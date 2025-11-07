@@ -1,0 +1,218 @@
+<app-step-form-layout leftCardTitle="Property Details" finishButtonText="Add Property" (finish)="submitProperty()">
+    <!-- Step Basic Details Content -->
+    <ng-container>
+        <app-step-pane title="Basic Details" description="Fill all the fields to add Your property">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Property Name</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Property Type</label>
+                    <app-custom-select [options]="['Admin', 'Owner', 'PM', 'User', 'Lead']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Land Area <small>Sq-ft</small></label>
+                    <app-custom-select [options]="['100', '300', '500', '700', '1000']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Land DM No (Affection Plan)</label>
+                    <input type="text" class="form-control" placeholder="Enter Land DM No">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Apartment No</label>
+                    <input type="text" class="form-control" placeholder="Enter apartment number">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-control" placeholder="Enter address here">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">No of Bedrooms</label>
+                    <app-custom-select [options]="['1', '2', '3', '4', '5']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Area of Property <small>Sq-ft</small></label>
+                    <app-custom-select [options]="['100', '300', '500', '700', '1000']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">No of Floors</label>
+                    <app-custom-select [options]="['1', '2', '3', '4', '5']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">No of Parking</label>
+                    <app-custom-select [options]="['1', '2', '3', '4', '5']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">No of Balcony</label>
+                    <app-custom-select [options]="['1', '2', '3', '4', '5']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Plot No</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Makani No</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Dewa No</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+            </div>
+        </app-step-pane>
+    </ng-container>
+
+    <!-- Step Commercials Content -->
+    <ng-container>
+        <app-step-pane title="Commercials" description="Fill all the fields to add Your property">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Rent</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Security Deposit</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Booking Amount</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Maintenance Charges</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Cycle</label>
+                    <app-custom-select [options]="['1 Month', '2 Months', '3 Months', '4 Months', '5 Months']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Notice Period</label>
+                    <app-custom-select [options]="['1 Month', '2 Months', '3 Months', '4 Months', '5 Months']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Commission in %</label>
+                    <input type="text" class="form-control" placeholder="Enter here">
+                </div>
+            </div>
+        </app-step-pane>
+
+        <ng-container *ngIf="currentRole === 'owner'">
+            <app-step-pane title="Add PMC" [secondCard]="true">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Property PMC</label>
+                        <app-custom-select [options]="['Novatis AG...', 'Agriculture....', 'Honda...']"
+                            (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                    </div>
+                </div>
+            </app-step-pane>
+        </ng-container>
+    </ng-container>
+
+    <!-- Step Property Images Content -->
+    <ng-container>
+        <app-step-pane title="Property Images" description="Upload images of the property">
+            <div class="commonTabs">
+                <ul class="nav nav-tabs" id="propertyImagesTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="exterior-tab" data-bs-toggle="tab"
+                            data-bs-target="#exterior-tab-pane" type="button" role="tab"
+                            aria-controls="exterior-tab-pane" aria-selected="true">Exterior</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="interior-tab" data-bs-toggle="tab"
+                            data-bs-target="#interior-tab-pane" type="button" role="tab"
+                            aria-controls="interior-tab-pane" aria-selected="false">Interior</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="commonTabsContent">
+                <div class="tab-content" id="propertyImagesTabContent">
+                    <div class="tab-pane fade show active" id="exterior-tab-pane" role="tabpanel"
+                        aria-labelledby="exterior-tab" tabindex="0">
+                        <app-upload-document />
+                    </div>
+                    <div class="tab-pane fade" id="interior-tab-pane" role="tabpanel" aria-labelledby="interior-tab"
+                        tabindex="0">
+                        <app-upload-document />
+                    </div>
+                </div>
+            </div>
+        </app-step-pane>
+    </ng-container>
+
+    <!-- Step Documentation Content -->
+    <ng-container>
+        <app-step-pane title="Documentation" description="Upload documents of the property">
+            <div class="commonTabs">
+                <ul class="nav nav-tabs" id="documentsTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="propertyFloorPlan-tab" data-bs-toggle="tab"
+                            data-bs-target="#propertyFloorPlan-tab-pane" type="button" role="tab"
+                            aria-controls="propertyFloorPlan-tab-pane" aria-selected="true">Property Floor Plan</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tenantDoc-tab" data-bs-toggle="tab"
+                            data-bs-target="#tenantDoc-tab-pane" type="button" role="tab"
+                            aria-controls="tenantDoc-tab-pane" aria-selected="false">Tenant Doc</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="ejariCertificates-tab" data-bs-toggle="tab"
+                            data-bs-target="#ejariCertificates-tab-pane" type="button" role="tab"
+                            aria-controls="ejariCertificates-tab-pane" aria-selected="false">Ejari Certificates</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pmcDocs-tab" data-bs-toggle="tab"
+                            data-bs-target="#pmcDocs-tab-pane" type="button" role="tab" aria-controls="pmcDocs-tab-pane"
+                            aria-selected="false">PMC DOCS</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="cheque-tab" data-bs-toggle="tab" data-bs-target="#cheque-tab-pane"
+                            type="button" role="tab" aria-controls="cheque-tab-pane"
+                            aria-selected="false">Cheque</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="commonTabsContent">
+                <div class="tab-content" id="documentsTabContent">
+                    <div class="tab-pane fade show active" id="propertyFloorPlan-tab-pane" role="tabpanel"
+                        aria-labelledby="propertyFloorPlan-tab" tabindex="0">
+                        <app-upload-document />
+                    </div>
+                    <div class="tab-pane fade" id="tenantDoc-tab-pane" role="tabpanel" aria-labelledby="tenantDoc-tab"
+                        tabindex="0">
+                        <app-upload-document />
+                    </div>
+                    <div class="tab-pane fade" id="ejariCertificates-tab-pane" role="tabpanel"
+                        aria-labelledby="ejariCertificates-tab" tabindex="0">
+                        <app-upload-document />
+                    </div>
+                    <div class="tab-pane fade" id="ejariCertificates-tab-pane" role="tabpanel"
+                        aria-labelledby="ejariCertificates-tab" tabindex="0">
+                        <app-upload-document />
+                    </div>
+                    <div class="tab-pane fade" id="pmcDocs-tab-pane" role="tabpanel" aria-labelledby="pmcDocs-tab"
+                        tabindex="0">
+                        <app-upload-document />
+                    </div>
+                    <div class="tab-pane fade" id="cheque-tab-pane" role="tabpanel" aria-labelledby="cheque-tab"
+                        tabindex="0">
+                        <app-upload-document />
+                    </div>
+                </div>
+            </div>
+        </app-step-pane>
+    </ng-container>
+
+</app-step-form-layout>

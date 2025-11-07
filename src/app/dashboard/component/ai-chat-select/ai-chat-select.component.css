@@ -1,0 +1,172 @@
+.aiChatSelect {
+    position: relative;
+    background-color: transparent;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 160px;
+    transition: all 0.3s ease 0s;
+}
+
+.aiChatSelect:hover,
+.aiChatSelect.show {
+    background-color: var(--whiteBg);
+    border-color: var(--muteBorder1);
+}
+
+.aiChatSelectInput {
+    position: relative;
+    font-size: 14px;
+    color: var(--blackText);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.aiChatSelectInput .aiChatSelectPlaceholder {
+    color: var(--blackText);
+}
+
+.aiChatSelectInput i {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.aiChatSelectDropdown {
+    background-color: var(--whiteBg);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 284px;
+    border: 1px solid var(--muteBorder1);
+    border-radius: 6px;
+    box-shadow: 4px 4px 15px 0 rgba(0, 0, 0, 0.15);
+    margin-top: 16px;
+    overflow: auto;
+    z-index: 9;
+}
+
+.aiChatSelectDropdown li {
+    padding: 16px;
+    height: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    overflow: hidden;
+}
+
+.aiChatSelectDropdown li+li {
+    border-top: 1px solid var(--muteBorder1);
+}
+
+.aiChatSelectDropdown li:hover {
+    height: 98px;
+}
+
+.aiChatSelectDropdown li.active {
+    background: var(--muteBg7);
+    height: 98px;
+}
+
+.aiChatSelectTtl {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.aiChatSelectTtl span {
+    color: var(--muteText2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.aiChatSelectDropdown li.active .aiChatSelectTtl span {
+    color: var(--greenText);
+}
+
+.aiChatSelectTtl span i.default {
+    display: block;
+}
+
+.aiChatSelectTtl span i.active {
+    display: none;
+}
+
+.aiChatSelectDropdown li.active .aiChatSelectTtl span i.default {
+    display: none;
+}
+
+.aiChatSelectDropdown li.active .aiChatSelectTtl span i.active {
+    display: block;
+}
+
+.aiChatSelectTtl span b {
+    font-size: 14px;
+    color: var(--muteText2);
+    font-weight: 500;
+    line-height: 18px;
+}
+
+.aiChatSelectDropdown li.active .aiChatSelectTtl span b {
+    color: var(--blackText);
+}
+
+.aiChatSelectInfo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 16px -16px 0 -16px;
+}
+
+.aiChatSelectInfo::before {
+    background-color: var(--muteBg6);
+    position: absolute;
+    content: "";
+    width: 1px;
+    height: 13px;
+    left: 50%;
+}
+
+.aiChatSelectInfoItem {
+    padding: 0 16px;
+    width: 50%;
+}
+
+.aiChatSelectInfoTtl {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.aiChatSelectInfoTtl span {
+    font-size: 13px;
+    color: var(--greyDarkText);
+    font-weight: 500;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.aiChatSelectInfoPrgrss {
+    margin-top: 8px;
+}
+
+.aiChatSelectInfoPrgrss .progress {
+    background-color: var(--muteBg1);
+    height: 5px;
+}
+
+.aiChatSelectInfoPrgrss .progress-bar {
+    background: linear-gradient(90deg, rgba(236, 241, 255, 1) 0%, rgba(98, 66, 255, 1) 100%);
+    border-radius: 10px;
+}

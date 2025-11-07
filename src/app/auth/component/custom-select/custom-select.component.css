@@ -1,0 +1,108 @@
+.customSelect {
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease 0s;
+}
+
+.customSelectInput {
+    background-color: var(--whiteBg);
+    font-size: 14px;
+    color: var(--blackText);
+    font-weight: 400;
+    padding: 8px 12px;
+    border: 1px solid var(--formBorder);
+    border-radius: 6px;
+    width: 100%;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.customSelectSmall .customSelectInput {
+    font-size: 12px;
+    border-color: var(--grayBorder1);
+    height: 34px;
+}
+
+.customSelectFilter .customSelectInput {
+    font-size: 12px;
+    color: var(--blackText6);
+    font-weight: 400;
+    padding: 8px 14px;
+    height: 33px;
+    border-color: var(--lightBorder);
+    border-radius: 35px;
+}
+
+.customSelectFilter.customSelect.show .customSelectInput,
+.customSelectFilter.customSelect .customSelectInput:hover {
+    background-color: var(--muteBg1);
+}
+
+.customSelectInput .customSelectPlaceholder {
+    color: var(--blackText4);
+}
+
+.customSelectInput>span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.customSelectInput>i {
+    color: var(--blackText4);
+}
+
+.customSelectDropdown {
+    background-color: var(--whiteBg);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    padding: 4px;
+    border: 1px solid var(--grayBorder);
+    border-radius: 6px;
+    box-shadow: 4px 4px 15px 0 rgba(0, 0, 0, 0.15);
+    min-width: 180px;
+    max-height: 200px;
+    overflow: auto;
+    z-index: 2;
+}
+
+.customSelectDropdown li {
+    font-size: 14px;
+    color: var(--blackText);
+    font-weight: 400;
+    line-height: 20px;
+    padding: 10px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.customSelectDropdown li+li {
+    border-top: 1px solid var(--muteBorde2);
+}
+
+.customSelectFilter .customSelectDropdown li {
+    font-size: 12px;
+    color: var(--blackText6);
+    padding: 6px 8px;
+}
+
+.customSelectDropdown li:hover {
+    background: var(--muteBg1);
+    color: var(--blackText);
+}
+
+.customSelectDropdown li.active,
+.customSelectDropdown li.active:hover {
+    background: var(--muteBg2);
+    color: var(--blackText);
+}

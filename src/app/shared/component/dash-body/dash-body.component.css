@@ -1,0 +1,53 @@
+.dashMainBody {
+    position: relative;
+    margin-left: 240px;
+    margin-top: 115px;
+    height: calc(100vh - 165px);
+    padding: 16px;
+    overflow: auto;
+    transition: all 0s ease-in-out 0s;
+    z-index: 1;
+}
+
+.dashMainSmallBody.dashMainBody {
+    margin-left: 70px;
+}
+
+.dashMainRightCloseBody.dashMainBody {
+    margin-right: 70px;
+}
+
+.dashMainRightOpenBody.dashMainBody {
+    margin-right: 290px;
+}
+
+@media (max-width: 1699px) {}
+
+@media (max-width: 1199px) {
+    .dashMainBody {
+        margin-left: 0;
+    }
+
+    .dashMainSmallBody.dashMainBody {
+        margin-left: 0;
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 991px) {
+    .dashMainRightOpenBody.dashMainBody {
+        margin-right: 70px;
+    }
+}
+
+@media (max-width: 767px) {
+    .dashMainBody {
+        margin-top: 100px;
+        height: calc(100vh - 150px);
+        padding: 16px;
+    }
+
+    .dashMainRightCloseBody.dashMainBody {
+        margin-right: 0;
+    }
+}

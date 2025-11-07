@@ -1,0 +1,20 @@
+<div class="pmntInfoCol">
+    <div class="pmntInfoSelect">
+        <ng-content></ng-content>
+    </div>
+    <div class="pmntInfoBtm">
+        <div class="pmntInfoList">
+            <ul>
+                <li><i>Overall Amount Paid</i> <span>{{ overallAmountPaid }}</span></li>
+                <li><i>Monthly Rent</i> <span>{{ monthlyRent }}</span></li>
+                <li><i>Maintenance Charges</i> <span>{{ maintenanceCharges }}</span></li>
+            </ul>
+            <div class="pmntInfoDue">
+                <span>Due in {{ dueTime }}</span> , Last date {{ lastDate }}
+            </div>
+        </div>
+        <div class="pmntInfoBtn">
+            <button type="button" (click)="goToPayment()" class="btn btnCommon">Pay My Dues</button>
+        </div>
+    </div>
+</div>

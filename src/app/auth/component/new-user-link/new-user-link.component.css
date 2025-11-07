@@ -1,0 +1,25 @@
+.newUserLink p {
+    font-size: 14px;
+    color: var(--greyDarkText1);
+    font-weight: 500;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.newUserLink a,
+.newUserLink button {
+    background-color: transparent;
+    font-size: 14px;
+    color: var(--activeText);
+    font-weight: 500;
+    text-decoration: underline;
+    padding: 0;
+    border: 0;
+}
+
+
+@media (max-width: 767px) {}

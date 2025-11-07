@@ -1,0 +1,20 @@
+<div class="dashWhiteCol" [ngClass]="[size, customClass]">
+    <div class="dashWhiteHdr" *ngIf="title">
+        <div>
+            <h4>{{ title }}
+                <span *ngIf="subtitle">
+                    {{ subtitle }}
+                </span>
+            </h4>
+            <p *ngIf="description">
+                {{ description }}
+            </p>
+        </div>
+        <div class="dashWhiteActn" *ngIf="showActions">
+            <ng-content select="[card-actions]"></ng-content>
+        </div>
+    </div>
+    <div class="dashWhiteBody">
+        <ng-content></ng-content>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+<button class="cmmnTblFltrBtn" [class.cmmnTblFltrIconBtn]="hasIcon" type="button" (click)="onClick()">
+    <ng-container *ngIf="hasIcon">
+        <i><ng-content></ng-content></i>
+    </ng-container>
+    <span>{{ title }}</span>
+</button>

@@ -1,0 +1,17 @@
+.alrtCol {
+    background: linear-gradient(90deg, rgba(251, 230, 255, 1) 0%, rgba(215, 254, 247, 1) 100%);
+    padding: 8px 10px;
+    border-radius: 8px;
+}
+
+.alrtCol p {
+    font-size: 13px;
+    color: var(--muteText7);
+    font-weight: 400;
+    line-height: 18px;
+    margin: 0;
+}
+
+.alrtCol p span {
+    font-weight: 500;
+}

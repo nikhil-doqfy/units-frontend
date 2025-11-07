@@ -1,0 +1,30 @@
+.badgeText {
+    font-size: 13px;
+    color: var(--greyText);
+    font-weight: 500;
+    line-height: 18px;
+}
+
+.badgeText.green {
+    color: var(--greenText);
+}
+
+.badgeText.greenLight {
+    color: var(--greenLightText);
+}
+
+.badgeText.orange {
+    color: var(--orangeText);
+}
+
+.badgeText.blue {
+    color: var(--blueText);
+}
+
+.badgeText.red {
+    color: var(--redText);
+}
+
+.badgeText.yellow {
+    color: var(--yellowText);
+}

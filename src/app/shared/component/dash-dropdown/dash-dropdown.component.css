@@ -1,0 +1,51 @@
+.dashDrpdwn {
+    width: 16px;
+    height: 16px;
+}
+
+.dashDrpdwnBtn {
+    position: relative;
+    background-color: transparent;
+    color: var(--greyText3);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+}
+
+.dashDrpdwnBtn::after {
+    display: none;
+}
+
+.dashDrpdwnMenu {
+    background-color: var(--lightBg1);
+    padding: 4px;
+    border: 1px solid var(--lightBorder2);
+    border-radius: 4px;
+    box-shadow: 4px 4px 15px 0 rgba(0, 0, 0, 0.15);
+    min-width: auto;
+    transform: inherit !important;
+    top: 100% !important;
+    right: 0 !important;
+    left: inherit !important;
+    overflow: hidden;
+}
+
+.dashDrpdwnMenu button {
+    background-color: transparent;
+    font-size: 14px;
+    color: var(--muteText5);
+    font-weight: 500;
+    line-height: 18px;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease 0s;
+}
+
+.dashDrpdwnMenu button:hover {
+    background-color: var(--muteBg5);
+    color: var(--muteText5);
+    font-weight: 500;
+}

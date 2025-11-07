@@ -1,0 +1,21 @@
+<div class="fltrPopupWrap" [class.show]="isOpen">
+    <app-table-filter-btn title="Filter" [hasIcon]="true" (clicked)="handleFilterOpenClick()">
+        <app-filter-icon />
+    </app-table-filter-btn>
+    <div class="fltrPopup">
+        <div class="fltrPopupHdr">
+            <h5>Filter</h5>
+            <button type="button" (click)="handleFilterCloseClick()">
+                <app-cross-icon />
+            </button>
+        </div>
+        <div class="fltrPopupBdy">
+            <app-dash-form>
+                <ng-content select="[form]"></ng-content>
+            </app-dash-form>
+        </div>
+        <div class="fltrPopupFtr">
+            <ng-content select="[action]"></ng-content>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,285 @@
+.cmmnPrprtyViewCol {
+    display: flex;
+    gap: 16px;
+}
+
+.cmmnPrprtyViewSldr {
+    display: flex;
+    gap: 6px;
+    width: 362px;
+    min-width: 362px;
+    height: 296px;
+}
+
+/* Main image slider should take full space */
+.mainSwiper {
+    flex: 1;
+    width: calc(100% - 66px);
+    height: 296px;
+    position: relative;
+}
+
+.mainSwiper img {
+    width: 296px;
+    height: 296px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+/* Vertical thumbnail slider */
+.thumbSwiperOuter {
+    position: relative;
+}
+
+.thumbSwiperOuter::before,
+.thumbSwiperOuter::after {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-color: var(--whiteBg);
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    height: 13px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.thumbSwiperOuter::before {
+    background-image: url("../../../../assets/swiperLeft.svg");
+    top: 0;
+}
+
+.thumbSwiperOuter::after {
+    background-image: url("../../../../assets/swiperRight.svg");
+    bottom: 0;
+}
+
+.thumbSwiper::part(container) {
+    padding: 19px 0;
+}
+
+.verticalThumbs {
+    position: relative;
+    width: 60px;
+    height: 296px;
+    display: flex;
+    flex-direction: column;
+}
+
+.verticalThumbs swiper-slide {
+    opacity: 1;
+    cursor: pointer;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: opacity .3s, transform .3s;
+}
+
+.verticalThumbs swiper-slide-thumb-active {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.verticalThumbs img {
+    width: 100%;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Keep your arrows */
+/* Target next button */
+.verticalThumbs::part(button-next),
+.thumbSwiper::part(button-next),
+.verticalThumbs::part(button-prev),
+.thumbSwiper::part(button-prev) {
+    background: var(--whiteBg);
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 60px;
+    height: 13px;
+    border: 0;
+    border-radius: 4px;
+    margin: 0;
+    opacity: 1;
+}
+
+.verticalThumbs::part(button-next),
+.thumbSwiper::part(button-next) {
+    top: inherit;
+    bottom: 0;
+}
+
+.verticalThumbs::part(button-prev),
+.thumbSwiper::part(button-prev) {
+    top: 0;
+    bottom: inherit;
+}
+
+
+.cmmnPrprtyViewCntnt {
+    width: calc(100% - 362px);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cmmnPrprtyViewTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.cmmnPrprtyViewTop>div {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.cmmnPrprtyViewTop p {
+    font-size: 14px;
+    color: var(--greyText);
+    font-weight: 400;
+    line-height: 18px;
+    margin: 0;
+}
+
+.cmmnPrprtyViewTop p span {
+    color: var(--greenText);
+    font-weight: 500;
+}
+
+.cmmnPrprtyViewTtl h4 {
+    font-size: 16px;
+    color: var(--greyDarkText1);
+    font-weight: 600;
+    line-height: 18px;
+    letter-spacing: 1%;
+    margin: 0;
+}
+
+.cmmnPrprtyViewTtl h5 {
+    font-size: 13px;
+    color: var(--lightDarkText);
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 1%;
+    margin: 8px 0 0 0;
+}
+
+.cmmnPrprtyViewCost span {
+    display: block;
+    font-size: 14px;
+    color: var(--greenText);
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.cmmnPrprtyViewCost h3 {
+    font-size: 24px;
+    color: var(--greyDarkText1);
+    font-weight: 600;
+    line-height: 32px;
+    margin: 8px 0;
+}
+
+.cmmnPrprtyViewCost ul {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.cmmnPrprtyViewCost ul li {
+    font-size: 14px;
+    color: var(--lightDarkText);
+    font-weight: 500;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@media (max-width: 767px) {
+    .cmmnPrprtyViewCol {
+        flex-direction: column;
+    }
+
+    .cmmnPrprtyViewSldr {
+        flex-direction: column;
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+    }
+
+    .thumbSwiperOuter::before,
+    .thumbSwiperOuter::after {
+        left: inherit;
+        right: inherit;
+        top: 0;
+        bottom: 0;
+        width: 13px;
+        height: auto;
+        opacity: 0;
+    }
+
+    .thumbSwiperOuter::before {
+        left: 0;
+    }
+
+    .thumbSwiperOuter::after {
+        right: 0;
+    }
+
+    .verticalThumbs {
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+    }
+
+    .thumbSwiper::part(container) {
+        padding: 0 19px;
+    }
+
+    /* Keep your arrows */
+    /* Target next button */
+    .verticalThumbs::part(button-next),
+    .thumbSwiper::part(button-next),
+    .verticalThumbs::part(button-prev),
+    .thumbSwiper::part(button-prev) {
+        left: inherit;
+        right: inherit;
+        top: 0;
+        bottom: 0;
+        width: 13px;
+        height: 60px;
+        border-radius: 0;
+    }
+
+    .verticalThumbs::part(button-next),
+    .thumbSwiper::part(button-next) {
+        right: 0;
+    }
+
+    .verticalThumbs::part(button-prev),
+    .thumbSwiper::part(button-prev) {
+        left: 0;
+    }
+
+    .mainSwiper {
+        width: 100%;
+        height: auto;
+    }
+
+    .mainSwiper img {
+        width: 100%;
+    }
+
+    .cmmnPrprtyViewCntnt {
+        width: 100%;
+        padding: 0;
+    }
+}

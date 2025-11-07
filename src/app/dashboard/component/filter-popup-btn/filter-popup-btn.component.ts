@@ -1,0 +1,36 @@
+import { Component, ElementRef, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { TableFilterButtonComponent } from '../table-filter-btn/table-filter-btn.component';
+import { FilterIconComponent } from '../icons/filter-icon/filter-icon.component';
+import { DashFormComponent } from "../../../shared/component/dash-form/dash-form.component";
+import { CrossIconComponent } from "../icons/cross-icon/cross-icon.component";
+
+@Component({
+  selector: 'app-filter-popup-btn',
+  standalone: true,
+  imports: [CommonModule, TableFilterButtonComponent, FilterIconComponent, DashFormComponent, CrossIconComponent],
+  templateUrl: './filter-popup-btn.component.html',
+  styleUrl: './filter-popup-btn.component.css'
+})
+export class FilterPopupButtonComponent {
+
+  isOpen = false;
+
+  constructor(private eRef: ElementRef) { }
+
+  handleFilterOpenClick(): void {
+    this.isOpen = true;
+  }
+
+  handleFilterCloseClick(): void {
+    this.isOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.isOpen && !this.eRef.nativeElement.contains(event.target)) {
+      this.isOpen = false;
+    }
+  }
+}

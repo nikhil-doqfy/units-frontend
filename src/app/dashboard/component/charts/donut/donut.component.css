@@ -1,0 +1,49 @@
+.toggleWrapperOuter {
+    text-align: center;
+    margin-top: -53px;
+}
+
+.toggleWrapper {
+    display: inline-flex;
+    justify-content: center;
+    gap: 6px;
+    background: var(--muteBg);
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+}
+
+.toggleWrapper button {
+    font-size: 13px;
+    color: var(--greyText);
+    border: 0;
+    background: transparent;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.toggleWrapper button.active {
+    background: var(--whiteBg);
+    color: var(--blackText);
+    font-weight: 500;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.donutWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 220px;
+}
+
+apx-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+@media (max-width: 991px) {
+    .toggleWrapperOuter {
+        margin-top: 0;
+    }
+}

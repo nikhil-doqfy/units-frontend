@@ -1,0 +1,90 @@
+.pmntInfoCol {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pmntInfoSelect {
+    display: inline-flex;
+}
+
+.pmntInfoBtm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.pmntInfoList {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.pmntInfoList ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.pmntInfoList ul li {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 172px;
+}
+
+.pmntInfoList ul li i {
+    display: block;
+    font-size: 12px;
+    color: var(--greyText);
+    font-weight: 400;
+    font-style: normal;
+    line-height: 16px;
+}
+
+.pmntInfoList ul li span {
+    display: block;
+    font-size: 13px;
+    color: var(--greyDarkText1);
+    font-weight: 500;
+    line-height: 16px;
+}
+
+.pmntInfoDue {
+    font-size: 12px;
+    color: var(--greyText);
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.pmntInfoDue span {
+    color: var(--redText);
+}
+
+@media (max-width: 767px) {
+    .pmntInfoBtm {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .pmntInfoList {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pmntInfoList ul {
+        flex-wrap: wrap;
+    }
+
+    .pmntInfoList ul li {
+        width: calc(50% - 8px);
+    }
+
+    .pmntInfoList ul li:last-child {
+        width: 100%;
+    }
+}

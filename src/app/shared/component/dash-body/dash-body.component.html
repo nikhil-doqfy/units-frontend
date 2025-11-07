@@ -1,0 +1,5 @@
+<div class="dashMainBody" [class.dashMainSmallBody]="!openSidebarValue"
+  [class.dashMainRightCloseBody]="hasRightSidebar && !openRightSidebarValue"
+  [class.dashMainRightOpenBody]="hasRightSidebar && openRightSidebarValue">
+  <ng-content></ng-content>
+</div>

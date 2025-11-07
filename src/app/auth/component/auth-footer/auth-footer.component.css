@@ -1,0 +1,44 @@
+.authFtrMain {
+    background-color: var(--whiteBg);
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 16px 24px;
+    height: 50px;
+    border-top: 1px solid var(--muteBorder);
+    z-index: 1;
+}
+
+.cpyghtText {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.authCpyghtText p {
+    font-size: 12px;
+    font-family: var(--secondaryFont);
+    color: var(--greyLightText);
+    font-weight: 400;
+    line-height: 16px;
+    margin: 0;
+}
+
+.authCpyghtText p i {
+    position: relative;
+    top: -2px;
+}
+
+.authCpyghtText p a {
+    color: var(--greyLightText);
+    cursor: pointer;
+    display: inline-block;
+}
+
+@media (max-width: 767px) {
+    .authFtrMain {
+        padding: 16px;
+    }
+}
