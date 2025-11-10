@@ -1,0 +1,7 @@
+const HOSTNAME = 'property-management-api.doqfy.in';
+export const environment = {
+  production: false,
+  enableLogging: true,
+  HOSTNAME: HOSTNAME,
+  SERVER_ADDRESS: `https://${HOSTNAME}`,
+};
