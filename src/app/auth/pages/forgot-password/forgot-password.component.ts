@@ -10,7 +10,10 @@ import { AuthFormComponent } from '../../component/auth-form/auth-form.component
 import { EmailIconComponent } from '../../component/icons/email-icon/email-icon.component';
 import { NewUserLinkComponent } from '../../component/new-user-link/new-user-link.component';
 import { TimerTextComponent } from '../../component/timer-text/timer-text.component';
-
+import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../../shared/services/alert.service';
+import { StorageService } from '../../../shared/services/storage.service';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
@@ -22,27 +25,40 @@ import { TimerTextComponent } from '../../component/timer-text/timer-text.compon
     EmailIconComponent,
     NewUserLinkComponent,
     TimerTextComponent,
+    FormsModule,
   ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
 })
 export class ForgotPasswordComponent {
   currentRole: UserRole = 'owner';
+  otp = '';
+  email = '';
   private modalService = inject(NgbModal);
 
-  constructor(private router: Router, private themeService: ThemeService) {
-    this.themeService.currentRole$.subscribe(role => {
+  constructor(
+    private router: Router,
+    private themeService: ThemeService,
+    private authService: AuthService,
+    private storageService: StorageService,
+    private alertService: AlertService
+  ) {
+    this.themeService.currentRole$.subscribe((role) => {
       this.currentRole = role;
     });
   }
   closeResult = '';
   otpSent = false;
   otpTimer = 0;
+  emailLocked = false;
   timerDisplay = '1:00';
   timerInterval: any;
   showResend = false;
 
-  onOtpChange(evt: any) { }
+  onOtpChange(evt: any) {
+    console.log(evt);
+    this.otp = evt;
+  }
 
   goToLogin(): void {
     this.modalService.dismissAll();
@@ -51,7 +67,33 @@ export class ForgotPasswordComponent {
 
   goToResetPassword(): void {
     this.modalService.dismissAll();
-    this.router.navigate(['auth/reset-password']);
+    this.router.navigate(['auth/reset-password'], {
+      state: { email: this.email, otp: this.otp },
+    });
+  }
+
+  sendOtp(): void {
+    if (!this.email) {
+      this.alertService.error('Please enter your email');
+      return;
+    }
+
+    let payload = { email: this.email };
+
+    this.authService.sendOtp(payload).subscribe({
+      next: (resp: any) => {
+        console.log('OTP response:--->', resp);
+        this.alertService.success(resp?.message || 'OTP sent successfully');
+        this.otpSent = true;
+        this.emailLocked = true;
+        this.otpTimer = 60;
+        this.startOtpTimer();
+      },
+      error: (err) => {
+        console.log('OTP error:--->', err);
+        this.alertService.error(err?.error?.message || 'Failed to send OTP');
+      },
+    });
   }
 
   openOtpVerifyModal(otpVerifyContent: TemplateRef<any>) {
@@ -72,7 +114,6 @@ export class ForgotPasswordComponent {
       }
     );
 
-    // Start OTP timer when modal opens
     this.startOtpTimer();
   }
 
@@ -98,7 +139,9 @@ export class ForgotPasswordComponent {
       this.otpTimer--;
       const minutes = Math.floor(this.otpTimer / 60);
       const seconds = this.otpTimer % 60;
-      this.timerDisplay = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+      this.timerDisplay = `${minutes}:${
+        seconds < 10 ? '0' + seconds : seconds
+      }`;
 
       if (this.otpTimer <= 0) {
         clearInterval(this.timerInterval);
@@ -108,7 +151,23 @@ export class ForgotPasswordComponent {
   }
 
   resendOtp(): void {
-    // You can call API here to resend OTP
     this.startOtpTimer();
+  }
+
+  signInWithOtp(): void {
+    let payload = {
+      email: this.email,
+      otp: this.otp,
+    };
+    this.authService.verifyOtp(payload).subscribe({
+      next: (resp: any) => {
+        console.log('OTP verify response: ', resp);
+        this.alertService.success('Login successful');
+      },
+      error: (err) => {
+        console.log('OTP verify error: ', err);
+        this.alertService.error(err?.error?.message || 'Invalid OTP');
+      },
+    });
   }
 }

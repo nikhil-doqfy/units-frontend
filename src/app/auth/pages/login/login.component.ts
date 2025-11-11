@@ -12,9 +12,11 @@ import { PasswordIconComponent } from '../../component/icons/password-icon/passw
 import { PasswordHideIconComponent } from '../../component/icons/password-hide-icon/password-hide-icon.component';
 import { PasswordShowIconComponent } from '../../component/icons/password-show-icon/password-show-icon.component';
 import { NewUserLinkComponent } from '../../component/new-user-link/new-user-link.component';
-import { FieldLinkComponent } from "../../component/field-link/field-link.component";
-import { TimerTextComponent } from "../../component/timer-text/timer-text.component";
-
+import { FieldLinkComponent } from '../../component/field-link/field-link.component';
+import { TimerTextComponent } from '../../component/timer-text/timer-text.component';
+import { AuthService } from '../../services/auth.service';
+import { StorageService } from '../../../shared/services/storage.service';
+import { AlertService } from '../../../shared/services/alert.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -30,10 +32,10 @@ import { TimerTextComponent } from "../../component/timer-text/timer-text.compon
     PasswordShowIconComponent,
     NewUserLinkComponent,
     FieldLinkComponent,
-    TimerTextComponent
+    TimerTextComponent,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   currentRole: UserRole = 'owner';
@@ -41,14 +43,23 @@ export class LoginComponent {
   authTitle = 'Sign In';
   showPassword = false;
   loginMode: 'password' | 'otp' = 'password';
+  email = '';
+  password = '';
 
+  otp = '';
   otpSent = false;
   emailLocked = false;
   otpTimer = 60;
   timerDisplay = '1:00';
   timerInterval: any;
 
-  constructor(private router: Router, private themeService: ThemeService) {
+  constructor(
+    private router: Router,
+    private themeService: ThemeService,
+    private authService: AuthService,
+    private storageService: StorageService,
+    private alertService: AlertService
+  ) {
     this.themeService.setRole(this.selectedRole);
   }
 
@@ -57,7 +68,32 @@ export class LoginComponent {
     this.themeService.setRole(this.selectedRole);
   }
 
-  onOtpChange(evt: any) { }
+  signIn(): void {
+    if (!this.email || !this.password) {
+      this.alertService.error('Please enter email and password');
+      return;
+    }
+
+    let payload = {
+      email: this.email,
+      password: this.password,
+    };
+    this.authService.login(payload).subscribe({
+      next: (resp: any) => {
+        console.log('resp:--->', resp);
+        this.alertService.success('Login successful');
+        // this.goToDashboard();
+      },
+      error: (err) => {
+        console.log(err);
+        // this.alertService.error(err?.error?.message || 'Login failed');
+      },
+    });
+  }
+
+  onOtpChange(evt: any) {
+    this.otp = evt;
+  }
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
@@ -99,10 +135,49 @@ export class LoginComponent {
   }
 
   sendOtp(): void {
-    this.otpSent = true;
-    this.emailLocked = true;
-    this.otpTimer = 60;
-    this.startOtpTimer();
+    if (!this.email) {
+      this.alertService.error('Please enter your email');
+      return;
+    }
+
+    let payload = { email: this.email };
+
+    this.authService.sendOtp(payload).subscribe({
+      next: (resp: any) => {
+        console.log('OTP response:--->', resp);
+        this.alertService.success(resp?.message || 'OTP sent successfully');
+        this.otpSent = true;
+        this.emailLocked = true;
+        this.otpTimer = 60;
+        this.startOtpTimer();
+      },
+      error: (err) => {
+        console.log('OTP error:--->', err);
+        this.alertService.error(err?.error?.message || 'Failed to send OTP');
+      },
+    });
+  }
+
+  signInWithOtp(): void {
+    if (!this.email || !this.otp) {
+      this.alertService.error('Enter email and OTP');
+      return;
+    }
+    let payload = {
+      email: this.email,
+      otp: this.otp,
+    };
+    this.authService.verifyOtp(payload).subscribe({
+      next: (resp: any) => {
+        console.log('OTP verify response: ', resp);
+        this.alertService.success('Login successful');
+        this.goToDashboard();
+      },
+      error: (err) => {
+        console.log('OTP verify error: ', err);
+        this.alertService.error(err?.error?.message || 'Invalid OTP');
+      },
+    });
   }
 
   changeEmail(): void {
@@ -136,5 +211,7 @@ export class LoginComponent {
   onResendOtp(): void {
     this.otpTimer = 60;
     this.startOtpTimer();
+
+    this.sendOtp();
   }
 }
