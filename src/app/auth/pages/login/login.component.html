@@ -5,7 +5,12 @@
 
 <app-auth-form>
   <!-- PASSWORD LOGIN FORM -->
-  <form *ngIf="loginMode === 'password'" class="mb-4">
+  <form
+    *ngIf="loginMode === 'password'"
+    class="mb-4"
+    [formGroup]="loginForm"
+    (ngSubmit)="signIn()"
+  >
     <div class="mb-4">
       <label for="email" class="form-label">Email Address</label>
       <div class="iconInput">
@@ -13,9 +18,9 @@
         <input
           class="form-control"
           type="email"
-          name="email"
-          [(ngModel)]="email"
+          formControlName="email"
           placeholder="Enter your email"
+          autocomplete="email"
         />
       </div>
     </div>
@@ -26,9 +31,9 @@
         <input
           class="form-control"
           [type]="showPassword ? 'text' : 'password'"
-          name="password"
-          [(ngModel)]="password"
+          formControlName="password"
           placeholder="Enter your password"
+          autocomplete="username"
         />
         <i class="right" (click)="togglePasswordVisibility()">
           <app-password-show-icon
@@ -44,13 +49,7 @@
     </div>
     <div class="frmBtns">
       <!-- (click)="goToDashboard()" -->
-      <button
-        type="button"
-        class="btn btnCommon btnMinWidth"
-        (click)="signIn()"
-      >
-        Sign In
-      </button>
+      <button type="button" class="btn btnCommon btnMinWidth">Sign In</button>
     </div>
   </form>
 

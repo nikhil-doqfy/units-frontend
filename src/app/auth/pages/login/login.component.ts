@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 import { NgOtpInputModule } from 'ng-otp-input';
@@ -17,6 +16,14 @@ import { TimerTextComponent } from '../../component/timer-text/timer-text.compon
 import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { AlertService } from '../../../shared/services/alert.service';
+
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -33,18 +40,21 @@ import { AlertService } from '../../../shared/services/alert.service';
     NewUserLinkComponent,
     FieldLinkComponent,
     TimerTextComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  isLoading = false;
   currentRole: UserRole = 'owner';
   selectedRole: UserRole = 'owner';
   authTitle = 'Sign In';
   showPassword = false;
   loginMode: 'password' | 'otp' = 'password';
   email = '';
-  password = '';
+  // password = '';
 
   otp = '';
   otpSent = false;
@@ -55,6 +65,8 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
+    private fb: FormBuilder,
+
     private themeService: ThemeService,
     private authService: AuthService,
     private storageService: StorageService,
@@ -68,25 +80,88 @@ export class LoginComponent {
     this.themeService.setRole(this.selectedRole);
   }
 
+  ngOnInit(): void {
+    // Create Reactive Form
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
+
+  // signIn(): void {
+  //   // Use reactive form validation instead of manual if check
+  //   if (this.loginForm.invalid) {
+  //     this.loginForm.markAllAsTouched(); // show errors
+  //     this.alertService.error('Please enter email and password');
+  //     return;
+  //   }
+
+  //   let payload = {
+  //     email: this.loginForm.value.email,
+  //     password: this.loginForm.value.password,
+  //   };
+
+  //   // const payload = this.loginForm.value;
+
+  //   this.authService.login(payload).subscribe({
+  //     next: (resp: any) => {
+  //       console.log('resp:--->', resp);
+  //       this.alertService.success('Login successful');
+  //       // this.goToDashboard();
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //       this.alertService.error(err?.error?.message || 'Login failed');
+  //     },
+  //   });
+  // }
+
+  checkFormValidity(): void {
+    Object.keys(this.loginForm.controls).forEach((field) => {
+      const control = this.loginForm.get(field);
+      if (control?.invalid) {
+        console.log(`❌ INVALID FIELD: ${field}`, control.errors);
+      } else {
+        console.log(`✅ VALID FIELD: ${field}`);
+      }
+    });
+
+    console.log(
+      'Overall Form Status:',
+      this.loginForm.valid ? '✅ VALID' : '❌ INVALID'
+    );
+  }
   signIn(): void {
-    if (!this.email || !this.password) {
+    // console.log('monali');
+    this.checkFormValidity();
+    if (this.loginForm.invalid) {
+      // console.log('monal');
+      // this.loginForm.markAllAsTouched(); // show errors
       this.alertService.error('Please enter email and password');
       return;
     }
+    this.isLoading = true;
+    const payload = this.loginForm.value;
 
-    let payload = {
-      email: this.email,
-      password: this.password,
-    };
     this.authService.login(payload).subscribe({
       next: (resp: any) => {
         console.log('resp:--->', resp);
-        this.alertService.success('Login successful');
+        this.isLoading = false;
+        // console.log('Login Response:', resp);
+        // this.alertService.success('Login successful');
         // this.goToDashboard();
+        if (resp && resp.token) {
+          this.storageService.setToken(resp.token);
+          this.alertService.success('Login successful!');
+          this.router.navigate(['/dashboard']); // redirect to dashboard
+        } else {
+          this.alertService.error('Token not found in response');
+        }
       },
+
       error: (err) => {
         console.log(err);
-        // this.alertService.error(err?.error?.message || 'Login failed');
+        this.alertService.error(err?.error?.message || 'Login failed');
       },
     });
   }

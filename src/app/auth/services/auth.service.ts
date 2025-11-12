@@ -16,6 +16,10 @@ export class AuthService {
     return this.http.post(`${environment.SERVER_ADDRESS}/auth/login/`, data);
   }
 
+  signup(data: any): Observable<any> {
+    return this.http.post(`${environment.SERVER_ADDRESS}/user/signup/`, data);
+  }
+
   sendOtp(data: any) {
     return this.http.post(
       `${environment.SERVER_ADDRESS}/auth/password/otp/send/`,

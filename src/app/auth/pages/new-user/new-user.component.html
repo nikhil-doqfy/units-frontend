@@ -1,36 +1,235 @@
 <app-auth-title title="Sign Up" description="to create your account" />
 
 <app-auth-form>
-    <form class="mb-4">
-        <div class="mb-4">
-            <label for="email" class="form-label justify-content-between">Email Address</label>
-            <div class="iconInput">
-                <i>
-                    <app-email-icon />
-                </i>
-                <input class="form-control" type="email" name="email" placeholder="Enter your email" />
-            </div>
+  <form class="mb-4" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <!-- Company Name -->
+    <div class="grid-2">
+      <ng-container *ngIf="selectedRole === 'owner'">
+        <!-- Company Name -->
+        <div class="mb-2">
+          <label for="companyName" class="form-label">Frist Name</label>
+          <input class="form-control" type="text" placeholder="Enter here" />
         </div>
-        <div class="mb-4">
-            <app-password-strength-field [(value)]="password" />
+
+        <!-- Company Emirates ID -->
+        <div class="mb-2">
+          <label for="emiratesId" class="form-label">Last Name</label>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="emiratesId"
+            placeholder="Enter here"
+          />
         </div>
-        <div class="mb-4">
-            <label for="repeatPassword" class="form-label">Confirm Password</label>
-            <div class="iconInput password">
-                <i><app-password-icon /></i>
-                <input class="form-control" [type]="showConfirmPassword ? 'text' : 'password'" name="repeatPassword"
-                    placeholder="Repeat your password" />
-                <i class="right" (click)="toggleConfirmPasswordVisibility()">
-                    <app-password-show-icon *ngIf="!showConfirmPassword"></app-password-show-icon>
-                    <app-password-hide-icon *ngIf="showConfirmPassword"></app-password-hide-icon>
-                </i>
-            </div>
+      </ng-container>
+      <ng-container *ngIf="selectedRole === 'property-manager'">
+        <div class="mb-2">
+          <label for="companyName" class="form-label">Company Name</label>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="companyName"
+            placeholder="Enter here"
+          />
+          <!-- <small
+        *ngIf="
+          signupForm.get('companyName')?.invalid &&
+          signupForm.get('companyName')?.touched
+        "
+      >
+        Company name is required
+      </small> -->
         </div>
-        <div class="frmBtns">
-            <button type="button" (click)="goToLogin()" class="btn btnCommon btnMinWidth">Sign
-                Up</button>
+
+        <!-- Company Emirates ID -->
+        <div class="mb-2">
+          <label for="emiratesId" class="form-label">Company Emirates ID</label>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="emiratesId"
+            placeholder="Enter here"
+          />
+          <small
+            *ngIf="
+              signupForm.get('emiratesId')?.invalid &&
+              signupForm.get('emiratesId')?.touched
+            "
+          >
+            Emirates ID is required
+          </small>
         </div>
-    </form>
+      </ng-container>
+      <ng-container *ngIf="selectedRole === 'tenant'">
+        <div class="mb-2">
+          <label for="buildingName" class="form-label">Full Name</label>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="buildingName"
+            placeholder="Enter here"
+          />
+        </div>
+
+        <div class="mb-2">
+          <label for="flatNumber" class="form-label">Emirates ID</label>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="flatNumber"
+            placeholder=" Enter here"
+          />
+        </div>
+      </ng-container>
+      <!-- Email Address -->
+      <div class="mb-2">
+        <label for="email" class="form-label justify-content-between"
+          >Email Address</label
+        >
+        <div class="iconInput">
+          <i><app-email-icon /></i>
+          <input
+            class="form-control"
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+          />
+          <small
+            *ngIf="
+              signupForm.get('email')?.invalid &&
+              signupForm.get('email')?.touched
+            "
+          >
+            Valid email is required
+          </small>
+        </div>
+      </div>
+
+      <!-- Contact Number -->
+      <div class="mb-2">
+        <label for="contactNumber" class="form-label">Contact Number</label>
+        <div class="iconInput">
+          <i><app-contact-number></app-contact-number></i>
+          <input
+            class="form-control"
+            type="tel"
+            formControlName="contactNumber"
+            placeholder="Enter your number"
+          />
+          <small
+            *ngIf="
+              signupForm.get('contactNumber')?.invalid &&
+              signupForm.get('contactNumber')?.touched
+            "
+          >
+            Contact number is required
+          </small>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="mb-4">
+      <label for="email" class="form-label justify-content-between"
+        >Email Address</label
+      >
+      <div class="iconInput">
+        <i>
+          <app-email-icon />
+        </i>
+        <input
+          class="form-control"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+
+        <small
+          *ngIf="
+            signupForm.get('email')?.invalid && signupForm.get('email')?.touched
+          "
+        >
+          Valid email is required
+        </small>
+      </div> -->
+    <!-- </div> -->
+    <div class="mb-2">
+      <app-password-strength-field
+        [value]="signupForm.get('password')?.value"
+        (valueChange)="signupForm.get('password')?.setValue($event)"
+      />
+    </div>
+    <div class="mb-4">
+      <label for="repeatPassword" class="form-label">Confirm Password</label>
+      <div class="iconInput password">
+        <i><app-password-icon /></i>
+        <input
+          class="form-control"
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          placeholder="Repeat your password"
+        />
+        <small
+          *ngIf="passwordMismatch && signupForm.get('confirmPassword')?.touched"
+          style="color: red"
+        >
+          Passwords do not match
+        </small>
+        <i class="right" (click)="toggleConfirmPasswordVisibility()">
+          <app-password-show-icon
+            *ngIf="!showConfirmPassword"
+          ></app-password-show-icon>
+          <app-password-hide-icon
+            *ngIf="showConfirmPassword"
+          ></app-password-hide-icon>
+        </i>
+      </div>
+    </div>
+    <div class="frmBtns">
+      <!-- (click)="goToLogin()" -->
+
+      <button
+        type="submit"
+        class="btn btnCommon btnMinWidth"
+        [disabled]="signupForm.invalid || passwordMismatch"
+      >
+        Sign Up
+      </button>
+    </div>
+  </form>
 </app-auth-form>
+
+<div class="loginRoleSelection mb-4">
+  <div class="loginRoleOptions">
+    <label>
+      <input
+        type="radio"
+        name="role"
+        value="owner"
+        [(ngModel)]="selectedRole"
+        (change)="onRoleChange()"
+      />
+      <span>Owner</span>
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="role"
+        value="property-manager"
+        [(ngModel)]="selectedRole"
+        (change)="onRoleChange()"
+      />
+      <span>Property Manager</span>
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="role"
+        value="tenant"
+        [(ngModel)]="selectedRole"
+        (change)="onRoleChange()"
+      />
+      <span>Tenant</span>
+    </label>
+  </div>
+</div>
 
 <app-new-user-link type="login" />
