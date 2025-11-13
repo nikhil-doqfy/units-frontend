@@ -3,6 +3,8 @@ import { AuthTitleComponent } from '../../component/auth-title/auth-title.compon
 import { AuthFormComponent } from '../../component/auth-form/auth-form.component';
 import { CommonModule } from '@angular/common';
 import { NewUserLinkComponent } from '../../component/new-user-link/new-user-link.component';
+import { Router } from '@angular/router';
+import { ArrowIconComponent } from '../../../icon/arrow-icon/arrow-icon.component';
 @Component({
   selector: 'app-upload-document',
   standalone: true,
@@ -11,6 +13,7 @@ import { NewUserLinkComponent } from '../../component/new-user-link/new-user-lin
     AuthFormComponent,
     CommonModule,
     NewUserLinkComponent,
+    ArrowIconComponent,
   ],
   templateUrl: './upload-document.component.html',
   styleUrl: './upload-document.component.css',
@@ -31,13 +34,19 @@ export class UploadDocumentComponent {
   //     dldCert: [null, Validators.required]
   //   });
   // }
-
+  constructor(private router: Router) {}
   triggerFile(type: string) {
     if (type === 'emiratesId') this.emiratesIdInput.nativeElement.click();
     if (type === 'uaeVisa') this.uaeVisaInput.nativeElement.click();
     if (type === 'dldCert') this.dldCertInput.nativeElement.click();
   }
 
+  goToResetPassword(): void {
+    this.router.navigate(['/auth/validation'], {});
+  }
+  back() {
+    this.router.navigate(['/auth/validation']);
+  }
   onFileSelect(event: any, type: string) {
     const file = event.target.files[0];
     if (!file) return;

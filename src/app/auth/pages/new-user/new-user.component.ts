@@ -24,6 +24,9 @@ import { StorageService } from '../../../shared/services/storage.service';
 import { ContactNumberComponent } from '../../../icon/contact-number/contact-number.component';
 import { ThemeService, UserRole } from '../../../theme.service';
 import { TimerTextComponent } from '../../component/timer-text/timer-text.component';
+import { EditIconComponent } from '../../../dashboard/component/icons/edit-icon/edit-icon.component';
+import { VerifyIconEditComponent } from '../../../icon/verify-icon-edit/verify-icon-edit.component';
+import { HeadphoneIconComponent } from '../../../icon/headphone-icon/headphone-icon.component';
 @Component({
   selector: 'app-new-user',
   standalone: true,
@@ -42,6 +45,9 @@ import { TimerTextComponent } from '../../component/timer-text/timer-text.compon
     ReactiveFormsModule,
     ContactNumberComponent,
     TimerTextComponent,
+    EditIconComponent,
+    VerifyIconEditComponent,
+    HeadphoneIconComponent,
   ],
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css',
@@ -80,7 +86,7 @@ export class NewUserComponent {
   }
   goToResetPassword(): void {
     this.modalService.dismissAll();
-    this.router.navigate(['auth/reset-password'], {
+    this.router.navigate(['/auth/validation'], {
       state: { email: this.email, otp: this.otp },
     });
   }

@@ -46,3 +46,22 @@
 .loginRoleOptions label input:checked ~ span {
   background-color: var(--whiteBg);
 }
+.custom-shadow {
+  box-shadow: 4px 4px 6px rgba(190, 187, 187, 0.8);
+  font-size: 13px;
+  font-weight: 500;
+  width: 120px;
+}
+.btn-wide {
+  width: 10px;
+}
+
+.btnCommons {
+  background: var(--ownerGradientBg);
+  font-size: 14px;
+  color: var(--whiteText);
+  width: 90px;
+}
+/* form {
+  height: 300px;
+} */

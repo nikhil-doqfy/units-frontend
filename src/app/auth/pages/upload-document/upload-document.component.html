@@ -101,104 +101,132 @@
   </div>
 </app-auth-form> -->
 
-<app-auth-title
-  title="Upload Documents"
-  description="Please upload your identity and address proof documents. Supported Format: PDF, PNG. Max 1MB."
-/>
+<app-auth-title title="Upload Documents" />
 
 <app-auth-form>
   <!-- [formGroup]="uploadForm" (ngSubmit)="onSubmit()" -->
   <form class="mb-4">
     <div class="upload-section">
       <div class="upload-header">
-        <div class="d-flex align-items-center">
-          <i class="fa fa-id-card me-2"></i>
-          <strong>Identity and Address Proof</strong>
-        </div>
-        <small>Supported Format: PDF, PNG. Max 1MB</small>
-      </div>
-
-      <div class="upload-boxes">
-        <div class="upload-box" (click)="triggerFile('emiratesId')">
-          <input
-            type="file"
-            hidden
-            #emiratesIdInput
-            (change)="onFileSelect($event, 'emiratesId')"
-            accept=".pdf,.png"
-          />
-          <i class="fa fa-upload"></i>
-          <p>Emirates ID</p>
-          <i
-            *ngIf="uploadedFiles.emiratesId"
-            class="fa fa-check-circle text-success"
-          ></i>
-        </div>
-
-        <div class="upload-box" (click)="triggerFile('uaeVisa')">
-          <input
-            type="file"
-            hidden
-            #uaeVisaInput
-            (change)="onFileSelect($event, 'uaeVisa')"
-            accept=".pdf,.png"
-          />
-          <i class="fa fa-upload"></i>
-          <p>UAE Residence Visa</p>
-          <i
-            *ngIf="uploadedFiles.uaeVisa"
-            class="fa fa-check-circle text-success"
-          ></i>
-        </div>
-
-        <div class="upload-box" (click)="triggerFile('dldCert')">
-          <input
-            type="file"
-            hidden
-            #dldCertInput
-            (change)="onFileSelect($event, 'dldCert')"
-            accept=".pdf,.png"
-          />
-          <i class="fa fa-upload"></i>
-          <p>DLD Certificate</p>
-          <i
-            *ngIf="uploadedFiles.dldCert"
-            class="fa fa-check-circle text-success"
-          ></i>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="uploadedList.length > 0" class="uploaded-section">
-      <h6>Documents Uploaded</h6>
-
-      <div class="uploaded-file" *ngFor="let file of uploadedList">
-        <div class="file-info">
-          <i
-            [ngClass]="
-              file.name.endsWith('.pdf')
-                ? 'fa fa-file-pdf text-danger'
-                : 'fa fa-file-image text-success'
-            "
-          ></i>
-          <div>
-            <p>{{ file.name }}</p>
-            <small>{{ file.size }}</small>
+        <div class="accordion" id="blueAccordion">
+          <div class="accordion-item border-primary">
+            <h2 class="accordion-header" id="headingBlue">
+              <button
+                class="accordion-button d-flex justify-content-between align-items-center text-primary fw-semibold"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseBlue"
+                aria-expanded="true"
+                aria-controls="collapseBlue"
+              >
+                <div class="d-flex align-items-center">
+                  <i class="fa fa-id-card me-2"></i>
+                  <small>Identity and Address Proof</small>
+                </div>
+                <small class="text-muted ms-2"
+                  >Supported Format: PDF, PNG. Max 1MB</small
+                >
+              </button>
+            </h2>
+            <div
+              id="collapseBlue"
+              class="accordion-collapse collapse show"
+              aria-labelledby="headingBlue"
+              data-bs-parent="#blueAccordion"
+            >
+              <div class="accordion-body">
+                <p class="mb-0">
+                  You can upload your document here (Aadhar, PAN, etc.).
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="file-actions">
-          <button type="button" (click)="editFile(file)">✏️</button>
-          <button type="button" (click)="deleteFile(file)">🗑️</button>
+
+        <div class="upload-boxes">
+          <div class="upload-box" (click)="triggerFile('emiratesId')">
+            <input
+              type="file"
+              hidden
+              #emiratesIdInput
+              (change)="onFileSelect($event, 'emiratesId')"
+              accept=".pdf,.png"
+            />
+            <i class="fa fa-upload"></i>
+            <p>Emirates ID</p>
+            <i
+              *ngIf="uploadedFiles.emiratesId"
+              class="fa fa-check-circle text-success"
+            ></i>
+          </div>
+
+          <div class="upload-box" (click)="triggerFile('uaeVisa')">
+            <input
+              type="file"
+              hidden
+              #uaeVisaInput
+              (change)="onFileSelect($event, 'uaeVisa')"
+              accept=".pdf,.png"
+            />
+            <i class="fa fa-upload"></i>
+            <p>UAE Residence Visa</p>
+            <i
+              *ngIf="uploadedFiles.uaeVisa"
+              class="fa fa-check-circle text-success"
+            ></i>
+          </div>
+
+          <div class="upload-box" (click)="triggerFile('dldCert')">
+            <input
+              type="file"
+              hidden
+              #dldCertInput
+              (change)="onFileSelect($event, 'dldCert')"
+              accept=".pdf,.png"
+            />
+            <i class="fa fa-upload"></i>
+            <p>DLD Certificate</p>
+            <i
+              *ngIf="uploadedFiles.dldCert"
+              class="fa fa-check-circle text-success"
+            ></i>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="uploadedList.length > 0" class="uploaded-section">
+        <h6>Documents Uploaded</h6>
+
+        <div class="uploaded-file" *ngFor="let file of uploadedList">
+          <div class="file-info">
+            <i
+              [ngClass]="
+                file.name.endsWith('.pdf')
+                  ? 'fa fa-file-pdf text-danger'
+                  : 'fa fa-file-image text-success'
+              "
+            ></i>
+            <div>
+              <p>{{ file.name }}</p>
+              <small>{{ file.size }}</small>
+            </div>
+          </div>
+          <div class="file-actions">
+            <button type="button" (click)="editFile(file)">✏️</button>
+            <button type="button" (click)="deleteFile(file)">🗑️</button>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="frmBtns d-flex justify-content-between mt-4">
-      <button type="button" class="btn btnLight">← Back</button>
-      <!-- [disabled]="uploadForm.invalid" -->
-      <button type="submit" class="btn btnCommon">Login</button>
-    </div>
   </form>
+  <div class="frmBtnss d-flex justify-content-center gap-3 mt-2 bt-wide">
+    <button type="button" class="btn btnLight custom-shadow" (click)="back()">
+      <app-arrow-icon></app-arrow-icon>
+      Back
+    </button>
+    <!-- [disabled]="uploadForm.invalid" -->
+    <button type="submit" class="btn btnCommon btn-wide">Login</button>
+  </div>
 </app-auth-form>
 
-<app-new-user-link type="back" />
+<!-- <app-new-user-link type="back" /> -->

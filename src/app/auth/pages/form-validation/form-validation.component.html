@@ -5,9 +5,9 @@
 
 <app-auth-form>
   <!-- [formGroup]="identificationForm" (ngSubmit)="onSubmit()" -->
-  <form class="mb-4">
+  <form class="mt-2">
     <!-- Property Manage Through -->
-    <div class="mb-4">
+    <div class="mb-3">
       <label class="form-label">Property Manage Through</label>
       <div class="d-flex gap-3">
         <label class="d-flex align-items-center gap-1">
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Emirate ID -->
-    <div class="mb-4">
+    <div class="mb-3">
       <label class="form-label">Emirate ID</label>
       <!-- <div class="iconInput"> -->
       <input
@@ -35,7 +35,7 @@
     </div>
 
     <!-- UAE Residence Visa -->
-    <div class="mb-4">
+    <div class="mb-3">
       <label class="form-label">UAE Residence Visa</label>
       <!-- <div class="iconInput"> -->
       <input
@@ -48,7 +48,7 @@
     </div>
 
     <!-- Trade License Number -->
-    <div class="mb-4">
+    <div class="mb-3">
       <label class="form-label">Trade License Number</label>
       <!-- <div class="iconInput"> -->
       <input
@@ -60,10 +60,19 @@
       <!-- </div> -->
     </div>
 
-    <div class="frmBtns">
+    <div class="frmBtnss d-flex justify-content-center gap-3 mt-2">
       <!-- (click)="goBack()" -->
-      <button type="button" class="btn btnCommon outline">← Back</button>
-      <button type="submit" class="btn btnCommon">Next</button>
+      <button type="button" class="btn btnLight custom-shadow" (click)="back()">
+        <app-arrow-icon></app-arrow-icon>
+        Back
+      </button>
+      <button
+        type="submit"
+        class="btn btnCommon btn-wide"
+        (click)="goToResetPassword()"
+      >
+        Next
+      </button>
     </div>
     <br />
     <br />

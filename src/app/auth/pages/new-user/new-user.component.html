@@ -187,45 +187,52 @@
 
 <ng-template #otpVerifyContent let-modal>
   <div class="modal-body otpVerifyMdlBody">
-    <div class="otpVerifyLogo">
+    <div class="otpVerifyLogo justify-content-start d-flex">
       <a href="javascript:void(0);" (click)="goToLogin()">
-        <img src="../../../../assets/mainLogo.svg" alt="Doqfy Logo" />
+        <img src="../../../../assets/favicon/verify.png" alt="Doqfy Logo" />
       </a>
+      <h4 class="verifyTitle text-center">Verify Account</h4>
     </div>
-    <div class="otpVerifyMdlInfo my-4">
+
+    <div class="otpVerifyMdlInfo mb-4">
       <p>
-        Please enter the Verification code sent to
-        <span>hariprXXXX&#64;doqfy.in</span>&nbsp;<button
+        We'Ve sent code to
+        <span>haXXX&#64;doqfy.in</span>&nbsp;<button
           type="button"
           (click)="modal.dismiss('Cross click')"
         >
-          Edit
+          <div class="justify-content-end">
+            <app-verify-icon-edit></app-verify-icon-edit>
+          </div>
         </button>
       </p>
     </div>
     <div class="otpVerifyForm">
       <app-auth-form>
         <form>
-          <div class="mb-2">
+          <div class="mb-2 text-center">
+            <span class="d-block mb-2">Enter OTP</span>
             <ng-otp-input
               class="formOtpInput"
               (onInputChange)="onOtpChange($event)"
               [config]="{
                 length: 6,
                 placeholder: '',
+
                 disableAutoFocus: true,
                 allowNumbersOnly: true
               }"
             ></ng-otp-input>
           </div>
-          <div class="d-flex align-items-center justify-content-between mb-4">
-            <div></div>
-            Timer
+          <div class="d-flex justify-content-center mb-4 text-center">
+            <!-- <div></div> -->
+
             <app-timer-text
+              label="Resend code in"
               *ngIf="otpSent && otpTimer > 0"
               [time]="timerDisplay"
             />
-            Resend link
+
             <button
               *ngIf="showResend"
               type="button"
@@ -235,13 +242,26 @@
               Resend OTP
             </button>
           </div>
-          <div class="frmBtns">
+
+          <div
+            class="frmBtnss justify-content-end d-flex justify-content-between justify-content-end mt-3"
+          >
+            <div class="justify-content-start">
+              <app-headphone-icon></app-headphone-icon>
+            </div>
             <button
               type="button"
-              class="btn btnCommon"
+              class="btn btnCommonss custom-shadow"
               (click)="goToResetPassword()"
             >
-              Reset Password
+              Resend OTP
+            </button>
+            <button
+              type="button"
+              class="btn btnCommons btn-wide"
+              (click)="goToResetPassword()"
+            >
+              submit
             </button>
           </div>
         </form>

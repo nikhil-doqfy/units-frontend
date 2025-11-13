@@ -1,0 +1,46 @@
+.upload-section {
+  background: #fff; /* white background keeps it clean */
+  border: 1px solid #dee2e6; /* light gray border */
+  border-radius: 8px; /* soft corners */
+  padding: 16px; /* inner spacing */
+  transition: all 0.2s ease-in-out;
+}
+.frmBtns {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.accordion-item {
+  /* border: 1px solid #cfe2ff; light blue border */
+  border: hidden;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.accordion-button {
+  background-color: #e7f1ff; /* light blue background */
+  font-weight: 10;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #d6e9ff;
+  /* color: #0a58ca; */
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  border-color: #0d6efd;
+}
+
+.accordion-body {
+  background-color: #fff;
+}
+
+.custom-shadow {
+  box-shadow: 0 4px 6px rgba(190, 187, 187, 0.8); /* solid black look */
+}
+.btn-wide {
+  width: 120px; /* आपल्या UI नुसार वाढव */
+}
