@@ -10,6 +10,12 @@ import { PasswordHideIconComponent } from '../../component/icons/password-hide-i
 import { PasswordShowIconComponent } from '../../component/icons/password-show-icon/password-show-icon.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
@@ -22,11 +28,13 @@ import { AuthService } from '../../services/auth.service';
     PasswordHideIconComponent,
     PasswordShowIconComponent,
     FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
 })
 export class ResetPasswordComponent implements OnInit {
+  resetForm!: FormGroup;
   email: string = '';
   otp: string = '';
   password: string = '';
@@ -35,6 +43,7 @@ export class ResetPasswordComponent implements OnInit {
   showConfirmPassword = false;
 
   constructor(
+    private fb: FormBuilder,
     private router: Router,
     private auth: AuthService,
     private route: ActivatedRoute
@@ -45,10 +54,15 @@ export class ResetPasswordComponent implements OnInit {
     this.email = data.email;
     this.otp = data.otp;
 
-    console.log('EMAIL:', this.email);
-    console.log('OTP:', this.otp);
-  }
+    // console.log('EMAIL:', this.email);
+    // console.log('OTP:', this.otp);
 
+    this.resetForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+    });
+  }
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
   }

@@ -2,7 +2,6 @@
 
 <app-auth-form>
   <form class="mb-4" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-    <!-- Company Name -->
     <div class="grid-2">
       <ng-container *ngIf="selectedRole === 'owner'">
         <!-- Company Name -->
@@ -14,23 +13,13 @@
         <!-- Company Emirates ID -->
         <div class="mb-2">
           <label for="emiratesId" class="form-label">Last Name</label>
-          <input
-            class="form-control"
-            type="text"
-            formControlName="emiratesId"
-            placeholder="Enter here"
-          />
+          <input class="form-control" type="text" placeholder="Enter here" />
         </div>
       </ng-container>
       <ng-container *ngIf="selectedRole === 'property-manager'">
         <div class="mb-2">
           <label for="companyName" class="form-label">Company Name</label>
-          <input
-            class="form-control"
-            type="text"
-            formControlName="companyName"
-            placeholder="Enter here"
-          />
+          <input class="form-control" type="text" placeholder="Enter here" />
           <!-- <small
         *ngIf="
           signupForm.get('companyName')?.invalid &&
@@ -44,12 +33,7 @@
         <!-- Company Emirates ID -->
         <div class="mb-2">
           <label for="emiratesId" class="form-label">Company Emirates ID</label>
-          <input
-            class="form-control"
-            type="text"
-            formControlName="emiratesId"
-            placeholder="Enter here"
-          />
+          <input class="form-control" type="text" placeholder="Enter here" />
           <small
             *ngIf="
               signupForm.get('emiratesId')?.invalid &&
@@ -63,22 +47,12 @@
       <ng-container *ngIf="selectedRole === 'tenant'">
         <div class="mb-2">
           <label for="buildingName" class="form-label">Full Name</label>
-          <input
-            class="form-control"
-            type="text"
-            formControlName="buildingName"
-            placeholder="Enter here"
-          />
+          <input class="form-control" type="text" placeholder="Enter here" />
         </div>
 
         <div class="mb-2">
           <label for="flatNumber" class="form-label">Emirates ID</label>
-          <input
-            class="form-control"
-            type="text"
-            formControlName="flatNumber"
-            placeholder=" Enter here"
-          />
+          <input class="form-control" type="text" placeholder=" Enter here" />
         </div>
       </ng-container>
       <!-- Email Address -->
@@ -127,30 +101,7 @@
         </div>
       </div>
     </div>
-    <!-- <div class="mb-4">
-      <label for="email" class="form-label justify-content-between"
-        >Email Address</label
-      >
-      <div class="iconInput">
-        <i>
-          <app-email-icon />
-        </i>
-        <input
-          class="form-control"
-          type="email"
-          formControlName="email"
-          placeholder="Enter your email"
-        />
 
-        <small
-          *ngIf="
-            signupForm.get('email')?.invalid && signupForm.get('email')?.touched
-          "
-        >
-          Valid email is required
-        </small>
-      </div> -->
-    <!-- </div> -->
     <div class="mb-2">
       <app-password-strength-field
         [value]="signupForm.get('password')?.value"
@@ -185,13 +136,13 @@
     </div>
     <div class="frmBtns">
       <!-- (click)="goToLogin()" -->
-
+      <!-- [disabled]="signupForm.invalid || passwordMismatch" -->
       <button
         type="submit"
         class="btn btnCommon btnMinWidth"
-        [disabled]="signupForm.invalid || passwordMismatch"
+        (click)="openOtpVerifyModal(otpVerifyContent)"
       >
-        Sign Up
+        Verify Account
       </button>
     </div>
   </form>
@@ -233,3 +184,68 @@
 </div>
 
 <app-new-user-link type="login" />
+
+<ng-template #otpVerifyContent let-modal>
+  <div class="modal-body otpVerifyMdlBody">
+    <div class="otpVerifyLogo">
+      <a href="javascript:void(0);" (click)="goToLogin()">
+        <img src="../../../../assets/mainLogo.svg" alt="Doqfy Logo" />
+      </a>
+    </div>
+    <div class="otpVerifyMdlInfo my-4">
+      <p>
+        Please enter the Verification code sent to
+        <span>hariprXXXX&#64;doqfy.in</span>&nbsp;<button
+          type="button"
+          (click)="modal.dismiss('Cross click')"
+        >
+          Edit
+        </button>
+      </p>
+    </div>
+    <div class="otpVerifyForm">
+      <app-auth-form>
+        <form>
+          <div class="mb-2">
+            <ng-otp-input
+              class="formOtpInput"
+              (onInputChange)="onOtpChange($event)"
+              [config]="{
+                length: 6,
+                placeholder: '',
+                disableAutoFocus: true,
+                allowNumbersOnly: true
+              }"
+            ></ng-otp-input>
+          </div>
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div></div>
+            Timer
+            <app-timer-text
+              *ngIf="otpSent && otpTimer > 0"
+              [time]="timerDisplay"
+            />
+            Resend link
+            <button
+              *ngIf="showResend"
+              type="button"
+              class="link"
+              (click)="resendOtp()"
+            >
+              Resend OTP
+            </button>
+          </div>
+          <div class="frmBtns">
+            <button
+              type="button"
+              class="btn btnCommon"
+              (click)="goToResetPassword()"
+            >
+              Reset Password
+            </button>
+          </div>
+        </form>
+      </app-auth-form>
+    </div>
+  </div>
+</ng-template>

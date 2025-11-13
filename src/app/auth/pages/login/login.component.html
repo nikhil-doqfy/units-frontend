@@ -4,7 +4,6 @@
 />
 
 <app-auth-form>
-  <!-- PASSWORD LOGIN FORM -->
   <form
     *ngIf="loginMode === 'password'"
     class="mb-4"
@@ -48,13 +47,16 @@
       <app-field-link title="Forgot password?" (click)="goToForgotPassword()" />
     </div>
     <div class="frmBtns">
-      <!-- (click)="goToDashboard()" -->
-      <button type="button" class="btn btnCommon btnMinWidth">Sign In</button>
+      <button type="submit" class="btn btnCommon btnMinWidth">Sign In</button>
     </div>
   </form>
 
-  <!-- OTP LOGIN FORM -->
-  <form *ngIf="loginMode === 'otp'" class="mb-4">
+  <form
+    *ngIf="loginMode === 'otp'"
+    class="mb-4"
+    [formGroup]="otpForm"
+    (ngSubmit)="sendOtp()"
+  >
     <div class="mb-4">
       <label for="email" class="form-label">
         Email Address
@@ -74,12 +76,10 @@
           type="email"
           name="email"
           placeholder="Enter your email"
-          [(ngModel)]="email"
+          formControlName="email"
           [disabled]="emailLocked"
         />
-        <button type="button" *ngIf="!otpSent" (click)="sendOtp()">
-          Send OTP
-        </button>
+        <button type="submit" *ngIf="!otpSent">Send OTP</button>
       </div>
     </div>
 
@@ -109,7 +109,6 @@
         (click)="onResendOtp()"
       />
     </div>
-    <!-- (click)="goToDashboard()" -->
 
     <div class="frmBtns">
       <button

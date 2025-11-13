@@ -16,7 +16,7 @@ import { TimerTextComponent } from '../../component/timer-text/timer-text.compon
 import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { AlertService } from '../../../shared/services/alert.service';
-
+import { Subscription } from 'rxjs';
 import {
   FormBuilder,
   FormGroup,
@@ -47,6 +47,7 @@ import {
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+
   isLoading = false;
   currentRole: UserRole = 'owner';
   selectedRole: UserRole = 'owner';
@@ -54,7 +55,7 @@ export class LoginComponent implements OnInit {
   showPassword = false;
   loginMode: 'password' | 'otp' = 'password';
   email = '';
-  // password = '';
+  password = '';
 
   otp = '';
   otpSent = false;
@@ -62,7 +63,7 @@ export class LoginComponent implements OnInit {
   otpTimer = 60;
   timerDisplay = '1:00';
   timerInterval: any;
-
+  otpForm!: FormGroup;
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -81,84 +82,36 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Create Reactive Form
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
-  }
-
-  // signIn(): void {
-  //   // Use reactive form validation instead of manual if check
-  //   if (this.loginForm.invalid) {
-  //     this.loginForm.markAllAsTouched(); // show errors
-  //     this.alertService.error('Please enter email and password');
-  //     return;
-  //   }
-
-  //   let payload = {
-  //     email: this.loginForm.value.email,
-  //     password: this.loginForm.value.password,
-  //   };
-
-  //   // const payload = this.loginForm.value;
-
-  //   this.authService.login(payload).subscribe({
-  //     next: (resp: any) => {
-  //       console.log('resp:--->', resp);
-  //       this.alertService.success('Login successful');
-  //       // this.goToDashboard();
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //       this.alertService.error(err?.error?.message || 'Login failed');
-  //     },
-  //   });
-  // }
-
-  checkFormValidity(): void {
-    Object.keys(this.loginForm.controls).forEach((field) => {
-      const control = this.loginForm.get(field);
-      if (control?.invalid) {
-        console.log(`❌ INVALID FIELD: ${field}`, control.errors);
-      } else {
-        console.log(`✅ VALID FIELD: ${field}`);
-      }
+    this.otpForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
     });
-
-    console.log(
-      'Overall Form Status:',
-      this.loginForm.valid ? '✅ VALID' : '❌ INVALID'
-    );
   }
+
   signIn(): void {
-    // console.log('monali');
-    this.checkFormValidity();
+    // Use reactive form validation instead of manual if check
     if (this.loginForm.invalid) {
-      // console.log('monal');
-      // this.loginForm.markAllAsTouched(); // show errors
+      this.loginForm.markAllAsTouched(); // show errors
       this.alertService.error('Please enter email and password');
       return;
     }
-    this.isLoading = true;
-    const payload = this.loginForm.value;
+
+    let payload = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password,
+    };
+
+    // const payload = this.loginForm.value;
 
     this.authService.login(payload).subscribe({
       next: (resp: any) => {
         console.log('resp:--->', resp);
-        this.isLoading = false;
-        // console.log('Login Response:', resp);
-        // this.alertService.success('Login successful');
-        // this.goToDashboard();
-        if (resp && resp.token) {
-          this.storageService.setToken(resp.token);
-          this.alertService.success('Login successful!');
-          this.router.navigate(['/dashboard']); // redirect to dashboard
-        } else {
-          this.alertService.error('Token not found in response');
-        }
+        this.alertService.success('Login successful');
+        this.goToDashboard();
       },
-
       error: (err) => {
         console.log(err);
         this.alertService.error(err?.error?.message || 'Login failed');
@@ -210,15 +163,22 @@ export class LoginComponent implements OnInit {
   }
 
   sendOtp(): void {
-    if (!this.email) {
-      this.alertService.error('Please enter your email');
+    // if (!this.email) {
+    //   this.alertService.error('Please enter your email');
+    //   return;
+    // }
+    console.log('seda', this.email);
+    if (this.otpForm.invalid) {
+      this.alertService.error('Please enter a valid email');
       return;
     }
 
-    let payload = { email: this.email };
+    const payload = { email: this.otpForm.value.email };
 
+    console.log('email========================>', this.email);
     this.authService.sendOtp(payload).subscribe({
       next: (resp: any) => {
+        console.log('monali', this.email);
         console.log('OTP response:--->', resp);
         this.alertService.success(resp?.message || 'OTP sent successfully');
         this.otpSent = true;
@@ -232,6 +192,32 @@ export class LoginComponent implements OnInit {
       },
     });
   }
+
+  // sendOtp(): void {
+  //   if (this.otpForm.invalid) {
+  //     this.alertService.error('Please enter a valid email');
+  //     return;
+  //   }
+
+  //   const payload = { email: this.otpForm.value.email };
+
+  //   this.subscription.add(
+  //     this.authService.sendOtp(payload).subscribe({
+  //       next: (resp: any) => {
+  //         console.log('OTP response:--->', resp);
+  //         this.alertService.success(resp?.message || 'OTP sent successfully');
+  //         this.otpSent = true;
+  //         this.emailLocked = true;
+  //         this.otpTimer = 60;
+  //         this.startOtpTimer();
+  //       },
+  //       error: (err) => {
+  //         console.log('OTP error:--->', err);
+  //         this.alertService.error(err?.error?.message || 'Failed to send OTP');
+  //       },
+  //     })
+  //   );
+  // }
 
   signInWithOtp(): void {
     if (!this.email || !this.otp) {
