@@ -36,7 +36,7 @@ import {
 export class ResetPasswordComponent implements OnInit {
   resetForm!: FormGroup;
   email: string = '';
-  otp: string = '';
+  otp = '';
   password: string = '';
   confirm_password: string = '';
 
@@ -59,6 +59,7 @@ export class ResetPasswordComponent implements OnInit {
 
     this.resetForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      otp: [this.otp, Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
     });
@@ -68,24 +69,36 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPassword() {
-    if (!this.password || !this.confirm_password) {
-      alert('Please enter both password fields');
+    // if (!this.password || !this.confirm_password) {
+    //   alert('Please enter both password fields');
+    //   return;
+    // }
+
+    // if (this.password !== this.confirm_password) {
+    //   alert('Passwords do not match');
+    //   return;
+    // }
+    // const data = {
+    //   email: this.email,
+    //   otp: this.otp,
+    //   password: this.password,
+    //   confirm_password: this.confirm_password,
+    // };
+
+    if (this.resetForm.invalid) {
+      this.resetForm.markAllAsTouched();
       return;
     }
 
-    if (this.password !== this.confirm_password) {
-      alert('Passwords do not match');
-      return;
-    }
-    const data = {
-      email: this.email,
-      otp: this.otp,
-      password: this.password,
-      confirm_password: this.confirm_password,
+    const payload = {
+      // email: this.resetForm.get('email')?.value,
+      // otp: this.resetForm.get('otp')?.value,
+      password: this.resetForm.get('password')?.value,
+      confirm_password: this.resetForm.get('confirm_password')?.value,
     };
 
-    console.log('DATA SENT:', data);
-    this.auth.resetPassword(data).subscribe({
+    // console.log('DATA SENT:', data);
+    this.auth.resetPassword(payload).subscribe({
       next: () => {
         alert('Password reset successful!');
         this.router.navigate(['/login']);

@@ -88,6 +88,7 @@ export class LoginComponent implements OnInit {
     });
     this.otpForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      otp: [''],
     });
   }
 
@@ -118,7 +119,7 @@ export class LoginComponent implements OnInit {
 
   onOtpChange(evt: any) {
     this.otp = evt;
-    // this.otpForm.patchValue({ otp: evt });
+    this.otpForm.patchValue({ otp: evt });
   }
 
   togglePasswordVisibility(): void {
@@ -187,26 +188,28 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithOtp(): void {
-    if (!this.email || !this.otp) {
-      this.alertService.error('Enter email and OTP');
+    // if (!this.email || !this.otp) {
+    //   this.alertService.error('Enter email and OTP');
 
+    //   return;
+    // }
+
+    if (this.otpForm.invalid) {
+      this.alertService.error('Enter a valid email and OTP');
       return;
     }
-    // const payload = { email: this.otpForm.value.email };
     const payload = {
       email: this.otpForm.value.email,
-      otp: this.otpForm.value.otp,
+      otp: Number(this.otpForm.value.otp),
     };
     this.authService.verifyOtp(payload).subscribe({
       next: (resp: any) => {
-        console.log('monali', this.email);
-
         console.log('OTP verify response: ', resp);
         this.alertService.success('Login successful');
         this.goToDashboard();
       },
       error: (err) => {
-        console.log('OTP verify error: ', err);
+        console.log('OTP verify error: ', err.err);
         this.alertService.error(err?.error?.message || 'Invalid OTP');
       },
     });

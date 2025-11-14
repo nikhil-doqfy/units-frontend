@@ -50,7 +50,7 @@
       <button type="submit" class="btn btnCommon btnMinWidth">Sign In</button>
     </div>
   </form>
-
+  <!--signin with otp-->
   <form
     *ngIf="loginMode === 'otp'"
     class="mb-4"
@@ -78,7 +78,7 @@
           formControlName="email"
           [readonly]="emailLocked"
         />
-        <button type="submit" *ngIf="!otpSent" (click)="sendOtp()">
+        <button type="button" *ngIf="!otpSent" (click)="sendOtp()">
           Send OTP
         </button>
       </div>
@@ -92,6 +92,7 @@
         [config]="{
           length: 6,
           placeholder: '',
+
           disableAutoFocus: true,
           allowNumbersOnly: true
         }"

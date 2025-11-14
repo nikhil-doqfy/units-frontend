@@ -94,8 +94,8 @@ export class ForgotPasswordComponent {
       return;
     }
 
-    let payload = { email: this.email };
-
+    // let payload = { email: this.email };
+    let payload = { email: this.forgetForm.value.email };
     this.authService.sendOtp(payload).subscribe({
       next: (resp: any) => {
         console.log('OTP response:--->', resp);
@@ -172,7 +172,7 @@ export class ForgotPasswordComponent {
 
   signInWithOtp(): void {
     let payload = {
-      email: this.email,
+      email: this.forgetForm.value.email,
       otp: this.otp,
     };
     this.authService.verifyOtp(payload).subscribe({

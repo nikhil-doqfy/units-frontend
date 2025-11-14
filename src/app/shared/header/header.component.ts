@@ -221,6 +221,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+    const token = this.storage.getToken();
     this.authService.logout().subscribe({
       next: (resp: any) => {
         this.modalService.dismissAll(); // ✅ Close modal before logout
