@@ -1,4 +1,5 @@
-<header class="dashHdrMain" [class.dashHdrSmallMain]="openSidebarValue === false">
+<header class="dashHdrMain" [class.dashHdrSmallMain]="openSidebarValue === false"
+    [ngClass]="{ 'arabic': currentLanguage === 'ar' }">
     <div class="dashHdrTop">
         <div class="row g-3 align-items-center justify-space-between">
             <div class="col">
@@ -17,14 +18,14 @@
                         <button type="button" class="btn btnCommon btnMinWidth d-none d-xl-flex"
                             (click)="goToAddProperty()" [ngClass]="isAddPropertyActive ? 'btnActive' : 'btnGrey'">
                             <i><app-plus-icon></app-plus-icon></i>
-                            Add Property
+                            {{ 'ADD_PROPERTY' | translate }}
                         </button>
                     </ng-container>
                     <ng-container *ngIf="currentRole === 'property-manager'">
                         <button type="button" class="btn btnCommon btnMinWidth d-none d-xl-flex"
                             (click)="goToAddLease()" [ngClass]="isAddLeaseActive ? 'btnActive' : 'btnWhite'">
                             <i><app-plus-icon></app-plus-icon></i>
-                            New Lease
+                            {{ 'NEW_LEASE' | translate }}
                         </button>
                     </ng-container>
                     <button type="button"
@@ -33,34 +34,31 @@
                         class="btn btnCommon btnWhite"><i><app-notification-icon></app-notification-icon></i></button>
                     <div ngbDropdown class="hdrDrpdwn hdrLanguageDrpdwn">
                         <button type="button" class="hdrDrpdwnBtn" id="userLanguageDropdown" ngbDropdownToggle>
-                            <i><img src="../../../assets/language/united-arab-emirates.png" width="24" height="24"
-                                    alt="United Arab Emirates" /></i>
+                            <i>
+                                <img [src]="flagIcon" width="24" height="24"
+                                    [alt]="currentLang === 'ar' ? 'Arabic' : 'English'" />
+                            </i>
                             <em>
-                                <span class="down">
-                                    <app-arrow-down-icon />
-                                </span>
-                                <span class="up">
-                                    <app-arrow-up-icon />
-                                </span>
+                                <span class="down"><app-arrow-down-icon /></span>
+                                <span class="up"><app-arrow-up-icon /></span>
                             </em>
                         </button>
                         <div class="hdrDrpdwnMenu hdrLanguageDrpdwnMenu" ngbDropdownMenu
                             aria-labelledby="userProfileDropdown">
                             <div class="hdrUserDrpdwnLinks">
-                                <button ngbDropdownItem><i><img src="../../../assets/language/united-arab-emirates.png"
-                                            alt="United Arab Emirates" /></i>United Arab Emirates</button>
+                                <button ngbDropdownItem (click)="setLanguage('en')">
+                                    <i><img src="assets/language/united-kingdom.png" alt="English" /></i>
+                                    English
+                                </button>
                                 <div class="dropdown-divider"></div>
-                                <button ngbDropdownItem><i><img src="../../../assets/language/united-arab-emirates.png"
-                                            alt="United Arab Emirates" /></i>US English</button>
-                                <div class="dropdown-divider"></div>
-                                <button ngbDropdownItem><i><img src="../../../assets/language/united-arab-emirates.png"
-                                            alt="United Arab Emirates" /></i>French</button>
-                                <div class="dropdown-divider"></div>
-                                <button ngbDropdownItem><i><img src="../../../assets/language/united-arab-emirates.png"
-                                            alt="United Arab Emirates" /></i>Canadian</button>
+                                <button ngbDropdownItem (click)="setLanguage('ar')">
+                                    <i><img src="assets/language/united-arab-emirates.png" alt="Arabic" /></i>
+                                    العربية
+                                </button>
                             </div>
                         </div>
                     </div>
+
                     <div ngbDropdown class="hdrDrpdwn hdrUserDrpdwn">
                         <button type="button" class="hdrDrpdwnBtn" id="userProfileDropdown" ngbDropdownToggle
                             [ngClass]="{'active': isProfileActive}">
@@ -83,12 +81,14 @@
                                 </div>
                             </div>
                             <div class="hdrUserDrpdwnLinks">
-                                <button ngbDropdownItem (click)="goToMyProfile()"><i><app-profile-icon /></i>My
-                                    Profile</button>
-                                <button ngbDropdownItem><i><app-document-icon /></i>Documentation</button>
+                                <button ngbDropdownItem (click)="goToMyProfile()"><i><app-profile-icon /></i>{{
+                                    'MY_PROFILE' | translate }}</button>
+                                <button ngbDropdownItem><i><app-document-icon /></i>{{ 'DOCUMENTATION' | translate
+                                    }}</button>
                                 <div class="dropdown-divider"></div>
                                 <button ngbDropdownItem
-                                    (click)="openLogoutModal(logoutContent)"><i><app-logout-icon></app-logout-icon></i>Logout</button>
+                                    (click)="openLogoutModal(logoutContent)"><i><app-logout-icon></app-logout-icon></i>{{
+                                    'LOGOUT' | translate }}</button>
                             </div>
                         </div>
                     </div>
@@ -105,13 +105,13 @@
             <i>
                 <app-logout-modal-icon />
             </i>
-            <h3>logout</h3>
-            <p>Are you sure you want to logout?</p>
+            <h3>{{ 'LOGOUT' | translate }}</h3>
+            <p>{{ 'LOGOUT_CONFIRM' | translate }}</p>
         </div>
         <div class="logoutMdlBtns">
             <button type="button" (click)="modal.dismiss('Cross click')"
-                class="btn btnCommon btnSmall btnTransparent">Cancel</button>
-            <button type="button" (click)="logout()" class="btn btnCommon btnSmall">Logout</button>
+                class="btn btnCommon btnSmall btnTransparent">{{ 'CANCEL' | translate }}</button>
+            <button type="button" (click)="logout()" class="btn btnCommon btnSmall">{{ 'LOGOUT' | translate }}</button>
         </div>
     </div>
 </ng-template>

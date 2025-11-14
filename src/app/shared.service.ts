@@ -53,20 +53,14 @@ export class SharedService {
   toggleRightSidebar() {
     const currentRightValue = this.openRightSidebarValueSource.value;
     const newRightValue = !currentRightValue;
-    localStorage.setItem(
-      this.openRightSidebarValueKey,
-      JSON.stringify(newRightValue)
-    );
+    localStorage.setItem(this.openRightSidebarValueKey, JSON.stringify(newRightValue));
     this.openRightSidebarValueSource.next(newRightValue);
   }
 
   // Set the sidebar state per route
   setRightSidebarStateForRoute(route: string) {
     const defaultState = this.getSidebarDefaultState(route);
-    localStorage.setItem(
-      this.openRightSidebarValueKey,
-      JSON.stringify(defaultState)
-    );
+    localStorage.setItem(this.openRightSidebarValueKey, JSON.stringify(defaultState));
     this.openRightSidebarValueSource.next(defaultState);
   }
 

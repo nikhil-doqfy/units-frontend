@@ -3,11 +3,12 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { SharedService } from '../../../shared.service';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dash-body',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './dash-body.component.html',
   styleUrls: ['./dash-body.component.css']
 })
@@ -16,13 +17,21 @@ export class DashBodyComponent implements OnInit, OnDestroy {
   openSidebarValue = true;
   openRightSidebarValue = false;
   hasRightSidebar = false;  // New flag to track right sidebar
+  currentLanguage = 'en';
+
   private subscriptions = new Subscription();
 
   constructor(
     private sharedService: SharedService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) { }
+    private activatedRoute: ActivatedRoute,
+    private translate: TranslateService
+  ) {
+    this.translate.onLangChange.subscribe((event:any) => {
+      this.currentLanguage = event.lang;
+    });
+    translate.use('en');
+  }
 
   ngOnInit() {
     // Initial check for sidebar on page load

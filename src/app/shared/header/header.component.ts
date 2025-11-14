@@ -1,43 +1,29 @@
-import {
-  Component,
-  Renderer2,
-  ElementRef,
-  ViewChild,
-  inject,
-  TemplateRef,
-  ViewEncapsulation,
-  OnDestroy,
-  OnInit,
-  Input,
-} from '@angular/core';
+import { Component, Renderer2, ElementRef, ViewChild, inject, TemplateRef, ViewEncapsulation, OnDestroy, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { SharedService } from '../../shared.service';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ThemeService, UserRole } from '../../theme.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-import {
-  NgbDropdownModule,
-  NgbNavModule,
-  ModalDismissReasons,
-  NgbModal,
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbNavModule, ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashTitleComponent } from '../component/dash-title/dash-title.component';
 import { PlusIconComponent } from '../component/icons/plus-icon/plus-icon.component';
 import { AppearanceIconComponent } from '../component/icons/appearance-icon/appearance-icon.component';
 import { NotificationIconComponent } from '../component/icons/notification-icon/notification-icon.component';
 import { ArrowDownIconComponent } from '../component/icons/arrow-down-icon/arrow-down-icon.component';
-import { ArrowUpIconComponent } from '../component/icons/arrow-up-icon/arrow-up-icon.component';
+import { ArrowUpIconComponent } from "../component/icons/arrow-up-icon/arrow-up-icon.component";
 import { ProfileIconComponent } from '../component/icons/profile-icon/profile-icon.component';
 import { DocumentIconComponent } from '../component/icons/document-icon/document-icon.component';
 import { LogoutIconComponent } from '../component/icons/logout-icon/logout-icon.component';
-import { LogoutModalIconComponent } from '../component/icons/logout-modal-icon/logout-modal-icon.component';
+import { LogoutModalIconComponent } from "../component/icons/logout-modal-icon/logout-modal-icon.component";
 import { DashBreadcrumbComponent } from '../component/dash-breadcrumb/dash-breadcrumb.component';
 import { AuthService } from '../../auth/services/auth.service';
 import { StorageService } from '../services/storage.service';
 import { AlertService } from '../services/alert.service';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -56,6 +42,7 @@ import { AlertService } from '../services/alert.service';
     LogoutIconComponent,
     LogoutModalIconComponent,
     DashBreadcrumbComponent,
+    TranslateModule
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -63,12 +50,14 @@ import { AlertService } from '../services/alert.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   currentRole: UserRole = 'owner';
+  currentLang = 'en';
   pageTitle: string = '';
   openSidebarValue = true;
   active = 1;
   isProfileActive = false;
   isAddPropertyActive = false;
   isAddLeaseActive = false;
+  currentLanguage = 'en';
 
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
 
@@ -80,13 +69,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
   closeResult = '';
 
   constructor(
-    private authService: AuthService,
     private renderer: Renderer2,
     private sharedService: SharedService,
     private router: Router,
     private themeService: ThemeService,
-    private storage: StorageService
-  ) {}
+    private authService: AuthService,
+    private translate: TranslateService
+  ) {
+    translate.addLangs(['en', 'ar']);
+    translate.setDefaultLang('en');
+    this.translate.onLangChange.subscribe((event:any) => {
+      this.currentLanguage = event.lang;
+      this.pageTitle = this.getRouteTitle(this.router.routerState.root);
+    });
+    translate.use('en');
+    this.updateDirection();
+  }
+
+  setLanguage(lang: string) {
+    this.currentLang = lang;
+    this.translate.use(lang);
+    localStorage.setItem('language', lang);
+    this.updateDirection();
+  }
+
+  private updateDirection() {
+    document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  // Helper to get the flag path
+  get flagIcon(): string {
+    return this.currentLang === 'ar'
+      ? 'assets/language/united-arab-emirates.png'
+      : 'assets/language/united-kingdom.png';
+  }
 
   private updateActiveButtons(url: string) {
     this.isAddPropertyActive = url.includes('/dashboard/add-property');
@@ -101,7 +117,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.updateActiveButtons(this.router.url);
 
     this.subscriptions.add(
-      this.sharedService.openSidebarValue$.subscribe((value) => {
+      this.sharedService.openSidebarValue$.subscribe(value => {
         this.openSidebarValue = value;
       })
     );
@@ -109,7 +125,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // ✅ Update title on route change
     this.subscriptions.add(
       this.router.events
-        .pipe(filter((event) => event instanceof NavigationEnd))
+        .pipe(filter(event => event instanceof NavigationEnd))
         .subscribe(() => {
           const currentRoute = this.router.routerState.root;
           this.pageTitle = this.getRouteTitle(currentRoute);
@@ -118,9 +134,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // ✅ Highlight profile menu when needed
     this.subscriptions.add(
-      this.router.events
-        .pipe(filter((event) => event instanceof NavigationEnd))
+      this.router.events.pipe(filter(event => event instanceof NavigationEnd))
         .subscribe((event: any) => {
+
           const url = event.urlAfterRedirects;
 
           this.isAddPropertyActive = url.includes('/dashboard/add-property');
@@ -132,20 +148,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
         })
     );
 
+
     this.isProfileActive = this.router.url.includes('/user/my-profile');
 
-    this.themeService.currentRole$.subscribe((role) => {
+    this.themeService.currentRole$.subscribe(role => {
       this.currentRole = role;
     });
   }
 
-  // ✅ MOVE IT HERE (outside ngOnInit)
   private getRouteTitle(route: any): string {
     while (route.firstChild) {
       route = route.firstChild;
     }
-    return route.snapshot.data['title'] || '';
+
+    const titleKey = route.snapshot.data['titleKey'];
+
+    if (!titleKey) return '';
+
+    return this.translate.instant(titleKey);
   }
+
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
@@ -167,57 +189,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/user/my-profile']);
   }
 
-  // openLogoutModal(logoutContent: TemplateRef<any>) {
-  //   const modalRef = this.modalService.open(logoutContent, {
-  //     windowClass: 'logoutMdl',
-  //     centered: true,
-  //   });
-
-  //   modalRef.result.then(
-  //     (result) => {
-  //       this.closeResult = `Closed with: ${result}`;
-  //       this.logout();
-  //     },
-  //     (reason) => {
-  //       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //     }
-  //   );
-  // }
-
-  // logout(): void {
-  //   this.modalService.dismissAll();
-  //   this.router.navigate(['/auth/login']);
-  // }
-
-  // private getDismissReason(reason: any): string {
-  //   switch (reason) {
-  //     case ModalDismissReasons.ESC:
-  //       return 'by pressing ESC';
-  //     case ModalDismissReasons.BACKDROP_CLICK:
-  //       return 'by clicking on a backdrop';
-  //     default:
-  //       return `with: ${reason}`;
-  //   }
-  // }
-
   openLogoutModal(logoutContent: TemplateRef<any>) {
-    const modalRef = this.modalService.open(logoutContent, {
-      windowClass: 'logoutMdl',
-      centered: true,
-    });
+    const modalRef = this.modalService.open(logoutContent, { windowClass: 'logoutMdl', centered: true });
 
     modalRef.result.then(
-      (result) => {
+      result => {
         this.closeResult = `Closed with: ${result}`;
-        this.logout(); // ✅ Call logout function on modal close
+        this.logout();
       },
-      (reason) => {
+      reason => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       }
     );
-  }
-  getDismissReason(reason: any) {
-    throw new Error('Method not implemented.');
   }
 
   logout() {
@@ -234,4 +217,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
+    }
+  }
 }
+

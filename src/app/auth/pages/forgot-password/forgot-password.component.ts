@@ -114,6 +114,7 @@ export class ForgotPasswordComponent {
       }
     );
 
+    // Start OTP timer when modal opens
     this.startOtpTimer();
   }
 
@@ -151,6 +152,7 @@ export class ForgotPasswordComponent {
   }
 
   resendOtp(): void {
+    // You can call API here to resend OTP
     this.startOtpTimer();
   }
 
