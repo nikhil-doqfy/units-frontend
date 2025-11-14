@@ -29,7 +29,7 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule, // ✅ Add this line
+    FormsModule,
     NgOtpInputModule,
     AuthTitleComponent,
     AuthFormComponent,
@@ -92,9 +92,8 @@ export class LoginComponent implements OnInit {
   }
 
   signIn(): void {
-    // Use reactive form validation instead of manual if check
     if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched(); // show errors
+      this.loginForm.markAllAsTouched();
       this.alertService.error('Please enter email and password');
       return;
     }
@@ -103,8 +102,6 @@ export class LoginComponent implements OnInit {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password,
     };
-
-    // const payload = this.loginForm.value;
 
     this.authService.login(payload).subscribe({
       next: (resp: any) => {
@@ -121,6 +118,7 @@ export class LoginComponent implements OnInit {
 
   onOtpChange(evt: any) {
     this.otp = evt;
+    // this.otpForm.patchValue({ otp: evt });
   }
 
   togglePasswordVisibility(): void {
@@ -142,7 +140,7 @@ export class LoginComponent implements OnInit {
   }
 
   goToDashboard(): void {
-    const role = this.selectedRole; // or this.themeService.currentRole
+    const role = this.selectedRole;
 
     switch (role) {
       case 'owner':
@@ -163,10 +161,6 @@ export class LoginComponent implements OnInit {
   }
 
   sendOtp(): void {
-    // if (!this.email) {
-    //   this.alertService.error('Please enter your email');
-    //   return;
-    // }
     console.log('seda', this.email);
     if (this.otpForm.invalid) {
       this.alertService.error('Please enter a valid email');
@@ -175,7 +169,6 @@ export class LoginComponent implements OnInit {
 
     const payload = { email: this.otpForm.value.email };
 
-    console.log('email========================>', this.email);
     this.authService.sendOtp(payload).subscribe({
       next: (resp: any) => {
         console.log('monali', this.email);
@@ -193,43 +186,21 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // sendOtp(): void {
-  //   if (this.otpForm.invalid) {
-  //     this.alertService.error('Please enter a valid email');
-  //     return;
-  //   }
-
-  //   const payload = { email: this.otpForm.value.email };
-
-  //   this.subscription.add(
-  //     this.authService.sendOtp(payload).subscribe({
-  //       next: (resp: any) => {
-  //         console.log('OTP response:--->', resp);
-  //         this.alertService.success(resp?.message || 'OTP sent successfully');
-  //         this.otpSent = true;
-  //         this.emailLocked = true;
-  //         this.otpTimer = 60;
-  //         this.startOtpTimer();
-  //       },
-  //       error: (err) => {
-  //         console.log('OTP error:--->', err);
-  //         this.alertService.error(err?.error?.message || 'Failed to send OTP');
-  //       },
-  //     })
-  //   );
-  // }
-
   signInWithOtp(): void {
     if (!this.email || !this.otp) {
       this.alertService.error('Enter email and OTP');
+
       return;
     }
-    let payload = {
-      email: this.email,
-      otp: this.otp,
+    // const payload = { email: this.otpForm.value.email };
+    const payload = {
+      email: this.otpForm.value.email,
+      otp: this.otpForm.value.otp,
     };
     this.authService.verifyOtp(payload).subscribe({
       next: (resp: any) => {
+        console.log('monali', this.email);
+
         console.log('OTP verify response: ', resp);
         this.alertService.success('Login successful');
         this.goToDashboard();
@@ -245,6 +216,8 @@ export class LoginComponent implements OnInit {
     this.otpSent = false;
     this.emailLocked = false;
     clearInterval(this.timerInterval);
+    this.otpForm.get('email')?.enable();
+    this.otp = '';
     this.otpTimer = 60;
     this.timerDisplay = '1:00';
   }

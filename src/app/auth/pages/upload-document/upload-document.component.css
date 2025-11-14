@@ -18,6 +18,16 @@
   border-radius: 8px;
   overflow: hidden;
 }
+.authFrmCol {
+  position: relative;
+  background-color: var(--whiteBg);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 4px 4px 15px 0 #0000004d;
+  width: 800px;
+  max-width: 100%;
+  margin: 0 auto;
+}
 
 .accordion-button {
   background-color: #e7f1ff; /* light blue background */
@@ -43,4 +53,55 @@
 }
 .btn-wide {
   width: 120px; /* आपल्या UI नुसार वाढव */
+}
+/* 
+form {
+  width: 634px;
+} */
+.custom-width-card {
+  width: 600px !important; /* new width for this instance */
+  max-width: 100%; /* prevent overflow on small screens */
+  margin: auto; /* center the card */
+}
+.upload-box.card {
+  cursor: pointer;
+  border-radius: 0.5rem; /* rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  width: 180px; /* fixed width for all cards */
+  height: 85px; /* fixed height for all cards */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box; /* include padding in width/height */
+}
+
+.upload-box.card:hover {
+  transform: translateY(-2px); /* lift on hover */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* stronger shadow */
+}
+
+.upload-boxes {
+  display: flex; /* use flex layout */
+  gap: 1rem; /* spacing between cards */
+  flex-wrap: wrap; /* wrap on smaller screens */
+  justify-content: center; /* center cards horizontally */
+}
+
+.custom-width-height {
+  width: 600px;
+  height: 500px;
+}
+.icon-btn {
+  border: none; /* remove border */
+  background: transparent; /* remove background */
+  padding: 0; /* remove padding */
+  margin: 0 0.25rem; /* optional spacing between buttons */
+  cursor: pointer; /* pointer on hover */
+  display: inline-flex; /* align the icon properly */
+  align-items: center;
+  justify-content: center;
 }

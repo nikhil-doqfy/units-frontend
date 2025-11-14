@@ -187,29 +187,42 @@
 
 <ng-template #otpVerifyContent let-modal>
   <div class="modal-body otpVerifyMdlBody">
-    <div class="otpVerifyLogo justify-content-start d-flex">
-      <a href="javascript:void(0);" (click)="goToLogin()">
-        <img src="../../../../assets/favicon/verify.png" alt="Doqfy Logo" />
-      </a>
-      <h4 class="verifyTitle text-center">Verify Account</h4>
+    <div class="otpVerifyContainer container">
+      <!-- Logo + Title Row -->
+      <div class="d-flex align-items-center mb-2">
+        <a href="javascript:void(0);" (click)="goToLogin()" class="me-2">
+          <img
+            src="../../../../assets/favicon/verify.png"
+            alt="Doqfy Logo"
+            style="height: 40px"
+          />
+        </a>
+        <h4 class="verifyTitle mb-0">
+          Verify Account
+
+          <div class="d-flex align-items-center otpVerifyMdlInfo">
+            <p class="mb-2">
+              We've sent code to
+              <span class="text-primary">haXXX&#64;doqfy.in</span>
+            </p>
+            <button
+              type="button"
+              (click)="modal.dismiss('Cross click')"
+              class="btn p-0 border-0 bg-transparent position-absolute top-1 end-0 mt-0 m-4"
+            >
+              <app-verify-icon-edit></app-verify-icon-edit>
+            </button>
+          </div>
+        </h4>
+      </div>
+
+      <!-- Modal Info Row -->
     </div>
 
-    <div class="otpVerifyMdlInfo mb-4">
-      <p>
-        We'Ve sent code to
-        <span>haXXX&#64;doqfy.in</span>&nbsp;<button
-          type="button"
-          (click)="modal.dismiss('Cross click')"
-        >
-          <div class="justify-content-end">
-            <app-verify-icon-edit></app-verify-icon-edit>
-          </div>
-        </button>
-      </p>
-    </div>
     <div class="otpVerifyForm">
       <app-auth-form>
         <form>
+          <hr />
           <div class="mb-2 text-center">
             <span class="d-block mb-2">Enter OTP</span>
             <ng-otp-input
@@ -231,6 +244,7 @@
               label="Resend code in"
               *ngIf="otpSent && otpTimer > 0"
               [time]="timerDisplay"
+              [customStyle]="'text-primary'"
             />
 
             <button
@@ -242,27 +256,32 @@
               Resend OTP
             </button>
           </div>
-
+          <hr />
           <div
-            class="frmBtnss justify-content-end d-flex justify-content-between justify-content-end mt-3"
+            class="frmBtnss d-flex align-items-center justify-content-between mt-3"
           >
-            <div class="justify-content-start">
+            <!-- Left: Headphone Icon -->
+            <div>
               <app-headphone-icon></app-headphone-icon>
             </div>
-            <button
-              type="button"
-              class="btn btnCommonss custom-shadow"
-              (click)="goToResetPassword()"
-            >
-              Resend OTP
-            </button>
-            <button
-              type="button"
-              class="btn btnCommons btn-wide"
-              (click)="goToResetPassword()"
-            >
-              submit
-            </button>
+
+            <!-- Right: Buttons together -->
+            <div class="d-flex">
+              <button
+                type="button"
+                class="btn btnCommonss custom-shadow me-2"
+                (click)="goToResetPassword()"
+              >
+                Resend OTP
+              </button>
+              <button
+                type="button"
+                class="btn btnCommons btn-wide"
+                (click)="goToResetPassword()"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </form>
       </app-auth-form>

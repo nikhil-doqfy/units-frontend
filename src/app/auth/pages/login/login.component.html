@@ -55,7 +55,7 @@
     *ngIf="loginMode === 'otp'"
     class="mb-4"
     [formGroup]="otpForm"
-    (ngSubmit)="sendOtp()"
+    (ngSubmit)="signInWithOtp()"
   >
     <div class="mb-4">
       <label for="email" class="form-label">
@@ -74,12 +74,13 @@
         <input
           class="form-control"
           type="email"
-          name="email"
           placeholder="Enter your email"
           formControlName="email"
-          [disabled]="emailLocked"
+          [readonly]="emailLocked"
         />
-        <button type="submit" *ngIf="!otpSent">Send OTP</button>
+        <button type="submit" *ngIf="!otpSent" (click)="sendOtp()">
+          Send OTP
+        </button>
       </div>
     </div>
 
@@ -112,10 +113,9 @@
 
     <div class="frmBtns">
       <button
-        type="button"
+        type="submit"
         [class.disabled]="!otpSent"
         class="btn btnCommon btnMinWidth"
-        (click)="signInWithOtp()"
       >
         Sign In
       </button>
