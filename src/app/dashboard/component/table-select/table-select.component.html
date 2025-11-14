@@ -1,9 +1,8 @@
 <div class="cmmnTblSlct">
-    <span>Showing</span>
-    <select>
-        <option>10</option>
-        <option>25</option>
-        <option>50</option>
-        <option>100</option>
-    </select>
+  <span>Showing</span>
+  <select [(ngModel)]="rowsPerPage" (ngModelChange)="onSelect($event)">
+    @for (row of rowsPerPageOptions; track $index) {
+    <option [value]="row">{{ row }}</option>
+    }
+  </select>
 </div>

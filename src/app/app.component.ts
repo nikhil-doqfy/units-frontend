@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 

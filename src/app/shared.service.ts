@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SharedService {
   private openSidebarValueKey = 'openSidebarValue';
@@ -53,14 +53,20 @@ export class SharedService {
   toggleRightSidebar() {
     const currentRightValue = this.openRightSidebarValueSource.value;
     const newRightValue = !currentRightValue;
-    localStorage.setItem(this.openRightSidebarValueKey, JSON.stringify(newRightValue));
+    localStorage.setItem(
+      this.openRightSidebarValueKey,
+      JSON.stringify(newRightValue)
+    );
     this.openRightSidebarValueSource.next(newRightValue);
   }
 
   // Set the sidebar state per route
   setRightSidebarStateForRoute(route: string) {
     const defaultState = this.getSidebarDefaultState(route);
-    localStorage.setItem(this.openRightSidebarValueKey, JSON.stringify(defaultState));
+    localStorage.setItem(
+      this.openRightSidebarValueKey,
+      JSON.stringify(defaultState)
+    );
     this.openRightSidebarValueSource.next(defaultState);
   }
 
@@ -76,5 +82,15 @@ export class SharedService {
     }
 
     return true; // Default to open for other routes
+  }
+
+  getQueryString(params: Record<string, any>): string {
+    if (!params || Object.keys(params).length === 0) return '';
+
+    const query = Object.entries(params)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
+
+    return `?${query}`;
   }
 }
