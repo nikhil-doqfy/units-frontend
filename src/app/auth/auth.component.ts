@@ -1,0 +1,53 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterModule } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { ThemeService, UserRole } from '../theme.service';
+
+import { AuthHeaderComponent } from './component/auth-header/auth-header.component';
+import { AuthFormCardComponent } from './component/auth-form-card/auth-form-card.component';
+import { AuthPattIconComponent } from './component/icons/auth-patt-icon/auth-patt-icon.component';
+import { AuthFooterComponent } from './component/auth-footer/auth-footer.component';
+
+@Component({
+  selector: 'app-auth',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterOutlet, // Ensure RouterOutlet is imported
+    RouterModule, // Import RouterModule to use its directives
+    AuthHeaderComponent,
+    AuthFormCardComponent,
+    AuthPattIconComponent,
+    AuthFooterComponent,
+  ],
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css'],
+})
+export class AuthComponent implements OnInit {
+  @Input() login: boolean | undefined;
+  @Input() newUser: boolean | undefined;
+  @Input() pageType: string | undefined;
+
+  currentRole: UserRole = 'owner';
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private themeService: ThemeService) { }
+
+  ngOnInit(): void {
+    this.themeService.currentRole$.subscribe(role => {
+      this.currentRole = role;
+    });
+
+    this.updatePageType();
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.updatePageType();
+      });
+  }
+
+  private updatePageType(): void {
+    this.pageType = this.activatedRoute.snapshot.firstChild?.routeConfig?.path || '';
+  }
+}

@@ -1,0 +1,540 @@
+<ng-container *ngIf="!showDetailView">
+    <div class="mb-3">
+        <app-white-card>
+            <div class="p-2 mb-2">
+                <app-card-title title="List of documents to be approved" />
+            </div>
+            <div class="commonTabs">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="inQue-tab" data-bs-toggle="tab"
+                            data-bs-target="#inQue-tab-pane" type="button" role="tab" aria-controls="inQue-tab-pane"
+                            aria-selected="true">In Que</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="accepted-tab" data-bs-toggle="tab"
+                            data-bs-target="#accepted-tab-pane" type="button" role="tab"
+                            aria-controls="accepted-tab-pane" aria-selected="false"><i><app-accept-icon /></i>
+                            Accepted</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="rejected-tab" data-bs-toggle="tab"
+                            data-bs-target="#rejected-tab-pane" type="button" role="tab"
+                            aria-controls="rejected-tab-pane" aria-selected="false"><i><app-reject-icon /></i>
+                            Rejected</button>
+                    </li>
+                </ul>
+            </div>
+        </app-white-card>
+    </div>
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="inQue-tab-pane" role="tabpanel" aria-labelledby="inQue-tab"
+            tabindex="0">
+            <div class="cmmnTblOuter">
+                <div class="cmmnTblBody">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th><button type="button">Tenant Name <i><app-sorting-icon /></i></button></th>
+                                    <th>Emirates ID</th>
+                                    <th>Date Requested</th>
+                                    <th>Contact Number</th>
+                                    <th>Email Address</th>
+                                    <th width="200"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-1.png" title="Jensi"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>LP9021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-70******23</td>
+                                    <td>jensi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-2.png" title="Richard"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>LP8021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-99******76</td>
+                                    <td>jensi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-3.png" title="Thaomas"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC79021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-89******12</td>
+                                    <td>thaomas&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-4.png" title="Akshay"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC69021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-90******45</td>
+                                    <td>akshay&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-5.png"
+                                            title="JeAvanshinsi" [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC59021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-78******90</td>
+                                    <td>avanshi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="cmmnTblFtr">
+                    <app-table-select />
+                    <app-table-pagination />
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="accepted-tab-pane" role="tabpanel" aria-labelledby="accepted-tab" tabindex="0">
+            <div class="cmmnTblOuter">
+                <div class="cmmnTblBody">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th><button type="button">Tenant Name <i><app-sorting-icon /></i></button></th>
+                                    <th>Emirates ID</th>
+                                    <th>Date Requested</th>
+                                    <th>Contact Number</th>
+                                    <th>Email Address</th>
+                                    <th width="200"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-1.png" title="Jensi"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>LP9021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-70******23</td>
+                                    <td>jensi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-2.png" title="Richard"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>LP8021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-99******76</td>
+                                    <td>jensi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-3.png" title="Thaomas"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC79021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-89******12</td>
+                                    <td>thaomas&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-4.png" title="Akshay"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC69021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-90******45</td>
+                                    <td>akshay&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-5.png"
+                                            title="JeAvanshinsi" [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC59021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-78******90</td>
+                                    <td>avanshi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="cmmnTblFtr">
+                    <app-table-select />
+                    <app-table-pagination />
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="rejected-tab-pane" role="tabpanel" aria-labelledby="rejected-tab" tabindex="0">
+            <div class="cmmnTblOuter">
+                <div class="cmmnTblBody">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th><button type="button">Tenant Name <i><app-sorting-icon /></i></button></th>
+                                    <th>Emirates ID</th>
+                                    <th>Date Requested</th>
+                                    <th>Contact Number</th>
+                                    <th>Email Address</th>
+                                    <th width="200"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-1.png" title="Jensi"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>LP9021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-70******23</td>
+                                    <td>jensi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-2.png" title="Richard"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>LP8021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-99******76</td>
+                                    <td>jensi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-3.png" title="Thaomas"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC79021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-89******12</td>
+                                    <td>thaomas&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-4.png" title="Akshay"
+                                            [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC69021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-90******45</td>
+                                    <td>akshay&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <app-table-img-item img="../../../../assets/user/user-5.png"
+                                            title="JeAvanshinsi" [clickable]="true" (clicked)="handleViewClick()" />
+                                    </td>
+                                    <td>VC59021</td>
+                                    <td>25-09-2025</td>
+                                    <td>+91-78******90</td>
+                                    <td>avanshi&#64;example.com</td>
+                                    <td align="center">
+                                        <div class="cmmnTblActnBtnDiv">
+                                            <app-table-action-btn type="reject" (clicked)="handleRejectClick()" />
+                                            <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="cmmnTblFtr">
+                    <app-table-select />
+                    <app-table-pagination />
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="showDetailView">
+    <app-table-view-card [title]="'Jensi'" [imgSrc]="'../../../assets/user/user-2.png'" [headerItems]="[
+            { label: 'Contact', value: '+91-8987898765' },
+            { label: 'Email', value: 'owner28@gmail.com' }
+        ]" [items]="[
+            { label: 'Emirates ID:', value: '784198657395715' },
+            { label: 'Nationality', value: 'India' },
+            { label: 'Tenant No', value: '247334' },
+            { label: 'Passport Self', value: '--' },
+            { label: 'Passport For Family Member (If any)', value: '--' },
+            { label: 'Passport Expiry', value: '2025-09-24' },
+            { label: 'Employment Proof', value: 'RAF28' },
+            { label: 'Visa Expiry', value: '2025-09-30' },
+            { label: 'Visa Self', value: '--' },
+            { label: 'Visa For Family Member (If any)', value: '--' }
+        ]" (back)="handleBackClick()">
+        <app-table-action-btn type="rejectOrange" (clicked)="handleRejectClick()" />
+        <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+    </app-table-view-card>
+
+    <div class="mt-3">
+        <app-white-card title="All Documents">
+            <div class="commonTabs">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="emiratesID-tab" data-bs-toggle="tab"
+                            data-bs-target="#emiratesID-tab-pane" type="button" role="tab"
+                            aria-controls="emiratesID-tab-pane" aria-selected="true">Emirates ID</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="passportSelf-tab" data-bs-toggle="tab"
+                            data-bs-target="#passportSelf-tab-pane" type="button" role="tab"
+                            aria-controls="passportSelf-tab-pane" aria-selected="false">Passport(self)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="passportFamily-tab" data-bs-toggle="tab"
+                            data-bs-target="#passportFamily-tab-pane" type="button" role="tab"
+                            aria-controls="passportFamily-tab-pane" aria-selected="false">Passport(Family)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="employmentProof-tab" data-bs-toggle="tab"
+                            data-bs-target="#employmentProof-tab-pane" type="button" role="tab"
+                            aria-controls="employmentProof-tab-pane" aria-selected="false">Employment Proof</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="visaSelf-tab" data-bs-toggle="tab"
+                            data-bs-target="#visaSelf-tab-pane" type="button" role="tab"
+                            aria-controls="visaSelf-tab-pane" aria-selected="false">Visa(self)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="visaFamily-tab" data-bs-toggle="tab"
+                            data-bs-target="#visaFamily-tab-pane" type="button" role="tab"
+                            aria-controls="visaFamily-tab-pane" aria-selected="false">Visa(Family)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="bankStatement-tab" data-bs-toggle="tab"
+                            data-bs-target="#bankStatement-tab-pane" type="button" role="tab"
+                            aria-controls="bankStatement-tab-pane" aria-selected="false">Bank Statement</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="commonTabsContent">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="emiratesID-tab-pane" role="tabpanel"
+                        aria-labelledby="emiratesID-tab" tabindex="0">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Finances.png" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="passportSelf-tab-pane" role="tabpanel"
+                        aria-labelledby="passportSelf-tab" tabindex="0">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Finances.png" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="passportFamily-tab-pane" role="tabpanel"
+                        aria-labelledby="passportFamily-tab" tabindex="0">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Finances.png" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="employmentProof-tab-pane" role="tabpanel"
+                        aria-labelledby="employmentProof-tab" tabindex="0">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Finances.png" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="visaSelf-tab-pane" role="tabpanel" aria-labelledby="visaSelf-tab"
+                        tabindex="0">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Finances.png" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="visaFamily-tab-pane" role="tabpanel" aria-labelledby="visaFamily-tab"
+                        tabindex="0">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Finances.png" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="bankStatement-tab-pane" role="tabpanel"
+                        aria-labelledby="bankStatement-tab" tabindex="0">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Finances.png" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+                            </div>
+                            <div class="col-auto">
+                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </app-white-card>
+    </div>
+</ng-container>

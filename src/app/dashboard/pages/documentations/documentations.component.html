@@ -1,0 +1,107 @@
+<div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+        <div class="row align-items-center">
+            <div class="col-md">
+                <app-table-title title="Documents" subtitle="5"></app-table-title>
+            </div>
+            <div class="col-md-auto">
+                <div class="d-flex align-items-center gap-2 gap-md-3">
+                    <app-custom-select
+                        [options]="['Falcom city', 'Novatis AG...', 'Agriculture', 'Honda', 'TVS', 'Samsung']"
+                        [placeholder]="selected" [selectedOption]="selected" (optionSelected)="onOptionSelected($event)"
+                        [isFilter]="true">
+                    </app-custom-select>
+                    <app-table-filter-btn title="Export" [hasIcon]="true" (clicked)="handleExportClick()">
+                        <app-export-icon />
+                    </app-table-filter-btn>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cmmnTblBody">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>SI.Code</th>
+                        <th>Agreement Name</th>
+                        <th>Status</th>
+                        <th width="200">Document</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LP9021</td>
+                        <td>Lease-Purchase Agreement</td>
+                        <td>
+                            <app-badge title="Active" status="green" />
+                        </td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LP8021</td>
+                        <td>Property Management Contract</td>
+                        <td>
+                            <app-badge title="Active" status="green" />
+                        </td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>VC79021</td>
+                        <td>Vendor Contract - Cleaning</td>
+                        <td>
+                            <app-badge title="Expired" status="red" />
+                        </td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                                <app-table-action-btn type="renew" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>VC69021</td>
+                        <td>Vendor Contract - Landscaping</td>
+                        <td>
+                            <app-badge title="Active" status="green" />
+                        </td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>VC59021</td>
+                        <td>Maintenance and Repair Agreement</td>
+                        <td>
+                            <app-badge title="Expires in 3 days" status="orange" />
+                        </td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="cmmnTblFtr">
+        <app-table-select />
+        <app-table-pagination />
+    </div>
+</div>

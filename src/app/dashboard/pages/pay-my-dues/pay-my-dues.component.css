@@ -1,0 +1,196 @@
+.pymntMthdOuter {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.pymntMthdOptns {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.pymntMthdOptns label {
+    font-size: 14px;
+    color: var(--greyLightText);
+    font-family: 400;
+    line-height: 18px;
+    cursor: pointer;
+}
+
+.pymntMthdOptns label input {
+    display: none;
+}
+
+.pymntMthdOptns label span {
+    position: relative;
+    padding-left: 24px;
+    display: inline-block;
+}
+
+.pymntMthdOptns label span::before {
+    position: absolute;
+    content: "";
+    width: 14px;
+    min-width: 14px;
+    height: 14px;
+    left: 0;
+    top: 1px;
+    border: 1px solid var(--greyDarkBorder3);
+    border-radius: 14px;
+}
+
+.pymntMthdOptns label input:checked~span::before {
+    border: 3px solid var(--purpleBorder);
+}
+
+.pymntMthdCol>p {
+    font-size: 14px;
+    color: var(--blackText);
+    font-weight: 400;
+    line-height: 18px;
+    margin: 16px 0 0 0;
+}
+
+.pmntPlanOuter {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.pmntPlanHdr {
+    border: 1px dashed var(--muteBorder2);
+    border-radius: 8px;
+}
+
+.pmntPlanHdr ul li {
+    font-size: 14px;
+    color: var(--greyDarkText1);
+    font-weight: 500;
+    line-height: 18px;
+    padding: 10px;
+}
+
+.pmntPlanHdr ul li span {
+    font-weight: 700;
+}
+
+.pmntPlanBdy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 8px 0;
+}
+
+.pmntPlanBdy::before,
+.pmntPlanBdy::after {
+    background-color: var(--lightBg2);
+    position: absolute;
+    content: "";
+    top: 39px;
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+}
+
+.pmntPlanBdy::before {
+    left: -39px;
+}
+
+.pmntPlanBdy::after {
+    right: -39px;
+}
+
+.pmntPlanBdy>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.pmntPlanBdy h4 {
+    font-size: 18px;
+    color: var(--greyDarkText1);
+    font-weight: 700;
+    line-height: 27px;
+    margin: 0;
+}
+
+.pmntPlanBdy h5 {
+    font-size: 16px;
+    color: var(--greyDarkText1);
+    font-weight: 700;
+    line-height: 24px;
+    margin: 0;
+}
+
+.pmntPlanBdy p {
+    font-size: 14px;
+    color: var(--blackText);
+    font-weight: 400;
+    line-height: 18px;
+    margin: 0;
+}
+
+.pmntPlanBdy p+p {
+    margin-top: 8px;
+}
+
+.pmntPlanBdy p b {
+    font-weight: 600;
+}
+
+.pmntPlanBdy p small {
+    font-size: 12px;
+    color: var(--greyDarkText2);
+    line-height: 15px;
+}
+
+.pmntPlanQty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--muteBorder1);
+    border-radius: 6px;
+}
+
+.pmntPlanQty button {
+    background-color: transparent;
+    color: var(--greyDarkText2);
+    padding: 0;
+    border: 0;
+    width: 30px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease 0s;
+}
+
+.pmntPlanQty button:hover {
+    color: var(--greyDarkText1);
+}
+
+.pmntPlanQty input {
+    font-size: 14px;
+    font-family: var(--secondaryFont);
+    color: var(--greyDarkText1);
+    font-weight: 400;
+    width: 30px;
+    height: 40px;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.pmntPlanQty input:hover,
+.pmntPlanQty input:focus {
+    box-shadow: none;
+}
+
+.pmntPlanFtr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

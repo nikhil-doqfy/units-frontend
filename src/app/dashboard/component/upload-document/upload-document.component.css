@@ -1,0 +1,70 @@
+.upldDocCol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+}
+
+.upldDocIcon {
+    position: relative;
+    background-color: var(--whiteBg);
+    border: 1px dashed var(--muteBorder2);
+    border-radius: 8px;
+    width: 416px;
+    height: 152px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.upldDocText {
+    pointer-events: none;
+    text-align: center;
+}
+
+.upldDocText i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.upldDocText h4 {
+    font-size: 14px;
+    color: var(--greyDarkText3);
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: -1%;
+    margin: 8px 0 4px 0;
+}
+
+.upldDocText p {
+    font-size: 10px;
+    color: var(--lightText);
+    font-weight: 400;
+    line-height: 16px;
+    margin: 0;
+}
+
+.upldDocText p span {
+    display: inline-block;
+    color: var(--activeText);
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+.upldDocIcon input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}

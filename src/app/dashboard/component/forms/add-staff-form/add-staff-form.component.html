@@ -1,0 +1,51 @@
+<app-modal-form-card>
+    <form>
+        <div class="row g-3">
+            <div class="col-md-12">
+                <div class="mb-0">
+                    <label for="staffName" class="form-label">Staff Name<span>*</span></label>
+                    <input class="form-control" type="text" name="staffName" placeholder="Enter name here" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-0">
+                    <label for="email" class="form-label">Email Address<span>*</span></label>
+                    <input class="form-control" type="email" name="email" placeholder="Enter email here" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-0">
+                    <label for="contact" class="form-label">Contact Number<span>*</span></label>
+                    <input class="form-control" type="number" name="contact" placeholder="Enter contact here" />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="mb-0">
+                    <label for="staffRole" class="form-label">Staff Role<span>*</span></label>
+                    <app-custom-select [options]="['Admin', 'Owner', 'PM', 'User', 'Lead']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="mb-0">
+                    <label for="assignedProperty" class="form-label">Assigned Property<span>*</span></label>
+                    <app-custom-select
+                        [options]="['Falcom city', 'Novatis AG...', 'Agriculture', 'Honda', 'TVS', 'Samsung']"
+                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-0">
+                    <label for="password" class="form-label">Password<span>*</span></label>
+                    <input class="form-control" type="text" name="password" placeholder="Enter here" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-0">
+                    <label for="confirmPassword" class="form-label">Confirm Password<span>*</span></label>
+                    <input class="form-control" type="text" name="confirmPassword" placeholder="Enter here" />
+                </div>
+            </div>
+        </div>
+    </form>
+</app-modal-form-card>

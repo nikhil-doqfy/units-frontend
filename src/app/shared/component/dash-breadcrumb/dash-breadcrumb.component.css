@@ -1,0 +1,67 @@
+.dashBrdcrmbOuter {
+    background-color: var(--whiteBg);
+    padding: 6.6px 24px;
+    box-shadow: 5px 2px 4px 0 #00000040;
+}
+
+.dashBrdcrmbOuter .breadcrumb {
+    margin: 0;
+}
+
+.dashBrdcrmbOuter .breadcrumb .breadcrumb-item+.breadcrumb-item::before {
+    color: var(--lightText);
+    content: "/";
+}
+
+.dashBrdcrmbOuter .breadcrumb li a,
+.dashBrdcrmbOuter .breadcrumb li span {
+    font-size: 12px;
+    font-weight: 400;
+    transition: all 0.3s ease 0s;
+}
+
+.dashBrdcrmbOuter .breadcrumb li a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--lightText);
+}
+
+.dashBrdcrmbOuter .breadcrumb li a i {
+    position: relative;
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    top: -1px;
+}
+
+.dashBrdcrmbOuter .breadcrumb li span {
+    color: var(--activeText);
+}
+
+.dashBrdcrmbOuter .breadcrumb li a:hover {
+    color: var(--greyText);
+}
+
+@media (max-width: 1199px) {
+    .dashBrdcrmbOuter {
+        padding: 6.6px 16px;
+        margin-left: -240px;
+    }
+}
+
+@media (max-width: 991px) {
+    .dashBrdcrmbOuter {
+        margin-left: -200px;
+    }
+}
+
+@media (max-width: 767px) {
+    .dashBrdcrmbOuter {
+        margin-left: -60px;
+    }
+}

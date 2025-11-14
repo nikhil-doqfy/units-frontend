@@ -1,0 +1,38 @@
+.dcmntPrgrsBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.dcmntPrgrsCrcl {
+    position: relative;
+    width: 32px;
+    height: 32px;
+}
+
+.dcmntPrgrsCrcl>span {
+    position: absolute;
+    font-size: 14px;
+    font-weight: 600;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dcmntPrgrsTxt span {
+    font-size: 12px;
+    color: var(--greyText3);
+    font-weight: 500;
+    line-height: 12px;
+}
+
+.dcmntPrgrsTxt p {
+    font-size: 14px;
+    color: var(--blackText);
+    font-weight: 500;
+    line-height: 18px;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    margin: 0;
+}

@@ -1,0 +1,11 @@
+<div class="usrProCol">
+    <div class="usrProImg">
+        <img [src]="userImage" width="50" height="50" alt="User Profile Image" />
+    </div>
+    <!-- <div class="usrProIcon" (click)="triggerFileInput()">
+        <i>
+            <app-edit-icon />
+        </i>
+    </div> -->
+    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden />
+</div>

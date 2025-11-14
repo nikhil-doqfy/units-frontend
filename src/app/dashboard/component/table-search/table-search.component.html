@@ -1,0 +1,5 @@
+<div class="cmmnTblSrch" [class.expanded]="isSearchExpanded" #searchContainer>
+    <button type="button"><app-search-icon /></button>
+    <input type="text" id="search" [placeholder]="placeholder" autocomplete="off" (focus)="expandSearch()"
+        (blur)="collapseSearch()" />
+</div>

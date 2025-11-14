@@ -1,0 +1,76 @@
+.dashSdbrSuprt {
+    width: 207px;
+    border: 1px solid var(--muteBorder1);
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 40px;
+    overflow: hidden;
+    transition: all 0s ease 0s;
+}
+
+.dashSdbrSmallSuprt.dashSdbrSuprt {
+    width: 42.4px;
+}
+
+.dashSdbrSuprt h5 {
+    font-size: 14px;
+    color: var(--greyText);
+    font-weight: 600;
+    line-height: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.dashSdbrSmallSuprt.dashSdbrSuprt h5 {
+    justify-content: center;
+}
+
+.dashSdbrSuprt h5 span {
+    transition: all 0s ease 0s;
+}
+
+.dashSdbrSmallSuprt.dashSdbrSuprt h5 span {
+    display: none;
+}
+
+.dashSdbrSuprt h5 i {
+    background-color: var(--lightBg);
+    width: 9px;
+    height: 9px;
+    border-radius: 9px;
+    transition: all 0s ease 0s;
+    display: none;
+}
+
+.dashSdbrSmallSuprt.dashSdbrSuprt h5 i {
+    display: block;
+}
+
+.dashSdbrSuprt ul li {
+    margin-top: 10px;
+}
+
+.dashSdbrSuprt ul li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--greyDarkText2);
+    font-weight: 500;
+    transition: all 0s ease 0s;
+}
+
+.dashSdbrSuprt ul li a span {
+    transition: all 0s ease 0s;
+    display: block;
+}
+
+.dashSdbrSmallSuprt.dashSdbrSuprt ul li a span {
+    display: none;
+}
+
+.dashSdbrSuprt ul li a:hover {
+    color: var(--greyText);
+}

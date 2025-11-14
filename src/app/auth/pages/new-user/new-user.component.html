@@ -1,0 +1,36 @@
+<app-auth-title title="Sign Up" description="to create your account" />
+
+<app-auth-form>
+    <form class="mb-4">
+        <div class="mb-4">
+            <label for="email" class="form-label justify-content-between">Email Address</label>
+            <div class="iconInput">
+                <i>
+                    <app-email-icon />
+                </i>
+                <input class="form-control" type="email" name="email" placeholder="Enter your email" />
+            </div>
+        </div>
+        <div class="mb-4">
+            <app-password-strength-field [(value)]="password" />
+        </div>
+        <div class="mb-4">
+            <label for="repeatPassword" class="form-label">Confirm Password</label>
+            <div class="iconInput password">
+                <i><app-password-icon /></i>
+                <input class="form-control" [type]="showConfirmPassword ? 'text' : 'password'" name="repeatPassword"
+                    placeholder="Repeat your password" />
+                <i class="right" (click)="toggleConfirmPasswordVisibility()">
+                    <app-password-show-icon *ngIf="!showConfirmPassword"></app-password-show-icon>
+                    <app-password-hide-icon *ngIf="showConfirmPassword"></app-password-hide-icon>
+                </i>
+            </div>
+        </div>
+        <div class="frmBtns">
+            <button type="button" (click)="goToLogin()" class="btn btnCommon btnMinWidth">Sign
+                Up</button>
+        </div>
+    </form>
+</app-auth-form>
+
+<app-new-user-link type="login" />

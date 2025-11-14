@@ -1,0 +1,7 @@
+.dashTtl h2 {
+    font-size: 18px;
+    color: var(--greyDarkText1);
+    font-weight: 600;
+    line-height: 24px;
+    margin: 0;
+}

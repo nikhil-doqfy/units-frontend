@@ -1,0 +1,24 @@
+<button class="cmmnTblActnBtn" [ngClass]="type + 'Btn'" type="button" (click)="onClick()" placement="top"
+    [ngbTooltip]="getTooltip(type)" tooltipClass="tltpCommon">
+    <ng-container [ngSwitch]="type">
+        <i *ngSwitchCase="'edit'">
+            <app-edit-icon></app-edit-icon>
+        </i>
+        <i *ngSwitchCase="'delete'">
+            <app-delete-icon></app-delete-icon>
+        </i>
+        <i *ngSwitchCase="'download'">
+            <app-doc-download-icon></app-doc-download-icon>
+        </i>
+        <i *ngSwitchCase="'preview'">
+            <app-preview-icon></app-preview-icon>
+        </i>
+        <i *ngSwitchCase="'view'">
+            <app-view-icon></app-view-icon>
+        </i>
+        <span *ngSwitchCase="'renew'">Renew Now</span>
+        <button *ngSwitchCase="'reject'" type="button">Reject</button>
+        <button *ngSwitchCase="'rejectOrange'" type="button">Reject</button>
+        <button *ngSwitchCase="'approve'" type="button">Approve</button>
+    </ng-container>
+</button>
