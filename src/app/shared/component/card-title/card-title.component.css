@@ -1,0 +1,33 @@
+.dashFrmCntrTtl {
+    display: flex;
+    justify-content: center;
+}
+
+.dashFrmTtl h4 {
+    font-size: 14px;
+    color: var(--greyDarkText1);
+    font-weight: 600;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.dashFrmLrgTtl.dashFrmTtl h4 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 32px;
+}
+
+.dashFrmTtl h4 i {
+    color: var(--lightText);
+}
+
+.dashFrmTtl p {
+    font-size: 12px;
+    color: var(--lightDarkText);
+    font-weight: 400;
+    line-height: 16px;
+    margin: 8px 0 0 0;
+}

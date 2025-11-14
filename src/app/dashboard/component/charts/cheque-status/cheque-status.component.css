@@ -1,0 +1,213 @@
+.chequeStatContainer {
+    padding: 10px 0 11px 0;
+}
+
+.chequeStatMain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.chequeStatTitle {
+    font-size: 14px;
+    color: var(--greyDarkText1);
+    font-weight: 700;
+    line-height: 18px;
+    margin-bottom: 18px;
+}
+
+/* BAR */
+.barWrapper {
+    position: relative;
+    display: flex;
+    width: 320px;
+    max-width: 100%;
+    height: 6px;
+    margin-bottom: 10px;
+}
+
+.barWrapper::before {
+    background-color: var(--greyDarkBg1);
+    position: absolute;
+    content: "";
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 9px;
+}
+
+/* Each half is 50% */
+.halfBar {
+    position: relative;
+    display: flex;
+    width: 50%;
+    transition: all 0.3s ease 0s;
+}
+
+.halfBar::before {
+    background-color: var(--greyDarkBg1);
+    position: absolute;
+    content: "";
+    top: 0;
+    width: 1px;
+    height: 9px;
+}
+
+.halfBar:first-child::before {
+    left: 0;
+}
+
+.halfBar:last-child::before {
+    right: 0;
+}
+
+/* Realized Styling */
+.realizedFill {
+    position: relative;
+    background: linear-gradient(90deg, #0047FF, #75D9FF);
+    transition: all 0.3s ease 0s;
+}
+
+.realizedFill:hover {
+    opacity: 0.8;
+}
+
+.realizedRemaining {
+    background: #E6E6E6;
+}
+
+/* Bounced Styling */
+.bouncedFill {
+    position: relative;
+    background: linear-gradient(90deg, #FF6A47, #FFB3A2);
+    transition: all 0.3s ease 0s;
+}
+
+.bouncedFill:hover {
+    opacity: 0.8;
+}
+
+.bouncedRemaining {
+    background: #E6E6E6;
+}
+
+/* Each half hover Styling */
+.halfBarHover {
+    background-color: var(--whiteBg);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    top: 16px;
+    width: 136px;
+    padding: 8px;
+    border: 1px solid var(--lightBorder);
+    border-radius: 6px;
+    opacity: 0;
+    transition: all 0.3s ease 0s;
+}
+
+.realizedFill:hover~.halfBarHover {
+    opacity: 1;
+}
+
+.bouncedFill:hover~.halfBarHover {
+    opacity: 1;
+}
+
+.halfBarHover span {
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.realizedFill~.halfBarHover span {
+    background: linear-gradient(90deg, #0047FF, #75D9FF);
+}
+
+.bouncedFill~.halfBarHover span {
+    background: linear-gradient(90deg, #FF6A47, #FFB3A2);
+}
+
+.halfBarHover p {
+    font-size: 11px;
+    color: var(--lightDarkText);
+    font-weight: 400;
+    line-height: 14px;
+    margin: 0;
+}
+
+.halfBarHover strong {
+    display: block;
+    font-size: 14px;
+    color: var(--blackText);
+    font-weight: 500;
+    line-height: 18px;
+    margin-top: 2px;
+}
+
+.chequeStatLabels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--greyDarkText1);
+    font-weight: 400;
+    width: 90%;
+}
+
+/* Aging blocks */
+.agingBlockOuter {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.agingBlock {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.agingBlock strong {
+    display: block;
+    font-size: 16px;
+    color: var(--greyDarkText7);
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.agingBlock span {
+    display: block;
+    font-size: 14px;
+    color: var(--greyDarkText6);
+    font-weight: 500;
+    line-height: 18px;
+    margin-top: 8px;
+}
+
+/* Note */
+.chequeStatNote {
+    font-size: 14px;
+    color: var(--greyDarkText2);
+    font-weight: 500;
+    line-height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+@media (max-width: 767px) {
+    .agingBlockOuter {
+        flex-wrap: wrap;
+    }
+
+    .agingBlock {
+        width: calc(50% - 8px);
+        padding: 12px;
+    }
+}

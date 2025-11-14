@@ -1,0 +1,108 @@
+<div class="mb-4">
+    <app-dash-form>
+        <form>
+            <app-white-card title="Account details"
+                description="Manage all your account and profile information in one place." [showActions]="true">
+                <div class="myPrflFrm" [class.editMode]="editUserMode">
+                    <div class="row align-items-center g-2">
+                        <div class="col-md-auto">
+                            <div class="usrProCol">
+                                <div class="usrProImg">
+                                    <img [src]="userImage" width="50" height="50" alt="User Profile Image" />
+                                </div>
+                                <div class="usrProIcon" (click)="triggerFileInput()">
+                                    <i>
+                                        <app-edit-icon />
+                                    </i>
+                                </div>
+                                <input type="file" #fileInput (change)="onFileSelected($event)"
+                                    accept=".png, .jpg, .jpeg" hidden />
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="myPrflFrmGrp" [class.changed]="changedFields.name">
+                                <input type="text" name="name" [(ngModel)]="profile.name" [disabled]="!editUserMode"
+                                    (input)="onFieldChange('name')" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="myPrflFrmGrpLst mt-3">
+                        <div class="myPrflFrmGrp" [class.changed]="changedFields.email">
+                            <label for="email">Primary Email ID</label>
+                            <input type="email" name="email" [(ngModel)]="profile.email" [disabled]="!editUserMode"
+                                (input)="onFieldChange('email')" />
+                        </div>
+                        <div class="myPrflFrmGrp" [class.changed]="changedFields.contact">
+                            <label for="contact">Contact</label>
+                            <input type="number" name="contact" [(ngModel)]="profile.contact" [disabled]="!editUserMode"
+                                (input)="onFieldChange('contact')" />
+                        </div>
+                        <div class="myPrflFrmGrp" [class.changed]="changedFields.role">
+                            <label for="role">Role</label>
+                            <input type="text" name="role" [(ngModel)]="profile.role" [disabled]="!editUserMode"
+                                (input)="onFieldChange('role')" />
+                        </div>
+                        <div class="myPrflFrmGrp" [class.changed]="changedFields.password">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" [(ngModel)]="profile.password"
+                                [disabled]="!editUserMode" (input)="onFieldChange('password')" />
+                        </div>
+                    </div>
+                </div>
+                <ng-container card-actions>
+                    <button *ngIf="!editUserMode" type="button" class="btn btnCommon btnWhite"
+                        (click)="enableUserEdit()"><i><app-edit-icon /></i>Edit</button>
+                    <button *ngIf="editUserMode" type="button" class="btn btnCommon btnActive" (click)="saveUser()">Save
+                        changes</button>
+                    <button *ngIf="editUserMode" type="button" class="btn btnCommon btnDarkGrey"
+                        (click)="cancelUser()">Cancel</button>
+                </ng-container>
+            </app-white-card>
+        </form>
+    </app-dash-form>
+</div>
+<app-dash-form>
+    <form>
+        <app-white-card title="Other details" [showActions]="true">
+            <div class="myPrflFrm othrDtlFrm" [class.editMode]="editOtherDetailsMode">
+                <div class="myPrflFrmGrpLst">
+                    <div class="myPrflFrmGrp" [class.changed]="changedFields.country">
+                        <label for="country">Country</label>
+                        <input type="text" name="country" [(ngModel)]="otherDetails.country"
+                            [disabled]="!editOtherDetailsMode" (input)="onFieldChange('country')" />
+                    </div>
+                    <div class="myPrflFrmGrp" [class.changed]="changedFields.timeZone">
+                        <label for="timeZone">Time Zone</label>
+                        <input type="text" name="timeZone" [(ngModel)]="otherDetails.timeZone"
+                            [disabled]="!editOtherDetailsMode" (input)="onFieldChange('timeZone')" />
+                    </div>
+                    <div class="myPrflFrmGrp" [class.changed]="changedFields.address">
+                        <label for="address">Address</label>
+                        <textarea name="address" [(ngModel)]="otherDetails.address" [disabled]="!editOtherDetailsMode"
+                            (input)="onFieldChange('address')"></textarea>
+                    </div>
+                    <div class="myPrflFrmGrp" [class.changed]="changedFields.state">
+                        <label for="state">State</label>
+                        <input type="text" name="state" [(ngModel)]="otherDetails.state"
+                            [disabled]="!editOtherDetailsMode" (input)="onFieldChange('state')" />
+                    </div>
+                    <div class="myPrflFrmGrp" [class.changed]="changedFields.postalCode">
+                        <label for="postalCode">Postal Code</label>
+                        <input type="number" inputmode="numeric" maxlength="6" name="postalCode"
+                            [(ngModel)]="otherDetails.postalCode" [disabled]="!editOtherDetailsMode"
+                            (input)="onFieldChange('postalCode')" />
+                    </div>
+                </div>
+            </div>
+            <ng-container card-actions>
+                <button *ngIf="!editOtherDetailsMode" type="button" class="btn btnCommon btnWhite"
+                    (click)="enableOtherDetailsEdit()"><i><app-edit-icon /></i>Edit</button>
+                <button *ngIf="editOtherDetailsMode" type="button" class="btn btnCommon btnActive"
+                    (click)="saveOtherDetails()">Save
+                    changes</button>
+                <button *ngIf="editOtherDetailsMode" type="button" class="btn btnCommon btnDarkGrey"
+                    (click)="cancelOtherDetails()">Cancel</button>
+            </ng-container>
+        </app-white-card>
+    </form>
+</app-dash-form>

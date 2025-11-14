@@ -1,0 +1,52 @@
+<div class="chequeStatContainer">
+  <div class="chequeStatMain">
+    <h4 class="chequeStatTitle">Total Cheques - {{ totalCheques }}</h4>
+
+    <!-- Stacked bar -->
+    <div class="barWrapper">
+      <!-- REALIZED half -->
+      <div class="halfBar">
+        <div class="realizedRemaining" [style.width.%]="realizedRemainingPercent"></div>
+        <div class="realizedFill" [style.width.%]="realizedFillPercent"></div>
+        <div class="halfBarHover">
+          <span></span>
+          <div>
+            <p>Realized cheques</p>
+            <strong>{{ realized }} / {{ totalCheques }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOUNCED half -->
+      <div class="halfBar">
+        <div class="bouncedFill" [style.width.%]="bouncedFillPercent"></div>
+        <div class="halfBarHover">
+          <span></span>
+          <div>
+            <p>Bounced cheques</p>
+            <strong>{{ bounced }} / {{ totalCheques }}</strong>
+          </div>
+        </div>
+        <div class="bouncedRemaining" [style.width.%]="bouncedRemainingPercent"></div>
+      </div>
+    </div>
+
+    <div class="chequeStatLabels">
+      <span>Realized</span>
+      <span>Bounced</span>
+    </div>
+  </div>
+
+  <!-- Aging Blocks -->
+  <div class="agingBlockOuter">
+    <div class="agingBlock" *ngFor="let item of agingData" [style.background]="item.bg">
+      <strong>{{ item.count }}</strong>
+      <span>{{ item.label }}</span>
+    </div>
+  </div>
+
+  <div class="chequeStatNote">
+    <i><app-info-icon /></i> The above mentioned are bounced aging cheques
+  </div>
+
+</div>

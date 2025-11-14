@@ -1,0 +1,6 @@
+.dashMainOuter {
+    background-color: var(--lightBg1);
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}

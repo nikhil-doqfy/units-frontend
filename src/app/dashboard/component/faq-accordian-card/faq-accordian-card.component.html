@@ -1,0 +1,21 @@
+<div class="accordion faqAcrdn" id="faqExample">
+    <div class="accordion-item faqAcrdnItem" *ngFor="let item of accordianData; let i = index">
+        <h2 class="accordion-header faqAcrdnHdr">
+            <button class="accordion-button" [ngClass]="{'collapsed': !isAccordionOpen(i)}" type="button"
+                [attr.data-bs-target]="'#collapse' + i" [attr.aria-expanded]="isAccordionOpen(i)"
+                [attr.aria-controls]="'collapse' + i" data-bs-toggle="collapse" (click)="toggleAccordion(i)">
+                {{ item.title }}
+                <i>
+                    <span><app-plus-icon *ngIf="openAccordionIndex !== i"></app-plus-icon></span>
+                    <span><app-minus-icon *ngIf="openAccordionIndex === i"></app-minus-icon></span>
+                </i>
+            </button>
+        </h2>
+        <div class="accordion-collapse faqAcrdnCollapse collapse" [class.show]="isAccordionOpen(i)"
+            [attr.id]="'collapse' + i" data-bs-parent="#faqExample">
+            <div class="accordion-body faqAcrdnBody">
+                <p>{{ item.content }}</p>
+            </div>
+        </div>
+    </div>
+</div>

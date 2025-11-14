@@ -1,0 +1,9 @@
+<div class="cmmnTblImgItem" [ngClass]="[size, clickable ? 'clickable' : '']" (click)="onClick()">
+    <i>
+        <img [src]="img" [alt]="title" />
+    </i>
+    <div>
+        <span>{{ title }}</span>
+        <em *ngIf="subtitle">{{ subtitle }}</em>
+    </div>
+</div>

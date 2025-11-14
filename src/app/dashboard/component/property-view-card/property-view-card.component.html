@@ -1,0 +1,48 @@
+<div class="cmmnPrprtyViewCol">
+    <div class="cmmnPrprtyViewSldr">
+        <!-- Thumbnail Slider (Vertical) -->
+        <div class="thumbSwiperOuter">
+            <swiper-container #thumbSwiper slides-per-view="4" space-between="6" watch-slides-progress="true"
+                navigation="true" class="thumbSwiper verticalThumbs">
+                <swiper-slide *ngFor="let propertyImage of propertyImages">
+                    <img [src]="propertyImage.imgSrc" />
+                </swiper-slide>
+            </swiper-container>
+        </div>
+        <!-- Main Slider -->
+        <swiper-container #mainSwiper [thumbs]="{ swiper: thumbsSwiper }" navigation="false" effect="fade"
+            pagination="false" autoplay="false" class="mainSwiper">
+            <swiper-slide *ngFor="let propertyImage of propertyImages">
+                <div class="prprtyViewSldrImg">
+                    <img [src]="propertyImage.imgSrc" />
+                </div>
+            </swiper-slide>
+        </swiper-container>
+    </div>
+    <div class="cmmnPrprtyViewCntnt">
+        <div class="cmmnPrprtyViewTop">
+            <p>Property Information</p>
+            <div>
+                <p>Status: <span>{{ status }}</span></p>
+                <button type="button" class="btn btnCommon btnWhite" *ngIf="showBack" (click)="onBackClick()">
+                    <i><app-back-icon /></i> Back
+                </button>
+            </div>
+        </div>
+        <div class="cmmnPrprtyViewTtl">
+            <h4>{{ name }}</h4>
+            <h5>{{ location }}</h5>
+        </div>
+        <div class="cmmnPrprtyViewCost">
+            <span>Rent Cost</span>
+            <h3>{{ price }}</h3>
+            <ul>
+                <li *ngIf="sqft"><i><app-bhk-icon /></i> {{ bhk }}</li>
+                <li *ngIf="sqft"><i><app-sqaure-feet-icon /></i> {{ sqft }}</li>
+            </ul>
+        </div>
+        <div class="cmmnPrprtyViewInfo">
+            <app-property-accordian-card [accordianData]="sections" />
+        </div>
+    </div>
+</div>

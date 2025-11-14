@@ -1,0 +1,120 @@
+<div class="mb-3">
+    <app-white-card>
+        <app-payments-info-card [overallAmountPaid]="overallAmountPaid" [monthlyRent]="monthlyRent"
+            [maintenanceCharges]="maintenanceCharges" [dueTime]="dueTime" [lastDate]="lastDate">
+            <app-custom-select
+                [options]="['Property Name: All', 'Property Name: Novatis AG...', 'Property Name: Agriculture', 'Property Name: Honda', 'Property Name: TVS', 'Property Name: Samsung']"
+                [placeholder]="selected" [selectedOption]="selected" (optionSelected)="onOptionSelected($event)"
+                [isGrey]="true">
+            </app-custom-select>
+        </app-payments-info-card>
+    </app-white-card>
+</div>
+
+<div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+        <div class="row align-items-center">
+            <div class="col-md">
+                <app-table-title title="Recent Payments / Invoice" subtitle="(5)"></app-table-title>
+            </div>
+            <div class="col-md-auto">
+                <div class="d-flex align-items-center gap-2 gap-md-3">
+                    <app-table-search placeholder="Search here..." />
+                    <app-table-filter-btn title="Filter" [hasIcon]="true" (clicked)="handleFilterClick()">
+                        <app-filter-icon />
+                    </app-table-filter-btn>
+                    <app-table-filter-btn title="Export" [hasIcon]="true" (clicked)="handleExportClick()">
+                        <app-export-icon />
+                    </app-table-filter-btn>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cmmnTblBody">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Invoice ID</th>
+                        <th>Payment date</th>
+                        <th>Invoice date</th>
+                        <th>Payment through</th>
+                        <th width="200">Invoice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LP9021</td>
+                        <td>LP9021</td>
+                        <td>12/02/2024</td>
+                        <td>12/02/2024</td>
+                        <td>RTGS</td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LP8021</td>
+                        <td>LP8021</td>
+                        <td>01/01/2024</td>
+                        <td>01/01/2024</td>
+                        <td>NEFT</td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>VC79021</td>
+                        <td>VC79021</td>
+                        <td>22/12/2023</td>
+                        <td>22/12/2023</td>
+                        <td>NEFT</td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>VC69021</td>
+                        <td>VC69021</td>
+                        <td>11/12/2023</td>
+                        <td>11/12/2023</td>
+                        <td>NEFT</td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>VC59021</td>
+                        <td>VC59021</td>
+                        <td>01/12/2023</td>
+                        <td>01/12/2023</td>
+                        <td>NEFT</td>
+                        <td align="center">
+                            <div class="cmmnTblActnBtnDiv">
+                                <app-table-action-btn type="download" (clicked)="handleDownloadClick()" />
+                                <app-table-action-btn type="preview" (clicked)="handlePreviewClick()" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="cmmnTblFtr">
+        <app-table-select />
+        <app-table-pagination />
+    </div>
+</div>

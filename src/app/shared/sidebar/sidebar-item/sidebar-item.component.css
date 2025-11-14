@@ -1,0 +1,92 @@
+.dashSdbrItem+.dashSdbrItem {
+    margin-top: 8px;
+}
+
+.dashSdbrItem a {
+    background: var(--whiteBg);
+    font-size: 14px;
+    color: var(--greyText);
+    font-weight: 600;
+    line-height: 36.4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--muteBorder1);
+    border-radius: 8px;
+    padding: 0 10px;
+    position: relative;
+    transition: all 0s ease 0s;
+    z-index: 1;
+}
+
+.dashSdbrSmallItem.dashSdbrItem a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashSdbrItem a i:first-child {
+    width: 16px;
+    display: inline-block;
+    text-align: center;
+}
+
+.dashSdbrSmallItem.dashSdbrItem a i {
+    margin-right: 0;
+}
+
+.dashSdbrItem a em {
+    color: var(--yellowText);
+    margin-left: 12px;
+}
+
+.dashSdbrSmallItem.dashSdbrItem span,
+.dashSdbrSmallItem.dashSdbrItem em {
+    display: none;
+}
+
+.dashSdbrItem .menuArrow {
+    position: absolute;
+    right: 10px;
+}
+
+.dashSdbrItem a:hover {
+    background-color: var(--muteBg);
+}
+
+.dashSdbrItem a.active {
+    background: var(--ownerGradientBg);
+    color: var(--whiteText);
+}
+
+/* Default owner theme */
+:host-context(.theme-owner) .dashSdbrItem a.active {
+    background: var(--ownerGradientBg);
+}
+
+/* Property Manager theme */
+:host-context(.theme-manager) .dashSdbrItem a.active {
+    background: var(--managerGradientBg);
+}
+
+/* Tenant theme */
+:host-context(.theme-tenant) .dashSdbrItem a.active {
+    background: var(--tenantGradientBg);
+}
+
+
+/* @media (max-width: 1300px) { */
+@media (max-width: 1199px) {
+    .dashSdbrSmallItem.dashSdbrItem a {
+        justify-content: flex-start;
+    }
+
+    .dashSdbrSmallItem.dashSdbrItem a i {
+        margin-right: 10px;
+    }
+
+    .dashSdbrSmallItem.dashSdbrItem span,
+    .dashSdbrSmallItem.dashSdbrItem em {
+        display: block;
+    }
+}

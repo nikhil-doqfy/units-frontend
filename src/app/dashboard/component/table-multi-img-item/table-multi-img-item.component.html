@@ -1,0 +1,11 @@
+<div class="cmmnTblMultiImgItem" [ngClass]="size">
+    <ng-container *ngFor="let image of images | slice:0:3">
+        <i>
+            <img [src]="image" alt="img" />
+        </i>
+    </ng-container>
+
+    <span *ngIf="remainingCount > 0">
+        +{{ remainingCount }}
+    </span>
+</div>

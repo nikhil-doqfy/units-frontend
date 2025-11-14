@@ -1,0 +1,5 @@
+.stepCount {
+    font-size: 13px;
+    color: var(--stepText);
+    font-weight: 400;
+}

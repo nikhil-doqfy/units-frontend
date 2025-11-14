@@ -1,0 +1,120 @@
+<div class="dashSdbrMain" [class.dashSdbrSmallMain]="!openSidebarValue"
+  [ngClass]="{ 'arabic': currentLanguage === 'ar' }">
+  <div class="dashSdbrHdr">
+    <div class="dashSdbrLogo">
+      <a (click)="goToDashboard()">
+        <img class="dashSdbrLogoImg" src="../../../../assets/mainLogo.svg" alt="Doqfy Logo" />
+        <img class="dashSdbrLogoIcon" src="../../../../assets/mainLogoIcon.svg" alt="Doqfy Logo" />
+      </a>
+    </div>
+    <div class="sdbrMenuBtn">
+      <button (click)="handleOpenPopup()">
+        <i class="open"><app-menu-open-icon /></i>
+        <i class="close"><app-menu-close-icon /></i>
+      </button>
+    </div>
+  </div>
+  <div class="dashSdbrSearch">
+    <input type="text" class="form-control" id="search" placeholder="{{ 'SEARCH_HERE' | translate }}"
+      autocomplete="off" />
+    <button type="button"><app-search-icon /></button>
+  </div>
+  <div class="dashSdbrList">
+
+    <!-- Owner Menus Start -->
+    <div class="dashSdbrWdgt" *ngIf="currentRole === 'owner'">
+      <app-sidebar-heading title="{{ 'MENU' | translate }}" />
+      <div class="dashSdbrItemList">
+        <app-sidebar-item title="{{ 'DASHBOARD' | translate }}" href="/dashboard/home">
+          <app-dashboard-icon></app-dashboard-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'PROPERTIES' | translate }}" href="/dashboard/properties">
+          <app-property-icon></app-property-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'PMC' | translate }}" href="/dashboard/pmc">
+          <app-pmc-icon></app-pmc-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'TENANTS' | translate }}" href="/dashboard/tenants">
+          <app-tenant-icon></app-tenant-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'LEASE_TENANCY' | translate }}" href="/dashboard/lease-tenancy">
+          <app-lease-tenancy-icon></app-lease-tenancy-icon>
+        </app-sidebar-item>
+      </div>
+    </div>
+    <!-- Owner Menus End -->
+
+    <!-- Property Manager Start Menus -->
+    <div class="dashSdbrWdgt" *ngIf="currentRole === 'property-manager'">
+      <app-sidebar-heading title="{{ 'MENU' | translate }}" />
+      <div class="dashSdbrItemList">
+        <app-sidebar-item title="{{ 'DASHBOARD' | translate }}" href="/dashboard/home">
+          <app-dashboard-icon></app-dashboard-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'PROPERTIES' | translate }}" href="/dashboard/properties">
+          <app-property-icon></app-property-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'TENANTS' | translate }}" href="/dashboard/tenants">
+          <app-tenant-icon></app-tenant-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'OWNER' | translate }}" href="/dashboard/owners">
+          <app-owner-icon></app-owner-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'LEASE_TENANCY' | translate }}" href="/dashboard/lease-tenancy">
+          <app-lease-tenancy-icon></app-lease-tenancy-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'APPROVAL' | translate }}" href="/dashboard/approval">
+          <app-approval-icon></app-approval-icon>
+        </app-sidebar-item>
+      </div>
+    </div>
+
+    <div class="dashSdbrWdgt" *ngIf="currentRole === 'property-manager'">
+      <app-sidebar-heading title="{{ 'USER_MANAGEMENT' | translate }}" />
+      <div class="dashSdbrItemList">
+        <app-sidebar-item title="{{ 'USERS' | translate }}" href="/dashboard/users">
+          <app-staff-icon></app-staff-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'STAFF' | translate }}" href="/dashboard/staff">
+          <app-staff-icon></app-staff-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'ROLES_AND_PERMISSIONS' | translate }}" href="/dashboard/roles-and-permissions">
+          <app-roles-permissions-icon></app-roles-permissions-icon>
+        </app-sidebar-item>
+      </div>
+    </div>
+    <!-- Property Manager Menus End -->
+
+    <!-- Tenant Menus Start -->
+    <div class="dashSdbrWdgt" *ngIf="currentRole === 'tenant'">
+      <app-sidebar-heading title="{{ 'MENU' | translate }}" />
+      <div class="dashSdbrItemList">
+        <app-sidebar-item title="{{ 'PROPERTIES' | translate }}" href="/dashboard/properties">
+          <app-property-icon></app-property-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'DOCUMENTATIONS' | translate }}" href="/dashboard/documentations">
+          <app-documentation-icon></app-documentation-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'PAYMENTS_AND_INVOICE' | translate }}" href="/dashboard/payments-and-invoice">
+          <app-payment-invoice-icon></app-payment-invoice-icon>
+        </app-sidebar-item>
+      </div>
+    </div>
+    <div class="dashSdbrWdgt" *ngIf="currentRole === 'tenant'">
+      <app-sidebar-heading title="{{ 'OTHERS' | translate }}" />
+      <div class="dashSdbrItemList">
+        <app-sidebar-item title="{{ 'RAISE_COMPLAINT' | translate }}" href="/dashboard/raise-complaint">
+          <app-raise-complaint-icon></app-raise-complaint-icon>
+        </app-sidebar-item>
+        <app-sidebar-item title="{{ 'PRIVACY_POLICY' | translate }}" href="/dashboard/privacy-policy">
+          <app-privacy-policy-icon></app-privacy-policy-icon>
+        </app-sidebar-item>
+      </div>
+    </div>
+    <div class="dashSdbrWdgt" *ngIf="currentRole === 'tenant'">
+      <app-sidebar-support></app-sidebar-support>
+    </div>
+    <!-- Tenant Menus End -->
+  </div>
+</div>
+<div *ngIf="!openSidebarValue" class="dashOverlay" (click)="handleOpenPopup()"></div>

@@ -1,0 +1,300 @@
+<ng-container *ngIf="!showDetailView">
+    <div class="cmmnTblOuter">
+        <div class="cmmnTblHdr">
+            <div class="row g-3 align-items-center">
+                <div class="col-md">
+                    <app-table-title title="All PMC" subtitle="(240)"></app-table-title>
+                </div>
+                <div class="col-md-auto">
+                    <div class="d-flex align-items-center gap-2 gap-md-3">
+                        <app-table-search placeholder="Search here..." />
+                        <app-table-filter-btn title="Export" [hasIcon]="true" (clicked)="handleExportClick()">
+                            <app-export-icon />
+                        </app-table-filter-btn>
+                        <app-invite-pmc-btn></app-invite-pmc-btn>
+                        <app-table-filter-btn title="Assign Property"
+                            (clicked)="openAssignPropertyModal(assignPropertyContent)"></app-table-filter-btn>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cmmnTblBody">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Property Handling</th>
+                            <th>PMC Name</th>
+                            <th>Tenancy Ratio</th>
+                            <th width="200">Address</th>
+                            <th width="200"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>VC89021</td>
+                            <td>4 Property</td>
+                            <td class="cursor" (click)="handleViewClick()">3 g real estate</td>
+                            <td>2:4</td>
+                            <td>Al Nahda St - Al Qusais Industrial Area 2 - Dubai</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
+                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
+                                    <app-table-action-dropdown [dropdownItems]="documentActions"
+                                        (actionClicked)="handleDropdownAction($event)">
+                                    </app-table-action-dropdown>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>VC78012</td>
+                            <td>5 Property</td>
+                            <td class="cursor" (click)="handleViewClick()">Prestige Builders</td>
+                            <td>2:4</td>
+                            <td>Sheikh Zayed Road - Trade Centre - Dubai</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
+                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
+                                    <app-table-action-dropdown [dropdownItems]="documentActions"
+                                        (actionClicked)="handleDropdownAction($event)">
+                                    </app-table-action-dropdown>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>VC67908</td>
+                            <td>1 Property</td>
+                            <td class="cursor" (click)="handleViewClick()">Tata Constructions</td>
+                            <td>5:7</td>
+                            <td>Al Maktoum Rd - Deira - Dubai</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
+                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
+                                    <app-table-action-dropdown [dropdownItems]="documentActions"
+                                        (actionClicked)="handleDropdownAction($event)">
+                                    </app-table-action-dropdown>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>VC56890</td>
+                            <td>11 Property</td>
+                            <td class="cursor" (click)="handleViewClick()">Godrej Properties</td>
+                            <td>1:9</td>
+                            <td>Al Maktoum Rd - Deira - Dubai</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
+                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
+                                    <app-table-action-dropdown [dropdownItems]="documentActions"
+                                        (actionClicked)="handleDropdownAction($event)">
+                                    </app-table-action-dropdown>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>VC45789</td>
+                            <td>2 Property</td>
+                            <td class="cursor" (click)="handleViewClick()">L&T Realty</td>
+                            <td>1:2</td>
+                            <td>Al Wasl Rd - Al Safa 1 - Dubai</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
+                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
+                                    <app-table-action-dropdown [dropdownItems]="documentActions"
+                                        (actionClicked)="handleDropdownAction($event)">
+                                    </app-table-action-dropdown>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="cmmnTblFtr">
+            <app-table-select />
+            <app-table-pagination />
+        </div>
+    </div>
+
+    <ng-template #assignPropertyContent let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-title">Assign Property</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <app-assign-property-form />
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btnCommon btnTransparent"
+                (click)="modal.dismiss('Save click')">Cancel</button>
+            <button type="button" class="btn btnCommon" (click)="modal.close('Save click')">Assign
+                Property</button>
+        </div>
+    </ng-template>
+</ng-container>
+
+<ng-container *ngIf="showDetailView">
+    <app-table-view-card [title]="'Prestige Builders'" [imgSrc]="''" [headerItems]="[
+            { label: 'Company Code', value: 'VC78012' },
+            { label: 'Email', value: 'owner28@gmail.com' }
+        ]" [items]="[
+            { label: 'Phone Number', value: '+97-7007836367' },
+            { label: 'Company', value: 'Afc25' },
+            { label: 'City', value: 'Bengaluru' },
+            { label: 'Locality', value: '' },
+            { label: 'Postal Code', value: '5621009' },
+            { label: 'Address Line 1', value: 'Koramangala' },
+            { label: 'Address Line 2', value: 'Bellandur' }
+        ]" (back)="handleBackClick()"></app-table-view-card>
+
+    <div class="mt-3">
+        <app-white-card title="PMC Documents">
+            <div class="row g-2">
+                <div class="col-auto">
+                    <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                </div>
+                <div class="col-auto">
+                    <app-document-type-item title="Finances.pdf" size="1.2 MB" />
+                </div>
+                <div class="col-auto">
+                    <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+                </div>
+                <div class="col-auto">
+                    <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+                </div>
+            </div>
+        </app-white-card>
+    </div>
+    <div class="cmmnTblOuter mt-3">
+        <div class="cmmnTblHdr">
+            <div class="row align-items-center">
+                <div class="col-md">
+                    <app-table-title title="Properties Assigned" subtitle="(5)"></app-table-title>
+                </div>
+                <div class="col-md-auto">
+                    <div class="d-flex align-items-center gap-2 gap-md-3">
+                        <app-table-search placeholder="Search here..." />
+                        <app-table-filter-btn title="Filter" [hasIcon]="true" (clicked)="handleExportClick()">
+                            <app-filter-icon />
+                        </app-table-filter-btn>
+                        <app-table-filter-btn title="Export" [hasIcon]="true" (clicked)="handleExportClick()">
+                            <app-export-icon />
+                        </app-table-filter-btn>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cmmnTblBody">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th><button type="button">Property Name <i><app-sorting-icon /></i></button></th>
+                            <th><button type="button">Tenant Name <i><app-sorting-icon /></i></button></th>
+                            <th>Tenancy Status</th>
+                            <th>Dimension</th>
+                            <th width="200">Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>LP9021</td>
+                            <td>
+                                <app-table-img-item img="../../assets/property/property-list-1.png" size="md"
+                                    title="Novatis AG..." />
+                            </td>
+                            <td>N/A</td>
+                            <td>Vacant</td>
+                            <td>1BHK</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="download" (clicked)="handleDownloadDocumentClick()" />
+                                    <app-table-action-btn type="preview" (clicked)="handlePreviewDocumentClick()" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>LP8021</td>
+                            <td>
+                                <app-table-img-item img="../../assets/property/property-list-2.png" size="md"
+                                    title="Agriculture...." />
+                            </td>
+                            <td>
+                                <app-table-img-item img="../../assets/user/user-2.png" title="Richard" />
+                            </td>
+                            <td>Occupied</td>
+                            <td>2BHK</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="download" (clicked)="handleDownloadDocumentClick()" />
+                                    <app-table-action-btn type="preview" (clicked)="handlePreviewDocumentClick()" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>VC79021</td>
+                            <td>
+                                <app-table-img-item img="../../assets/property/property-list-2.png" size="md"
+                                    title="Honda..." />
+                            </td>
+                            <td>
+                                <app-table-img-item img="../../assets/user/user-3.png" title="Thaomas" />
+                            </td>
+                            <td>Occupied</td>
+                            <td>5BHK</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="download" (clicked)="handleDownloadDocumentClick()" />
+                                    <app-table-action-btn type="preview" (clicked)="handlePreviewDocumentClick()" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>VC69021</td>
+                            <td>
+                                <app-table-img-item img="../../assets/property/property-list-2.png" size="md"
+                                    title="TVS" />
+                            </td>
+                            <td>
+                                <app-table-img-item img="../../assets/user/user-4.png" title="Akshay" />
+                            </td>
+                            <td>Occupied</td>
+                            <td>1RK</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="download" (clicked)="handleDownloadDocumentClick()" />
+                                    <app-table-action-btn type="preview" (clicked)="handlePreviewDocumentClick()" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>VC59021</td>
+                            <td>
+                                <app-table-img-item img="../../assets/property/property-list-2.png" size="md"
+                                    title="Samsung" />
+                            </td>
+                            <td>
+                                <app-table-img-item img="../../assets/user/user-5.png" title="Avanshi" />
+                            </td>
+                            <td>Occupied</td>
+                            <td>1BHK</td>
+                            <td align="center">
+                                <div class="cmmnTblActnBtnDiv">
+                                    <app-table-action-btn type="download" (clicked)="handleDownloadDocumentClick()" />
+                                    <app-table-action-btn type="preview" (clicked)="handlePreviewDocumentClick()" />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-container>

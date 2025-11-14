@@ -1,0 +1,6 @@
+<div class="dashMainBody" [class.dashMainSmallBody]="!openSidebarValue"
+  [class.dashMainRightCloseBody]="hasRightSidebar && !openRightSidebarValue"
+  [class.dashMainRightOpenBody]="hasRightSidebar && openRightSidebarValue"
+  [ngClass]="{ 'arabic': currentLanguage === 'ar' }">
+  <ng-content></ng-content>
+</div>

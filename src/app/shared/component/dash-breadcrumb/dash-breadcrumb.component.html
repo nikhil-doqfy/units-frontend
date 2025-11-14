@@ -1,0 +1,24 @@
+<div class="dashBrdcrmbOuter">
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item" *ngFor="let item of breadcrumbItems; let i = index; let last = last"
+        [ngClass]="{'active': last}" [attr.aria-current]="last ? 'page' : null">
+
+        <!-- First item with dashboard icon -->
+        <ng-container *ngIf="i === 0; else normalItem">
+          <a [routerLink]="item.link || '/dashboard'">
+            <i><app-home-icon /></i>
+            {{ item.label }}
+          </a>
+        </ng-container>
+
+        <!-- Other items -->
+        <ng-template #normalItem>
+          <a *ngIf="!last" [routerLink]="item.link">{{ item.label }}</a>
+          <span *ngIf="last">{{ item.label }}</span>
+        </ng-template>
+
+      </li>
+    </ol>
+  </nav>
+</div>

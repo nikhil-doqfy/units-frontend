@@ -1,0 +1,45 @@
+.dashSdbrHdng {
+    margin-bottom: 8px;
+}
+
+.dashSdbrSmallHdng {
+    text-align: center;
+}
+
+.dashSdbrHdng p {
+    font-size: 12px;
+    color: var(--lightText);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.dashSdbrHdng span {
+    background-color: var(--lightBg);
+    width: 9px;
+    height: 9px;
+    border-radius: 9px;
+    display: none;
+}
+
+.dashSdbrSmallHdng p {
+    display: none;
+}
+
+.dashSdbrSmallHdng span {
+    display: inline-block;
+}
+
+
+@media (max-width: 1300px) {
+    .dashSdbrSmallHdng {
+        text-align: left;
+    }
+
+    .dashSdbrSmallHdng p {
+        display: block;
+    }
+
+    .dashSdbrSmallHdng span {
+        display: none;
+    }
+}

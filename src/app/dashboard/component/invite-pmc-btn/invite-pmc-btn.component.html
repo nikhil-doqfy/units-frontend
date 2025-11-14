@@ -1,0 +1,18 @@
+<app-table-filter-btn title="Invite PMC" [hasIcon]="true" (clicked)="openInvitePMCModal(invitePMCContent)">
+    <app-invite-icon />
+</app-table-filter-btn>
+
+<ng-template #invitePMCContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Invite PMC</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <app-invite-pmc-form />
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btnCommon btnTransparent" (click)="modal.dismiss('Save click')">Cancel</button>
+        <button type="button" class="btn btnCommon" (click)="modal.close('Save click')"><i><app-send-icon /></i>Send
+            Invitation</button>
+    </div>
+</ng-template>

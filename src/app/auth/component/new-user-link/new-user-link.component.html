@@ -1,0 +1,11 @@
+<div class="newUserLink">
+    <ng-container *ngIf="type === 'back'">
+        <p>Back to <button type="button" (click)="goToLogin()">Sign In</button></p>
+    </ng-container>
+    <ng-container *ngIf="type === 'login'">
+        <p>Already have an account? <button type="button" (click)="goToLogin()">Sign In</button></p>
+    </ng-container>
+    <ng-container *ngIf="type === 'new-user'">
+        <p>Don’t have an account? <button type="button" (click)="goToNewUser()">Sign Up</button></p>
+    </ng-container>
+</div>

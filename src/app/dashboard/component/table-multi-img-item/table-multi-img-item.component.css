@@ -1,0 +1,47 @@
+.cmmnTblMultiImgItem {
+    display: flex;
+    align-items: center;
+}
+
+.cmmnTblMultiImgItem i {
+    position: relative;
+}
+
+.cmmnTblMultiImgItem i+i {
+    margin-left: -8px;
+}
+
+.cmmnTblMultiImgItem i img {
+    border-radius: 50%;
+}
+
+.cmmnTblMultiImgItem.sm i img {
+    width: 24px;
+    height: 24px;
+}
+
+.cmmnTblMultiImgItem.md i img {
+    width: 28px;
+    height: 28px;
+}
+
+.cmmnTblMultiImgItem.lg i img {
+    width: 32px;
+    height: 32px;
+}
+
+.cmmnTblMultiImgItem span {
+    position: relative;
+    background-color: var(--activeLightBg);
+    font-size: 13px;
+    color: var(--blackText);
+    font-weight: 400;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--activeDarkBorder);
+    border-radius: 28px;
+    margin-left: -8px;
+}

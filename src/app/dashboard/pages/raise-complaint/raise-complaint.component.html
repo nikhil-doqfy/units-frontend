@@ -1,0 +1,11 @@
+<app-raise-complaint-card>
+    <ng-container form-content>
+        <div class="textareaCombo">
+            <textarea class="form-control" type="text" name="contactMsg" placeholder="How can we help you?"></textarea>
+            <button type="button" class="btn btnCommon btnWhite btnExtraSmall"><i><app-send-icon /></i> Send</button>
+        </div>
+    </ng-container>
+    <ng-container accordion-content>
+        <app-faq-accordian-card [accordianData]="faqList" />
+    </ng-container>
+</app-raise-complaint-card>

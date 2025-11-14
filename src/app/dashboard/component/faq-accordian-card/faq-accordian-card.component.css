@@ -1,0 +1,62 @@
+.faqAcrdnItem {
+    border: 0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.faqAcrdnItem+.faqAcrdnItem {
+    margin-top: 16px;
+}
+
+.faqAcrdnHdr .accordion-button {
+    font-size: 14px;
+    color: var(--greyText2);
+    font-weight: 400;
+    line-height: 18px;
+    padding: 12px;
+    justify-content: space-between;
+}
+
+.faqAcrdnHdr .accordion-button:not(.collapsed),
+.faqAcrdnHdr .accordion-button:focus {
+    color: var(--greyText2);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.faqAcrdnHdr .accordion-button::after {
+    display: none;
+}
+
+.faqAcrdnHdr .accordion-button i {
+    background-color: var(--muteBg);
+    color: var(--greyLightText);
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.faqAcrdnHdr .accordion-button i span {
+    margin-top: -2px;
+}
+
+.faqAcrdnBody {
+    padding: 0px 12px 12px 12px;
+}
+
+.faqAcrdnBody p {
+    font-size: 14px;
+    color: var(--blackText10);
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 767px) {}
