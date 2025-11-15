@@ -4,7 +4,6 @@
 />
 
 <app-auth-form>
-  <!-- [formGroup]="identificationForm" (ngSubmit)="onSubmit()" -->
   <form class="mt-2">
     <!-- Property Manage Through -->
     <div class="mb-3">
@@ -24,7 +23,7 @@
     <!-- Emirate ID -->
     <div class="mb-3">
       <label class="form-label">Emirate ID</label>
-      <!-- <div class="iconInput"> -->
+
       <input
         type="text"
         class="form-control"
@@ -37,31 +36,28 @@
     <!-- UAE Residence Visa -->
     <div class="mb-3">
       <label class="form-label">UAE Residence Visa</label>
-      <!-- <div class="iconInput"> -->
+
       <input
         type="text"
         class="form-control"
         placeholder="Enter here"
         formControlName="residenceVisa"
       />
-      <!-- </div> -->
     </div>
 
     <!-- Trade License Number -->
     <div class="mb-3">
       <label class="form-label">Trade License Number</label>
-      <!-- <div class="iconInput"> -->
+
       <input
         type="text"
         class="form-control"
         placeholder="Enter here"
         formControlName="tradeLicense"
       />
-      <!-- </div> -->
     </div>
 
     <div class="frmBtnss d-flex justify-content-center gap-3 mt-2">
-      <!-- (click)="goBack()" -->
       <button type="button" class="btn btnLight custom-shadow" (click)="back()">
         <app-arrow-icon></app-arrow-icon>
         Back

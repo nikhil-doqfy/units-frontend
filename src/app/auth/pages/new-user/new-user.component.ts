@@ -180,7 +180,7 @@ export class NewUserComponent {
       email,
       password,
       confirm_password: confirmPassword,
-      user_type: this.defaultUserType, // ✅ Default
+      user_type: this.defaultUserType,
     };
 
     this.auth.signup(payload).subscribe({

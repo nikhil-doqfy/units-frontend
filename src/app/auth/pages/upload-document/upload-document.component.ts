@@ -32,17 +32,10 @@ export class UploadDocumentComponent {
   @ViewChild('dldCertInput') dldCertInput!: ElementRef<HTMLInputElement>;
   @ViewChild('uploadedSection') uploadedSection!: ElementRef;
 
-  // uploadForm: FormGroup;
   uploadedFiles: any = { emiratesId: null, uaeVisa: null, dldCert: null };
   uploadedList: any[] = [];
   showUploadedSection = false;
-  // constructor(private fb: FormBuilder) {
-  //   this.uploadForm = this.fb.group({
-  //     emiratesId: [null, Validators.required],
-  //     uaeVisa: [null, Validators.required],
-  //     dldCert: [null, Validators.required]
-  //   });
-  // }
+
   constructor(private router: Router) {}
   triggerFile(type: string) {
     if (type === 'emiratesId') this.emiratesIdInput.nativeElement.click();
@@ -73,7 +66,6 @@ export class UploadDocumentComponent {
     }
 
     this.uploadedFiles[type] = file;
-    // this.uploadForm.get(type)?.setValue(file);
 
     const fileInfo = {
       type,
@@ -99,18 +91,11 @@ export class UploadDocumentComponent {
 
   deleteFile(file: any) {
     this.uploadedFiles[file.type] = null;
-    // this.uploadForm.get(file.type)?.reset();
+
     this.uploadedList = this.uploadedList.filter((f) => f.type !== file.type);
   }
 
   isUploaded(type: string): boolean {
     return !!this.uploadedFiles[type];
   }
-  // onSubmit() {
-  //   if (this.uploadForm.invalid) {
-  //     alert('Please upload all required documents.');
-  //     return;
-  //   }
-  //   console.log('Form Data:', this.uploadForm.value);
-  // }
 }

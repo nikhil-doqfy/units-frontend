@@ -54,50 +54,38 @@ export class ResetPasswordComponent implements OnInit {
     this.email = data.email;
     this.otp = data.otp;
 
-    // console.log('EMAIL:', this.email);
-    // console.log('OTP:', this.otp);
-
     this.resetForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [this.email, [Validators.required, Validators.email]],
       otp: [this.otp, Validators.required],
       password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
+      confirm_password: ['', Validators.required],
     });
+    console.log('Email from state:', this.email);
+    console.log('OTP from state:', this.otp);
   }
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   resetPassword() {
-    // if (!this.password || !this.confirm_password) {
-    //   alert('Please enter both password fields');
-    //   return;
-    // }
-
-    // if (this.password !== this.confirm_password) {
-    //   alert('Passwords do not match');
-    //   return;
-    // }
-    // const data = {
-    //   email: this.email,
-    //   otp: this.otp,
-    //   password: this.password,
-    //   confirm_password: this.confirm_password,
-    // };
-
+    console.log('Form submitted');
+    console.log('Form values:', this.resetForm.value);
+    console.log('Form valid?', this.resetForm.valid);
     if (this.resetForm.invalid) {
+      console.log('monali');
       this.resetForm.markAllAsTouched();
+      console.log('monali');
       return;
     }
-
+    console.log('monalo');
     const payload = {
-      // email: this.resetForm.get('email')?.value,
-      // otp: this.resetForm.get('otp')?.value,
+      email: this.resetForm.get('email')?.value,
+      otp: this.resetForm.get('otp')?.value,
+
       password: this.resetForm.get('password')?.value,
       confirm_password: this.resetForm.get('confirm_password')?.value,
     };
-
-    // console.log('DATA SENT:', data);
+    console.log('Payload sending:', payload);
     this.auth.resetPassword(payload).subscribe({
       next: () => {
         alert('Password reset successful!');

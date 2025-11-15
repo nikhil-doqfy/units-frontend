@@ -2,13 +2,11 @@
   <app-auth-title title="Upload Documents" />
 
   <app-auth-form [customClass]="'custom-width-height'">
-    <!-- [formGroup]="uploadForm" (ngSubmit)="onSubmit()" -->
     <form class="mb-4">
       <div class="upload-section">
         <div class="upload-header">
           <div class="accordion" id="blueAccordion">
             <div class="accordion-item border-primary">
-              <!-- <h2 class="accordion-header" id="headingBlue"> -->
               <button
                 class="accordion-button d-flex justify-content-between align-items-center text-primary fw-semibold"
                 type="button"
@@ -27,7 +25,7 @@
                   >Supported Format: PDF, PNG. Max 1MB</small
                 >
               </button>
-              <!-- </h2> -->
+
               <div
                 id="collapseBlue"
                 class="accordion-collapse collapse show"
@@ -166,7 +164,7 @@
         <app-arrow-icon></app-arrow-icon>
         Back
       </button>
-      <!-- [disabled]="uploadForm.invalid" -->
+
       <button type="submit" class="btn btnCommon btn-wide">Login</button>
     </div>
   </app-auth-form>

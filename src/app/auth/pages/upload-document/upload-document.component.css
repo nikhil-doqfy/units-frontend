@@ -1,8 +1,8 @@
 .upload-section {
-  background: #fff; /* white background keeps it clean */
-  border: 1px solid #dee2e6; /* light gray border */
-  border-radius: 8px; /* soft corners */
-  padding: 16px; /* inner spacing */
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 16px;
   transition: all 0.2s ease-in-out;
 }
 .frmBtns {
@@ -13,7 +13,6 @@
 }
 
 .accordion-item {
-  /* border: 1px solid #cfe2ff; light blue border */
   border: hidden;
   border-radius: 8px;
   overflow: hidden;
@@ -30,13 +29,12 @@
 }
 
 .accordion-button {
-  background-color: #e7f1ff; /* light blue background */
+  background-color: #e7f1ff;
   font-weight: 10;
 }
 
 .accordion-button:not(.collapsed) {
   background-color: #d6e9ff;
-  /* color: #0a58ca; */
 }
 
 .accordion-button:focus {
@@ -49,46 +47,43 @@
 }
 
 .custom-shadow {
-  box-shadow: 0 4px 6px rgba(190, 187, 187, 0.8); /* solid black look */
+  box-shadow: 0 4px 6px rgba(190, 187, 187, 0.8);
 }
 .btn-wide {
-  width: 120px; /* आपल्या UI नुसार वाढव */
+  width: 120px;
 }
-/* 
-form {
-  width: 634px;
-} */
+
 .custom-width-card {
-  width: 600px !important; /* new width for this instance */
-  max-width: 100%; /* prevent overflow on small screens */
-  margin: auto; /* center the card */
+  width: 600px !important;
+  max-width: 100%;
+  margin: auto;
 }
 .upload-box.card {
   cursor: pointer;
-  border-radius: 0.5rem; /* rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
 
-  width: 180px; /* fixed width for all cards */
-  height: 85px; /* fixed height for all cards */
+  width: 180px;
+  height: 85px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  box-sizing: border-box; /* include padding in width/height */
+  box-sizing: border-box;
 }
 
 .upload-box.card:hover {
-  transform: translateY(-2px); /* lift on hover */
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* stronger shadow */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .upload-boxes {
-  display: flex; /* use flex layout */
-  gap: 1rem; /* spacing between cards */
-  flex-wrap: wrap; /* wrap on smaller screens */
-  justify-content: center; /* center cards horizontally */
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .custom-width-height {
@@ -96,12 +91,12 @@ form {
   height: 500px;
 }
 .icon-btn {
-  border: none; /* remove border */
-  background: transparent; /* remove background */
-  padding: 0; /* remove padding */
-  margin: 0 0.25rem; /* optional spacing between buttons */
-  cursor: pointer; /* pointer on hover */
-  display: inline-flex; /* align the icon properly */
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0 0.25rem;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }

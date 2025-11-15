@@ -4,13 +4,11 @@
   <form class="mb-4" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
     <div class="grid-2">
       <ng-container *ngIf="selectedRole === 'owner'">
-        <!-- Company Name -->
         <div class="mb-2">
           <label for="companyName" class="form-label">Frist Name</label>
           <input class="form-control" type="text" placeholder="Enter here" />
         </div>
 
-        <!-- Company Emirates ID -->
         <div class="mb-2">
           <label for="emiratesId" class="form-label">Last Name</label>
           <input class="form-control" type="text" placeholder="Enter here" />
@@ -20,17 +18,16 @@
         <div class="mb-2">
           <label for="companyName" class="form-label">Company Name</label>
           <input class="form-control" type="text" placeholder="Enter here" />
-          <!-- <small
-        *ngIf="
-          signupForm.get('companyName')?.invalid &&
-          signupForm.get('companyName')?.touched
-        "
-      >
-        Company name is required
-      </small> -->
+          <small
+            *ngIf="
+              signupForm.get('companyName')?.invalid &&
+              signupForm.get('companyName')?.touched
+            "
+          >
+            Company name is required
+          </small>
         </div>
 
-        <!-- Company Emirates ID -->
         <div class="mb-2">
           <label for="emiratesId" class="form-label">Company Emirates ID</label>
           <input class="form-control" type="text" placeholder="Enter here" />
@@ -55,7 +52,7 @@
           <input class="form-control" type="text" placeholder=" Enter here" />
         </div>
       </ng-container>
-      <!-- Email Address -->
+
       <div class="mb-2">
         <label for="email" class="form-label justify-content-between"
           >Email Address</label
@@ -79,7 +76,6 @@
         </div>
       </div>
 
-      <!-- Contact Number -->
       <div class="mb-2">
         <label for="contactNumber" class="form-label">Contact Number</label>
         <div class="iconInput">
@@ -135,8 +131,6 @@
       </div>
     </div>
     <div class="frmBtns">
-      <!-- (click)="goToLogin()" -->
-      <!-- [disabled]="signupForm.invalid || passwordMismatch" -->
       <button
         type="submit"
         class="btn btnCommon btnMinWidth"
@@ -188,7 +182,6 @@
 <ng-template #otpVerifyContent let-modal>
   <div class="modal-body otpVerifyMdlBody">
     <div class="otpVerifyContainer container">
-      <!-- Logo + Title Row -->
       <div class="d-flex align-items-center mb-2">
         <a href="javascript:void(0);" (click)="goToLogin()" class="me-2">
           <img
@@ -215,8 +208,6 @@
           </div>
         </h4>
       </div>
-
-      <!-- Modal Info Row -->
     </div>
 
     <div class="otpVerifyForm">
@@ -238,8 +229,6 @@
             ></ng-otp-input>
           </div>
           <div class="d-flex justify-content-center mb-4 text-center">
-            <!-- <div></div> -->
-
             <app-timer-text
               label="Resend code in"
               *ngIf="otpSent && otpTimer > 0"
@@ -260,12 +249,10 @@
           <div
             class="frmBtnss d-flex align-items-center justify-content-between mt-3"
           >
-            <!-- Left: Headphone Icon -->
             <div>
               <app-headphone-icon></app-headphone-icon>
             </div>
 
-            <!-- Right: Buttons together -->
             <div class="d-flex">
               <button
                 type="button"

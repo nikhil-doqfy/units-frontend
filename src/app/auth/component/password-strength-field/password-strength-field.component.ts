@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  forwardRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -6,7 +12,7 @@ import { PasswordIconComponent } from '../icons/password-icon/password-icon.comp
 import { PasswordTooltipComponent } from '../password-tooltip/password-tooltip.component';
 import { PasswordShowIconComponent } from '../icons/password-show-icon/password-show-icon.component';
 import { PasswordHideIconComponent } from '../icons/password-hide-icon/password-hide-icon.component';
-
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'app-password-strength-field',
   standalone: true,
@@ -20,18 +26,43 @@ import { PasswordHideIconComponent } from '../icons/password-hide-icon/password-
   ],
   templateUrl: './password-strength-field.component.html',
   styleUrl: './password-strength-field.component.css',
+
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PasswordStrengthFieldComponent),
+      multi: true,
+    },
+  ],
 })
 export class PasswordStrengthFieldComponent {
   @Input() value: string = '';
   @Output() valueChange = new EventEmitter<string>();
+  @Input() placeholder: string = 'Enter your password';
 
   passwordStrength = 0;
   showPassword = false;
 
+  onChange = (value: string) => {};
+  onTouched = () => {};
+  writeValue(value: string): void {
+    this.value = value;
+    this.evaluatePasswordStrength();
+  }
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
   onInput(value: string): void {
     this.value = value;
     this.valueChange.emit(value);
     this.evaluatePasswordStrength();
+
+    this.onChange(value);
+    this.onTouched();
   }
 
   toggleVisibility(): void {

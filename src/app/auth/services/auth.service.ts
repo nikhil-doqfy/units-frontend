@@ -27,28 +27,20 @@ export class AuthService {
     );
   }
 
-  // OTP verify
   verifyOtp(data: any) {
     return this.http.post(
       `${environment.SERVER_ADDRESS}/auth/password/otp/verify/`,
       data
     );
   }
-  //forget password
-  forgetPassword(email: string): Observable<any> {
-    return this.http.post(
-      `${environment.SERVER_ADDRESS}/auth/forget-password`,
-      { email }
-    );
-  }
-  //reset password
+
   resetPassword(data: any) {
     return this.http.post(
       `${environment.SERVER_ADDRESS}/auth/password/reset/`,
       data
     );
   }
-  //logout
+
   logout(): Observable<any> {
     return this.http.post(`${environment.SERVER_ADDRESS}/auth/logout/`, {});
   }

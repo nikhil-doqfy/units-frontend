@@ -188,12 +188,6 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithOtp(): void {
-    // if (!this.email || !this.otp) {
-    //   this.alertService.error('Enter email and OTP');
-
-    //   return;
-    // }
-
     if (this.otpForm.invalid) {
       this.alertService.error('Enter a valid email and OTP');
       return;
