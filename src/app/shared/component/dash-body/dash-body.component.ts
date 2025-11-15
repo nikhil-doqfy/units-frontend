@@ -27,7 +27,7 @@ export class DashBodyComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService
   ) {
-    this.translate.onLangChange.subscribe(event => {
+    this.translate.onLangChange.subscribe((event:any) => {
       this.currentLanguage = event.lang;
     });
     translate.use('en');

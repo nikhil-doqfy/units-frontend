@@ -1,4 +1,12 @@
-import { Component, Input, Output, EventEmitter, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  HostListener,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -12,7 +20,7 @@ import { CustomSelectService } from './custom-select.service'; // 👈 Import th
   standalone: true,
   imports: [CommonModule, ArrowDownIconComponent, ArrowUpIconComponent],
   templateUrl: './custom-select.component.html',
-  styleUrls: ['./custom-select.component.css']
+  styleUrls: ['./custom-select.component.css'],
 })
 export class CustomSelectComponent implements OnInit, OnDestroy {
   @Input() isFilter: boolean = false;
@@ -26,20 +34,22 @@ export class CustomSelectComponent implements OnInit, OnDestroy {
 
   private subscription!: Subscription;
 
-  constructor(private dropdownService: CustomSelectService) { }
+  constructor(private dropdownService: CustomSelectService) {}
 
   ngOnInit() {
-    this.subscription = this.dropdownService.openDropdown$.subscribe(openComponent => {
-      if (openComponent !== this) {
-        this.isDropdownOpen = false; // Close if another component is opened
+    this.subscription = this.dropdownService.openDropdown$.subscribe(
+      (openComponent) => {
+        if (openComponent !== this) {
+          this.isDropdownOpen = false;
+        }
       }
-    });
+    );
   }
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
     if (this.isDropdownOpen) {
-      this.dropdownService.notifyOpen(this); // Notify service of current open dropdown
+      this.dropdownService.notifyOpen(this);
     }
   }
 

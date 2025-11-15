@@ -26,7 +26,7 @@ export class DashboardComponent {
     this.currentLang = this.translate.currentLang || 'en';
 
     // Listen for language change
-    this.translate.onLangChange.subscribe((event) => {
+    this.translate.onLangChange.subscribe((event: any) => {
       this.currentLang = event.lang;
     });
   }
@@ -39,4 +39,3 @@ export class DashboardComponent {
     }
   }
 }
-

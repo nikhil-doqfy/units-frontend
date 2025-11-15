@@ -1,4 +1,12 @@
-import { Component, Input, Output, EventEmitter, HostListener, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  HostListener,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface AIChatOption {
@@ -9,19 +17,27 @@ export interface AIChatOption {
   hasChatPro?: boolean;
 }
 
-import { ArrowDownIconComponent } from "../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component";
-import { CheckIconComponent } from "../icons/check-icon/check-icon.component";
-import { CheckFillIconComponent } from "../icons/check-fill-icon/check-fill-icon.component";
-import { ChatProIconComponent } from "../icons/chat-pro-icon/chat-pro-icon.component";
-import { DepthIconComponent } from "../icons/depth-icon/depth-icon.component";
+import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
+import { CheckIconComponent } from '../icons/check-icon/check-icon.component';
+import { CheckFillIconComponent } from '../icons/check-fill-icon/check-fill-icon.component';
+import { ChatProIconComponent } from '../icons/chat-pro-icon/chat-pro-icon.component';
+import { DepthIconComponent } from '../icons/depth-icon/depth-icon.component';
 import { SpeedIconComponent } from '../icons/speed-icon/speed-icon.component';
 
 @Component({
   selector: 'app-ai-chat-select',
   standalone: true,
-  imports: [CommonModule, ArrowDownIconComponent, CheckIconComponent, CheckFillIconComponent, ChatProIconComponent, DepthIconComponent, SpeedIconComponent],
+  imports: [
+    CommonModule,
+    ArrowDownIconComponent,
+    CheckIconComponent,
+    CheckFillIconComponent,
+    ChatProIconComponent,
+    DepthIconComponent,
+    SpeedIconComponent,
+  ],
   templateUrl: './ai-chat-select.component.html',
-  styleUrls: ['./ai-chat-select.component.css']
+  styleUrls: ['./ai-chat-select.component.css'],
 })
 export class AIChatSelectComponent implements OnInit {
   @Input() options: AIChatOption[] = [];
@@ -31,18 +47,19 @@ export class AIChatSelectComponent implements OnInit {
   selectedOption: string | null = null;
   isDropdownOpen = false;
 
-  constructor(private cdRef: ChangeDetectorRef) { }
+  constructor(private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     // Check if "GPT-4o-mini" exists in the options and set it as default
-    const defaultOption = this.options.find(opt => opt.value === 'GPT-4o-mini');
+    const defaultOption = this.options.find(
+      (opt) => opt.value === 'GPT-4o-mini'
+    );
     if (defaultOption) {
       this.selectedOption = defaultOption.value;
       this.optionSelected.emit(this.selectedOption); // Emit event for default selection
       this.cdRef.detectChanges();
     }
   }
-
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -62,4 +79,3 @@ export class AIChatSelectComponent implements OnInit {
     }
   }
 }
-

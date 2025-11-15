@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -13,8 +13,8 @@ import {
   ApexFill,
   ApexGrid,
   ApexLegend,
-  NgApexchartsModule
-} from "ng-apexcharts";
+  NgApexchartsModule,
+} from 'ng-apexcharts';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -37,102 +37,110 @@ export type ChartOptions = {
   standalone: true,
   imports: [NgApexchartsModule],
   templateUrl: './group-bar.component.html',
-  styleUrl: './group-bar.component.css'
+  styleUrl: './group-bar.component.css',
 })
 export class GroupBarChartComponent {
-  @ViewChild("chart") chart!: ChartComponent;
+  @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
   constructor() {
     this.chartOptions = {
-      colors: ["#1988FD", "#00C9D7"],
+      colors: ['#1988FD', '#00C9D7'],
 
       series: [
         {
-          name: "Owner",
-          data: [780, 456, 890, 789, 456, 345, 800]
+          name: 'Owner',
+          data: [780, 456, 890, 789, 456, 345, 800],
         },
         {
-          name: "Third Party",
-          data: [670, 390, 290, 249, 790, 249, 123]
+          name: 'Third Party',
+          data: [670, 390, 290, 249, 790, 249, 123],
         },
       ],
       chart: {
-        type: "bar",
+        type: 'bar',
         height: 240,
         toolbar: {
-          show: false
-        }
+          show: false,
+        },
       },
       plotOptions: {
         bar: {
           borderRadius: 2,
-          borderRadiusApplication: "end",
-          borderRadiusWhenStacked: "last",
+          borderRadiusApplication: 'end',
+          borderRadiusWhenStacked: 'last',
           horizontal: true,
-          barHeight: "85%",
+          barHeight: '85%',
           dataLabels: {
-            position: "right"
-          }
-        }
+            position: 'right',
+          },
+        },
       },
       grid: {
-        show: false
+        show: false,
       },
       tooltip: {
         shared: true,
         intersect: false,
         y: {
-          formatter: (val) => `${val}`
-        }
+          formatter: (val: number) => `${val}`,
+        },
       },
       stroke: {
         width: 1,
-        colors: ["#fff"]
+        colors: ['#fff'],
       },
       title: {
-        text: "",
-        align: "left"
+        text: '',
+        align: 'left',
       },
       xaxis: {
-        categories: ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5', 'Unit 6', 'Unit 7'],
+        categories: [
+          'Unit 1',
+          'Unit 2',
+          'Unit 3',
+          'Unit 4',
+          'Unit 5',
+          'Unit 6',
+          'Unit 7',
+        ],
         labels: {
-          show: false
+          show: false,
         },
         axisBorder: { show: false },
-        axisTicks: { show: false }
+        axisTicks: { show: false },
       },
       dataLabels: {
         enabled: true,
         offsetX: 10,
         style: {
-          fontSize: "10px",
-          colors: ["#445860"]
-        }
+          fontSize: '10px',
+          colors: ['#445860'],
+        },
       },
       yaxis: {
         title: {
-          text: undefined
+          text: undefined,
         },
         axisBorder: { show: false },
-        axisTicks: { show: false }
+        axisTicks: { show: false },
       },
       fill: {
-        opacity: 1
+        opacity: 1,
       },
       legend: {
-        position: "top",
+        position: 'top',
         offsetX: 0,
         offsetY: 0,
         markers: {
-          width: 8,
+          size: 8,
           height: 8,
-          radius: 8
-        },
+          radius: 8,
+        } as any,
         labels: {
-          colors: "#344046"
-        }
-      }
+          colors: '#344046',
+        },
+      },
     };
   }
 }

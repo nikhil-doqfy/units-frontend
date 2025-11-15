@@ -1,274 +1,311 @@
 <ng-container *ngIf="!showDetailView">
-    <div class="cmmnTblOuter">
-        <div class="cmmnTblHdr">
-            <div class="row g-3 align-items-center">
-                <div class="col-md">
-                    <app-table-title title="All Tenants" subtitle="(240)"></app-table-title>
-                </div>
-                <div class="col-md-auto">
-                    <div class="d-flex align-items-center gap-2 gap-md-3">
-                        <app-table-search placeholder="Search here..." />
-                        <app-table-filter-btn title="Filter" [hasIcon]="true" (clicked)="handleFilterClick()">
-                            <app-filter-icon />
-                        </app-table-filter-btn>
-                        <app-table-filter-btn title="Export" [hasIcon]="true" (clicked)="handleExportClick()">
-                            <app-export-icon />
-                        </app-table-filter-btn>
-                        <app-table-filter-btn *ngIf="currentRole === 'owner'" title="Add Tenant" [hasIcon]="true"
-                            (clicked)="openAddTenantModal(addTenantContent)">
-                            <app-plus-icon />
-                        </app-table-filter-btn>
-                        <app-table-filter-btn *ngIf="currentRole === 'property-manager'" title="Invite Tenant"
-                            [hasIcon]="true" (clicked)="openInviteTenantModal(inviteTenantContent)">
-                            <app-invite-icon />
-                        </app-table-filter-btn>
-                    </div>
-                </div>
-            </div>
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            title="All Tenants"
+            subtitle="(240)"
+          ></app-table-title>
         </div>
-        <div class="cmmnTblBody">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th><button type="button">Tenant Name <i><app-sorting-icon /></i></button></th>
-                            <th>Code</th>
-                            <th>Contact Number</th>
-                            <th><button type="button">Property Assigned <i><app-sorting-icon /></i></button></th>
-                            <th>Rental Agreement</th>
-                            <th width="200"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-1.png" title="Jensi"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>LP9021</td>
-                            <td>+91-70******23</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-1.png" size="md"
-                                    title="Novatis AG..." />
-                            </td>
-                            <td>
-                                <app-document-type-item title="Lease_001.pdf" subtitle="1.2 MB" />
-                            </td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-2.png" title="Richard"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>LP8021</td>
-                            <td>+91-99******76</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-2.png" size="md"
-                                    title="Agriculture...." />
-                            </td>
-                            <td>
-                                <app-document-type-item title="Lease_002.pdf" subtitle="1.2 MB" />
-                            </td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-3.png" title="Thaomas"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>VC79021</td>
-                            <td>+91-89******12</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-2.png" size="md"
-                                    title="Honda..." />
-                            </td>
-                            <td>
-                                <app-document-type-item title="Lease_003.pdf" subtitle="1.2 MB" />
-                            </td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-4.png" title="Akshay"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>VC69021</td>
-                            <td>+91-90******45</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-2.png" size="md"
-                                    title="TVS" />
-                            </td>
-                            <td>
-                                <app-document-type-item title="Lease_004.pdf" subtitle="1.2 MB" />
-                            </td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-5.png" title="Avanshi"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>VC59021</td>
-                            <td>+91-78******90</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-2.png" size="md"
-                                    title="Samsung" />
-                            </td>
-                            <td>
-                                <app-document-type-item title="Lease_005.pdf" subtitle="1.2 MB" />
-                            </td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search
+              placeholder="Search here..."
+              (onValueChange)="onTenantsSearch$.next($event)"
+            />
+            <app-table-filter-btn
+              title="Filter"
+              [hasIcon]="true"
+              (clicked)="handleFilterClick()"
+            >
+              <app-filter-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              title="Export"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              *ngIf="currentRole === 'owner'"
+              title="Add Tenant"
+              [hasIcon]="true"
+              (clicked)="openAddTenantModal(addTenantContent)"
+            >
+              <app-plus-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              *ngIf="currentRole === 'property-manager'"
+              title="Invite Tenant"
+              [hasIcon]="true"
+              (clicked)="openInviteTenantModal(inviteTenantContent)"
+            >
+              <app-invite-icon />
+            </app-table-filter-btn>
+          </div>
         </div>
-        <div class="cmmnTblFtr">
-            <app-table-select />
-            <app-table-pagination />
-        </div>
+      </div>
     </div>
+    <div class="cmmnTblBody">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>
+                <button type="button">
+                  Tenant Name <i><app-sorting-icon /></i>
+                </button>
+              </th>
+              <th>Code</th>
+              <th>Contact Number</th>
+              <th>
+                <button type="button">
+                  Property Assigned <i><app-sorting-icon /></i>
+                </button>
+              </th>
+              <th>Rental Agreement</th>
+              <th width="200"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tenant of tenantsList; track $index) {
+            <tr>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/userDefaultProImg.png"
+                  [title]="tenant?.full_name"
+                  [clickable]="true"
+                  (clicked)="handleViewClick()"
+                />
+              </td>
+              <td>{{ tenant?.tenant_number }}</td>
+              <td>{{ tenant?.mobile_number }}</td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-1.png"
+                  size="md"
+                  [title]="tenant.property_assigned"
+                />
+              </td>
+              <td>
+                <app-document-type-item
+                  title="Lease_001.pdf"
+                  subtitle="1.2 MB"
+                />
+              </td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn
+                    type="edit"
+                    (clicked)="handleEditClick()"
+                  />
+                  <app-table-action-btn
+                    type="delete"
+                    (clicked)="handleDeleteClick()"
+                  />
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </div>
+              </td>
+            </tr>
+            }@empty {
+            <tr>
+              <td colspan="6" align="center">No Data to Show</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
 
-    <ng-template #addTenantContent let-modal>
-        <div class="modal-header">
-            <h4 class="modal-title" id="modal-title">Add Tenant</h4>
-            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-        </div>
-        <div class="modal-body">
-            <app-add-tenant-form />
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btnCommon btnTransparent"
-                (click)="modal.dismiss('Save click')">Cancel</button>
-            <button type="button" class="btn btnCommon" (click)="modal.close('Save click')">Submit Details</button>
-        </div>
-    </ng-template>
+  <!-- -------------------- ADD Tenant Form -------------------- -->
+  <ng-template #addTenantContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title">Add Tenant</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <app-add-tenant-form />
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btnCommon btnTransparent"
+        (click)="modal.dismiss('Save click')"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btnCommon"
+        (click)="modal.close('Save click')"
+      >
+        Submit Details
+      </button>
+    </div>
+  </ng-template>
 
-    <ng-template #inviteTenantContent let-modal>
-        <div class="modal-header">
-            <h4 class="modal-title" id="modal-title">Invite Tenant</h4>
-            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-        </div>
-        <div class="modal-body">
-            <app-invite-tenant-form />
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btnCommon btnTransparent"
-                (click)="modal.dismiss('Save click')">Cancel</button>
-            <button type="button" class="btn btnCommon" (click)="modal.close('Save click')"><i><app-send-icon /></i>Send
-                Invitation</button>
-        </div>
-    </ng-template>
+  <!-- -------------------- Invite Tenant Form -------------------- -->
+  <ng-template #inviteTenantContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title">Invite Tenant</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <app-invite-tenant-form #inviteFormRef />
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btnCommon btnTransparent"
+        (click)="modal.dismiss('Save click')"
+      >
+        Cancel
+      </button>
+      <button type="button" class="btn btnCommon" (click)="sendInvite(inviteFormRef, modal)">
+        <i><app-send-icon /></i>Send Invitation
+      </button>
+    </div>
+  </ng-template>
 </ng-container>
 
 <ng-container *ngIf="showDetailView">
-    <app-table-view-card [title]="'Richard'" [imgSrc]="'../../../assets/user/user-2.png'" [items]="[
-            { label: 'Email', value: 'Richard@gmail.com' },
-            { label: 'Phone Number', value: '+97-7007836367' },
-            { label: 'Emirates ID', value: 'Afc25' },
-            { label: 'City', value: 'Bengaluru' },
-            { label: 'Locality', value: '' },
-            { label: 'Postal Code', value: '5621009' },
-            { label: 'Address Line 1', value: 'Koramangala' },
-            { label: 'Address Line 2', value: 'Bellandur' },
-            { label: 'Linked Property', value: 'Prestige Builders', link: '/dashboard/tenants' }
-        ]" [showEdit]="true" (edit)="handleEditClick()" (back)="handleBackClick()"></app-table-view-card>
+  <app-table-view-card
+    [title]="'Richard'"
+    [imgSrc]="'../../../assets/user/user-2.png'"
+    [items]="[
+      { label: 'Email', value: 'Richard@gmail.com' },
+      { label: 'Phone Number', value: '+97-7007836367' },
+      { label: 'Emirates ID', value: 'Afc25' },
+      { label: 'City', value: 'Bengaluru' },
+      { label: 'Locality', value: '' },
+      { label: 'Postal Code', value: '5621009' },
+      { label: 'Address Line 1', value: 'Koramangala' },
+      { label: 'Address Line 2', value: 'Bellandur' },
+      {
+        label: 'Linked Property',
+        value: 'Prestige Builders',
+        link: '/dashboard/tenants'
+      }
+    ]"
+    [showEdit]="true"
+    (edit)="handleEditClick()"
+    (back)="handleBackClick()"
+  ></app-table-view-card>
 
-    <div class="mt-3">
-        <app-white-card title="Photos & Documents">
-            <div class="commonTabs">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="tenantDocument-tab" data-bs-toggle="tab"
-                            data-bs-target="#tenantDocument-tab-pane" type="button" role="tab"
-                            aria-controls="tenantDocument-tab-pane" aria-selected="true">Tenant Document</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="ejariDocuments-tab" data-bs-toggle="tab"
-                            data-bs-target="#ejariDocuments-tab-pane" type="button" role="tab"
-                            aria-controls="ejariDocuments-tab-pane" aria-selected="false">Ejari Documents</button>
-                    </li>
-                </ul>
+  <div class="mt-3">
+    <app-white-card title="Photos & Documents">
+      <div class="commonTabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="tenantDocument-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tenantDocument-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="tenantDocument-tab-pane"
+              aria-selected="true"
+            >
+              Tenant Document
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="ejariDocuments-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#ejariDocuments-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="ejariDocuments-tab-pane"
+              aria-selected="false"
+            >
+              Ejari Documents
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="commonTabsContent">
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="tenantDocument-tab-pane"
+            role="tabpanel"
+            aria-labelledby="tenantDocument-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
             </div>
-            <div class="commonTabsContent">
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="tenantDocument-tab-pane" role="tabpanel"
-                        aria-labelledby="tenantDocument-tab" tabindex="0">
-                        <div class="row g-2">
-                            <div class="col-auto">
-                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Finances.png" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="ejariDocuments-tab-pane" role="tabpanel"
-                        aria-labelledby="ejariDocuments-tab" tabindex="0">
-                        <div class="row g-2">
-                            <div class="col-auto">
-                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Finances.png" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="ejariDocuments-tab-pane"
+            role="tabpanel"
+            aria-labelledby="ejariDocuments-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
             </div>
-        </app-white-card>
-    </div>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
 </ng-container>

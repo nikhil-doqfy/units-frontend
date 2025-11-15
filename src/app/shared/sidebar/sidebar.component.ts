@@ -56,7 +56,7 @@ export class SidebarComponent implements OnInit {
           this.sharedService.toggleSidebar();
         }
       });
-    this.translate.onLangChange.subscribe(event => {
+    this.translate.onLangChange.subscribe((event:any) => {
       this.currentLanguage = event.lang;
     });
     translate.use('en');
