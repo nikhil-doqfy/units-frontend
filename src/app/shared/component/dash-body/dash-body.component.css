@@ -9,8 +9,18 @@
     z-index: 1;
 }
 
+.arabic.dashMainBody {
+    margin-left: 0;
+    margin-right: 240px;
+}
+
 .dashMainSmallBody.dashMainBody {
     margin-left: 70px;
+}
+
+.arabic.dashMainSmallBody.dashMainBody {
+    margin-left: 0;
+    margin-right: 70px;
 }
 
 .dashMainRightCloseBody.dashMainBody {
@@ -28,9 +38,17 @@
         margin-left: 0;
     }
 
+    .arabic.dashMainBody {
+        margin-right: 0;
+    }
+
     .dashMainSmallBody.dashMainBody {
         margin-left: 0;
         overflow: hidden;
+    }
+
+    .arabic.dashMainSmallBody.dashMainBody {
+        margin-right: 0;
     }
 }
 

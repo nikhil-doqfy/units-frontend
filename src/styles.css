@@ -359,6 +359,11 @@ input[type="number"] {
   margin-left: -4px;
 }
 
+.errorMsg {
+  color: var(--redText);
+  font-weight: 400;
+}
+
 .commonForm .form-control,
 .commonForm .form-select {
   font-size: 14px;

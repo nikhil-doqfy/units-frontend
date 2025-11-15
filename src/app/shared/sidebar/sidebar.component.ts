@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ThemeService, UserRole } from '../../theme.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { SharedService } from '../../shared.service';
 
@@ -29,7 +30,7 @@ import { SidebarSupportComponent } from "./sidebar-support/sidebar-support.compo
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, MenuOpenIconComponent, MenuCloseIconComponent, SearchIconComponent, SidebarHeadingComponent, SidebarItemComponent, DashboardIconComponent, PropertyIconComponent, PMCIconComponent, TenantIconComponent, LeaseTenancyIconComponent, OwnerIconComponent, ApprovalIconComponent, StaffIconComponent, RolesPermissionsIconComponent, DocumentationIconComponent, PaymentInvoiceIconComponent, RaiseComplaintIconComponent, PrivacyPolicyIconComponent, SidebarSupportComponent],
+  imports: [CommonModule, MenuOpenIconComponent, MenuCloseIconComponent, SearchIconComponent, SidebarHeadingComponent, SidebarItemComponent, DashboardIconComponent, PropertyIconComponent, PMCIconComponent, TenantIconComponent, LeaseTenancyIconComponent, OwnerIconComponent, ApprovalIconComponent, StaffIconComponent, RolesPermissionsIconComponent, DocumentationIconComponent, PaymentInvoiceIconComponent, RaiseComplaintIconComponent, PrivacyPolicyIconComponent, SidebarSupportComponent, TranslateModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
@@ -38,12 +39,14 @@ export class SidebarComponent implements OnInit {
   selected: string = '';
   openSidebarValue = true;
   currentRoute: string = '/';
+  currentLanguage = 'en';
 
   constructor(
     private sharedService: SharedService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private translate: TranslateService
   ) {
     this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
@@ -53,6 +56,15 @@ export class SidebarComponent implements OnInit {
           this.sharedService.toggleSidebar();
         }
       });
+    this.translate.onLangChange.subscribe((event:any) => {
+      this.currentLanguage = event.lang;
+    });
+    translate.use('en');
+  }
+
+  setLanguage(lang: string) {
+    this.translate.use(lang);
+    localStorage.setItem('language', lang);
   }
 
   onOptionSelected(option: string) {

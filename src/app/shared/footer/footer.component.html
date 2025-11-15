@@ -2,15 +2,16 @@
     <div class="row align-items-center justify-space-between">
         <div class="col-lg">
             <div class="cpyghtText">
-                <p><i><app-copyright-icon></app-copyright-icon></i> 2025, <a (click)="goToDashboard()">Doqfy
-                        Internet Pvt.Ltd.</a> All Rights Reserved</p>
+                <p><i><app-copyright-icon></app-copyright-icon></i> {{ 'YEAR' | translate }}, <a
+                        (click)="goToDashboard()">{{ 'COMPANY_NAME' | translate }}</a> {{ 'ALL_RIGHTS_RESERVED' |
+                    translate }}</p>
             </div>
         </div>
         <div class="col-lg-auto">
             <div class="cpyghtVrsn">
-                <span *ngIf="currentRole === 'owner'">Owner Management:</span>
-                <span *ngIf="currentRole === 'property-manager'">Property Manager Management:</span>
-                <span *ngIf="currentRole === 'tenant'">Tenant Management:</span>
+                <span *ngIf="currentRole === 'owner'">{{ 'OWNER_MANAGEMENT' | translate }}:</span>
+                <span *ngIf="currentRole === 'property-manager'">{{ 'PROPERTY_MANAGER_MANAGEMENT' | translate }}:</span>
+                <span *ngIf="currentRole === 'tenant'">{{ 'TENANT_MANAGEMENT' | translate }}:</span>
                 v6.7.0.0
             </div>
         </div>

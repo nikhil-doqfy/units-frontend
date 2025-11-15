@@ -16,6 +16,7 @@ import { SharedService } from '../../shared.service';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ThemeService, UserRole } from '../../theme.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import {
   NgbDropdownModule,
@@ -38,6 +39,7 @@ import { DashBreadcrumbComponent } from '../component/dash-breadcrumb/dash-bread
 import { AuthService } from '../../auth/services/auth.service';
 import { StorageService } from '../services/storage.service';
 import { AlertService } from '../services/alert.service';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -56,6 +58,7 @@ import { AlertService } from '../services/alert.service';
     LogoutIconComponent,
     LogoutModalIconComponent,
     DashBreadcrumbComponent,
+    TranslateModule,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -63,12 +66,14 @@ import { AlertService } from '../services/alert.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   currentRole: UserRole = 'owner';
+  currentLang = 'en';
   pageTitle: string = '';
   openSidebarValue = true;
   active = 1;
   isProfileActive = false;
   isAddPropertyActive = false;
   isAddLeaseActive = false;
+  currentLanguage = 'en';
 
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
 
@@ -80,13 +85,41 @@ export class HeaderComponent implements OnInit, OnDestroy {
   closeResult = '';
 
   constructor(
-    private authService: AuthService,
     private renderer: Renderer2,
     private sharedService: SharedService,
     private router: Router,
     private themeService: ThemeService,
+    private authService: AuthService,
+    private translate: TranslateService,
     private storage: StorageService
-  ) {}
+  ) {
+    translate.addLangs(['en', 'ar']);
+    translate.setDefaultLang('en');
+    this.translate.onLangChange.subscribe((event: any) => {
+      this.currentLanguage = event.lang;
+      this.pageTitle = this.getRouteTitle(this.router.routerState.root);
+    });
+    translate.use('en');
+    this.updateDirection();
+  }
+
+  setLanguage(lang: string) {
+    this.currentLang = lang;
+    this.translate.use(lang);
+    localStorage.setItem('language', lang);
+    this.updateDirection();
+  }
+
+  private updateDirection() {
+    document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  // Helper to get the flag path
+  get flagIcon(): string {
+    return this.currentLang === 'ar'
+      ? 'assets/language/united-arab-emirates.png'
+      : 'assets/language/united-kingdom.png';
+  }
 
   private updateActiveButtons(url: string) {
     this.isAddPropertyActive = url.includes('/dashboard/add-property');
@@ -139,12 +172,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ✅ MOVE IT HERE (outside ngOnInit)
   private getRouteTitle(route: any): string {
     while (route.firstChild) {
       route = route.firstChild;
     }
-    return route.snapshot.data['title'] || '';
+
+    const titleKey = route.snapshot.data['titleKey'];
+
+    if (!titleKey) return '';
+
+    return this.translate.instant(titleKey);
   }
 
   ngOnDestroy() {
@@ -167,39 +204,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/user/my-profile']);
   }
 
-  // openLogoutModal(logoutContent: TemplateRef<any>) {
-  //   const modalRef = this.modalService.open(logoutContent, {
-  //     windowClass: 'logoutMdl',
-  //     centered: true,
-  //   });
-
-  //   modalRef.result.then(
-  //     (result) => {
-  //       this.closeResult = `Closed with: ${result}`;
-  //       this.logout();
-  //     },
-  //     (reason) => {
-  //       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //     }
-  //   );
-  // }
-
-  // logout(): void {
-  //   this.modalService.dismissAll();
-  //   this.router.navigate(['/auth/login']);
-  // }
-
-  // private getDismissReason(reason: any): string {
-  //   switch (reason) {
-  //     case ModalDismissReasons.ESC:
-  //       return 'by pressing ESC';
-  //     case ModalDismissReasons.BACKDROP_CLICK:
-  //       return 'by clicking on a backdrop';
-  //     default:
-  //       return `with: ${reason}`;
-  //   }
-  // }
-
   openLogoutModal(logoutContent: TemplateRef<any>) {
     const modalRef = this.modalService.open(logoutContent, {
       windowClass: 'logoutMdl',
@@ -209,15 +213,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     modalRef.result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
-        this.logout(); // ✅ Call logout function on modal close
+        this.logout();
       },
       (reason) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       }
     );
-  }
-  getDismissReason(reason: any) {
-    throw new Error('Method not implemented.');
   }
 
   logout() {
@@ -234,5 +235,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
         localStorage.clear();
       },
     });
+  }
+
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
+    }
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SharedService {
   private openSidebarValueKey = 'openSidebarValue';
@@ -76,5 +76,15 @@ export class SharedService {
     }
 
     return true; // Default to open for other routes
+  }
+
+  getQueryString(params: Record<string, any>): string {
+    if (!params || Object.keys(params).length === 0) return '';
+
+    const query = Object.entries(params)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
+
+    return `?${query}`;
   }
 }

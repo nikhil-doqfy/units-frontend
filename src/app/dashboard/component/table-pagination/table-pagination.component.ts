@@ -1,25 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-
-const FILTER_PAG_REGEX = /[^0-9]/g;
+import { PageChange } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-table-pagination',
   standalone: true,
   imports: [CommonModule, NgbPaginationModule],
   templateUrl: './table-pagination.component.html',
-  styleUrl: './table-pagination.component.css'
+  styleUrl: './table-pagination.component.css',
 })
 export class TablePaginationComponent {
-  page = 1;
+  @Input() componentName: string | undefined = undefined;
+  @Input() currentPage: number = 1;
+  @Input() totalRecords: number = 0;
+  @Input() rowsPerPage: number = 0;
+  @Input() disabled: boolean = false;
+  @Output() pageChange = new EventEmitter<PageChange>();
 
-  selectPage(page: string) {
-    this.page = parseInt(page, 10) || 1;
-  }
-
-  formatInput(input: HTMLInputElement) {
-    input.value = input.value.replace(FILTER_PAG_REGEX, '');
+  onPageChange(event: any) {
+    this.currentPage = event;
+    this.pageChange.emit({
+      currentPage: this.currentPage,
+      componentName: this.componentName,
+    });
   }
 }

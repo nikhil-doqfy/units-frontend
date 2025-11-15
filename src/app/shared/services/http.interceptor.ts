@@ -33,6 +33,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
       'Content-Type': 'application/json',
       Authorization: token ? `Bearer ${token}` : '',
     },
+    withCredentials: true,
   });
 
   return next(modifiedReq).pipe(

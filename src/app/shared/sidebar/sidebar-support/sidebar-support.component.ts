@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SharedService } from '../../../shared.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { MailIconComponent } from "../../../dashboard/component/icons/mail-icon/mail-icon.component";
 import { CallIconComponent } from "../../../dashboard/component/icons/call-icon/call-icon.component";
@@ -7,13 +8,22 @@ import { CallIconComponent } from "../../../dashboard/component/icons/call-icon/
 @Component({
   selector: 'app-sidebar-support',
   standalone: true,
-  imports: [MailIconComponent, CallIconComponent],
+  imports: [MailIconComponent, CallIconComponent, TranslateModule],
   templateUrl: './sidebar-support.component.html',
   styleUrl: './sidebar-support.component.css'
 })
 export class SidebarSupportComponent {
   openSidebarValue = true;
-  constructor(private sharedService: SharedService) { }
+  constructor(
+    private sharedService: SharedService,
+    private translate: TranslateService
+  ) {
+    translate.use('en');
+  }
+  setLanguage(lang: string) {
+    this.translate.use(lang);
+    localStorage.setItem('language', lang);
+  }
   ngOnInit() {
     this.sharedService.openSidebarValue$.subscribe(value => {
       this.openSidebarValue = value;
