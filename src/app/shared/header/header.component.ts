@@ -91,7 +91,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private themeService: ThemeService,
     private authService: AuthService,
     private translate: TranslateService,
-    private storage: StorageService
+    private storage: StorageService,
+    private alertService: AlertService
   ) {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
@@ -222,12 +223,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    const token = this.storage.getToken();
     this.authService.logout().subscribe({
       next: (resp: any) => {
-        this.modalService.dismissAll(); // ✅ Close modal before logout
+        this.modalService.dismissAll();
         this.router.navigate(['/auth/login']);
-        // this.alertService.success(resp.message);
+        console.log('monali');
+        this.alertService.success(resp.message);
       },
       error: (error: any) => {
         this.modalService.dismissAll();

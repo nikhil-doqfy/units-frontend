@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class StorageService {
   private TOKEN_KEY = 'AuthToken';
   private userKey = 'user_profile';
+  private statusKey = 'userRegestrationStatusKey';
   constructor() {}
 
   setToken(token: string): void {
@@ -26,6 +27,15 @@ export class StorageService {
   }
   removeToken() {
     localStorage.removeItem(this.TOKEN_KEY);
+  }
+
+  setCurrentStatus(status: any): void {
+    localStorage.setItem(this.statusKey, JSON.stringify(status));
+  }
+
+  getCurrentStatus() {
+    var status: any = localStorage.getItem(this.statusKey);
+    return JSON.parse(status);
   }
 
   // getUser(): any {
