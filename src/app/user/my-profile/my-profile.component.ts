@@ -1,4 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -6,22 +13,88 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
 import { DashFormComponent } from '../../shared/component/dash-form/dash-form.component';
-import { EditIconComponent } from "../component/icons/edit-icon/edit-icon.component";
+import { EditIconComponent } from '../component/icons/edit-icon/edit-icon.component';
+import { UserService } from '../services/user.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbNavModule, WhiteCardComponent, DashFormComponent, EditIconComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgbNavModule,
+    WhiteCardComponent,
+    DashFormComponent,
+    EditIconComponent,
+  ],
   templateUrl: './my-profile.component.html',
-  styleUrl: './my-profile.component.css'
+  styleUrl: './my-profile.component.css',
 })
 export class MyProfileComponent {
-  userImage: string = '../../../../assets/userProImg.png';
+  private userService = inject(UserService);
   @ViewChild('fileInput') fileInput!: ElementRef;
 
+  userImage: string = '../../../../assets/userDefaultProImg.png';
   editUserMode = false;
   editOtherDetailsMode = false;
   changedFields: any = {};
+  private destroy$ = new Subject<void>();
+
+  profile = {
+    name: '',
+    email: '',
+    contact: '',
+    role: '',
+    password: '',
+  };
+
+  otherDetails = {
+    country: '',
+    timeZone: '',
+    address: '',
+    state: '',
+    postalCode: '',
+  };
+
+  ngOnInit() {
+    this.getUserProfileData();
+  }
+
+  getUserProfileData() {
+    this.userService
+      .getUserProfile({})
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => {
+          const content = response?.content;
+          this.setUserFormData(content);
+        },
+      });
+  }
+
+  setUserFormData(content: any) {
+    this.userImage =
+      content?.profile_image === 'N/A' || !content?.profile_image
+        ? this.userImage
+        : content?.profile_image;
+
+    this.profile = {
+      name: content?.name,
+      email: content?.email,
+      contact: content?.contact,
+      role: content?.role,
+      password: '************',
+    };
+
+    this.otherDetails = {
+      country: content?.country,
+      timeZone: content?.time_zone,
+      address: content?.address,
+      state: content?.state,
+      postalCode: content?.postal_code,
+    };
+  }
 
   triggerFileInput() {
     this.fileInput.nativeElement.click();
@@ -46,23 +119,6 @@ export class MyProfileComponent {
       reader.readAsDataURL(file);
     }
   }
-
-  profile = {
-    name: 'Ali Musif',
-    email: 'Ali@doqfy.in',
-    contact: '878987887',
-    role: 'Owner',
-    password: '************'
-  };
-
-  otherDetails = {
-    country: 'India',
-    timeZone: 'UTC',
-    address: '2nd Floor, 161, Basavanagar Main Rd, Above Reliance Trends, Vignan Nagar, Basavanagara, Bengaluru, Karnataka 560037',
-    state: 'Karnataka',
-    postalCode: '560087'
-  };
-
 
   onFieldChange(fieldName: string) {
     this.changedFields[fieldName] = true;
@@ -96,5 +152,10 @@ export class MyProfileComponent {
   cancelOtherDetails() {
     this.editOtherDetailsMode = false;
     this.changedFields = {};
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
