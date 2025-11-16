@@ -3,18 +3,21 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Name</th>
-        <th>Occupancy rate</th>
-        <th style="text-align: center;">Figures</th>
+        <th>{{ "NAME" | translate }}</th>
+        <th>{{ "OCCUPANCY_RATE" | translate }}</th>
+        <th style="text-align: center">{{ "FIGURES" | translate }}</th>
       </tr>
     </thead>
 
     <tbody>
       <tr *ngFor="let row of rows; let i = index">
-        <td>{{ row.id || (i + 1) }}</td>
+        <td>{{ row.id || i + 1 }}</td>
         <td>{{ row.name }}</td>
         <td>
-          <ngb-progressbar [showValue]="false" [value]="row.value"></ngb-progressbar>
+          <ngb-progressbar
+            [showValue]="false"
+            [value]="row.value"
+          ></ngb-progressbar>
         </td>
         <td align="center">
           <span class="value">{{ row.value }}%</span>

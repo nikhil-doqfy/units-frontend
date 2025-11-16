@@ -12,11 +12,19 @@ import { FooterComponent } from '../shared/footer/footer.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, DashOuterComponent, DashBodyComponent, HeaderComponent, SidebarComponent, FooterComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    DashOuterComponent,
+    DashBodyComponent,
+    HeaderComponent,
+    SidebarComponent,
+    FooterComponent,
+    TranslateModule,
+  ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
-
 export class DashboardComponent {
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
 

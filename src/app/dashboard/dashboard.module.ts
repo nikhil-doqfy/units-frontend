@@ -21,35 +21,109 @@ import { PayMyDuesComponent } from './pages/pay-my-dues/pay-my-dues.component';
 import { RaiseComplaintComponent } from './pages/raise-complaint/raise-complaint.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 
+import { TranslateModule } from '@ngx-translate/core';
 export const routes: Routes = [
-    {
+  {
+    path: '',
+    component: DashboardComponent,
+    children: [
+      {
         path: '',
-        component: DashboardComponent,
-        children: [
-            { path: '', redirectTo: 'home', title: 'Dashboard | Doqfy', pathMatch: 'full' },
+        redirectTo: 'home',
+        title: 'Dashboard | Doqfy',
+        pathMatch: 'full',
+      },
 
-            { path: 'home', component: HomeComponent, data: { titleKey: 'PAGE_TITLE.DASHBOARD' } },
-            { path: 'properties', component: PropertiesComponent, data: { titleKey: 'PAGE_TITLE.PROPERTIES' } },
-            { path: 'add-property', component: AddPropertyComponent, data: { titleKey: 'PAGE_TITLE.ADD_PROPERTY' } },
-            { path: 'pmc', component: PMCComponent, data: { titleKey: 'PAGE_TITLE.PMC' } },
-            { path: 'tenants', component: TenantsComponent, data: { titleKey: 'PAGE_TITLE.TENANTS' } },
-            { path: 'lease-tenancy', component: LeaseTenancyComponent, data: { titleKey: 'PAGE_TITLE.LEASE' } },
-            { path: 'add-lease', component: AddLeaseComponent, data: { titleKey: 'PAGE_TITLE.ADD_LEASE' } },
-            { path: 'owners', component: OwnersComponent, data: { titleKey: 'PAGE_TITLE.OWNERS' } },
-            { path: 'approval', component: ApprovalComponent, data: { titleKey: 'PAGE_TITLE.APPROVAL' } },
-            { path: 'staff', component: StaffComponent, data: { titleKey: 'PAGE_TITLE.STAFF' } },
-            { path: 'users', component: UsersComponent, data: { titleKey: 'PAGE_TITLE.USERS' } },
-            { path: 'roles-and-permissions', component: RolesAndPermissionsComponent, data: { titleKey: 'PAGE_TITLE.ROLES_PERMISSIONS' } },
-            { path: 'documentations', component: DocumentationsComponent, data: { titleKey: 'PAGE_TITLE.DOCUMENTATIONS' } },
-            { path: 'payments-and-invoice', component: PaymentsAndInvoiceComponent, data: { titleKey: 'PAGE_TITLE.PAYMENTS_INVOICE' } },
-            { path: 'pay-my-dues', component: PayMyDuesComponent, data: { titleKey: 'PAGE_TITLE.PAY_MY_DUES' } },
-            { path: 'raise-complaint', component: RaiseComplaintComponent, data: { titleKey: 'PAGE_TITLE.RAISE_COMPLAINT' } },
-            { path: 'privacy-policy', component: PrivacyPolicyComponent, data: { titleKey: 'PAGE_TITLE.PRIVACY_POLICY' } },
-        ]
-    },
+      {
+        path: 'home',
+        component: HomeComponent,
+        data: { titleKey: 'PAGE_TITLE.DASHBOARD' },
+      },
+      {
+        path: 'properties',
+        component: PropertiesComponent,
+        data: { titleKey: 'PAGE_TITLE.PROPERTIES' },
+      },
+      {
+        path: 'add-property',
+        component: AddPropertyComponent,
+        data: { titleKey: 'PAGE_TITLE.ADD_PROPERTY' },
+      },
+      {
+        path: 'pmc',
+        component: PMCComponent,
+        data: { titleKey: 'PAGE_TITLE.PMC' },
+      },
+      {
+        path: 'tenants',
+        component: TenantsComponent,
+        data: { titleKey: 'PAGE_TITLE.TENANTS' },
+      },
+      {
+        path: 'lease-tenancy',
+        component: LeaseTenancyComponent,
+        data: { titleKey: 'PAGE_TITLE.LEASE' },
+      },
+      {
+        path: 'add-lease',
+        component: AddLeaseComponent,
+        data: { titleKey: 'PAGE_TITLE.ADD_LEASE' },
+      },
+      {
+        path: 'owners',
+        component: OwnersComponent,
+        data: { titleKey: 'PAGE_TITLE.OWNERS' },
+      },
+      {
+        path: 'approval',
+        component: ApprovalComponent,
+        data: { titleKey: 'PAGE_TITLE.APPROVAL' },
+      },
+      {
+        path: 'staff',
+        component: StaffComponent,
+        data: { titleKey: 'PAGE_TITLE.STAFF' },
+      },
+      {
+        path: 'users',
+        component: UsersComponent,
+        data: { titleKey: 'PAGE_TITLE.USERS' },
+      },
+      {
+        path: 'roles-and-permissions',
+        component: RolesAndPermissionsComponent,
+        data: { titleKey: 'PAGE_TITLE.ROLES_PERMISSIONS' },
+      },
+      {
+        path: 'documentations',
+        component: DocumentationsComponent,
+        data: { titleKey: 'PAGE_TITLE.DOCUMENTATIONS' },
+      },
+      {
+        path: 'payments-and-invoice',
+        component: PaymentsAndInvoiceComponent,
+        data: { titleKey: 'PAGE_TITLE.PAYMENTS_INVOICE' },
+      },
+      {
+        path: 'pay-my-dues',
+        component: PayMyDuesComponent,
+        data: { titleKey: 'PAGE_TITLE.PAY_MY_DUES' },
+      },
+      {
+        path: 'raise-complaint',
+        component: RaiseComplaintComponent,
+        data: { titleKey: 'PAGE_TITLE.RAISE_COMPLAINT' },
+      },
+      {
+        path: 'privacy-policy',
+        component: PrivacyPolicyComponent,
+        data: { titleKey: 'PAGE_TITLE.PRIVACY_POLICY' },
+      },
+    ],
+  },
 ];
 
 @NgModule({
-    imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class DashboardModule { }
+export class DashboardModule {}

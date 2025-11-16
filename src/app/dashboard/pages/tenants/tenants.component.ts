@@ -40,6 +40,7 @@ import { TenantsService } from '../../services/tenants.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tenants',
@@ -65,6 +66,7 @@ import { AlertService } from '../../../shared/services/alert.service';
     TableViewCardComponent,
     WhiteCardComponent,
     DocumentTypeItemComponent,
+    TranslateModule,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',

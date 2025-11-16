@@ -55,17 +55,18 @@
             <tr>
               <th>
                 <button type="button">
-                  Tenant Name <i><app-sorting-icon /></i>
+                  {{ "TENANT_NAME" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
-              <th>Code</th>
-              <th>Contact Number</th>
+              <th>{{ "CODE" | translate }}</th>
+              <th>{{ "CONTACT_NUMBER" | translate }}</th>
               <th>
                 <button type="button">
-                  Property Assigned <i><app-sorting-icon /></i>
+                  {{ "PROPERTY_ASSIGED" | translate }}
+                  <i><app-sorting-icon /></i>
                 </button>
               </th>
-              <th>Rental Agreement</th>
+              <th>{{ "RENTAL_AGREEMENT" | translate }}</th>
               <th width="200"></th>
             </tr>
           </thead>
@@ -193,7 +194,11 @@
       >
         Cancel
       </button>
-      <button type="button" class="btn btnCommon" (click)="sendInvite(inviteFormRef, modal)">
+      <button
+        type="button"
+        class="btn btnCommon"
+        (click)="sendInvite(inviteFormRef, modal)"
+      >
         <i><app-send-icon /></i>Send Invitation
       </button>
     </div>
