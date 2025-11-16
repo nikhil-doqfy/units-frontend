@@ -130,6 +130,7 @@ export class MyProfileComponent {
   }
 
   saveUser() {
+    console.log('changedUser:---->', this.changedFields);
     this.editUserMode = false;
     this.changedFields = {};
   }
