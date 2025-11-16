@@ -25,6 +25,7 @@
                 name="property"
                 value="my-properties"
                 [(ngModel)]="propertyView"
+                (change)="onPropertyViewChange()"
               />
               <span>My Properties <i>(2)</i></span>
             </label>
@@ -36,7 +37,7 @@
                 [(ngModel)]="propertyView"
               />
               <span
-                >{{ "ALL_PROPERTIES" | translate }} <i>(240)</i>
+                >{{ "ALL_PROPERTIES" | translate }} <i>({{ totalRecords }})</i>
                 <button type="button"><app-refresh-icon /></button
               ></span>
             </label>
@@ -48,7 +49,8 @@
           >
             <app-table-title
               title="All Properties"
-              subtitle="(240)"
+              [subtitle]="'(' + totalRecords + ')'"
+              (onRefresh)="onRefresh()"
             ></app-table-title>
           </ng-container>
         </div>
@@ -72,7 +74,10 @@
               </app-custom-select>
             </ng-container>
             <ng-container *ngIf="propertyView === 'all-properties'">
-              <app-table-search placeholder="Search here..." />
+              <app-table-search
+                placeholder="Search here..."
+                (onValueChange)="onPropertySearch$.next($event)"
+              />
               <app-table-filter-btn
                 title="Filter"
                 [hasIcon]="true"
@@ -416,80 +421,16 @@
             </tr>
           </thead>
           <tbody>
+            @for (property of propertiesList; track $index) {
             <tr>
-              <td *ngIf="currentRole === 'property-manager'">133</td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-list-1.png"
-                  size="md"
-                  title="Novatis AG..."
-                  [clickable]="true"
-                  (clicked)="handleViewClick()"
-                />
+              <td *ngIf="currentRole === 'property-manager'">
+                {{ property.id }}
               </td>
-              <td
-                *ngIf="
-                  currentRole === 'owner' || currentRole === 'property-manager'
-                "
-              >
-                <app-table-img-item
-                  img="../../../../assets/user/user-1.png"
-                  title="Jensi"
-                />
-              </td>
-              <td *ngIf="currentRole === 'owner'">
-                <app-badge title="Ongoing" status="green" />
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'tenant' || currentRole === 'property-manager'
-                "
-              >
-                Ali Musfiq Rahman
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'property-manager' || currentRole === 'tenant'
-                "
-              >
-                <app-badge title="Available" status="green" />
-              </td>
-              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                1BHK
-              </td>
-              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                3g real estate
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'owner' || currentRole === 'property-manager'
-                "
-                align="center"
-              >
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  />
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td *ngIf="currentRole === 'property-manager'">1233</td>
               <td>
                 <app-table-img-item
                   img="../../../../assets/property/property-list-2.png"
                   size="md"
-                  title="Agriculture...."
+                  [title]="property.property_name"
                   [clickable]="true"
                   (clicked)="handleViewClick()"
                 />
@@ -501,31 +442,36 @@
               >
                 <app-table-img-item
                   img="../../../../assets/user/user-2.png"
-                  title="Richard"
+                  [title]="property.tenants?.[0]?.tenant_name || 'N/A'"
                 />
               </td>
               <td *ngIf="currentRole === 'owner'">
-                <app-badge title="Expired" status="red" />
+                <app-badge [title]="property.rental_status" status="green" />
               </td>
               <td
                 *ngIf="
                   currentRole === 'tenant' || currentRole === 'property-manager'
                 "
               >
-                Ali Musfiq Rahman
+                {{ property?.owner_info?.owner_name || "N/A" }}
               </td>
               <td
                 *ngIf="
                   currentRole === 'property-manager' || currentRole === 'tenant'
                 "
               >
-                <app-badge title="Not Available" status="red" />
+                <app-badge
+                  [title]="property.rental_status"
+                  [status]="
+                    property.rental_status === 'AVAILABLE' ? 'green' : 'red'
+                  "
+                />
               </td>
               <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                2BHK
+                {{ property.bedrooms }}
               </td>
               <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                3g real estate
+                {{ property?.pmc_info?.company_name || "N/A" }}
               </td>
               <td
                 *ngIf="
@@ -550,214 +496,29 @@
                 </div>
               </td>
             </tr>
+            }@empty {
             <tr>
-              <td *ngIf="currentRole === 'property-manager'">1233</td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Honda..."
-                  [clickable]="true"
-                  (clicked)="handleViewClick()"
-                />
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'owner' || currentRole === 'property-manager'
-                "
-              >
-                <app-table-img-item
-                  img="../../../../assets/user/user-3.png"
-                  title="Thaomas"
-                />
-              </td>
-              <td *ngIf="currentRole === 'owner'">
-                <app-badge title="About to expire" status="orange" />
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'tenant' || currentRole === 'property-manager'
-                "
-              >
-                Ali Musfiq Rahman
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'property-manager' || currentRole === 'tenant'
-                "
-              >
-                <app-badge title="Available" status="green" />
-              </td>
-              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                5BHK
-              </td>
-              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                3g real estate
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'owner' || currentRole === 'property-manager'
-                "
-                align="center"
-              >
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  />
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
+              <td colspan="20" align="center">No Data to Show</td>
             </tr>
-            <tr>
-              <td *ngIf="currentRole === 'property-manager'">123</td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-list-2.png"
-                  size="md"
-                  title="TVS"
-                  [clickable]="true"
-                  (clicked)="handleViewClick()"
-                />
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'owner' || currentRole === 'property-manager'
-                "
-              >
-                <app-table-img-item
-                  img="../../../../assets/user/user-4.png"
-                  title="Akshay"
-                />
-              </td>
-              <td *ngIf="currentRole === 'owner'">
-                <app-badge title=" Ongoing" status="green" />
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'tenant' || currentRole === 'property-manager'
-                "
-              >
-                Ali Musfiq Rahman
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'property-manager' || currentRole === 'tenant'
-                "
-              >
-                <app-badge title="Available" status="green" />
-              </td>
-              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                1BHK
-              </td>
-              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                3g real estate
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'owner' || currentRole === 'property-manager'
-                "
-                align="center"
-              >
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  />
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td *ngIf="currentRole === 'property-manager'">134</td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Samsung"
-                  [clickable]="true"
-                  (clicked)="handleViewClick()"
-                />
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'owner' || currentRole === 'property-manager'
-                "
-              >
-                <app-table-img-item
-                  img="../../../../assets/user/user-5.png"
-                  title="Avanshi"
-                />
-              </td>
-              <td *ngIf="currentRole === 'owner'">
-                <app-badge title="Ongoing" status="green" />
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'tenant' || currentRole === 'property-manager'
-                "
-              >
-                Ali Musfiq Rahman
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'property-manager' || currentRole === 'tenant'
-                "
-              >
-                <app-badge title="Available" status="green" />
-              </td>
-              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                1BHK
-              </td>
-              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                3g real estate
-              </td>
-              <td
-                *ngIf="
-                  currentRole === 'owner' || currentRole === 'property-manager'
-                "
-                align="center"
-              >
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  />
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
+            }
           </tbody>
         </table>
       </div>
     </div>
     <div class="cmmnTblFtr" *ngIf="propertyView === 'all-properties'">
-      <app-table-select />
-      <app-table-pagination />
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 </ng-container>

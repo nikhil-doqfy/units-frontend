@@ -140,6 +140,10 @@ export class TenantsComponent {
       });
   }
 
+  onRefresh() {
+    this.getTenants();
+  }
+
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;

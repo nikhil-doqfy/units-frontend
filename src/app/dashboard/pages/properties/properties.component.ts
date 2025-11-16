@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -27,6 +27,9 @@ import { PropertyViewCardComponent } from '../../component/property-view-card/pr
 import { CardTitleComponent } from '../../../shared/component/card-title/card-title.component';
 import { DashTitleComponent } from '../../../shared/component/dash-title/dash-title.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { PropertyService } from '../../services/property.service';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-properties',
@@ -60,6 +63,9 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './properties.component.css',
 })
 export class PropertiesComponent {
+  private propertyService = inject(PropertyService);
+
+  componentName: string = 'PropertiesComponent';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Properties', link: '' },
@@ -76,10 +82,24 @@ export class PropertiesComponent {
 
   showDetailView: boolean = false;
 
-  constructor(private router: Router, private themeService: ThemeService) {}
+  propertiesList: any[] = [];
+  propertiesFilter: Record<string, any> = {};
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  onPropertySearch$ = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
-  onOptionSelected(option: string) {
-    this.selected = option;
+  constructor(private router: Router, private themeService: ThemeService) {
+    this.onPropertySearch$
+      .pipe(debounceTime(1500), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (value?.trim()) this.propertiesFilter['search'] = value.trim();
+        else delete this.propertiesFilter['search'];
+
+        this.getProperties();
+      });
   }
 
   ngOnInit() {
@@ -90,8 +110,51 @@ export class PropertiesComponent {
         this.propertyView = 'my-properties';
       } else {
         this.propertyView = 'all-properties';
+        this.getProperties();
       }
     });
+  }
+
+  onPropertyViewChange() {
+    if (this.propertyView === 'all-properties') {
+      this.getProperties();
+    } else if (this.propertyView === 'my-properties') {
+    }
+  }
+
+  private getProperties() {
+    this.propertiesFilter = {
+      ...this.propertiesFilter,
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
+
+    this.propertyService
+      .getProperties(this.propertiesFilter)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => {
+          this.propertiesList = response?.content ?? [];
+          this.totalRecords = response?.pagination?.total_records ?? 0;
+        },
+      });
+  }
+
+  onRefresh() {
+    this.getProperties();
+  }
+
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getProperties();
+  }
+
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getProperties();
   }
 
   property = {
@@ -162,6 +225,10 @@ export class PropertiesComponent {
     ],
   };
 
+  onOptionSelected(option: string) {
+    this.selected = option;
+  }
+
   goToAddProperty(): void {
     this.router.navigate(['/dashboard/add-property']);
   }
@@ -192,5 +259,10 @@ export class PropertiesComponent {
 
   handleBackClick(): void {
     this.showDetailView = false;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

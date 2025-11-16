@@ -5,7 +5,8 @@
         <div class="col-md">
           <app-table-title
             title="All Tenants"
-            subtitle="(240)"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
