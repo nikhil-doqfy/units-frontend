@@ -45,6 +45,12 @@ export const routes: Routes = [
             { path: 'pay-my-dues', component: PayMyDuesComponent, data: { titleKey: 'PAGE_TITLE.PAY_MY_DUES' } },
             { path: 'raise-complaint', component: RaiseComplaintComponent, data: { titleKey: 'PAGE_TITLE.RAISE_COMPLAINT' } },
             { path: 'privacy-policy', component: PrivacyPolicyComponent, data: { titleKey: 'PAGE_TITLE.PRIVACY_POLICY' } },
+            {
+                path: 'staff/detail/:id',
+                component: StaffComponent
+            },
+            { path: 'owners/detail/:id', component: OwnersComponent, data: { titleKey: 'PAGE_TITLE.OWNERS' } },
+
         ]
     },
 ];

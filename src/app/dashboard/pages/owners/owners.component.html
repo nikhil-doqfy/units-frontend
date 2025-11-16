@@ -2,12 +2,16 @@
     <div class="cmmnTblOuter">
         <div class="cmmnTblHdr">
             <div class="row g-3 align-items-center">
+
+
                 <div class="col-md">
-                    <app-table-title title="All Owners" subtitle="(240)"></app-table-title>
+                    <app-table-title title="All Owners" [subtitle]="'(' + totalRecords + ')'"
+                        (onRefresh)="onRefresh()"></app-table-title>
                 </div>
                 <div class="col-md-auto">
                     <div class="d-flex align-items-center gap-2 gap-md-3">
-                        <app-table-search placeholder="Search here..." />
+                        <app-table-search placeholder="Search here..." (onValueChange)="searchTextChange($event)" />
+
                         <app-table-filter-btn title="Filter" [hasIcon]="true" (clicked)="handleFilterClick()">
                             <app-filter-icon />
                         </app-table-filter-btn>
@@ -36,13 +40,15 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @for (owner of owners; track $index) {
                         <tr>
                             <td>
-                                <app-table-img-item img="../../../../assets/user/user-1.png" title="Jensi"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
+                                <app-table-img-item [img]="owner.profile_image || '../../../../assets/user/user-1.png'"
+                                    [clickable]="true" (clicked)="handleViewClick(owner.id)"
+                                    [title]="owner.full_name" />
                             </td>
-                            <td>LP9021</td>
-                            <td>+91-70******23</td>
+                            <td>{{owner.owner_number}}</td>
+                            <td>{{owner.mobile_number | maskPhone}}</td>
                             <td>
                                 <app-table-multi-img-item [images]="[
                                     'assets/property/property-list-1.png',
@@ -51,172 +57,65 @@
                                     'assets/property/property-list-2.png',
                                     'assets/property/property-list-2.png',
                                     'assets/property/property-list-3.png'
-                                ]" size="md">
-                                </app-table-multi-img-item>
+                                ]" size="md"></app-table-multi-img-item>
                             </td>
-                            <td>jensi&#64;example.com</td>
+                            <td>{{owner.email}}</td>
                             <td align="center">
                                 <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
                                     <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
+                                        (actionClicked)="handleDropdownAction($event)"></app-table-action-dropdown>
                                 </div>
                             </td>
                         </tr>
+                        } @empty {
                         <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-2.png" title="Richard"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>LP8021</td>
-                            <td>+91-99******76</td>
-                            <td>
-                                <app-table-multi-img-item [images]="[
-                                    'assets/property/property-list-1.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png'
-                                ]" size="md">
-                                </app-table-multi-img-item>
-                            </td>
-                            <td>richard&#64;example.com</td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
+                            <td colspan="6" align="center">No Data to Show</td>
                         </tr>
-                        <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-3.png" title="Thaomas"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>VC79021</td>
-                            <td>+91-89******12</td>
-                            <td>
-                                <app-table-multi-img-item [images]="[
-                                    'assets/property/property-list-1.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png'
-                                ]" size="md">
-                                </app-table-multi-img-item>
-                            </td>
-                            <td>thomas&#64;example.com</td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-4.png" title="Akshay"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>VC69021</td>
-                            <td>+91-90******45</td>
-                            <td>
-                                <app-table-multi-img-item [images]="[
-                                    'assets/property/property-list-1.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png'
-                                ]" size="md">
-                                </app-table-multi-img-item>
-                            </td>
-                            <td>akshay&#64;example.com</td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <app-table-img-item img="../../../../assets/user/user-5.png" title="Avanshi"
-                                    [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td>VC59021</td>
-                            <td>+91-78******90</td>
-                            <td>
-                                <app-table-multi-img-item [images]="[
-                                    'assets/property/property-list-1.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png',
-                                    'assets/property/property-list-2.png'
-                                ]" size="md">
-                                </app-table-multi-img-item>
-                            </td>
-                            <td>avanshi&#64;example.com</td>
-                            <td align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
+                        }
                     </tbody>
+
                 </table>
             </div>
         </div>
         <div class="cmmnTblFtr">
-            <app-table-select />
-            <app-table-pagination />
+            <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage"
+                [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
+            <app-table-pagination [componentName]="componentName" [currentPage]="currentPage"
+                [totalRecords]="totalRecords" [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
         </div>
     </div>
-
+    <!-- -------------------- Invite Owner Form -------------------- -->
     <ng-template #inviteOwnerContent let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-title">Invite Owner</h4>
             <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
         </div>
         <div class="modal-body">
-            <app-invite-owner-form />
+            <app-invite-owner-form #inviteFormRef />
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btnCommon btnTransparent"
                 (click)="modal.dismiss('Save click')">Cancel</button>
-            <button type="button" class="btn btnCommon" (click)="modal.close('Save click')"><i><app-send-icon /></i>Send
-                Invitation</button>
+
+            <button type="button" class="btn btnCommon" (click)="sendInvite(inviteFormRef, modal)">
+                <i><app-send-icon /></i>Send Invitation
+            </button>
+
+
         </div>
     </ng-template>
 </ng-container>
 
-<ng-container *ngIf="showDetailView">
-    <app-table-view-card [title]="'Ali Musfiq Rahman'" [imgSrc]="''" [headerItems]="[
-            { label: 'Contact', value: '+91-8987898765' },
-            { label: 'Email', value: 'owner28@gmail.com' }
+<ng-container *ngIf="showDetailView && selectedOwner">
+    <app-table-view-card [title]="selectedOwner.full_name" [imgSrc]="selectedOwner?.profile_image || ''" [headerItems]="[
+            { label: 'Contact', value: '+91-' + selectedOwner?.mobile_number },
+            { label: 'Email', value: selectedOwner.email }
         ]" [items]="[
-            { label: 'Emirates ID', value: '784198657395715' },
-            { label: 'Residence Visa', value: '20120247736538' },
-            { label: 'Trade License', value: '247334' },
-            { label: 'Owner Code', value: '5621009' },
-            { label: 'Role', value: 'Owner'}
+            { label: 'Emirates ID', value: selectedOwner.emirate_id },
+            { label: 'Residence Visa', value: selectedOwner.uae_residence_visa },
+            { label: 'Trade License', value: selectedOwner.trade_license_number },
+            { label: 'Owner Code', value: selectedOwner.owner_number},
+            { label: 'Role', value: selectedOwner.user_type}
         ]" (back)="handleBackClick()"></app-table-view-card>
 
     <div class="cmmnTblOuter mt-3">

@@ -82,7 +82,8 @@
                 />
               </td>
               <td>{{ tenant?.tenant_number }}</td>
-              <td>{{ tenant?.mobile_number }}</td>
+              <td>{{ tenant.mobile_number | maskPhone }}</td>
+
               <td>
                 <app-table-img-item
                   img="../../../../assets/property/property-list-1.png"

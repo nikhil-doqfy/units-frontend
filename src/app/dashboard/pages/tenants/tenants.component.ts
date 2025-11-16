@@ -40,6 +40,7 @@ import { TenantsService } from '../../services/tenants.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
+import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 
 @Component({
   selector: 'app-tenants',
@@ -65,6 +66,7 @@ import { AlertService } from '../../../shared/services/alert.service';
     TableViewCardComponent,
     WhiteCardComponent,
     DocumentTypeItemComponent,
+    MaskPhonePipe,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
