@@ -3,21 +3,28 @@ import { CommonModule } from '@angular/common';
 
 import { TableFilterButtonComponent } from '../table-filter-btn/table-filter-btn.component';
 import { FilterIconComponent } from '../icons/filter-icon/filter-icon.component';
-import { DashFormComponent } from "../../../shared/component/dash-form/dash-form.component";
-import { CrossIconComponent } from "../icons/cross-icon/cross-icon.component";
+import { DashFormComponent } from '../../../shared/component/dash-form/dash-form.component';
+import { CrossIconComponent } from '../icons/cross-icon/cross-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-filter-popup-btn',
   standalone: true,
-  imports: [CommonModule, TableFilterButtonComponent, FilterIconComponent, DashFormComponent, CrossIconComponent],
+  imports: [
+    CommonModule,
+    TableFilterButtonComponent,
+    FilterIconComponent,
+    DashFormComponent,
+    CrossIconComponent,
+    TranslateModule,
+  ],
   templateUrl: './filter-popup-btn.component.html',
-  styleUrl: './filter-popup-btn.component.css'
+  styleUrl: './filter-popup-btn.component.css',
 })
 export class FilterPopupButtonComponent {
-
   isOpen = false;
 
-  constructor(private eRef: ElementRef) { }
+  constructor(private eRef: ElementRef) {}
 
   handleFilterOpenClick(): void {
     this.isOpen = true;

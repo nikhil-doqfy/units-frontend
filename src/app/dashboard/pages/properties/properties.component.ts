@@ -26,6 +26,7 @@ import { DocumentTypeItemComponent } from '../../component/document-type-item/do
 import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
 import { CardTitleComponent } from '../../../shared/component/card-title/card-title.component';
 import { DashTitleComponent } from '../../../shared/component/dash-title/dash-title.component';
+import { TranslateModule } from '@ngx-translate/core';
 import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
@@ -56,6 +57,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
     PropertyViewCardComponent,
     CardTitleComponent,
     DashTitleComponent,
+    TranslateModule,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',

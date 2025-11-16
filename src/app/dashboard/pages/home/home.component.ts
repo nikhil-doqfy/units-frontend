@@ -6,38 +6,58 @@ import { FormsModule } from '@angular/forms';
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
-import { StatsCardComponent } from "../../component/stats-card/stats-card.component";
-import { GraphStatsIconComponent } from "../../component/icons/graph-stats-icon/graph-stats-icon.component";
-import { PropertyStatsIconComponent } from "../../component/icons/property-stats-icon/property-stats-icon.component";
-import { TenantStatsIconComponent } from "../../component/icons/tenant-stats-icon/tenant-stats-icon.component";
-import { FilterPopupButtonComponent } from "../../component/filter-popup-btn/filter-popup-btn.component";
-import { DateIconComponent } from "../../component/icons/date-icon/date-icon.component";
+import { StatsCardComponent } from '../../component/stats-card/stats-card.component';
+import { GraphStatsIconComponent } from '../../component/icons/graph-stats-icon/graph-stats-icon.component';
+import { PropertyStatsIconComponent } from '../../component/icons/property-stats-icon/property-stats-icon.component';
+import { TenantStatsIconComponent } from '../../component/icons/tenant-stats-icon/tenant-stats-icon.component';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { DateIconComponent } from '../../component/icons/date-icon/date-icon.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { BadgeComponent } from '../../component/badge/badge.component';
-import { ColumnChartComponent } from "../../component/charts/column/column.component";
-import { StackedColumnChartComponent } from "../../component/charts/stacked-column/stacked-column.component";
-import { GroupBarChartComponent } from "../../component/charts/group-bar/group-bar.component";
-import { ProgressBarTableComponent } from "../../component/progress-bar-table/progress-bar-table.component";
-import { ChequeStatusComponent } from "../../component/charts/cheque-status/cheque-status.component";
-import { DonutChartComponent } from "../../component/charts/donut/donut.component";
-import { LineChartComponent } from "../../component/charts/line/line.component";
-
+import { ColumnChartComponent } from '../../component/charts/column/column.component';
+import { StackedColumnChartComponent } from '../../component/charts/stacked-column/stacked-column.component';
+import { GroupBarChartComponent } from '../../component/charts/group-bar/group-bar.component';
+import { ProgressBarTableComponent } from '../../component/progress-bar-table/progress-bar-table.component';
+import { ChequeStatusComponent } from '../../component/charts/cheque-status/cheque-status.component';
+import { DonutChartComponent } from '../../component/charts/donut/donut.component';
+import { LineChartComponent } from '../../component/charts/line/line.component';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, WhiteCardComponent, StatsCardComponent, GraphStatsIconComponent, PropertyStatsIconComponent, TenantStatsIconComponent, FilterPopupButtonComponent, NgbDatepickerModule, DateIconComponent, CustomSelectComponent, TableTitleComponent, BadgeComponent, ColumnChartComponent, StackedColumnChartComponent, GroupBarChartComponent, ProgressBarTableComponent, ChequeStatusComponent, DonutChartComponent, LineChartComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    WhiteCardComponent,
+    StatsCardComponent,
+    GraphStatsIconComponent,
+    PropertyStatsIconComponent,
+    TenantStatsIconComponent,
+    FilterPopupButtonComponent,
+    NgbDatepickerModule,
+    DateIconComponent,
+    CustomSelectComponent,
+    TableTitleComponent,
+    BadgeComponent,
+    ColumnChartComponent,
+    StackedColumnChartComponent,
+    GroupBarChartComponent,
+    ProgressBarTableComponent,
+    ChequeStatusComponent,
+    DonutChartComponent,
+    LineChartComponent,
+    TranslateModule,
+  ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  breadcrumbData = [
-    { label: 'Dashboard', link: '' }
-  ];
+  breadcrumbData = [{ label: 'Dashboard', link: '' }];
 
   model: NgbDateStruct | null = null;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   propertyData = [
     { id: '01', name: 'Dubai Hills Golf Club', value: 45 },
@@ -77,4 +97,3 @@ export class HomeComponent {
     console.log('Filter button clicked');
   }
 }
-

@@ -1,15 +1,38 @@
 <div class="toggleWrapperOuter">
   <div class="toggleWrapper">
-    <button (click)="changeMode('vacancy')" [class.active]="selectedMode === 'vacancy'">Vacancy</button>
-    <button (click)="changeMode('occupied')" [class.active]="selectedMode === 'occupied'">Occupied</button>
-    <button (click)="changeMode('both')" [class.active]="selectedMode === 'both'">Both</button>
+    <button
+      (click)="changeMode('vacancy')"
+      [class.active]="selectedMode === 'vacancy'"
+    >
+      {{ "VACANCY" | translate }}
+    </button>
+    <button
+      (click)="changeMode('occupied')"
+      [class.active]="selectedMode === 'occupied'"
+    >
+      {{ "OCCUPIED" | translate }}
+    </button>
+    <button
+      (click)="changeMode('both')"
+      [class.active]="selectedMode === 'both'"
+    >
+      {{ "BOTH" | translate }}
+    </button>
   </div>
 </div>
 
 <div class="donutWrapper">
-  <apx-chart *ngIf="chartOptions.series" [series]="chartOptions.series!" [chart]="chartOptions.chart!"
-    [labels]="chartOptions.labels!" [colors]="chartOptions.colors!" [plotOptions]="chartOptions.plotOptions!"
-    [dataLabels]="chartOptions.dataLabels!" [stroke]="chartOptions.stroke!" [legend]="chartOptions.legend!"
-    [tooltip]="chartOptions.tooltip!">
+  <apx-chart
+    *ngIf="chartOptions.series"
+    [series]="chartOptions.series!"
+    [chart]="chartOptions.chart!"
+    [labels]="chartOptions.labels!"
+    [colors]="chartOptions.colors!"
+    [plotOptions]="chartOptions.plotOptions!"
+    [dataLabels]="chartOptions.dataLabels!"
+    [stroke]="chartOptions.stroke!"
+    [legend]="chartOptions.legend!"
+    [tooltip]="chartOptions.tooltip!"
+  >
   </apx-chart>
 </div>
