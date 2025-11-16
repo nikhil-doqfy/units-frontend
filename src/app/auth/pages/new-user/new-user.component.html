@@ -1,36 +1,277 @@
 <app-auth-title title="Sign Up" description="to create your account" />
 
 <app-auth-form>
-    <form class="mb-4">
-        <div class="mb-4">
-            <label for="email" class="form-label justify-content-between">Email Address</label>
-            <div class="iconInput">
-                <i>
-                    <app-email-icon />
-                </i>
-                <input class="form-control" type="email" name="email" placeholder="Enter your email" />
-            </div>
+  <form class="mb-4" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <div class="grid-2">
+      <ng-container *ngIf="selectedRole === 'owner'">
+        <div class="mb-2">
+          <label for="companyName" class="form-label">Frist Name</label>
+          <input class="form-control" type="text" placeholder="Enter here" />
         </div>
-        <div class="mb-4">
-            <app-password-strength-field [(value)]="password" />
+
+        <div class="mb-2">
+          <label for="emiratesId" class="form-label">Last Name</label>
+          <input class="form-control" type="text" placeholder="Enter here" />
         </div>
-        <div class="mb-4">
-            <label for="repeatPassword" class="form-label">Confirm Password</label>
-            <div class="iconInput password">
-                <i><app-password-icon /></i>
-                <input class="form-control" [type]="showConfirmPassword ? 'text' : 'password'" name="repeatPassword"
-                    placeholder="Repeat your password" />
-                <i class="right" (click)="toggleConfirmPasswordVisibility()">
-                    <app-password-show-icon *ngIf="!showConfirmPassword"></app-password-show-icon>
-                    <app-password-hide-icon *ngIf="showConfirmPassword"></app-password-hide-icon>
-                </i>
-            </div>
+      </ng-container>
+      <ng-container *ngIf="selectedRole === 'property-manager'">
+        <div class="mb-2">
+          <label for="companyName" class="form-label">Company Name</label>
+          <input class="form-control" type="text" placeholder="Enter here" />
+          <small
+            *ngIf="
+              signupForm.get('companyName')?.invalid &&
+              signupForm.get('companyName')?.touched
+            "
+          >
+            Company name is required
+          </small>
         </div>
-        <div class="frmBtns">
-            <button type="button" (click)="goToLogin()" class="btn btnCommon btnMinWidth">Sign
-                Up</button>
+
+        <div class="mb-2">
+          <label for="emiratesId" class="form-label">Company Emirates ID</label>
+          <input class="form-control" type="text" placeholder="Enter here" />
+          <small
+            *ngIf="
+              signupForm.get('emiratesId')?.invalid &&
+              signupForm.get('emiratesId')?.touched
+            "
+          >
+            Emirates ID is required
+          </small>
         </div>
-    </form>
+      </ng-container>
+      <ng-container *ngIf="selectedRole === 'tenant'">
+        <div class="mb-2">
+          <label for="buildingName" class="form-label">Full Name</label>
+          <input class="form-control" type="text" placeholder="Enter here" />
+        </div>
+
+        <div class="mb-2">
+          <label for="flatNumber" class="form-label">Emirates ID</label>
+          <input class="form-control" type="text" placeholder=" Enter here" />
+        </div>
+      </ng-container>
+
+      <div class="mb-2">
+        <label for="email" class="form-label justify-content-between"
+          >Email Address</label
+        >
+        <div class="iconInput">
+          <i><app-email-icon /></i>
+          <input
+            class="form-control"
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+          />
+          <small
+            *ngIf="
+              signupForm.get('email')?.invalid &&
+              signupForm.get('email')?.touched
+            "
+          >
+            Valid email is required
+          </small>
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label for="contactNumber" class="form-label">Contact Number</label>
+        <div class="iconInput">
+          <i><app-contact-number></app-contact-number></i>
+          <input
+            class="form-control"
+            type="tel"
+            formControlName="contactNumber"
+            placeholder="Enter your number"
+          />
+          <small
+            *ngIf="
+              signupForm.get('contactNumber')?.invalid &&
+              signupForm.get('contactNumber')?.touched
+            "
+          >
+            Contact number is required
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-2">
+      <app-password-strength-field
+        [value]="signupForm.get('password')?.value"
+        (valueChange)="signupForm.get('password')?.setValue($event)"
+      />
+    </div>
+    <div class="mb-4">
+      <label for="repeatPassword" class="form-label">Confirm Password</label>
+      <div class="iconInput password">
+        <i><app-password-icon /></i>
+        <input
+          class="form-control"
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          placeholder="Repeat your password"
+        />
+        <small
+          *ngIf="passwordMismatch && signupForm.get('confirmPassword')?.touched"
+          style="color: red"
+        >
+          Passwords do not match
+        </small>
+        <i class="right" (click)="toggleConfirmPasswordVisibility()">
+          <app-password-show-icon
+            *ngIf="!showConfirmPassword"
+          ></app-password-show-icon>
+          <app-password-hide-icon
+            *ngIf="showConfirmPassword"
+          ></app-password-hide-icon>
+        </i>
+      </div>
+    </div>
+    <div class="frmBtns">
+      <button
+        type="submit"
+        class="btn btnCommon btnMinWidth"
+        (click)="openOtpVerifyModal(otpVerifyContent)"
+      >
+        Verify Account
+      </button>
+    </div>
+  </form>
 </app-auth-form>
 
+<div class="loginRoleSelection mb-4">
+  <div class="loginRoleOptions">
+    <label>
+      <input
+        type="radio"
+        name="role"
+        value="owner"
+        [(ngModel)]="selectedRole"
+        (change)="onRoleChange()"
+      />
+      <span>Owner</span>
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="role"
+        value="property-manager"
+        [(ngModel)]="selectedRole"
+        (change)="onRoleChange()"
+      />
+      <span>Property Manager</span>
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="role"
+        value="tenant"
+        [(ngModel)]="selectedRole"
+        (change)="onRoleChange()"
+      />
+      <span>Tenant</span>
+    </label>
+  </div>
+</div>
+
 <app-new-user-link type="login" />
+
+<ng-template #otpVerifyContent let-modal>
+  <div class="modal-body otpVerifyMdlBody">
+    <div class="otpVerifyContainer container">
+      <div class="d-flex align-items-center mb-2">
+        <a href="javascript:void(0);" (click)="goToLogin()" class="me-2">
+          <img
+            src="../../../../assets/favicon/verify.png"
+            alt="Doqfy Logo"
+            style="height: 40px"
+          />
+        </a>
+        <h4 class="verifyTitle mb-0">
+          Verify Account
+
+          <div class="d-flex align-items-center otpVerifyMdlInfo">
+            <p class="mb-2">
+              We've sent code to
+              <span class="text-primary">haXXX&#64;doqfy.in</span>
+            </p>
+            <button
+              type="button"
+              (click)="modal.dismiss('Cross click')"
+              class="btn p-0 border-0 bg-transparent position-absolute top-1 end-0 mt-0 m-4"
+            >
+              <app-verify-icon-edit></app-verify-icon-edit>
+            </button>
+          </div>
+        </h4>
+      </div>
+    </div>
+
+    <div class="otpVerifyForm">
+      <app-auth-form>
+        <form>
+          <hr />
+          <div class="mb-2 text-center">
+            <span class="d-block mb-2">Enter OTP</span>
+            <ng-otp-input
+              class="formOtpInput"
+              (onInputChange)="onOtpChange($event)"
+              [config]="{
+                length: 6,
+                placeholder: '',
+
+                disableAutoFocus: true,
+                allowNumbersOnly: true
+              }"
+            ></ng-otp-input>
+          </div>
+          <div class="d-flex justify-content-center mb-4 text-center">
+            <app-timer-text
+              label="Resend code in"
+              *ngIf="otpSent && otpTimer > 0"
+              [time]="timerDisplay"
+              [customStyle]="'text-primary'"
+            />
+
+            <button
+              *ngIf="showResend"
+              type="button"
+              class="link"
+              (click)="resendOtp()"
+            >
+              Resend OTP
+            </button>
+          </div>
+          <hr />
+          <div
+            class="frmBtnss d-flex align-items-center justify-content-between mt-3"
+          >
+            <div>
+              <app-headphone-icon></app-headphone-icon>
+            </div>
+
+            <div class="d-flex">
+              <button
+                type="button"
+                class="btn btnCommonss custom-shadow me-2"
+                (click)="goToResetPassword()"
+              >
+                Resend OTP
+              </button>
+              <button
+                type="button"
+                class="btn btnCommons btn-wide"
+                (click)="goToResetPassword()"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </app-auth-form>
+    </div>
+  </div>
+</ng-template>

@@ -1775,9 +1775,9 @@ linearGradient .authBgPatt stop:last-child {
   border-radius: 16px;
 }
 
-.otpVerifyMdlBody {
+/* .otpVerifyMdlBody {
   padding: 36px;
-}
+} */
 
 .otpVerifyLogo {
   text-align: center;

@@ -14,6 +14,12 @@ import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
@@ -26,17 +32,21 @@ import { FormsModule } from '@angular/forms';
     NewUserLinkComponent,
     TimerTextComponent,
     FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
 })
 export class ForgotPasswordComponent {
+  forgetForm!: FormGroup;
+  showPassword = false;
   currentRole: UserRole = 'owner';
   otp = '';
   email = '';
   private modalService = inject(NgbModal);
 
   constructor(
+    private fb: FormBuilder,
     private router: Router,
     private themeService: ThemeService,
     private authService: AuthService,
@@ -47,6 +57,7 @@ export class ForgotPasswordComponent {
       this.currentRole = role;
     });
   }
+
   closeResult = '';
   otpSent = false;
   otpTimer = 0;
@@ -72,14 +83,19 @@ export class ForgotPasswordComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.forgetForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+  }
   sendOtp(): void {
-    if (!this.email) {
-      this.alertService.error('Please enter your email');
+    if (this.forgetForm.invalid) {
+      this.forgetForm.markAllAsTouched();
       return;
     }
 
-    let payload = { email: this.email };
-
+    // let payload = { email: this.email };
+    let payload = { email: this.forgetForm.value.email };
     this.authService.sendOtp(payload).subscribe({
       next: (resp: any) => {
         console.log('OTP response:--->', resp);
@@ -158,7 +174,7 @@ export class ForgotPasswordComponent {
 
   signInWithOtp(): void {
     let payload = {
-      email: this.email,
+      email: this.forgetForm.value.email,
       otp: this.otp,
     };
     this.authService.verifyOtp(payload).subscribe({

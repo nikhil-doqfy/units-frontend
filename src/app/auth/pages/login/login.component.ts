@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 import { NgOtpInputModule } from 'ng-otp-input';
@@ -17,12 +16,20 @@ import { TimerTextComponent } from '../../component/timer-text/timer-text.compon
 import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { AlertService } from '../../../shared/services/alert.service';
+import { Subscription } from 'rxjs';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule, // ✅ Add this line
+    FormsModule,
     NgOtpInputModule,
     AuthTitleComponent,
     AuthFormComponent,
@@ -33,11 +40,15 @@ import { AlertService } from '../../../shared/services/alert.service';
     NewUserLinkComponent,
     FieldLinkComponent,
     TimerTextComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+
+  isLoading = false;
   currentRole: UserRole = 'owner';
   selectedRole: UserRole = 'owner';
   authTitle = 'Sign In';
@@ -52,9 +63,11 @@ export class LoginComponent {
   otpTimer = 60;
   timerDisplay = '1:00';
   timerInterval: any;
-
+  otpForm!: FormGroup;
   constructor(
     private router: Router,
+    private fb: FormBuilder,
+
     private themeService: ThemeService,
     private authService: AuthService,
     private storageService: StorageService,
@@ -68,31 +81,45 @@ export class LoginComponent {
     this.themeService.setRole(this.selectedRole);
   }
 
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+    this.otpForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      otp: [''],
+    });
+  }
+
   signIn(): void {
-    if (!this.email || !this.password) {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       this.alertService.error('Please enter email and password');
       return;
     }
 
     let payload = {
-      email: this.email,
-      password: this.password,
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password,
     };
+
     this.authService.login(payload).subscribe({
       next: (resp: any) => {
         console.log('resp:--->', resp);
         this.alertService.success('Login successful');
-        // this.goToDashboard();
+        this.goToDashboard();
       },
       error: (err) => {
         console.log(err);
-        // this.alertService.error(err?.error?.message || 'Login failed');
+        this.alertService.error(err?.error?.message || 'Login failed');
       },
     });
   }
 
   onOtpChange(evt: any) {
     this.otp = evt;
+    this.otpForm.patchValue({ otp: evt });
   }
 
   togglePasswordVisibility(): void {
@@ -114,7 +141,7 @@ export class LoginComponent {
   }
 
   goToDashboard(): void {
-    const role = this.selectedRole; // or this.themeService.currentRole
+    const role = this.selectedRole;
 
     switch (role) {
       case 'owner':
@@ -135,15 +162,17 @@ export class LoginComponent {
   }
 
   sendOtp(): void {
-    if (!this.email) {
-      this.alertService.error('Please enter your email');
+    console.log('seda', this.email);
+    if (this.otpForm.invalid) {
+      this.alertService.error('Please enter a valid email');
       return;
     }
 
-    let payload = { email: this.email };
+    const payload = { email: this.otpForm.value.email };
 
     this.authService.sendOtp(payload).subscribe({
       next: (resp: any) => {
+        console.log('monali', this.email);
         console.log('OTP response:--->', resp);
         this.alertService.success(resp?.message || 'OTP sent successfully');
         this.otpSent = true;
@@ -159,13 +188,13 @@ export class LoginComponent {
   }
 
   signInWithOtp(): void {
-    if (!this.email || !this.otp) {
-      this.alertService.error('Enter email and OTP');
+    if (this.otpForm.invalid) {
+      this.alertService.error('Enter a valid email and OTP');
       return;
     }
-    let payload = {
-      email: this.email,
-      otp: this.otp,
+    const payload = {
+      email: this.otpForm.value.email,
+      otp: Number(this.otpForm.value.otp),
     };
     this.authService.verifyOtp(payload).subscribe({
       next: (resp: any) => {
@@ -174,7 +203,7 @@ export class LoginComponent {
         this.goToDashboard();
       },
       error: (err) => {
-        console.log('OTP verify error: ', err);
+        console.log('OTP verify error: ', err.err);
         this.alertService.error(err?.error?.message || 'Invalid OTP');
       },
     });
@@ -184,6 +213,8 @@ export class LoginComponent {
     this.otpSent = false;
     this.emailLocked = false;
     clearInterval(this.timerInterval);
+    this.otpForm.get('email')?.enable();
+    this.otp = '';
     this.otpTimer = 60;
     this.timerDisplay = '1:00';
   }

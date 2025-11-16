@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --aot",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -26,6 +26,7 @@
     "apexcharts": "^3.45.2",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",
+    "i": "^0.3.7",
     "ng-apexcharts": "^1.8.0",
     "ng-otp-input": "^1.9.3",
     "ng-zorro-antd": "^17.3.0",

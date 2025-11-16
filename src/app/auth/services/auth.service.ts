@@ -10,10 +10,27 @@ import { SharedService } from '../../shared.service';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private storage: StorageService) {}
+  constructor(
+    private storageService: StorageService,
+    private http: HttpClient,
+    private storage: StorageService
+  ) {}
   login(data: any) {
     console.log('environment.SERVER_ADDRESS:--', environment.SERVER_ADDRESS);
-    return this.http.post(`${environment.SERVER_ADDRESS}/auth/login/`, data);
+    return this.http
+      .post(`${environment.SERVER_ADDRESS}/auth/login/`, data)
+      .pipe(
+        map((resp: any) => {
+          this.storageService.setToken(resp['content'].access_token);
+          // this.storageService.setCurrentStatus(resp['content'].redirect_to);
+          this.storageService.setUserProfile(resp['content']);
+          return resp;
+        })
+      );
+  }
+
+  signup(data: any): Observable<any> {
+    return this.http.post(`${environment.SERVER_ADDRESS}/user/signup/`, data);
   }
 
   sendOtp(data: any) {
@@ -23,28 +40,20 @@ export class AuthService {
     );
   }
 
-  // OTP verify
   verifyOtp(data: any) {
     return this.http.post(
       `${environment.SERVER_ADDRESS}/auth/password/otp/verify/`,
       data
     );
   }
-  //forget password
-  forgetPassword(email: string): Observable<any> {
-    return this.http.post(
-      `${environment.SERVER_ADDRESS}/auth/forget-password`,
-      { email }
-    );
-  }
-  //reset password
+
   resetPassword(data: any) {
     return this.http.post(
       `${environment.SERVER_ADDRESS}/auth/password/reset/`,
       data
     );
   }
-  //logout
+
   logout(): Observable<any> {
     return this.http.post(`${environment.SERVER_ADDRESS}/auth/logout/`, {});
   }

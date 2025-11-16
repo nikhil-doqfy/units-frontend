@@ -4,8 +4,12 @@
 />
 
 <app-auth-form>
-  <!-- PASSWORD LOGIN FORM -->
-  <form *ngIf="loginMode === 'password'" class="mb-4">
+  <form
+    *ngIf="loginMode === 'password'"
+    class="mb-4"
+    [formGroup]="loginForm"
+    (ngSubmit)="signIn()"
+  >
     <div class="mb-4">
       <label for="email" class="form-label">Email Address</label>
       <div class="iconInput">
@@ -13,9 +17,9 @@
         <input
           class="form-control"
           type="email"
-          name="email"
-          [(ngModel)]="email"
+          formControlName="email"
           placeholder="Enter your email"
+          autocomplete="email"
         />
       </div>
     </div>
@@ -26,9 +30,9 @@
         <input
           class="form-control"
           [type]="showPassword ? 'text' : 'password'"
-          name="password"
-          [(ngModel)]="password"
+          formControlName="password"
           placeholder="Enter your password"
+          autocomplete="username"
         />
         <i class="right" (click)="togglePasswordVisibility()">
           <app-password-show-icon
@@ -43,19 +47,16 @@
       <app-field-link title="Forgot password?" (click)="goToForgotPassword()" />
     </div>
     <div class="frmBtns">
-      <!-- (click)="goToDashboard()" -->
-      <button
-        type="button"
-        class="btn btnCommon btnMinWidth"
-        (click)="signIn()"
-      >
-        Sign In
-      </button>
+      <button type="submit" class="btn btnCommon btnMinWidth">Sign In</button>
     </div>
   </form>
-
-  <!-- OTP LOGIN FORM -->
-  <form *ngIf="loginMode === 'otp'" class="mb-4">
+  <!--signin with otp-->
+  <form
+    *ngIf="loginMode === 'otp'"
+    class="mb-4"
+    [formGroup]="otpForm"
+    (ngSubmit)="signInWithOtp()"
+  >
     <div class="mb-4">
       <label for="email" class="form-label">
         Email Address
@@ -73,10 +74,9 @@
         <input
           class="form-control"
           type="email"
-          name="email"
           placeholder="Enter your email"
-          [(ngModel)]="email"
-          [disabled]="emailLocked"
+          formControlName="email"
+          [readonly]="emailLocked"
         />
         <button type="button" *ngIf="!otpSent" (click)="sendOtp()">
           Send OTP
@@ -92,6 +92,7 @@
         [config]="{
           length: 6,
           placeholder: '',
+
           disableAutoFocus: true,
           allowNumbersOnly: true
         }"
@@ -110,14 +111,12 @@
         (click)="onResendOtp()"
       />
     </div>
-    <!-- (click)="goToDashboard()" -->
 
     <div class="frmBtns">
       <button
-        type="button"
+        type="submit"
         [class.disabled]="!otpSent"
         class="btn btnCommon btnMinWidth"
-        (click)="signInWithOtp()"
       >
         Sign In
       </button>

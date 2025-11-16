@@ -6,8 +6,10 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './auth-form-card.component.html',
-  styleUrl: './auth-form-card.component.css'
+  styleUrl: './auth-form-card.component.css',
 })
 export class AuthFormCardComponent {
   @Input() size: 'small' | 'large' | undefined;
+
+  @Input() customClass: string = '';
 }
