@@ -1,491 +1,731 @@
 <ng-container *ngIf="!showDetailView">
-    <div *ngIf="currentRole === 'owner' || currentRole === 'property-manager'" class="mb-3 d-xl-none">
-        <div class="row align-items-center justify-content-between g-3">
-            <div class="col">
-                <app-dash-title title="Properties" />
-            </div>
-            <div class="col-auto">
-                <button type="button" class="btn btnCommon" (click)="goToAddProperty()"><i><app-plus-icon /></i>Add
-                    Property</button>
-            </div>
-        </div>
+  <div
+    *ngIf="currentRole === 'owner' || currentRole === 'property-manager'"
+    class="mb-3 d-xl-none"
+  >
+    <div class="row align-items-center justify-content-between g-3">
+      <div class="col">
+        <app-dash-title title="Properties" />
+      </div>
+      <div class="col-auto">
+        <button type="button" class="btn btnCommon" (click)="goToAddProperty()">
+          <i><app-plus-icon /></i>Add Property
+        </button>
+      </div>
     </div>
-    <div class="cmmnTblOuter">
-        <div class="cmmnTblHdr">
-            <div class="row g-3 align-items-center">
-                <div class="col-md">
-                    <div *ngIf="currentRole === 'tenant'" class="cmmnTblRadio">
-                        <label>
-                            <input type="radio" name="property" value="my-properties" [(ngModel)]="propertyView" />
-                            <span>My Properties <i>(2)</i></span>
-                        </label>
-                        <label>
-                            <input type="radio" name="property" value="all-properties" [(ngModel)]="propertyView" />
-                            <span>All Properties <i>(240)</i> <button type="button"><app-refresh-icon /></button></span>
-                        </label>
-                    </div>
-                    <ng-container *ngIf="currentRole === 'owner' || currentRole === 'property-manager'">
-                        <app-table-title title="All Properties" subtitle="(240)"></app-table-title>
-                    </ng-container>
-                </div>
-                <div class="col-md-auto">
-                    <div class="d-flex align-items-center gap-2 gap-md-3">
-                        <ng-container *ngIf="propertyView === 'my-properties'">
-                            <app-custom-select
-                                [options]="['Falcom city', 'Novatis AG...', 'Agriculture', 'Honda', 'TVS', 'Samsung']"
-                                [placeholder]="selected" [selectedOption]="selected"
-                                (optionSelected)="onOptionSelected($event)" [isFilter]="true">
-                            </app-custom-select>
-                        </ng-container>
-                        <ng-container *ngIf="propertyView === 'all-properties'">
-                            <app-table-search placeholder="Search here..." />
-                            <app-table-filter-btn title="Filter" [hasIcon]="true" (clicked)="handleFilterClick()">
-                                <app-filter-icon />
-                            </app-table-filter-btn>
-                            <app-table-filter-btn title="Export" [hasIcon]="true" (clicked)="handleExportClick()">
-                                <app-export-icon />
-                            </app-table-filter-btn>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
+  </div>
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <div *ngIf="currentRole === 'tenant'" class="cmmnTblRadio">
+            <label>
+              <input
+                type="radio"
+                name="property"
+                value="my-properties"
+                [(ngModel)]="propertyView"
+                (change)="onPropertyViewChange()"
+              />
+              <span>My Properties <i>(2)</i></span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="property"
+                value="all-properties"
+                [(ngModel)]="propertyView"
+                (change)="onPropertyViewChange()"
+              />
+              <span
+                >All Properties <i>({{ totalRecords }})</i>
+                <button type="button"><app-refresh-icon /></button
+              ></span>
+            </label>
+          </div>
+          <ng-container
+            *ngIf="
+              currentRole === 'owner' || currentRole === 'property-manager'
+            "
+          >
+            <app-table-title
+              title="All Properties"
+              [subtitle]="'(' + totalRecords + ')'"
+              (onRefresh)="onRefresh()"
+            ></app-table-title>
+          </ng-container>
         </div>
-        <div class="cmmnTblBody">
-            <!-- My Properties -->
-            <app-white-card *ngIf="propertyView === 'my-properties'" class="myProprtyCard">
-                <app-property-view-card [propertyImages]="property.propertyImages" [name]="property.name"
-                    [location]="property.location" [status]="property.status" [price]="property.rent"
-                    [bhk]="property.bhk" [sqft]="property.sqft" [sections]="property.sections">
-                </app-property-view-card>
-                <div class="mt-4">
-                    <app-card-title title="All Documents" />
-                    <div class="commonTabs mt-2">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="rentalDocument-tab" data-bs-toggle="tab"
-                                    data-bs-target="#rentalDocument-tab-pane" type="button" role="tab"
-                                    aria-controls="rentalDocument-tab-pane" aria-selected="true">Rental
-                                    Document</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="tenantDoc-tab" data-bs-toggle="tab"
-                                    data-bs-target="#tenantDoc-tab-pane" type="button" role="tab"
-                                    aria-controls="tenantDoc-tab-pane" aria-selected="false">Tenant Doc</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="ejariCerificates-tab" data-bs-toggle="tab"
-                                    data-bs-target="#ejariCerificates-tab-pane" type="button" role="tab"
-                                    aria-controls="ejariCerificates-tab-pane" aria-selected="false">Ejari
-                                    Cerificates</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="ownerDocs-tab" data-bs-toggle="tab"
-                                    data-bs-target="#ownerDocs-tab-pane" type="button" role="tab"
-                                    aria-controls="ownerDocs-tab-pane" aria-selected="false">Owner Docs</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="cheque-tab" data-bs-toggle="tab"
-                                    data-bs-target="#cheque-tab-pane" type="button" role="tab"
-                                    aria-controls="cheque-tab-pane" aria-selected="false">Cheque</button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="commonTabsContent">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="rentalDocument-tab-pane" role="tabpanel"
-                                aria-labelledby="rentalDocument-tab" tabindex="0">
-                                <div class="row g-2">
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Finances.png" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="tenantDoc-tab-pane" role="tabpanel"
-                                aria-labelledby="tenantDoc-tab" tabindex="0">
-                                <div class="row g-2">
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Finances.png" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="ejariCerificates-tab-pane" role="tabpanel"
-                                aria-labelledby="ejariCerificates-tab" tabindex="0">
-                                <div class="row g-2">
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Finances.png" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="ownerDocs-tab-pane" role="tabpanel"
-                                aria-labelledby="ownerDocs-tab" tabindex="0">
-                                <div class="row g-2">
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Finances.png" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="cheque-tab-pane" role="tabpanel" aria-labelledby="cheque-tab"
-                                tabindex="0">
-                                <div class="row g-2">
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Finances.png" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <ng-container *ngIf="propertyView === 'my-properties'">
+              <app-custom-select
+                [options]="[
+                  'Falcom city',
+                  'Novatis AG...',
+                  'Agriculture',
+                  'Honda',
+                  'TVS',
+                  'Samsung'
+                ]"
+                [placeholder]="selected"
+                [selectedOption]="selected"
+                (optionSelected)="onOptionSelected($event)"
+                [isFilter]="true"
+              >
+              </app-custom-select>
+            </ng-container>
+            <ng-container *ngIf="propertyView === 'all-properties'">
+              <app-table-search
+                placeholder="Search here..."
+                (onValueChange)="onPropertySearch$.next($event)"
+              />
+              <app-table-filter-btn
+                title="Filter"
+                [hasIcon]="true"
+                (clicked)="handleFilterClick()"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+              <app-table-filter-btn
+                title="Export"
+                [hasIcon]="true"
+                (clicked)="handleExportClick()"
+              >
+                <app-export-icon />
+              </app-table-filter-btn>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cmmnTblBody">
+      <!-- My Properties -->
+      <app-white-card
+        *ngIf="propertyView === 'my-properties'"
+        class="myProprtyCard"
+      >
+        <app-property-view-card
+          [propertyImages]="property.propertyImages"
+          [name]="property.name"
+          [location]="property.location"
+          [status]="property.status"
+          [price]="property.rent"
+          [bhk]="property.bhk"
+          [sqft]="property.sqft"
+          [sections]="property.sections"
+        >
+        </app-property-view-card>
+        <div class="mt-4">
+          <app-card-title title="All Documents" />
+          <div class="commonTabs mt-2">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="rentalDocument-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#rentalDocument-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="rentalDocument-tab-pane"
+                  aria-selected="true"
+                >
+                  Rental Document
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="tenantDoc-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#tenantDoc-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="tenantDoc-tab-pane"
+                  aria-selected="false"
+                >
+                  Tenant Doc
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="ejariCerificates-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#ejariCerificates-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="ejariCerificates-tab-pane"
+                  aria-selected="false"
+                >
+                  Ejari Cerificates
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="ownerDocs-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#ownerDocs-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="ownerDocs-tab-pane"
+                  aria-selected="false"
+                >
+                  Owner Docs
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="cheque-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#cheque-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="cheque-tab-pane"
+                  aria-selected="false"
+                >
+                  Cheque
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="commonTabsContent">
+            <div class="tab-content" id="myTabContent">
+              <div
+                class="tab-pane fade show active"
+                id="rentalDocument-tab-pane"
+                role="tabpanel"
+                aria-labelledby="rentalDocument-tab"
+                tabindex="0"
+              >
+                <div class="row g-2">
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Contract.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Finances.png"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Marketing.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="LaunchPlan.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
                 </div>
-            </app-white-card>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="tenantDoc-tab-pane"
+                role="tabpanel"
+                aria-labelledby="tenantDoc-tab"
+                tabindex="0"
+              >
+                <div class="row g-2">
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Contract.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Finances.png"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Marketing.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="LaunchPlan.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="ejariCerificates-tab-pane"
+                role="tabpanel"
+                aria-labelledby="ejariCerificates-tab"
+                tabindex="0"
+              >
+                <div class="row g-2">
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Contract.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Finances.png"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Marketing.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="LaunchPlan.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="ownerDocs-tab-pane"
+                role="tabpanel"
+                aria-labelledby="ownerDocs-tab"
+                tabindex="0"
+              >
+                <div class="row g-2">
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Contract.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Finances.png"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Marketing.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="LaunchPlan.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="cheque-tab-pane"
+                role="tabpanel"
+                aria-labelledby="cheque-tab"
+                tabindex="0"
+              >
+                <div class="row g-2">
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Contract.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Finances.png"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="Marketing.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <app-document-type-item
+                      title="LaunchPlan.pdf"
+                      size="1.2 MB"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-white-card>
 
-            <!-- All Properties -->
-            <div *ngIf="propertyView === 'all-properties'" class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th *ngIf="currentRole === 'property-manager'">Property ID</th>
-                            <th><button type="button">Property Name <i><app-sorting-icon /></i></button></th>
-                            <th *ngIf="currentRole === 'owner' || currentRole === 'property-manager'"><button
-                                    type="button">Tenant Name <i><app-sorting-icon /></i></button></th>
-                            <th *ngIf="currentRole === 'owner'">Agreement
-                                Expiration
-                            </th>
-                            <th *ngIf="currentRole === 'tenant' || currentRole === 'property-manager'">Owner Name</th>
-                            <th *ngIf="currentRole === 'property-manager' || currentRole === 'tenant'">Tenancy Status
-                            </th>
-                            <th *ngIf="currentRole === 'owner' || currentRole === 'tenant'">Dimension</th>
-                            <th *ngIf="currentRole === 'owner' || currentRole === 'tenant'">PMC</th>
-                            <th *ngIf="currentRole === 'owner' || currentRole === 'property-manager'" width="200"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td *ngIf="currentRole === 'property-manager'">133</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-1.png" size="md"
-                                    title="Novatis AG..." [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'">
-                                <app-table-img-item img="../../../../assets/user/user-1.png" title="Jensi" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner'">
-                                <app-badge title="Ongoing" status="green" />
-                            </td>
-                            <td *ngIf="currentRole === 'tenant' || currentRole === 'property-manager'">Ali Musfiq Rahman
-                            </td>
-                            <td *ngIf="currentRole === 'property-manager' || currentRole === 'tenant'">
-                                <app-badge title="Available" status="green" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">1BHK</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">3g real estate</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'" align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td *ngIf="currentRole === 'property-manager'">1233</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-2.png" size="md"
-                                    title="Agriculture...." [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'">
-                                <app-table-img-item img="../../../../assets/user/user-2.png" title="Richard" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner'">
-                                <app-badge title="Expired" status="red" />
-                            </td>
-                            <td *ngIf="currentRole === 'tenant' || currentRole === 'property-manager'">Ali Musfiq Rahman
-                            </td>
-                            <td *ngIf="currentRole === 'property-manager' || currentRole === 'tenant'">
-                                <app-badge title="Not Available" status="red" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">2BHK</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">3g real estate</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'" align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td *ngIf="currentRole === 'property-manager'">1233</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-2.png" size="md"
-                                    title="Honda..." [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'">
-                                <app-table-img-item img="../../../../assets/user/user-3.png" title="Thaomas" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner'">
-                                <app-badge title="About to expire" status="orange" />
-                            </td>
-                            <td *ngIf="currentRole === 'tenant' || currentRole === 'property-manager'">Ali Musfiq Rahman
-                            </td>
-                            <td *ngIf="currentRole === 'property-manager' || currentRole === 'tenant'">
-                                <app-badge title="Available" status="green" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">5BHK</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">3g real estate</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'" align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td *ngIf="currentRole === 'property-manager'">123</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-2.png" size="md"
-                                    title="TVS" [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'">
-                                <app-table-img-item img="../../../../assets/user/user-4.png" title="Akshay" />
-                            </td>
-                            <td *ngIf=" currentRole==='owner'">
-                                <app-badge title=" Ongoing" status="green" />
-                            </td>
-                            <td *ngIf="currentRole === 'tenant' || currentRole === 'property-manager'">Ali Musfiq Rahman
-                            </td>
-                            <td *ngIf="currentRole === 'property-manager' || currentRole === 'tenant'">
-                                <app-badge title="Available" status="green" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">1BHK</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">3g real estate</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'" align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td *ngIf="currentRole === 'property-manager'">134</td>
-                            <td>
-                                <app-table-img-item img="../../../../assets/property/property-list-2.png" size="md"
-                                    title="Samsung" [clickable]="true" (clicked)="handleViewClick()" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'">
-                                <app-table-img-item img="../../../../assets/user/user-5.png" title="Avanshi" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner'">
-                                <app-badge title="Ongoing" status="green" />
-                            </td>
-                            <td *ngIf="currentRole === 'tenant' || currentRole === 'property-manager'">Ali Musfiq Rahman
-                            </td>
-                            <td *ngIf="currentRole === 'property-manager' || currentRole === 'tenant'">
-                                <app-badge title="Available" status="green" />
-                            </td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">1BHK</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">3g real estate</td>
-                            <td *ngIf="currentRole === 'owner' || currentRole === 'property-manager'" align="center">
-                                <div class="cmmnTblActnBtnDiv">
-                                    <app-table-action-btn type="edit" (clicked)="handleEditClick()" />
-                                    <app-table-action-btn type="delete" (clicked)="handleDeleteClick()" />
-                                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                                        (actionClicked)="handleDropdownAction($event)">
-                                    </app-table-action-dropdown>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="cmmnTblFtr" *ngIf="propertyView === 'all-properties'">
-            <app-table-select />
-            <app-table-pagination />
-        </div>
+      <!-- All Properties -->
+      <div *ngIf="propertyView === 'all-properties'" class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th *ngIf="currentRole === 'property-manager'">Property ID</th>
+              <th>
+                <button type="button">
+                  Property Name <i><app-sorting-icon /></i>
+                </button>
+              </th>
+              <th
+                *ngIf="
+                  currentRole === 'owner' || currentRole === 'property-manager'
+                "
+              >
+                <button type="button">
+                  Tenant Name <i><app-sorting-icon /></i>
+                </button>
+              </th>
+              <th *ngIf="currentRole === 'owner'">Agreement Expiration</th>
+              <th
+                *ngIf="
+                  currentRole === 'tenant' || currentRole === 'property-manager'
+                "
+              >
+                Owner Name
+              </th>
+              <th
+                *ngIf="
+                  currentRole === 'property-manager' || currentRole === 'tenant'
+                "
+              >
+                Tenancy Status
+              </th>
+              <th *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
+                Dimension
+              </th>
+              <th *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
+                PMC
+              </th>
+              <th
+                *ngIf="
+                  currentRole === 'owner' || currentRole === 'property-manager'
+                "
+                width="200"
+              ></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (property of propertiesList; track $index) {
+            <tr>
+              <td *ngIf="currentRole === 'property-manager'">
+                {{ property.id }}
+              </td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-2.png"
+                  size="md"
+                  [title]="property.property_name"
+                  [clickable]="true"
+                  (clicked)="handleViewClick()"
+                />
+              </td>
+              <td
+                *ngIf="
+                  currentRole === 'owner' || currentRole === 'property-manager'
+                "
+              >
+                <app-table-img-item
+                  img="../../../../assets/user/user-2.png"
+                  [title]="property.tenants?.[0]?.tenant_name || 'N/A'"
+                />
+              </td>
+              <td *ngIf="currentRole === 'owner'">
+                <app-badge [title]="property.rental_status" status="green" />
+              </td>
+              <td
+                *ngIf="
+                  currentRole === 'tenant' || currentRole === 'property-manager'
+                "
+              >
+                {{ property?.owner_info?.owner_name || "N/A" }}
+              </td>
+              <td
+                *ngIf="
+                  currentRole === 'property-manager' || currentRole === 'tenant'
+                "
+              >
+                <app-badge
+                  [title]="property.rental_status"
+                  [status]="
+                    property.rental_status === 'AVAILABLE' ? 'green' : 'red'
+                  "
+                />
+              </td>
+              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
+                {{ property.bedrooms }}
+              </td>
+              <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
+                {{ property?.pmc_info?.company_name || "N/A" }}
+              </td>
+              <td
+                *ngIf="
+                  currentRole === 'owner' || currentRole === 'property-manager'
+                "
+                align="center"
+              >
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn
+                    type="edit"
+                    (clicked)="handleEditClick()"
+                  />
+                  <app-table-action-btn
+                    type="delete"
+                    (clicked)="handleDeleteClick()"
+                  />
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </div>
+              </td>
+            </tr>
+            }@empty {
+            <tr>
+              <td colspan="20" align="center">No Data to Show</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
+    <div class="cmmnTblFtr" *ngIf="propertyView === 'all-properties'">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
 </ng-container>
 
 <ng-container *ngIf="showDetailView">
-    <app-white-card>
-        <app-property-view-card [propertyImages]="property.propertyImages" [name]="property.name"
-            [location]="property.location" [status]="property.status" [price]="property.rent" [bhk]="property.bhk"
-            [sqft]="property.sqft" [sections]="property.sections" [showBack]="true" (back)="handleBackClick()">
-        </app-property-view-card>
+  <app-white-card>
+    <app-property-view-card
+      [propertyImages]="property.propertyImages"
+      [name]="property.name"
+      [location]="property.location"
+      [status]="property.status"
+      [price]="property.rent"
+      [bhk]="property.bhk"
+      [sqft]="property.sqft"
+      [sections]="property.sections"
+      [showBack]="true"
+      (back)="handleBackClick()"
+    >
+    </app-property-view-card>
+  </app-white-card>
+  <div class="mt-3">
+    <app-white-card title="All Documents">
+      <div class="commonTabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="rentalDocument-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#rentalDocument-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="rentalDocument-tab-pane"
+              aria-selected="true"
+            >
+              Rental Document
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="tenantDoc-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tenantDoc-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="tenantDoc-tab-pane"
+              aria-selected="false"
+            >
+              Tenant Doc
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="ejariCerificates-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#ejariCerificates-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="ejariCerificates-tab-pane"
+              aria-selected="false"
+            >
+              Ejari Cerificates
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="ownerDocs-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#ownerDocs-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="ownerDocs-tab-pane"
+              aria-selected="false"
+            >
+              Owner Docs
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="cheque-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#cheque-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="cheque-tab-pane"
+              aria-selected="false"
+            >
+              Cheque
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="commonTabsContent">
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="rentalDocument-tab-pane"
+            role="tabpanel"
+            aria-labelledby="rentalDocument-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="tenantDoc-tab-pane"
+            role="tabpanel"
+            aria-labelledby="tenantDoc-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="ejariCerificates-tab-pane"
+            role="tabpanel"
+            aria-labelledby="ejariCerificates-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="ownerDocs-tab-pane"
+            role="tabpanel"
+            aria-labelledby="ownerDocs-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="cheque-tab-pane"
+            role="tabpanel"
+            aria-labelledby="cheque-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </app-white-card>
-    <div class="mt-3">
-        <app-white-card title="All Documents">
-            <div class="commonTabs">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="rentalDocument-tab" data-bs-toggle="tab"
-                            data-bs-target="#rentalDocument-tab-pane" type="button" role="tab"
-                            aria-controls="rentalDocument-tab-pane" aria-selected="true">Rental Document</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="tenantDoc-tab" data-bs-toggle="tab"
-                            data-bs-target="#tenantDoc-tab-pane" type="button" role="tab"
-                            aria-controls="tenantDoc-tab-pane" aria-selected="false">Tenant Doc</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="ejariCerificates-tab" data-bs-toggle="tab"
-                            data-bs-target="#ejariCerificates-tab-pane" type="button" role="tab"
-                            aria-controls="ejariCerificates-tab-pane" aria-selected="false">Ejari Cerificates</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="ownerDocs-tab" data-bs-toggle="tab"
-                            data-bs-target="#ownerDocs-tab-pane" type="button" role="tab"
-                            aria-controls="ownerDocs-tab-pane" aria-selected="false">Owner Docs</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="cheque-tab" data-bs-toggle="tab" data-bs-target="#cheque-tab-pane"
-                            type="button" role="tab" aria-controls="cheque-tab-pane"
-                            aria-selected="false">Cheque</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="commonTabsContent">
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="rentalDocument-tab-pane" role="tabpanel"
-                        aria-labelledby="rentalDocument-tab" tabindex="0">
-                        <div class="row g-2">
-                            <div class="col-auto">
-                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Finances.png" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="tenantDoc-tab-pane" role="tabpanel" aria-labelledby="tenantDoc-tab"
-                        tabindex="0">
-                        <div class="row g-2">
-                            <div class="col-auto">
-                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Finances.png" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="ejariCerificates-tab-pane" role="tabpanel"
-                        aria-labelledby="ejariCerificates-tab" tabindex="0">
-                        <div class="row g-2">
-                            <div class="col-auto">
-                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Finances.png" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="ownerDocs-tab-pane" role="tabpanel" aria-labelledby="ownerDocs-tab"
-                        tabindex="0">
-                        <div class="row g-2">
-                            <div class="col-auto">
-                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Finances.png" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="cheque-tab-pane" role="tabpanel" aria-labelledby="cheque-tab"
-                        tabindex="0">
-                        <div class="row g-2">
-                            <div class="col-auto">
-                                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Finances.png" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-                            </div>
-                            <div class="col-auto">
-                                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </app-white-card>
-    </div>
+  </div>
 </ng-container>
