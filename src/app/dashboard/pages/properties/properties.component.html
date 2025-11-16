@@ -443,7 +443,12 @@
                 />
               </td>
               <td *ngIf="currentRole === 'owner'">
-                <app-badge [title]="property.rental_status" status="green" />
+                <app-badge
+                  [title]="property.rental_status"
+                  [status]="
+                    property.rental_status === 'Available' ? 'green' : 'red'
+                  "
+                />
               </td>
               <td
                 *ngIf="
@@ -460,7 +465,7 @@
                 <app-badge
                   [title]="property.rental_status"
                   [status]="
-                    property.rental_status === 'AVAILABLE' ? 'green' : 'red'
+                    property.rental_status === 'Available' ? 'green' : 'red'
                   "
                 />
               </td>
