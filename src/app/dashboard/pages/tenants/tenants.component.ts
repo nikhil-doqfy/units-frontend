@@ -41,7 +41,11 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
 import { TranslateModule } from '@ngx-translate/core';
+<<<<<<< HEAD
 import { NoDataComponent } from '../../../no-data/no-data.component';
+=======
+import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
+>>>>>>> e5fbc0a5dfdcac57bcfef1867fcf1c1b190e09d0
 
 @Component({
   selector: 'app-tenants',
@@ -68,7 +72,11 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
     WhiteCardComponent,
     DocumentTypeItemComponent,
     TranslateModule,
+<<<<<<< HEAD
     NoDataComponent,
+=======
+    MaskPhonePipe,
+>>>>>>> e5fbc0a5dfdcac57bcfef1867fcf1c1b190e09d0
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',

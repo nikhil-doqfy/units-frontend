@@ -1,0 +1,28 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { SharedService } from '../../shared.service';
+import { environment } from '../../../environments/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class StaffService {
+  private http = inject(HttpClient);
+  private sharedService = inject(SharedService);
+  private SERVER_ADDRESS = environment.SERVER_ADDRESS;
+
+  constructor() { }
+
+
+
+
+  // ------------------------- Access staff role details -------------------------
+    accessStaffRoleDetails(params: Record<string, any>): Observable<any> {
+      const queryString = this.sharedService.getQueryString(params);
+      return this.http.get(
+        `${this.SERVER_ADDRESS}/staff/view/${queryString}`
+      );
+    }
+  
+}

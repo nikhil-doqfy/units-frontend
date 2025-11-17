@@ -22,4 +22,13 @@ export class UserService {
   editUserProfile(data: Record<string, any>): Observable<any> {
     return this.http.put(`${this.SERVER_ADDRESS}/user/profile/view`, data);
   }
+
+  // ------------------------- Access user service management -------------------------
+  accessUserManagement(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/user/user/management${queryString}`
+    );
+  }
+
 }

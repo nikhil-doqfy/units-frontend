@@ -84,8 +84,8 @@ export class MyProfileComponent {
     this.profile = {
       name: content?.name,
       email: content?.email,
-      contact: content?.contact,
-      role: content?.role,
+      contact: content?.contact_number,
+      role: content?.user_type,
       password: '************',
     };
 
