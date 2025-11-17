@@ -1,7 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
-import { NgApexchartsModule, ApexChart, ApexNonAxisChartSeries, ApexResponsive, ApexDataLabels, ApexLegend, ApexTooltip, ApexFill, ApexStroke, ApexPlotOptions } from "ng-apexcharts";
+import {
+  NgApexchartsModule,
+  ApexChart,
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexDataLabels,
+  ApexLegend,
+  ApexTooltip,
+  ApexFill,
+  ApexStroke,
+  ApexPlotOptions,
+} from 'ng-apexcharts';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -20,12 +32,11 @@ export type ChartOptions = {
 @Component({
   selector: 'app-donut-chart',
   standalone: true,
-  imports: [CommonModule, NgApexchartsModule],
+  imports: [CommonModule, NgApexchartsModule, TranslateModule],
   templateUrl: './donut.component.html',
-  styleUrls: ['./donut.component.css']
+  styleUrls: ['./donut.component.css'],
 })
 export class DonutChartComponent {
-
   @Input() vacancy = 88;
   @Input() occupied = 12;
 
@@ -55,14 +66,12 @@ export class DonutChartComponent {
       colors = ['#3D7BFF', '#EFEFEF'];
       labels = ['Vacancy', 'Remaining'];
       chartHeight = 240;
-    }
-    else if (this.selectedMode === 'occupied') {
+    } else if (this.selectedMode === 'occupied') {
       series = [this.occupied, 100 - this.occupied];
       colors = ['#FF8A41', '#EFEFEF'];
       labels = ['Occupied', 'Remaining'];
       chartHeight = 240;
-    }
-    else {
+    } else {
       series = [this.vacancy, this.occupied];
       colors = ['#3D7BFF', '#FF8A41'];
       labels = ['Vacancy', 'Occupied'];
@@ -74,32 +83,32 @@ export class DonutChartComponent {
       labels,
       colors,
       chart: {
-        type: "donut",
-        height: chartHeight
+        type: 'donut',
+        height: chartHeight,
       },
       plotOptions: {
         pie: {
           donut: {
-            size: "50%",
+            size: '50%',
             labels: {
               show: true,
               total: {
                 show: true,
-                label: "",
-                fontSize: "16px",
+                label: '',
+                fontSize: '16px',
                 formatter: () =>
                   this.selectedMode === 'vacancy'
                     ? `${this.vacancy}%`
                     : this.selectedMode === 'occupied'
-                      ? `${this.occupied}%`
-                      : `${100}%`
-              }
-            }
-          }
-        }
+                    ? `${this.occupied}%`
+                    : `${100}%`,
+              },
+            },
+          },
+        },
       },
       stroke: {
-        width: 0
+        width: 0,
       },
       dataLabels: { enabled: false },
       legend: {
@@ -107,13 +116,13 @@ export class DonutChartComponent {
         formatter: (seriesName: string, opts: any) => {
           const value = opts.w.globals.series[opts.seriesIndex];
           return `${seriesName} - ${value}%`;
-        }
+        },
       },
       tooltip: {
         y: {
-          formatter: (val: number) => `${val}%`
-        }
-      }
+          formatter: (val: number) => `${val}%`,
+        },
+      },
     };
   }
 }

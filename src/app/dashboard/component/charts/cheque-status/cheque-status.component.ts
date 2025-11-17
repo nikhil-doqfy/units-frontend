@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InfoIconComponent } from "../../icons/info-icon/info-icon.component";
+import { InfoIconComponent } from '../../icons/info-icon/info-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cheque-status',
   standalone: true,
-  imports: [CommonModule, InfoIconComponent],
+  imports: [CommonModule, InfoIconComponent, TranslateModule],
   templateUrl: './cheque-status.component.html',
-  styleUrls: ['./cheque-status.component.css']
+  styleUrls: ['./cheque-status.component.css'],
 })
 export class ChequeStatusComponent {
-
   totalCheques = 6000;
 
   realized = 5680;
@@ -37,7 +37,6 @@ export class ChequeStatusComponent {
     { count: 200, label: '30 days', bg: '#D7F9DC' },
     { count: 200, label: '60 days', bg: '#DAF9F2' },
     { count: 10, label: '90 days', bg: '#E0EDFD' },
-    { count: 10, label: '>90 days', bg: '#F1E8FD' }
+    { count: 10, label: '>90 days', bg: '#F1E8FD' },
   ];
-
 }

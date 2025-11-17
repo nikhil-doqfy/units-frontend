@@ -6,7 +6,10 @@
     <div class="barWrapper">
       <!-- REALIZED half -->
       <div class="halfBar">
-        <div class="realizedRemaining" [style.width.%]="realizedRemainingPercent"></div>
+        <div
+          class="realizedRemaining"
+          [style.width.%]="realizedRemainingPercent"
+        ></div>
         <div class="realizedFill" [style.width.%]="realizedFillPercent"></div>
         <div class="halfBarHover">
           <span></span>
@@ -27,7 +30,10 @@
             <strong>{{ bounced }} / {{ totalCheques }}</strong>
           </div>
         </div>
-        <div class="bouncedRemaining" [style.width.%]="bouncedRemainingPercent"></div>
+        <div
+          class="bouncedRemaining"
+          [style.width.%]="bouncedRemainingPercent"
+        ></div>
       </div>
     </div>
 
@@ -39,14 +45,18 @@
 
   <!-- Aging Blocks -->
   <div class="agingBlockOuter">
-    <div class="agingBlock" *ngFor="let item of agingData" [style.background]="item.bg">
+    <div
+      class="agingBlock"
+      *ngFor="let item of agingData"
+      [style.background]="item.bg"
+    >
       <strong>{{ item.count }}</strong>
       <span>{{ item.label }}</span>
     </div>
   </div>
 
   <div class="chequeStatNote">
-    <i><app-info-icon /></i> The above mentioned are bounced aging cheques
+    <i><app-info-icon /></i
+    >{{ "THE ABOVE MENTIONED ARE BOUNCED AGING CHEQUES" | translate }}
   </div>
-
 </div>

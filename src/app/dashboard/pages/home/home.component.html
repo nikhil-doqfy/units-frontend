@@ -1,368 +1,525 @@
-<app-white-card title="Your Statistics">
-    <div class="row g-3">
-        <div class="col-lg-3">
-            <app-stats-card [stats]="[
-                { label: 'Monthly Commission', value: 'AED 1,20,573' }
-            ]">
-                <ng-container icon>
-                    <app-graph-stats-icon />
-                </ng-container>
-                <ng-container action>
-                    <app-custom-select [options]="['Sep 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025']"
-                        [placeholder]="selectedMonthly" [selectedOption]="selectedMonthly"
-                        (optionSelected)="onOptionSelectedMonthly($event)" [isFilter]="true" [isPlain]="true">
-                    </app-custom-select>
-                </ng-container>
-            </app-stats-card>
-        </div>
-        <div class="col-lg-9">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <app-stats-card [title]="'Properties'" [stats]="[
-                        { label: 'Total', value: '240' },
-                        { label: 'Rented', value: '12' },
-                        { label: 'Vacant', value: '438' }
-                    ]">
-                        <ng-container icon>
-                            <app-property-stats-icon />
-                        </ng-container>
-                    </app-stats-card>
-                </div>
-                <div class="col-md-6">
-                    <app-stats-card [title]="'Tenants'" [stats]="[
-                        { label: 'Active', value: '450' },
-                        { label: 'Upcoming Renewals', value: '180' },
-                        { label: 'Negotiations', value: '438' }
-                    ]">
-                        <ng-container icon>
-                            <app-tenant-stats-icon />
-                        </ng-container>
-                    </app-stats-card>
-                </div>
-            </div>
-        </div>
+<app-white-card title="{{ 'YOUR_STATISTICS' | translate }}">
+  <div class="row g-3">
+    <div class="col-lg-3">
+      <app-stats-card
+        [stats]="[
+          {
+            label: ('MONTHLY_COMMISSION' | translate),
+            value: ('AED 1,20,573' | translate)
+          }
+        ]"
+      >
+        <ng-container icon>
+          <app-graph-stats-icon />
+        </ng-container>
+        <ng-container action>
+          <app-custom-select
+            [options]="['Sep 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025']"
+            [placeholder]="selectedMonthly"
+            [selectedOption]="selectedMonthly"
+            (optionSelected)="onOptionSelectedMonthly($event)"
+            [isFilter]="true"
+            [isPlain]="true"
+          >
+          </app-custom-select>
+        </ng-container>
+      </app-stats-card>
     </div>
+    <div class="col-lg-9">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <app-stats-card
+            [title]="'PROPERTIES' | translate"
+            [stats]="[
+              { label: ('TOTAL' | translate), value: '240' },
+              { label: ('RENTED' | translate), value: '12' },
+              { label: ('VACANT' | translate), value: '438' }
+            ]"
+          >
+            <ng-container icon>
+              <app-property-stats-icon />
+            </ng-container>
+          </app-stats-card>
+        </div>
+        <div class="col-md-6">
+          <app-stats-card
+            [title]="'TENANTS' | translate"
+            [stats]="[
+              { label: ('ACTIVE' | translate), value: '450' },
+              { label: ('UPCOMING RENEWALS' | translate), value: '180' },
+              { label: ('NEGOTIATIONS' | translate), value: '438' }
+            ]"
+          >
+            <ng-container icon>
+              <app-tenant-stats-icon />
+            </ng-container>
+          </app-stats-card>
+        </div>
+      </div>
+    </div>
+  </div>
 </app-white-card>
 
 <div class="mt-3">
-    <div class="row g-3">
-        <div class="col-lg-5">
-            <app-white-card title="Most Revenue Generating Properties">
-                <app-progress-bar-table [rows]="propertyData"></app-progress-bar-table>
-            </app-white-card>
-        </div>
-        <div class="col-lg-7">
-            <app-white-card title="Revenue" subtitle="Monthly recurring revenue - AED 54,352" [showActions]="true"
-                customClass="pb-0">
-                <ng-container card-actions>
-                    <app-filter-popup-btn>
-                        <ng-container form>
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Location</label>
-                                        <app-custom-select
-                                            [options]="['All', 'Dubai hills golf club', 'Silicon central mall', 'Falcon city of wonders', 'Majan']"
-                                            [selectedOption]="selectedFilter"
-                                            (optionSelected)="onOptionSelectedFilter($event)">
-                                        </app-custom-select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Unit</label>
-                                        <app-custom-select [options]="['Sep 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025']"
-                                            [selectedOption]="selectedFilter"
-                                            (optionSelected)="onOptionSelectedFilter($event)">
-                                        </app-custom-select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Date Range</label>
-                                        <label class="form-label small">From</label>
-                                        <div class="datePicker">
-                                            <input class="form-control" placeholder="DD-MM-YYYY" name="dp"
-                                                [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" />
-                                            <button type="button" (click)="d.toggle()">
-                                                <app-date-icon />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label d-none d-md-block">&nbsp;</label>
-                                        <label class="form-label small">To</label>
-                                        <div class="datePicker">
-                                            <input class="form-control" placeholder="DD-MM-YYYY" name="dp"
-                                                [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" />
-                                            <button type="button" (click)="d.toggle()">
-                                                <app-date-icon />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </ng-container>
-                        <ng-container action>
-                            <button type="button" class="btn btnCommon">Apply</button>
-                        </ng-container>
-                    </app-filter-popup-btn>
-                </ng-container>
-                <app-column-chart></app-column-chart>
-            </app-white-card>
-        </div>
+  <div class="row g-3">
+    <div class="col-lg-5">
+      <app-white-card title="{{ 'MOST_REVENUE_PROPERTIES' | translate }}">
+        <app-progress-bar-table [rows]="propertyData"></app-progress-bar-table>
+      </app-white-card>
     </div>
+    <div class="col-lg-7">
+      <app-white-card
+        title="{{ 'REVENUE' | translate }}"
+        subtitle="{{ 'SUBTITLE' | translate }}"
+        [showActions]="true"
+        customClass="pb-0"
+      >
+        <ng-container card-actions>
+          <app-filter-popup-btn>
+            <ng-container form>
+              <form>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Location</label>
+                    <app-custom-select
+                      [options]="[
+                        'All' | translate,
+                        'Dubai hills golf club',
+                        'Silicon central mall',
+                        'Falcon city of wonders',
+                        'Majan'
+                      ]"
+                      [selectedOption]="selectedFilter"
+                      (optionSelected)="onOptionSelectedFilter($event)"
+                    >
+                    </app-custom-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Unit</label>
+                    <app-custom-select
+                      [options]="[
+                        'Sep 2025',
+                        'Aug 2025',
+                        'Sep 2025',
+                        'Oct 2025'
+                      ]"
+                      [selectedOption]="selectedFilter"
+                      (optionSelected)="onOptionSelectedFilter($event)"
+                    >
+                    </app-custom-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Date Range</label>
+                    <label class="form-label small">From</label>
+                    <div class="datePicker">
+                      <input
+                        class="form-control"
+                        placeholder="DD-MM-YYYY"
+                        name="dp"
+                        [(ngModel)]="model"
+                        ngbDatepicker
+                        #d="ngbDatepicker"
+                      />
+                      <button type="button" (click)="d.toggle()">
+                        <app-date-icon />
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label d-none d-md-block">&nbsp;</label>
+                    <label class="form-label small">To</label>
+                    <div class="datePicker">
+                      <input
+                        class="form-control"
+                        placeholder="DD-MM-YYYY"
+                        name="dp"
+                        [(ngModel)]="model"
+                        ngbDatepicker
+                        #d="ngbDatepicker"
+                      />
+                      <button type="button" (click)="d.toggle()">
+                        <app-date-icon />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </ng-container>
+            <ng-container action>
+              <button type="button" class="btn btnCommon">Apply</button>
+            </ng-container>
+          </app-filter-popup-btn>
+        </ng-container>
+        <app-column-chart></app-column-chart>
+      </app-white-card>
+    </div>
+  </div>
 </div>
 
 <div class="mt-3">
-    <div class="row g-3">
-        <div class="col-lg-5">
-            <app-white-card title="Occupancy" [showActions]="true">
-                <ng-container card-actions>
-                    <app-custom-select
-                        [options]="['All', 'Dubai hiils golf club', 'Sillicon central mall', 'Falcon city of wonders', 'Majan']"
-                        [placeholder]="selectedOccupancy" [selectedOption]="selectedOccupancy"
-                        (optionSelected)="onOptionSelectedOccupancy($event)" [isFilter]="true" [isSmall]="true">
-                    </app-custom-select>
-                </ng-container>
-                <app-donut-chart [vacancy]="88" [occupied]="12"></app-donut-chart>
-            </app-white-card>
-        </div>
-        <div class="col-lg-7">
-            <app-white-card title="Dues" subtitle="Due Amount - AED 54,352" [showActions]="true" customClass="pb-0">
-                <ng-container card-actions>
-                    <app-filter-popup-btn>
-                        <ng-container form>
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Location</label>
-                                        <app-custom-select
-                                            [options]="['All', 'Dubai hills golf club', 'Silicon central mall', 'Falcon city of wonders', 'Majan']"
-                                            [selectedOption]="selectedFilter"
-                                            (optionSelected)="onOptionSelectedFilter($event)">
-                                        </app-custom-select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Unit</label>
-                                        <app-custom-select [options]="['Sep 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025']"
-                                            [selectedOption]="selectedFilter"
-                                            (optionSelected)="onOptionSelectedFilter($event)">
-                                        </app-custom-select>
-                                    </div>
-                                </div>
-                            </form>
-                        </ng-container>
-                        <ng-container action>
-                            <button type="button" class="btn btnCommon">Apply</button>
-                        </ng-container>
-                    </app-filter-popup-btn>
-                </ng-container>
-                <app-line-chart></app-line-chart>
-            </app-white-card>
-        </div>
+  <div class="row g-3">
+    <div class="col-lg-5">
+      <app-white-card
+        title="{{ 'OCCUPANCY' | translate }}"
+        [showActions]="true"
+      >
+        <ng-container card-actions>
+          <app-custom-select
+            [options]="[
+              'All',
+              'Dubai hiils golf club',
+              'Sillicon central mall',
+              'Falcon city of wonders',
+              'Majan'
+            ]"
+            [placeholder]="selectedOccupancy"
+            [selectedOption]="selectedOccupancy"
+            (optionSelected)="onOptionSelectedOccupancy($event)"
+            [isFilter]="true"
+            [isSmall]="true"
+          >
+          </app-custom-select>
+        </ng-container>
+        <app-donut-chart [vacancy]="88" [occupied]="12"></app-donut-chart>
+      </app-white-card>
     </div>
+    <div class="col-lg-7">
+      <app-white-card
+        title="{{ 'DUES' | translate }}"
+        subtitle="{{ 'TOTAL_DUE_AMOUNT' | translate }}"
+        [showActions]="true"
+        customClass="pb-0"
+      >
+        <ng-container card-actions>
+          <app-filter-popup-btn>
+            <ng-container form>
+              <form>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Location</label>
+                    <app-custom-select
+                      [options]="[
+                        'All',
+                        'Dubai hills golf club',
+                        'Silicon central mall',
+                        'Falcon city of wonders',
+                        'Majan'
+                      ]"
+                      [selectedOption]="selectedFilter"
+                      (optionSelected)="onOptionSelectedFilter($event)"
+                    >
+                    </app-custom-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Unit</label>
+                    <app-custom-select
+                      [options]="[
+                        'Sep 2025',
+                        'Aug 2025',
+                        'Sep 2025',
+                        'Oct 2025'
+                      ]"
+                      [selectedOption]="selectedFilter"
+                      (optionSelected)="onOptionSelectedFilter($event)"
+                    >
+                    </app-custom-select>
+                  </div>
+                </div>
+              </form>
+            </ng-container>
+            <ng-container action>
+              <button type="button" class="btn btnCommon">Apply</button>
+            </ng-container>
+          </app-filter-popup-btn>
+        </ng-container>
+        <app-line-chart></app-line-chart>
+      </app-white-card>
+    </div>
+  </div>
 </div>
 
 <div class="mt-3">
-    <div class="row g-3">
-        <div class="col-lg-5">
-            <app-white-card title="Cheques Aging" [showActions]="true">
-                <ng-container card-actions>
-                    <app-custom-select
-                        [options]="['All', 'Dubai hiils golf club', 'Sillicon central mall', 'Falcon city of wonders', 'Majan']"
-                        [placeholder]="selectedChequesAging" [selectedOption]="selectedChequesAging"
-                        (optionSelected)="onOptionSelectedChequesAging($event)" [isFilter]="true">
-                    </app-custom-select>
-                </ng-container>
-                <app-cheque-status></app-cheque-status>
-            </app-white-card>
-        </div>
-        <div class="col-lg-7">
-            <div class="cmmnTblOuter">
-                <div class="cmmnTblHdr">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <app-table-title size="md" title="Cheques Visibility"></app-table-title>
-                        </div>
-                        <div class="col-auto">
-                            <ng-container card-actions>
-                                <app-filter-popup-btn>
-                                    <ng-container form>
-                                        <form>
-                                            <div class="row g-3">
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Location</label>
-                                                    <app-custom-select
-                                                        [options]="['All', 'Dubai hills golf club', 'Silicon central mall', 'Falcon city of wonders', 'Majan']"
-                                                        [selectedOption]="selectedFilter"
-                                                        (optionSelected)="onOptionSelectedFilter($event)">
-                                                    </app-custom-select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Unit</label>
-                                                    <app-custom-select
-                                                        [options]="['Sep 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025']"
-                                                        [selectedOption]="selectedFilter"
-                                                        (optionSelected)="onOptionSelectedFilter($event)">
-                                                    </app-custom-select>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="cmmnFltrRadioOuter">
-                                                        <div class="cmmnFltrRadio">
-                                                            <label>
-                                                                <input type="radio" name="filterMonth" value="month" />
-                                                                <span>Month</span>
-                                                            </label>
-                                                            <label>
-                                                                <input type="radio" name="filterMonth"
-                                                                    value="last6Months" checked />
-                                                                <span>Last 6 Months</span>
-                                                            </label>
-                                                            <label>
-                                                                <input type="radio" name="filterMonth" value="year" />
-                                                                <span>Year</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </ng-container>
-                                    <ng-container action>
-                                        <button type="button" class="btn btnCommon">Apply</button>
-                                    </ng-container>
-                                </app-filter-popup-btn>
-                            </ng-container>
-                        </div>
-                    </div>
-                </div>
-                <div class="cmmnTblBody">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>SI.No</th>
-                                    <th>Property</th>
-                                    <th>Name</th>
-                                    <th>Cheque Number</th>
-                                    <th>Status</th>
-                                    <th width="200">Amout</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#1234</td>
-                                    <td>Dubai Hills golf club</td>
-                                    <td>Ahmed</td>
-                                    <td>0001234567</td>
-                                    <td>
-                                        <app-badge title="Pending" status="yellow" />
-                                    </td>
-                                    <td>AED 1,20,573</td>
-                                </tr>
-                                <tr>
-                                    <td>#1235</td>
-                                    <td>Silicon central mall</td>
-                                    <td>Abdullah</td>
-                                    <td>9876543210</td>
-                                    <td>
-                                        <app-badge title="Realized" status="light-green" />
-                                    </td>
-                                    <td>AED 1,20,573</td>
-                                </tr>
-                                <tr>
-                                    <td>#6789</td>
-                                    <td>Majan</td>
-                                    <td>Juma Al Majid</td>
-                                    <td>1122334455</td>
-                                    <td>
-                                        <app-badge title="Bounce" status="red" />
-                                    </td>
-                                    <td>AED 1,20,573</td>
-                                </tr>
-                                <tr>
-                                    <td>#8796</td>
-                                    <td>Silicon valley</td>
-                                    <td>Omar</td>
-                                    <td>7654321098</td>
-                                    <td>
-                                        <app-badge title="Realized" status="light-green" />
-                                    </td>
-                                    <td>AED 1,20,573</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="cmmnTblFtr"></div>
+  <div class="row g-3">
+    <div class="col-lg-5">
+      <app-white-card
+        title="{{ 'CHEQUES AGING' | translate }}"
+        [showActions]="true"
+      >
+        <ng-container card-actions>
+          <app-custom-select
+            [options]="[
+              'All',
+              'Dubai hiils golf club',
+              'Sillicon central mall',
+              'Falcon city of wonders',
+              'Majan'
+            ]"
+            [placeholder]="selectedChequesAging"
+            [selectedOption]="selectedChequesAging"
+            (optionSelected)="onOptionSelectedChequesAging($event)"
+            [isFilter]="true"
+          >
+          </app-custom-select>
+        </ng-container>
+        <app-cheque-status></app-cheque-status>
+      </app-white-card>
+    </div>
+    <div class="col-lg-7">
+      <div class="cmmnTblOuter">
+        <div class="cmmnTblHdr">
+          <div class="row align-items-center">
+            <div class="col">
+              <app-table-title
+                size="md"
+                title="{{ 'CHEQUES VISIBILITY' | translate }}"
+              ></app-table-title>
             </div>
+            <div class="col-auto">
+              <ng-container card-actions>
+                <app-filter-popup-btn>
+                  <ng-container form>
+                    <form>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <label class="form-label">Location</label>
+                          <app-custom-select
+                            [options]="[
+                              'All',
+                              'Dubai hills golf club',
+                              'Silicon central mall',
+                              'Falcon city of wonders',
+                              'Majan'
+                            ]"
+                            [selectedOption]="selectedFilter"
+                            (optionSelected)="onOptionSelectedFilter($event)"
+                          >
+                          </app-custom-select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Unit</label>
+                          <app-custom-select
+                            [options]="[
+                              'Sep 2025',
+                              'Aug 2025',
+                              'Sep 2025',
+                              'Oct 2025'
+                            ]"
+                            [selectedOption]="selectedFilter"
+                            (optionSelected)="onOptionSelectedFilter($event)"
+                          >
+                          </app-custom-select>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="cmmnFltrRadioOuter">
+                            <div class="cmmnFltrRadio">
+                              <label>
+                                <input
+                                  type="radio"
+                                  name="filterMonth"
+                                  value="month"
+                                />
+                                <span>Month</span>
+                              </label>
+                              <label>
+                                <input
+                                  type="radio"
+                                  name="filterMonth"
+                                  value="last6Months"
+                                  checked
+                                />
+                                <span>Last 6 Months</span>
+                              </label>
+                              <label>
+                                <input
+                                  type="radio"
+                                  name="filterMonth"
+                                  value="year"
+                                />
+                                <span>Year</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </ng-container>
+                  <ng-container action>
+                    <button type="button" class="btn btnCommon">Apply</button>
+                  </ng-container>
+                </app-filter-popup-btn>
+              </ng-container>
+            </div>
+          </div>
         </div>
+        <div class="cmmnTblBody">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>{{ "SI.No" | translate }}</th>
+                  <th>{{ "PROPERETY" | translate }}</th>
+                  <th>{{ "NAME" | translate }}</th>
+                  <th>{{ "CHEQUE NUMBER" | translate }}</th>
+                  <th>{{ "STATUS" | translate }}</th>
+                  <th width="200">{{ "AMOUNT" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#1234</td>
+                  <td>Dubai Hills golf club</td>
+                  <td>Ahmed</td>
+                  <td>0001234567</td>
+                  <td>
+                    <app-badge title="Pending" status="yellow" />
+                  </td>
+                  <td>AED 1,20,573</td>
+                </tr>
+                <tr>
+                  <td>#1235</td>
+                  <td>Silicon central mall</td>
+                  <td>Abdullah</td>
+                  <td>9876543210</td>
+                  <td>
+                    <app-badge title="Realized" status="light-green" />
+                  </td>
+                  <td>AED 1,20,573</td>
+                </tr>
+                <tr>
+                  <td>#6789</td>
+                  <td>Majan</td>
+                  <td>Juma Al Majid</td>
+                  <td>1122334455</td>
+                  <td>
+                    <app-badge title="Bounce" status="red" />
+                  </td>
+                  <td>AED 1,20,573</td>
+                </tr>
+                <tr>
+                  <td>#8796</td>
+                  <td>Silicon valley</td>
+                  <td>Omar</td>
+                  <td>7654321098</td>
+                  <td>
+                    <app-badge title="Realized" status="light-green" />
+                  </td>
+                  <td>AED 1,20,573</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="cmmnTblFtr"></div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="mt-3">
-    <div class="row g-3">
-        <div class="col-lg-5">
-            <app-white-card title="Properties Owned" [showActions]="true" customClass="pb-0">
-                <ng-container card-actions>
-                    <app-custom-select
-                        [options]="['All', 'Dubai hiils golf club', 'Sillicon central mall', 'Falcon city of wonders', 'Majan']"
-                        [placeholder]="selectedPropertiesOwned" [selectedOption]="selectedPropertiesOwned"
-                        (optionSelected)="onOptionSelectedPropertiesOwned($event)" [isFilter]="true">
-                    </app-custom-select>
-                </ng-container>
-                <app-group-bar-chart></app-group-bar-chart>
-            </app-white-card>
-        </div>
-        <div class="col-lg-7">
-            <app-white-card title="Other Type Payments" subtitle="Total Revenue - AED 1,54,456" [showActions]="true"
-                customClass="pb-0">
-                <ng-container card-actions>
-                    <app-filter-popup-btn>
-                        <ng-container form>
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Location</label>
-                                        <app-custom-select
-                                            [options]="['All', 'Dubai hills golf club', 'Silicon central mall', 'Falcon city of wonders', 'Majan']"
-                                            [selectedOption]="selectedFilter"
-                                            (optionSelected)="onOptionSelectedFilter($event)">
-                                        </app-custom-select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Unit</label>
-                                        <app-custom-select [options]="['Sep 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025']"
-                                            [selectedOption]="selectedFilter"
-                                            (optionSelected)="onOptionSelectedFilter($event)">
-                                        </app-custom-select>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="cmmnFltrRadioOuter">
-                                            <div class="cmmnFltrRadio">
-                                                <label>
-                                                    <input type="radio" name="filterMonth" value="month" />
-                                                    <span>Month</span>
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="filterMonth" value="last6Months"
-                                                        checked />
-                                                    <span>Last 6 Months</span>
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="filterMonth" value="year" />
-                                                    <span>Year</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </ng-container>
-                        <ng-container action>
-                            <button type="button" class="btn btnCommon">Apply</button>
-                        </ng-container>
-                    </app-filter-popup-btn>
-                </ng-container>
-                <app-stacked-column-chart></app-stacked-column-chart>
-            </app-white-card>
-        </div>
+  <div class="row g-3">
+    <div class="col-lg-5">
+      <app-white-card
+        title="{{ 'PROPERTIES OWNED' | translate }}"
+        [showActions]="true"
+        customClass="pb-0"
+      >
+        <ng-container card-actions>
+          <app-custom-select
+            [options]="[
+              'All',
+              'Dubai hiils golf club',
+              'Sillicon central mall',
+              'Falcon city of wonders',
+              'Majan'
+            ]"
+            [placeholder]="selectedPropertiesOwned"
+            [selectedOption]="selectedPropertiesOwned"
+            (optionSelected)="onOptionSelectedPropertiesOwned($event)"
+            [isFilter]="true"
+          >
+          </app-custom-select>
+        </ng-container>
+        <app-group-bar-chart></app-group-bar-chart>
+      </app-white-card>
     </div>
+    <div class="col-lg-7">
+      <app-white-card
+        title="{{ 'OTHER TYPE PAYMENTS' | translate }}"
+        subtitle="{{ 'Total Revenue - AED 1,54,456' | translate }}"
+        [showActions]="true"
+        customClass="pb-0"
+      >
+        <ng-container card-actions>
+          <app-filter-popup-btn>
+            <ng-container form>
+              <form>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Location</label>
+                    <app-custom-select
+                      [options]="[
+                        'All',
+                        'Dubai hills golf club',
+                        'Silicon central mall',
+                        'Falcon city of wonders',
+                        'Majan'
+                      ]"
+                      [selectedOption]="selectedFilter"
+                      (optionSelected)="onOptionSelectedFilter($event)"
+                    >
+                    </app-custom-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Unit</label>
+                    <app-custom-select
+                      [options]="[
+                        'Sep 2025',
+                        'Aug 2025',
+                        'Sep 2025',
+                        'Oct 2025'
+                      ]"
+                      [selectedOption]="selectedFilter"
+                      (optionSelected)="onOptionSelectedFilter($event)"
+                    >
+                    </app-custom-select>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="cmmnFltrRadioOuter">
+                      <div class="cmmnFltrRadio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="filterMonth"
+                            value="month"
+                          />
+                          <span>Month</span>
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="filterMonth"
+                            value="last6Months"
+                            checked
+                          />
+                          <span>Last 6 Months</span>
+                        </label>
+                        <label>
+                          <input type="radio" name="filterMonth" value="year" />
+                          <span>Year</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </ng-container>
+            <ng-container action>
+              <button type="button" class="btn btnCommon">Apply</button>
+            </ng-container>
+          </app-filter-popup-btn>
+        </ng-container>
+        <app-stacked-column-chart></app-stacked-column-chart>
+      </app-white-card>
+    </div>
+  </div>
 </div>

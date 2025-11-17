@@ -9,7 +9,7 @@
       </div>
       <div class="col-auto">
         <button type="button" class="btn btnCommon" (click)="goToAddProperty()">
-          <i><app-plus-icon /></i>Add Property
+          <i><app-plus-icon /></i>{{ "Add Property" | translate }}
         </button>
       </div>
     </div>
@@ -35,10 +35,9 @@
                 name="property"
                 value="all-properties"
                 [(ngModel)]="propertyView"
-                (change)="onPropertyViewChange()"
               />
               <span
-                >All Properties <i>({{ totalRecords }})</i>
+                >{{ "ALL_PROPERTIES" | translate }} <i>({{ totalRecords }})</i>
                 <button type="button"><app-refresh-icon /></button
               ></span>
             </label>
@@ -373,10 +372,12 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th *ngIf="currentRole === 'property-manager'">Property ID</th>
+              <th *ngIf="currentRole === 'property-manager'">
+                {{ "PROPERTY_ID" | translate }}
+              </th>
               <th>
                 <button type="button">
-                  Property Name <i><app-sorting-icon /></i>
+                  {{ "PROPERTY_NAME" | translate }}<i><app-sorting-icon /></i>
                 </button>
               </th>
               <th
@@ -385,29 +386,31 @@
                 "
               >
                 <button type="button">
-                  Tenant Name <i><app-sorting-icon /></i>
+                  {{ "TENANT_NAME" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
-              <th *ngIf="currentRole === 'owner'">Agreement Expiration</th>
+              <th *ngIf="currentRole === 'owner'">
+                {{ "AGREEMENT_EXPIRATION" | translate }}
+              </th>
               <th
                 *ngIf="
                   currentRole === 'tenant' || currentRole === 'property-manager'
                 "
               >
-                Owner Name
+                {{ "OWNER_NAME" | translate }}
               </th>
               <th
                 *ngIf="
                   currentRole === 'property-manager' || currentRole === 'tenant'
                 "
               >
-                Tenancy Status
+                {{ "TENANCY_STATUS" | translate }}
               </th>
               <th *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                Dimension
+                {{ "DIMENSION" | translate }}
               </th>
               <th *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                PMC
+                {{ "PMC" | translate }}
               </th>
               <th
                 *ngIf="
