@@ -210,7 +210,8 @@ export class LoginComponent implements OnInit {
     };
     this.authService.verifyOtp(payload).subscribe({
       next: (resp: any) => {
-        console.log('OTP verify response: ', resp);
+        this.storageService.setToken(resp['content'].access_token);
+        this.storageService.setUserProfile(resp['content']);
         this.alertService.success('Login successful');
         this.goToDashboard();
       },
