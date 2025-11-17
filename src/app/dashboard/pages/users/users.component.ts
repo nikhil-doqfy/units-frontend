@@ -19,6 +19,9 @@ import { TableActionButtonComponent } from '../../component/table-action-btn/tab
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { AddUserFormComponent } from '../../component/forms/add-user-form/add-user-form.component';
+import { UserService } from '../../../user/services/user.service';
+import { Subject } from 'rxjs';
+import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -35,6 +38,7 @@ import { TranslateModule } from '@ngx-translate/core';
     TablePaginationComponent,
     SortingIconComponent,
     AddUserFormComponent,
+    TableImgItemComponent,
     TranslateModule,
   ],
   templateUrl: './users.component.html',
@@ -45,11 +49,35 @@ export class UsersComponent {
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Users', link: '' },
   ];
+  componentName: string = 'UsersComponent';
+  activeTab: 'all' | 'deleted' = 'all'; // track current tab
+  users: any[] = [];
+  newUsers: any[] = [];
+  deletedUsers: any[] = [];
+
+  userData: Record<string, any> = {};
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 1;
 
   private modalService = inject(NgbModal);
+  private userService = inject(UserService);
+  private destroy$ = new Subject<void>();
   closeResult: WritableSignal<string> = signal('');
 
   constructor(private router: Router) {}
+
+  // ------------------------- call ngOnInit -------------------------
+  ngOnInit(): void {
+    this.getUser();
+  }
+
+  onRefresh() {
+    this.getUser();
+    this.fetchDeletedUser();
+  }
 
   openAddUserModal(addUserContent: TemplateRef<any>) {
     this.modalService
@@ -85,5 +113,53 @@ export class UsersComponent {
 
   handleDeleteClick(): void {
     console.log('Delete button clicked');
+  }
+
+  // ------------------------- Fetched User Details -------------------------
+  getUser(): void {
+    this.userData = {
+      ...this.userData,
+      limit: this.rowsPerPage,
+      page_number: this.currentPage,
+    };
+
+    this.userService.accessUserManagement(this.userData).subscribe({
+      next: (resp: any) => {
+        this.users = resp?.content?.data;
+        this.totalRecords = resp?.pagination?.total_records ?? 0;
+        this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+      },
+    });
+  }
+  // ------------------------- Fetched Delated User Details -------------------------
+  fetchDeletedUser(): void {
+    const payload = {
+      ...this.userData,
+      limit: this.rowsPerPage,
+      page_number: this.currentPage,
+      is_deleted: 'true',
+    };
+
+    this.userService.accessUserManagement(payload).subscribe((resp: any) => {
+      this.deletedUsers = resp.content;
+      this.totalRecords = resp?.pagination?.total_records ?? 0;
+      this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+    });
+  }
+
+  tabChange(): void {}
+
+  // ------------------------- Pagination -------------------------
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getUser();
+  }
+
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getUser();
   }
 }

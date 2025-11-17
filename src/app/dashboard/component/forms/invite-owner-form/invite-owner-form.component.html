@@ -1,8 +1,18 @@
 <app-modal-form-card>
-    <form>
+    <form [formGroup]="pmcOwnerForm">
         <div class="mb-0">
-            <label for="email" class="form-label">Email address<span>*</span></label>
-            <input class="form-control" type="email" name="email" placeholder="Enter email address here" />
+            <label for="email" class="form-label">
+                Email address<span>*</span>
+            </label>
+
+            <input class="form-control" type="email" name="email" formControlName="email"
+                placeholder="Enter email address here" />
+
+            @if (isInvalid(pmcOwnerForm, 'email').status) {
+            <small class="errorMsg">
+                {{ isInvalid(pmcOwnerForm, "email").msg }}
+            </small>
+            }
         </div>
     </form>
 </app-modal-form-card>
