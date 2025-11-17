@@ -20,4 +20,29 @@ export class PropertyService {
       `${this.SERVER_ADDRESS}/property/details/list/view${queryString}`
     );
   }
+
+  addBasicDetailsOfProperty(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/create/property/basic`, data);
+  }
+
+  addCommercialDetailsOfProperty(data: Record<string, any>): Observable<any> {
+    return this.http.post(
+      `${this.SERVER_ADDRESS}/property/commercial/details`,
+      data
+    );
+  }
+
+  addPropertyImages(data: Record<string, any>) {
+    return this.http.post(
+      `${this.SERVER_ADDRESS}/upload/property/images`,
+      data
+    );
+  }
+
+  addPropertyDocuments(data: Record<string, any>) {
+    return this.http.post(
+      `${this.SERVER_ADDRESS}/upload/property/images`,
+      data
+    );
+  }
 }

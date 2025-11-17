@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
   AfterContentInit,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -14,6 +15,9 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { CardTitleComponent } from '../../../shared/component/card-title/card-title.component';
 import { DashFormComponent } from '../../../shared/component/dash-form/dash-form.component';
 import { InvitePMCButtonComponent } from '../invite-pmc-btn/invite-pmc-btn.component';
+import { PropertyFormService } from '../../services/property-form.service';
+import { FormStaus } from '../../model/property.model';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 interface StepGroup {
   main: StepPaneComponent;
@@ -34,6 +38,8 @@ interface StepGroup {
   styleUrls: ['./step-form-layout.component.css'],
 })
 export class StepFormLayoutComponent implements AfterContentInit {
+  private propertyFormService = inject(PropertyFormService);
+  private spinner = inject(NgxSpinnerService);
   @ContentChildren(StepPaneComponent) steps!: QueryList<StepPaneComponent>;
 
   @Input() leftCardTitle: string = 'Property Details';
@@ -62,15 +68,35 @@ export class StepFormLayoutComponent implements AfterContentInit {
     this.filteredSteps = this.stepGroups.map((g) => g.main);
   }
 
-  nextStep() {
+  async nextStep() {
     if (this.currentStep < this.stepGroups.length - 1) {
-      console.log('currentStep:--->', this.currentStep);
+      try {
+        this.spinner.show();
 
-      this.currentStep++;
+        const response = await this.propertyFormService.savePrpertyDetails(
+          this.currentStep
+        );
+
+        // mark NEXT step as available
+        this.propertyFormService.updateFormStatus(
+          this.currentStep + 1,
+          'ONGOING'
+        );
+
+        this.currentStep++;
+        this.spinner.hide();
+      } catch (err) {
+        console.log('Save failed:', err);
+      }
     }
   }
 
+  getStatus(step: number): FormStaus {
+    return this.propertyFormService.getFormStatus(step);
+  }
+
   goToStep(index: number) {
+    if (this.getStatus(index) === 'READY_TO_START') return;
     this.currentStep = index;
   }
 
