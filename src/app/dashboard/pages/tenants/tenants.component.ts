@@ -41,6 +41,7 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 
 @Component({
@@ -68,6 +69,7 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
     WhiteCardComponent,
     DocumentTypeItemComponent,
     TranslateModule,
+    NoDataComponent,
     MaskPhonePipe,
   ],
   templateUrl: './tenants.component.html',

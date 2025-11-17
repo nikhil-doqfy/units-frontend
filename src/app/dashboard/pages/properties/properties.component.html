@@ -9,7 +9,7 @@
       </div>
       <div class="col-auto">
         <button type="button" class="btn btnCommon" (click)="goToAddProperty()">
-          <i><app-plus-icon /></i>{{ "Add Property" | translate }}
+          <i><app-plus-icon /></i>{{ "ADD_PROPERTY" | translate }}
         </button>
       </div>
     </div>
@@ -503,7 +503,7 @@
             </tr>
             }@empty {
             <tr>
-              <td colspan="20" align="center">No Data to Show</td>
+              <td colspan="20" align="center"><app-no-data></app-no-data></td>
             </tr>
             }
           </tbody>

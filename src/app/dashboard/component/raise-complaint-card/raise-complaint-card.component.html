@@ -1,23 +1,32 @@
 <div class="raiseCmplntOuter">
-    <div class="raiseCmplntTtl">
-        <p>Get help, find answers, and connect with our support team for quick issue resolution.</p>
-    </div>
-    <div class="raiseCmplntInfo">
-        <h2>Welcome to Support</h2>
-        <ul>
-            <li>
-                <a href="mailto:helpdesk@taxbridge.com"><i><app-mail-icon /></i> helpdesk&#64;pm.com</a>
-            </li>
-            <li>
-                <a href="tel:+91-8909876567"><i><app-call-icon /></i> +91-8909876567</a>
-            </li>
-        </ul>
-    </div>
-    <div class="commonForm raiseCmplntFrm">
-        <ng-content select="[form-content]"></ng-content>
-    </div>
-    <div class="raiseCmplntBody">
-        <h3>Frequently Asked Questions</h3>
-        <ng-content select="[accordion-content]"></ng-content>
-    </div>
+  <div class="raiseCmplntTtl">
+    <p>
+      {{
+        "Get help, find answers, and connect with our support team for quick issue resolution."
+          | translate
+      }}
+    </p>
+  </div>
+  <div class="raiseCmplntInfo">
+    <h2>{{ "Welcome to Support" | translate }}</h2>
+    <ul>
+      <li>
+        <a href="mailto:helpdesk@taxbridge.com"
+          ><i><app-mail-icon /></i> helpdesk&#64;pm.com</a
+        >
+      </li>
+      <li>
+        <a href="tel:+91-8909876567"
+          ><i><app-call-icon /></i> +91-8909876567</a
+        >
+      </li>
+    </ul>
+  </div>
+  <div class="commonForm raiseCmplntFrm">
+    <ng-content select="[form-content]"></ng-content>
+  </div>
+  <div class="raiseCmplntBody">
+    <h3>{{ "Frequently Asked Questions" | translate }}</h3>
+    <ng-content select="[accordion-content]"></ng-content>
+  </div>
 </div>

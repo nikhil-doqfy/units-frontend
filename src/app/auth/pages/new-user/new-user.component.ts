@@ -1,4 +1,4 @@
-import { Component, inject, TemplateRef } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgOtpInputModule } from 'ng-otp-input';
@@ -52,16 +52,18 @@ import { HeadphoneIconComponent } from '../../../icon/headphone-icon/headphone-i
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css',
 })
-export class NewUserComponent {
+export class NewUserComponent implements OnInit {
   signupForm!: FormGroup;
   otp = '';
   email = '';
+
   currentRole: UserRole = 'owner';
   selectedRole: UserRole = 'owner';
   showConfirmPassword = false;
   passwordMismatch = false;
   password: string = '';
-  defaultUserType: string = 'OWNER';
+  // defaultUserType: string = 'OWNER';
+  userType: string = '';
   private modalService = inject(NgbModal);
   constructor(
     private router: Router,
@@ -92,11 +94,102 @@ export class NewUserComponent {
   }
   ngOnInit() {
     this.signupForm = this.fb.group({
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      company_name: [''],
+      emirate_id: [''],
+      Contact_Number: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
+      user_type: [''],
     });
   }
+
+  onUserTypeChange(type: string) {
+    this.userType = type;
+    this.signupForm.get('user_type')?.setValue(type);
+
+    // Clear all validators first
+    this.clearAllDynamicValidators();
+
+    if (type === 'OWNER') this.setOwnerValidators();
+    if (type === 'PROPERTY_MANAGER') this.setPMCValidators();
+    if (type === 'TENANT') this.setTenantValidators();
+
+    this.signupForm.updateValueAndValidity();
+  }
+  setOwnerValidators() {
+    const fields = [
+      'first_name',
+      'last_name',
+      'Contact_Number',
+      'email',
+      'password',
+      'confirmPassword',
+    ];
+
+    fields.forEach((f) => {
+      this.signupForm.get(f)?.setValidators([Validators.required]);
+    });
+
+    this.update();
+  }
+  setPMCValidators() {
+    const fields = [
+      'company_name',
+      'emirate_id',
+      'Contact_Number',
+      'email',
+      'password',
+      'confirmPassword',
+    ];
+
+    fields.forEach((f) => {
+      this.signupForm.get(f)?.setValidators([Validators.required]);
+    });
+
+    this.update();
+  }
+  setTenantValidators() {
+    const fields = [
+      'first_name',
+      'last_name',
+      'Contact_Number',
+      'email',
+      'password',
+      'confirmPassword',
+    ];
+
+    fields.forEach((f) => {
+      this.signupForm.get(f)?.setValidators([Validators.required]);
+    });
+
+    this.update();
+  }
+
+  clearAllDynamicValidators() {
+    const fields = [
+      'first_name',
+      'last_name',
+      'Contact_Number',
+      'email',
+      'password',
+      'confirmPassword',
+    ];
+
+    fields.forEach((field) => {
+      this.signupForm.get(field)?.clearValidators();
+      this.signupForm.get(field)?.setValue('');
+    });
+
+    this.update();
+  }
+
+  update() {
+    this.signupForm.updateValueAndValidity();
+  }
+
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
@@ -160,9 +253,72 @@ export class NewUserComponent {
     }, 1000);
   }
 
+  checkFormValidity(): void {
+    Object.keys(this.signupForm.controls).forEach((field) => {
+      const control = this.signupForm.get(field);
+      if (control?.invalid) {
+        console.log(`❌ INVALID FIELD: ${field}`, control.errors);
+      } else {
+        console.log(`✅ VALID FIELD: ${field}`);
+      }
+    });
+
+    console.log(
+      'Overall Form Status:',
+      this.signupForm.valid ? '✅ VALID' : '❌ INVALID'
+    );
+  }
+  sendOtp(): void {
+    this.checkFormValidity();
+    const emailCtrl = this.signupForm.get('email');
+    emailCtrl?.markAsTouched();
+    emailCtrl?.updateValueAndValidity();
+    console.log('seda', this.email);
+    if (this.signupForm.invalid) {
+      console.log('Enter your name');
+      this.alert.error('Please enter a valid email');
+      return;
+    }
+
+    const payload = { email: this.signupForm.value.email };
+
+    this.auth.sendOtp(payload).subscribe({
+      next: (resp: any) => {
+        console.log('monali', this.email);
+        console.log('OTP response:--->', resp);
+        this.alert.success(resp?.message || 'OTP sent successfully');
+        this.otpSent = true;
+        this.emailLocked = true;
+        this.otpTimer = 60;
+        this.startOtpTimer();
+      },
+      error: (err) => {
+        console.log('OTP error:--->', err);
+        this.alert.error(err?.error?.message || 'Failed to send OTP');
+      },
+    });
+  }
   resendOtp(): void {
     this.startOtpTimer();
   }
+
+  signInWithOtp(): void {
+    let payload = {
+      email: this.signupForm.value.email,
+      otp: this.otp,
+    };
+    this.auth.verifyOtp(payload).subscribe({
+      next: (resp: any) => {
+        console.log('OTP verify response: ', resp);
+        this.alert.success('Login successful');
+      },
+      error: (err) => {
+        console.log('OTP verify error: ', err);
+        this.alert.error(err?.error?.message || 'Invalid OTP');
+      },
+    });
+  }
+
   onSubmit() {
     console.log('Form submitted');
     console.log('Form values:', this.signupForm.value);
@@ -180,7 +336,7 @@ export class NewUserComponent {
       email,
       password,
       confirm_password: confirmPassword,
-      user_type: this.defaultUserType,
+      // user_type: this.defaultUserType,
     };
 
     this.auth.signup(payload).subscribe({

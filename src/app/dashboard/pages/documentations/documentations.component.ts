@@ -2,21 +2,33 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { TableTitleComponent } from "../../../dashboard/component/table-title/table-title.component";
+import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
 import { BadgeComponent } from '../../component/badge/badge.component';
-import { TableSelectComponent } from "../../component/table-select/table-select.component";
-import { CustomSelectComponent } from "../../component/custom-select/custom-select.component";
-import { TableFilterButtonComponent } from "../../../dashboard/component/table-filter-btn/table-filter-btn.component";
-import { ExportIconComponent } from "../../component/icons/export-icon/export-icon.component";
-import { TableActionButtonComponent } from "../../component/table-action-btn/table-action-btn.component";
-import { TablePaginationComponent } from "../../../dashboard/component/table-pagination/table-pagination.component";
+import { TableSelectComponent } from '../../component/table-select/table-select.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { TableFilterButtonComponent } from '../../../dashboard/component/table-filter-btn/table-filter-btn.component';
+import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
+import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
+import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-documentations',
   standalone: true,
-  imports: [CommonModule, TableTitleComponent, BadgeComponent, TableSelectComponent, CustomSelectComponent, TableFilterButtonComponent, ExportIconComponent, TableActionButtonComponent, TablePaginationComponent],
+  imports: [
+    CommonModule,
+    TableTitleComponent,
+    BadgeComponent,
+    TableSelectComponent,
+    CustomSelectComponent,
+    TableFilterButtonComponent,
+    ExportIconComponent,
+    TableActionButtonComponent,
+    TablePaginationComponent,
+    TranslateModule,
+  ],
   templateUrl: './documentations.component.html',
-  styleUrl: './documentations.component.css'
+  styleUrl: './documentations.component.css',
 })
 export class DocumentationsComponent {
   breadcrumbData = [
@@ -26,7 +38,7 @@ export class DocumentationsComponent {
 
   selected: string = 'Falcom city';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   onOptionSelected(option: string) {
     this.selected = option;
