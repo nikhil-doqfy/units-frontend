@@ -6,7 +6,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -28,6 +28,12 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { AddStaffFormComponent } from '../../component/forms/add-staff-form/add-staff-form.component';
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { OwnerService } from '../../services/owner.service';
+import { AlertService } from '../../../shared/services/alert.service';
+import { StaffService } from '../../services/staff.service';
+import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 
 @Component({
   selector: 'app-staff',
@@ -50,6 +56,7 @@ import { TranslateModule } from '@ngx-translate/core';
     AddStaffFormComponent,
     TableViewCardComponent,
     TranslateModule,
+    MaskPhonePipe,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',
@@ -60,7 +67,23 @@ export class StaffComponent {
     { label: 'Staff', link: '' },
   ];
 
+  componentName: string = 'StaffComponent';
+  selectedStaff: any = null;
+
+  staffRoles: any[] = [];
+  staffRolesData: Record<string, any> = {};
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 1;
+
   private modalService = inject(NgbModal);
+  private staffService = inject(StaffService);
+  private alertService = inject(AlertService);
+  private route = inject(ActivatedRoute);
+  private destroy$ = new Subject<void>();
+  private searchTextSubject = new Subject<string>();
   closeResult: WritableSignal<string> = signal('');
 
   showDetailView: boolean = false;
@@ -70,7 +93,42 @@ export class StaffComponent {
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    // ------------------------- Search debounce time -------------------------
+    this.searchTextSubject
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe((searchText) => {
+        if (searchText?.trim())
+          this.staffRolesData['search'] = searchText.trim();
+        else delete this.staffRolesData['search'];
+
+        this.currentPage = 1;
+        this.getStaffRoleDetails();
+      });
+  }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      // Detail view
+      this.showDetailView = true;
+      this.loadDetailView(+id);
+    } else {
+      // Listing view
+      this.showDetailView = false;
+      this.getStaffRoleDetails();
+    }
+  }
+
+  onRefresh() {
+    this.getStaffRoleDetails();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
@@ -120,12 +178,8 @@ export class StaffComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(): void {
-    this.showDetailView = true;
-  }
-
   handleBackClick(): void {
-    this.showDetailView = false;
+    this.router.navigate(['/dashboard/staff']);
   }
 
   handleDownloadDocumentClick(): void {
@@ -134,5 +188,55 @@ export class StaffComponent {
 
   handlePreviewDocumentClick(): void {
     console.log('Preview Document button clicked');
+  }
+
+  // ------------------------- Fetched Staff Role Details -------------------------
+  getStaffRoleDetails(): void {
+    this.staffRolesData = {
+      ...this.staffRolesData,
+      limit: this.rowsPerPage,
+      page_number: this.currentPage,
+    };
+
+    this.staffService.accessStaffRoleDetails(this.staffRolesData).subscribe({
+      next: (resp: any) => {
+        this.staffRoles = resp?.content ?? [];
+        this.totalRecords = resp?.pagination?.total_records ?? 0;
+        this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+      },
+    });
+  }
+
+  // ------------------------- Pagination component -------------------------
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getStaffRoleDetails();
+  }
+
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getStaffRoleDetails();
+  }
+
+  searchTextChange(search: string) {
+    this.searchTextSubject.next(search);
+  }
+
+  // ------------------------- Handel show details function -------------------------
+
+  handleViewClick(staffId: number): void {
+    this.router.navigate(['/dashboard/staff/detail', staffId]);
+  }
+
+  loadDetailView(staffId: number): void {
+    this.staffService.accessStaffRoleDetails({ id: staffId }).subscribe({
+      next: (resp: any) => {
+        this.selectedStaff = resp.content;
+      },
+      error: (err) => console.error('Detail API Error:', err),
+    });
   }
 }

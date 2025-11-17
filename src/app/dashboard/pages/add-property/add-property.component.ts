@@ -1,21 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 
-import { StepFormLayoutComponent } from "../../component/step-form-layout/step-form-layout.component";
-import { StepPaneComponent } from "../../component/step-form-layout/step-pane.component";
+import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
+import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
+import { PropertyFormService } from '../../services/property-form.service';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { FormService } from '../../../shared/services/form.service';
 
 @Component({
   selector: 'app-add-property',
   standalone: true,
-  imports: [CommonModule, StepFormLayoutComponent, StepPaneComponent, CustomSelectComponent, UploadDocumentComponent],
+  imports: [
+    CommonModule,
+    StepFormLayoutComponent,
+    StepPaneComponent,
+    CustomSelectComponent,
+    UploadDocumentComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './add-property.component.html',
-  styleUrl: './add-property.component.css'
+  styleUrl: './add-property.component.css',
 })
 export class AddPropertyComponent {
+  private propertyFormService = inject(PropertyFormService);
+  private sharedAPIService = inject(SharedApiService);
+  private formService = inject(FormService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Properties', link: '/dashboard/properties' },
@@ -23,27 +38,51 @@ export class AddPropertyComponent {
   ];
 
   currentRole: UserRole = 'owner';
-  selectedType: string = '';
 
-  constructor(
-    private router: Router,
-    private themeService: ThemeService
-  ) { }
+  basicDetailsForm = this.propertyFormService.propertyBasicDetailsForm;
+  commercialsForm = this.propertyFormService.propertyCommercialsForm;
+  imagesForm = this.propertyFormService.propertyImagesForm;
+  documentationForm = this.propertyFormService.propertyDocumentationForm;
+
+  isInvalid = this.formService.isInvalid;
+
+  propertyType: any[] = [];
+  PMC_List: any[] = [];
+
+  private destroy$ = new Subject<void>();
+
+  constructor(private router: Router, private themeService: ThemeService) {}
 
   ngOnInit() {
-    this.themeService.currentRole$.subscribe(role => {
-      this.currentRole = role;
-    });
+    this.themeService.currentRole$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+
+    this.getOptionType();
   }
 
-  onOptionSelected(option: string) {
-    this.selectedType = option;
+  getOptionType() {
+    this.sharedAPIService
+      .getOptions({ option_type: 'PROPERTY_TYPES, PMC_LIST' })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.propertyType = response?.content?.property_types;
+          this.PMC_List = response?.content?.pmc_list;
+        },
+      });
   }
 
   submitProperty(): void {
-    console.log("Final Step Completed — Submitting Property...");
+    console.log('Final Step Completed — Submitting Property...');
     // Call API or navigate
     this.router.navigate(['dashboard/properties']);
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

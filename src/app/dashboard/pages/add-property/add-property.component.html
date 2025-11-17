@@ -1,218 +1,540 @@
-<app-step-form-layout leftCardTitle="Property Details" finishButtonText="Add Property" (finish)="submitProperty()">
-    <!-- Step Basic Details Content -->
-    <ng-container>
-        <app-step-pane title="Basic Details" description="Fill all the fields to add Your property">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label">Property Name</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Property Type</label>
-                    <app-custom-select [options]="['Admin', 'Owner', 'PM', 'User', 'Lead']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Land Area <small>Sq-ft</small></label>
-                    <app-custom-select [options]="['100', '300', '500', '700', '1000']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Land DM No (Affection Plan)</label>
-                    <input type="text" class="form-control" placeholder="Enter Land DM No">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Apartment No</label>
-                    <input type="text" class="form-control" placeholder="Enter apartment number">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Address</label>
-                    <input type="text" class="form-control" placeholder="Enter address here">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">No of Bedrooms</label>
-                    <app-custom-select [options]="['1', '2', '3', '4', '5']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Area of Property <small>Sq-ft</small></label>
-                    <app-custom-select [options]="['100', '300', '500', '700', '1000']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">No of Floors</label>
-                    <app-custom-select [options]="['1', '2', '3', '4', '5']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">No of Parking</label>
-                    <app-custom-select [options]="['1', '2', '3', '4', '5']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">No of Balcony</label>
-                    <app-custom-select [options]="['1', '2', '3', '4', '5']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Plot No</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Makani No</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Dewa No</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-            </div>
-        </app-step-pane>
+<app-step-form-layout
+  leftCardTitle="Property Details"
+  finishButtonText="Add Property"
+  (finish)="submitProperty()"
+>
+  <!-- Step Basic Details Content -->
+  <ng-container>
+    <app-step-pane
+      title="Basic Details"
+      description="Fill all the fields to add Your property"
+    >
+      <form class="row g-3" [formGroup]="basicDetailsForm">
+        <div class="col-md-6">
+          <label class="form-label">Property Name</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="propertyName"
+          />
+          @if (isInvalid(basicDetailsForm, 'propertyName').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "propertyName").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Property Type</label>
+          <app-custom-select
+            [options]="propertyType"
+            key="key"
+            value="value"
+            formControlName="propertyType"
+          ></app-custom-select>
+          @if (isInvalid(basicDetailsForm, 'propertyType').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "propertyType").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Land Area <small>Sq-ft</small></label>
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="landArea"
+          />
+          @if (isInvalid(basicDetailsForm, 'landArea').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "landArea").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Land DM No (Affection Plan)</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter Land DM No"
+            formControlName="landDMNo"
+          />
+          @if (isInvalid(basicDetailsForm, 'landDMNo').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "landDMNo").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Apartment No</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter apartment number"
+            formControlName="apartmentNo"
+          />
+          @if (isInvalid(basicDetailsForm, 'apartmentNo').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "apartmentNo").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Address</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter address here"
+            formControlName="address"
+          />
+          @if (isInvalid(basicDetailsForm, 'address').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "address").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">No of Bedrooms</label>
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="NoOfBedrooms"
+          />
+          @if (isInvalid(basicDetailsForm, 'NoOfBedrooms').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "NoOfBedrooms").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label"
+            >Area of Property <small>Sq-ft</small></label
+          >
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="areaOfProperty"
+          />
+          @if (isInvalid(basicDetailsForm, 'areaOfProperty').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "areaOfProperty").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">No of Floors</label>
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="NoOfFloors"
+          />
+          @if (isInvalid(basicDetailsForm, 'NoOfFloors').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "NoOfFloors").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">No of Parking</label>
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="NoOfParking"
+          />
+          @if (isInvalid(basicDetailsForm, 'NoOfParking').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "NoOfParking").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">No of Balcony</label>
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="NoOfBalcony"
+          />
+          @if (isInvalid(basicDetailsForm, 'NoOfBalcony').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "NoOfBalcony").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Plot No</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="plotNo"
+          />
+          @if (isInvalid(basicDetailsForm, 'plotNo').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "plotNo").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Makani No</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="makaniNo"
+          />
+          @if (isInvalid(basicDetailsForm, 'makaniNo').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "makaniNo").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Dewa No</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="dewaNo"
+          />
+          @if (isInvalid(basicDetailsForm, 'dewaNo').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "dewaNo").msg }}
+          </small>
+          }
+        </div>
+      </form>
+    </app-step-pane>
+  </ng-container>
+
+  <!-- Step Commercials Content -->
+  <ng-container>
+    <app-step-pane
+      title="Commercials"
+      description="Fill all the fields to add Your property"
+    >
+      <form class="row g-3" [formGroup]="commercialsForm">
+        <div class="col-md-3">
+          <label class="form-label">Rent</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="rent"
+          />
+          @if (isInvalid(basicDetailsForm, 'rent').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "rent").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Security Deposit</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="securityDeposit"
+          />
+          @if (isInvalid(basicDetailsForm, 'securityDeposit').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "securityDeposit").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Booking Amount</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="bookingAmount"
+          />
+          @if (isInvalid(basicDetailsForm, 'bookingAmount').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "bookingAmount").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Maintenance Charges</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="maintenanceCharges"
+          />
+          @if (isInvalid(basicDetailsForm, 'maintenanceCharges').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "maintenanceCharges").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Cycle (in months)</label>
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="cycle"
+          />
+          @if (isInvalid(basicDetailsForm, 'cycle').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "cycle").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Notice Period (in months)</label>
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="noticePeriod"
+          />
+          @if (isInvalid(basicDetailsForm, 'noticePeriod').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "noticePeriod").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Commission in %</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter here"
+            formControlName="commission"
+          />
+          @if (isInvalid(basicDetailsForm, 'commission').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "commission").msg }}
+          </small>
+          }
+        </div>
+      </form>
+    </app-step-pane>
+
+    <ng-container *ngIf="currentRole === 'owner'">
+      <app-step-pane title="Add PMC" [secondCard]="true">
+        <form class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Property PMC</label>
+            <app-custom-select
+              [options]="PMC_List"
+            ></app-custom-select>
+          </div>
+        </form>
+      </app-step-pane>
     </ng-container>
+  </ng-container>
 
-    <!-- Step Commercials Content -->
-    <ng-container>
-        <app-step-pane title="Commercials" description="Fill all the fields to add Your property">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label">Rent</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Security Deposit</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Booking Amount</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Maintenance Charges</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Cycle</label>
-                    <app-custom-select [options]="['1 Month', '2 Months', '3 Months', '4 Months', '5 Months']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Notice Period</label>
-                    <app-custom-select [options]="['1 Month', '2 Months', '3 Months', '4 Months', '5 Months']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Commission in %</label>
-                    <input type="text" class="form-control" placeholder="Enter here">
-                </div>
-            </div>
-        </app-step-pane>
+  <!-- Step Property Images Content -->
+  <ng-container>
+    <app-step-pane
+      title="Property Images"
+      description="Upload images of the property"
+    >
+      <div class="commonTabs">
+        <ul class="nav nav-tabs" id="propertyImagesTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="exterior-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#exterior-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="exterior-tab-pane"
+              aria-selected="true"
+            >
+              Exterior
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="interior-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#interior-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="interior-tab-pane"
+              aria-selected="false"
+            >
+              Interior
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="commonTabsContent">
+        <div class="tab-content" id="propertyImagesTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="exterior-tab-pane"
+            role="tabpanel"
+            aria-labelledby="exterior-tab"
+            tabindex="0"
+          >
+            <app-upload-document />
+          </div>
+          <div
+            class="tab-pane fade"
+            id="interior-tab-pane"
+            role="tabpanel"
+            aria-labelledby="interior-tab"
+            tabindex="0"
+          >
+            <app-upload-document />
+          </div>
+        </div>
+      </div>
+    </app-step-pane>
+  </ng-container>
 
-        <ng-container *ngIf="currentRole === 'owner'">
-            <app-step-pane title="Add PMC" [secondCard]="true">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Property PMC</label>
-                        <app-custom-select [options]="['Novatis AG...', 'Agriculture....', 'Honda...']"
-                            (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                    </div>
-                </div>
-            </app-step-pane>
-        </ng-container>
-    </ng-container>
-
-    <!-- Step Property Images Content -->
-    <ng-container>
-        <app-step-pane title="Property Images" description="Upload images of the property">
-            <div class="commonTabs">
-                <ul class="nav nav-tabs" id="propertyImagesTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="exterior-tab" data-bs-toggle="tab"
-                            data-bs-target="#exterior-tab-pane" type="button" role="tab"
-                            aria-controls="exterior-tab-pane" aria-selected="true">Exterior</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="interior-tab" data-bs-toggle="tab"
-                            data-bs-target="#interior-tab-pane" type="button" role="tab"
-                            aria-controls="interior-tab-pane" aria-selected="false">Interior</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="commonTabsContent">
-                <div class="tab-content" id="propertyImagesTabContent">
-                    <div class="tab-pane fade show active" id="exterior-tab-pane" role="tabpanel"
-                        aria-labelledby="exterior-tab" tabindex="0">
-                        <app-upload-document />
-                    </div>
-                    <div class="tab-pane fade" id="interior-tab-pane" role="tabpanel" aria-labelledby="interior-tab"
-                        tabindex="0">
-                        <app-upload-document />
-                    </div>
-                </div>
-            </div>
-        </app-step-pane>
-    </ng-container>
-
-    <!-- Step Documentation Content -->
-    <ng-container>
-        <app-step-pane title="Documentation" description="Upload documents of the property">
-            <div class="commonTabs">
-                <ul class="nav nav-tabs" id="documentsTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="propertyFloorPlan-tab" data-bs-toggle="tab"
-                            data-bs-target="#propertyFloorPlan-tab-pane" type="button" role="tab"
-                            aria-controls="propertyFloorPlan-tab-pane" aria-selected="true">Property Floor Plan</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="tenantDoc-tab" data-bs-toggle="tab"
-                            data-bs-target="#tenantDoc-tab-pane" type="button" role="tab"
-                            aria-controls="tenantDoc-tab-pane" aria-selected="false">Tenant Doc</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="ejariCertificates-tab" data-bs-toggle="tab"
-                            data-bs-target="#ejariCertificates-tab-pane" type="button" role="tab"
-                            aria-controls="ejariCertificates-tab-pane" aria-selected="false">Ejari Certificates</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pmcDocs-tab" data-bs-toggle="tab"
-                            data-bs-target="#pmcDocs-tab-pane" type="button" role="tab" aria-controls="pmcDocs-tab-pane"
-                            aria-selected="false">PMC DOCS</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="cheque-tab" data-bs-toggle="tab" data-bs-target="#cheque-tab-pane"
-                            type="button" role="tab" aria-controls="cheque-tab-pane"
-                            aria-selected="false">Cheque</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="commonTabsContent">
-                <div class="tab-content" id="documentsTabContent">
-                    <div class="tab-pane fade show active" id="propertyFloorPlan-tab-pane" role="tabpanel"
-                        aria-labelledby="propertyFloorPlan-tab" tabindex="0">
-                        <app-upload-document />
-                    </div>
-                    <div class="tab-pane fade" id="tenantDoc-tab-pane" role="tabpanel" aria-labelledby="tenantDoc-tab"
-                        tabindex="0">
-                        <app-upload-document />
-                    </div>
-                    <div class="tab-pane fade" id="ejariCertificates-tab-pane" role="tabpanel"
-                        aria-labelledby="ejariCertificates-tab" tabindex="0">
-                        <app-upload-document />
-                    </div>
-                    <div class="tab-pane fade" id="ejariCertificates-tab-pane" role="tabpanel"
-                        aria-labelledby="ejariCertificates-tab" tabindex="0">
-                        <app-upload-document />
-                    </div>
-                    <div class="tab-pane fade" id="pmcDocs-tab-pane" role="tabpanel" aria-labelledby="pmcDocs-tab"
-                        tabindex="0">
-                        <app-upload-document />
-                    </div>
-                    <div class="tab-pane fade" id="cheque-tab-pane" role="tabpanel" aria-labelledby="cheque-tab"
-                        tabindex="0">
-                        <app-upload-document />
-                    </div>
-                </div>
-            </div>
-        </app-step-pane>
-    </ng-container>
-
+  <!-- Step Documentation Content -->
+  <ng-container>
+    <app-step-pane
+      title="Documentation"
+      description="Upload documents of the property"
+    >
+      <div class="commonTabs">
+        <ul class="nav nav-tabs" id="documentsTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="propertyFloorPlan-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#propertyFloorPlan-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="propertyFloorPlan-tab-pane"
+              aria-selected="true"
+            >
+              Property Floor Plan
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="tenantDoc-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tenantDoc-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="tenantDoc-tab-pane"
+              aria-selected="false"
+            >
+              Tenant Doc
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="ejariCertificates-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#ejariCertificates-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="ejariCertificates-tab-pane"
+              aria-selected="false"
+            >
+              Ejari Certificates
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="pmcDocs-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#pmcDocs-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="pmcDocs-tab-pane"
+              aria-selected="false"
+            >
+              PMC DOCS
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="cheque-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#cheque-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="cheque-tab-pane"
+              aria-selected="false"
+            >
+              Cheque
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="commonTabsContent">
+        <div class="tab-content" id="documentsTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="propertyFloorPlan-tab-pane"
+            role="tabpanel"
+            aria-labelledby="propertyFloorPlan-tab"
+            tabindex="0"
+          >
+            <app-upload-document />
+          </div>
+          <div
+            class="tab-pane fade"
+            id="tenantDoc-tab-pane"
+            role="tabpanel"
+            aria-labelledby="tenantDoc-tab"
+            tabindex="0"
+          >
+            <app-upload-document />
+          </div>
+          <div
+            class="tab-pane fade"
+            id="ejariCertificates-tab-pane"
+            role="tabpanel"
+            aria-labelledby="ejariCertificates-tab"
+            tabindex="0"
+          >
+            <app-upload-document />
+          </div>
+          <div
+            class="tab-pane fade"
+            id="ejariCertificates-tab-pane"
+            role="tabpanel"
+            aria-labelledby="ejariCertificates-tab"
+            tabindex="0"
+          >
+            <app-upload-document />
+          </div>
+          <div
+            class="tab-pane fade"
+            id="pmcDocs-tab-pane"
+            role="tabpanel"
+            aria-labelledby="pmcDocs-tab"
+            tabindex="0"
+          >
+            <app-upload-document />
+          </div>
+          <div
+            class="tab-pane fade"
+            id="cheque-tab-pane"
+            role="tabpanel"
+            aria-labelledby="cheque-tab"
+            tabindex="0"
+          >
+            <app-upload-document />
+          </div>
+        </div>
+      </div>
+    </app-step-pane>
+  </ng-container>
 </app-step-form-layout>

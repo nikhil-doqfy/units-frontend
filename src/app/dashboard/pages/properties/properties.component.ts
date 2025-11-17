@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -103,16 +103,18 @@ export class PropertiesComponent {
   }
 
   ngOnInit() {
-    this.themeService.currentRole$.subscribe((role) => {
-      this.currentRole = role;
+    this.themeService.currentRole$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((role) => {
+        this.currentRole = role;
 
-      if (this.currentRole === 'tenant') {
-        this.propertyView = 'my-properties';
-      } else {
-        this.propertyView = 'all-properties';
-        this.getProperties();
-      }
-    });
+        if (this.currentRole === 'tenant') {
+          this.propertyView = 'my-properties';
+        } else {
+          this.propertyView = 'all-properties';
+          this.getProperties();
+        }
+      });
   }
 
   onPropertyViewChange() {

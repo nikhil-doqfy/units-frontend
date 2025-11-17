@@ -75,6 +75,11 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.OWNERS' },
       },
       {
+        path: 'owners/detail/:id',
+        component: OwnersComponent,
+        data: { titleKey: 'PAGE_TITLE.OWNERS' },
+      },
+      {
         path: 'approval',
         component: ApprovalComponent,
         data: { titleKey: 'PAGE_TITLE.APPROVAL' },
@@ -83,6 +88,10 @@ export const routes: Routes = [
         path: 'staff',
         component: StaffComponent,
         data: { titleKey: 'PAGE_TITLE.STAFF' },
+      },
+      {
+        path: 'staff/detail/:id',
+        component: StaffComponent,
       },
       {
         path: 'users',
