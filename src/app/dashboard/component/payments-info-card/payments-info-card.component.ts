@@ -1,13 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payments-info-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './payments-info-card.component.html',
-  styleUrl: './payments-info-card.component.css'
+  styleUrl: './payments-info-card.component.css',
 })
 export class PaymentsInfoCardComponent {
   @Input() overallAmountPaid!: string;
@@ -16,7 +17,7 @@ export class PaymentsInfoCardComponent {
   @Input() dueTime!: string;
   @Input() lastDate!: string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   goToPayment(): void {
     this.router.navigate(['dashboard/pay-my-dues']);

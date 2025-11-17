@@ -1,17 +1,34 @@
-import { Component, Input, Output, EventEmitter, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { BackIconComponent } from "../icons/back-icon/back-icon.component";
-import { BHKIconComponent } from "../icons/bhk-icon/bhk-icon.component";
-import { SqaureFeetIconComponent } from "../icons/sqaure-feet-icon/sqaure-feet-icon.component";
-import { PropertyAccordianCardComponent } from "../property-accordian-card/property-accordian-card.component";
+import { BackIconComponent } from '../icons/back-icon/back-icon.component';
+import { BHKIconComponent } from '../icons/bhk-icon/bhk-icon.component';
+import { SqaureFeetIconComponent } from '../icons/sqaure-feet-icon/sqaure-feet-icon.component';
+import { PropertyAccordianCardComponent } from '../property-accordian-card/property-accordian-card.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-property-view-card',
   standalone: true,
-  imports: [CommonModule, NgbAccordionModule, BackIconComponent, BHKIconComponent, SqaureFeetIconComponent, PropertyAccordianCardComponent],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    NgbAccordionModule,
+    BackIconComponent,
+    BHKIconComponent,
+    SqaureFeetIconComponent,
+    PropertyAccordianCardComponent,
+  ],
   templateUrl: './property-view-card.component.html',
   styleUrls: ['./property-view-card.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -25,10 +42,15 @@ export class PropertyViewCardComponent {
   @Input() price!: string;
   @Input() bhk!: string;
   @Input() sqft!: string;
-  @Input() sections!: { title: string, items: { label: string, value: string }[] }[];
+  @Input() sections!: {
+    title: string;
+    items: { label: string; value: string }[];
+  }[];
 
   @Output() back = new EventEmitter<void>();
-  onBackClick() { this.back.emit(); }
+  onBackClick() {
+    this.back.emit();
+  }
 
   @ViewChild('mainSwiper', { static: false }) mainSwiper!: ElementRef;
   @ViewChild('thumbSwiper', { static: false }) thumbSwiper!: ElementRef;
@@ -40,13 +62,13 @@ export class PropertyViewCardComponent {
     576: { slidesPerView: 1, spaceBetween: 16 },
     768: { slidesPerView: 1, spaceBetween: 16 },
     992: { slidesPerView: 1, spaceBetween: 16 },
-    1200: { slidesPerView: 1, spaceBetween: 16 }
+    1200: { slidesPerView: 1, spaceBetween: 16 },
   };
 
   swiperConfig: any = {
     slidesPerView: 1,
     spaceBetween: 16,
-    effect: "fade",
+    effect: 'fade',
     fadeEffect: {
       crossFade: true,
     },
@@ -54,7 +76,7 @@ export class PropertyViewCardComponent {
       delay: 3000,
       disableOnInteraction: false,
     },
-    breakpoints: this.swiperBreakpoints
+    breakpoints: this.swiperBreakpoints,
   };
 
   ngAfterViewInit() {
@@ -75,8 +97,8 @@ export class PropertyViewCardComponent {
             768: {
               direction: 'vertical',
               slidesPerView: 4,
-            }
-          }
+            },
+          },
         });
         thumbEl.initialize();
         this.thumbsSwiper = thumbEl.swiper;
@@ -89,7 +111,7 @@ export class PropertyViewCardComponent {
           effect: 'fade',
           fadeEffect: { crossFade: true },
           pagination: false,
-          autoplay: false
+          autoplay: false,
         });
         mainEl.initialize();
       }

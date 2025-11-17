@@ -2,24 +2,39 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { WhiteCardComponent } from "../../../shared/component/white-card/white-card.component";
-import { PaymentsInfoCardComponent } from "../../component/payments-info-card/payments-info-card.component";
-import { TableTitleComponent } from "../../../dashboard/component/table-title/table-title.component";
-import { TableSelectComponent } from "../../component/table-select/table-select.component";
-import { TableSearchComponent } from "../../component/table-search/table-search.component";
-import { TableFilterButtonComponent } from "../../../dashboard/component/table-filter-btn/table-filter-btn.component";
+import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
+import { PaymentsInfoCardComponent } from '../../component/payments-info-card/payments-info-card.component';
+import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
+import { TableSelectComponent } from '../../component/table-select/table-select.component';
+import { TableSearchComponent } from '../../component/table-search/table-search.component';
+import { TableFilterButtonComponent } from '../../../dashboard/component/table-filter-btn/table-filter-btn.component';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
-import { ExportIconComponent } from "../../component/icons/export-icon/export-icon.component";
-import { TableActionButtonComponent } from "../../component/table-action-btn/table-action-btn.component";
-import { TablePaginationComponent } from "../../../dashboard/component/table-pagination/table-pagination.component";
-import { CustomSelectComponent } from "../../component/custom-select/custom-select.component";
+import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
+import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
+import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payments-and-invoice',
   standalone: true,
-  imports: [CommonModule, WhiteCardComponent, PaymentsInfoCardComponent, TableTitleComponent, TableSelectComponent, TableSearchComponent, TableFilterButtonComponent, FilterIconComponent, ExportIconComponent, TableActionButtonComponent, TablePaginationComponent, CustomSelectComponent],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    WhiteCardComponent,
+    PaymentsInfoCardComponent,
+    TableTitleComponent,
+    TableSelectComponent,
+    TableSearchComponent,
+    TableFilterButtonComponent,
+    FilterIconComponent,
+    ExportIconComponent,
+    TableActionButtonComponent,
+    TablePaginationComponent,
+    CustomSelectComponent,
+  ],
   templateUrl: './payments-and-invoice.component.html',
-  styleUrl: './payments-and-invoice.component.css'
+  styleUrl: './payments-and-invoice.component.css',
 })
 export class PaymentsAndInvoiceComponent {
   selected: string = 'Property Name: All';
@@ -28,13 +43,13 @@ export class PaymentsAndInvoiceComponent {
     { label: 'Payments & Invoice', link: '' },
   ];
 
-  overallAmountPaid = "AED 5,678";
-  monthlyRent = "AED300";
-  maintenanceCharges = "AED12";
-  dueTime = "5 Days";
-  lastDate = "29/09/2025";
+  overallAmountPaid = 'AED 5,678';
+  monthlyRent = 'AED300';
+  maintenanceCharges = 'AED12';
+  dueTime = '5 Days';
+  lastDate = '29/09/2025';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   onOptionSelected(option: string) {
     this.selected = option;
