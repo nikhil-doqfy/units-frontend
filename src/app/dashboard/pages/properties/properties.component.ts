@@ -30,6 +30,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-properties',
@@ -58,6 +59,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
     CardTitleComponent,
     DashTitleComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',

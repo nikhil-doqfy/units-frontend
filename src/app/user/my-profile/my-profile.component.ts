@@ -16,6 +16,7 @@ import { DashFormComponent } from '../../shared/component/dash-form/dash-form.co
 import { EditIconComponent } from '../component/icons/edit-icon/edit-icon.component';
 import { UserService } from '../services/user.service';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-my-profile',
@@ -27,6 +28,7 @@ import { Subject, takeUntil } from 'rxjs';
     WhiteCardComponent,
     DashFormComponent,
     EditIconComponent,
+    TranslateModule,
   ],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css',

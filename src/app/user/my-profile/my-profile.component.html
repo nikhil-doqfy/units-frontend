@@ -2,8 +2,11 @@
   <app-dash-form>
     <form>
       <app-white-card
-        title="Account details"
-        description="Manage all your account and profile information in one place."
+        title="{{ 'Account details' | translate }}"
+        description="{{
+          'Manage all your account and profile information in one place.'
+            | translate
+        }}"
         [showActions]="true"
       >
         <div class="myPrflFrm" [class.editMode]="editUserMode">

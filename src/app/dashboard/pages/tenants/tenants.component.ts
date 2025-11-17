@@ -41,6 +41,7 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-tenants',
@@ -67,6 +68,7 @@ import { TranslateModule } from '@ngx-translate/core';
     WhiteCardComponent,
     DocumentTypeItemComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
