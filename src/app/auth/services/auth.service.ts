@@ -16,13 +16,11 @@ export class AuthService {
     private storage: StorageService
   ) {}
   login(data: any) {
-    console.log('environment.SERVER_ADDRESS:--', environment.SERVER_ADDRESS);
     return this.http
       .post(`${environment.SERVER_ADDRESS}/auth/login/`, data)
       .pipe(
         map((resp: any) => {
           this.storageService.setToken(resp['content'].access_token);
-          // this.storageService.setCurrentStatus(resp['content'].redirect_to);
           this.storageService.setUserProfile(resp['content']);
           return resp;
         })
