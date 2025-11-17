@@ -1,17 +1,27 @@
 <app-auth-title title="Sign Up" description="to create your account" />
 
 <app-auth-form>
-  <form class="mb-4" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+  <form class="mb-4" [formGroup]="signupForm" (ngSubmit)="sendOtp()">
     <div class="grid-2">
       <ng-container *ngIf="selectedRole === 'owner'">
         <div class="mb-2">
           <label for="companyName" class="form-label">Frist Name</label>
-          <input class="form-control" type="text" placeholder="Enter here" />
+          <input
+            class="form-control"
+            formControlName="first_name"
+            type="text"
+            placeholder="Enter here"
+          />
         </div>
 
         <div class="mb-2">
           <label for="emiratesId" class="form-label">Last Name</label>
-          <input class="form-control" type="text" placeholder="Enter here" />
+          <input
+            class="form-control"
+            formControlName="last_name"
+            type="text"
+            placeholder="Enter here"
+          />
         </div>
       </ng-container>
       <ng-container *ngIf="selectedRole === 'property-manager'">
@@ -48,7 +58,7 @@
         </div>
 
         <div class="mb-2">
-          <label for="flatNumber" class="form-label">Emirates ID</label>
+          <label for="flatNumber" class="form-label">Last Name</label>
           <input class="form-control" type="text" placeholder=" Enter here" />
         </div>
       </ng-container>
@@ -61,7 +71,6 @@
           <i><app-email-icon /></i>
           <input
             class="form-control"
-            type="email"
             formControlName="email"
             placeholder="Enter your email"
           />
@@ -77,19 +86,19 @@
       </div>
 
       <div class="mb-2">
-        <label for="contactNumber" class="form-label">Contact Number</label>
+        <label for="contact_Number" class="form-label">Contact Number</label>
         <div class="iconInput">
           <i><app-contact-number></app-contact-number></i>
           <input
             class="form-control"
             type="tel"
-            formControlName="contactNumber"
+            formControlName="Contact_Number"
             placeholder="Enter your number"
           />
           <small
             *ngIf="
-              signupForm.get('contactNumber')?.invalid &&
-              signupForm.get('contactNumber')?.touched
+              signupForm.get('Contact_Number')?.invalid &&
+              signupForm.get('Contact_Number')?.touched
             "
           >
             Contact number is required
@@ -262,9 +271,9 @@
                 Resend OTP
               </button>
               <button
-                type="button"
+                type="submit"
+                (click)="signInWithOtp()"
                 class="btn btnCommons btn-wide"
-                (click)="goToResetPassword()"
               >
                 Submit
               </button>

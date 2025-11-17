@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './upload-big-icon.component.html',
-  styleUrl: './upload-big-icon.component.css'
+  styleUrl: './upload-big-icon.component.css',
 })
-export class UploadBigIconComponent {
-
-}
+export class UploadBigIconComponent {}
