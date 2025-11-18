@@ -74,6 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAddPropertyActive = false;
   isAddLeaseActive = false;
   currentLanguage = 'en';
+  userProfile = this.storage.getUserProfile();
 
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
 
