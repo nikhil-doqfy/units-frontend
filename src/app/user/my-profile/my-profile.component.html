@@ -49,7 +49,7 @@
           </div>
           <div class="myPrflFrmGrpLst mt-3">
             <div class="myPrflFrmGrp" [class.changed]="changedFields.email">
-              <label for="email">Primary Email ID</label>
+              <label for="email">{{ "Primary Email ID" | translate }}</label>
               <input
                 type="email"
                 name="email"
@@ -59,7 +59,7 @@
               />
             </div>
             <div class="myPrflFrmGrp" [class.changed]="changedFields.contact">
-              <label for="contact">Contact</label>
+              <label for="contact">{{ "Contact" | translate }}</label>
               <input
                 type="number"
                 name="contact"
@@ -69,7 +69,7 @@
               />
             </div>
             <div class="myPrflFrmGrp" [class.changed]="changedFields.role">
-              <label for="role">Role</label>
+              <label for="role">{{ "Role" | translate }}</label>
               <input
                 type="text"
                 name="role"
@@ -79,7 +79,7 @@
               />
             </div>
             <div class="myPrflFrmGrp" [class.changed]="changedFields.password">
-              <label for="password">Password</label>
+              <label for="password">{{ "Password" | translate }}</label>
               <input
                 type="password"
                 name="password"
@@ -97,7 +97,7 @@
             class="btn btnCommon btnWhite"
             (click)="enableUserEdit()"
           >
-            <i><app-edit-icon /></i>Edit
+            <i><app-edit-icon /></i>{{ "Edit" | translate }}
           </button>
           <button
             *ngIf="editUserMode"
@@ -122,11 +122,14 @@
 </div>
 <app-dash-form>
   <form>
-    <app-white-card title="Other details" [showActions]="true">
+    <app-white-card
+      title="{{ 'Other details' | translate }}"
+      [showActions]="true"
+    >
       <div class="myPrflFrm othrDtlFrm" [class.editMode]="editOtherDetailsMode">
         <div class="myPrflFrmGrpLst">
           <div class="myPrflFrmGrp" [class.changed]="changedFields.country">
-            <label for="country">Country</label>
+            <label for="country">{{ "Country" | translate }}</label>
             <input
               type="text"
               name="country"
@@ -136,7 +139,7 @@
             />
           </div>
           <div class="myPrflFrmGrp" [class.changed]="changedFields.timeZone">
-            <label for="timeZone">Time Zone</label>
+            <label for="timeZone">{{ "Time Zone" | translate }}</label>
             <input
               type="text"
               name="timeZone"
@@ -146,7 +149,7 @@
             />
           </div>
           <div class="myPrflFrmGrp" [class.changed]="changedFields.address">
-            <label for="address">Address</label>
+            <label for="address">{{ "Address" | translate }}</label>
             <textarea
               name="address"
               [(ngModel)]="otherDetails.address"
@@ -155,7 +158,7 @@
             ></textarea>
           </div>
           <div class="myPrflFrmGrp" [class.changed]="changedFields.state">
-            <label for="state">State</label>
+            <label for="state">{{ "State" | translate }}</label>
             <input
               type="text"
               name="state"
@@ -165,7 +168,7 @@
             />
           </div>
           <div class="myPrflFrmGrp" [class.changed]="changedFields.postalCode">
-            <label for="postalCode">Postal Code</label>
+            <label for="postalCode">{{ "Postal Code" | translate }}</label>
             <input
               type="number"
               inputmode="numeric"
@@ -185,7 +188,7 @@
           class="btn btnCommon btnWhite"
           (click)="enableOtherDetailsEdit()"
         >
-          <i><app-edit-icon /></i>Edit
+          <i><app-edit-icon /></i>{{ "Edit" | translate }}
         </button>
         <button
           *ngIf="editOtherDetailsMode"
@@ -193,7 +196,7 @@
           class="btn btnCommon btnActive"
           (click)="saveOtherDetails()"
         >
-          Save changes
+          {{ "Save changes" | translate }}
         </button>
         <button
           *ngIf="editOtherDetailsMode"
@@ -201,7 +204,7 @@
           class="btn btnCommon btnDarkGrey"
           (click)="cancelOtherDetails()"
         >
-          Cancel
+          {{ "Cancel" | translate }}
         </button>
       </ng-container>
     </app-white-card>

@@ -12,7 +12,7 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search
-              placeholder="Search here..."
+              placeholder="{{ 'SEARCH_HERE' | translate }}"
               (onValueChange)="onTenantsSearch$.next($event)"
             />
             <app-table-filter-btn

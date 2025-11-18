@@ -30,6 +30,7 @@ import { DocumentTypeItemComponent } from '../../component/document-type-item/do
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-pmc',
@@ -54,6 +55,7 @@ import { TranslateModule } from '@ngx-translate/core';
     SortingIconComponent,
     TableImgItemComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './pmc.component.html',
   styleUrl: './pmc.component.css',
@@ -66,7 +68,7 @@ export class PMCComponent {
 
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
-
+  pmcList: any[] = [];
   showDetailView: boolean = false;
 
   documentActions = [

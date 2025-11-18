@@ -183,5 +183,19 @@
   "Can I track maintenance requests and service updates?": "Can I track maintenance requests and service updates?",
   "Is my property and tenant data secure?": "Is my property and tenant data secure?",
   "Property Information": "Property Information",
-  "Rent Cost": "Rent Cost"
+  "Rent Cost": "Rent Cost",
+  "Account details": "Account details",
+  "Manage all your account and profile information in one place.": "Manage all your account and profile information in one place.",
+  "Primary Email ID": "Primary Email ID",
+  "Contact": "Contact",
+  "Password": "Password",
+  "Edit": "Edit",
+  "Country": "Country",
+  "Time Zone": "Time Zone",
+  "Address": "Address",
+  "State": "State",
+  "Save changes": "Save changes",
+  "Cancel": "Cancel",
+  "Other details": "Other details",
+  "Postal Code": "Postal Code"
 }

@@ -172,6 +172,7 @@ export class NewUserComponent implements OnInit {
     const fields = [
       'first_name',
       'last_name',
+      'emirate_id',
       'Contact_Number',
       'email',
       'password',
@@ -302,7 +303,7 @@ export class NewUserComponent implements OnInit {
     this.startOtpTimer();
   }
 
-  signInWithOtp(): void {
+  WithOtp(): void {
     let payload = {
       email: this.signupForm.value.email,
       otp: this.otp,

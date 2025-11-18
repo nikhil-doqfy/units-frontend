@@ -184,5 +184,19 @@
   "Can I track maintenance requests and service updates?": "هل يمكنني تتبع طلبات الصيانة وتحديث الخدمة؟",
   "Is my property and tenant data secure?": "ل بيانات ممتلكاتي  ومستأجري آمنة؟",
   "Property Information": "معلومات الملكية",
-  "Rent Cost": "تكلفة الإيجار"
+  "Rent Cost": "تكلفة الإيجار",
+  "Account details": "تفاصيل الحساب",
+  "Manage all your account and profile information in one place.": "إدارة كافة معلومات حسابك وملفك الشخصي في مكان واحد.",
+  "Primary Email ID": "معرف البريد الإلكترونيالأساسي",
+  "Contact": "اتصال",
+  "Password": "كلمة المرور",
+  "Edit": "يحرر",
+  "Country": "دولة",
+  "Time Zone": "المنطقة الزمنية",
+  "Address": "عنوان",
+  "State": "ولاية",
+  "Save changes": "حفظ التغييرات",
+  "Cancel": "يلغي",
+  "Other details": "تفاصيل أخرى",
+  "Postal Code": "رمز بريدي"
 }
