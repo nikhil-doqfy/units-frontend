@@ -4,6 +4,10 @@
   gap: 20px 20px;
 }
 
+.col-span-2 {
+  grid-column: span 2;
+}
+
 .loginRoleSelection {
   display: flex;
   align-items: center;

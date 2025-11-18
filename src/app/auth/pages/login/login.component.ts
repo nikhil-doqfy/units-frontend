@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
 
   otp = '';
   otpSent = false;
+  isOTPVerified = false;
   emailLocked = false;
   otpTimer = 60;
   timerDisplay = '1:00';
@@ -117,9 +118,13 @@ export class LoginComponent implements OnInit {
       user_type: this.getUserType(),
     };
 
+    this.login(payload);
+  }
+
+  login(payload: any): void {
     this.authService.login(payload).subscribe({
       next: (resp: any) => {
-        this.alertService.success('Login successful');
+        this.alertService.success(resp.message);
         this.goToDashboard();
       },
       error: (err) => {
@@ -204,16 +209,25 @@ export class LoginComponent implements OnInit {
       this.alertService.error('Enter a valid email and OTP');
       return;
     }
-    const payload = {
+    const payload: any = {
       email: this.otpForm.value.email,
       otp: Number(this.otpForm.value.otp),
     };
+
+    if (this.isOTPVerified) {
+      payload['user_type'] = this.getUserType();
+      this.login(payload);
+    } else {
+      this.verifyOtp(payload);
+    }
+  }
+
+  verifyOtp(payload: any): void {
     this.authService.verifyOtp(payload).subscribe({
       next: (resp: any) => {
-        this.storageService.setToken(resp['content'].access_token);
-        this.storageService.setUserProfile(resp['content']);
-        this.alertService.success('Login successful');
-        this.goToDashboard();
+        this.alertService.success(resp.message);
+        this.isOTPVerified = true;
+        clearInterval(this.timerInterval);
       },
       error: (err) => {
         console.log('OTP verify error: ', err.err);
@@ -225,6 +239,7 @@ export class LoginComponent implements OnInit {
   changeEmail(): void {
     this.otpSent = false;
     this.emailLocked = false;
+    this.isOTPVerified = false;
     clearInterval(this.timerInterval);
     this.otpForm.get('email')?.enable();
     this.otp = '';

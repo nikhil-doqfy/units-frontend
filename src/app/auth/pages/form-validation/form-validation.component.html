@@ -4,7 +4,7 @@
 />
 
 <app-auth-form>
-  <form class="mt-2">
+  <form class="mt-2" [formGroup]="detailForm">
     <!-- Property Manage Through -->
     <div class="mb-3">
       <label class="form-label">Property Manage Through</label>
@@ -14,7 +14,7 @@
             type="radio"
             name="manageThrough"
             formControlName="manageThrough"
-            value="myself"
+            value="MYSELF"
           />
           Myself
         </label>
@@ -23,7 +23,7 @@
             type="radio"
             name="manageThrough"
             formControlName="manageThrough"
-            value="pmc"
+            value="PMC"
           />
           PMC
         </label>
@@ -40,7 +40,11 @@
         placeholder="Enter here"
         formControlName="emirateId"
       />
-      <!-- </div> -->
+      @if (isInvalid(detailForm, 'emirateId').status) {
+      <small class="errorMsg">
+        {{ isInvalid(detailForm, "emirateId").msg }}
+      </small>
+      }
     </div>
 
     <!-- UAE Residence Visa -->
@@ -53,6 +57,11 @@
         placeholder="Enter here"
         formControlName="residenceVisa"
       />
+      @if (isInvalid(detailForm, 'residenceVisa').status) {
+      <small class="errorMsg">
+        {{ isInvalid(detailForm, "residenceVisa").msg }}
+      </small>
+      }
     </div>
 
     <!-- Trade License Number -->
@@ -65,6 +74,11 @@
         placeholder="Enter here"
         formControlName="tradeLicense"
       />
+      @if (isInvalid(detailForm, 'tradeLicense').status) {
+      <small class="errorMsg">
+        {{ isInvalid(detailForm, "tradeLicense").msg }}
+      </small>
+      }
     </div>
 
     <div class="frmBtnss d-flex justify-content-center gap-3 mt-2">

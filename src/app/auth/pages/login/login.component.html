@@ -118,7 +118,7 @@
         [class.disabled]="!otpSent"
         class="btn btnCommon btnMinWidth"
       >
-        Sign In
+       {{ isOTPVerified ?  'Sign In' : 'Verify'}}
       </button>
     </div>
   </form>
