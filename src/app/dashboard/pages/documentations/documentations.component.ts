@@ -11,6 +11,7 @@ import { ExportIconComponent } from '../../component/icons/export-icon/export-ic
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-documentations',
@@ -26,11 +27,13 @@ import { TranslateModule } from '@ngx-translate/core';
     TableActionButtonComponent,
     TablePaginationComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './documentations.component.html',
   styleUrl: './documentations.component.css',
 })
 export class DocumentationsComponent {
+  documentationList: any[] = [];
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Documentations', link: '' },

@@ -10,6 +10,8 @@ import { SharedService } from '../../shared.service';
   providedIn: 'root',
 })
 export class AuthService {
+  signupData: Record<string, any> = {};
+
   constructor(
     private storageService: StorageService,
     private http: HttpClient,
@@ -59,5 +61,9 @@ export class AuthService {
 
   logout(): Observable<any> {
     return this.http.post(`${environment.SERVER_ADDRESS}/auth/logout/`, {});
+  }
+
+  signUp(data: Record<string, any>) {
+    return this.http.post(`${environment.SERVER_ADDRESS}/user/signup/`, data);
   }
 }

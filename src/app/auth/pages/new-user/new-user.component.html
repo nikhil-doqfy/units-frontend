@@ -1,9 +1,11 @@
 <app-auth-title title="Sign Up" description="to create your account" />
 
 <app-auth-form>
-  <form class="mb-4" [formGroup]="signupForm" (ngSubmit)="sendOtp()">
+  <form class="mb-4" [formGroup]="signupForm">
     <div class="grid-2">
-      <ng-container *ngIf="selectedRole === 'owner'">
+      <ng-container
+        *ngIf="selectedRole === 'owner' || selectedRole === 'tenant'"
+      >
         <div class="mb-2">
           <label for="companyName" class="form-label">Frist Name</label>
           <input
@@ -12,6 +14,11 @@
             type="text"
             placeholder="Enter here"
           />
+          @if (isInvalid(signupForm, 'first_name').status) {
+          <small class="errorMsg">
+            {{ isInvalid(signupForm, "first_name").msg }}
+          </small>
+          }
         </div>
 
         <div class="mb-2">
@@ -22,44 +29,59 @@
             type="text"
             placeholder="Enter here"
           />
+          @if (isInvalid(signupForm, 'last_name').status) {
+          <small class="errorMsg">
+            {{ isInvalid(signupForm, "last_name").msg }}
+          </small>
+          }
         </div>
       </ng-container>
       <ng-container *ngIf="selectedRole === 'property-manager'">
         <div class="mb-2">
           <label for="companyName" class="form-label">Company Name</label>
-          <input class="form-control" type="text" placeholder="Enter here" />
-          <small
-            *ngIf="
-              signupForm.get('companyName')?.invalid &&
-              signupForm.get('companyName')?.touched
-            "
-          >
-            Company name is required
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter here"
+            formControlName="company_name"
+          />
+          @if (isInvalid(signupForm, 'company_name').status) {
+          <small class="errorMsg">
+            {{ isInvalid(signupForm, "company_name").msg }}
           </small>
+          }
         </div>
 
         <div class="mb-2">
           <label for="emiratesId" class="form-label">Company Emirates ID</label>
-          <input class="form-control" type="text" placeholder="Enter here" />
-          <small
-            *ngIf="
-              signupForm.get('emiratesId')?.invalid &&
-              signupForm.get('emiratesId')?.touched
-            "
-          >
-            Emirates ID is required
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter here"
+            formControlName="company_emirate_id"
+          />
+          @if (isInvalid(signupForm, 'company_emirate_id').status) {
+          <small class="errorMsg">
+            {{ isInvalid(signupForm, "company_emirate_id").msg }}
           </small>
+          }
         </div>
       </ng-container>
-      <ng-container *ngIf="selectedRole === 'tenant'">
-        <div class="mb-2">
-          <label for="buildingName" class="form-label">Full Name</label>
-          <input class="form-control" type="text" placeholder="Enter here" />
-        </div>
 
-        <div class="mb-2">
-          <label for="flatNumber" class="form-label">Last Name</label>
-          <input class="form-control" type="text" placeholder=" Enter here" />
+      <ng-container *ngIf="selectedRole === 'tenant'">
+        <div class="mb-2 col-span-2">
+          <label for="emiratesId" class="form-label">Emirates ID</label>
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter here"
+            formControlName="emirate_id"
+          />
+          @if (isInvalid(signupForm, 'emirate_id').status) {
+          <small class="errorMsg">
+            {{ isInvalid(signupForm, "emirate_id").msg }}
+          </small>
+          }
         </div>
       </ng-container>
 
@@ -74,14 +96,11 @@
             formControlName="email"
             placeholder="Enter your email"
           />
-          <small
-            *ngIf="
-              signupForm.get('email')?.invalid &&
-              signupForm.get('email')?.touched
-            "
-          >
-            Valid email is required
+          @if (isInvalid(signupForm, 'email').status) {
+          <small class="errorMsg">
+            {{ isInvalid(signupForm, "email").msg }}
           </small>
+          }
         </div>
       </div>
 
@@ -95,14 +114,11 @@
             formControlName="Contact_Number"
             placeholder="Enter your number"
           />
-          <small
-            *ngIf="
-              signupForm.get('Contact_Number')?.invalid &&
-              signupForm.get('Contact_Number')?.touched
-            "
-          >
-            Contact number is required
+          @if (isInvalid(signupForm, 'Contact_Number').status) {
+          <small class="errorMsg">
+            {{ isInvalid(signupForm, "Contact_Number").msg }}
           </small>
+          }
         </div>
       </div>
     </div>
@@ -125,7 +141,7 @@
         />
         <small
           *ngIf="passwordMismatch && signupForm.get('confirmPassword')?.touched"
-          style="color: red"
+          class="errorMsg"
         >
           Passwords do not match
         </small>
@@ -143,7 +159,7 @@
       <button
         type="submit"
         class="btn btnCommon btnMinWidth"
-        (click)="openOtpVerifyModal(otpVerifyContent)"
+        (click)="sendOtp()"
       >
         Verify Account
       </button>
@@ -205,7 +221,9 @@
           <div class="d-flex align-items-center otpVerifyMdlInfo">
             <p class="mb-2">
               We've sent code to
-              <span class="text-primary">haXXX&#64;doqfy.in</span>
+              <span class="text-primary">{{
+                signupForm.get("email")?.value
+              }}</span>
             </p>
             <button
               type="button"
@@ -264,15 +282,8 @@
 
             <div class="d-flex">
               <button
-                type="button"
-                class="btn btnCommonss custom-shadow me-2"
-                (click)="goToResetPassword()"
-              >
-                Resend OTP
-              </button>
-              <button
                 type="submit"
-                (click)="WithOtp()"
+                (click)="verifyOtp()"
                 class="btn btnCommons btn-wide"
               >
                 Submit

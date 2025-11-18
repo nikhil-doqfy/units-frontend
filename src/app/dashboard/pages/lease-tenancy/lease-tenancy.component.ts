@@ -17,6 +17,7 @@ import { TablePaginationComponent } from '../../../dashboard/component/table-pag
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { DashTitleComponent } from '../../../shared/component/dash-title/dash-title.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-lease-tenancy',
@@ -37,11 +38,13 @@ import { TranslateModule } from '@ngx-translate/core';
     SortingIconComponent,
     DashTitleComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './lease-tenancy.component.html',
   styleUrl: './lease-tenancy.component.css',
 })
 export class LeaseTenancyComponent {
+  tenancyList: any[] = [];
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Lease', link: '' },

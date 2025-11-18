@@ -80,7 +80,7 @@ export class MyProfileComponent {
       content?.profile_image === 'N/A' || !content?.profile_image
         ? this.userImage
         : content?.profile_image;
-
+    console.log(content.contact_number);
     this.profile = {
       name: content?.name,
       email: content?.email,

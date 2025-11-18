@@ -14,6 +14,7 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-approval',
@@ -32,11 +33,14 @@ import { TranslateModule } from '@ngx-translate/core';
     TableViewCardComponent,
     DocumentTypeItemComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.css',
 })
 export class ApprovalComponent {
+  ApprovalList: any[] = [];
+
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Approval', link: '' },

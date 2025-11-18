@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, TemplateRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgOtpInputModule } from 'ng-otp-input';
@@ -24,9 +30,9 @@ import { StorageService } from '../../../shared/services/storage.service';
 import { ContactNumberComponent } from '../../../icon/contact-number/contact-number.component';
 import { ThemeService, UserRole } from '../../../theme.service';
 import { TimerTextComponent } from '../../component/timer-text/timer-text.component';
-import { EditIconComponent } from '../../../dashboard/component/icons/edit-icon/edit-icon.component';
 import { VerifyIconEditComponent } from '../../../icon/verify-icon-edit/verify-icon-edit.component';
 import { HeadphoneIconComponent } from '../../../icon/headphone-icon/headphone-icon.component';
+import { FormService } from '../../../shared/services/form.service';
 @Component({
   selector: 'app-new-user',
   standalone: true,
@@ -45,7 +51,6 @@ import { HeadphoneIconComponent } from '../../../icon/headphone-icon/headphone-i
     ReactiveFormsModule,
     ContactNumberComponent,
     TimerTextComponent,
-    EditIconComponent,
     VerifyIconEditComponent,
     HeadphoneIconComponent,
   ],
@@ -53,6 +58,9 @@ import { HeadphoneIconComponent } from '../../../icon/headphone-icon/headphone-i
   styleUrl: './new-user.component.css',
 })
 export class NewUserComponent implements OnInit {
+  private formService = inject(FormService);
+  private modalService = inject(NgbModal);
+  isInvalid = this.formService.isInvalid;
   signupForm!: FormGroup;
   otp = '';
   email = '';
@@ -62,9 +70,10 @@ export class NewUserComponent implements OnInit {
   showConfirmPassword = false;
   passwordMismatch = false;
   password: string = '';
-  // defaultUserType: string = 'OWNER';
-  userType: string = '';
-  private modalService = inject(NgbModal);
+  isOtpVerificationModalOpen = false;
+
+  @ViewChild('otpVerifyContent') otpVerifyContent!: TemplateRef<any>;
+
   constructor(
     private router: Router,
     private themeService: ThemeService,
@@ -82,113 +91,85 @@ export class NewUserComponent implements OnInit {
   timerInterval: any;
   showResend = false;
 
-  onOtpChange(evt: any) {
-    console.log(evt);
-    this.otp = evt;
-  }
-  goToResetPassword(): void {
-    this.modalService.dismissAll();
-    this.router.navigate(['/auth/validation'], {
-      state: { email: this.email, otp: this.otp },
-    });
-  }
   ngOnInit() {
     this.signupForm = this.fb.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
+      first_name: [''],
+      last_name: [''],
       company_name: [''],
       emirate_id: [''],
-      Contact_Number: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-      user_type: [''],
+      company_emirate_id: [''],
+      contact_number: [''],
+      email: ['', [Validators.email]],
+      password: [''],
+      confirmPassword: [''],
     });
+
+    this.onUserTypeChange(this.currentRole);
   }
+
+  roleFieldMap: Record<string, string[]> = {
+    owner: [
+      'first_name',
+      'last_name',
+      'contact_number',
+      'email',
+      'password',
+      'confirmPassword',
+    ],
+    'property-manager': [
+      'company_name',
+      'company_emirate_id',
+      'contact_number',
+      'email',
+      'password',
+      'confirmPassword',
+    ],
+    tenant: [
+      'first_name',
+      'last_name',
+      'emirate_id',
+      'contact_number',
+      'email',
+      'password',
+      'confirmPassword',
+    ],
+  };
 
   onUserTypeChange(type: string) {
-    this.userType = type;
-    this.signupForm.get('user_type')?.setValue(type);
-
-    // Clear all validators first
     this.clearAllDynamicValidators();
 
-    if (type === 'OWNER') this.setOwnerValidators();
-    if (type === 'PROPERTY_MANAGER') this.setPMCValidators();
-    if (type === 'TENANT') this.setTenantValidators();
+    const fields = this.roleFieldMap[type] || [];
+
+    fields.forEach((field) => {
+      const control = this.signupForm.get(field);
+      if (!control) return;
+
+      control.addValidators(Validators.required);
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    });
 
     this.signupForm.updateValueAndValidity();
-  }
-  setOwnerValidators() {
-    const fields = [
-      'first_name',
-      'last_name',
-      'Contact_Number',
-      'email',
-      'password',
-      'confirmPassword',
-    ];
-
-    fields.forEach((f) => {
-      this.signupForm.get(f)?.setValidators([Validators.required]);
-    });
-
-    this.update();
-  }
-  setPMCValidators() {
-    const fields = [
-      'company_name',
-      'emirate_id',
-      'Contact_Number',
-      'email',
-      'password',
-      'confirmPassword',
-    ];
-
-    fields.forEach((f) => {
-      this.signupForm.get(f)?.setValidators([Validators.required]);
-    });
-
-    this.update();
-  }
-  setTenantValidators() {
-    const fields = [
-      'first_name',
-      'last_name',
-      'Contact_Number',
-      'email',
-      'password',
-      'confirmPassword',
-    ];
-
-    fields.forEach((f) => {
-      this.signupForm.get(f)?.setValidators([Validators.required]);
-    });
-
-    this.update();
   }
 
   clearAllDynamicValidators() {
-    const fields = [
-      'first_name',
-      'last_name',
-      'emirate_id',
-      'Contact_Number',
-      'email',
-      'password',
-      'confirmPassword',
-    ];
+    const allFields = [...new Set(Object.values(this.roleFieldMap).flat())];
 
-    fields.forEach((field) => {
-      this.signupForm.get(field)?.clearValidators();
-      this.signupForm.get(field)?.setValue('');
+    allFields.forEach((field) => {
+      const control = this.signupForm.get(field);
+      if (!control) return;
+
+      control.removeValidators(Validators.required);
+
+      // control.setValue('');
+
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     });
 
-    this.update();
+    this.signupForm.updateValueAndValidity();
   }
 
-  update() {
-    this.signupForm.updateValueAndValidity();
+  onOtpChange(evt: any) {
+    this.otp = evt;
   }
 
   toggleConfirmPasswordVisibility(): void {
@@ -198,22 +179,31 @@ export class NewUserComponent implements OnInit {
   onRoleChange(): void {
     this.currentRole = this.selectedRole;
     this.themeService.setRole(this.selectedRole);
+    this.onUserTypeChange(this.currentRole);
   }
 
-  openOtpVerifyModal(otpVerifyContent: TemplateRef<any>) {
-    const modalRef = this.modalService.open(otpVerifyContent, {
+  openOtpVerifyModal() {
+    if (this.signupForm.invalid) {
+      this.signupForm.markAllAsTouched();
+      this.alert.error('Please fill valid fields before requesting OTP');
+      return;
+    }
+
+    const modalRef = this.modalService.open(this.otpVerifyContent, {
       windowClass: 'otpVerifyMdl',
       centered: true,
       backdrop: 'static',
       keyboard: false,
     });
+    this.isOtpVerificationModalOpen = true;
 
     modalRef.result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
-        this.goToResetPassword();
+        this.isOtpVerificationModalOpen = false;
       },
       (reason) => {
+        this.isOtpVerificationModalOpen = false;
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       }
     );
@@ -254,40 +244,21 @@ export class NewUserComponent implements OnInit {
     }, 1000);
   }
 
-  checkFormValidity(): void {
-    Object.keys(this.signupForm.controls).forEach((field) => {
-      const control = this.signupForm.get(field);
-      if (control?.invalid) {
-        console.log(`❌ INVALID FIELD: ${field}`, control.errors);
-      } else {
-        console.log(`✅ VALID FIELD: ${field}`);
-      }
-    });
-
-    console.log(
-      'Overall Form Status:',
-      this.signupForm.valid ? '✅ VALID' : '❌ INVALID'
-    );
-  }
   sendOtp(): void {
-    this.checkFormValidity();
-    const emailCtrl = this.signupForm.get('email');
-    emailCtrl?.markAsTouched();
-    emailCtrl?.updateValueAndValidity();
-    console.log('seda', this.email);
     if (this.signupForm.invalid) {
-      console.log('Enter your name');
-      this.alert.error('Please enter a valid email');
+      this.signupForm.markAllAsTouched();
+      this.alert.error('Please fill valid fields before requesting OTP');
       return;
     }
 
-    const payload = { email: this.signupForm.value.email };
+    const payload = { email: this.signupForm.value.email, purpose: 'signup' };
 
     this.auth.sendOtp(payload).subscribe({
       next: (resp: any) => {
-        console.log('monali', this.email);
-        console.log('OTP response:--->', resp);
-        this.alert.success(resp?.message || 'OTP sent successfully');
+        if (!this.isOtpVerificationModalOpen) {
+          this.openOtpVerifyModal();
+        }
+        this.alert.success(resp?.message);
         this.otpSent = true;
         this.emailLocked = true;
         this.otpTimer = 60;
@@ -295,23 +266,28 @@ export class NewUserComponent implements OnInit {
       },
       error: (err) => {
         console.log('OTP error:--->', err);
-        this.alert.error(err?.error?.message || 'Failed to send OTP');
       },
     });
   }
+
   resendOtp(): void {
     this.startOtpTimer();
+    this.sendOtp();
   }
 
-  WithOtp(): void {
+  verifyOtp(): void {
     let payload = {
       email: this.signupForm.value.email,
-      otp: this.otp,
+      otp: Number(this.otp),
     };
+    let data = { ...this.signupForm.value, userType: this.currentRole };
+    this.auth.signupData = data;
     this.auth.verifyOtp(payload).subscribe({
       next: (resp: any) => {
-        console.log('OTP verify response: ', resp);
-        this.alert.success('Login successful');
+        this.alert.success(resp.message);
+        console.log('OTP verified successfully');
+        this.router.navigate(['/auth/validation']);
+        this.modalService.dismissAll();
       },
       error: (err) => {
         console.log('OTP verify error: ', err);
@@ -320,38 +296,6 @@ export class NewUserComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    console.log('Form submitted');
-    console.log('Form values:', this.signupForm.value);
-    console.log('Form valid?', this.signupForm.valid);
-    if (this.signupForm.invalid) return;
-    console.log('signup form invalid');
-    const { email, password, confirmPassword } = this.signupForm.value;
-    console.log(email, password, confirmPassword);
-
-    this.passwordMismatch = password !== confirmPassword;
-
-    if (this.passwordMismatch) return;
-
-    const payload = {
-      email,
-      password,
-      confirm_password: confirmPassword,
-      // user_type: this.defaultUserType,
-    };
-
-    this.auth.signup(payload).subscribe({
-      next: (res) => {
-        console.log('Signup success:', res);
-        alert('Signup successful!');
-        this.router.navigate(['/auth/login']);
-      },
-      error: (err) => {
-        console.error('Signup failed:', err);
-        alert('Signup failed. Please try again.');
-      },
-    });
-  }
   goToLogin(): void {
     this.modalService.dismissAll();
     this.router.navigate(['auth/login']);
