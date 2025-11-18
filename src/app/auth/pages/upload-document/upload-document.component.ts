@@ -38,6 +38,7 @@ export class UploadDocumentComponent {
   uploadedFiles: any = { emiratesId: null, uaeVisa: null, dldCert: null };
   uploadedList: any[] = [];
   showUploadedSection = false;
+  private cardElement: HTMLElement | null = null;
 
   constructor(private router: Router, private authService: AuthService) {
     if (
@@ -48,6 +49,23 @@ export class UploadDocumentComponent {
       return;
     }
   }
+
+  ngAfterViewInit() {
+    const card = document.querySelector('.authFrmCol') as HTMLElement;
+
+    if (card) {
+      card.style.width = '50%';
+      card.style.maxWidth = 'fit-content';
+      this.cardElement = card;
+    }
+  }
+  ngOnDestroy() {
+    if (this.cardElement) {
+      this.cardElement.style.width = '';
+      this.cardElement.style.maxWidth = '100%';
+    }
+  }
+
   triggerFile(type: string) {
     if (type === 'emiratesId') this.emiratesIdInput.nativeElement.click();
     if (type === 'uaeVisa') this.uaeVisaInput.nativeElement.click();
@@ -79,7 +97,7 @@ export class UploadDocumentComponent {
 
       reader.onload = () => {
         const result = reader.result as string;
-        resolve(result.split(',')[1]); // return pure base64 without prefix
+        resolve(result.split(',')[1]);
       };
 
       reader.onerror = (error) => reject(error);
