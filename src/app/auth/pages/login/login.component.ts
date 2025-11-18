@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
 
   otp = '';
   otpSent = false;
+  isOTPVerified = false;
   emailLocked = false;
   otpTimer = 60;
   timerDisplay = '1:00';
@@ -92,6 +93,18 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  getUserType(): string {
+    const userTypes: any = {
+      owner: 'OWNER',
+      'property-manager': 'PROPERTY_MANAGER',
+      tenant: 'TENANT',
+    };
+
+    const selectedUserType = localStorage.getItem('userRole') ?? 'owner';
+
+    return userTypes[selectedUserType];
+  }
+
   signIn(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -102,12 +115,16 @@ export class LoginComponent implements OnInit {
     let payload = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password,
+      user_type: this.getUserType(),
     };
 
+    this.login(payload);
+  }
+
+  login(payload: any): void {
     this.authService.login(payload).subscribe({
       next: (resp: any) => {
-        console.log('resp:--->', resp);
-        this.alertService.success('Login successful');
+        this.alertService.success(resp.message);
         this.goToDashboard();
       },
       error: (err) => {
@@ -192,15 +209,25 @@ export class LoginComponent implements OnInit {
       this.alertService.error('Enter a valid email and OTP');
       return;
     }
-    const payload = {
+    const payload: any = {
       email: this.otpForm.value.email,
       otp: Number(this.otpForm.value.otp),
     };
+
+    if (this.isOTPVerified) {
+      payload['user_type'] = this.getUserType();
+      this.login(payload);
+    } else {
+      this.verifyOtp(payload);
+    }
+  }
+
+  verifyOtp(payload: any): void {
     this.authService.verifyOtp(payload).subscribe({
       next: (resp: any) => {
-        console.log('OTP verify response: ', resp);
-        this.alertService.success('Login successful');
-        this.goToDashboard();
+        this.alertService.success(resp.message);
+        this.isOTPVerified = true;
+        clearInterval(this.timerInterval);
       },
       error: (err) => {
         console.log('OTP verify error: ', err.err);
@@ -212,6 +239,7 @@ export class LoginComponent implements OnInit {
   changeEmail(): void {
     this.otpSent = false;
     this.emailLocked = false;
+    this.isOTPVerified = false;
     clearInterval(this.timerInterval);
     this.otpForm.get('email')?.enable();
     this.otp = '';

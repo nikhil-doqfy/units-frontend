@@ -1,69 +1,93 @@
 <div class="cmnStepLayout">
+  <!-- LEFT SIDE -->
+  <div class="cmnStepLayoutLft">
+    <div class="cmnStepNav">
+      <app-white-card [title]="leftCardTitle">
+        <h6>Configurations</h6>
+        <ul>
+          <li
+            *ngFor="let step of filteredSteps; let i = index"
+            [class.active]="i === currentStep"
+          >
+            <button
+              type="button"
+              [disabled]="getStatus(i) === 'READY_TO_START'"
+              (click)="goToStep(i)"
+            >
+              <span>{{ step.title }}</span>
+              <i *ngIf="i < currentStep">
+                <img
+                  src="../../../../assets/completeIcon.gif"
+                  width="20"
+                  height="20"
+                  [alt]="step.title"
+                />
+              </i>
+            </button>
+          </li>
+        </ul>
+      </app-white-card>
+    </div>
+  </div>
 
-    <!-- LEFT SIDE -->
-    <div class="cmnStepLayoutLft">
-        <div class="cmnStepNav">
-            <app-white-card [title]="leftCardTitle">
-                <h6>Configurations</h6>
-                <ul>
-                    <li *ngFor="let step of filteredSteps; let i = index" [class.active]="i === currentStep">
-                        <button type="button" (click)="goToStep(i)">
-                            <span>{{ step.title }}</span>
-                            <i *ngIf="i < currentStep">
-                                <img src="../../../../assets/completeIcon.gif" width="20" height="20"
-                                    [alt]="step.title" />
-                            </i>
-                        </button>
-                    </li>
-                </ul>
+  <!-- RIGHT SIDE -->
+  <div class="cmnStepLayoutRght">
+    <ng-container *ngFor="let group of stepGroups; let i = index">
+      <ng-container *ngIf="i === currentStep">
+        <!-- MAIN CARD -->
+        <app-white-card>
+          <div class="cmnStepFrmHdr mb-4">
+            <app-card-title
+              [title]="group.main.title"
+              [description]="group.main.description"
+            >
+            </app-card-title>
+            <button
+              type="button"
+              class="btn btnCommon"
+              *ngIf="i < stepGroups.length - 1"
+              (click)="nextStep()"
+            >
+              Save & Next
+            </button>
+            <button
+              type="button"
+              class="btn btnCommon"
+              *ngIf="i === stepGroups.length - 1"
+              (click)="onFinish()"
+            >
+              {{ finishButtonText }}
+            </button>
+          </div>
+          <div class="cmnStepFrmOuter">
+            <app-dash-form>
+              <ng-container
+                *ngTemplateOutlet="group.main.content"
+              ></ng-container>
+            </app-dash-form>
+          </div>
+        </app-white-card>
+
+        <!-- SUB CARDS -->
+        <ng-container *ngFor="let sub of group.sub">
+          <div class="mt-3">
+            <app-white-card>
+              <div class="cmnStepFrmHdr mb-4">
+                <app-card-title
+                  [title]="sub.title"
+                  [description]="sub.description"
+                ></app-card-title>
+                <app-invite-pmc-btn />
+              </div>
+              <div class="cmnStepFrmOuter">
+                <app-dash-form>
+                  <ng-container *ngTemplateOutlet="sub.content"></ng-container>
+                </app-dash-form>
+              </div>
             </app-white-card>
-        </div>
-    </div>
-
-    <!-- RIGHT SIDE -->
-    <div class="cmnStepLayoutRght">
-        <ng-container *ngFor="let group of stepGroups; let i = index">
-            <ng-container *ngIf="i === currentStep">
-                <!-- MAIN CARD -->
-                <app-white-card>
-                    <div class="cmnStepFrmHdr mb-4">
-                        <app-card-title [title]="group.main.title" [description]="group.main.description">
-                        </app-card-title>
-                        <button type="button" class="btn btnCommon" *ngIf="i < stepGroups.length - 1"
-                            (click)="nextStep()">
-                            Save & Next
-                        </button>
-                        <button type="button" class="btn btnCommon" *ngIf="i === stepGroups.length - 1"
-                            (click)="onFinish()">
-                            {{ finishButtonText }}
-                        </button>
-                    </div>
-                    <div class="cmnStepFrmOuter">
-                        <app-dash-form>
-                            <ng-container *ngTemplateOutlet="group.main.content"></ng-container>
-                        </app-dash-form>
-                    </div>
-                </app-white-card>
-
-                <!-- SUB CARDS -->
-                <ng-container *ngFor="let sub of group.sub">
-                    <div class="mt-3">
-                        <app-white-card>
-                            <div class="cmnStepFrmHdr mb-4">
-                                <app-card-title [title]="sub.title" [description]="sub.description"></app-card-title>
-                                <app-invite-pmc-btn />
-                            </div>
-                            <div class="cmnStepFrmOuter">
-                                <app-dash-form>
-                                    <ng-container *ngTemplateOutlet="sub.content"></ng-container>
-                                </app-dash-form>
-                            </div>
-                        </app-white-card>
-                    </div>
-                </ng-container>
-            </ng-container>
+          </div>
         </ng-container>
-
-    </div>
-
+      </ng-container>
+    </ng-container>
+  </div>
 </div>

@@ -104,8 +104,20 @@
               ngbDropdownToggle
               [ngClass]="{ active: isProfileActive }"
             >
-              <i><img src="../../../assets/userImg.png" alt="AI Musfiq" /></i>
-              <span>AI Musfiq</span>
+              <i
+                ><img
+                  [src]="
+                    userProfile?.profile_image
+                      ? userProfile?.profile_image
+                      : '../../../assets/userDefaultProImg.png'
+                  "
+                  [alt]="
+                    userProfile?.first_name + ' ' + userProfile?.last_name
+                  "
+              /></i>
+              <span>
+                {{ userProfile?.first_name + " " + userProfile?.last_name }}
+              </span>
               <em>
                 <span class="down">
                   <app-arrow-down-icon />
@@ -122,8 +134,10 @@
             >
               <div class="hdrUserDrpdwnTop">
                 <div class="hdrUserDrpdwnTopInfo">
-                  <p>Amir Ali</p>
-                  <span>User ID: ali&#64;gmail.in</span>
+                  <p>
+                    {{ userProfile?.first_name + " " + userProfile?.last_name }}
+                  </p>
+                  <span>User ID: {{ userProfile?.email }}</span>
                 </div>
               </div>
               <div class="hdrUserDrpdwnLinks">
