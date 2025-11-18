@@ -88,6 +88,18 @@ export class UploadDocumentComponent {
     });
   }
 
+  getUserType(): string {
+    const userTypes: any = {
+      owner: 'OWNER',
+      'property-manager': 'PROPERTY_MANAGER',
+      tenant: 'TENANT',
+    };
+
+    const selectedUserType = localStorage.getItem('userRole') ?? 'owner';
+
+    return userTypes[selectedUserType];
+  }
+
   async onFileSelect(event: any, type: string) {
     const file = event.target.files[0];
     if (!file) return;
@@ -156,15 +168,9 @@ export class UploadDocumentComponent {
       return file ? file.base64 : '';
     };
 
-    const userTypes: any = {
-      owner: 'OWNER',
-      'property-manager': 'PROPERTY_MANAGER',
-      tenant: 'TENANT',
-    };
-
     const data = this.authService.signupData;
 
-    const selctedUsertype = userTypes[data['user_type']] || 'OWNER';
+    const selctedUsertype = this.getUserType();
 
     const paylod: Record<string, any> = {
       email: data['email'],
@@ -183,6 +189,8 @@ export class UploadDocumentComponent {
     if (selctedUsertype === 'PROPERTY_MANAGER') {
       paylod['company_name'] = data['company_name'];
       paylod['company_emirate_id'] = data['company_emirate_id'];
+      paylod['first_name'] = data['company_name'];
+      paylod['last_name'] = data['company_name'];
     } else if (selctedUsertype === 'TENANT') {
       paylod['first_name'] = data['first_name'];
       paylod['last_name'] = data['last_name'];

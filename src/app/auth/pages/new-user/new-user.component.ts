@@ -160,7 +160,7 @@ export class NewUserComponent implements OnInit {
 
       control.removeValidators(Validators.required);
 
-      control.setValue('');
+      // control.setValue('');
 
       control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     });
