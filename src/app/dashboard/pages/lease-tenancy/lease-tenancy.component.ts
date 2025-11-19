@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
@@ -17,6 +17,7 @@ import { TablePaginationComponent } from '../../../dashboard/component/table-pag
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { DashTitleComponent } from '../../../shared/component/dash-title/dash-title.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-lease-tenancy',
@@ -42,6 +43,8 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './lease-tenancy.component.css',
 })
 export class LeaseTenancyComponent {
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Lease', link: '' },
@@ -49,7 +52,10 @@ export class LeaseTenancyComponent {
 
   currentRole: UserRole = 'owner';
 
-  constructor(private router: Router, private themeService: ThemeService) {}
+  constructor(private router: Router, private themeService: ThemeService) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   ngOnInit() {
     this.themeService.currentRole$.subscribe((role) => {

@@ -76,7 +76,7 @@
             <ng-container *ngIf="propertyView === 'all-properties'">
               <app-table-search
                 placeholder="Search here..."
-                (onValueChange)="onPropertySearch$.next($event)"
+                (onValueChange)="searchTextChange($event)"
               />
               <app-table-filter-btn
                 title="Filter"

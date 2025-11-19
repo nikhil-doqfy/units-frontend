@@ -5,8 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class StorageService {
   private TOKEN_KEY = 'AuthToken';
-  private userKey = 'user_profile';
-  private statusKey = 'userRegestrationStatusKey';
+  private USER_KEY = 'user_profile';
+  private STATUS_KEY = 'userRegestrationStatusKey';
+  private LANGUAGE = 'language';
   constructor() {}
 
   setToken(token: string): void {
@@ -18,11 +19,11 @@ export class StorageService {
   }
 
   setUserProfile(user: any) {
-    localStorage.setItem(this.userKey, JSON.stringify(user));
+    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }
 
   getUserProfile(): any {
-    const user = localStorage.getItem(this.userKey);
+    const user = localStorage.getItem(this.USER_KEY);
     return user ? JSON.parse(user) : null;
   }
   removeToken() {
@@ -30,12 +31,20 @@ export class StorageService {
   }
 
   setCurrentStatus(status: any): void {
-    localStorage.setItem(this.statusKey, JSON.stringify(status));
+    localStorage.setItem(this.STATUS_KEY, JSON.stringify(status));
   }
 
   getCurrentStatus() {
-    var status: any = localStorage.getItem(this.statusKey);
+    var status: any = localStorage.getItem(this.STATUS_KEY);
     return JSON.parse(status);
+  }
+
+  setLanguage(laguage: string): void {
+    localStorage.setItem(this.LANGUAGE, laguage);
+  }
+
+  getLanguage(): string {
+    return localStorage.getItem(this.LANGUAGE) ?? 'en';
   }
 
   // getUser(): any {

@@ -21,7 +21,6 @@ import { PayMyDuesComponent } from './pages/pay-my-dues/pay-my-dues.component';
 import { RaiseComplaintComponent } from './pages/raise-complaint/raise-complaint.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 
-import { TranslateModule } from '@ngx-translate/core';
 export const routes: Routes = [
   {
     path: '',
@@ -48,6 +47,11 @@ export const routes: Routes = [
         path: 'add-property',
         component: AddPropertyComponent,
         data: { titleKey: 'PAGE_TITLE.ADD_PROPERTY' },
+      },
+      {
+        path: 'edit-property/:id',
+        component: AddPropertyComponent,
+        data: { titleKey: 'PAGE_TITLE.EDIT_PROPERTY' },
       },
       {
         path: 'pmc',
@@ -92,6 +96,7 @@ export const routes: Routes = [
       {
         path: 'staff/detail/:id',
         component: StaffComponent,
+        data: { titleKey: 'PAGE_TITLE.STAFF' },
       },
       {
         path: 'users',
