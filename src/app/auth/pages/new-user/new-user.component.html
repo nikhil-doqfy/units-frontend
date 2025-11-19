@@ -105,13 +105,13 @@
       </div>
 
       <div class="mb-2">
-        <label for="contact_Number" class="form-label">Contact Number</label>
+        <label for="contact_number" class="form-label">Contact Number</label>
         <div class="iconInput">
           <i><app-contact-number></app-contact-number></i>
           <input
             class="form-control"
             type="tel"
-            formControlName="Contact_Number"
+            formControlName="contact_number"
             placeholder="Enter your number"
           />
           @if (isInvalid(signupForm, 'Contact_Number').status) {

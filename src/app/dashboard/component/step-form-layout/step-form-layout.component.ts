@@ -18,6 +18,7 @@ import { InvitePMCButtonComponent } from '../invite-pmc-btn/invite-pmc-btn.compo
 import { PropertyFormService } from '../../services/property-form.service';
 import { FormStaus } from '../../model/property.model';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface StepGroup {
   main: StepPaneComponent;
@@ -33,6 +34,7 @@ interface StepGroup {
     CardTitleComponent,
     DashFormComponent,
     InvitePMCButtonComponent,
+    TranslateModule,
   ],
   templateUrl: './step-form-layout.component.html',
   styleUrls: ['./step-form-layout.component.css'],

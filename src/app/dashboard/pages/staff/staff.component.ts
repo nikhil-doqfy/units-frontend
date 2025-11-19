@@ -57,6 +57,7 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
     TableViewCardComponent,
     TranslateModule,
     MaskPhonePipe,
+    TranslateModule,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',

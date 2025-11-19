@@ -17,6 +17,10 @@ export class StorageService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
+  saveUserProfile(profile: any): void {
+    localStorage.setItem(this.userKey, JSON.stringify(profile));
+  }
+
   setUserProfile(user: any) {
     localStorage.setItem(this.userKey, JSON.stringify(user));
   }

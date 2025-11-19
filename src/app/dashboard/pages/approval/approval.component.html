@@ -2,7 +2,9 @@
   <div class="mb-3">
     <app-white-card>
       <div class="p-2 mb-2">
-        <app-card-title title="LIST OF DOCUMENT TO BE APPROVED" />
+        <app-card-title
+          [title]="'LIST OF DOCUMENT TO BE APPROVED' | translate"
+        />
       </div>
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="myTab" role="tablist">

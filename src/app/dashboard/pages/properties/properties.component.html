@@ -48,7 +48,7 @@
             "
           >
             <app-table-title
-              title="All Properties"
+              [title]="'All Properties' | translate"
               [subtitle]="'(' + totalRecords + ')'"
               (onRefresh)="onRefresh()"
             ></app-table-title>

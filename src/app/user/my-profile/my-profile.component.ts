@@ -17,7 +17,7 @@ import { EditIconComponent } from '../component/icons/edit-icon/edit-icon.compon
 import { UserService } from '../services/user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { StorageService } from '../../shared/services/storage.service';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -35,6 +35,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class MyProfileComponent {
   private userService = inject(UserService);
+  private storageService = inject(StorageService);
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   userImage: string = '../../../../assets/userDefaultProImg.png';
@@ -131,10 +132,36 @@ export class MyProfileComponent {
     this.editUserMode = true;
   }
 
+  // saveUser() {
+  //   console.log('changedUser:---->', this.changedFields);
+  //   this.editUserMode = false;
+  //   this.changedFields = {};
+  // }
+
   saveUser() {
-    console.log('changedUser:---->', this.changedFields);
-    this.editUserMode = false;
-    this.changedFields = {};
+    const payload: Record<string, any> = {
+      name: this.profile.name,
+      email: this.profile.email,
+      contact_number: this.profile.contact,
+    };
+
+    this.userService
+      .editUserProfile(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          console.log('Profile updated:', res);
+
+          this.storageService.saveUserProfile(res.content || res);
+
+          this.setUserFormData(res.content || res);
+          this.editUserMode = false;
+          this.changedFields = {};
+        },
+        error: (err) => {
+          console.error('Error updating profile:', err);
+        },
+      });
   }
 
   cancelUser() {
@@ -150,6 +177,27 @@ export class MyProfileComponent {
   saveOtherDetails() {
     this.editOtherDetailsMode = false;
     this.changedFields = {};
+
+    const payload = {
+      email: this.profile.email,
+      contact_number: this.profile.contact,
+    };
+
+    this.userService
+      .editUserProfile(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          console.log('Other details updated:', res);
+          this.storageService.saveUserProfile(res.content || res);
+          this.setUserFormData(res.content || res);
+          this.editOtherDetailsMode = false;
+          this.changedFields = {};
+        },
+        error: (err) => {
+          console.error('Error updating other details:', err);
+        },
+      });
   }
 
   cancelOtherDetails() {

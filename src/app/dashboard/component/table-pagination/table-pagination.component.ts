@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { PageChange } from '../../../shared/model/shared.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-table-pagination',
   standalone: true,
-  imports: [CommonModule, NgbPaginationModule],
+  imports: [CommonModule, NgbPaginationModule, TranslateModule],
   templateUrl: './table-pagination.component.html',
   styleUrl: './table-pagination.component.css',
 })

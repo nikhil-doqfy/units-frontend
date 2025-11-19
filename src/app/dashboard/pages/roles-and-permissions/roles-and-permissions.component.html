@@ -3,7 +3,7 @@
     <app-white-card>
       <div class="row align-items-center justify-content-between g-3">
         <div class="col">
-          <app-card-title title="Roles" />
+          <app-card-title [title]="'Roles' | translate" />
         </div>
         <div class="col-auto">
           <button
@@ -22,7 +22,10 @@
     <div class="cmmnTblHdr">
       <div class="row align-items-center">
         <div class="col-md">
-          <app-table-title title="6" subtitle="Roles Found"></app-table-title>
+          <app-table-title
+            title="6"
+            [subtitle]="'Roles Found' | translate"
+          ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3"></div>
@@ -443,7 +446,7 @@
             }@empty {
             <tr>
               <td colspan="20" align="center">
-                <app-no-data></app-no-data>
+                <app-no-data />
               </td>
             </tr>
             }
