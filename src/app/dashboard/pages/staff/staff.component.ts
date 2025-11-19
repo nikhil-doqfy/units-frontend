@@ -34,6 +34,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 import { StaffService } from '../../services/staff.service';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-staff',
@@ -82,8 +83,9 @@ export class StaffComponent {
   private staffService = inject(StaffService);
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   private destroy$ = new Subject<void>();
-  private searchTextSubject = new Subject<string>();
+  private onStaffSearch$ = new Subject<string>();
   closeResult: WritableSignal<string> = signal('');
 
   showDetailView: boolean = false;
@@ -94,8 +96,10 @@ export class StaffComponent {
   ];
 
   constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
     // ------------------------- Search debounce time -------------------------
-    this.searchTextSubject
+    this.onStaffSearch$
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe((searchText) => {
         if (searchText?.trim())
@@ -198,13 +202,16 @@ export class StaffComponent {
       page_number: this.currentPage,
     };
 
-    this.staffService.accessStaffRoleDetails(this.staffRolesData).subscribe({
-      next: (resp: any) => {
-        this.staffRoles = resp?.content ?? [];
-        this.totalRecords = resp?.pagination?.total_records ?? 0;
-        this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
-      },
-    });
+    this.staffService
+      .accessStaffRoleDetails(this.staffRolesData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (resp: any) => {
+          this.staffRoles = resp?.content ?? [];
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+        },
+      });
   }
 
   // ------------------------- Pagination component -------------------------
@@ -222,7 +229,7 @@ export class StaffComponent {
   }
 
   searchTextChange(search: string) {
-    this.searchTextSubject.next(search);
+    this.onStaffSearch$.next(search);
   }
 
   // ------------------------- Handel show details function -------------------------

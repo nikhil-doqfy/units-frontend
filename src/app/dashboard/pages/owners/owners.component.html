@@ -11,7 +11,10 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="Search here..." />
+            <app-table-search
+              placeholder="Search here..."
+              (onValueChange)="searchTextChange($event)"
+            />
             <app-table-filter-btn
               title="Filter"
               [hasIcon]="true"
@@ -64,7 +67,9 @@
               <td>
                 <app-table-img-item
                   [img]="
-                    owner.profile_image || '../../../../assets/user/user-1.png'
+                    owner?.profile_image
+                      ? 'data:image/png;base64,' + owner?.profile_image
+                      : '../../../../assets/userDefaultProImg.png'
                   "
                   [clickable]="true"
                   (clicked)="handleViewClick(owner.id)"

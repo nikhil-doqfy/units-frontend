@@ -101,14 +101,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.currentLanguage = event.lang;
       this.pageTitle = this.getRouteTitle(this.router.routerState.root);
     });
-    translate.use('en');
+
+    translate.use(storage.getLanguage());
     this.updateDirection();
   }
 
   setLanguage(lang: string) {
     this.currentLang = lang;
     this.translate.use(lang);
-    localStorage.setItem('language', lang);
+    this.storage.setLanguage(lang);
     this.updateDirection();
   }
 

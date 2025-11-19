@@ -6,7 +6,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,6 +21,7 @@ import { BackIconComponent } from '../../component/icons/back-icon/back-icon.com
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { AddRoleFormComponent } from '../../component/forms/add-role-form/add-role-form.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-roles-and-permissions',
@@ -43,6 +44,8 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './roles-and-permissions.component.css',
 })
 export class RolesAndPermissionsComponent {
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Roles & Permissions', link: '' },
@@ -52,7 +55,10 @@ export class RolesAndPermissionsComponent {
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   openAddRoleModal(addRoleContent: TemplateRef<any>) {
     this.modalService

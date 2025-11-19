@@ -6,7 +6,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 
 import {
@@ -43,6 +43,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-tenants',
@@ -79,6 +80,8 @@ export class TenantsComponent {
   private tenantsService = inject(TenantsService);
   private modalService = inject(NgbModal);
   private alertService = inject(AlertService);
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
 
   componentName: string = 'TenantsComponent';
   breadcrumbData = [
@@ -102,16 +105,19 @@ export class TenantsComponent {
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
-  onTenantsSearch$ = new Subject<string>();
+  private onTenantsSearch$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router, private themeService: ThemeService) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
     this.onTenantsSearch$
-      .pipe(debounceTime(1500), takeUntil(this.destroy$))
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
       .subscribe((value) => {
         if (value?.trim()) this.tenantsFilter['search'] = value.trim();
         else delete this.tenantsFilter['search'];
 
+        this.currentPage = 1;
         this.getTenants();
       });
   }
@@ -146,6 +152,10 @@ export class TenantsComponent {
 
   onRefresh() {
     this.getTenants();
+  }
+
+  searchTextChange(search: string): void {
+    this.onTenantsSearch$.next(search);
   }
 
   onPageSizeChange(event: PageSizeChange): void {

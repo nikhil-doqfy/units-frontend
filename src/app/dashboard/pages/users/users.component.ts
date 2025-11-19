@@ -6,7 +6,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -20,9 +20,10 @@ import { TablePaginationComponent } from '../../component/table-pagination/table
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { AddUserFormComponent } from '../../component/forms/add-user-form/add-user-form.component';
 import { UserService } from '../../../user/services/user.service';
-import { Subject } from 'rxjs';
+import { pipe, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-users',
@@ -45,6 +46,8 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './users.component.css',
 })
 export class UsersComponent {
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Users', link: '' },
@@ -67,7 +70,10 @@ export class UsersComponent {
   private destroy$ = new Subject<void>();
   closeResult: WritableSignal<string> = signal('');
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   // ------------------------- call ngOnInit -------------------------
   ngOnInit(): void {
@@ -122,13 +128,16 @@ export class UsersComponent {
       page: this.currentPage,
     };
 
-    this.userService.accessUserManagement(this.userData).subscribe({
-      next: (resp: any) => {
-        this.users = resp?.content?.data;
-        this.totalRecords = resp?.pagination?.total_records ?? 0;
-        this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
-      },
-    });
+    this.userService
+      .accessUserManagement(this.userData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (resp: any) => {
+          this.users = resp?.content?.data;
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+        },
+      });
   }
 
   // ------------------------- Fetched Active User Details -------------------------
