@@ -38,6 +38,7 @@ import { InvitePMCFormComponent } from '../../component/forms/invite-pmc-form/in
 import { AlertService } from '../../../shared/services/alert.service';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-owners',
@@ -62,6 +63,7 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
     TableViewCardComponent,
     TranslateModule,
     MaskPhonePipe,
+    NoDataComponent,
   ],
   templateUrl: './owners.component.html',
   styleUrl: './owners.component.css',

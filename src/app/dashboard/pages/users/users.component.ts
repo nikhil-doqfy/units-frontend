@@ -23,6 +23,7 @@ import { UserService } from '../../../user/services/user.service';
 import { Subject } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-users',
@@ -40,6 +41,8 @@ import { TranslateModule } from '@ngx-translate/core';
     AddUserFormComponent,
     TableImgItemComponent,
     TranslateModule,
+    NoDataComponent,
+    NoDataComponent,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
@@ -76,7 +79,6 @@ export class UsersComponent {
 
   onRefresh() {
     this.getUser();
-    this.fetchDeletedUser();
   }
 
   openAddUserModal(addUserContent: TemplateRef<any>) {
@@ -120,7 +122,7 @@ export class UsersComponent {
     this.userData = {
       ...this.userData,
       limit: this.rowsPerPage,
-      page_number: this.currentPage,
+      page: this.currentPage,
     };
 
     this.userService.accessUserManagement(this.userData).subscribe({
@@ -131,23 +133,33 @@ export class UsersComponent {
       },
     });
   }
-  // ------------------------- Fetched Delated User Details -------------------------
-  fetchDeletedUser(): void {
-    const payload = {
-      ...this.userData,
-      limit: this.rowsPerPage,
-      page_number: this.currentPage,
-      is_deleted: 'true',
-    };
 
-    this.userService.accessUserManagement(payload).subscribe((resp: any) => {
-      this.deletedUsers = resp.content;
-      this.totalRecords = resp?.pagination?.total_records ?? 0;
-      this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
-    });
+  // ------------------------- Fetched Active User Details -------------------------
+  getActiveUser() {
+    delete this.userData['is_deleted'];
+    delete this.userData['start_date'];
+    delete this.userData['end_date'];
+    this.currentPage = 1;
+    this.getUser();
   }
 
-  tabChange(): void {}
+  // ------------------------- Fetched Delated User Details -------------------------
+  getDeletedUser(): void {
+    delete this.userData['start_date'];
+    delete this.userData['end_date'];
+    this.userData['is_deleted'] = true;
+    this.currentPage = 1;
+    this.getUser();
+  }
+
+  // ------------------------- Fetched New User Details -------------------------
+  getNewUser(): void {
+    delete this.userData['is_deleted'];
+    this.userData['start_date'] = this.getPrevios30DayDateInEpoch();
+    this.userData['end_date'] = new Date().getTime();
+    this.currentPage = 1;
+    this.getUser();
+  }
 
   // ------------------------- Pagination -------------------------
   onPageChange(event: PageChange): void {
@@ -161,5 +173,11 @@ export class UsersComponent {
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
     this.getUser();
+  }
+
+  getPrevios30DayDateInEpoch() {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() - 30);
+    return currentDate.getTime();
   }
 }

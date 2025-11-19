@@ -152,7 +152,7 @@ export class MyProfileComponent {
         next: (res: any) => {
           console.log('Profile updated:', res);
 
-          this.storageService.saveUserProfile(res.content || res);
+          this.storageService.setUserProfile(res.content || res);
 
           this.setUserFormData(res.content || res);
           this.editUserMode = false;

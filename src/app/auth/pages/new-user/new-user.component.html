@@ -114,9 +114,9 @@
             formControlName="contact_number"
             placeholder="Enter your number"
           />
-          @if (isInvalid(signupForm, 'Contact_Number').status) {
+          @if (isInvalid(signupForm, 'contact_number').status) {
           <small class="errorMsg">
-            {{ isInvalid(signupForm, "Contact_Number").msg }}
+            {{ isInvalid(signupForm, "contact_number").msg }}
           </small>
           }
         </div>

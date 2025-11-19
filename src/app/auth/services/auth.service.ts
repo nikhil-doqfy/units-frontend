@@ -28,11 +28,6 @@ export class AuthService {
         })
       );
   }
-  refreshToken(refreshToken: string) {
-    return this.http.post<{ accessToken: string }>('/api/auth/refresh', {
-      refreshToken,
-    });
-  }
 
   signup(data: any): Observable<any> {
     return this.http.post(`${environment.SERVER_ADDRESS}/user/signup/`, data);

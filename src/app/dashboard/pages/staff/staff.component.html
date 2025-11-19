@@ -118,7 +118,7 @@
             }@empty {
             <!-- When no data exists -->
             <tr>
-              <td colspan="7" align="center">No Data to Show</td>
+              <td colspan="7" align="center"><app-no-data></app-no-data></td>
             </tr>
             }
           </tbody>
@@ -254,6 +254,7 @@
             </tr>
           </thead>
           <tbody>
+            @for (staff of staffRoles; track $index) {
             <tr>
               <td>LP9021</td>
               <td>
@@ -399,6 +400,13 @@
                 </div>
               </td>
             </tr>
+
+            }@empty {
+            <!-- When no data exists -->
+            <tr>
+              <td colspan="7" align="center"><app-no-data></app-no-data></td>
+            </tr>
+            }
           </tbody>
         </table>
       </div>
