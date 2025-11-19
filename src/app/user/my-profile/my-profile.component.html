@@ -101,7 +101,7 @@
           </button>
           <button
             *ngIf="editUserMode"
-            type="button"
+            type="submit"
             class="btn btnCommon btnActive"
             (click)="saveUser()"
           >
@@ -121,7 +121,7 @@
   </app-dash-form>
 </div>
 <app-dash-form>
-  <form>
+  <form (ngSubmit)="getUserProfileData()">
     <app-white-card
       title="{{ 'Other details' | translate }}"
       [showActions]="true"

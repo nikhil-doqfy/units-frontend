@@ -23,6 +23,7 @@ export class StorageService {
 
   setUserProfile(user: any) {
     localStorage.setItem(this.userKey, JSON.stringify(user));
+    return user ? JSON.parse(user) : null;
   }
 
   getUserProfile(): any {

@@ -132,12 +132,6 @@ export class MyProfileComponent {
     this.editUserMode = true;
   }
 
-  // saveUser() {
-  //   console.log('changedUser:---->', this.changedFields);
-  //   this.editUserMode = false;
-  //   this.changedFields = {};
-  // }
-
   saveUser() {
     const payload: Record<string, any> = {
       name: this.profile.name,
@@ -153,8 +147,9 @@ export class MyProfileComponent {
           console.log('Profile updated:', res);
 
           this.storageService.saveUserProfile(res.content || res);
+          console.log('changedUser:---->', this.changedFields);
 
-          this.setUserFormData(res.content || res);
+          this.setUserFormData({});
           this.editUserMode = false;
           this.changedFields = {};
         },
@@ -175,6 +170,7 @@ export class MyProfileComponent {
   }
 
   saveOtherDetails() {
+    console.log('monali');
     this.editOtherDetailsMode = false;
     this.changedFields = {};
 
@@ -188,10 +184,21 @@ export class MyProfileComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: any) => {
+          console.log('monali');
+
           console.log('Other details updated:', res);
           this.storageService.saveUserProfile(res.content || res);
-          this.setUserFormData(res.content || res);
-          this.editOtherDetailsMode = false;
+          this.userService
+            .getUserProfile({})
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (response: any) => {
+                const content = response?.content || response;
+                this.setUserFormData(content); // update UI here
+                console.log('GET success:', content);
+              },
+            }),
+            (this.editOtherDetailsMode = false);
           this.changedFields = {};
         },
         error: (err) => {
