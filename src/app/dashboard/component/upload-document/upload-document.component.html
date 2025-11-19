@@ -1,12 +1,27 @@
 <div class="upldDocCol">
-    <div class="upldDocIcon">
-        <div class="upldDocText">
-            <i>
-                <app-upload-doc-icon />
-            </i>
-            <h4>Drop your files here</h4>
-            <p>Or <span>click to select file</span> jpg, jpeg, png (max. 20MB)</p>
-        </div>
-        <input type="file" />
+  <div
+    class="upldDocIcon"
+    [class.dragging]="isDragging"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
+    <div class="upldDocText">
+      <i>
+        <app-upload-doc-icon />
+      </i>
+      <h4>Drop your files here</h4>
+      <p>
+        Or <span>click to select file</span> {{ fileTypes.join(", ") }} (max.
+        {{ maxSize }}MB)
+      </p>
     </div>
+
+    <input
+      type="file"
+      [attr.multiple]="isMultipleFiles ? '' : null"
+      [attr.accept]="acceptTypes"
+      (change)="onFileSelect($event)"
+    />
+  </div>
 </div>
