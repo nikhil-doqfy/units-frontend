@@ -1,6 +1,9 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 =======
+=======
+>>>>>>> Stashed changes
 import {
   Component,
   ElementRef,
@@ -8,6 +11,9 @@ import {
   OnDestroy,
   AfterViewInit,
 } from '@angular/core';
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 import { AuthTitleComponent } from '../../component/auth-title/auth-title.component';
 import { AuthFormComponent } from '../../component/auth-form/auth-form.component';
@@ -50,6 +56,7 @@ export class UploadDocumentComponent {
   showUploadedSection = false;
   private cardElement: HTMLElement | null = null;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
   constructor(private router: Router, private authService: AuthService) {
     if (
@@ -63,14 +70,21 @@ export class UploadDocumentComponent {
 
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
   ngAfterViewInit() {
     const card = document.querySelector('.authFrmCol') as HTMLElement;
 
     if (card) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       card.style.width = '50%';
       card.style.maxWidth = 'fit-content';
       this.cardElement = card;
+=======
+      card.style.width = '50%'; // whatever width you want
+      this.cardElement = card; // store element for destroy
+>>>>>>> Stashed changes
 =======
       card.style.width = '50%'; // whatever width you want
       this.cardElement = card; // store element for destroy
@@ -81,7 +95,10 @@ export class UploadDocumentComponent {
     if (this.cardElement) {
       this.cardElement.style.width = '';
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       this.cardElement.style.maxWidth = '100%';
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     }
