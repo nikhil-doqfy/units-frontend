@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { PaymentsInfoCardComponent } from '../../component/payments-info-card/payments-info-card.component';
@@ -15,6 +15,7 @@ import { TablePaginationComponent } from '../../../dashboard/component/table-pag
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-payments-and-invoice',
@@ -39,7 +40,8 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
   styleUrl: './payments-and-invoice.component.css',
 })
 export class PaymentsAndInvoiceComponent {
-  paymentandinvoice: any[] = [];
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   selected: string = 'Property Name: All';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
@@ -52,7 +54,10 @@ export class PaymentsAndInvoiceComponent {
   dueTime = '5 Days';
   lastDate = '29/09/2025';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   onOptionSelected(option: string) {
     this.selected = option;

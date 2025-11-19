@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +13,7 @@ import { UploadIconComponent } from '../../component/icons/upload-icon/upload-ic
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { CrossIconComponent } from '../../component/icons/cross-icon/cross-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-add-lease',
@@ -34,6 +35,8 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './add-lease.component.css',
 })
 export class AddLeaseComponent {
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Lease', link: '/dashboard/lease-tenancy' },
@@ -43,7 +46,10 @@ export class AddLeaseComponent {
   selectedType: string = '';
   model: NgbDateStruct | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   onOptionSelected(option: string) {
     this.selectedType = option;

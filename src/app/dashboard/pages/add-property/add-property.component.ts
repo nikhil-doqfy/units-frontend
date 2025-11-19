@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 
 import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
@@ -13,6 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-add-property',
@@ -33,6 +34,8 @@ export class AddPropertyComponent {
   private propertyFormService = inject(PropertyFormService);
   private sharedAPIService = inject(SharedApiService);
   private formService = inject(FormService);
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Properties', link: '/dashboard/properties' },
@@ -53,7 +56,10 @@ export class AddPropertyComponent {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private router: Router, private themeService: ThemeService) {}
+  constructor(private router: Router, private themeService: ThemeService) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   ngOnInit() {
     this.themeService.currentRole$

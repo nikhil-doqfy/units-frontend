@@ -83,7 +83,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (property of ApprovalList; track $index){
+                <!-- @for (property of ApprovalList; track $index){ -->
                 <tr>
                   <td>
                     <app-table-img-item
@@ -214,13 +214,13 @@
                     </div>
                   </td>
                 </tr>
-                }@empty {
+                <!-- }@empty {
                 <tr>
                   <td colspan="20" align="center">
                     <app-no-data></app-no-data>
                   </td>
                 </tr>
-                }
+                } -->
               </tbody>
             </table>
           </div>

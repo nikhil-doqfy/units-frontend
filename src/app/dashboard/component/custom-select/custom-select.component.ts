@@ -89,7 +89,6 @@ export class CustomSelectComponent
   closeDropdown(event: Event) {
     if (!(event.target as HTMLElement).closest('.customSelect')) {
       this.isDropdownOpen = false;
-      this.onTouched();
     }
   }
 

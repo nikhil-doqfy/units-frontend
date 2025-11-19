@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { CardTitleComponent } from '../../../shared/component/card-title/card-title.component';
@@ -14,8 +14,8 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
-
 @Component({
   selector: 'app-approval',
   standalone: true,
@@ -39,8 +39,8 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
   styleUrl: './approval.component.css',
 })
 export class ApprovalComponent {
-  ApprovalList: any[] = [];
-
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Approval', link: '' },
@@ -48,7 +48,10 @@ export class ApprovalComponent {
 
   showDetailView: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   handleRejectClick(): void {
     console.log('Reject button clicked');

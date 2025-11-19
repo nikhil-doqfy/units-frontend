@@ -98,7 +98,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
   }
 
   goToStep(index: number) {
-    if (this.getStatus(index) === 'READY_TO_START') return;
+    // if (this.getStatus(index) === 'READY_TO_START') return;
     this.currentStep = index;
   }
 

@@ -38,6 +38,7 @@ import { InvitePMCFormComponent } from '../../component/forms/invite-pmc-form/in
 import { AlertService } from '../../../shared/services/alert.service';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-owners',
@@ -84,9 +85,10 @@ export class OwnersComponent {
   private ownerService = inject(OwnerService);
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
 
   private destroy$ = new Subject<void>();
-  private searchTextSubject = new Subject<string>();
+  private onOwnerSearch$ = new Subject<string>();
 
   closeResult: WritableSignal<string> = signal('');
   showDetailView: boolean = false;
@@ -100,8 +102,8 @@ export class OwnersComponent {
 
   constructor(private router: Router) {
     // ------------------------- Search debounce time -------------------------
-    this.searchTextSubject
-      .pipe(debounceTime(300), takeUntil(this.destroy$))
+    this.onOwnerSearch$
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
       .subscribe((searchText) => {
         if (searchText?.trim()) this.ownerData['search'] = searchText.trim();
         else delete this.ownerData['search'];
@@ -123,6 +125,9 @@ export class OwnersComponent {
       this.showDetailView = false;
       this.getOwner();
     }
+
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
   }
 
   onRefresh() {
@@ -166,7 +171,7 @@ export class OwnersComponent {
   }
 
   searchTextChange(search: string) {
-    this.searchTextSubject.next(search);
+    this.onOwnerSearch$.next(search);
   }
 
   // ------------------------- Model -------------------------

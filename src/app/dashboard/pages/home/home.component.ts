@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -23,6 +23,7 @@ import { ChequeStatusComponent } from '../../component/charts/cheque-status/cheq
 import { DonutChartComponent } from '../../component/charts/donut/donut.component';
 import { LineChartComponent } from '../../component/charts/line/line.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -53,11 +54,16 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   breadcrumbData = [{ label: 'Dashboard', link: '' }];
 
   model: NgbDateStruct | null = null;
 
-  constructor(private router: Router) {}
+  constructor() {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   propertyData = [
     { id: '01', name: 'Dubai Hills Golf Club', value: 45 },

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
 import { BadgeComponent } from '../../component/badge/badge.component';
@@ -12,6 +12,7 @@ import { TableActionButtonComponent } from '../../component/table-action-btn/tab
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-documentations',
@@ -33,7 +34,8 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
   styleUrl: './documentations.component.css',
 })
 export class DocumentationsComponent {
-  documentationList: any[] = [];
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Documentations', link: '' },
@@ -41,7 +43,10 @@ export class DocumentationsComponent {
 
   selected: string = 'Falcom city';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
   onOptionSelected(option: string) {
     this.selected = option;

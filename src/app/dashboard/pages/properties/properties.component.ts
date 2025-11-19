@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
@@ -31,6 +31,7 @@ import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-properties',
@@ -66,6 +67,8 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
 })
 export class PropertiesComponent {
   private propertyService = inject(PropertyService);
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
 
   componentName: string = 'PropertiesComponent';
   breadcrumbData = [
@@ -90,16 +93,19 @@ export class PropertiesComponent {
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
-  onPropertySearch$ = new Subject<string>();
+  private onPropertySearch$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router, private themeService: ThemeService) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
     this.onPropertySearch$
-      .pipe(debounceTime(1500), takeUntil(this.destroy$))
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
       .subscribe((value) => {
         if (value?.trim()) this.propertiesFilter['search'] = value.trim();
         else delete this.propertiesFilter['search'];
 
+        this.currentPage = 1;
         this.getProperties();
       });
   }
@@ -146,6 +152,10 @@ export class PropertiesComponent {
 
   onRefresh() {
     this.getProperties();
+  }
+
+  searchTextChange(search: string): void {
+    this.onPropertySearch$.next(search);
   }
 
   onPageSizeChange(event: PageSizeChange): void {

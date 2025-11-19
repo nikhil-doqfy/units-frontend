@@ -1,10 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
+  private title = inject(Title);
+  private translate = inject(TranslateService);
   private openSidebarValueKey = 'openSidebarValue';
   private openRightSidebarValueKey = 'openRightSidebarValue';
 
@@ -53,14 +57,20 @@ export class SharedService {
   toggleRightSidebar() {
     const currentRightValue = this.openRightSidebarValueSource.value;
     const newRightValue = !currentRightValue;
-    localStorage.setItem(this.openRightSidebarValueKey, JSON.stringify(newRightValue));
+    localStorage.setItem(
+      this.openRightSidebarValueKey,
+      JSON.stringify(newRightValue)
+    );
     this.openRightSidebarValueSource.next(newRightValue);
   }
 
   // Set the sidebar state per route
   setRightSidebarStateForRoute(route: string) {
     const defaultState = this.getSidebarDefaultState(route);
-    localStorage.setItem(this.openRightSidebarValueKey, JSON.stringify(defaultState));
+    localStorage.setItem(
+      this.openRightSidebarValueKey,
+      JSON.stringify(defaultState)
+    );
     this.openRightSidebarValueSource.next(defaultState);
   }
 
@@ -86,5 +96,11 @@ export class SharedService {
       .join('&');
 
     return `?${query}`;
+  }
+
+  setTitle(key: string) {
+    this.translate.get(key).subscribe((translated: string) => {
+      this.title.setTitle(`${translated} | Doqfy`);
+    });
   }
 }
