@@ -141,7 +141,7 @@ export class MyProfileComponent {
   saveUser() {
     const payload: Record<string, any> = {
       name: this.profile.name,
-      email: this.profile.email,
+      // email: this.profile.email,
       contact_number: this.profile.contact,
     };
 
@@ -175,9 +175,6 @@ export class MyProfileComponent {
   }
 
   saveOtherDetails() {
-    this.editOtherDetailsMode = false;
-    this.changedFields = {};
-
     const payload = {
       email: this.profile.email,
       contact_number: this.profile.contact,
