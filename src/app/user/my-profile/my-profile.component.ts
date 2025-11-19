@@ -189,7 +189,7 @@ export class MyProfileComponent {
       .subscribe({
         next: (res: any) => {
           console.log('Other details updated:', res);
-          this.storageService.saveUserProfile(res.content || res);
+          this.storageService.setUserProfile(res.content || res);
           this.setUserFormData(res.content || res);
           this.editOtherDetailsMode = false;
           this.changedFields = {};

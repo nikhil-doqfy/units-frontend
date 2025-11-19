@@ -34,6 +34,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 import { StaffService } from '../../services/staff.service';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-staff',
@@ -58,6 +59,7 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
     TranslateModule,
     MaskPhonePipe,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',
