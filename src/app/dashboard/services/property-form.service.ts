@@ -22,6 +22,7 @@ export class PropertyFormService {
     2: 'READY_TO_START',
     3: 'READY_TO_START',
   };
+  propertyID: number | undefined;
 
   constructor() {
     this.initPropertyBasicDetailsForm();
@@ -74,9 +75,10 @@ export class PropertyFormService {
 
   initPropertyImagesForm() {
     this.propertyImagesForm = this.formBuilder.group({
-      propertyId: [''],
-      exterior: [''],
-      interior: [''],
+      propertyId: ['', [Validators.required]],
+      images: ['', [Validators.required]],
+      // exterior: [''],
+      // interior: [''],
     });
   }
 
@@ -135,7 +137,7 @@ export class PropertyFormService {
       maintenance_charges: v.maintenanceCharges,
       cycle: v.cycle?.key,
       notice_period: v.noticePeriod?.key,
-      commission: v.commission,
+      commission_percent: v.commission,
     };
   }
 
@@ -204,6 +206,15 @@ export class PropertyFormService {
     }
   }
 
+  patchPropertyIDToAllForm(propertyId: number) {
+    [
+      this.propertyBasicDetailsForm,
+      this.propertyCommercialsForm,
+      this.propertyImagesForm,
+      this.propertyDocumentationForm,
+    ].forEach((form) => form.patchValue({ propertyId }));
+  }
+
   savePrpertyDetails(step: number) {
     return new Promise((resolve, reject) => {
       const currentForm = this.formMap[step];
@@ -234,6 +245,9 @@ export class PropertyFormService {
         next: (res) => {
           this.alertService.success(res.message);
           this.updateFormStatus(step, 'COMPLETED'); // step done
+          const propertyId = res?.content?.property_id;
+          this.propertyID = propertyId ?? this.propertyID;
+          if (this.propertyID) this.patchPropertyIDToAllForm(this.propertyID);
           resolve(res);
         },
         error: (err) => {
