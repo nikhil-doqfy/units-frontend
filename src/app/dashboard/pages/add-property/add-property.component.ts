@@ -13,6 +13,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
 import { SharedService } from '../../../shared.service';
+import { UploadFileModel } from '../../../shared/model/shared.model';
+import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 
 @Component({
   selector: 'app-add-property',
@@ -24,6 +26,7 @@ import { SharedService } from '../../../shared.service';
     CustomSelectComponent,
     UploadDocumentComponent,
     ReactiveFormsModule,
+    FileUploadItemComponent,
   ],
   templateUrl: './add-property.component.html',
   styleUrl: './add-property.component.css',
@@ -66,12 +69,12 @@ export class AddPropertyComponent {
         this.currentRole = role;
       });
 
-    this.getOptionType();
+    this.getOptionType(['PROPERTY_TYPES', 'PMC_LIST']);
   }
 
-  getOptionType() {
+  getOptionType(options: string[]) {
     this.sharedAPIService
-      .getOptions({ option_type: 'PROPERTY_TYPES, PMC_LIST' })
+      .getOptions({ option_type: options.join(',') })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -85,6 +88,41 @@ export class AddPropertyComponent {
     console.log('Final Step Completed — Submitting Property...');
     // Call API or navigate
     this.router.navigate(['dashboard/properties']);
+  }
+
+  exteriorImages: UploadFileModel[] = [];
+  interiorImages: UploadFileModel[] = [];
+
+  uploadIdCounter = 1;
+
+  onExteriorImageUploadProgress(event: UploadFileModel) {
+    this.handleUploadEvent(event, this.exteriorImages);
+    console.log('exteriorImages:--->', this.exteriorImages);
+  }
+
+  onInteriorImageUploadProgress(event: UploadFileModel) {
+    this.handleUploadEvent(event, this.interiorImages);
+  }
+
+  private handleUploadEvent(event: UploadFileModel, list: UploadFileModel[]) {
+    const existing = list.find((i) => i.tempId === event.tempId);
+
+    if (!existing) {
+      list.push({
+        ...event,
+        id: this.uploadIdCounter++,
+      });
+    } else {
+      Object.assign(existing, event);
+    }
+  }
+
+  removeExteriorImage(id: number) {
+    this.exteriorImages = this.exteriorImages.filter((x) => x.id !== id);
+  }
+
+  removeInteriorImage(id: number) {
+    this.interiorImages = this.interiorImages.filter((x) => x.id !== id);
   }
 
   ngOnDestroy() {

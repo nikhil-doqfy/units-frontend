@@ -1,0 +1,26 @@
+<div class="upload-item">
+  <div class="icon">
+    <i class="pi pi-file"></i>
+  </div>
+
+  <div class="info">
+    <div class="name">{{ item.file.name }}</div>
+    <div class="size">
+      {{ formatFileSize(item.file.size) }}
+    </div>
+
+    <ng-container [ngSwitch]="item.status">
+      <div *ngSwitchCase="'processing'">
+        <progress [value]="item.progress" max="100"></progress>
+      </div>
+
+      <div *ngSwitchCase="'done'" class="success">Upload complete</div>
+
+      <div *ngSwitchCase="'error'" class="error">
+        {{ item.errorMessage }}
+      </div>
+    </ng-container>
+  </div>
+
+  <button class="remove" (click)="onRemove()">Remove</button>
+</div>

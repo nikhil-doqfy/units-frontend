@@ -86,7 +86,8 @@ export class StepFormLayoutComponent implements AfterContentInit {
         this.currentStep++;
         this.spinner.hide();
       } catch (err) {
-        console.log('Save failed:', err);
+        this.spinner.hide();
+        console.error('Save failed:', err);
       }
     }
   }
