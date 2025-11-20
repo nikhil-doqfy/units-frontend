@@ -14,6 +14,7 @@ import { TableActionButtonComponent } from '../../component/table-action-btn/tab
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 
 @Component({
@@ -33,6 +34,7 @@ import { SharedService } from '../../../shared.service';
     TableActionButtonComponent,
     TablePaginationComponent,
     CustomSelectComponent,
+    NoDataComponent,
   ],
   templateUrl: './payments-and-invoice.component.html',
   styleUrl: './payments-and-invoice.component.css',

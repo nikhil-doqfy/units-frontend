@@ -80,7 +80,9 @@
               <form>
                 <div class="row g-3">
                   <div class="col-md-6">
-                    <label class="form-label">Location</label>
+                    <label class="form-label">{{
+                      "LOCATION" | translate
+                    }}</label>
                     <app-custom-select
                       [options]="[
                         'All' | translate,
@@ -95,7 +97,7 @@
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">Unit</label>
+                    <label class="form-label">{{ "UNIT" | translate }}</label>
                     <app-custom-select
                       [options]="[
                         'Sep 2025',
@@ -109,8 +111,12 @@
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">Date Range</label>
-                    <label class="form-label small">From</label>
+                    <label class="form-label">{{
+                      "DATE_RANGE" | translate
+                    }}</label>
+                    <label class="form-label small">{{
+                      "FROM" | translate
+                    }}</label>
                     <div class="datePicker">
                       <input
                         class="form-control"
@@ -127,7 +133,9 @@
                   </div>
                   <div class="col-md-6">
                     <label class="form-label d-none d-md-block">&nbsp;</label>
-                    <label class="form-label small">To</label>
+                    <label class="form-label small">{{
+                      "TO" | translate
+                    }}</label>
                     <div class="datePicker">
                       <input
                         class="form-control"
@@ -146,7 +154,9 @@
               </form>
             </ng-container>
             <ng-container action>
-              <button type="button" class="btn btnCommon">Apply</button>
+              <button type="button" class="btn btnCommon">
+                {{ "APPLY" | translate }}
+              </button>
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>
@@ -196,7 +206,9 @@
               <form>
                 <div class="row g-3">
                   <div class="col-md-6">
-                    <label class="form-label">Location</label>
+                    <label class="form-label">{{
+                      "LOCATION" | translate
+                    }}</label>
                     <app-custom-select
                       [options]="[
                         'All',
@@ -211,7 +223,7 @@
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">Unit</label>
+                    <label class="form-label">{{ "UNIT" | translate }}</label>
                     <app-custom-select
                       [options]="[
                         'Sep 2025',
@@ -228,7 +240,9 @@
               </form>
             </ng-container>
             <ng-container action>
-              <button type="button" class="btn btnCommon">Apply</button>
+              <button type="button" class="btn btnCommon">
+                {{ "APPLY" | translate }}
+              </button>
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>
@@ -281,7 +295,9 @@
                     <form>
                       <div class="row g-3">
                         <div class="col-md-6">
-                          <label class="form-label">Location</label>
+                          <label class="form-label">{{
+                            "LOCATION" | translate
+                          }}</label>
                           <app-custom-select
                             [options]="[
                               'All',
@@ -296,7 +312,9 @@
                           </app-custom-select>
                         </div>
                         <div class="col-md-6">
-                          <label class="form-label">Unit</label>
+                          <label class="form-label">{{
+                            "UNIT" | translate
+                          }}</label>
                           <app-custom-select
                             [options]="[
                               'Sep 2025',
@@ -318,7 +336,7 @@
                                   name="filterMonth"
                                   value="month"
                                 />
-                                <span>Month</span>
+                                <span>{{ "MONTH" | translate }}</span>
                               </label>
                               <label>
                                 <input
@@ -327,7 +345,7 @@
                                   value="last6Months"
                                   checked
                                 />
-                                <span>Last 6 Months</span>
+                                <span>{{ "LAST_6_MONTHS" | translate }}</span>
                               </label>
                               <label>
                                 <input
@@ -335,7 +353,7 @@
                                   name="filterMonth"
                                   value="year"
                                 />
-                                <span>Year</span>
+                                <span>{{ "YEARS" | translate }}</span>
                               </label>
                             </div>
                           </div>
@@ -344,7 +362,9 @@
                     </form>
                   </ng-container>
                   <ng-container action>
-                    <button type="button" class="btn btnCommon">Apply</button>
+                    <button type="button" class="btn btnCommon">
+                      {{ "APPLY" | translate }}
+                    </button>
                   </ng-container>
                 </app-filter-popup-btn>
               </ng-container>
@@ -455,7 +475,9 @@
               <form>
                 <div class="row g-3">
                   <div class="col-md-6">
-                    <label class="form-label">Location</label>
+                    <label class="form-label">{{
+                      "LOCATION" | translate
+                    }}</label>
                     <app-custom-select
                       [options]="[
                         'All',
@@ -470,7 +492,7 @@
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">Unit</label>
+                    <label class="form-label">{{ "UNIT" | translate }}</label>
                     <app-custom-select
                       [options]="[
                         'Sep 2025',
@@ -492,7 +514,7 @@
                             name="filterMonth"
                             value="month"
                           />
-                          <span>Month</span>
+                          <span>{{ "MONTH" | translate }}</span>
                         </label>
                         <label>
                           <input
@@ -501,11 +523,11 @@
                             value="last6Months"
                             checked
                           />
-                          <span>Last 6 Months</span>
+                          <span>{{ "LAST_6_MONTH" | translate }}</span>
                         </label>
                         <label>
                           <input type="radio" name="filterMonth" value="year" />
-                          <span>Year</span>
+                          <span>{{ "YEARS" | translate }}</span>
                         </label>
                       </div>
                     </div>
@@ -514,7 +536,9 @@
               </form>
             </ng-container>
             <ng-container action>
-              <button type="button" class="btn btnCommon">Apply</button>
+              <button type="button" class="btn btnCommon">
+                {{ "APPLY" | translate }}
+              </button>
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>

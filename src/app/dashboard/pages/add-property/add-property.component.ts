@@ -12,6 +12,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 
 @Component({
@@ -24,6 +25,7 @@ import { SharedService } from '../../../shared.service';
     CustomSelectComponent,
     UploadDocumentComponent,
     ReactiveFormsModule,
+    TranslateModule,
   ],
   templateUrl: './add-property.component.html',
   styleUrl: './add-property.component.css',

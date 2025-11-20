@@ -175,7 +175,7 @@ export class ForgotPasswordComponent {
   signInWithOtp(): void {
     let payload = {
       email: this.forgetForm.value.email,
-      otp: this.otp,
+      otp: Number(this.otp),
     };
     this.authService.verifyOtp(payload).subscribe({
       next: (resp: any) => {

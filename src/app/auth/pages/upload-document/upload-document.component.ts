@@ -194,7 +194,7 @@ export class UploadDocumentComponent {
       email: data['email'],
       password: data['password'],
       confirm_password: data['confirmPassword'],
-      mobile_number: data['Contact_Number'],
+      mobile_number: data['contact_number'],
       user_type: selctedUsertype,
       emirate_id: data['emirate_id'],
       uae_residence_visa: data['residenceVisa'],

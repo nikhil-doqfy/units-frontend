@@ -12,6 +12,7 @@ import { DateIconComponent } from '../../component/icons/date-icon/date-icon.com
 import { UploadIconComponent } from '../../component/icons/upload-icon/upload-icon.component';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { CrossIconComponent } from '../../component/icons/cross-icon/cross-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 
 @Component({
@@ -19,6 +20,7 @@ import { SharedService } from '../../../shared.service';
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     FormsModule,
     StepFormLayoutComponent,
     StepPaneComponent,

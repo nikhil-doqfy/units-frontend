@@ -17,7 +17,8 @@ import { EditIconComponent } from '../component/icons/edit-icon/edit-icon.compon
 import { UserService } from '../services/user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { StorageService } from '../../shared/services/storage.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -35,15 +36,20 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class MyProfileComponent {
   private userService = inject(UserService);
+  private storageService = inject(StorageService);
+  private http = inject(HttpClient);
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  userImage: string = '../../../../assets/userDefaultProImg.png';
+  userImage: string = '';
+  fileType: string = 'png';
   editUserMode = false;
   editOtherDetailsMode = false;
   changedFields: any = {};
   private destroy$ = new Subject<void>();
 
   profile = {
+    firstName: '',
+    lastName: '',
     name: '',
     email: '',
     contact: '',
@@ -75,14 +81,33 @@ export class MyProfileComponent {
       });
   }
 
+  getBase64() {
+    const fileUrl = 'assets/userDefaultProImg.png';
+
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        this.userImage = reader.result as string;
+        this.fileType = 'png';
+      };
+    });
+  }
+
   setUserFormData(content: any) {
-    this.userImage =
-      content?.profile_image === 'N/A' || !content?.profile_image
-        ? this.userImage
-        : content?.profile_image;
+    if (!content?.profile_image) {
+      this.getBase64();
+    } else {
+      this.userImage = `data:image/${content.profile_image_type};base64,${content.profile_image}`;
+    }
 
     this.profile = {
-      name: content?.name,
+      name:
+        content?.user_type === 'PROPERTY_MANAGER'
+          ? content?.company_name
+          : content?.full_name,
+      firstName: content?.first_name,
+      lastName: content?.last_name,
       email: content?.email,
       contact: content?.contact_number,
       role: content?.user_type,
@@ -117,6 +142,7 @@ export class MyProfileComponent {
       const reader = new FileReader();
       reader.onload = () => {
         this.userImage = reader.result as string;
+        this.fileType = file.name.split('.').at(-1) ?? 'png';
       };
       reader.readAsDataURL(file);
     }
@@ -131,10 +157,53 @@ export class MyProfileComponent {
     this.editUserMode = true;
   }
 
-  saveUser() {
-    console.log('changedUser:---->', this.changedFields);
-    this.editUserMode = false;
-    this.changedFields = {};
+  saveAccountDetails() {
+    const payload: Record<string, any> = {
+      first_name:
+        this.profile.role === 'PROPERTY_MANAGER'
+          ? this.profile.name
+          : this.profile.firstName,
+      last_name:
+        this.profile.role === 'PROPERTY_MANAGER'
+          ? this.profile.name
+          : this.profile.lastName,
+      contact_number: this.profile.contact,
+      profile_image: this.userImage.split(',')[1],
+      profile_image_type: this.fileType,
+    };
+
+    if (this.profile.role === 'PROPERTY_MANAGER') {
+      payload['company_name'] = this.profile.name;
+    }
+    this.saveUser(payload);
+  }
+
+  saveOtherDetails() {
+    const payload: Record<string, any> = {
+      country: this.otherDetails.country,
+      time_zone: this.otherDetails.timeZone,
+      address: this.otherDetails.address,
+      state: this.otherDetails.state,
+      postal_code: this.otherDetails.postalCode,
+    };
+    this.saveUser(payload);
+  }
+
+  saveUser(payload: Record<string, any>) {
+    this.userService
+      .editUserProfile(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          this.getUserProfileData();
+          this.editUserMode = false;
+          this.changedFields = {};
+          this.editOtherDetailsMode = false;
+        },
+        error: (err) => {
+          console.error('Error updating profile:', err);
+        },
+      });
   }
 
   cancelUser() {
@@ -145,11 +214,6 @@ export class MyProfileComponent {
   // Other Details edit toggles
   enableOtherDetailsEdit() {
     this.editOtherDetailsMode = true;
-  }
-
-  saveOtherDetails() {
-    this.editOtherDetailsMode = false;
-    this.changedFields = {};
   }
 
   cancelOtherDetails() {
