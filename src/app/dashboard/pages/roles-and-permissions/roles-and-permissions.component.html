@@ -3,7 +3,7 @@
     <app-white-card>
       <div class="row align-items-center justify-content-between g-3">
         <div class="col">
-          <app-card-title [title]="'Roles' | translate" />
+          <app-card-title [title]="'ROLES' | translate" />
         </div>
         <div class="col-auto">
           <button
@@ -11,7 +11,7 @@
             class="btn btnCommon"
             (click)="openAddRoleModal(addRoleContent)"
           >
-            <i><app-plus-icon /></i>{{ "New Role" | translate }}
+            <i><app-plus-icon /></i>{{ "NEW_ROLE" | translate }}
           </button>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <div class="col-md">
           <app-table-title
             title="6"
-            [subtitle]="'Roles Found' | translate"
+            [subtitle]="'ROLES_FOUND' | translate"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
@@ -37,10 +37,10 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>{{ "Role" | translate }}</th>
+              <th>{{ "ROLE" | translate }}</th>
               <th>
                 <button type="button">
-                  {{ "created_on" | translate }} <i><app-sorting-icon /></i>
+                  {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
               <th></th>

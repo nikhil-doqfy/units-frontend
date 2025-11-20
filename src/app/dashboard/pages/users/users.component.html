@@ -16,7 +16,7 @@
                 aria-selected="true"
                 (click)="getActiveUser()"
               >
-                {{ "All_user" | translate }}
+                {{ "ALL_USER" | translate }}
               </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -31,7 +31,7 @@
                 aria-selected="false"
                 (click)="getNewUser()"
               >
-                {{ "New_Users" | translate }}
+                {{ "NEW_USERS" | translate }}
               </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -46,7 +46,7 @@
                 aria-selected="false"
                 (click)="getDeletedUser()"
               >
-                {{ "Deleted_Users" | translate }}
+                {{ "DELETED_USERS" | translate }}
               </button>
             </li>
           </ul>
@@ -58,7 +58,7 @@
           class="btn btnCommon"
           (click)="openAddUserModal(addUserContent)"
         >
-          <i><app-plus-icon /></i>{{ "New_User" | translate }}
+          <i><app-plus-icon /></i>{{ "NEW_USER" | translate }}
         </button>
       </div>
     </div>
@@ -78,7 +78,7 @@
           <div class="col-md">
             <app-table-title
               title="6"
-              [subtitle]="'users Found' | translate"
+              [subtitle]="'USERS_FOUND' | translate"
             ></app-table-title>
           </div>
           <div class="col-md-auto">
@@ -93,23 +93,23 @@
               <tr>
                 <th>
                   <button type="button">
-                    {{ "User_Name" | translate }} <i><app-sorting-icon /></i>
+                    {{ "USER_NAME" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
-                <th>{{ "Phone" | translate }}</th>
-                <th>{{ "Role" | translate }}</th>
-                <th>{{ "Email" | translate }}</th>
+                <th>{{ "PHONE" | translate }}</th>
+                <th>{{ "ROLE" | translate }}</th>
+                <th>{{ "EMAIL" | translate }}</th>
                 <th>
                   <button type="button">
-                    {{ "Created_On" | translate }} <i><app-sorting-icon /></i>
+                    {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
                 <th>
                   <button type="button">
-                    {{ "Last_Login" | translate }} <i><app-sorting-icon /></i>
+                    {{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
-                <th>{{ "Status" | translate }}</th>
+                <th>{{ "STATUS" | translate }}</th>
                 <th width="200"></th>
               </tr>
             </thead>
