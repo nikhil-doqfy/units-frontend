@@ -20,7 +20,7 @@ export class UserService {
   }
 
   editUserProfile(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/user/profile/view`, data);
+    return this.http.put(`${this.SERVER_ADDRESS}/user/profile/view/`, data);
   }
 
   // ------------------------- Access user service management -------------------------
@@ -30,5 +30,4 @@ export class UserService {
       `${this.SERVER_ADDRESS}/user/user/management${queryString}`
     );
   }
-
 }

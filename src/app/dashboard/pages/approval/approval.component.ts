@@ -15,7 +15,7 @@ import { TableViewCardComponent } from '../../component/table-view-card/table-vi
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
-
+import { NoDataComponent } from '../../../no-data/no-data.component';
 @Component({
   selector: 'app-approval',
   standalone: true,
@@ -33,6 +33,7 @@ import { SharedService } from '../../../shared.service';
     TableViewCardComponent,
     DocumentTypeItemComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.css',

@@ -58,6 +58,7 @@ import { SharedService } from '../../../shared.service';
     TableViewCardComponent,
     TranslateModule,
     MaskPhonePipe,
+    TranslateModule,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',

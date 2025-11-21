@@ -70,6 +70,7 @@
           </tr>
         </thead>
         <tbody>
+          <!-- @for (pmc of paymentandinvoice; track $index) { -->
           <tr>
             <td>LP9021</td>
             <td>LP9021</td>
@@ -165,6 +166,13 @@
               </div>
             </td>
           </tr>
+          <!-- }@empty {
+          <tr>
+            <td colspan="20" align="center">
+              <app-no-data></app-no-data>
+            </td>
+          </tr>
+          } -->
         </tbody>
       </table>
     </div>

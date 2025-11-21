@@ -1,21 +1,21 @@
 <app-step-form-layout
-  leftCardTitle="Property Details"
+  [leftCardTitle]="'PROPERTY_DETAILS' | translate"
   finishButtonText="Add Property"
   (finish)="submitProperty()"
 >
   <!-- Step Basic Details Content -->
   <ng-container>
     <app-step-pane
-      title="Basic Details"
-      description="Fill all the fields to add Your property"
+      [title]="'BASIC_DETAILS' | translate"
+      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
     >
       <form class="row g-3" [formGroup]="basicDetailsForm">
         <div class="col-md-6">
-          <label class="form-label">Property Name</label>
+          <label class="form-label">{{ "PROPERTY_NAME" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="propertyName"
           />
           @if (isInvalid(basicDetailsForm, 'propertyName').status) {
@@ -25,7 +25,7 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">Property Type</label>
+          <label class="form-label">{{ "PROPERTY_TYPE" | translate }}</label>
           <app-custom-select
             [options]="propertyType"
             key="key"
@@ -39,11 +39,14 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">Land Area <small>Sq-ft</small></label>
+          <label class="form-label"
+            >{{ "LAND_AREA" | translate }}
+            <small>{{ "SQ-FT" | translate }}</small></label
+          >
           <input
             type="number"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="landArea"
           />
           @if (isInvalid(basicDetailsForm, 'landArea').status) {
@@ -53,11 +56,13 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">Land DM No (Affection Plan)</label>
+          <label class="form-label">{{
+            "LAND DM NO (AFFECTION PLAN)" | translate
+          }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter Land DM No"
+            [placeholder]="'ENTER_LAND_DM_NO' | translate"
             formControlName="landDMNo"
           />
           @if (isInvalid(basicDetailsForm, 'landDMNo').status) {
@@ -67,11 +72,11 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">Apartment No</label>
+          <label class="form-label">{{ "APARTMENT_NO" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter apartment number"
+            [placeholder]="'ENTER_APARTMENT_NUMBER' | translate"
             formControlName="apartmentNo"
           />
           @if (isInvalid(basicDetailsForm, 'apartmentNo').status) {
@@ -81,11 +86,11 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">Address</label>
+          <label class="form-label">{{ "ADDRESS" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter address here"
+            [placeholder]="'ENTER_ADDRESS_HERE' | translate"
             formControlName="address"
           />
           @if (isInvalid(basicDetailsForm, 'address').status) {
@@ -95,11 +100,11 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">No of Bedrooms</label>
+          <label class="form-label">{{ "NO_OF_BEDROOMS" | translate }}</label>
           <input
             type="number"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="NoOfBedrooms"
           />
           @if (isInvalid(basicDetailsForm, 'NoOfBedrooms').status) {
@@ -110,12 +115,13 @@
         </div>
         <div class="col-md-6">
           <label class="form-label"
-            >Area of Property <small>Sq-ft</small></label
+            >{{ "AREA_OF_PROPERTY" | translate }}
+            <small>{{ "SQ-FT" | translate }}</small></label
           >
           <input
             type="number"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="areaOfProperty"
           />
           @if (isInvalid(basicDetailsForm, 'areaOfProperty').status) {
@@ -125,11 +131,11 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">No of Floors</label>
+          <label class="form-label">{{ "NO_OF_FLOORS" | translate }}</label>
           <input
             type="number"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="NoOfFloors"
           />
           @if (isInvalid(basicDetailsForm, 'NoOfFloors').status) {
@@ -139,11 +145,11 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">No of Parking</label>
+          <label class="form-label">{{ "NO_OF_PARKING" | translate }}</label>
           <input
             type="number"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="NoOfParking"
           />
           @if (isInvalid(basicDetailsForm, 'NoOfParking').status) {
@@ -153,11 +159,11 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">No of Balcony</label>
+          <label class="form-label">{{ "NO_OF_BALCONY" | translate }}</label>
           <input
             type="number"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="NoOfBalcony"
           />
           @if (isInvalid(basicDetailsForm, 'NoOfBalcony').status) {
@@ -167,11 +173,11 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Plot No</label>
+          <label class="form-label">{{ "PLOT_NO" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="plotNo"
           />
           @if (isInvalid(basicDetailsForm, 'plotNo').status) {
@@ -181,11 +187,11 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Makani No</label>
+          <label class="form-label">{{ "MAKANI_NO" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="makaniNo"
           />
           @if (isInvalid(basicDetailsForm, 'makaniNo').status) {
@@ -195,11 +201,11 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Dewa No</label>
+          <label class="form-label">{{ "DEWA_NO" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="dewaNo"
           />
           @if (isInvalid(basicDetailsForm, 'dewaNo').status) {
@@ -215,16 +221,16 @@
   <!-- Step Commercials Content -->
   <ng-container>
     <app-step-pane
-      title="Commercials"
-      description="Fill all the fields to add Your property"
+      [title]="'COMMERCIALS' | translate"
+      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
     >
       <form class="row g-3" [formGroup]="commercialsForm">
         <div class="col-md-3">
-          <label class="form-label">Rent</label>
+          <label class="form-label">{{ "RENT" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="rent"
           />
           @if (isInvalid(commercialsForm, 'rent').status) {
@@ -234,11 +240,11 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Security Deposit</label>
+          <label class="form-label">{{ "SECURITY_DEPOSIT" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="securityDeposit"
           />
           @if (isInvalid(commercialsForm, 'securityDeposit').status) {
@@ -248,11 +254,11 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Booking Amount</label>
+          <label class="form-label">{{ "BOOKING_AMOUNT" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="bookingAmount"
           />
           @if (isInvalid(commercialsForm, 'bookingAmount').status) {
@@ -262,11 +268,13 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Maintenance Charges</label>
+          <label class="form-label">{{
+            "MAINTENCE_CHARGES" | translate
+          }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="maintenanceCharges"
           />
           @if (isInvalid(commercialsForm, 'maintenanceCharges').status) {
@@ -276,11 +284,13 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Cycle (in months)</label>
+          <label class="form-label">{{
+            "Cycle (in months)" | translate
+          }}</label>
           <input
             type="number"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="cycle"
           />
           @if (isInvalid(commercialsForm, 'cycle').status) {
@@ -290,11 +300,13 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Notice Period (in months)</label>
+          <label class="form-label">{{
+            "Notice Period (in months)" | translate
+          }}</label>
           <input
             type="number"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="noticePeriod"
           />
           @if (isInvalid(commercialsForm, 'noticePeriod').status) {
@@ -304,11 +316,11 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">Commission in %</label>
+          <label class="form-label">{{ "Commission in %" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            placeholder="Enter here"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="commission"
           />
           @if (isInvalid(commercialsForm, 'commission').status) {
@@ -324,7 +336,7 @@
       <app-step-pane title="Add PMC" [secondCard]="true">
         <form class="row g-3">
           <div class="col-md-6">
-            <label class="form-label">Property PMC</label>
+            <label class="form-label">{{ "Property PMC" | translate }}</label>
             <app-custom-select [options]="PMC_List"></app-custom-select>
           </div>
         </form>
@@ -335,8 +347,8 @@
   <!-- Step Property Images Content -->
   <ng-container>
     <app-step-pane
-      title="Property Images"
-      description="Upload images of the property"
+      [title]="'PROPERTY_IMAGES' | translate"
+      [description]="'Upload images of the property' | translate"
     >
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="propertyImagesTab" role="tablist">
@@ -351,7 +363,7 @@
               aria-controls="exterior-tab-pane"
               aria-selected="true"
             >
-              Exterior
+              {{ "Exterior" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -365,7 +377,7 @@
               aria-controls="interior-tab-pane"
               aria-selected="false"
             >
-              Interior
+              {{ "Interior" | translate }}
             </button>
           </li>
         </ul>
@@ -424,8 +436,8 @@
   <!-- Step Documentation Content -->
   <ng-container>
     <app-step-pane
-      title="Documentation"
-      description="Upload documents of the property"
+      [title]="'DOCUMENTATION' | translate"
+      [description]="'Upload documents of the property' | translate"
     >
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="documentsTab" role="tablist">
@@ -440,7 +452,7 @@
               aria-controls="propertyFloorPlan-tab-pane"
               aria-selected="true"
             >
-              Property Floor Plan
+              {{ "Property Floor Plan" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -454,7 +466,7 @@
               aria-controls="tenantDoc-tab-pane"
               aria-selected="false"
             >
-              Tenant Doc
+              {{ "Tenant Doc" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -468,7 +480,7 @@
               aria-controls="ejariCertificates-tab-pane"
               aria-selected="false"
             >
-              Ejari Certificates
+              {{ "Ejari Certificates" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -482,7 +494,7 @@
               aria-controls="pmcDocs-tab-pane"
               aria-selected="false"
             >
-              PMC DOCS
+              {{ "PMC DOCS" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -496,7 +508,7 @@
               aria-controls="cheque-tab-pane"
               aria-selected="false"
             >
-              Cheque
+              {{ "Cheque" | translate }}
             </button>
           </li>
         </ul>

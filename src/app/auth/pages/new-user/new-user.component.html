@@ -39,7 +39,12 @@
       <ng-container *ngIf="selectedRole === 'property-manager'">
         <div class="mb-2">
           <label for="companyName" class="form-label">Company Name</label>
-          <input class="form-control" type="text" placeholder="Enter here"  formControlName="company_name" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter here"
+            formControlName="company_name"
+          />
           @if (isInvalid(signupForm, 'company_name').status) {
           <small class="errorMsg">
             {{ isInvalid(signupForm, "company_name").msg }}
@@ -49,7 +54,12 @@
 
         <div class="mb-2">
           <label for="emiratesId" class="form-label">Company Emirates ID</label>
-          <input class="form-control" type="text" placeholder="Enter here" formControlName="company_emirate_id" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter here"
+            formControlName="company_emirate_id"
+          />
           @if (isInvalid(signupForm, 'company_emirate_id').status) {
           <small class="errorMsg">
             {{ isInvalid(signupForm, "company_emirate_id").msg }}
@@ -61,7 +71,12 @@
       <ng-container *ngIf="selectedRole === 'tenant'">
         <div class="mb-2 col-span-2">
           <label for="emiratesId" class="form-label">Emirates ID</label>
-          <input class="form-control" type="text" placeholder="Enter here" formControlName="emirate_id" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter here"
+            formControlName="emirate_id"
+          />
           @if (isInvalid(signupForm, 'emirate_id').status) {
           <small class="errorMsg">
             {{ isInvalid(signupForm, "emirate_id").msg }}
@@ -90,13 +105,13 @@
       </div>
 
       <div class="mb-2">
-        <label for="contact_Number" class="form-label">Contact Number</label>
+        <label for="contact_number" class="form-label">Contact Number</label>
         <div class="iconInput">
           <i><app-contact-number></app-contact-number></i>
           <input
             class="form-control"
             type="tel"
-            formControlName="Contact_Number"
+            formControlName="contact_number"
             placeholder="Enter your number"
           />
           @if (isInvalid(signupForm, 'Contact_Number').status) {
@@ -206,7 +221,9 @@
           <div class="d-flex align-items-center otpVerifyMdlInfo">
             <p class="mb-2">
               We've sent code to
-              <span class="text-primary">{{signupForm.get('email')?.value}}</span>
+              <span class="text-primary">{{
+                signupForm.get("email")?.value
+              }}</span>
             </p>
             <button
               type="button"

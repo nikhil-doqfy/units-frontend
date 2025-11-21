@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PageSizeChange } from '../../../shared/model/shared.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-table-select',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './table-select.component.html',
   styleUrl: './table-select.component.css',
 })

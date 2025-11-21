@@ -72,12 +72,9 @@ export class ResetPasswordComponent implements OnInit {
     console.log('Form values:', this.resetForm.value);
     console.log('Form valid?', this.resetForm.valid);
     if (this.resetForm.invalid) {
-      console.log('monali');
       this.resetForm.markAllAsTouched();
-      console.log('monali');
       return;
     }
-    console.log('monalo');
     const payload = {
       email: this.resetForm.get('email')?.value,
       otp: this.resetForm.get('otp')?.value,

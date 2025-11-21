@@ -11,6 +11,7 @@ import { ExportIconComponent } from '../../component/icons/export-icon/export-ic
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 
 @Component({
@@ -27,6 +28,7 @@ import { SharedService } from '../../../shared.service';
     TableActionButtonComponent,
     TablePaginationComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './documentations.component.html',
   styleUrl: './documentations.component.css',

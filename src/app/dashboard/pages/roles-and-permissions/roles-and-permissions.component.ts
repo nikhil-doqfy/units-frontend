@@ -21,6 +21,7 @@ import { BackIconComponent } from '../../component/icons/back-icon/back-icon.com
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { AddRoleFormComponent } from '../../component/forms/add-role-form/add-role-form.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 
 @Component({
@@ -39,6 +40,7 @@ import { SharedService } from '../../../shared.service';
     TablePaginationComponent,
     AddRoleFormComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './roles-and-permissions.component.html',
   styleUrl: './roles-and-permissions.component.css',
