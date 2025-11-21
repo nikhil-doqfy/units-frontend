@@ -6,27 +6,27 @@
     <div class="pmntInfoList">
       <ul>
         <li>
-          <i>{{ "Overall Amount Paid" | translate }}</i>
+          <i>{{ "OVERALL_AMOUNT_PAID" | translate }}</i>
           <span>{{ overallAmountPaid }}</span>
         </li>
         <li>
-          <i>{{ "Monthly Rent" | translate }}</i> <span>{{ monthlyRent }}</span>
+          <i>{{ "MONTHLY_RENT" | translate }}</i> <span>{{ monthlyRent }}</span>
         </li>
         <li>
-          <i>{{ "Maintenance Charges" | translate }}</i>
+          <i>{{ "MAINTENCE_CHARGES" | translate }}</i>
           <span>{{ maintenanceCharges }}</span>
         </li>
       </ul>
       <div class="pmntInfoDue">
-        <span>{{ "Due in" | translate }} {{ dueTime }}</span> ,{{
-          "Last date" | translate
+        <span>{{ "DUE_IN" | translate }} {{ dueTime }}</span> ,{{
+          "LAST_DATE" | translate
         }}
         {{ lastDate }}
       </div>
     </div>
     <div class="pmntInfoBtn">
       <button type="button" (click)="goToPayment()" class="btn btnCommon">
-        {{ "Pay My Dues" | translate }}
+        {{ "PAY_MY_DUES" | translate }}
       </button>
     </div>
   </div>

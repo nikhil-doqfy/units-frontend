@@ -1,15 +1,35 @@
 <app-modal-form-card>
-    <form>
-        <div class="mb-3">
-            <label for="myProperty" class="form-label">My Property<span>*</span></label>
-            <app-custom-select [options]="['Falcom city', 'Novatis AG...', 'Agriculture', 'Honda', 'TVS', 'Samsung']"
-                (optionSelected)="onOptionSelected($event)"></app-custom-select>
-        </div>
-        <div class="mb-0">
-            <label for="pmc" class="form-label">PMC<span>*</span></label>
-            <app-custom-select
-                [options]="['3 g real estate', 'Prestige Builders', 'Tata Constructions', 'Godrej Properties', 'L&T Realty']"
-                (optionSelected)="onOptionSelected($event)"></app-custom-select>
-        </div>
-    </form>
+  <form>
+    <div class="mb-3">
+      <label for="myProperty" class="form-label"
+        >{{ "MY_PROPERTY" | translate }}<span>*</span></label
+      >
+      <app-custom-select
+        [options]="[
+          'Falcom city',
+          'Novatis AG...',
+          'Agriculture',
+          'Honda',
+          'TVS',
+          'Samsung'
+        ]"
+        (optionSelected)="onOptionSelected($event)"
+      ></app-custom-select>
+    </div>
+    <div class="mb-0">
+      <label for="pmc" class="form-label"
+        >{{ "PMC" | translate }}<span>*</span></label
+      >
+      <app-custom-select
+        [options]="[
+          '3 g real estate',
+          'Prestige Builders',
+          'Tata Constructions',
+          'Godrej Properties',
+          'L&T Realty'
+        ]"
+        (optionSelected)="onOptionSelected($event)"
+      ></app-custom-select>
+    </div>
+  </form>
 </app-modal-form-card>

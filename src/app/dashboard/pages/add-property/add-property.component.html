@@ -1,6 +1,6 @@
 <app-step-form-layout
   [leftCardTitle]="'PROPERTY_DETAILS' | translate"
-  finishButtonText="Add Property"
+  finishButtonText="{{ 'ADD_PROPERTY' | translate }}"
   (finish)="submitProperty()"
 >
   <!-- Step Basic Details Content -->
@@ -57,7 +57,7 @@
         </div>
         <div class="col-md-6">
           <label class="form-label">{{
-            "LAND DM NO (AFFECTION PLAN)" | translate
+            "LAND_DM_NO(AFFECTION PLAN)" | translate
           }}</label>
           <input
             type="text"
@@ -285,7 +285,7 @@
         </div>
         <div class="col-md-3">
           <label class="form-label">{{
-            "Cycle (in months)" | translate
+            "CYCLE_(IN MONTHS)" | translate
           }}</label>
           <input
             type="number"
@@ -301,7 +301,7 @@
         </div>
         <div class="col-md-3">
           <label class="form-label">{{
-            "Notice Period (in months)" | translate
+            "NOTICE_PERIOD(IN_MONTHS)" | translate
           }}</label>
           <input
             type="number"
@@ -316,7 +316,7 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{ "Commission in %" | translate }}</label>
+          <label class="form-label">{{ "COMMISION_IN %" | translate }}</label>
           <input
             type="text"
             class="form-control"
@@ -333,10 +333,10 @@
     </app-step-pane>
 
     <ng-container *ngIf="currentRole === 'owner'">
-      <app-step-pane title="Add PMC" [secondCard]="true">
+      <app-step-pane [title]="'ADD_PMC' | translate" [secondCard]="true">
         <form class="row g-3">
           <div class="col-md-6">
-            <label class="form-label">{{ "Property PMC" | translate }}</label>
+            <label class="form-label">{{ "PROPERTY_PMC" | translate }}</label>
             <app-custom-select [options]="PMC_List"></app-custom-select>
           </div>
         </form>
@@ -348,7 +348,7 @@
   <ng-container>
     <app-step-pane
       [title]="'PROPERTY_IMAGES' | translate"
-      [description]="'Upload images of the property' | translate"
+      [description]="'UPLOAD_PROPERTY_IMAGES' | translate"
     >
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="propertyImagesTab" role="tablist">
@@ -363,7 +363,7 @@
               aria-controls="exterior-tab-pane"
               aria-selected="true"
             >
-              {{ "Exterior" | translate }}
+              {{ "EXTERIOR" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -377,7 +377,7 @@
               aria-controls="interior-tab-pane"
               aria-selected="false"
             >
-              {{ "Interior" | translate }}
+              {{ "INTERIOR" | translate }}
             </button>
           </li>
         </ul>
@@ -411,7 +411,7 @@
   <ng-container>
     <app-step-pane
       [title]="'DOCUMENTATION' | translate"
-      [description]="'Upload documents of the property' | translate"
+      [description]="'UPLOAD_DOCUMENTS_OF_THE_PROPERTY' | translate"
     >
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="documentsTab" role="tablist">
@@ -426,7 +426,7 @@
               aria-controls="propertyFloorPlan-tab-pane"
               aria-selected="true"
             >
-              {{ "Property Floor Plan" | translate }}
+              {{ "PROPERTY_FLOOR_PLAN" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -440,7 +440,7 @@
               aria-controls="tenantDoc-tab-pane"
               aria-selected="false"
             >
-              {{ "Tenant Doc" | translate }}
+              {{ "TENANT_DOC" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -454,7 +454,7 @@
               aria-controls="ejariCertificates-tab-pane"
               aria-selected="false"
             >
-              {{ "Ejari Certificates" | translate }}
+              {{ "EJARI_CERTIFICATES" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -468,7 +468,7 @@
               aria-controls="pmcDocs-tab-pane"
               aria-selected="false"
             >
-              {{ "PMC DOCS" | translate }}
+              {{ "PMC_DOCS" | translate }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -482,7 +482,7 @@
               aria-controls="cheque-tab-pane"
               aria-selected="false"
             >
-              {{ "Cheque" | translate }}
+              {{ "CHEQUES" | translate }}
             </button>
           </li>
         </ul>

@@ -3,7 +3,7 @@
     <div class="row align-items-center">
       <div class="col-md">
         <app-table-title
-          title="{{ 'Documents' | translate }}"
+          title="{{ 'DOCUMENTS' | translate }}"
           subtitle="5"
         ></app-table-title>
       </div>
@@ -25,7 +25,7 @@
           >
           </app-custom-select>
           <app-table-filter-btn
-            title="Export"
+            [title]="'EXPORT' | translate"
             [hasIcon]="true"
             (clicked)="handleExportClick()"
           >
@@ -40,10 +40,10 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>{{ "SI.Code" | translate }}</th>
-            <th>{{ "Agreement Name" | translate }}</th>
-            <th>{{ "Status" | translate }}</th>
-            <th width="200">{{ "Document" | translate }}</th>
+            <th>{{ "SI.CODE" | translate }}</th>
+            <th>{{ "AGREEMENT_NAME" | translate }}</th>
+            <th>{{ "STAUES" | translate }}</th>
+            <th width="200">{{ "DOCUMENT" | translate }}</th>
           </tr>
         </thead>
         <tbody>

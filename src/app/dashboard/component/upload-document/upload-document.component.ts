@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
 
 import { UploadDocIconComponent } from '../icons/upload-doc-icon/upload-doc-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-upload-document',
   standalone: true,
-  imports: [UploadDocIconComponent],
+  imports: [UploadDocIconComponent, TranslateModule],
   templateUrl: './upload-document.component.html',
   styleUrl: './upload-document.component.css',
 })

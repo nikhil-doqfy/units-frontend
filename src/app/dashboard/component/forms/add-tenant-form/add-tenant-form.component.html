@@ -1,55 +1,105 @@
 <app-modal-form-card>
-    <form>
-        <div class="row g-3">
-            <div class="col-md1-2">
-                <div class="tenantProCol">
-                    <div class="tenantProIcon">
-                        <button type="button" (click)="triggerFileInput()">
-                            <i *ngIf="!userImage"><app-upload-icon /></i>
-                            <img *ngIf="userImage" [src]="userImage" width="56" height="56"
-                                alt="Tenant Profile Image" />
-                        </button>
-                        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg"
-                            hidden />
-                    </div>
-                    <div class="tenantProTtl">
-                        <label class="form-label">Tenant Photo<span>*</span></label>
-                        <p>Max 5MB, PNG</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="staffName" class="form-label">Tenant Name<span>*</span></label>
-                    <input class="form-control" type="text" name="staffName" placeholder="Enter name here" />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-0">
-                    <label for="email" class="form-label">Email Address<span>*</span></label>
-                    <input class="form-control" type="email" name="email" placeholder="Enter email here" />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-0">
-                    <label for="contact" class="form-label">Contact Number<span>*</span></label>
-                    <input class="form-control" type="number" name="contact" placeholder="Enter contact here" />
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="emiratesID" class="form-label">Emirates ID<span>*</span></label>
-                    <input class="form-control" type="text" name="emiratesID" placeholder="Enter ID here" />
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="linkProperty" class="form-label">Link Property<span>*</span></label>
-                    <app-custom-select
-                        [options]="['Falcom city', 'Novatis AG...', 'Agriculture', 'Honda', 'TVS', 'Samsung']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-            </div>
+  <form>
+    <div class="row g-3">
+      <div class="col-md1-2">
+        <div class="tenantProCol">
+          <div class="tenantProIcon">
+            <button type="button" (click)="triggerFileInput()">
+              <i *ngIf="!userImage"><app-upload-icon /></i>
+              <img
+                *ngIf="userImage"
+                [src]="userImage"
+                width="56"
+                height="56"
+                alt="Tenant Profile Image"
+              />
+            </button>
+            <input
+              type="file"
+              #fileInput
+              (change)="onFileSelected($event)"
+              accept=".png, .jpg, .jpeg"
+              hidden
+            />
+          </div>
+          <div class="tenantProTtl">
+            <label class="form-label"
+              >{{ "TENANT_PHTOT" | translate }}<span>*</span></label
+            >
+            <p>Max 5MB, PNG</p>
+          </div>
         </div>
-    </form>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="staffName" class="form-label"
+            >{{ "TENANT_NAME" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="staffName"
+            [placeholder]="'ENTER_NAME_HERE' | translate"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="email" class="form-label"
+            >{{ "EMAIL_ADDRESS" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="email"
+            name="email"
+            [placeholder]="'ENTER_EMAIL_HERE' | translate"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="contact" class="form-label"
+            >{{ "CONTACT_NUMBER" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="number"
+            name="contact"
+            [placeholder]="'ENTER_CONTACT_HERE' | translate"
+          />
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="emiratesID" class="form-label"
+            >{{ "EMIRATES_ID" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="emiratesID"
+            [placeholder]="'ENTER_ID_HERE' | translate"
+          />
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="linkProperty" class="form-label"
+            >{{ "LINK_PROPERTY" | translate }}<span>*</span></label
+          >
+          <app-custom-select
+            [options]="[
+              'Falcom city',
+              'Novatis AG...',
+              'Agriculture',
+              'Honda',
+              'TVS',
+              'Samsung'
+            ]"
+            (optionSelected)="onOptionSelected($event)"
+          ></app-custom-select>
+        </div>
+      </div>
+    </div>
+  </form>
 </app-modal-form-card>

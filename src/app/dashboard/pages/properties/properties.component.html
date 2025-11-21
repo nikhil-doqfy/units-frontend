@@ -27,7 +27,7 @@
                 [(ngModel)]="propertyView"
                 (change)="onPropertyViewChange()"
               />
-              <span>My Properties <i>(2)</i></span>
+              <span>{{ "MY_PROPERTIES" | translate }} <i>(2)</i></span>
             </label>
             <label>
               <input
@@ -75,18 +75,18 @@
             </ng-container>
             <ng-container *ngIf="propertyView === 'all-properties'">
               <app-table-search
-                placeholder="Search here..."
+                [placeholder]="'SEARCH_HERE' | translate"
                 (onValueChange)="searchTextChange($event)"
               />
               <app-table-filter-btn
-                title="Filter"
+                [title]="'FILTER' | translate"
                 [hasIcon]="true"
                 (clicked)="handleFilterClick()"
               >
                 <app-filter-icon />
               </app-table-filter-btn>
               <app-table-filter-btn
-                title="Export"
+                [title]="'EXPORT' | translate"
                 [hasIcon]="true"
                 (clicked)="handleExportClick()"
               >
@@ -115,7 +115,7 @@
         >
         </app-property-view-card>
         <div class="mt-4">
-          <app-card-title title="All Documents" />
+          <app-card-title [title]="'ALL_DOCUMENTS' | translate" />
           <div class="commonTabs mt-2">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
@@ -129,7 +129,7 @@
                   aria-controls="rentalDocument-tab-pane"
                   aria-selected="true"
                 >
-                  Rental Document
+                  {{ "RENTAL_DOCUMENT" | translate }}
                 </button>
               </li>
               <li class="nav-item" role="presentation">
@@ -143,7 +143,7 @@
                   aria-controls="tenantDoc-tab-pane"
                   aria-selected="false"
                 >
-                  Tenant Doc
+                  {{ "TENANT_DOC" | translate }}
                 </button>
               </li>
               <li class="nav-item" role="presentation">
@@ -157,7 +157,7 @@
                   aria-controls="ejariCerificates-tab-pane"
                   aria-selected="false"
                 >
-                  Ejari Cerificates
+                  {{ "EJARI_CERTIFICATES" | translate }}
                 </button>
               </li>
               <li class="nav-item" role="presentation">
@@ -171,7 +171,7 @@
                   aria-controls="ownerDocs-tab-pane"
                   aria-selected="false"
                 >
-                  Owner Docs
+                  {{ "OWNER_DOCS" | translate }}
                 </button>
               </li>
               <li class="nav-item" role="presentation">
@@ -185,7 +185,7 @@
                   aria-controls="cheque-tab-pane"
                   aria-selected="false"
                 >
-                  Cheque
+                  {{ "CHEQUES" | translate }}
                 </button>
               </li>
             </ul>

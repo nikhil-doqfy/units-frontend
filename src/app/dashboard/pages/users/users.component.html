@@ -430,7 +430,9 @@
 
 <ng-template #addUserContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Add New User</h4>
+    <h4 class="modal-title" id="modal-title">
+      {{ "ADD_NEW_USER" | translate }}
+    </h4>
     <button
       type="button"
       class="btn-close"
@@ -447,14 +449,14 @@
       class="btn btnCommon btnTransparent"
       (click)="modal.dismiss('Save click')"
     >
-      Cancel
+      {{ "CANCEL" | translate }}
     </button>
     <button
       type="button"
       class="btn btnCommon"
       (click)="modal.close('Save click')"
     >
-      Submit Details
+      {{ "SUBMIT_DETAILS" | translate }}
     </button>
   </div>
 </ng-template>

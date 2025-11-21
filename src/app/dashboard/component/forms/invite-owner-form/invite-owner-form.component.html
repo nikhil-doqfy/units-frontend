@@ -1,18 +1,23 @@
 <app-modal-form-card>
-    <form [formGroup]="pmcOwnerForm">
-        <div class="mb-0">
-            <label for="email" class="form-label">
-                Email address<span>*</span>
-            </label>
+  <form [formGroup]="pmcOwnerForm">
+    <div class="mb-0">
+      <label for="email" class="form-label">
+        {{ "EMAIL_ADDRESS" | translate }}<span>*</span>
+      </label>
 
-            <input class="form-control" type="email" name="email" formControlName="email"
-                placeholder="Enter email address here" />
+      <input
+        class="form-control"
+        type="email"
+        name="email"
+        formControlName="email"
+        [placeholder]="'ENTER_EMAIL_ADDRESS_HERE' | translate"
+      />
 
-            @if (isInvalid(pmcOwnerForm, 'email').status) {
-            <small class="errorMsg">
-                {{ isInvalid(pmcOwnerForm, "email").msg }}
-            </small>
-            }
-        </div>
-    </form>
+      @if (isInvalid(pmcOwnerForm, 'email').status) {
+      <small class="errorMsg">
+        {{ isInvalid(pmcOwnerForm, "email").msg }}
+      </small>
+      }
+    </div>
+  </form>
 </app-modal-form-card>

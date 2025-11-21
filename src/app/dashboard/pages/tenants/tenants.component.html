@@ -12,18 +12,18 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search
-              placeholder="Search here..."
+              [placeholder]="'SEARCH_HERE' | translate"
               (onValueChange)="searchTextChange($event)"
             />
             <app-table-filter-btn
-              title="Filter"
+              [title]="'FILTER' | translate"
               [hasIcon]="true"
               (clicked)="handleFilterClick()"
             >
               <app-filter-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
@@ -31,7 +31,7 @@
             </app-table-filter-btn>
             <app-table-filter-btn
               *ngIf="currentRole === 'owner'"
-              title="Add Tenant"
+              [title]="'ADD_TENANT' | translate"
               [hasIcon]="true"
               (clicked)="openAddTenantModal(addTenantContent)"
             >
@@ -39,7 +39,7 @@
             </app-table-filter-btn>
             <app-table-filter-btn
               *ngIf="currentRole === 'property-manager'"
-              title="Invite Tenant"
+              [title]="'INVITE_TENANT' | translate"
               [hasIcon]="true"
               (clicked)="openInviteTenantModal(inviteTenantContent)"
             >
@@ -145,7 +145,9 @@
   <!-- -------------------- ADD Tenant Form -------------------- -->
   <ng-template #addTenantContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Add Tenant</h4>
+      <h4 class="modal-title" id="modal-title">
+        {{ "ADD_TENANT" | translate }}
+      </h4>
       <button
         type="button"
         class="btn-close"
@@ -162,14 +164,14 @@
         class="btn btnCommon btnTransparent"
         (click)="modal.dismiss('Save click')"
       >
-        Cancel
+        {{ "CANCEL" | translate }}
       </button>
       <button
         type="button"
         class="btn btnCommon"
         (click)="modal.close('Save click')"
       >
-        Submit Details
+        {{ "SUBMIT_DETAILS" | translate }}
       </button>
     </div>
   </ng-template>
@@ -177,7 +179,9 @@
   <!-- -------------------- Invite Tenant Form -------------------- -->
   <ng-template #inviteTenantContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Invite Tenant</h4>
+      <h4 class="modal-title" id="modal-title">
+        {{ "INVITE_TENANT" | translate }}
+      </h4>
       <button
         type="button"
         class="btn-close"
@@ -194,14 +198,14 @@
         class="btn btnCommon btnTransparent"
         (click)="modal.dismiss('Save click')"
       >
-        Cancel
+        {{ "CANCEL" | translate }}
       </button>
       <button
         type="button"
         class="btn btnCommon"
         (click)="sendInvite(inviteFormRef, modal)"
       >
-        <i><app-send-icon /></i>Send Invitation
+        <i><app-send-icon /></i>{{ "SEND_INVITATION" | translate }}
       </button>
     </div>
   </ng-template>

@@ -463,7 +463,9 @@
 
 <ng-template #addRoleContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Add New Role</h4>
+    <h4 class="modal-title" id="modal-title">
+      {{ "ADD_NEW_ROLE" | translate }}
+    </h4>
     <button
       type="button"
       class="btn-close"
@@ -480,14 +482,14 @@
       class="btn btnCommon btnTransparent"
       (click)="modal.dismiss('Save click')"
     >
-      Cancel
+      {{ "CANCEL" | translate }}
     </button>
     <button
       type="button"
       class="btn btnCommon"
       (click)="modal.close('Save click')"
     >
-      Create Role
+      {{ "CREATE_ROLE" | translate }}
     </button>
   </div>
 </ng-template>

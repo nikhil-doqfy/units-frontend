@@ -31,22 +31,22 @@
     <div class="row align-items-center">
       <div class="col-md">
         <app-table-title
-          title="{{ 'Recent Payments / Invoice' | translate }}"
+          title="{{ 'RECENT_PAYMENTS/INVOICE' | translate }}"
           subtitle="(5)"
         ></app-table-title>
       </div>
       <div class="col-md-auto">
         <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-table-search placeholder="Search here..." />
+          <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
           <app-table-filter-btn
-            title="Filter"
+            [title]="'FILTER' | translate"
             [hasIcon]="true"
             (clicked)="handleFilterClick()"
           >
             <app-filter-icon />
           </app-table-filter-btn>
           <app-table-filter-btn
-            title="Export"
+            [title]="'EXPORT' | translate"
             [hasIcon]="true"
             (clicked)="handleExportClick()"
           >
@@ -61,12 +61,12 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>{{ "Transaction ID" | translate }}</th>
-            <th>{{ "Invoice ID" | translate }}</th>
-            <th>{{ "Payment date" | translate }}</th>
-            <th>{{ "Invoice date" | translate }}</th>
-            <th>{{ "Payment through" | translate }}</th>
-            <th width="200">{{ "Invoice" | translate }}</th>
+            <th>{{ "TRANSACTION_ID" | translate }}</th>
+            <th>{{ "INVOICE_ID" | translate }}</th>
+            <th>{{ "PAYMENT_DATE" | translate }}</th>
+            <th>{{ "INVOICE_DATE" | translate }}</th>
+            <th>{{ "PAYMENT_THROUGH" | translate }}</th>
+            <th width="200">{{ "INVOICE" | translate }}</th>
           </tr>
         </thead>
         <tbody>

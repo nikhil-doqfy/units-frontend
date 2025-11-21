@@ -1,18 +1,24 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ModalFormCardComponent } from "../../modal-form-card/modal-form-card.component";
-import { CustomSelectComponent } from "../../custom-select/custom-select.component";
-import { UploadIconComponent } from "../../icons/upload-icon/upload-icon.component";
+import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
+import { CustomSelectComponent } from '../../custom-select/custom-select.component';
+import { UploadIconComponent } from '../../icons/upload-icon/upload-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-tenant-form',
   standalone: true,
-  imports: [CommonModule, ModalFormCardComponent, CustomSelectComponent, UploadIconComponent],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ModalFormCardComponent,
+    CustomSelectComponent,
+    UploadIconComponent,
+  ],
   templateUrl: './add-tenant-form.component.html',
-  styleUrl: './add-tenant-form.component.css'
+  styleUrl: './add-tenant-form.component.css',
 })
-
 export class AddTenantFormComponent {
   userImage: string | null = null;
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -47,4 +53,3 @@ export class AddTenantFormComponent {
     this.selectedType = option;
   }
 }
-
