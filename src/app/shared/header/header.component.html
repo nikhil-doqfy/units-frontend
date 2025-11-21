@@ -106,11 +106,7 @@
             >
               <i
                 ><img
-                  [src]="
-                    userProfile?.profile_image
-                      ? userProfile?.profile_image
-                      : '../../../assets/userDefaultProImg.png'
-                  "
+                  [src]="profileImageUrl"
                   [alt]="
                     userProfile?.first_name + ' ' + userProfile?.last_name
                   "

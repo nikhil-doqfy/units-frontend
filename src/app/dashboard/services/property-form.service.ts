@@ -76,20 +76,18 @@ export class PropertyFormService {
   initPropertyImagesForm() {
     this.propertyImagesForm = this.formBuilder.group({
       propertyId: ['', [Validators.required]],
-      images: ['', [Validators.required]],
-      // exterior: [''],
-      // interior: [''],
+      images: [[], [Validators.required]],
     });
   }
 
   initPropertyDocumentationForm() {
     this.propertyDocumentationForm = this.formBuilder.group({
-      propertyId: [''],
-      propertyFloorPlan: [''],
-      tenantDocs: [''],
-      ejariCertificates: [''],
-      PMCDocs: [''],
-      cheque: [''],
+      propertyId: [],
+      propertyFloorPlan: [[]],
+      tenantDocs: [[]],
+      ejariCertificates: [[]],
+      PMCDocs: [[]],
+      cheque: [[]],
     });
   }
 
@@ -144,10 +142,15 @@ export class PropertyFormService {
   getImagesForm(): Record<string, any> {
     const v = this.propertyImagesForm.value;
 
+    const images = v.images.map((i: any) => ({
+      data: i.data,
+      file_name: i.file_name,
+      type: i.type,
+    }));
+
     return {
       property_id: v.propertyId,
-      exterior: v.exterior, // base64 or url
-      interior: v.interior,
+      images,
     };
   }
 

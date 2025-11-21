@@ -17,6 +17,15 @@ import { SharedService } from '../../../shared.service';
 import { UploadFileModel } from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 
+type UploadImageType =
+  | 'interior'
+  | 'exterior'
+  | 'property_floor_paln'
+  | 'tenant_doc'
+  | 'ejari_certificates'
+  | 'pmc_docs'
+  | 'cheque';
+
 @Component({
   selector: 'app-add-property',
   standalone: true,
@@ -57,6 +66,16 @@ export class AddPropertyComponent {
   propertyType: any[] = [];
   PMC_List: any[] = [];
 
+  exteriorImages: UploadFileModel[] = [];
+  interiorImages: UploadFileModel[] = [];
+  propertyFloorPlanImages: UploadFileModel[] = [];
+  tenantDocImages: UploadFileModel[] = [];
+  ejariCertificateImages: UploadFileModel[] = [];
+  pmcDocsImages: UploadFileModel[] = [];
+  checkImages: UploadFileModel[] = [];
+
+  uploadIdCounter = 1;
+
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router, private themeService: ThemeService) {
@@ -92,39 +111,76 @@ export class AddPropertyComponent {
     this.router.navigate(['dashboard/properties']);
   }
 
-  exteriorImages: UploadFileModel[] = [];
-  interiorImages: UploadFileModel[] = [];
-
-  uploadIdCounter = 1;
-
   onExteriorImageUploadProgress(event: UploadFileModel) {
-    this.handleUploadEvent(event, this.exteriorImages);
-    console.log('exteriorImages:--->', this.exteriorImages);
+    this.handleUploadEvent(event, this.exteriorImages, 'exterior');
   }
 
   onInteriorImageUploadProgress(event: UploadFileModel) {
-    this.handleUploadEvent(event, this.interiorImages);
+    this.handleUploadEvent(event, this.interiorImages, 'interior');
   }
 
-  private handleUploadEvent(event: UploadFileModel, list: UploadFileModel[]) {
-    const existing = list.find((i) => i.tempId === event.tempId);
+  private handleUploadEvent(
+    event: UploadFileModel,
+    list: UploadFileModel[],
+    type: 'interior' | 'exterior'
+  ) {
+    const existing = list.find((item) => item.tempId === event.tempId); // Find existing by tempId (unique per upload slot)
 
     if (!existing) {
-      list.push({
+      // First time seeing this file
+      const model = {
         ...event,
-        id: this.uploadIdCounter++,
-      });
-    } else {
-      Object.assign(existing, event);
+        id: this.uploadIdCounter++, // permanent id
+        type,
+      };
+
+      list.push(model);
+      return;
     }
+
+    Object.assign(existing, event); // Update the existing upload model
+
+    // Only sync to form when upload is fully complete
+    if (event.progress === 100) {
+      this.syncImageToForm(existing, type);
+    }
+  }
+
+  private syncImageToForm(file: UploadFileModel, type: string) {
+    let images = this.imagesForm.value.images || [];
+
+    const imageData = {
+      id: file.id,
+      file_name: file.file.name,
+      type,
+      data: file.base64,
+    };
+
+    const existsIndex = images.findIndex((x: any) => x.id === file.id);
+
+    if (existsIndex === -1) {
+      images.push(imageData);
+    } else {
+      images[existsIndex] = imageData;
+    }
+
+    this.imagesForm.patchValue({ images });
   }
 
   removeExteriorImage(id: number) {
     this.exteriorImages = this.exteriorImages.filter((x) => x.id !== id);
+    this.removeImageFromForm(id);
   }
 
   removeInteriorImage(id: number) {
     this.interiorImages = this.interiorImages.filter((x) => x.id !== id);
+    this.removeImageFromForm(id);
+  }
+
+  removeImageFromForm(id: number) {
+    const images = this.imagesForm.value.images || [];
+    const updated = images.filter((img: any) => img.id !== id);
+    this.imagesForm.patchValue({ images: updated });
   }
 
   ngOnDestroy() {
