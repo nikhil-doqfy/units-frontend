@@ -20,11 +20,11 @@ import { FileUploadItemComponent } from '../../component/file-upload-item/file-u
 type UploadImageType =
   | 'interior'
   | 'exterior'
-  | 'property_floor_paln'
-  | 'tenant_doc'
+  | 'floor_plan_documents'
+  | 'tenant_documents'
   | 'ejari_certificates'
-  | 'pmc_docs'
-  | 'cheque';
+  | 'pmc_documents'
+  | 'cheque_documents';
 
 @Component({
   selector: 'app-add-property',
@@ -74,6 +74,45 @@ export class AddPropertyComponent {
   pmcDocsImages: UploadFileModel[] = [];
   checkImages: UploadFileModel[] = [];
 
+  private uploadConfig = {
+    exterior: {
+      list: this.exteriorImages,
+      form: this.imagesForm,
+      formKey: 'images',
+    },
+    interior: {
+      list: this.interiorImages,
+      form: this.imagesForm,
+      formKey: 'images',
+    },
+
+    floor_plan_documents: {
+      list: this.propertyFloorPlanImages,
+      form: this.documentationForm,
+      formKey: 'documents',
+    },
+    tenant_documents: {
+      list: this.tenantDocImages,
+      form: this.documentationForm,
+      formKey: 'documents',
+    },
+    ejari_certificates: {
+      list: this.ejariCertificateImages,
+      form: this.documentationForm,
+      formKey: 'documents',
+    },
+    pmc_documents: {
+      list: this.pmcDocsImages,
+      form: this.documentationForm,
+      formKey: 'documents',
+    },
+    cheque_documents: {
+      list: this.checkImages,
+      form: this.documentationForm,
+      formKey: 'documents',
+    },
+  };
+
   uploadIdCounter = 1;
 
   private destroy$ = new Subject<void>();
@@ -111,77 +150,164 @@ export class AddPropertyComponent {
     this.router.navigate(['dashboard/properties']);
   }
 
-  onExteriorImageUploadProgress(event: UploadFileModel) {
-    this.handleUploadEvent(event, this.exteriorImages, 'exterior');
+  onUpload(type: UploadImageType, event: UploadFileModel) {
+    this.handleUploadEvent(type, event);
   }
 
-  onInteriorImageUploadProgress(event: UploadFileModel) {
-    this.handleUploadEvent(event, this.interiorImages, 'interior');
-  }
+  private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {
+    const cfg = this.uploadConfig[type];
+    const list = cfg.list;
 
-  private handleUploadEvent(
-    event: UploadFileModel,
-    list: UploadFileModel[],
-    type: 'interior' | 'exterior'
-  ) {
-    const existing = list.find((item) => item.tempId === event.tempId); // Find existing by tempId (unique per upload slot)
+    const existing = list.find((x) => x.tempId === event.tempId);
 
     if (!existing) {
-      // First time seeing this file
-      const model = {
-        ...event,
-        id: this.uploadIdCounter++, // permanent id
-        type,
-      };
-
+      const model = { ...event, id: this.uploadIdCounter++, type };
       list.push(model);
       return;
     }
 
-    Object.assign(existing, event); // Update the existing upload model
+    Object.assign(existing, event);
 
-    // Only sync to form when upload is fully complete
     if (event.progress === 100) {
-      this.syncImageToForm(existing, type);
+      this.syncToForm(type, existing);
     }
   }
 
-  private syncImageToForm(file: UploadFileModel, type: string) {
-    let images = this.imagesForm.value.images || [];
+  private syncToForm(type: UploadImageType, file: UploadFileModel) {
+    const cfg = this.uploadConfig[type];
+    const form = cfg.form;
+    const formKey = cfg.formKey;
 
-    const imageData = {
+    let items = form.value[formKey] || [];
+
+    const payload = {
       id: file.id,
       file_name: file.file.name,
       type,
       data: file.base64,
     };
 
-    const existsIndex = images.findIndex((x: any) => x.id === file.id);
+    const index = items.findIndex((x: any) => x.id === file.id);
 
-    if (existsIndex === -1) {
-      images.push(imageData);
-    } else {
-      images[existsIndex] = imageData;
-    }
+    if (index === -1) items.push(payload);
+    else items[index] = payload;
 
-    this.imagesForm.patchValue({ images });
+    form.patchValue({ [formKey]: items });
   }
 
-  removeExteriorImage(id: number) {
-    this.exteriorImages = this.exteriorImages.filter((x) => x.id !== id);
-    this.removeImageFromForm(id);
+  remove(type: UploadImageType, id: number | undefined) {
+    const cfg = this.uploadConfig[type];
+
+    // 1. Remove from UI list
+    cfg.list = cfg.list.filter((item) => item.id !== id);
+
+    // 2. Remove from correct form + correct control
+    const form = cfg.form;
+    const formKey = cfg.formKey;
+    const updated = (form.value[formKey] || []).filter((x: any) => x.id !== id);
+
+    form.patchValue({ [formKey]: updated });
   }
 
-  removeInteriorImage(id: number) {
-    this.interiorImages = this.interiorImages.filter((x) => x.id !== id);
-    this.removeImageFromForm(id);
-  }
+  // onExteriorImageUploadProgress(event: UploadFileModel) {
+  //   this.handleUploadEvent(event, this.exteriorImages, 'exterior');
+  // }
 
-  removeImageFromForm(id: number) {
-    const images = this.imagesForm.value.images || [];
-    const updated = images.filter((img: any) => img.id !== id);
-    this.imagesForm.patchValue({ images: updated });
-  }
+  // onInteriorImageUploadProgress(event: UploadFileModel) {
+  //   this.handleUploadEvent(event, this.interiorImages, 'interior');
+  // }
+
+  // onPropertyPlanUploadProgress(event: UploadFileModel) {
+  //   this.handleUploadEvent(
+  //     event,
+  //     this.propertyFloorPlanImages,
+  //     'floor_plan_documents'
+  //   );
+  // }
+
+  // onTenantDocsUploadProgress(event: UploadFileModel) {
+  //   this.handleUploadEvent(event, this.tenantDocImages, 'tenant_documents');
+  // }
+
+  // onEjariCersUploadProgress(event: UploadFileModel) {
+  //   this.handleUploadEvent(
+  //     event,
+  //     this.ejariCertificateImages,
+  //     'ejari_certificates'
+  //   );
+  // }
+
+  // onPmcDocUploadProgress(event: UploadFileModel) {
+  //   this.handleUploadEvent(event, this.pmcDocsImages, 'pmc_documents');
+  // }
+
+  // onCheckUploadProgress(event: UploadFileModel) {
+  //   this.handleUploadEvent(event, this.checkImages, 'cheque_documents');
+  // }
+
+  // private handleUploadEvent(
+  //   event: UploadFileModel,
+  //   list: UploadFileModel[],
+  //   type: UploadImageType
+  // ) {
+  //   const existing = list.find((item) => item.tempId === event.tempId); // Find existing by tempId (unique per upload slot)
+
+  //   if (!existing) {
+  //     // First time seeing this file
+  //     const model = {
+  //       ...event,
+  //       id: this.uploadIdCounter++, // permanent id
+  //       type,
+  //     };
+
+  //     list.push(model);
+  //     return;
+  //   }
+
+  //   Object.assign(existing, event); // Update the existing upload model
+
+  //   // Only sync to form when upload is fully complete
+  //   if (event.progress === 100) {
+  //     this.syncImageToForm(existing, type);
+  //   }
+  // }
+
+  // private syncImageToForm(file: UploadFileModel, type: UploadImageType) {
+  //   let images = this.imagesForm.value.images || [];
+
+  //   const imageData = {
+  //     id: file.id,
+  //     file_name: file.file.name,
+  //     type,
+  //     data: file.base64,
+  //   };
+
+  //   const existsIndex = images.findIndex((x: any) => x.id === file.id);
+
+  //   if (existsIndex === -1) {
+  //     images.push(imageData);
+  //   } else {
+  //     images[existsIndex] = imageData;
+  //   }
+
+  //   this.imagesForm.patchValue({ images });
+  // }
+
+  // removeExteriorImage(id: number) {
+  //   this.exteriorImages = this.exteriorImages.filter((x) => x.id !== id);
+  //   this.removeImageFromForm(id);
+  // }
+
+  // removeInteriorImage(id: number) {
+  //   this.interiorImages = this.interiorImages.filter((x) => x.id !== id);
+  //   this.removeImageFromForm(id);
+  // }
+
+  // removeImageFromForm(id: number) {
+  //   const images = this.imagesForm.value.images || [];
+  //   const updated = images.filter((img: any) => img.id !== id);
+  //   this.imagesForm.patchValue({ images: updated });
+  // }
 
   ngOnDestroy() {
     this.destroy$.next();

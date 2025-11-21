@@ -395,14 +395,14 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onExteriorImageUploadProgress($event)"
+              (uploadProgress)="onUpload('exterior', $event)"
             ></app-upload-document>
 
             <div class="uploads-list" *ngIf="exteriorImages.length">
               <app-file-upload-item
-                *ngFor="let img of exteriorImages"
-                [item]="img"
-                (remove)="removeExteriorImage($event)"
+                *ngFor="let image of exteriorImages"
+                [item]="image"
+                (remove)="remove('exterior', image.id)"
               ></app-file-upload-item>
             </div>
           </div>
@@ -417,14 +417,14 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onInteriorImageUploadProgress($event)"
+              (uploadProgress)="onUpload('interior', $event)"
             />
 
             <div class="uploads-list" *ngIf="interiorImages.length">
               <app-file-upload-item
                 *ngFor="let image of interiorImages"
                 [item]="image"
-                (remove)="removeInteriorImage($event)"
+                (remove)="remove('interior', image.id)"
               />
             </div>
           </div>
@@ -522,7 +522,20 @@
             aria-labelledby="propertyFloorPlan-tab"
             tabindex="0"
           >
-            <app-upload-document />
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload('floor_plan_documents', $event)"
+            />
+
+            <div class="uploads-list" *ngIf="propertyFloorPlanImages.length">
+              <app-file-upload-item
+                *ngFor="let image of propertyFloorPlanImages"
+                [item]="image"
+                (remove)="remove('floor_plan_documents', image.id)"
+              />
+            </div>
           </div>
           <div
             class="tab-pane fade"
@@ -531,7 +544,20 @@
             aria-labelledby="tenantDoc-tab"
             tabindex="0"
           >
-            <app-upload-document />
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload('tenant_documents', $event)"
+            />
+
+            <div class="uploads-list" *ngIf="tenantDocImages.length">
+              <app-file-upload-item
+                *ngFor="let image of tenantDocImages"
+                [item]="image"
+                (remove)="remove('tenant_documents', image.id)"
+              />
+            </div>
           </div>
           <div
             class="tab-pane fade"
@@ -540,7 +566,20 @@
             aria-labelledby="ejariCertificates-tab"
             tabindex="0"
           >
-            <app-upload-document />
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload('ejari_certificates', $event)"
+            />
+
+            <div class="uploads-list" *ngIf="ejariCertificateImages.length">
+              <app-file-upload-item
+                *ngFor="let image of ejariCertificateImages"
+                [item]="image"
+                (remove)="remove('ejari_certificates', image.id)"
+              />
+            </div>
           </div>
           <div
             class="tab-pane fade"
@@ -549,7 +588,20 @@
             aria-labelledby="ejariCertificates-tab"
             tabindex="0"
           >
-            <app-upload-document />
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload('ejari_certificates', $event)"
+            />
+
+            <div class="uploads-list" *ngIf="ejariCertificateImages.length">
+              <app-file-upload-item
+                *ngFor="let image of ejariCertificateImages"
+                [item]="image"
+                (remove)="remove('ejari_certificates', image.id)"
+              />
+            </div>
           </div>
           <div
             class="tab-pane fade"
@@ -558,7 +610,20 @@
             aria-labelledby="pmcDocs-tab"
             tabindex="0"
           >
-            <app-upload-document />
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload('pmc_documents', $event)"
+            />
+
+            <div class="uploads-list" *ngIf="pmcDocsImages.length">
+              <app-file-upload-item
+                *ngFor="let image of pmcDocsImages"
+                [item]="image"
+                (remove)="remove('pmc_documents', image.id)"
+              />
+            </div>
           </div>
           <div
             class="tab-pane fade"
@@ -567,7 +632,20 @@
             aria-labelledby="cheque-tab"
             tabindex="0"
           >
-            <app-upload-document />
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload('cheque_documents', $event)"
+            />
+
+            <div class="uploads-list" *ngIf="checkImages.length">
+              <app-file-upload-item
+                *ngFor="let image of checkImages"
+                [item]="image"
+                (remove)="remove('cheque_documents', image.id)"
+              />
+            </div>
           </div>
         </div>
       </div>
