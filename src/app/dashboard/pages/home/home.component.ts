@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ import { DonutChartComponent } from '../../component/charts/donut/donut.componen
 import { LineChartComponent } from '../../component/charts/line/line.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
+import { PropertyService } from '../../services/property.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -53,18 +54,41 @@ import { SharedService } from '../../../shared.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private property = inject(PropertyService);
   breadcrumbData = [{ label: 'Dashboard', link: '' }];
 
   model: NgbDateStruct | null = null;
 
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
 
+  ngOnInit(): void {
+    this.getStats();
+  }
+
+  stats: any = {
+    total_properties: 0,
+    occupied_properties: 0,
+    vacant_properties: 0,
+
+    active_leases: 0,
+    upcoming_renewals: 0,
+    negotiations: 0,
+  };
+
+  getStats() {
+    this.property.getDashboardStatistics().subscribe((res) => {
+      this.stats = res.content;
+
+      // this.cd.detectChanges();
+      console.log('data', this.stats);
+    });
+  }
   propertyData = [
     { id: '01', name: 'Dubai Hills Golf Club', value: 45 },
     { id: '02', name: 'Silicon Central Mall', value: 29 },
