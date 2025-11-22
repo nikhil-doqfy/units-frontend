@@ -120,6 +120,9 @@ export class AddPropertyComponent {
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
+    const formId = this.route.snapshot.paramMap.get('id');
+    if (formId) this.propertyFormService.loadPropertyData(Number(formId));
   }
 
   ngOnInit() {
@@ -146,7 +149,6 @@ export class AddPropertyComponent {
 
   submitProperty(): void {
     console.log('Final Step Completed — Submitting Property...');
-    // Call API or navigate
     this.router.navigate(['dashboard/properties']);
   }
 
@@ -193,15 +195,19 @@ export class AddPropertyComponent {
     else items[index] = payload;
 
     form.patchValue({ [formKey]: items });
+    console.log('Synced to form:', formKey, items);
+    console.log(form.value);
   }
 
   remove(type: UploadImageType, id: number | undefined) {
+    if (!id) return;
     const cfg = this.uploadConfig[type];
 
-    // 1. Remove from UI list
-    cfg.list = cfg.list.filter((item) => item.id !== id);
+    // Remove from UI list
+    const index = cfg.list.findIndex((item) => item.id === id);
+    if (index !== -1) cfg.list.splice(index, 1);
 
-    // 2. Remove from correct form + correct control
+    // Remove from correct form + correct control
     const form = cfg.form;
     const formKey = cfg.formKey;
     const updated = (form.value[formKey] || []).filter((x: any) => x.id !== id);
@@ -209,108 +215,9 @@ export class AddPropertyComponent {
     form.patchValue({ [formKey]: updated });
   }
 
-  // onExteriorImageUploadProgress(event: UploadFileModel) {
-  //   this.handleUploadEvent(event, this.exteriorImages, 'exterior');
-  // }
-
-  // onInteriorImageUploadProgress(event: UploadFileModel) {
-  //   this.handleUploadEvent(event, this.interiorImages, 'interior');
-  // }
-
-  // onPropertyPlanUploadProgress(event: UploadFileModel) {
-  //   this.handleUploadEvent(
-  //     event,
-  //     this.propertyFloorPlanImages,
-  //     'floor_plan_documents'
-  //   );
-  // }
-
-  // onTenantDocsUploadProgress(event: UploadFileModel) {
-  //   this.handleUploadEvent(event, this.tenantDocImages, 'tenant_documents');
-  // }
-
-  // onEjariCersUploadProgress(event: UploadFileModel) {
-  //   this.handleUploadEvent(
-  //     event,
-  //     this.ejariCertificateImages,
-  //     'ejari_certificates'
-  //   );
-  // }
-
-  // onPmcDocUploadProgress(event: UploadFileModel) {
-  //   this.handleUploadEvent(event, this.pmcDocsImages, 'pmc_documents');
-  // }
-
-  // onCheckUploadProgress(event: UploadFileModel) {
-  //   this.handleUploadEvent(event, this.checkImages, 'cheque_documents');
-  // }
-
-  // private handleUploadEvent(
-  //   event: UploadFileModel,
-  //   list: UploadFileModel[],
-  //   type: UploadImageType
-  // ) {
-  //   const existing = list.find((item) => item.tempId === event.tempId); // Find existing by tempId (unique per upload slot)
-
-  //   if (!existing) {
-  //     // First time seeing this file
-  //     const model = {
-  //       ...event,
-  //       id: this.uploadIdCounter++, // permanent id
-  //       type,
-  //     };
-
-  //     list.push(model);
-  //     return;
-  //   }
-
-  //   Object.assign(existing, event); // Update the existing upload model
-
-  //   // Only sync to form when upload is fully complete
-  //   if (event.progress === 100) {
-  //     this.syncImageToForm(existing, type);
-  //   }
-  // }
-
-  // private syncImageToForm(file: UploadFileModel, type: UploadImageType) {
-  //   let images = this.imagesForm.value.images || [];
-
-  //   const imageData = {
-  //     id: file.id,
-  //     file_name: file.file.name,
-  //     type,
-  //     data: file.base64,
-  //   };
-
-  //   const existsIndex = images.findIndex((x: any) => x.id === file.id);
-
-  //   if (existsIndex === -1) {
-  //     images.push(imageData);
-  //   } else {
-  //     images[existsIndex] = imageData;
-  //   }
-
-  //   this.imagesForm.patchValue({ images });
-  // }
-
-  // removeExteriorImage(id: number) {
-  //   this.exteriorImages = this.exteriorImages.filter((x) => x.id !== id);
-  //   this.removeImageFromForm(id);
-  // }
-
-  // removeInteriorImage(id: number) {
-  //   this.interiorImages = this.interiorImages.filter((x) => x.id !== id);
-  //   this.removeImageFromForm(id);
-  // }
-
-  // removeImageFromForm(id: number) {
-  //   const images = this.imagesForm.value.images || [];
-  //   const updated = images.filter((img: any) => img.id !== id);
-  //   this.imagesForm.patchValue({ images: updated });
-  // }
-
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.propertyFormService.unsubcribe();
   }
 }

@@ -71,7 +71,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
   }
 
   async nextStep() {
-    if (this.currentStep < this.stepGroups.length - 1) {
+    if (this.currentStep < this.stepGroups.length) {
       try {
         this.spinner.show();
 
@@ -85,7 +85,12 @@ export class StepFormLayoutComponent implements AfterContentInit {
           'ONGOING'
         );
 
-        this.currentStep++;
+        if (this.currentStep === this.stepGroups.length - 1) {
+          this.onFinish();
+        } else {
+          this.currentStep++;
+        }
+
         this.spinner.hide();
       } catch (err) {
         this.spinner.hide();
@@ -99,7 +104,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
   }
 
   goToStep(index: number) {
-    // if (this.getStatus(index) === 'READY_TO_START') return;
+    if (this.getStatus(index) === 'READY_TO_START') return;
     this.currentStep = index;
   }
 

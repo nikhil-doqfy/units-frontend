@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PropertyService } from './property.service';
 import { FormStaus } from '../model/property.model';
 import { AlertService } from '../../shared/services/alert.service';
+import { pipe, Subject, takeUntil } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ export class PropertyFormService {
     3: 'READY_TO_START',
   };
   propertyID: number | undefined;
+  destroy$ = new Subject<void>();
 
   constructor() {
     this.initPropertyBasicDetailsForm();
@@ -82,13 +84,18 @@ export class PropertyFormService {
 
   initPropertyDocumentationForm() {
     this.propertyDocumentationForm = this.formBuilder.group({
-      propertyId: [],
-      propertyFloorPlan: [[]],
-      tenantDocs: [[]],
-      ejariCertificates: [[]],
-      PMCDocs: [[]],
-      cheque: [[]],
+      propertyId: ['18', [Validators.required]],
+      documents: [[], [Validators.required]],
     });
+  }
+
+  clearAllForms() {
+    [
+      this.propertyBasicDetailsForm,
+      this.propertyCommercialsForm,
+      this.propertyImagesForm,
+      this.propertyDocumentationForm,
+    ].forEach((form) => form.reset());
   }
 
   private setFormMap() {
@@ -157,13 +164,15 @@ export class PropertyFormService {
   getDocumentationForm(): Record<string, any> {
     const v = this.propertyDocumentationForm.value;
 
+    const documents = v.documents.map((d: any) => ({
+      data: d.data,
+      file_name: d.file_name,
+      type: d.type,
+    }));
+
     return {
       property_id: v.propertyId,
-      property_floor_plan: v.propertyFloorPlan,
-      tenant_docs: v.tenantDocs,
-      ejari_certificates: v.ejariCertificates,
-      pmc_docs: v.PMCDocs,
-      cheque: v.cheque,
+      documents,
     };
   }
 
@@ -244,20 +253,29 @@ export class PropertyFormService {
 
       this.updateFormStatus(step, 'ONGOING'); // API starting
 
-      handler(payload).subscribe({
-        next: (res) => {
-          this.alertService.success(res.message);
-          this.updateFormStatus(step, 'COMPLETED'); // step done
-          const propertyId = res?.content?.property_id;
-          this.propertyID = propertyId ?? this.propertyID;
-          if (this.propertyID) this.patchPropertyIDToAllForm(this.propertyID);
-          resolve(res);
-        },
-        error: (err) => {
-          this.updateFormStatus(step, 'ONGOING'); // still work in progress
-          reject(err);
-        },
-      });
+      handler(payload)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res) => {
+            this.alertService.success(res.message);
+            this.updateFormStatus(step, 'COMPLETED'); // step done
+            const propertyId = res?.content?.property_id;
+            this.propertyID = propertyId ?? this.propertyID;
+            if (this.propertyID) this.patchPropertyIDToAllForm(this.propertyID);
+            resolve(res);
+          },
+          error: (err) => {
+            this.updateFormStatus(step, 'ONGOING'); // still work in progress
+            reject(err);
+          },
+        });
     });
+  }
+
+  loadPropertyData(propertyId: number) {}
+
+  unsubcribe() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

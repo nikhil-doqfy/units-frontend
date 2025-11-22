@@ -583,28 +583,6 @@
           </div>
           <div
             class="tab-pane fade"
-            id="ejariCertificates-tab-pane"
-            role="tabpanel"
-            aria-labelledby="ejariCertificates-tab"
-            tabindex="0"
-          >
-            <app-upload-document
-              [isMultipleFiles]="true"
-              [fileTypes]="['jpg', 'jpeg', 'png']"
-              [maxSize]="20"
-              (uploadProgress)="onUpload('ejari_certificates', $event)"
-            />
-
-            <div class="uploads-list" *ngIf="ejariCertificateImages.length">
-              <app-file-upload-item
-                *ngFor="let image of ejariCertificateImages"
-                [item]="image"
-                (remove)="remove('ejari_certificates', image.id)"
-              />
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
             id="pmcDocs-tab-pane"
             role="tabpanel"
             aria-labelledby="pmcDocs-tab"
