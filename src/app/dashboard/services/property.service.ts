@@ -54,18 +54,24 @@ export class PropertyService {
     );
   }
 
-  getCommercialsDetails(params: Record<string, any>): Observable<any> {
+  getCommercialDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/commercial/details${queryString}`
+    );
   }
 
   getPropertyImages(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/images/${queryString}`
+    );
   }
 
   getPropertyDocuments(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/fetch/property/documents${queryString}`
+    );
   }
 }

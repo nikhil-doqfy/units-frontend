@@ -140,8 +140,8 @@ export class PropertyFormService {
       security_deposit: v.securityDeposit,
       booking_amount: v.bookingAmount,
       maintenance_charges: v.maintenanceCharges,
-      cycle: v.cycle?.key,
-      notice_period: v.noticePeriod?.key,
+      cycle: v.cycle,
+      notice_period: v.noticePeriod,
       commission_percent: v.commission,
     };
   }
@@ -277,14 +277,106 @@ export class PropertyFormService {
       const response = await firstValueFrom(
         this.propertyService.getBasicDetails({ property_id: propertyId })
       );
-      console.log('response:--->', response);
+
+      if (response.status !== 200) {
+        reject('API_ERROR');
+        return;
+      }
+
+      let content = response?.content;
+
+      if (!content) {
+        reject('NO_DATA_FOUND');
+        return;
+      }
+
+      this.propertyBasicDetailsForm.patchValue({
+        propertyId: content.id,
+        propertyName: content.property_name,
+        propertyType: content.property_type,
+        landArea: content.land_area,
+        landDMNo: content.land_dm_no,
+        apartmentNo: content.apartment_no,
+        address: content.address,
+        NoOfBedrooms: content.bedrooms,
+        areaOfProperty: content.area_of_property,
+        NoOfFloors: content.no_of_floors,
+        NoOfParking: content.no_of_parking,
+        NoOfBalcony: content.balcony,
+        plotNo: content.plot_no,
+        makaniNo: content.makani_no,
+        dewaNo: content.dewa_no,
+      });
+
+      resolve(response);
     });
   }
 
-  loadPropertyData(propertyId: number) {
+  getAndPatchCommercialDetails(propertyId: number) {
+    return new Promise(async (resolve, reject) => {
+      const response = await firstValueFrom(
+        this.propertyService.getCommercialDetails({ property_id: propertyId })
+      );
+
+      if (response.status !== 200) {
+        reject('API_ERROR');
+        return;
+      }
+
+      let content = response?.content;
+
+      if (!content) {
+        reject('NO_DATA_FOUND');
+        return;
+      }
+      this.propertyCommercialsForm.patchValue({
+        propertyId: content.property_id,
+        rent: content.rent,
+        securityDeposit: content.security_deposit,
+        bookingAmount: content.booking_amount,
+        maintenanceCharges: content.maintenance_charges,
+        cycle: content.cycle,
+        noticePeriod: content.notice_period,
+        commission: content.commission_percent,
+      });
+
+      resolve(response);
+    });
+  }
+
+  getAndPatchPropertyImages(propertyId: number) {
+    return new Promise(async (resolve, reject) => {
+      const response = await firstValueFrom(
+        this.propertyService.getPropertyImages({ property_id: propertyId })
+      );
+    });
+  }
+
+  async loadPropertyData(propertyId: number) {
     if (!propertyId) return;
-    console.log('loadPropertyData initiated:--->');
-    this.getAndPatchBasicDetails(propertyId);
+
+    this.patchPropertyIDToAllForm(propertyId);
+    let basicFormResponse = await this.getAndPatchBasicDetails(propertyId);
+
+    if (basicFormResponse instanceof Object) {
+      this.updateFormStatus(0, 'COMPLETED');
+    } else {
+      this.updateFormStatus(0, 'ONGOING');
+      return;
+    }
+
+    let commercialFormResponse = await this.getAndPatchCommercialDetails(
+      propertyId
+    );
+
+    if (commercialFormResponse instanceof Object) {
+      this.updateFormStatus(1, 'COMPLETED');
+    } else {
+      this.updateFormStatus(1, 'ONGOING');
+      return;
+    }
+
+    let imagesFormResponse = await this.getAndPatchPropertyImages(propertyId);
   }
 
   unsubcribe() {
