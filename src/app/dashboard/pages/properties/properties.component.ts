@@ -259,8 +259,9 @@ export class PropertiesComponent {
     console.log('Export button clicked');
   }
 
-  handleEditClick(): void {
+  handleEditClick(id: number): void {
     console.log('Edit button clicked');
+    this.router.navigate(['/dashboard/edit-property', id]);
   }
 
   handleDeleteClick(): void {

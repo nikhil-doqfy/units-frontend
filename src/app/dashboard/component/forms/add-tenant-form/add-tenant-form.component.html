@@ -1,55 +1,151 @@
 <app-modal-form-card>
-    <form>
-        <div class="row g-3">
-            <div class="col-md1-2">
-                <div class="tenantProCol">
-                    <div class="tenantProIcon">
-                        <button type="button" (click)="triggerFileInput()">
-                            <i *ngIf="!userImage"><app-upload-icon /></i>
-                            <img *ngIf="userImage" [src]="userImage" width="56" height="56"
-                                alt="Tenant Profile Image" />
-                        </button>
-                        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg"
-                            hidden />
-                    </div>
-                    <div class="tenantProTtl">
-                        <label class="form-label">Tenant Photo<span>*</span></label>
-                        <p>Max 5MB, PNG</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="staffName" class="form-label">Tenant Name<span>*</span></label>
-                    <input class="form-control" type="text" name="staffName" placeholder="Enter name here" />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-0">
-                    <label for="email" class="form-label">Email Address<span>*</span></label>
-                    <input class="form-control" type="email" name="email" placeholder="Enter email here" />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-0">
-                    <label for="contact" class="form-label">Contact Number<span>*</span></label>
-                    <input class="form-control" type="number" name="contact" placeholder="Enter contact here" />
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="emiratesID" class="form-label">Emirates ID<span>*</span></label>
-                    <input class="form-control" type="text" name="emiratesID" placeholder="Enter ID here" />
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="linkProperty" class="form-label">Link Property<span>*</span></label>
-                    <app-custom-select
-                        [options]="['Falcom city', 'Novatis AG...', 'Agriculture', 'Honda', 'TVS', 'Samsung']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-            </div>
+  <form [formGroup]="tenantForm">
+    <div class="row g-3">
+      <div class="col-md1-2">
+        <div class="tenantProCol">
+          <div class="tenantProIcon">
+            <button type="button" (click)="triggerFileInput()">
+              <i *ngIf="!imageBase64"><app-upload-icon /></i>
+              <img
+                *ngIf="imageBase64"
+                [src]="imageBase64"
+                width="56"
+                height="56"
+                alt="Tenant Profile Image"
+              />
+            </button>
+            <input
+              type="file"
+              #fileInput
+              (change)="onFileSelected($event)"
+              accept=".png, .jpg, .jpeg"
+              hidden
+            />
+          </div>
+          @if (isInvalid(tenantForm, 'imageBase64').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "imageBase64").msg }}
+          </small>
+          }
+          <div class="tenantProTtl">
+            <label class="form-label">Tenant Photo<span>*</span></label>
+            <p>Max 5MB, PNG, JPG, JPEG</p>
+          </div>
         </div>
-    </form>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="staffName" class="form-label"
+            >First Name<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="staffName"
+            placeholder="Enter name here"
+            formControlName="firstName"
+          />
+          @if (isInvalid(tenantForm, 'firstName').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "firstName").msg }}
+          </small>
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="staffName" class="form-label"
+            >Last Name<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="staffName"
+            placeholder="Enter name here"
+            formControlName="lastName"
+          />
+          @if (isInvalid(tenantForm, 'lastName').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "lastName").msg }}
+          </small>
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="email" class="form-label"
+            >Email Address<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="email"
+            name="email"
+            placeholder="Enter email here"
+            formControlName="email"
+          />
+          @if (isInvalid(tenantForm, 'email').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "email").msg }}
+          </small>
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="contact" class="form-label"
+            >Contact Number<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="number"
+            name="contact"
+            placeholder="Enter contact here"
+            formControlName="contactNumber"
+          />
+          @if (isInvalid(tenantForm, 'contactNumber').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "contactNumber").msg }}
+          </small>
+          }
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="emiratesID" class="form-label"
+            >Emirates ID<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="emiratesID"
+            placeholder="Enter ID here"
+            formControlName="emiratesID"
+          />
+          @if (isInvalid(tenantForm, 'emiratesID').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "emiratesID").msg }}
+          </small>
+          }
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="linkProperty" class="form-label"
+            >Link Property<span>*</span></label
+          >
+          <app-custom-select
+            [options]="propertyList"
+            key="id"
+            value="property_name"
+            formControlName="property"
+          ></app-custom-select>
+          @if (isInvalid(tenantForm, 'property').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "property").msg }}
+          </small>
+          }
+        </div>
+      </div>
+    </div>
+  </form>
 </app-modal-form-card>

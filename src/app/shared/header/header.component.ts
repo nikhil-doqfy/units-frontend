@@ -106,30 +106,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.updateDirection();
   }
 
-  setLanguage(lang: string) {
-    this.currentLang = lang;
-    this.translate.use(lang);
-    this.storage.setLanguage(lang);
-    this.updateDirection();
-  }
-
-  private updateDirection() {
-    document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
-  }
-
-  // Helper to get the flag path
-  get flagIcon(): string {
-    return this.currentLang === 'ar'
-      ? 'assets/language/united-arab-emirates.png'
-      : 'assets/language/united-kingdom.png';
-  }
-
-  private updateActiveButtons(url: string) {
-    this.isAddPropertyActive = url.includes('/dashboard/add-property');
-    this.isAddLeaseActive = url.includes('/dashboard/add-lease');
-    this.isProfileActive = url.includes('/user/my-profile');
-  }
-
   ngOnInit() {
     // ✅ Handle refresh case
     this.pageTitle = this.getRouteTitle(this.router.routerState.root);
@@ -173,6 +149,39 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.themeService.currentRole$.subscribe((role) => {
       this.currentRole = role;
     });
+  }
+
+  setLanguage(lang: string) {
+    this.currentLang = lang;
+    this.translate.use(lang);
+    this.storage.setLanguage(lang);
+    this.updateDirection();
+  }
+
+  private updateDirection() {
+    document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  // Helper to get the flag path
+  get flagIcon(): string {
+    return this.currentLang === 'ar'
+      ? 'assets/language/united-arab-emirates.png'
+      : 'assets/language/united-kingdom.png';
+  }
+
+  private updateActiveButtons(url: string) {
+    this.isAddPropertyActive = url.includes('/dashboard/add-property');
+    this.isAddLeaseActive = url.includes('/dashboard/add-lease');
+    this.isProfileActive = url.includes('/user/my-profile');
+  }
+
+  get profileImageUrl(): string {
+    const p = this.userProfile;
+    if (!p?.profile_image) {
+      return 'assets/userDefaultProImg.png';
+    }
+
+    return `data:image/${p.profile_image_type};base64,${p.profile_image}`;
   }
 
   private getRouteTitle(route: any): string {

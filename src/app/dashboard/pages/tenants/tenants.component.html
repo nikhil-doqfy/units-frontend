@@ -100,14 +100,14 @@
               </td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
+                  <!-- <app-table-action-btn
                     type="edit"
                     (clicked)="handleEditClick()"
                   />
                   <app-table-action-btn
                     type="delete"
                     (clicked)="handleDeleteClick()"
-                  />
+                  /> -->
                   <app-table-action-dropdown
                     [dropdownItems]="documentActions"
                     (actionClicked)="handleDropdownAction($event)"
@@ -154,7 +154,7 @@
       ></button>
     </div>
     <div class="modal-body">
-      <app-add-tenant-form />
+      <app-add-tenant-form #addTenantFormComponent />
     </div>
     <div class="modal-footer">
       <button
@@ -167,7 +167,7 @@
       <button
         type="button"
         class="btn btnCommon"
-        (click)="modal.close('Save click')"
+        (click)="onTenantSave(addTenantFormComponent, modal)"
       >
         Submit Details
       </button>

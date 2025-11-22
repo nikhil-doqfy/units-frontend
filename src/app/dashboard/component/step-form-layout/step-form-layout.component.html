@@ -9,8 +9,11 @@
             *ngFor="let step of filteredSteps; let i = index"
             [class.active]="i === currentStep"
           >
-            <button type="button" (click)="goToStep(i)">
-              <!-- [disabled]="getStatus(i) === 'READY_TO_START'" -->
+            <button
+              type="button"
+              (click)="goToStep(i)"
+              [disabled]="getStatus(i) === 'READY_TO_START'"
+            >
               <span>{{ step.title }}</span>
               <i *ngIf="i < currentStep">
                 <img
@@ -51,7 +54,7 @@
               type="button"
               class="btn btnCommon"
               *ngIf="i === stepGroups.length - 1"
-              (click)="onFinish()"
+              (click)="nextStep()"
             >
               {{ finishButtonText }}
             </button>
