@@ -21,6 +21,10 @@ export class PropertyService {
     );
   }
 
+  getDashboardStatistics(): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/property/statistics`);
+  }
+
   addBasicDetailsOfProperty(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/create/property/basic`, data);
   }
