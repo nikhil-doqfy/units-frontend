@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PropertyService } from './property.service';
 import { FormStaus } from '../model/property.model';
 import { AlertService } from '../../shared/services/alert.service';
-import { pipe, Subject, takeUntil } from 'rxjs';
+import { firstValueFrom, pipe, Subject, takeUntil } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -272,7 +272,20 @@ export class PropertyFormService {
     });
   }
 
-  loadPropertyData(propertyId: number) {}
+  getAndPatchBasicDetails(propertyId: number) {
+    return new Promise(async (resolve, reject) => {
+      const response = await firstValueFrom(
+        this.propertyService.getBasicDetails({ property_id: propertyId })
+      );
+      console.log('response:--->', response);
+    });
+  }
+
+  loadPropertyData(propertyId: number) {
+    if (!propertyId) return;
+    console.log('loadPropertyData initiated:--->');
+    this.getAndPatchBasicDetails(propertyId);
+  }
 
   unsubcribe() {
     this.destroy$.next();

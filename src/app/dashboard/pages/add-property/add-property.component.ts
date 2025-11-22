@@ -122,6 +122,7 @@ export class AddPropertyComponent {
     this.sharedService.setTitle(key);
 
     const formId = this.route.snapshot.paramMap.get('id');
+    console.log('formId:--->', formId);
     if (formId) this.propertyFormService.loadPropertyData(Number(formId));
   }
 
@@ -195,8 +196,6 @@ export class AddPropertyComponent {
     else items[index] = payload;
 
     form.patchValue({ [formKey]: items });
-    console.log('Synced to form:', formKey, items);
-    console.log(form.value);
   }
 
   remove(type: UploadImageType, id: number | undefined) {
@@ -219,5 +218,6 @@ export class AddPropertyComponent {
     this.destroy$.next();
     this.destroy$.complete();
     this.propertyFormService.unsubcribe();
+    this.propertyFormService.clearAllForms();
   }
 }

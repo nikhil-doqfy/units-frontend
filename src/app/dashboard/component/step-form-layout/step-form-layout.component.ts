@@ -109,6 +109,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
   }
 
   onFinish() {
+    this.propertyFormService.clearAllForms();
     this.finish.emit();
   }
 }
