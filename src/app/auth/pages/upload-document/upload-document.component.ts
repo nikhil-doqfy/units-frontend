@@ -12,6 +12,7 @@ import { EditIconComponent } from '../../../dashboard/component/icons/edit-icon/
 import { DeleteIconComponent } from '../../../dashboard/component/icons/delete-icon/delete-icon.component';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../../shared/services/alert.service';
+import { FileService } from '../../../shared/services/file.service';
 @Component({
   selector: 'app-upload-document',
   standalone: true,
@@ -30,6 +31,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 })
 export class UploadDocumentComponent {
   private alert = inject(AlertService);
+  private fileService = inject(FileService);
   @ViewChild('emiratesIdInput') emiratesIdInput!: ElementRef<HTMLInputElement>;
   @ViewChild('uaeVisaInput') uaeVisaInput!: ElementRef<HTMLInputElement>;
   @ViewChild('dldCertInput') dldCertInput!: ElementRef<HTMLInputElement>;
@@ -38,6 +40,7 @@ export class UploadDocumentComponent {
   uploadedFiles: any = { emiratesId: null, uaeVisa: null, dldCert: null };
   uploadedList: any[] = [];
   showUploadedSection = false;
+  formatFileSize = this.fileService.formatFileSize;
   private cardElement: HTMLElement | null = null;
 
   constructor(private router: Router, private authService: AuthService) {
@@ -80,32 +83,6 @@ export class UploadDocumentComponent {
     this.router.navigate(['/auth/validation']);
   }
 
-  formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 KB';
-
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-
-    const value = bytes / Math.pow(1024, i);
-
-    return `${value.toFixed(2)} ${sizes[i]}`;
-  }
-
-  fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const result = reader.result as string;
-        resolve(result.split(',')[1]);
-      };
-
-      reader.onerror = (error) => reject(error);
-
-      reader.readAsDataURL(file);
-    });
-  }
-
   getUserType(): string {
     const userTypes: any = {
       owner: 'OWNER',
@@ -135,14 +112,14 @@ export class UploadDocumentComponent {
 
     this.uploadedFiles[type] = file;
 
-    const base64 = await this.fileToBase64(file);
+    const base64: string = await this.fileService.getFileToBase64(file);
 
     const fileInfo = {
       type,
       name: file.name,
       size: this.formatFileSize(file.size),
       file,
-      base64,
+      base64: base64.split(',')[1],
     };
 
     const index = this.uploadedList.findIndex((f) => f.type === type);

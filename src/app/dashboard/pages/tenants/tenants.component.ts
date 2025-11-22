@@ -59,7 +59,7 @@ import { SharedService } from '../../../shared.service';
     ExportIconComponent,
     PlusIconComponent,
     InviteIconComponent,
-    TableActionButtonComponent,
+    // TableActionButtonComponent,
     TableActionDropdownComponent,
     TablePaginationComponent,
     SortingIconComponent,
@@ -264,6 +264,36 @@ export class TenantsComponent {
 
   handleBackClick(): void {
     this.showDetailView = false;
+  }
+
+  onTenantSave(component: AddTenantFormComponent, modal: NgbActiveModal) {
+    const tenantForm = component?.tenantForm;
+    if (tenantForm.invalid) {
+      tenantForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = tenantForm.value;
+
+    const payload = {
+      profile_image: formValue.imageBase64,
+      first_name: formValue.firstName,
+      last_name: formValue.lastName,
+      email: formValue.email,
+      contact_number: formValue.contactNumber,
+      emirate_id: formValue.emiratesID,
+      property_id: formValue.property,
+    };
+
+    this.tenantsService
+      .addTenant(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          modal.close('Save click');
+          this.alertService.success(response.message);
+        },
+      });
   }
 
   ngOnDestroy() {
