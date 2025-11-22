@@ -31,9 +31,18 @@
           <app-stats-card
             [title]="'PROPERTIES' | translate"
             [stats]="[
-              { label: ('TOTAL' | translate), value: '240' },
-              { label: ('RENTED' | translate), value: '12' },
-              { label: ('VACANT' | translate), value: '438' }
+              {
+                label: ('TOTAL' | translate),
+                value: stats?.total_properties ?? 'N/A'
+              },
+              {
+                label: ('RENTED' | translate),
+                value: stats?.occupied_properties ?? 'N/A'
+              },
+              {
+                label: ('VACANT' | translate),
+                value: stats?.vacant_properties ?? 'N/A'
+              }
             ]"
           >
             <ng-container icon>
@@ -45,9 +54,18 @@
           <app-stats-card
             [title]="'TENANTS' | translate"
             [stats]="[
-              { label: ('ACTIVE' | translate), value: '450' },
-              { label: ('UPCOMING RENEWALS' | translate), value: '180' },
-              { label: ('NEGOTIATIONS' | translate), value: '438' }
+              {
+                label: ('ACTIVE' | translate),
+                value: stats?.active_leases ?? 'N/A'
+              },
+              {
+                label: ('UPCOMING RENEWALS' | translate),
+                value: stats?.upcoming_renewals ?? 'N/A'
+              },
+              {
+                label: ('NEGOTIATIONS' | translate),
+                value: stats?.negotiations ?? 'N/A'
+              }
             ]"
           >
             <ng-container icon>
