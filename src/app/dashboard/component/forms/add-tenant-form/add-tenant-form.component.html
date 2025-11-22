@@ -1,14 +1,14 @@
 <app-modal-form-card>
-  <form>
+  <form [formGroup]="tenantForm">
     <div class="row g-3">
       <div class="col-md1-2">
         <div class="tenantProCol">
           <div class="tenantProIcon">
             <button type="button" (click)="triggerFileInput()">
-              <i *ngIf="!userImage"><app-upload-icon /></i>
+              <i *ngIf="!imageBase64"><app-upload-icon /></i>
               <img
-                *ngIf="userImage"
-                [src]="userImage"
+                *ngIf="imageBase64"
+                [src]="imageBase64"
                 width="56"
                 height="56"
                 alt="Tenant Profile Image"
@@ -22,25 +22,55 @@
               hidden
             />
           </div>
+          @if (isInvalid(tenantForm, 'imageBase64').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "imageBase64").msg }}
+          </small>
+          }
           <div class="tenantProTtl">
             <label class="form-label"
               >{{ "TENANT_PHTOT" | translate }}<span>*</span></label
             >
-            <p>Max 5MB, PNG</p>
+            <p>Max 5MB, PNG, JPG, JPEG</p>
           </div>
         </div>
       </div>
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="mb-0">
           <label for="staffName" class="form-label"
-            >{{ "TENANT_NAME" | translate }}<span>*</span></label
+            >First Name<span>*</span></label
           >
           <input
             class="form-control"
             type="text"
             name="staffName"
-            [placeholder]="'ENTER_NAME_HERE' | translate"
+            placeholder="Enter name here"
+            formControlName="firstName"
           />
+          @if (isInvalid(tenantForm, 'firstName').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "firstName").msg }}
+          </small>
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="staffName" class="form-label"
+            >Last Name<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="staffName"
+            placeholder="Enter name here"
+            formControlName="lastName"
+          />
+          @if (isInvalid(tenantForm, 'lastName').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "lastName").msg }}
+          </small>
+          }
         </div>
       </div>
       <div class="col-md-6">
@@ -53,7 +83,13 @@
             type="email"
             name="email"
             [placeholder]="'ENTER_EMAIL_HERE' | translate"
+            formControlName="email"
           />
+          @if (isInvalid(tenantForm, 'email').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "email").msg }}
+          </small>
+          }
         </div>
       </div>
       <div class="col-md-6">
@@ -66,7 +102,13 @@
             type="number"
             name="contact"
             [placeholder]="'ENTER_CONTACT_HERE' | translate"
+            formControlName="contactNumber"
           />
+          @if (isInvalid(tenantForm, 'contactNumber').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "contactNumber").msg }}
+          </small>
+          }
         </div>
       </div>
       <div class="col-md-12">
@@ -79,7 +121,13 @@
             type="text"
             name="emiratesID"
             [placeholder]="'ENTER_ID_HERE' | translate"
+            formControlName="emiratesID"
           />
+          @if (isInvalid(tenantForm, 'emiratesID').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "emiratesID").msg }}
+          </small>
+          }
         </div>
       </div>
       <div class="col-md-12">
@@ -88,16 +136,16 @@
             >{{ "LINK_PROPERTY" | translate }}<span>*</span></label
           >
           <app-custom-select
-            [options]="[
-              'Falcom city',
-              'Novatis AG...',
-              'Agriculture',
-              'Honda',
-              'TVS',
-              'Samsung'
-            ]"
-            (optionSelected)="onOptionSelected($event)"
+            [options]="propertyList"
+            key="id"
+            value="property_name"
+            formControlName="property"
           ></app-custom-select>
+          @if (isInvalid(tenantForm, 'property').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "property").msg }}
+          </small>
+          }
         </div>
       </div>
     </div>

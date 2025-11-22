@@ -19,6 +19,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { StorageService } from '../../shared/services/storage.service';
 import { HttpClient } from '@angular/common/http';
+import { AlertService } from '../../shared/services/alert.service';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -38,6 +39,7 @@ export class MyProfileComponent {
   private userService = inject(UserService);
   private storageService = inject(StorageService);
   private http = inject(HttpClient);
+  private alertService = inject(AlertService);
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   userImage: string = '';
@@ -199,6 +201,7 @@ export class MyProfileComponent {
           this.editUserMode = false;
           this.changedFields = {};
           this.editOtherDetailsMode = false;
+          this.alertService.success(res?.message);
         },
         error: (err) => {
           console.error('Error updating profile:', err);

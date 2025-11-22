@@ -37,15 +37,12 @@ export class PropertyService {
   }
 
   addPropertyImages(data: Record<string, any>) {
-    return this.http.post(
-      `${this.SERVER_ADDRESS}/upload/property/images`,
-      data
-    );
+    return this.http.post(`${this.SERVER_ADDRESS}/property/images/`, data);
   }
 
   addPropertyDocuments(data: Record<string, any>) {
     return this.http.post(
-      `${this.SERVER_ADDRESS}/upload/property/images`,
+      `${this.SERVER_ADDRESS}/upload/property/documents`,
       data
     );
   }
