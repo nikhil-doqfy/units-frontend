@@ -8,10 +8,11 @@
   >
     <div class="upldDocText">
       <i><app-upload-doc-icon /></i>
-      <h4>Drop your files here</h4>
+      <h4>{{ "DROP_FILES" | translate }}</h4>
       <p>
-        Or <span>click to select file</span> {{ fileTypes.join(", ") }} (max.
-        {{ maxSize }}MB)
+        {{ "OR" | translate }}
+        <span>{{ "CLICK_SELECT" | translate }}</span>
+        {{ fileTypes.join(", ") }} (max. {{ maxSize }}MB)
       </p>
     </div>
 

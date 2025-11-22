@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UploadDocIconComponent } from '../icons/upload-doc-icon/upload-doc-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 import { UploadFileModel } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-upload-document',
   standalone: true,
-  imports: [UploadDocIconComponent],
+  imports: [UploadDocIconComponent, TranslateModule],
   templateUrl: './upload-document.component.html',
   styleUrl: './upload-document.component.css',
 })

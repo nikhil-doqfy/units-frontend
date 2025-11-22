@@ -34,10 +34,10 @@
   </div>
   <div class="cmmnPrprtyViewCntnt">
     <div class="cmmnPrprtyViewTop">
-      <p>{{ "Property Information" | translate }}</p>
+      <p>{{ "PROPERTY_INFORMATION" | translate }}</p>
       <div>
         <p>
-          {{ "Status" | translate }}: <span>{{ status }}</span>
+          {{ "STATUS" | translate }}: <span>{{ status }}</span>
         </p>
         <button
           type="button"
@@ -45,7 +45,7 @@
           *ngIf="showBack"
           (click)="onBackClick()"
         >
-          <i><app-back-icon /></i> {{ "Back" | translate }}
+          <i><app-back-icon /></i> {{ "BACK" | translate }}
         </button>
       </div>
     </div>
@@ -54,7 +54,7 @@
       <h5>{{ location }}</h5>
     </div>
     <div class="cmmnPrprtyViewCost">
-      <span>{{ "Rent Cost" | translate }}</span>
+      <span>{{ "RENT_COST" | translate }}</span>
       <h3>{{ price }}</h3>
       <ul>
         <li *ngIf="sqft">

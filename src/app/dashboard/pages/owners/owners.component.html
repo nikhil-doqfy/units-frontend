@@ -12,25 +12,25 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search
-              placeholder="Search here..."
+              [placeholder]="'SEARCH_HERE' | translate"
               (onValueChange)="searchTextChange($event)"
             />
             <app-table-filter-btn
-              title="Filter"
+              [title]="'FILTER' | translate"
               [hasIcon]="true"
               (clicked)="handleFilterClick()"
             >
               <app-filter-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
               <app-export-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
-              title="Invite Owner"
+              [title]="'INVITE_OWNER' | translate"
               [hasIcon]="true"
               (clicked)="openInviteOwnerModal(inviteOwnerContent)"
             >
@@ -129,7 +129,9 @@
 
   <ng-template #inviteOwnerContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Invite Owner</h4>
+      <h4 class="modal-title" id="modal-title">
+        {{ "INVITE_OWNER" | translate }}
+      </h4>
       <button
         type="button"
         class="btn-close"
@@ -146,7 +148,7 @@
         class="btn btnCommon btnTransparent"
         (click)="modal.dismiss('Save click')"
       >
-        Cancel
+        {{ "CANCEL" | translate }}
       </button>
 
       <button
@@ -154,7 +156,7 @@
         class="btn btnCommon"
         (click)="sendInvite(inviteFormRef, modal)"
       >
-        <i><app-send-icon /></i>Send Invitation
+        <i><app-send-icon /></i>{{ "SEND_INVITATION" | translate }}
       </button>
     </div>
   </ng-template>

@@ -12,7 +12,7 @@
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="{{ 'SEARCH_HERE' | translate }}" />
             <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
@@ -20,7 +20,7 @@
             </app-table-filter-btn>
             <app-invite-pmc-btn></app-invite-pmc-btn>
             <app-table-filter-btn
-              title="Assign Property"
+              [title]="'ASSIGN_PROPERTY' | translate"
               (clicked)="openAssignPropertyModal(assignPropertyContent)"
             ></app-table-filter-btn>
           </div>
@@ -187,7 +187,9 @@
 
   <ng-template #assignPropertyContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Assign Property</h4>
+      <h4 class="modal-title" id="modal-title">
+        {{ "ASSIGN_PROPERTY" | translate }}
+      </h4>
       <button
         type="button"
         class="btn-close"
@@ -204,14 +206,14 @@
         class="btn btnCommon btnTransparent"
         (click)="modal.dismiss('Save click')"
       >
-        Cancel
+        {{ "CANCEL" | translate }}
       </button>
       <button
         type="button"
         class="btn btnCommon"
         (click)="modal.close('Save click')"
       >
-        Assign Property
+        {{ "ASSIGN_PROPERTY" | translate }}
       </button>
     </div>
   </ng-template>

@@ -8,11 +8,12 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { FormService } from '../../../../shared/services/form.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-invite-tenant-form',
   standalone: true,
-  imports: [ModalFormCardComponent, ReactiveFormsModule],
+  imports: [ModalFormCardComponent, ReactiveFormsModule, TranslateModule],
   templateUrl: './invite-tenant-form.component.html',
   styleUrl: './invite-tenant-form.component.css',
 })

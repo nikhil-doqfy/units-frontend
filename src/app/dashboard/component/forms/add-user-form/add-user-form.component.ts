@@ -1,21 +1,30 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ModalFormCardComponent } from "../../modal-form-card/modal-form-card.component";
-import { CustomSelectComponent } from "../../custom-select/custom-select.component";
-import { EmailIconComponent } from "../../../../auth/component/icons/email-icon/email-icon.component";
-import { PasswordShowIconComponent } from "../../../../auth/component/icons/password-show-icon/password-show-icon.component";
-import { PasswordHideIconComponent } from "../../../../auth/component/icons/password-hide-icon/password-hide-icon.component";
-import { UploadBigIconComponent } from "../../icons/upload-big-icon/upload-big-icon.component";
+import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
+import { CustomSelectComponent } from '../../custom-select/custom-select.component';
+import { EmailIconComponent } from '../../../../auth/component/icons/email-icon/email-icon.component';
+import { PasswordShowIconComponent } from '../../../../auth/component/icons/password-show-icon/password-show-icon.component';
+import { PasswordHideIconComponent } from '../../../../auth/component/icons/password-hide-icon/password-hide-icon.component';
+import { UploadBigIconComponent } from '../../icons/upload-big-icon/upload-big-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-user-form',
   standalone: true,
-  imports: [CommonModule, ModalFormCardComponent, CustomSelectComponent, EmailIconComponent, PasswordShowIconComponent, PasswordHideIconComponent, UploadBigIconComponent],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ModalFormCardComponent,
+    CustomSelectComponent,
+    EmailIconComponent,
+    PasswordShowIconComponent,
+    PasswordHideIconComponent,
+    UploadBigIconComponent,
+  ],
   templateUrl: './add-user-form.component.html',
-  styleUrl: './add-user-form.component.css'
+  styleUrl: './add-user-form.component.css',
 })
-
 export class AddUserFormComponent {
   userImage: string | null = null;
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -60,4 +69,3 @@ export class AddUserFormComponent {
     this.hideConfirmPassword = !this.hideConfirmPassword;
   }
 }
-

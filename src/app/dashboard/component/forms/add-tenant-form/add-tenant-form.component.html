@@ -28,7 +28,9 @@
           </small>
           }
           <div class="tenantProTtl">
-            <label class="form-label">Tenant Photo<span>*</span></label>
+            <label class="form-label"
+              >{{ "TENANT_PHTOT" | translate }}<span>*</span></label
+            >
             <p>Max 5MB, PNG, JPG, JPEG</p>
           </div>
         </div>
@@ -74,13 +76,13 @@
       <div class="col-md-6">
         <div class="mb-0">
           <label for="email" class="form-label"
-            >Email Address<span>*</span></label
+            >{{ "EMAIL_ADDRESS" | translate }}<span>*</span></label
           >
           <input
             class="form-control"
             type="email"
             name="email"
-            placeholder="Enter email here"
+            [placeholder]="'ENTER_EMAIL_HERE' | translate"
             formControlName="email"
           />
           @if (isInvalid(tenantForm, 'email').status) {
@@ -93,13 +95,13 @@
       <div class="col-md-6">
         <div class="mb-0">
           <label for="contact" class="form-label"
-            >Contact Number<span>*</span></label
+            >{{ "CONTACT_NUMBER" | translate }}<span>*</span></label
           >
           <input
             class="form-control"
             type="number"
             name="contact"
-            placeholder="Enter contact here"
+            [placeholder]="'ENTER_CONTACT_HERE' | translate"
             formControlName="contactNumber"
           />
           @if (isInvalid(tenantForm, 'contactNumber').status) {
@@ -112,13 +114,13 @@
       <div class="col-md-12">
         <div class="mb-0">
           <label for="emiratesID" class="form-label"
-            >Emirates ID<span>*</span></label
+            >{{ "EMIRATES_ID" | translate }}<span>*</span></label
           >
           <input
             class="form-control"
             type="text"
             name="emiratesID"
-            placeholder="Enter ID here"
+            [placeholder]="'ENTER_ID_HERE' | translate"
             formControlName="emiratesID"
           />
           @if (isInvalid(tenantForm, 'emiratesID').status) {
@@ -131,7 +133,7 @@
       <div class="col-md-12">
         <div class="mb-0">
           <label for="linkProperty" class="form-label"
-            >Link Property<span>*</span></label
+            >{{ "LINK_PROPERTY" | translate }}<span>*</span></label
           >
           <app-custom-select
             [options]="propertyList"

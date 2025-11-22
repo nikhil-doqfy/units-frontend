@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
 import { CustomSelectComponent } from '../../custom-select/custom-select.component';
 import { UploadIconComponent } from '../../icons/upload-icon/upload-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
 import { Subject, takeUntil } from 'rxjs';
 import {
@@ -20,6 +21,7 @@ import { FormService } from '../../../../shared/services/form.service';
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     ModalFormCardComponent,
     CustomSelectComponent,
     UploadIconComponent,
