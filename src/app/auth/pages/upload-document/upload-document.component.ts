@@ -125,14 +125,6 @@ export class UploadDocumentComponent {
     const index = this.uploadedList.findIndex((f) => f.type === type);
     if (index !== -1) this.uploadedList[index] = fileInfo;
     else this.uploadedList.push(fileInfo);
-
-    console.log('Uploaded Files List: ', this.uploadedList);
-    setTimeout(() => {
-      this.uploadedSection.nativeElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }, 100);
   }
 
   editFile(file: any) {
