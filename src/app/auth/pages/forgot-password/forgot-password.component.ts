@@ -79,7 +79,7 @@ export class ForgotPasswordComponent {
   goToResetPassword(): void {
     this.modalService.dismissAll();
     this.router.navigate(['auth/reset-password'], {
-      state: { email: this.email, otp: this.otp },
+      state: { email: this.forgetForm.get('email')?.value, otp: this.otp },
     });
   }
 
@@ -179,6 +179,7 @@ export class ForgotPasswordComponent {
     };
     this.authService.verifyOtp(payload).subscribe({
       next: (resp: any) => {
+        this.goToResetPassword();
         console.log('OTP verify response: ', resp);
         this.alertService.success('Login successful');
       },

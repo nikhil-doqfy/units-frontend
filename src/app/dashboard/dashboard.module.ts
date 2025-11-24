@@ -54,12 +54,22 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.EDIT_PROPERTY' },
       },
       {
+        path: 'property/details/:id',
+        component: PropertiesComponent,
+        data: { titleKey: 'PAGE_TITLE.PROPERTIES' },
+      },
+      {
         path: 'pmc',
         component: PMCComponent,
         data: { titleKey: 'PAGE_TITLE.PMC' },
       },
       {
         path: 'tenants',
+        component: TenantsComponent,
+        data: { titleKey: 'PAGE_TITLE.TENANTS' },
+      },
+      {
+        path: 'tenant/details/:id',
         component: TenantsComponent,
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
       },

@@ -38,13 +38,13 @@
       <div class="col-md-6">
         <div class="mb-0">
           <label for="staffName" class="form-label"
-            >First Name<span>*</span></label
+            >{{ "FIRST_NAME" | translate }}<span>*</span></label
           >
           <input
             class="form-control"
             type="text"
             name="staffName"
-            placeholder="Enter name here"
+            [placeholder]="'ENTER_NAME_HERE' | translate"
             formControlName="firstName"
           />
           @if (isInvalid(tenantForm, 'firstName').status) {
@@ -57,13 +57,13 @@
       <div class="col-md-6">
         <div class="mb-0">
           <label for="staffName" class="form-label"
-            >Last Name<span>*</span></label
+            >{{ "LAST_NAME" | translate }}<span>*</span></label
           >
           <input
             class="form-control"
             type="text"
             name="staffName"
-            placeholder="Enter name here"
+            [placeholder]="'ENTER_NAME_HERE' | translate"
             formControlName="lastName"
           />
           @if (isInvalid(tenantForm, 'lastName').status) {
