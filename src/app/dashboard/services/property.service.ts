@@ -29,8 +29,19 @@ export class PropertyService {
     return this.http.post(`${this.SERVER_ADDRESS}/create/property/basic`, data);
   }
 
+  editBasicDetailsOfProperty(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/create/property/basic`, data);
+  }
+
   addCommercialDetailsOfProperty(data: Record<string, any>): Observable<any> {
     return this.http.post(
+      `${this.SERVER_ADDRESS}/property/commercial/details`,
+      data
+    );
+  }
+
+  editCommercialDetailsOfProperty(data: Record<string, any>): Observable<any> {
+    return this.http.put(
       `${this.SERVER_ADDRESS}/property/commercial/details`,
       data
     );
@@ -40,8 +51,19 @@ export class PropertyService {
     return this.http.post(`${this.SERVER_ADDRESS}/property/images/`, data);
   }
 
+  editPropertyImages(data: Record<string, any>) {
+    return this.http.put(`${this.SERVER_ADDRESS}/property/images/`, data);
+  }
+
   addPropertyDocuments(data: Record<string, any>) {
     return this.http.post(
+      `${this.SERVER_ADDRESS}/upload/property/documents`,
+      data
+    );
+  }
+
+  editPropertyDocuments(data: Record<string, any>) {
+    return this.http.put(
       `${this.SERVER_ADDRESS}/upload/property/documents`,
       data
     );

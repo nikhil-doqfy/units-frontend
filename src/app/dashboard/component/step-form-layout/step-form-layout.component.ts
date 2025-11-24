@@ -16,7 +16,7 @@ import { CardTitleComponent } from '../../../shared/component/card-title/card-ti
 import { DashFormComponent } from '../../../shared/component/dash-form/dash-form.component';
 import { InvitePMCButtonComponent } from '../invite-pmc-btn/invite-pmc-btn.component';
 import { PropertyFormService } from '../../services/property-form.service';
-import { FormStaus } from '../../model/property.model';
+import { FormStaus, PropertyFormStep } from '../../model/property.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -52,7 +52,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
   stepGroups: StepGroup[] = [];
   filteredSteps: StepPaneComponent[] = []; // For left side list only
 
-  currentStep = 0;
+  currentStep: PropertyFormStep = 0;
 
   ngAfterContentInit() {
     const allSteps = this.steps.toArray();
@@ -70,6 +70,10 @@ export class StepFormLayoutComponent implements AfterContentInit {
     this.filteredSteps = this.stepGroups.map((g) => g.main);
   }
 
+  getNextStep(step: PropertyFormStep): PropertyFormStep {
+    return (step + 1) as PropertyFormStep;
+  }
+
   async nextStep() {
     if (this.currentStep < this.stepGroups.length) {
       try {
@@ -81,7 +85,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
         // mark NEXT step as available
         this.propertyFormService.updateFormStatus(
-          this.currentStep + 1,
+          this.getNextStep(this.currentStep),
           'ONGOING'
         );
 
@@ -100,12 +104,12 @@ export class StepFormLayoutComponent implements AfterContentInit {
   }
 
   getStatus(step: number): FormStaus {
-    return this.propertyFormService.getFormStatus(step);
+    return this.propertyFormService.getFormStatus(step as PropertyFormStep);
   }
 
   goToStep(index: number) {
     if (this.getStatus(index) === 'READY_TO_START') return;
-    this.currentStep = index;
+    this.currentStep = index as PropertyFormStep;
   }
 
   onFinish() {
