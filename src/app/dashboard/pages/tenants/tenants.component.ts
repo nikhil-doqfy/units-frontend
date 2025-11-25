@@ -125,14 +125,11 @@ export class TenantsComponent {
   }
 
   ngOnInit() {
-    this.getTenants();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      // Detail view
       this.showDetailView = true;
-      this.loadDetailView(+id);
+      this.getTenantDetails(+id);
     } else {
-      // Listing view
       this.showDetailView = false;
       this.getTenants();
     }
@@ -143,7 +140,6 @@ export class TenantsComponent {
         this.currentRole = role;
       });
 
-    this.getTenants();
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
@@ -282,6 +278,7 @@ export class TenantsComponent {
 
   handleBackClick(): void {
     this.showDetailView = false;
+    this.router.navigate(['/dashboard/tenants']);
   }
 
   onTenantSave(component: AddTenantFormComponent, modal: NgbActiveModal) {
@@ -312,17 +309,19 @@ export class TenantsComponent {
         },
       });
   }
-  loadDetailView(tenantID: number): void {
-    this.tenantsService
-      .getTenants({ tenant_id: tenantID })
 
+  getTenantDetails(tenantID: number): void {
+    this.tenantsService
+      .getTenantDetails({ tenant_id: tenantID })
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp: any) => {
-          this.selectedTenant = resp.content;
+          this.selectedTenant = resp.content?.tenant_details;
         },
         error: (err) => console.error('Detail API Error:', err),
       });
   }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
