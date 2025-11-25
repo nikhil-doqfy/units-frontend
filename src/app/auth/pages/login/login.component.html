@@ -46,6 +46,38 @@
       <app-field-link title="Sign In using OTP" (click)="switchToOtp()" />
       <app-field-link title="Forgot password?" (click)="goToForgotPassword()" />
     </div>
+
+    <div class="loginRoleSelection mb-4">
+      <div class="loginRoleOptions">
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="owner"
+            (change)="onRoleChange()"
+          />
+          <span>Owner</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="property-manager"
+            (change)="onRoleChange()"
+          />
+          <span>Property Manager</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="tenant"
+            (change)="onRoleChange()"
+          />
+          <span>Tenant</span>
+        </label>
+      </div>
+    </div>
     <div class="frmBtns">
       <button type="submit" class="btn btnCommon btnMinWidth">Sign In</button>
     </div>
@@ -118,45 +150,10 @@
         [class.disabled]="!otpSent"
         class="btn btnCommon btnMinWidth"
       >
-       {{ isOTPVerified ?  'Sign In' : 'Verify'}}
+        {{ isOTPVerified ? "Sign In" : "Verify" }}
       </button>
     </div>
   </form>
 </app-auth-form>
-
-<div class="loginRoleSelection mb-4">
-  <div class="loginRoleOptions">
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="owner"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Owner</span>
-    </label>
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="property-manager"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Property Manager</span>
-    </label>
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="tenant"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Tenant</span>
-    </label>
-  </div>
-</div>
 
 <app-new-user-link type="new-user" />

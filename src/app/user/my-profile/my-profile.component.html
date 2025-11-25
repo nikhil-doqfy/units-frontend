@@ -36,7 +36,7 @@
               <div
                 class="myPrflFrmGrp"
                 [class.changed]="changedFields.name"
-                *ngIf="!editUserMode || profile.role === 'PROPERTY_MANAGER'"
+                *ngIf="!editUserMode"
               >
                 <input
                   type="text"
@@ -50,7 +50,7 @@
                 <div
                   class="myPrflFrmGrp"
                   [class.changed]="changedFields.firstName"
-                  *ngIf="editUserMode && profile.role !== 'PROPERTY_MANAGER'"
+                  *ngIf="editUserMode"
                 >
                   <label for="firstName">{{ "FIRST_NAME" | translate }}</label>
                   <input
@@ -61,10 +61,11 @@
                     (input)="onFieldChange('firstName')"
                   />
                 </div>
+
                 <div
                   class="myPrflFrmGrp"
                   [class.changed]="changedFields.lastName"
-                  *ngIf="editUserMode && profile.role !== 'PROPERTY_MANAGER'"
+                  *ngIf="editUserMode"
                 >
                   <label for="lastName">{{ "LAST_NAME" | translate }}</label>
                   <input
@@ -97,6 +98,20 @@
                 [(ngModel)]="profile.contact"
                 [disabled]="!editUserMode"
                 (input)="onFieldChange('contact')"
+              />
+            </div>
+            <div
+              class="myPrflFrmGrp"
+              [class.changed]="changedFields.firstName"
+              *ngIf="profile.role === 'PROPERTY_MANAGER'"
+            >
+              <label for="companyName">{{ "COMAPANY_NAME" | translate }}</label>
+              <input
+                type="text"
+                name="companyName"
+                [(ngModel)]="profile.companyName"
+                [disabled]="!editUserMode"
+                (input)="onFieldChange('companyName')"
               />
             </div>
             <div class="myPrflFrmGrp" [class.changed]="changedFields.role">

@@ -102,6 +102,11 @@ export class NewUserComponent implements OnInit {
       email: ['', [Validators.email]],
       password: [''],
       confirmPassword: [''],
+      role: [this.selectedRole],
+    });
+    this.signupForm.get('role')?.valueChanges.subscribe((value) => {
+      this.selectedRole = value;
+      this.onRoleChange();
     });
 
     this.onUserTypeChange(this.currentRole);

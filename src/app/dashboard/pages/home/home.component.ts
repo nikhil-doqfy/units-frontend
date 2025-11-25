@@ -84,9 +84,6 @@ export class HomeComponent implements OnInit {
   getStats() {
     this.property.getDashboardStatistics().subscribe((res) => {
       this.stats = res.content;
-
-      // this.cd.detectChanges();
-      console.log('data', this.stats);
     });
   }
   propertyData = [

@@ -85,7 +85,7 @@ export class ResetPasswordComponent implements OnInit {
     this.auth.resetPassword(payload).subscribe({
       next: () => {
         alert('Password reset successful!');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       },
       error: (err) => {
         console.log(err);

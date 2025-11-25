@@ -125,7 +125,6 @@ export class TenantsComponent {
   }
 
   ngOnInit() {
-    this.getTenants();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       // Detail view
@@ -179,13 +178,13 @@ export class TenantsComponent {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
-    this.getTenants();
+    // this.getTenants();
   }
 
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
-    this.getTenants();
+    // this.getTenants();
   }
 
   handleDropdownAction(action: string) {

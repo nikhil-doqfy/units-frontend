@@ -52,6 +52,7 @@ export class MyProfileComponent {
   profile = {
     firstName: '',
     lastName: '',
+    companyName: '',
     name: '',
     email: '',
     contact: '',
@@ -104,12 +105,11 @@ export class MyProfileComponent {
     }
 
     this.profile = {
-      name:
-        content?.user_type === 'PROPERTY_MANAGER'
-          ? content?.company_name
-          : content?.full_name,
+      name: content?.first_name + ' ' + content?.last_name,
       firstName: content?.first_name,
       lastName: content?.last_name,
+      companyName:
+        content?.user_type == 'PROPERTY_MANAGER' ? content.company_name : '',
       email: content?.email,
       contact: content?.contact_number,
       role: content?.user_type,
@@ -161,21 +161,15 @@ export class MyProfileComponent {
 
   saveAccountDetails() {
     const payload: Record<string, any> = {
-      first_name:
-        this.profile.role === 'PROPERTY_MANAGER'
-          ? this.profile.name
-          : this.profile.firstName,
-      last_name:
-        this.profile.role === 'PROPERTY_MANAGER'
-          ? this.profile.name
-          : this.profile.lastName,
+      first_name: this.profile.firstName,
+      last_name: this.profile.lastName,
       contact_number: this.profile.contact,
       profile_image: this.userImage.split(',')[1],
       profile_image_type: this.fileType,
     };
 
     if (this.profile.role === 'PROPERTY_MANAGER') {
-      payload['company_name'] = this.profile.name;
+      payload['company_name'] = this.profile.companyName;
     }
     this.saveUser(payload);
   }
@@ -197,6 +191,10 @@ export class MyProfileComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: any) => {
+          this.storageService.updateUserName(
+            this.profile.firstName,
+            this.profile.lastName
+          );
           this.getUserProfileData();
           this.editUserMode = false;
           this.changedFields = {};
