@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PropertyService } from './property.service';
-import { FormStaus } from '../model/property.model';
+import { FormStaus, PropertyFormStep } from '../model/property.model';
 import { AlertService } from '../../shared/services/alert.service';
-import { pipe, Subject, takeUntil } from 'rxjs';
+import { firstValueFrom, Observable, pipe, Subject, takeUntil } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,13 +16,47 @@ export class PropertyFormService {
   propertyCommercialsForm!: FormGroup;
   propertyImagesForm!: FormGroup;
   propertyDocumentationForm!: FormGroup;
-  formMap!: Record<number, FormGroup>;
-  formStatus: Record<number, FormStaus> = {
+  formMap!: Record<PropertyFormStep, FormGroup>;
+  formStatus: Record<PropertyFormStep, FormStaus> = {
     0: 'ONGOING',
     1: 'READY_TO_START',
     2: 'READY_TO_START',
     3: 'READY_TO_START',
   };
+  private stepApiMap: Record<
+    PropertyFormStep,
+    {
+      add: (data: any) => Observable<any>;
+      edit: (data: any) => Observable<any>;
+    }
+  > = {
+    0: {
+      add: this.propertyService.addBasicDetailsOfProperty.bind(
+        this.propertyService
+      ),
+      edit: this.propertyService.editBasicDetailsOfProperty.bind(
+        this.propertyService
+      ),
+    },
+    1: {
+      add: this.propertyService.addCommercialDetailsOfProperty.bind(
+        this.propertyService
+      ),
+      edit: this.propertyService.editCommercialDetailsOfProperty.bind(
+        this.propertyService
+      ),
+    },
+    2: {
+      add: this.propertyService.addPropertyImages.bind(this.propertyService),
+      edit: this.propertyService.editPropertyImages.bind(this.propertyService),
+    },
+    3: {
+      add: this.propertyService.addPropertyDocuments.bind(this.propertyService),
+      edit: this.propertyService.editPropertyDocuments.bind(
+        this.propertyService
+      ),
+    },
+  } as const;
   propertyID: number | undefined;
   destroy$ = new Subject<void>();
 
@@ -34,11 +68,11 @@ export class PropertyFormService {
     this.setFormMap();
   }
 
-  updateFormStatus(step: number, status: FormStaus) {
+  updateFormStatus(step: PropertyFormStep, status: FormStaus) {
     this.formStatus[step] = status;
   }
 
-  getFormStatus(step: number): FormStaus {
+  getFormStatus(step: PropertyFormStep): FormStaus {
     return this.formStatus[step];
   }
 
@@ -128,6 +162,9 @@ export class PropertyFormService {
       area_unit: 'Sq-ft',
       land_area_unit: 'Sq-ft',
     };
+    if (this.getFormStatus(0) === 'COMPLETED') {
+      data['property_id'] = formValue.propertyId;
+    }
     return data;
   }
 
@@ -140,8 +177,8 @@ export class PropertyFormService {
       security_deposit: v.securityDeposit,
       booking_amount: v.bookingAmount,
       maintenance_charges: v.maintenanceCharges,
-      cycle: v.cycle?.key,
-      notice_period: v.noticePeriod?.key,
+      cycle: v.cycle,
+      notice_period: v.noticePeriod,
       commission_percent: v.commission,
     };
   }
@@ -191,31 +228,14 @@ export class PropertyFormService {
     }
   }
 
-  getApiHandlerForStep(step: number) {
-    switch (step) {
-      case 0:
-        return this.propertyService.addBasicDetailsOfProperty.bind(
-          this.propertyService
-        );
+  getApiHandlerForStep(step: PropertyFormStep) {
+    const config = this.stepApiMap[step];
+    if (!config) return null;
 
-      case 1:
-        return this.propertyService.addCommercialDetailsOfProperty.bind(
-          this.propertyService
-        );
-
-      case 2:
-        return this.propertyService.addPropertyImages.bind(
-          this.propertyService
-        );
-
-      case 3:
-        return this.propertyService.addPropertyDocuments.bind(
-          this.propertyService
-        );
-
-      default:
-        return null;
-    }
+    const status = this.getFormStatus(step);
+    console.log('status:---', status);
+    console.log(status === 'COMPLETED' ? config.edit : config.add);
+    return status === 'COMPLETED' ? config.edit : config.add;
   }
 
   patchPropertyIDToAllForm(propertyId: number) {
@@ -227,7 +247,7 @@ export class PropertyFormService {
     ].forEach((form) => form.patchValue({ propertyId }));
   }
 
-  savePrpertyDetails(step: number) {
+  savePrpertyDetails(step: PropertyFormStep) {
     return new Promise((resolve, reject) => {
       const currentForm = this.formMap[step];
 
@@ -238,7 +258,9 @@ export class PropertyFormService {
 
       if (currentForm.invalid) {
         currentForm.markAllAsTouched();
-        this.updateFormStatus(step, 'ONGOING'); // still editing
+        // It will not change when Edit/PUT
+        if (this.getFormStatus(step) !== 'COMPLETED')
+          this.updateFormStatus(step, 'ONGOING'); // still editing
         reject('INVALID_FORM');
         return;
       }
@@ -251,7 +273,9 @@ export class PropertyFormService {
         return;
       }
 
-      this.updateFormStatus(step, 'ONGOING'); // API starting
+      // It will not change when Edit/PUT
+      if (this.getFormStatus(step) !== 'COMPLETED')
+        this.updateFormStatus(step, 'ONGOING'); // API starting
 
       handler(payload)
         .pipe(takeUntil(this.destroy$))
@@ -265,15 +289,124 @@ export class PropertyFormService {
             resolve(res);
           },
           error: (err) => {
-            this.updateFormStatus(step, 'ONGOING'); // still work in progress
+            if (this.getFormStatus(step) !== 'COMPLETED')
+              this.updateFormStatus(step, 'ONGOING'); // still work in progress
             reject(err);
           },
         });
     });
   }
 
-  loadPropertyData(propertyId: number) {}
+  getAndPatchBasicDetails(propertyId: number) {
+    return new Promise(async (resolve, reject) => {
+      const response = await firstValueFrom(
+        this.propertyService.getBasicDetails({ property_id: propertyId })
+      );
 
+      if (response.status !== 200) throw 'API_ERROR';
+      if (!response?.content) throw 'NO_DATA_FOUND';
+
+      let content = response?.content;
+
+      this.propertyBasicDetailsForm.patchValue({
+        propertyId: content.id,
+        propertyName: content.property_name,
+        propertyType: content.property_type,
+        landArea: content.land_area,
+        landDMNo: content.land_dm_no,
+        apartmentNo: content.apartment_no,
+        address: content.address,
+        NoOfBedrooms: content.bedrooms,
+        areaOfProperty: content.area_of_property,
+        NoOfFloors: content.no_of_floors,
+        NoOfParking: content.no_of_parking,
+        NoOfBalcony: content.balcony,
+        plotNo: content.plot_no,
+        makaniNo: content.makani_no,
+        dewaNo: content.dewa_no,
+      });
+
+      resolve(response);
+    });
+  }
+
+  getAndPatchCommercialDetails(propertyId: number) {
+    return new Promise(async (resolve, reject) => {
+      const response = await firstValueFrom(
+        this.propertyService.getCommercialDetails({ property_id: propertyId })
+      );
+
+      if (response.status !== 200) throw 'API_ERROR';
+      if (!response?.content) throw 'NO_DATA_FOUND';
+
+      let content = response?.content;
+
+      this.propertyCommercialsForm.patchValue({
+        propertyId: content.property_id,
+        rent: content.rent,
+        securityDeposit: content.security_deposit,
+        bookingAmount: content.booking_amount,
+        maintenanceCharges: content.maintenance_charges,
+        cycle: content.cycle,
+        noticePeriod: content.notice_period,
+        commission: content.commission_percent,
+      });
+
+      resolve(response);
+    });
+  }
+
+  getAndPatchPropertyImages(propertyId: number) {
+    return new Promise(async (resolve, reject) => {
+      const response = await firstValueFrom(
+        this.propertyService.getPropertyImages({ property_id: propertyId })
+      );
+    });
+  }
+
+  async loadPropertyData(propertyId: number) {
+    if (!propertyId) return;
+
+    this.patchPropertyIDToAllForm(propertyId);
+
+    let response: any;
+
+    try {
+      response = await this.getAndPatchBasicDetails(propertyId);
+      console.log('response:--->', response);
+      this.updateFormStatus(0, 'COMPLETED');
+    } catch (err) {
+      this.updateFormStatus(0, 'ONGOING');
+      return;
+    }
+
+    if (response.content.step_choice === 'BASIC_DETAILS') {
+      this.updateFormStatus(1, 'ONGOING');
+      console.log('formStatus', this.formStatus);
+      return;
+    }
+
+    try {
+      await this.getAndPatchCommercialDetails(propertyId);
+      this.updateFormStatus(1, 'COMPLETED');
+    } catch (err) {
+      this.updateFormStatus(1, 'ONGOING');
+      return;
+    }
+
+    if (response.content.step_choice === 'BASIC_DETAILS') {
+      this.updateFormStatus(1, 'ONGOING');
+      console.log('formStatus', this.formStatus);
+      return;
+    }
+
+    try {
+      await this.getAndPatchPropertyImages(propertyId);
+      this.updateFormStatus(2, 'COMPLETED');
+    } catch (err) {
+      this.updateFormStatus(2, 'ONGOING');
+    }
+  }
   unsubcribe() {
     this.destroy$.next();
     this.destroy$.complete();

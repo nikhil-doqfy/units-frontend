@@ -29,8 +29,19 @@ export class PropertyService {
     return this.http.post(`${this.SERVER_ADDRESS}/create/property/basic`, data);
   }
 
+  editBasicDetailsOfProperty(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/create/property/basic`, data);
+  }
+
   addCommercialDetailsOfProperty(data: Record<string, any>): Observable<any> {
     return this.http.post(
+      `${this.SERVER_ADDRESS}/property/commercial/details`,
+      data
+    );
+  }
+
+  editCommercialDetailsOfProperty(data: Record<string, any>): Observable<any> {
+    return this.http.put(
       `${this.SERVER_ADDRESS}/property/commercial/details`,
       data
     );
@@ -40,10 +51,49 @@ export class PropertyService {
     return this.http.post(`${this.SERVER_ADDRESS}/property/images/`, data);
   }
 
+  editPropertyImages(data: Record<string, any>) {
+    return this.http.put(`${this.SERVER_ADDRESS}/property/images/`, data);
+  }
+
   addPropertyDocuments(data: Record<string, any>) {
     return this.http.post(
       `${this.SERVER_ADDRESS}/upload/property/documents`,
       data
+    );
+  }
+
+  editPropertyDocuments(data: Record<string, any>) {
+    return this.http.put(
+      `${this.SERVER_ADDRESS}/upload/property/documents`,
+      data
+    );
+  }
+
+  getBasicDetails(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/create/property/basic${queryString}`
+    );
+  }
+
+  getCommercialDetails(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/commercial/details${queryString}`
+    );
+  }
+
+  getPropertyImages(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/images/${queryString}`
+    );
+  }
+
+  getPropertyDocuments(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/fetch/property/documents${queryString}`
     );
   }
 }

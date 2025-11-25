@@ -87,9 +87,9 @@
 
               <td>
                 <app-table-img-item
-                  img="../../../../assets/property/property-list-1.png"
+                  img="../../../../assets/property/property-img-default.svg"
                   size="md"
-                  [title]="tenant.property_assigned"
+                  [title]="tenant.property_assigned ?? 'N/A'"
                 />
               </td>
               <td>
@@ -213,24 +213,28 @@
 
 <ng-container *ngIf="showDetailView">
   <app-table-view-card
-    [title]="'Richard'"
-    [imgSrc]="'../../../assets/user/user-2.png'"
+    [title]="selectedTenant?.first_name + ' ' + selectedTenant?.last_name"
+    [imgSrc]="
+      selectedTenant?.profile_image
+        ? selectedTenant?.profile_image
+        : '../../../assets/userDefaultProImg.png'
+    "
     [items]="[
-      { label: 'Email', value: 'Richard@gmail.com' },
-      { label: 'Phone Number', value: '+97-7007836367' },
-      { label: 'Emirates ID', value: 'Afc25' },
-      { label: 'City', value: 'Bengaluru' },
-      { label: 'Locality', value: '' },
-      { label: 'Postal Code', value: '5621009' },
-      { label: 'Address Line 1', value: 'Koramangala' },
-      { label: 'Address Line 2', value: 'Bellandur' },
+      { label: 'Email', value: selectedTenant?.email ?? 'N/A' },
+      { label: 'Phone Number', value: selectedTenant?.contact_number ?? 'N/A' },
+      { label: 'Emirates ID', value: selectedTenant?.emirate_id ?? 'N/A' },
+      { label: 'City', value: selectedTenant?.city ?? 'N/A' },
+      { label: 'Locality', value: selectedTenant?.loacality ?? 'N/A' },
+      { label: 'Postal Code', value: selectedTenant?.postal_code ?? 'N/A' },
+      { label: 'Address Line 1', value: selectedTenant?.address ?? 'N/A' },
+      { label: 'Address Line 2', value: selectedTenant?.nationality ?? 'N/A' },
       {
         label: 'Linked Property',
         value: 'Prestige Builders',
         link: '/dashboard/tenants'
       }
     ]"
-    [showEdit]="true"
+    [showEdit]="false"
     (edit)="handleEditClick()"
     (back)="handleBackClick()"
   ></app-table-view-card>
