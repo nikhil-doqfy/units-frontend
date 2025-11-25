@@ -4,7 +4,11 @@
   <form class="mb-4" [formGroup]="signupForm">
     <div class="grid-2">
       <ng-container
-        *ngIf="selectedRole === 'owner' || selectedRole === 'tenant'"
+        *ngIf="
+          selectedRole === 'owner' ||
+          selectedRole === 'tenant' ||
+          selectedRole === 'property-manager'
+        "
       >
         <div class="mb-2">
           <label for="companyName" class="form-label">Frist Name</label>
@@ -155,6 +159,38 @@
         </i>
       </div>
     </div>
+
+    <div class="loginRoleSelection mb-4">
+      <div class="loginRoleOptions">
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="owner"
+            (change)="onRoleChange()"
+          />
+          <span>Owner</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="property-manager"
+            (change)="onRoleChange()"
+          />
+          <span>Property Manager</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="tenant"
+            (change)="onRoleChange()"
+          />
+          <span>Tenant</span>
+        </label>
+      </div>
+    </div>
     <div class="frmBtns">
       <button
         type="submit"
@@ -166,41 +202,6 @@
     </div>
   </form>
 </app-auth-form>
-
-<div class="loginRoleSelection mb-4">
-  <div class="loginRoleOptions">
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="owner"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Owner</span>
-    </label>
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="property-manager"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Property Manager</span>
-    </label>
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="tenant"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Tenant</span>
-    </label>
-  </div>
-</div>
 
 <app-new-user-link type="login" />
 
@@ -230,7 +231,7 @@
               (click)="modal.dismiss('Cross click')"
               class="btn p-0 border-0 bg-transparent position-absolute top-1 end-0 mt-0 m-4"
             >
-              <app-verify-icon-edit></app-verify-icon-edit>
+              <!-- <app-verify-icon-edit></app-verify-icon-edit> -->
             </button>
           </div>
         </h4>
@@ -277,7 +278,7 @@
             class="frmBtnss d-flex align-items-center justify-content-between mt-3"
           >
             <div>
-              <app-headphone-icon></app-headphone-icon>
+              <!-- <app-headphone-icon></app-headphone-icon> -->
             </div>
 
             <div class="d-flex">
