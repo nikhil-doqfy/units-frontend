@@ -25,14 +25,15 @@ export class FileUploadItemComponent {
 
   formatFileSize = this.fileService.formatFileSize;
 
-  @Input() item!: UploadFileModel;
+  @Input() item!: any;
   @Output() remove = new EventEmitter<number>();
 
   onRemove() {
     this.remove.emit(this.item.id);
   }
 
-  getFileExtension(fileName: string): string {
+  getFileExtension(fileName: string | undefined): string {
+    if (!fileName) return '';
     return fileName.split('.').pop()?.toLowerCase() || '';
   }
 }

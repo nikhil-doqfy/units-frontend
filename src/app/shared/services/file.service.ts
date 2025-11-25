@@ -23,6 +23,7 @@ export class FileService {
 
   formatFileSize(bytes: number): string {
     if (bytes === 0) return '0 KB';
+    if (!bytes) return '';
 
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));

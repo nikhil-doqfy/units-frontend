@@ -18,13 +18,13 @@ import { UploadFileModel } from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 
 type UploadImageType =
-  | 'interior'
-  | 'exterior'
-  | 'floor_plan_documents'
-  | 'tenant_documents'
-  | 'ejari_certificates'
-  | 'pmc_documents'
-  | 'cheque_documents';
+  | 'INTERIOR'
+  | 'EXTERIOR'
+  | 'FLOOR_PLAN_DOCUMENT'
+  | 'TENANT_DOCUMENT'
+  | 'EJARI_CERTIFICATE'
+  | 'PMC_DOCUMENT'
+  | 'CHEQUE_DOCUMENT';
 
 @Component({
   selector: 'app-add-property',
@@ -66,54 +66,42 @@ export class AddPropertyComponent {
   propertyType: any[] = [];
   PMC_List: any[] = [];
 
-  exteriorImages: UploadFileModel[] = [];
-  interiorImages: UploadFileModel[] = [];
-  propertyFloorPlanImages: UploadFileModel[] = [];
-  tenantDocImages: UploadFileModel[] = [];
-  ejariCertificateImages: UploadFileModel[] = [];
-  pmcDocsImages: UploadFileModel[] = [];
-  checkImages: UploadFileModel[] = [];
-
   private uploadConfig = {
-    exterior: {
-      list: this.exteriorImages,
+    EXTERIOR: {
       form: this.imagesForm,
       formKey: 'images',
     },
-    interior: {
-      list: this.interiorImages,
+    INTERIOR: {
       form: this.imagesForm,
       formKey: 'images',
     },
 
-    floor_plan_documents: {
-      list: this.propertyFloorPlanImages,
+    FLOOR_PLAN_DOCUMENT: {
       form: this.documentationForm,
       formKey: 'documents',
     },
-    tenant_documents: {
-      list: this.tenantDocImages,
+    TENANT_DOCUMENT: {
       form: this.documentationForm,
       formKey: 'documents',
     },
-    ejari_certificates: {
-      list: this.ejariCertificateImages,
+    EJARI_CERTIFICATE: {
       form: this.documentationForm,
       formKey: 'documents',
     },
-    pmc_documents: {
-      list: this.pmcDocsImages,
+    PMC_DOCUMENT: {
       form: this.documentationForm,
       formKey: 'documents',
     },
-    cheque_documents: {
-      list: this.checkImages,
+    CHEQUE_DOCUMENT: {
       form: this.documentationForm,
       formKey: 'documents',
     },
   };
 
-  uploadIdCounter = 1;
+  uploadIdCounter = {
+    images: 1,
+    documents: 1,
+  };
 
   private destroy$ = new Subject<void>();
 
@@ -122,8 +110,13 @@ export class AddPropertyComponent {
     this.sharedService.setTitle(key);
 
     const formId = this.route.snapshot.paramMap.get('id');
-    console.log('formId:--->', formId);
-    if (formId) this.propertyFormService.loadPropertyData(Number(formId));
+    if (formId) {
+      //For edit get and patch form
+      this.propertyFormService.loadPropertyData(Number(formId));
+    } else {
+      this.propertyFormService.clearAllForms();
+      this.propertyFormService.setFormStatusToStart();
+    }
   }
 
   ngOnInit() {
@@ -158,60 +151,57 @@ export class AddPropertyComponent {
   }
 
   private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {
-    const cfg = this.uploadConfig[type];
-    const list = cfg.list;
+    const { form, formKey } = this.uploadConfig[type];
+    const items = [...(form.value[formKey] || [])];
 
-    const existing = list.find((x) => x.tempId === event.tempId);
-
-    if (!existing) {
-      const model = { ...event, id: this.uploadIdCounter++, type };
-      list.push(model);
-      return;
-    }
-
-    Object.assign(existing, event);
-
-    if (event.progress === 100) {
-      this.syncToForm(type, existing);
-    }
-  }
-
-  private syncToForm(type: UploadImageType, file: UploadFileModel) {
-    const cfg = this.uploadConfig[type];
-    const form = cfg.form;
-    const formKey = cfg.formKey;
-
-    let items = form.value[formKey] || [];
+    const index = items.findIndex((x) => x.tempId === event.tempId);
+    const counterKey = formKey === 'images' ? 'images' : 'documents';
 
     const payload = {
-      id: file.id,
-      file_name: file.file.name,
+      id: index === -1 ? this.uploadIdCounter[counterKey]++ : items[index].id,
+      tempId: event.tempId,
+      file_name: event.file.name,
+      file: event.file,
+      base64: event.base64,
+      status: event.status ?? 'uploading',
+      progress: event.progress ?? 0,
       type,
-      data: file.base64,
     };
 
-    const index = items.findIndex((x: any) => x.id === file.id);
-
     if (index === -1) items.push(payload);
-    else items[index] = payload;
+    else items[index] = { ...items[index], ...payload };
 
     form.patchValue({ [formKey]: items });
   }
 
-  remove(type: UploadImageType, id: number | undefined) {
-    if (!id) return;
+  remove(type: UploadImageType, item: any) {
+    if (item?.backendId) {
+      this.removeItem(type, item?.backendId, true);
+    } else {
+      this.removeItem(type, item.id);
+    }
+  }
+
+  removeItem(type: UploadImageType, id: number, isBackend = false) {
     const cfg = this.uploadConfig[type];
-
-    // Remove from UI list
-    const index = cfg.list.findIndex((item) => item.id === id);
-    if (index !== -1) cfg.list.splice(index, 1);
-
-    // Remove from correct form + correct control
     const form = cfg.form;
-    const formKey = cfg.formKey;
-    const updated = (form.value[formKey] || []).filter((x: any) => x.id !== id);
+    const key = cfg.formKey;
 
-    form.patchValue({ [formKey]: updated });
+    console.log(form.value[key]);
+
+    const filtered = isBackend
+      ? (form.value[key] || []).filter((x: any) => x.backendId !== id)
+      : (form.value[key] || []).filter((x: any) => x.id !== id);
+
+    form.patchValue({ [key]: filtered });
+  }
+
+  getItems(type: UploadImageType) {
+    const cfg = this.uploadConfig[type];
+    const form = cfg.form;
+    const key = cfg.formKey;
+
+    return (form.value[key] || []).filter((x: any) => x.type === type);
   }
 
   ngOnDestroy() {

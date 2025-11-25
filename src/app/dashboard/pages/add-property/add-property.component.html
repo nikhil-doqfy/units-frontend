@@ -395,14 +395,14 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('exterior', $event)"
+              (uploadProgress)="onUpload('EXTERIOR', $event)"
             ></app-upload-document>
 
-            <div class="uploads-list" *ngIf="exteriorImages.length">
+            <div class="uploads-list" *ngIf="getItems('EXTERIOR').length">
               <app-file-upload-item
-                *ngFor="let image of exteriorImages"
+                *ngFor="let image of getItems('EXTERIOR')"
                 [item]="image"
-                (remove)="remove('exterior', image.id)"
+                (remove)="remove('EXTERIOR', image)"
               ></app-file-upload-item>
             </div>
           </div>
@@ -417,14 +417,14 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('interior', $event)"
+              (uploadProgress)="onUpload('INTERIOR', $event)"
             />
 
-            <div class="uploads-list" *ngIf="interiorImages.length">
+            <div class="uploads-list" *ngIf="getItems('INTERIOR').length">
               <app-file-upload-item
-                *ngFor="let image of interiorImages"
+                *ngFor="let image of getItems('INTERIOR')"
                 [item]="image"
-                (remove)="remove('interior', image.id)"
+                (remove)="remove('INTERIOR', image)"
               />
             </div>
           </div>
@@ -526,14 +526,17 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('floor_plan_documents', $event)"
+              (uploadProgress)="onUpload('FLOOR_PLAN_DOCUMENT', $event)"
             />
 
-            <div class="uploads-list" *ngIf="propertyFloorPlanImages.length">
+            <div
+              class="uploads-list"
+              *ngIf="getItems('FLOOR_PLAN_DOCUMENT').length"
+            >
               <app-file-upload-item
-                *ngFor="let image of propertyFloorPlanImages"
+                *ngFor="let image of getItems('FLOOR_PLAN_DOCUMENT')"
                 [item]="image"
-                (remove)="remove('floor_plan_documents', image.id)"
+                (remove)="remove('FLOOR_PLAN_DOCUMENT', image)"
               />
             </div>
           </div>
@@ -548,14 +551,17 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('tenant_documents', $event)"
+              (uploadProgress)="onUpload('TENANT_DOCUMENT', $event)"
             />
 
-            <div class="uploads-list" *ngIf="tenantDocImages.length">
+            <div
+              class="uploads-list"
+              *ngIf="getItems('TENANT_DOCUMENT').length"
+            >
               <app-file-upload-item
-                *ngFor="let image of tenantDocImages"
+                *ngFor="let image of getItems('TENANT_DOCUMENT')"
                 [item]="image"
-                (remove)="remove('tenant_documents', image.id)"
+                (remove)="remove('TENANT_DOCUMENT', image)"
               />
             </div>
           </div>
@@ -570,14 +576,17 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('ejari_certificates', $event)"
+              (uploadProgress)="onUpload('EJARI_CERTIFICATE', $event)"
             />
 
-            <div class="uploads-list" *ngIf="ejariCertificateImages.length">
+            <div
+              class="uploads-list"
+              *ngIf="getItems('EJARI_CERTIFICATE').length"
+            >
               <app-file-upload-item
-                *ngFor="let image of ejariCertificateImages"
+                *ngFor="let image of getItems('EJARI_CERTIFICATE')"
                 [item]="image"
-                (remove)="remove('ejari_certificates', image.id)"
+                (remove)="remove('EJARI_CERTIFICATE', image)"
               />
             </div>
           </div>
@@ -592,14 +601,14 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('pmc_documents', $event)"
+              (uploadProgress)="onUpload('PMC_DOCUMENT', $event)"
             />
 
-            <div class="uploads-list" *ngIf="pmcDocsImages.length">
+            <div class="uploads-list" *ngIf="getItems('PMC_DOCUMENT').length">
               <app-file-upload-item
-                *ngFor="let image of pmcDocsImages"
+                *ngFor="let image of getItems('PMC_DOCUMENT')"
                 [item]="image"
-                (remove)="remove('pmc_documents', image.id)"
+                (remove)="remove('PMC_DOCUMENT', image)"
               />
             </div>
           </div>
@@ -614,14 +623,17 @@
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('cheque_documents', $event)"
+              (uploadProgress)="onUpload('CHEQUE_DOCUMENT', $event)"
             />
 
-            <div class="uploads-list" *ngIf="checkImages.length">
+            <div
+              class="uploads-list"
+              *ngIf="getItems('CHEQUE_DOCUMENT').length"
+            >
               <app-file-upload-item
-                *ngFor="let image of checkImages"
+                *ngFor="let image of getItems('CHEQUE_DOCUMENT')"
                 [item]="image"
-                (remove)="remove('cheque_documents', image.id)"
+                (remove)="remove('CHEQUE_DOCUMENT', image)"
               />
             </div>
           </div>

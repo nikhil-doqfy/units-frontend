@@ -75,20 +75,20 @@ export class PropertyService {
   getPropertyDocuments(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/fetch/property/documents${queryString}`
+      `${this.SERVER_ADDRESS}/property/documents/view${queryString}`
     );
   }
 
   addPropertyDocuments(data: Record<string, any>) {
     return this.http.post(
-      `${this.SERVER_ADDRESS}/upload/property/documents`,
+      `${this.SERVER_ADDRESS}/property/documents/view`,
       data
     );
   }
 
   editPropertyDocuments(data: Record<string, any>) {
     return this.http.put(
-      `${this.SERVER_ADDRESS}/upload/property/documents`,
+      `${this.SERVER_ADDRESS}/property/documents/view`,
       data
     );
   }
