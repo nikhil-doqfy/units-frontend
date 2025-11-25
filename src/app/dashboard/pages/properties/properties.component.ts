@@ -66,6 +66,7 @@ import { SharedService } from '../../../shared.service';
   styleUrl: './properties.component.css',
 })
 export class PropertiesComponent {
+  [x: string]: any;
   private propertyService = inject(PropertyService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
@@ -268,14 +269,29 @@ export class PropertiesComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(): void {
-    this.showDetailView = true;
-  }
-
   handleBackClick(): void {
     this.showDetailView = false;
   }
 
+  selectedProperties: any = null;
+
+  handleViewClick(propertiesID: number): void {
+    this.showDetailView = true;
+
+    this.router.navigate(['/dashboard/property/details/', propertiesID]);
+  }
+
+  loadDetailView(propertiesID: number): void {
+    this.propertyService
+      .getProperties({ properties_id: propertiesID })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (resp: any) => {
+          this.selectedProperties = resp.content;
+        },
+        error: (err) => console.error('Detail API Error:', err),
+      });
+  }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

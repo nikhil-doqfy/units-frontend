@@ -79,7 +79,7 @@
                   img="../../../../assets/userDefaultProImg.png"
                   [title]="tenant?.full_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick()"
+                  (clicked)="handleViewClick(tenant.id)"
                 />
               </td>
               <td>{{ tenant?.tenant_number }}</td>
