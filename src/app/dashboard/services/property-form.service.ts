@@ -76,6 +76,19 @@ export class PropertyFormService {
     return this.formStatus[step];
   }
 
+  setFormStatusToStart() {
+    const status: FormStaus[] = [
+      'ONGOING',
+      'READY_TO_START',
+      'READY_TO_START',
+      'READY_TO_START',
+    ];
+    const steps: PropertyFormStep[] = [0, 1, 2, 3];
+    steps.forEach((step: PropertyFormStep) =>
+      this.updateFormStatus(step, status[step])
+    );
+  }
+
   initPropertyBasicDetailsForm() {
     this.propertyBasicDetailsForm = this.formBuilder.group({
       propertyId: [''],
@@ -118,7 +131,7 @@ export class PropertyFormService {
 
   initPropertyDocumentationForm() {
     this.propertyDocumentationForm = this.formBuilder.group({
-      propertyId: ['18', [Validators.required]],
+      propertyId: ['', [Validators.required]],
       documents: [[], [Validators.required]],
     });
   }
@@ -186,11 +199,13 @@ export class PropertyFormService {
   getImagesForm(): Record<string, any> {
     const v = this.propertyImagesForm.value;
 
-    const images = v.images.map((i: any) => ({
-      data: i.data,
-      file_name: i.file_name,
-      type: i.type,
-    }));
+    const images = v.images
+      .filter((i: any) => !i?.backendId)
+      .map((i: any) => ({
+        data: i.base64,
+        file_name: i.file_name,
+        type: i.type,
+      }));
 
     return {
       property_id: v.propertyId,
@@ -201,11 +216,13 @@ export class PropertyFormService {
   getDocumentationForm(): Record<string, any> {
     const v = this.propertyDocumentationForm.value;
 
-    const documents = v.documents.map((d: any) => ({
-      data: d.data,
-      file_name: d.file_name,
-      type: d.type,
-    }));
+    const documents = v.documents
+      .filter((i: any) => !i?.backendId)
+      .map((d: any) => ({
+        data: d.base64,
+        file_name: d.file_name,
+        type: d.type,
+      }));
 
     return {
       property_id: v.propertyId,
@@ -233,8 +250,6 @@ export class PropertyFormService {
     if (!config) return null;
 
     const status = this.getFormStatus(step);
-    console.log('status:---', status);
-    console.log(status === 'COMPLETED' ? config.edit : config.add);
     return status === 'COMPLETED' ? config.edit : config.add;
   }
 
@@ -297,18 +312,28 @@ export class PropertyFormService {
     });
   }
 
+  private async fetchAndPatch<T>(
+    apiCall: Promise<any>,
+    mapper: (content: any) => any,
+    formGroup: FormGroup
+  ) {
+    const response = await apiCall;
+
+    if (response.status !== 200) throw 'API_ERROR';
+    if (!response?.content) throw 'NO_DATA_FOUND';
+
+    const data = mapper(response.content);
+    formGroup.patchValue(data);
+
+    return response.content;
+  }
+
   getAndPatchBasicDetails(propertyId: number) {
-    return new Promise(async (resolve, reject) => {
-      const response = await firstValueFrom(
+    return this.fetchAndPatch(
+      firstValueFrom(
         this.propertyService.getBasicDetails({ property_id: propertyId })
-      );
-
-      if (response.status !== 200) throw 'API_ERROR';
-      if (!response?.content) throw 'NO_DATA_FOUND';
-
-      let content = response?.content;
-
-      this.propertyBasicDetailsForm.patchValue({
+      ),
+      (content) => ({
         propertyId: content.id,
         propertyName: content.property_name,
         propertyType: content.property_type,
@@ -324,24 +349,17 @@ export class PropertyFormService {
         plotNo: content.plot_no,
         makaniNo: content.makani_no,
         dewaNo: content.dewa_no,
-      });
-
-      resolve(response);
-    });
+      }),
+      this.propertyBasicDetailsForm
+    );
   }
 
   getAndPatchCommercialDetails(propertyId: number) {
-    return new Promise(async (resolve, reject) => {
-      const response = await firstValueFrom(
+    return this.fetchAndPatch(
+      firstValueFrom(
         this.propertyService.getCommercialDetails({ property_id: propertyId })
-      );
-
-      if (response.status !== 200) throw 'API_ERROR';
-      if (!response?.content) throw 'NO_DATA_FOUND';
-
-      let content = response?.content;
-
-      this.propertyCommercialsForm.patchValue({
+      ),
+      (content) => ({
         propertyId: content.property_id,
         rent: content.rent,
         securityDeposit: content.security_deposit,
@@ -350,18 +368,51 @@ export class PropertyFormService {
         cycle: content.cycle,
         noticePeriod: content.notice_period,
         commission: content.commission_percent,
-      });
-
-      resolve(response);
-    });
+      }),
+      this.propertyCommercialsForm
+    );
   }
 
   getAndPatchPropertyImages(propertyId: number) {
-    return new Promise(async (resolve, reject) => {
-      const response = await firstValueFrom(
+    return this.fetchAndPatch(
+      firstValueFrom(
         this.propertyService.getPropertyImages({ property_id: propertyId })
-      );
-    });
+      ),
+      (content) => ({
+        propertyId: content.property_id,
+        images: content.images.map((i: any) => ({
+          backendId: i.id,
+          file_name: i.file_name,
+          file: { name: i.file_name },
+          base64: i.data,
+          status: 'done',
+          progress: 100,
+          type: i.type,
+        })),
+      }),
+      this.propertyImagesForm
+    );
+  }
+
+  getAndPatchPropertyDocuments(propertyId: number) {
+    return this.fetchAndPatch(
+      firstValueFrom(
+        this.propertyService.getPropertyDocuments({ property_id: propertyId })
+      ),
+      (content) => ({
+        propertyId: content.property_id,
+        documents: content.documents.map((i: any) => ({
+          backendId: i.id,
+          file_name: i.file_name,
+          file: { name: i.file_name },
+          base64: i.data,
+          status: 'done',
+          progress: 100,
+          type: i.type,
+        })),
+      }),
+      this.propertyDocumentationForm
+    );
   }
 
   async loadPropertyData(propertyId: number) {
@@ -369,44 +420,40 @@ export class PropertyFormService {
 
     this.patchPropertyIDToAllForm(propertyId);
 
-    let response: any;
-
     try {
-      response = await this.getAndPatchBasicDetails(propertyId);
-      console.log('response:--->', response);
+      const basic = await this.getAndPatchBasicDetails(propertyId);
       this.updateFormStatus(0, 'COMPLETED');
-    } catch (err) {
-      this.updateFormStatus(0, 'ONGOING');
-      return;
-    }
 
-    if (response.content.step_choice === 'BASIC_DETAILS') {
-      this.updateFormStatus(1, 'ONGOING');
-      console.log('formStatus', this.formStatus);
-      return;
-    }
+      if (basic.step_choice === 'BASIC_DETAILS') {
+        this.updateFormStatus(1, 'ONGOING');
+        return;
+      }
 
-    try {
-      await this.getAndPatchCommercialDetails(propertyId);
+      const commercials = await this.getAndPatchCommercialDetails(propertyId);
       this.updateFormStatus(1, 'COMPLETED');
-    } catch (err) {
-      this.updateFormStatus(1, 'ONGOING');
-      return;
-    }
 
-    if (response.content.step_choice === 'BASIC_DETAILS') {
-      this.updateFormStatus(1, 'ONGOING');
-      console.log('formStatus', this.formStatus);
-      return;
-    }
+      if (commercials.step_choice === 'COMMERCIALS_DETAILS') {
+        this.updateFormStatus(2, 'ONGOING');
+        return;
+      }
 
-    try {
-      await this.getAndPatchPropertyImages(propertyId);
+      const images = await this.getAndPatchPropertyImages(propertyId);
       this.updateFormStatus(2, 'COMPLETED');
-    } catch (err) {
-      this.updateFormStatus(2, 'ONGOING');
+
+      if (images.step_choice === 'PROPERTY_IMAGES_DETAILS') {
+        this.updateFormStatus(3, 'ONGOING');
+        return;
+      }
+
+      if (images.step_choice === 'DOCUMENTS_DETAILS') {
+        await this.getAndPatchPropertyDocuments(propertyId);
+        this.updateFormStatus(3, 'COMPLETED');
+      }
+    } catch (e) {
+      console.error('Property Load Error:', e);
     }
   }
+
   unsubcribe() {
     this.destroy$.next();
     this.destroy$.complete();

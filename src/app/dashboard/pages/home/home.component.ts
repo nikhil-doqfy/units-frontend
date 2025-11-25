@@ -24,7 +24,9 @@ import { DonutChartComponent } from '../../component/charts/donut/donut.componen
 import { LineChartComponent } from '../../component/charts/line/line.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
-import { PropertyService } from '../../services/property.service';
+import { HomeService } from '../../services/home.service';
+import { Subject, takeUntil } from 'rxjs';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -57,10 +59,12 @@ import { PropertyService } from '../../services/property.service';
 export class HomeComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
-  private property = inject(PropertyService);
-  breadcrumbData = [{ label: 'Dashboard', link: '' }];
+  private homeService = inject(HomeService);
 
+  breadcrumbData = [{ label: 'Dashboard', link: '' }];
   model: NgbDateStruct | null = null;
+
+  private destroy$ = new Subject<void>();
 
   constructor(private cd: ChangeDetectorRef) {
     const key = this.route.snapshot.data['titleKey'];
@@ -82,9 +86,12 @@ export class HomeComponent implements OnInit {
   };
 
   getStats() {
-    this.property.getDashboardStatistics().subscribe((res) => {
-      this.stats = res.content;
-    });
+    this.homeService
+      .getDashboardStatistics()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.stats = res.content;
+      });
   }
   propertyData = [
     { id: '01', name: 'Dubai Hills Golf Club', value: 45 },
@@ -122,5 +129,10 @@ export class HomeComponent implements OnInit {
 
   handleFilterClick(): void {
     console.log('Filter button clicked');
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
