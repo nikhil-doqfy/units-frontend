@@ -87,6 +87,11 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      role: [this.selectedRole],
+    });
+    this.loginForm.get('role')?.valueChanges.subscribe((value) => {
+      this.selectedRole = value;
+      this.onRoleChange();
     });
     this.otpForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],

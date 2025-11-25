@@ -22,6 +22,17 @@ export class StorageService {
     localStorage.setItem(this.USER_KEY, JSON.stringify(profile));
   }
 
+  updateUserName(firstName: string, lastName: string): void {
+    const user = this.getUserProfile(); // existing user get
+    if (user) {
+      user.first_name = firstName;
+      user.last_name = lastName;
+
+      // save updated user back
+      localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    }
+  }
+
   setUserProfile(user: any) {
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }
