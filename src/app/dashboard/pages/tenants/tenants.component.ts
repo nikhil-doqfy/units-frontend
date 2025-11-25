@@ -84,10 +84,12 @@ export class TenantsComponent {
   private sharedService = inject(SharedService);
 
   componentName: string = 'TenantsComponent';
+
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Tenants', link: '' },
   ];
+  selectedTenant: any = null;
 
   currentRole: UserRole = 'owner';
   closeResult: WritableSignal<string> = signal('');
@@ -123,12 +125,27 @@ export class TenantsComponent {
   }
 
   ngOnInit() {
+    this.getTenants();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      // Detail view
+      this.showDetailView = true;
+      this.loadDetailView(+id);
+    } else {
+      // Listing view
+      this.showDetailView = false;
+      this.getTenants();
+    }
+
     this.themeService.currentRole$
       .pipe(takeUntil(this.destroy$))
       .subscribe((role) => {
         this.currentRole = role;
       });
+
     this.getTenants();
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
   }
 
   private getTenants() {
@@ -258,8 +275,9 @@ export class TenantsComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(): void {
-    this.showDetailView = true;
+  handleViewClick(tenantID: number): void {
+    // this.showDetailView = true;
+    this.router.navigate(['/dashboard/tenant/details/', tenantID]);
   }
 
   handleBackClick(): void {
@@ -284,7 +302,6 @@ export class TenantsComponent {
       emirate_id: formValue.emiratesID,
       property_id: formValue.property,
     };
-
     this.tenantsService
       .addTenant(payload)
       .pipe(takeUntil(this.destroy$))
@@ -295,7 +312,17 @@ export class TenantsComponent {
         },
       });
   }
+  loadDetailView(tenantID: number): void {
+    this.tenantsService
+      .getTenants({ tenant_id: tenantID })
 
+      .subscribe({
+        next: (resp: any) => {
+          this.selectedTenant = resp.content;
+        },
+        error: (err) => console.error('Detail API Error:', err),
+      });
+  }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

@@ -53,22 +53,21 @@ export class ResetPasswordComponent implements OnInit {
     const data = history.state;
     this.email = data.email;
     this.otp = data.otp;
-
+    console.log(data);
     this.resetForm = this.fb.group({
       email: [this.email, [Validators.required, Validators.email]],
+
       otp: [this.otp, Validators.required],
       password: ['', Validators.required],
       confirm_password: ['', Validators.required],
     });
     console.log('Email from state:', this.email);
-    console.log('OTP from state:', this.otp);
   }
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   resetPassword() {
-    console.log('Form submitted');
     console.log('Form values:', this.resetForm.value);
     console.log('Form valid?', this.resetForm.valid);
     if (this.resetForm.invalid) {

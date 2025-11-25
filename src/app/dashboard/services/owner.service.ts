@@ -5,16 +5,14 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OwnerService {
   private http = inject(HttpClient);
   private sharedService = inject(SharedService);
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
 
-  constructor() { }
-
-
+  constructor() {}
 
   // ------------------------- getOwnerDetails -------------------------
   getOwnerDetails(params: Record<string, any>): Observable<any> {
@@ -24,9 +22,6 @@ export class OwnerService {
     );
   }
 
-
-
-  
   // ------------------------- addOwnerToInvite -------------------------
   addOwnerToInvite(data: Record<'email', string>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/invite/pmc/owner`, data);

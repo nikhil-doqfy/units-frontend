@@ -7,7 +7,14 @@
   transition: all 0s ease 0s;
   z-index: 99;
 }
+.list {
+  width: 100px;
 
+  padding: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .arabic.dashHdrMain {
   left: 0;
   right: 240px;
