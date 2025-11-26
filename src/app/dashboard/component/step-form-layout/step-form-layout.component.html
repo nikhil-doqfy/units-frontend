@@ -12,7 +12,7 @@
             <button
               type="button"
               (click)="goToStep(i)"
-              [disabled]="getStatus(i) === 'READY_TO_START'"
+              [disabled]="getStatus(i) === 'LOCKED'"
             >
               <span>{{ step.title }}</span>
               <i *ngIf="i < currentStep">

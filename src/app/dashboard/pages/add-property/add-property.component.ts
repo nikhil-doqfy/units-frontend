@@ -16,6 +16,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { UploadFileModel } from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
+import { StepSchema } from '../../model/step-engine/step-schema';
+import { StepEngine } from '../../model/step-engine/step-engine';
 
 type UploadImageType =
   | 'INTERIOR'
@@ -55,53 +57,17 @@ export class AddPropertyComponent {
   ];
 
   currentRole: UserRole = 'owner';
+  isInvalid = this.formService.isInvalid;
+  propertyType: any[] = [];
+  PMC_List: any[] = [];
 
   basicDetailsForm = this.propertyFormService.propertyBasicDetailsForm;
   commercialsForm = this.propertyFormService.propertyCommercialsForm;
   imagesForm = this.propertyFormService.propertyImagesForm;
   documentationForm = this.propertyFormService.propertyDocumentationForm;
 
-  isInvalid = this.formService.isInvalid;
-
-  propertyType: any[] = [];
-  PMC_List: any[] = [];
-
-  private uploadConfig = {
-    EXTERIOR: {
-      form: this.imagesForm,
-      formKey: 'images',
-    },
-    INTERIOR: {
-      form: this.imagesForm,
-      formKey: 'images',
-    },
-
-    FLOOR_PLAN_DOCUMENT: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-    TENANT_DOCUMENT: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-    EJARI_CERTIFICATE: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-    PMC_DOCUMENT: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-    CHEQUE_DOCUMENT: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-  };
-
-  uploadIdCounter = {
-    images: 1,
-    documents: 1,
-  };
+  engine!: StepEngine;
+  steps: StepSchema[] = [];
 
   private destroy$ = new Subject<void>();
 
@@ -109,13 +75,13 @@ export class AddPropertyComponent {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
+    this.steps = this.propertyFormService.buildPropertySteps();
+    this.engine = new StepEngine(this.steps);
+
     const formId = this.route.snapshot.paramMap.get('id');
     if (formId) {
       //For edit get and patch form
-      this.propertyFormService.loadPropertyData(Number(formId));
     } else {
-      this.propertyFormService.clearAllForms();
-      this.propertyFormService.setFormStatusToStart();
     }
   }
 
@@ -150,64 +116,18 @@ export class AddPropertyComponent {
     this.handleUploadEvent(type, event);
   }
 
-  private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {
-    const { form, formKey } = this.uploadConfig[type];
-    const items = [...(form.value[formKey] || [])];
+  private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {}
 
-    const index = items.findIndex((x) => x.tempId === event.tempId);
-    const counterKey = formKey === 'images' ? 'images' : 'documents';
+  remove(type: UploadImageType, item: any) {}
 
-    const payload = {
-      id: index === -1 ? this.uploadIdCounter[counterKey]++ : items[index].id,
-      tempId: event.tempId,
-      file_name: event.file.name,
-      file: event.file,
-      base64: event.base64,
-      status: event.status ?? 'uploading',
-      progress: event.progress ?? 0,
-      type,
-    };
-
-    if (index === -1) items.push(payload);
-    else items[index] = { ...items[index], ...payload };
-
-    form.patchValue({ [formKey]: items });
-  }
-
-  remove(type: UploadImageType, item: any) {
-    if (item?.backendId) {
-      this.removeItem(type, item?.backendId, true);
-    } else {
-      this.removeItem(type, item.id);
-    }
-  }
-
-  removeItem(type: UploadImageType, id: number, isBackend = false) {
-    const cfg = this.uploadConfig[type];
-    const form = cfg.form;
-    const key = cfg.formKey;
-
-    console.log(form.value[key]);
-
-    const filtered = isBackend
-      ? (form.value[key] || []).filter((x: any) => x.backendId !== id)
-      : (form.value[key] || []).filter((x: any) => x.id !== id);
-
-    form.patchValue({ [key]: filtered });
-  }
+  removeItem(type: UploadImageType, id: number, isBackend = false) {}
 
   getItems(type: UploadImageType) {
-    const cfg = this.uploadConfig[type];
-    const form = cfg.form;
-    const key = cfg.formKey;
-
-    return (form.value[key] || []).filter((x: any) => x.type === type);
+    return [];
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.propertyFormService.unsubcribe();
-    this.propertyFormService.clearAllForms();
   }
 }
