@@ -21,12 +21,26 @@ export class PropertyService {
     );
   }
 
-  getDashboardStatistics(): Observable<any> {
-    return this.http.get(`${this.SERVER_ADDRESS}/property/statistics`);
+  getBasicDetails(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/create/property/basic${queryString}`
+    );
   }
 
   addBasicDetailsOfProperty(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/create/property/basic`, data);
+  }
+
+  editBasicDetailsOfProperty(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/create/property/basic`, data);
+  }
+
+  getCommercialDetails(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/commercial/details${queryString}`
+    );
   }
 
   addCommercialDetailsOfProperty(data: Record<string, any>): Observable<any> {
@@ -36,13 +50,45 @@ export class PropertyService {
     );
   }
 
+  editCommercialDetailsOfProperty(data: Record<string, any>): Observable<any> {
+    return this.http.put(
+      `${this.SERVER_ADDRESS}/property/commercial/details`,
+      data
+    );
+  }
+
+  getPropertyImages(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/images/${queryString}`
+    );
+  }
+
   addPropertyImages(data: Record<string, any>) {
     return this.http.post(`${this.SERVER_ADDRESS}/property/images/`, data);
   }
 
+  editPropertyImages(data: Record<string, any>) {
+    return this.http.put(`${this.SERVER_ADDRESS}/property/images/`, data);
+  }
+
+  getPropertyDocuments(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/documents/view${queryString}`
+    );
+  }
+
   addPropertyDocuments(data: Record<string, any>) {
     return this.http.post(
-      `${this.SERVER_ADDRESS}/upload/property/documents`,
+      `${this.SERVER_ADDRESS}/property/documents/view`,
+      data
+    );
+  }
+
+  editPropertyDocuments(data: Record<string, any>) {
+    return this.http.put(
+      `${this.SERVER_ADDRESS}/property/documents/view`,
       data
     );
   }

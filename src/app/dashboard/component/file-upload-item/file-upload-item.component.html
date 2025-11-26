@@ -2,21 +2,21 @@
   <div class="icon">
     <i>
       <app-pdf-icon
-        *ngIf="getFileExtension(item.file.name) === 'pdf'"
+        *ngIf="getFileExtension(item.file?.name) === 'pdf'"
       ></app-pdf-icon>
       <app-png-icon
         *ngIf="
-          ['png', 'jpg', 'jpeg'].includes(getFileExtension(item.file.name))
+          ['png', 'jpg', 'jpeg'].includes(getFileExtension(item.file?.name))
         "
       ></app-png-icon>
     </i>
   </div>
 
   <div class="info">
-    <div class="name">{{ item.file.name }}</div>
+    <div class="name">{{ item.file?.name }}</div>
     <div class="subInfo">
       <small class="size">
-        {{ formatFileSize(item.file.size) }}
+        {{ formatFileSize(item.file?.size) || "" }}
       </small>
 
       <ng-container [ngSwitch]="item.status">

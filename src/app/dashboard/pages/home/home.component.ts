@@ -24,7 +24,9 @@ import { DonutChartComponent } from '../../component/charts/donut/donut.componen
 import { LineChartComponent } from '../../component/charts/line/line.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
-import { PropertyService } from '../../services/property.service';
+import { HomeService } from '../../services/home.service';
+import { Subject, takeUntil } from 'rxjs';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -57,14 +59,15 @@ import { PropertyService } from '../../services/property.service';
 export class HomeComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
-  private property = inject(PropertyService);
+  private homeService = inject(HomeService);
   private translate = inject(TranslateService);
-  breadcrumbData = [
-    { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
-  ];
 
   model: NgbDateStruct | null = null;
   currentLanguage = 'en';
+  private destroy$ = new Subject<void>();
+  breadcrumbData = [
+    { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
+  ];
   constructor(private cd: ChangeDetectorRef) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -100,9 +103,12 @@ export class HomeComponent implements OnInit {
   };
 
   getStats() {
-    this.property.getDashboardStatistics().subscribe((res) => {
-      this.stats = res.content;
-    });
+    this.homeService
+      .getDashboardStatistics()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.stats = res.content;
+      });
   }
   propertyData = [
     { id: '01', name: 'Dubai Hills Golf Club', value: 45 },
@@ -140,5 +146,10 @@ export class HomeComponent implements OnInit {
 
   handleFilterClick(): void {
     console.log('Filter button clicked');
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
