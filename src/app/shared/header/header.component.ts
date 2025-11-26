@@ -74,6 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAddPropertyActive = false;
   isAddLeaseActive = false;
   currentLanguage = 'en';
+
   userProfile = this.storage.getUserProfile();
 
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
@@ -84,7 +85,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private modalService = inject(NgbModal);
   closeResult = '';
-
+  currentbreadcrumb: { label: string; link?: string }[] = [];
   constructor(
     private renderer: Renderer2,
     private sharedService: SharedService,
@@ -107,6 +108,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.sharedService.breadcrumb$.subscribe((res) => {
+      this.breadcrumbData = res; // instantly update UI
+    });
     // ✅ Handle refresh case
     this.pageTitle = this.getRouteTitle(this.router.routerState.root);
 
@@ -151,11 +155,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  setLanguage(lang: string) {
+  async setLanguage(lang: string) {
     this.currentLang = lang;
     this.translate.use(lang);
     this.storage.setLanguage(lang);
     this.updateDirection();
+
+    // this.sharedService.getBreadcrumbs(this.sharedService.currentbreadcrumb);
+    await this.sharedService.getBreadcrumbs(
+      this.sharedService.currentbreadcrumb
+    );
   }
 
   private updateDirection() {

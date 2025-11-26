@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -17,11 +16,38 @@ export class SharedService {
 
   private openRightSidebarValueSource = new BehaviorSubject<boolean>(false);
   openRightSidebarValue$ = this.openRightSidebarValueSource.asObservable();
+  currentbreadcrumb:
+    | { key: string; link?: string }
+    | { key: string; link?: string }[] = [];
+
+  breadcrumb$ = new BehaviorSubject<{ label: string; link: string }[]>([]);
 
   constructor() {
     this.initializeSidebarState(); // Initialize the sidebar state properly
   }
 
+  async getBreadcrumbs(
+    items: { key: string; link?: string } | { key: string; link?: string }[]
+  ): Promise<{ label: string; link: string }[]> {
+    // Convert single object to array
+    const list = Array.isArray(items) ? items : [items];
+    this.currentbreadcrumb = list;
+    const promises = list.map((item) =>
+      this.translate
+        .get(item.key)
+        .toPromise()
+        .then((translated) => {
+          return { label: translated, link: item.link || '' };
+        })
+    );
+    const translatedList = await Promise.all(promises);
+
+    // 🔥 Emit event so HeaderComponent updates without refresh
+    this.breadcrumb$.next(translatedList);
+
+    return translatedList;
+    return Promise.all(promises);
+  }
   // Detect if the user is on a mobile device
   private isMobile(): boolean {
     return window.innerWidth <= 991; // Adjust breakpoint as needed

@@ -26,7 +26,7 @@ import { DocumentTypeItemComponent } from '../../component/document-type-item/do
 import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
 import { CardTitleComponent } from '../../../shared/component/card-title/card-title.component';
 import { DashTitleComponent } from '../../../shared/component/dash-title/dash-title.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
@@ -68,6 +68,7 @@ import { SharedService } from '../../../shared.service';
 export class PropertiesComponent {
   [x: string]: any;
   private propertyService = inject(PropertyService);
+
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
 
@@ -96,7 +97,8 @@ export class PropertiesComponent {
   currentPage: number = 1;
   private onPropertySearch$ = new Subject<string>();
   private destroy$ = new Subject<void>();
-
+  private translate = inject(TranslateService);
+  currentLanguage = 'en';
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -112,6 +114,21 @@ export class PropertiesComponent {
   }
 
   ngOnInit() {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.PROPERTIES', link: '' },
+    ]);
+
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
     this.themeService.currentRole$
       .pipe(takeUntil(this.destroy$))
       .subscribe((role) => {

@@ -40,7 +40,7 @@ import { TenantsService } from '../../services/tenants.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
@@ -109,7 +109,8 @@ export class TenantsComponent {
   currentPage: number = 1;
   private onTenantsSearch$ = new Subject<string>();
   private destroy$ = new Subject<void>();
-
+  private translate = inject(TranslateService);
+  currentLanguage = 'en';
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -125,6 +126,20 @@ export class TenantsComponent {
   }
 
   ngOnInit() {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.TENANTS', link: '' },
+    ]);
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       // Detail view

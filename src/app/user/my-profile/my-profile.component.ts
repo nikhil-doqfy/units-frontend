@@ -20,6 +20,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { StorageService } from '../../shared/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { AlertService } from '../../shared/services/alert.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -36,12 +37,13 @@ import { AlertService } from '../../shared/services/alert.service';
   styleUrl: './my-profile.component.css',
 })
 export class MyProfileComponent {
+  private translate = inject(TranslateService);
   private userService = inject(UserService);
   private storageService = inject(StorageService);
   private http = inject(HttpClient);
   private alertService = inject(AlertService);
   @ViewChild('fileInput') fileInput!: ElementRef;
-
+  currentLanguage = 'en';
   userImage: string = '';
   fileType: string = 'png';
   editUserMode = false;
@@ -69,6 +71,11 @@ export class MyProfileComponent {
   };
 
   ngOnInit() {
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
     this.getUserProfileData();
   }
 

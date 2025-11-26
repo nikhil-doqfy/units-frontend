@@ -10,7 +10,7 @@ import { TableFilterButtonComponent } from '../../../dashboard/component/table-f
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 
@@ -35,7 +35,9 @@ import { SharedService } from '../../../shared.service';
 })
 export class DocumentationsComponent {
   private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
   private sharedService = inject(SharedService);
+  currentLanguage = 'en';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Documentations', link: '' },
@@ -46,6 +48,13 @@ export class DocumentationsComponent {
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+  }
+  ngOnInit() {
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
   }
 
   onOptionSelected(option: string) {
