@@ -21,6 +21,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { StepEngine } from '../../model/step-engine/step-engine';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { Subscription } from 'rxjs';
+import { AlertService } from '../../../shared/services/alert.service';
 
 interface StepGroup {
   main: StepPaneComponent;
@@ -43,6 +44,7 @@ interface StepGroup {
 })
 export class StepFormLayoutComponent implements AfterContentInit {
   private spinner = inject(NgxSpinnerService);
+  private alertService = inject(AlertService);
   @ContentChildren(StepPaneComponent) steps!: QueryList<StepPaneComponent>;
 
   @Input() leftCardTitle: string = 'Property Details';
@@ -85,6 +87,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
   }
 
   ngOnDestroy() {
+    this.engine.reset();
     this.subs.unsubscribe();
   }
 
@@ -101,6 +104,16 @@ export class StepFormLayoutComponent implements AfterContentInit {
       try {
         this.spinner.show();
         const result = await this.engine.saveStep(this.currentStep);
+
+        if (result?.content?.id) {
+          this.engine.setFormId(result?.content?.id); // set form id for next form or edit
+        }
+
+        if (result?.status === 201) {
+          const currentStep = this.engine.getCurrentStep();
+          if (currentStep) this.engine.setStepFormMode(currentStep.id, 'EDIT'); // set edit mode afte post
+        }
+        this.showAlert(result.message);
 
         const next = this.getNextStep(this.currentStep);
         if (next < this.stepGroups.length)
@@ -120,6 +133,10 @@ export class StepFormLayoutComponent implements AfterContentInit {
     }
   }
 
+  showAlert(msg: string) {
+    this.alertService.success(msg);
+  }
+
   getStatus(index: number) {
     if (!this.engine) return 'LOCKED';
     const step = this.engine.getStep(index);
@@ -133,6 +150,12 @@ export class StepFormLayoutComponent implements AfterContentInit {
     if (!step) return;
     const status = this.engine.getStepStatus(step.id);
     if (status === 'LOCKED' || status === 'READY') return;
+
+    let mode = this.engine.getStepFormMode(step.id);
+
+    if (mode === 'EDIT') {
+      this.engine.loadStep(index);
+    }
 
     this.currentStep = index;
     this.engine.goTo(index);

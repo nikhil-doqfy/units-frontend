@@ -1,16 +1,20 @@
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
-import { StepId, StepSchema, StepStatus } from './step-schema';
+import { FormMode, StepId, StepSchema, StepStatus } from './step-schema';
 
 export class StepEngine {
   private steps: StepSchema[] = [];
   private currentIndex$ = new BehaviorSubject<number>(0);
   private statuses$ = new BehaviorSubject<Record<StepId, StepStatus>>({});
+  private formMode$ = new BehaviorSubject<Record<StepId, FormMode>>({});
+  private formId$ = new BehaviorSubject<number | null>(null);
   private loading$ = new BehaviorSubject<boolean>(false);
 
   // public obsevables to wire into UIs
   public currentIndex = this.currentIndex$.asObservable();
   public statuses = this.statuses$.asObservable();
   public loading = this.loading$.asObservable();
+  public formMode = this.formMode$.asObservable();
+  public formId = this.formId$.asObservable();
 
   // external context (e.g., property id) — parents can set
   public context: Record<string, any> = {};
@@ -22,12 +26,15 @@ export class StepEngine {
   init(steps: StepSchema[]) {
     this.steps = steps;
     const initialStatuses: Record<StepId, StepStatus> = {};
+    const initialFormMode: Record<StepId, FormMode> = {};
     for (const s of steps) {
       initialStatuses[s.id] = 'LOCKED';
+      initialFormMode[s.id] = 'ADD';
     }
     // first step becomes ONGOING
     if (steps.length) initialStatuses[steps[0].id] = 'ONGOING';
     this.statuses$.next(initialStatuses);
+    this.formMode$.next(initialFormMode);
     this.currentIndex$.next(0);
   }
 
@@ -65,12 +72,38 @@ export class StepEngine {
     this.statuses$.next(s);
   }
 
+  getCurrentStepFormMode(): FormMode | undefined {
+    const step = this.getCurrentStep();
+    if (step) return this.getStepFormMode(step.id);
+    return undefined;
+  }
+
+  getStepFormMode(stepID: StepId): FormMode | undefined {
+    return this.formMode$.value[stepID];
+  }
+
+  setStepFormMode(stepId: StepId, formMode: FormMode) {
+    const mode = { ...this.formMode$.value };
+    mode[stepId] = formMode;
+    this.formMode$.next(mode);
+  }
+
+  setFormId(id: number) {
+    this.formId$.next(id);
+  }
+
   async loadStep(index: number) {
     const step = this.getStep(index);
     if (!step || !step.load) return null;
     this.setStepStatus(step.id, 'ONGOING');
     this.loading$.next(true);
     try {
+      this.context = {
+        ...this.context,
+        formId: this.formId$.value,
+        formMode: this.formMode$.value,
+      };
+
       const resp = await firstValueFrom(step.load(this.context));
       if (step.mapIn) {
         const patch = step.mapIn(resp);
@@ -114,8 +147,12 @@ export class StepEngine {
     this.setStepStatus(step.id, 'ONGOING');
     this.loading$.next(true);
     try {
+      this.context = {
+        ...this.context,
+        formId: this.formId$.value,
+        formMode: this.formMode$.value,
+      };
       const resp = await firstValueFrom(handler(payload, this.context));
-      // step completed — parent might return ids (e.g., property_id)
       this.setStepStatus(step.id, 'COMPLETED');
       return resp;
     } catch (e) {
@@ -158,6 +195,7 @@ export class StepEngine {
   reset() {
     for (const s of this.steps) {
       this.setStepStatus(s.id, 'LOCKED');
+      s.formGroup.reset();
     }
     if (this.steps.length) {
       this.setStepStatus(this.steps[0].id, 'ONGOING');

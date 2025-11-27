@@ -28,6 +28,15 @@ type UploadImageType =
   | 'PMC_DOCUMENT'
   | 'CHEQUE_DOCUMENT';
 
+type FormKey = 'images' | 'documents';
+
+interface UploadConfig {
+  form: FormGroup;
+  formKey: FormKey;
+}
+
+type UploadConfigRecord = Record<UploadImageType, UploadConfig>;
+
 @Component({
   selector: 'app-add-property',
   standalone: true,
@@ -69,6 +78,11 @@ export class AddPropertyComponent {
   engine!: StepEngine;
   steps: StepSchema[] = [];
 
+  uploadIdCounter = {
+    images: 1,
+    documents: 1,
+  };
+
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router, private themeService: ThemeService) {
@@ -77,11 +91,12 @@ export class AddPropertyComponent {
 
     this.steps = this.propertyFormService.buildPropertySteps();
     this.engine = new StepEngine(this.steps);
+    this.propertyFormService.setEngine(this.engine);
 
     const formId = this.route.snapshot.paramMap.get('id');
     if (formId) {
-      //For edit get and patch form
-    } else {
+      this.engine.setFormId(+formId);
+      this.engine.loadStep(0);
     }
   }
 
@@ -108,22 +123,101 @@ export class AddPropertyComponent {
   }
 
   submitProperty(): void {
-    console.log('Final Step Completed — Submitting Property...');
     this.router.navigate(['dashboard/properties']);
+  }
+
+  getUploadConfig(type: UploadImageType): UploadConfig {
+    const uploadConfig: UploadConfigRecord = {
+      EXTERIOR: {
+        form: this.imagesForm,
+        formKey: 'images',
+      },
+      INTERIOR: {
+        form: this.imagesForm,
+        formKey: 'images',
+      },
+
+      FLOOR_PLAN_DOCUMENT: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+      TENANT_DOCUMENT: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+      EJARI_CERTIFICATE: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+      PMC_DOCUMENT: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+      CHEQUE_DOCUMENT: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+    };
+
+    return uploadConfig[type];
   }
 
   onUpload(type: UploadImageType, event: UploadFileModel) {
     this.handleUploadEvent(type, event);
   }
 
-  private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {}
+  private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {
+    const { form, formKey } = this.getUploadConfig(type);
+    const items = [...(form.value[formKey] || [])];
 
-  remove(type: UploadImageType, item: any) {}
+    const index = items.findIndex((x) => x.tempId === event.tempId);
+    const counterKey = formKey === 'images' ? 'images' : 'documents';
 
-  removeItem(type: UploadImageType, id: number, isBackend = false) {}
+    const payload = {
+      id: index === -1 ? this.uploadIdCounter[counterKey]++ : items[index].id,
+      tempId: event.tempId,
+      file_name: event.file.name,
+      file: event.file,
+      base64: event.base64,
+      status: event.status ?? 'uploading',
+      progress: event.progress ?? 0,
+      type,
+    };
+
+    if (index === -1) items.push(payload);
+    else items[index] = { ...items[index], ...payload };
+
+    form.patchValue({ [formKey]: items });
+  }
+
+  remove(type: UploadImageType, item: any) {
+    if (item?.backendId) {
+      this.removeItem(type, item?.backendId, true);
+    } else {
+      this.removeItem(type, item.id);
+    }
+  }
+
+  removeItem(type: UploadImageType, id: number, isBackend = false) {
+    const cfg = this.getUploadConfig(type);
+    const form = cfg.form;
+    const key = cfg.formKey;
+
+    console.log(form.value[key]);
+
+    const filtered = isBackend
+      ? (form.value[key] || []).filter((x: any) => x.backendId !== id)
+      : (form.value[key] || []).filter((x: any) => x.id !== id);
+
+    form.patchValue({ [key]: filtered });
+  }
 
   getItems(type: UploadImageType) {
-    return [];
+    const cfg = this.getUploadConfig(type);
+    const form = cfg.form;
+    const key = cfg.formKey;
+
+    return (form.value[key] || []).filter((x: any) => x.type === type);
   }
 
   ngOnDestroy() {

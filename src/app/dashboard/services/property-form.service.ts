@@ -1,16 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PropertyService } from './property.service';
-import { FormStaus, PropertyFormStep } from '../model/property.model';
-import { AlertService } from '../../shared/services/alert.service';
-import { firstValueFrom, Observable, pipe, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { StepSchema } from '../model/step-engine/step-schema';
+import { StepEngine } from '../model/step-engine/step-engine';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PropertyFormService {
   private formBuilder = inject(FormBuilder);
+  private propertyService = inject(PropertyService);
+  private engine = new BehaviorSubject<StepEngine | null>(null);
 
   propertyBasicDetailsForm!: FormGroup;
   propertyCommercialsForm!: FormGroup;
@@ -24,9 +25,12 @@ export class PropertyFormService {
     this.initPropertyDocumentationForm();
   }
 
+  setEngine(engine: StepEngine) {
+    this.engine.next(engine);
+  }
+
   initPropertyBasicDetailsForm() {
     this.propertyBasicDetailsForm = this.formBuilder.group({
-      propertyId: [''],
       propertyName: ['', [Validators.required]],
       propertyType: ['', [Validators.required]],
       landArea: ['', [Validators.required]],
@@ -46,7 +50,6 @@ export class PropertyFormService {
 
   initPropertyCommercialsForm() {
     this.propertyCommercialsForm = this.formBuilder.group({
-      propertyId: ['', [Validators.required]],
       rent: ['', [Validators.required]],
       securityDeposit: ['', [Validators.required]],
       bookingAmount: ['', [Validators.required]],
@@ -59,14 +62,12 @@ export class PropertyFormService {
 
   initPropertyImagesForm() {
     this.propertyImagesForm = this.formBuilder.group({
-      propertyId: ['', [Validators.required]],
       images: [[], [Validators.required]],
     });
   }
 
   initPropertyDocumentationForm() {
     this.propertyDocumentationForm = this.formBuilder.group({
-      propertyId: ['', [Validators.required]],
       documents: [[], [Validators.required]],
     });
   }
@@ -77,26 +78,206 @@ export class PropertyFormService {
         id: 'BASIC_DETAILS',
         title: 'Basic Details',
         formGroup: this.propertyBasicDetailsForm,
+        load: (context) => this.getBasicDetails(context),
+        save: (payload, context) => this.saveBasicDetails(payload, context),
+        mapIn: (response) => this.patchBasicDetails(response),
         mapOut: (value) => this.mapOutBasicDetails(value),
       },
       {
-        id: 'COMMERCIAL_DETAILS',
+        id: 'COMMERCIALS_DETAILS',
         title: 'Commercial Details',
         formGroup: this.propertyCommercialsForm,
+        load: (context) => this.getCommercialDetails(context),
+        save: (payload, context) =>
+          this.saveCommercialDetails(payload, context),
+        mapIn: (response) => this.patchCommercialDetails(response),
+        mapOut: (value) => this.mapOutCommercialDetails(value),
       },
       {
         id: 'PROPERTY_IMAGES_DETAILS',
         title: 'Property Image Details',
         formGroup: this.propertyImagesForm,
+        load: (context) => this.getImageDetails(context),
+        save: (payload, context) => this.saveImagesDetails(payload, context),
+        mapIn: (response) => this.patchImageDetails(response),
+        mapOut: (value) => this.mapOutImagesDetails(value),
       },
       {
-        id: 'DOCUMENT_DETAILS',
+        id: 'DOCUMENTS_DETAILS',
         title: 'Document Details',
         formGroup: this.propertyDocumentationForm,
+        load: (context) => this.getDocumentDetails(context),
+        save: (payload, context) => this.saveDocumentsDetails(payload, context),
+        mapIn: (response) => this.patchDocumentDetails(response),
+        mapOut: (value) => this.mapOutDocumentsDetails(value),
       },
     ];
 
     return steps;
+  }
+
+  private applyStepStatus(stepChoice: string) {
+    const steps = this.engine.value?.getSteps()?.map((s) => s.id);
+    console.log('steps:', steps);
+    if (!steps) return;
+
+    const idx = steps.indexOf(stepChoice);
+
+    steps.forEach((step, i) => {
+      console.log(i, idx);
+      const status =
+        i <= idx ? 'COMPLETED' : i === idx + 1 ? 'ONGOING' : 'LOCKED';
+      const mode = i <= idx ? 'EDIT' : 'ADD';
+
+      this.engine.value?.setStepStatus(step, status);
+      this.engine.value?.setStepFormMode(step, mode);
+    });
+  }
+
+  getBasicDetails(context: any) {
+    return this.propertyService
+      .getBasicDetails({
+        property_id: context.formId,
+      })
+      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
+  }
+
+  getCommercialDetails(context: any) {
+    return this.propertyService
+      .getCommercialDetails({
+        property_id: context.formId,
+      })
+      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
+  }
+
+  getImageDetails(context: any) {
+    return this.propertyService
+      .getPropertyImages({
+        property_id: context.formId,
+      })
+      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
+  }
+
+  getDocumentDetails(context: any) {
+    return this.propertyService
+      .getPropertyDocuments({
+        property_id: context.formId,
+      })
+      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
+  }
+
+  saveBasicDetails(
+    payload: Record<string, any>,
+    context: any
+  ): Observable<any> {
+    const satus = this.engine.value?.getCurrentStepFormMode();
+    if (satus === 'EDIT') {
+      payload['property_id'] = context.formId;
+      return this.propertyService.editBasicDetailsOfProperty(payload);
+    } else {
+      return this.propertyService.addBasicDetailsOfProperty(payload);
+    }
+  }
+
+  saveCommercialDetails(payload: Record<string, any>, context: any) {
+    payload['property_id'] = context.formId;
+    const satus = this.engine.value?.getCurrentStepFormMode();
+    if (satus === 'EDIT') {
+      payload['property_id'] = context.formId;
+      return this.propertyService.editCommercialDetailsOfProperty(payload);
+    } else {
+      return this.propertyService.addCommercialDetailsOfProperty(payload);
+    }
+  }
+
+  saveImagesDetails(payload: Record<string, any>, context: any) {
+    payload['property_id'] = context.formId;
+    const satus = this.engine.value?.getCurrentStepFormMode();
+    if (satus === 'EDIT') {
+      payload['property_id'] = context.formId;
+      return this.propertyService.editPropertyImages(payload);
+    } else {
+      return this.propertyService.addPropertyImages(payload);
+    }
+  }
+
+  saveDocumentsDetails(payload: Record<string, any>, context: any) {
+    payload['property_id'] = context.formId;
+    const satus = this.engine.value?.getCurrentStepFormMode();
+    if (satus === 'EDIT') {
+      payload['property_id'] = context.formId;
+      return this.propertyService.editPropertyDocuments(payload);
+    } else {
+      return this.propertyService.addPropertyDocuments(payload);
+    }
+  }
+
+  patchBasicDetails(response: any) {
+    console.log(response);
+    const content: any = response.content;
+    return {
+      propertyId: content.id,
+      propertyName: content.property_name,
+      propertyType: content.property_type,
+      landArea: content.land_area,
+      landDMNo: content.land_dm_no,
+      apartmentNo: content.apartment_no,
+      address: content.address,
+      NoOfBedrooms: content.bedrooms,
+      areaOfProperty: content.area_of_property,
+      NoOfFloors: content.no_of_floors,
+      NoOfParking: content.no_of_parking,
+      NoOfBalcony: content.balcony,
+      plotNo: content.plot_no,
+      makaniNo: content.makani_no,
+      dewaNo: content.dewa_no,
+    };
+  }
+
+  patchCommercialDetails(response: any) {
+    console.log(response);
+    const content: any = response.content;
+    return {
+      rent: content.rent,
+      securityDeposit: content.security_deposit,
+      bookingAmount: content.booking_amount,
+      maintenanceCharges: content.maintenance_charges,
+      cycle: content.cycle,
+      noticePeriod: content.notice_period,
+      commission: content.commission_percent,
+    };
+  }
+
+  patchImageDetails(response: any) {
+    console.log(response);
+    const content: any = response.content;
+    return {
+      images: content.images.map((i: any) => ({
+        backendId: i.id,
+        file_name: i.file_name,
+        file: { name: i.file_name },
+        base64: i.data,
+        status: 'done',
+        progress: 100,
+        type: i.type,
+      })),
+    };
+  }
+
+  patchDocumentDetails(response: any) {
+    console.log(response);
+    const content: any = response.content;
+    return {
+      documents: content.documents.map((i: any) => ({
+        backendId: i.id,
+        file_name: i.file_name,
+        file: { name: i.file_name },
+        base64: i.data,
+        status: 'done',
+        progress: 100,
+        type: i.type,
+      })),
+    };
   }
 
   mapOutBasicDetails(value: any): Record<string, any> {
@@ -119,9 +300,43 @@ export class PropertyFormService {
       area_unit: 'Sq-ft',
       land_area_unit: 'Sq-ft',
     };
-    // if (this.getFormStatus(0) === 'COMPLETED') {
-    //   data['property_id'] = formValue.propertyId;
-    // }
     return data;
+  }
+
+  mapOutCommercialDetails(value: any): Record<string, any> {
+    const data: any = {
+      rent: value.rent,
+      security_deposit: value.securityDeposit,
+      booking_amount: value.bookingAmount,
+      maintenance_charges: value.maintenanceCharges,
+      cycle: value.cycle,
+      notice_period: value.noticePeriod,
+      commission_percent: value.commission,
+    };
+    return data;
+  }
+
+  mapOutImagesDetails(value: any): Record<string, any> {
+    const images = value.images
+      .filter((i: any) => !i?.backendId)
+      .map((i: any) => ({
+        data: i.base64,
+        file_name: i.file_name,
+        type: i.type,
+      }));
+
+    return { images };
+  }
+
+  mapOutDocumentsDetails(value: any): Record<string, any> {
+    const documents = value.documents
+      .filter((i: any) => !i?.backendId)
+      .map((i: any) => ({
+        data: i.base64,
+        file_name: i.file_name,
+        type: i.type,
+      }));
+
+    return { documents };
   }
 }

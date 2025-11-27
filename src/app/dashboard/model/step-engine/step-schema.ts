@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 export type StepId = string;
 export type StepStatus = 'READY' | 'ONGOING' | 'COMPLETED' | 'ERROR' | 'LOCKED';
+export type FormMode = 'ADD' | 'EDIT' | 'VIEW';
 
 export interface StepSchema {
   id: StepId;
