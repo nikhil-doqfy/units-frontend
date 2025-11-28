@@ -76,7 +76,7 @@ export class AddLeaseComponent {
     this.engine = new StepEngine(this.steps);
     this.leaseFormService.setEngine(this.engine);
 
-    this.getOptionType(['TENANTS_LIST', 'OWNER_PROPERTIES']);
+    this.getOptionType(['TENANTS_LIST', 'PMC_PROPERTIES']);
   }
 
   getOptionType(options: string[]) {
@@ -87,7 +87,7 @@ export class AddLeaseComponent {
         next: (res: any) => {
           const content = res?.content;
           this.tenantList = content?.tenants_list || [];
-          this.propertyList = content?.owner_properties || [];
+          this.propertyList = content?.pmc_properties || [];
         },
       });
   }

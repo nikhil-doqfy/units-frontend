@@ -118,13 +118,11 @@ export class PropertyFormService {
 
   private applyStepStatus(stepChoice: string) {
     const steps = this.engine.value?.getSteps()?.map((s) => s.id);
-    console.log('steps:', steps);
     if (!steps) return;
 
     const idx = steps.indexOf(stepChoice);
 
     steps.forEach((step, i) => {
-      console.log(i, idx);
       const status =
         i <= idx ? 'COMPLETED' : i === idx + 1 ? 'ONGOING' : 'LOCKED';
       const mode = i <= idx ? 'EDIT' : 'ADD';
@@ -170,8 +168,8 @@ export class PropertyFormService {
     payload: Record<string, any>,
     context: any
   ): Observable<any> {
-    const satus = this.engine.value?.getCurrentStepFormMode();
-    if (satus === 'EDIT') {
+    const mode = this.engine.value?.getCurrentStepFormMode();
+    if (mode === 'EDIT') {
       payload['property_id'] = context.formId;
       return this.propertyService.editBasicDetailsOfProperty(payload);
     } else {
@@ -181,8 +179,8 @@ export class PropertyFormService {
 
   saveCommercialDetails(payload: Record<string, any>, context: any) {
     payload['property_id'] = context.formId;
-    const satus = this.engine.value?.getCurrentStepFormMode();
-    if (satus === 'EDIT') {
+    const mode = this.engine.value?.getCurrentStepFormMode();
+    if (mode === 'EDIT') {
       payload['property_id'] = context.formId;
       return this.propertyService.editCommercialDetailsOfProperty(payload);
     } else {
@@ -192,8 +190,8 @@ export class PropertyFormService {
 
   saveImagesDetails(payload: Record<string, any>, context: any) {
     payload['property_id'] = context.formId;
-    const satus = this.engine.value?.getCurrentStepFormMode();
-    if (satus === 'EDIT') {
+    const mode = this.engine.value?.getCurrentStepFormMode();
+    if (mode === 'EDIT') {
       payload['property_id'] = context.formId;
       return this.propertyService.editPropertyImages(payload);
     } else {
@@ -203,8 +201,8 @@ export class PropertyFormService {
 
   saveDocumentsDetails(payload: Record<string, any>, context: any) {
     payload['property_id'] = context.formId;
-    const satus = this.engine.value?.getCurrentStepFormMode();
-    if (satus === 'EDIT') {
+    const mode = this.engine.value?.getCurrentStepFormMode();
+    if (mode === 'EDIT') {
       payload['property_id'] = context.formId;
       return this.propertyService.editPropertyDocuments(payload);
     } else {
@@ -213,7 +211,6 @@ export class PropertyFormService {
   }
 
   patchBasicDetails(response: any) {
-    console.log(response);
     const content: any = response.content;
     return {
       propertyId: content.id,
@@ -235,7 +232,6 @@ export class PropertyFormService {
   }
 
   patchCommercialDetails(response: any) {
-    console.log(response);
     const content: any = response.content;
     return {
       rent: content.rent,
@@ -249,7 +245,6 @@ export class PropertyFormService {
   }
 
   patchImageDetails(response: any) {
-    console.log(response);
     const content: any = response.content;
     return {
       images: content.images.map((i: any) => ({
@@ -265,7 +260,6 @@ export class PropertyFormService {
   }
 
   patchDocumentDetails(response: any) {
-    console.log(response);
     const content: any = response.content;
     return {
       documents: content.documents.map((i: any) => ({
