@@ -16,6 +16,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { UploadFileModel } from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
+import { StepSchema } from '../../model/step-engine/step-schema';
+import { StepEngine } from '../../model/step-engine/step-engine';
 
 type UploadImageType =
   | 'INTERIOR'
@@ -25,6 +27,15 @@ type UploadImageType =
   | 'EJARI_CERTIFICATE'
   | 'PMC_DOCUMENT'
   | 'CHEQUE_DOCUMENT';
+
+type FormKey = 'images' | 'documents';
+
+interface UploadConfig {
+  form: FormGroup;
+  formKey: FormKey;
+}
+
+type UploadConfigRecord = Record<UploadImageType, UploadConfig>;
 
 @Component({
   selector: 'app-add-property',
@@ -55,48 +66,17 @@ export class AddPropertyComponent {
   ];
 
   currentRole: UserRole = 'owner';
+  isInvalid = this.formService.isInvalid;
+  propertyType: any[] = [];
+  PMC_List: any[] = [];
 
   basicDetailsForm = this.propertyFormService.propertyBasicDetailsForm;
   commercialsForm = this.propertyFormService.propertyCommercialsForm;
   imagesForm = this.propertyFormService.propertyImagesForm;
   documentationForm = this.propertyFormService.propertyDocumentationForm;
 
-  isInvalid = this.formService.isInvalid;
-
-  propertyType: any[] = [];
-  PMC_List: any[] = [];
-
-  private uploadConfig = {
-    EXTERIOR: {
-      form: this.imagesForm,
-      formKey: 'images',
-    },
-    INTERIOR: {
-      form: this.imagesForm,
-      formKey: 'images',
-    },
-
-    FLOOR_PLAN_DOCUMENT: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-    TENANT_DOCUMENT: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-    EJARI_CERTIFICATE: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-    PMC_DOCUMENT: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-    CHEQUE_DOCUMENT: {
-      form: this.documentationForm,
-      formKey: 'documents',
-    },
-  };
+  engine!: StepEngine;
+  steps: StepSchema[] = [];
 
   uploadIdCounter = {
     images: 1,
@@ -109,13 +89,14 @@ export class AddPropertyComponent {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
+    this.steps = this.propertyFormService.buildPropertySteps();
+    this.engine = new StepEngine(this.steps);
+    this.propertyFormService.setEngine(this.engine);
+
     const formId = this.route.snapshot.paramMap.get('id');
     if (formId) {
-      //For edit get and patch form
-      this.propertyFormService.loadPropertyData(Number(formId));
-    } else {
-      this.propertyFormService.clearAllForms();
-      this.propertyFormService.setFormStatusToStart();
+      this.engine.setFormId(+formId);
+      this.engine.loadStep(0);
     }
   }
 
@@ -142,8 +123,43 @@ export class AddPropertyComponent {
   }
 
   submitProperty(): void {
-    console.log('Final Step Completed — Submitting Property...');
     this.router.navigate(['dashboard/properties']);
+  }
+
+  getUploadConfig(type: UploadImageType): UploadConfig {
+    const uploadConfig: UploadConfigRecord = {
+      EXTERIOR: {
+        form: this.imagesForm,
+        formKey: 'images',
+      },
+      INTERIOR: {
+        form: this.imagesForm,
+        formKey: 'images',
+      },
+
+      FLOOR_PLAN_DOCUMENT: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+      TENANT_DOCUMENT: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+      EJARI_CERTIFICATE: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+      PMC_DOCUMENT: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+      CHEQUE_DOCUMENT: {
+        form: this.documentationForm,
+        formKey: 'documents',
+      },
+    };
+
+    return uploadConfig[type];
   }
 
   onUpload(type: UploadImageType, event: UploadFileModel) {
@@ -151,7 +167,7 @@ export class AddPropertyComponent {
   }
 
   private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {
-    const { form, formKey } = this.uploadConfig[type];
+    const { form, formKey } = this.getUploadConfig(type);
     const items = [...(form.value[formKey] || [])];
 
     const index = items.findIndex((x) => x.tempId === event.tempId);
@@ -183,7 +199,7 @@ export class AddPropertyComponent {
   }
 
   removeItem(type: UploadImageType, id: number, isBackend = false) {
-    const cfg = this.uploadConfig[type];
+    const cfg = this.getUploadConfig(type);
     const form = cfg.form;
     const key = cfg.formKey;
 
@@ -197,7 +213,7 @@ export class AddPropertyComponent {
   }
 
   getItems(type: UploadImageType) {
-    const cfg = this.uploadConfig[type];
+    const cfg = this.getUploadConfig(type);
     const form = cfg.form;
     const key = cfg.formKey;
 
@@ -207,7 +223,5 @@ export class AddPropertyComponent {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.propertyFormService.unsubcribe();
-    this.propertyFormService.clearAllForms();
   }
 }

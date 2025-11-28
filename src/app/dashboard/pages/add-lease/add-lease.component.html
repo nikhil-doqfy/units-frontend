@@ -1,6 +1,8 @@
 <app-step-form-layout
   [leftCardTitle]="'LEASE_DETAILS' | translate"
   [finishButtonText]="'FINALIZE_AGREEMENT' | translate"
+  [engine]="engine"
+  [stepSchema]="steps"
   (finish)="submitLease()"
 >
   <!-- Step Property Details Content -->
@@ -8,26 +10,34 @@
     [title]="'PROPERTY_DETAILS' | translate"
     [description]="'FILL_ALL_FIELDS_CREATE_LEASE' | translate"
   >
-    <div class="row g-4">
+    <form class="row g-4" [formGroup]="propertyDetailsForm">
       <div class="col-md-6">
         <label class="form-label">{{ "PROPERETY" | translate }}</label>
         <app-custom-select
-          [options]="[
-            'Novatis AG...',
-            'Agriculture....',
-            'Honda...',
-            'TVS',
-            'Samsung'
-          ]"
-          (optionSelected)="onOptionSelected($event)"
+          [options]="propertyList"
+          key="key"
+          value="value"
+          formControlName="property"
         ></app-custom-select>
+         @if (isInvalid(propertyDetailsForm, 'property').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailsForm, "property").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "TENANT" | translate }}</label>
         <app-custom-select
-          [options]="['Novatis', 'fghf', 'Honda', 'TVS', 'Samsung']"
-          (optionSelected)="onOptionSelected($event)"
+          [options]="tenantList"
+          key="key"
+          value="value"
+          formControlName="tenant"
         ></app-custom-select>
+         @if (isInvalid(propertyDetailsForm, 'tenant').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailsForm, "tenant").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "START_DATE" | translate }}</label>
@@ -36,14 +46,19 @@
             class="form-control"
             placeholder="DD-MM-YYYY"
             name="dp"
-            [(ngModel)]="model"
             ngbDatepicker
             #d="ngbDatepicker"
+            formControlName="startDate"
           />
           <button type="button" (click)="d.toggle()">
             <app-date-icon />
           </button>
         </div>
+         @if (isInvalid(propertyDetailsForm, 'startDate').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailsForm, "startDate").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "END_DATE" | translate }}</label>
@@ -52,14 +67,19 @@
             class="form-control"
             placeholder="DD-MM-YYYY"
             name="dp"
-            [(ngModel)]="model"
             ngbDatepicker
             #d="ngbDatepicker"
+            formControlName="endDate"
           />
           <button type="button" (click)="d.toggle()">
             <app-date-icon />
           </button>
         </div>
+         @if (isInvalid(propertyDetailsForm, 'endDate').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailsForm, "endDate").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "GRACE_START_DATE" | translate }}</label>
@@ -68,14 +88,19 @@
             class="form-control"
             placeholder="DD-MM-YYYY"
             name="dp"
-            [(ngModel)]="model"
             ngbDatepicker
             #d="ngbDatepicker"
+            formControlName="graceStartDate"
           />
           <button type="button" (click)="d.toggle()">
             <app-date-icon />
           </button>
         </div>
+         @if (isInvalid(propertyDetailsForm, 'graceStartDate').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailsForm, "graceStartDate").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "GRACE_END_DATE" | translate }}</label>
@@ -84,14 +109,19 @@
             class="form-control"
             placeholder="DD-MM-YYYY"
             name="dp"
-            [(ngModel)]="model"
             ngbDatepicker
             #d="ngbDatepicker"
+            formControlName="graceEndDate"
           />
           <button type="button" (click)="d.toggle()">
             <app-date-icon />
           </button>
         </div>
+         @if (isInvalid(propertyDetailsForm, 'graceEndDate').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailsForm, "graceEndDate").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-12">
         <label class="form-label">{{ "REMARKS" | translate }}</label>
@@ -99,9 +129,15 @@
           type="text"
           class="form-control large"
           [placeholder]="'WRITE_HERE' | translate"
+          formControlName="remark"
         ></textarea>
+         @if (isInvalid(propertyDetailsForm, 'remark').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailsForm, "remark").msg }}
+          </small>
+          }
       </div>
-    </div>
+    </form>
   </app-step-pane>
 
   <!-- Step Commercials Content -->
@@ -109,14 +145,20 @@
     [title]="'COMMERCIALS' | translate"
     [description]="'FILL_ALL_FIELDS_CREATE_LEASE' | translate"
   >
-    <div class="row g-3">
+    <form class="row g-3" [formGroup]="commercialDetailsForm">
       <div class="col-md-3">
         <label class="form-label">{{ "ANNUAL_AMOUNT" | translate }}</label>
         <input
           type="text"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
+          formControlName="annualAmount"
         />
+         @if (isInvalid(commercialDetailsForm, 'annualAmount').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "annualAmount").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{
@@ -126,7 +168,13 @@
           type="text"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
+          formControlName="actualAnnualAmount"
         />
+         @if (isInvalid(commercialDetailsForm, 'actualAnnualAmount').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "actualAnnualAmount").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "BOOKING_AMOUNT" | translate }}</label>
@@ -134,7 +182,13 @@
           type="text"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
+          formControlName="bookingAmount"
         />
+         @if (isInvalid(commercialDetailsForm, 'bookingAmount').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "bookingAmount").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "MAINTENCE_CHARGES" | translate }}</label>
@@ -142,7 +196,13 @@
           type="text"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
+          formControlName="maintenanceCharges"
         />
+         @if (isInvalid(commercialDetailsForm, 'maintenanceCharges').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "maintenanceCharges").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "RENT" | translate }}</label>
@@ -150,7 +210,13 @@
           type="text"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
+          formControlName="rent"
         />
+         @if (isInvalid(commercialDetailsForm, 'rent').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "rent").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "SECURITY_DEPOSIT" | translate }}</label>
@@ -158,28 +224,41 @@
           type="text"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
+          formControlName="securityDeposite"
         />
+         @if (isInvalid(commercialDetailsForm, 'securityDeposite').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "securityDeposite").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "COMMISION_IN %" | translate }}</label>
         <input
-          type="text"
+          type="number"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
+          formControlName="commission"
         />
+         @if (isInvalid(commercialDetailsForm, 'commission').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "commission").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "NOTICE_PERIOD" | translate }}</label>
-        <app-custom-select
-          [options]="[
-            '1 Month',
-            '2 Months',
-            '3 Months',
-            '4 Months',
-            '5 Months'
-          ]"
-          (optionSelected)="onOptionSelected($event)"
-        ></app-custom-select>
+         <input
+          type="number"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="noticePeriod"
+        />
+         @if (isInvalid(commercialDetailsForm, 'noticePeriod').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "noticePeriod").msg }}
+          </small>
+          }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{
@@ -189,9 +268,15 @@
           type="text"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
+          formControlName="discount"
         />
+         @if (isInvalid(commercialDetailsForm, 'propertyName').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "propertyName").msg }}
+          </small>
+          }
       </div>
-    </div>
+    </form>
   </app-step-pane>
 
   <!-- Step Document Layout Content -->
