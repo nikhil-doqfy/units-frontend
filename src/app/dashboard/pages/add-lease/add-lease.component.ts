@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
@@ -14,6 +15,11 @@ import { UploadDocumentComponent } from '../../component/upload-document/upload-
 import { CrossIconComponent } from '../../component/icons/cross-icon/cross-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { LeaseFormService } from '../../services/lease-form.service';
+import { StepEngine } from '../../model/step-engine/step-engine';
+import { StepSchema } from '../../model/step-engine/step-schema';
+import { FormService } from '../../../shared/services/form.service';
 
 @Component({
   selector: 'app-add-lease',
@@ -30,6 +36,7 @@ import { SharedService } from '../../../shared.service';
     UploadIconComponent,
     UploadDocumentComponent,
     CrossIconComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './add-lease.component.html',
   styleUrl: './add-lease.component.css',
@@ -37,22 +44,52 @@ import { SharedService } from '../../../shared.service';
 export class AddLeaseComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private sharedAPIService = inject(SharedApiService);
+  private leaseFormService = inject(LeaseFormService);
+  private formService = inject(FormService);
+
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Lease', link: '/dashboard/lease-tenancy' },
     { label: 'Add Lease', link: '' },
   ];
 
-  selectedType: string = '';
-  model: NgbDateStruct | null = null;
+  propertyDetailsForm = this.leaseFormService.leasePropertyDetailsForm;
+  commercialDetailsForm = this.leaseFormService.leaseCommercialDetailsForm;
+  documentLayoutForm = this.leaseFormService.leaseDocumentsForm;
+  negotiationForm = this.leaseFormService.leaseNegotiationForm;
+  documentsForm = this.leaseFormService.leaseDocumentsForm;
 
-  constructor(private router: Router) {
+  propertyList: any[] = [];
+  tenantList: any[] = [];
+
+  engine!: StepEngine;
+  steps: StepSchema[] = [];
+
+  isInvalid = this.formService.isInvalid;
+
+  constructor(private router: Router, private destroyRef: DestroyRef) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
+    this.steps = this.leaseFormService.buildLeaseSteps();
+    this.engine = new StepEngine(this.steps);
+    this.leaseFormService.setEngine(this.engine);
+
+    this.getOptionType(['TENANTS_LIST', 'OWNER_PROPERTIES']);
   }
 
-  onOptionSelected(option: string) {
-    this.selectedType = option;
+  getOptionType(options: string[]) {
+    this.sharedAPIService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          const content = res?.content;
+          this.tenantList = content?.tenants_list || [];
+          this.propertyList = content?.owner_properties || [];
+        },
+      });
   }
 
   submitLease(): void {
