@@ -137,205 +137,227 @@
   </app-step-pane>
 
   <!-- Step Commercials Content -->
-  <app-step-pane
-    [title]="'COMMERCIALS' | translate"
-    [description]="'FILL_ALL_FIELDS_CREATE_LEASE' | translate"
-  >
-    <form class="row g-3" [formGroup]="commercialDetailsForm">
-      <div class="col-md-3">
-        <label class="form-label">{{ "ANNUAL_AMOUNT" | translate }}</label>
-        <input
-          type="text"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="annualAmount"
-        />
-        @if (isInvalid(commercialDetailsForm, 'annualAmount').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "annualAmount").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">{{
-          "ACTUAL_ANNUAL_AMOUNT" | translate
-        }}</label>
-        <input
-          type="text"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="actualAnnualAmount"
-        />
-        @if (isInvalid(commercialDetailsForm, 'actualAnnualAmount').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "actualAnnualAmount").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">{{ "BOOKING_AMOUNT" | translate }}</label>
-        <input
-          type="text"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="bookingAmount"
-        />
-        @if (isInvalid(commercialDetailsForm, 'bookingAmount').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "bookingAmount").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">{{ "MAINTENCE_CHARGES" | translate }}</label>
-        <input
-          type="text"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="maintenanceCharges"
-        />
-        @if (isInvalid(commercialDetailsForm, 'maintenanceCharges').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "maintenanceCharges").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">{{ "RENT" | translate }}</label>
-        <input
-          type="text"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="rent"
-        />
-        @if (isInvalid(commercialDetailsForm, 'rent').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "rent").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">{{ "SECURITY_DEPOSIT" | translate }}</label>
-        <input
-          type="text"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="securityDeposite"
-        />
-        @if (isInvalid(commercialDetailsForm, 'securityDeposite').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "securityDeposite").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">{{ "COMMISION_IN %" | translate }}</label>
-        <input
-          type="number"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="commission"
-        />
-        @if (isInvalid(commercialDetailsForm, 'commission').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "commission").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">{{ "NOTICE_PERIOD" | translate }}</label>
-        <input
-          type="number"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="noticePeriod"
-        />
-        @if (isInvalid(commercialDetailsForm, 'noticePeriod').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "noticePeriod").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">{{
-          "DISCOUNT_(OPTIONAL)" | translate
-        }}</label>
-        <input
-          type="text"
-          class="form-control"
-          [placeholder]="'ENTER_HERE' | translate"
-          formControlName="discount"
-        />
-        @if (isInvalid(commercialDetailsForm, 'discount').status) {
-        <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "discount").msg }}
-        </small>
-        }
-      </div>
-    </form>
-  </app-step-pane>
-
-  <!-- Step Document Layout Content -->
-  <app-step-pane
-    [title]="'DOCUMENT_LAYOUT' | translate"
-    [description]="'SELECT' | translate"
-  >
-    <div class="tmpltRadioOuter">
-      <div class="tmpltRadio">
-        <label>
-          <input type="radio" name="documentLayout" value="" checked />
-          <span>
-            <i>
-              <img
-                src="../../../../assets/createLayoutIcon.png"
-                width="24"
-                height="24"
-                alt=""
-              />
-            </i>
-            <em
-              >{{ "CREATE_LAYOUT" | translate }} <br />{{
-                "BY_AI" | translate
-              }}</em
-            >
-            <i class="newIcon">
-              <img src="../../../../assets/newIcon.gif" alt="New Icon" />
-            </i>
-          </span>
-        </label>
-        <label>
-          <input type="radio" name="documentLayout" value="" />
-          <span>
-            <i>
-              <img
-                src="../../../../assets/selectTemplateIcon.png"
-                width="24"
-                height="24"
-                alt="Select Template"
-              />
-            </i>
-            <em
-              >{{ "SELECT" | translate }} <br />{{ "TEMPLATE" | translate }}</em
-            >
-          </span>
-        </label>
-      </div>
-      <div class="tmpltOr">
-        <span>{{ "OR" | translate }}</span>
-      </div>
-      <div class="tmpltUpld">
-        <div class="tmpltUpldIcon">
-          <i>
-            <app-upload-icon />
-          </i>
-          <input type="file" />
+    <app-step-pane
+      [title]="'COMMERCIALS' | translate"
+      [description]="'FILL_ALL_FIELDS_CREATE_LEASE' | translate"
+    >
+      <form class="row g-3" [formGroup]="commercialDetailsForm">
+        <div class="col-md-3">
+          <label class="form-label">{{ "ANNUAL_AMOUNT" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="annualAmount"
+          />
+          @if (isInvalid(commercialDetailsForm, 'annualAmount').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "annualAmount").msg }}
+          </small>
+          }
         </div>
-        <span
-          >{{ "UPLOAD" | translate }} <br />{{ "TEMPLATE" | translate }}</span
-        >
-      </div>
-    </div>
-  </app-step-pane>
+        <div class="col-md-3">
+          <label class="form-label">{{
+            "ACTUAL_ANNUAL_AMOUNT" | translate
+          }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="actualAnnualAmount"
+          />
+          @if (isInvalid(commercialDetailsForm, 'actualAnnualAmount').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "actualAnnualAmount").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "BOOKING_AMOUNT" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="bookingAmount"
+          />
+          @if (isInvalid(commercialDetailsForm, 'bookingAmount').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "bookingAmount").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{
+            "MAINTENCE_CHARGES" | translate
+          }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="maintenanceCharges"
+          />
+          @if (isInvalid(commercialDetailsForm, 'maintenanceCharges').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "maintenanceCharges").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "RENT" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="rent"
+          />
+          @if (isInvalid(commercialDetailsForm, 'rent').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "rent").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "SECURITY_DEPOSIT" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="securityDeposite"
+          />
+          @if (isInvalid(commercialDetailsForm, 'securityDeposite').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "securityDeposite").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "COMMISION_IN %" | translate }}</label>
+          <input
+            type="number"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="commission"
+          />
+          @if (isInvalid(commercialDetailsForm, 'commission').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "commission").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "NOTICE_PERIOD" | translate }}</label>
+          <input
+            type="number"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="noticePeriod"
+          />
+          @if (isInvalid(commercialDetailsForm, 'noticePeriod').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "noticePeriod").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{
+            "DISCOUNT_(OPTIONAL)" | translate
+          }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="discount"
+          />
+          @if (isInvalid(commercialDetailsForm, 'discount').status) {
+          <small class="errorMsg">
+            {{ isInvalid(commercialDetailsForm, "discount").msg }}
+          </small>
+          }
+        </div>
+      </form>
+    </app-step-pane>
+    
+  <!-- Step Document Layout Content -->
+  <ng-container>
+    <app-step-pane
+      [title]="'DOCUMENT_LAYOUT' | translate"
+      [description]="'SELECT' | translate"
+    >
+      <form class="tmpltRadioOuter" [formGroup]="documentLayoutForm">
+        <div class="tmpltRadio">
+          <label>
+            <input
+              type="radio"
+              name="documentLayout"
+            
+              value="createLayoutByAI"
+              checked
+            />
+            <span>
+              <i>
+                <img
+                  src="../../../../assets/createLayoutIcon.png"
+                  width="24"
+                  height="24"
+                  alt=""
+                />
+              </i>
+              <em
+                >{{ "CREATE_LAYOUT" | translate }} <br />{{
+                  "BY_AI" | translate
+                }}</em
+              >
+              <i class="newIcon">
+                <img src="../../../../assets/newIcon.gif" alt="New Icon" />
+              </i>
+            </span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="documentLayout"
+      
+              value="predefinedTemplate"
+            />
+            <span>
+              <i>
+                <img
+                  src="../../../../assets/selectTemplateIcon.png"
+                  width="24"
+                  height="24"
+                  alt="Select Template"
+                />
+              </i>
+              <em
+                >{{ "SELECT" | translate }} <br />{{ "TEMPLATE" | translate }}</em
+              >
+            </span>
+          </label>
+        </div>
+        <div class="tmpltOr">
+          <span>{{ "OR" | translate }}</span>
+        </div>
+        <div class="tmpltUpld">
+          <div class="tmpltUpldIcon">
+            <i>
+              <app-upload-icon />
+            </i>
+            <input type="file"/>
+          </div>
+          <span
+            >{{ "UPLOAD" | translate }} <br />{{ "TEMPLATE" | translate }}</span
+          >
+        </div>
+      </form>
+    </app-step-pane>
+  
+    <ng-container>
+      <app-step-pane
+        [title]="'Select Template' | translate"
+        [secondCard]="true"
+      ></app-step-pane>
+    </ng-container>
+  </ng-container>
 
   <!-- Step Negotiation Content -->
   <app-step-pane

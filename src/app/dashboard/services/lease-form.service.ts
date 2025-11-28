@@ -65,7 +65,7 @@ export class LeaseFormService {
 
   initLeaseDocumentLayoutForm() {
     this.leaseDocumentLayoutForm = this.formBuilder.group({
-      type: ['', [Validators.required]],
+      documentLayout: ['', [Validators.required]],
       template: ['', [Validators.required]],
     });
   }

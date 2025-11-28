@@ -335,7 +335,11 @@
     </app-step-pane>
 
     <ng-container *ngIf="currentRole === 'owner'">
-      <app-step-pane [title]="'ADD_PMC' | translate" [secondCard]="true">
+      <app-step-pane
+        [title]="'ADD_PMC' | translate"
+        [secondCard]="true"
+        [showInvitePmcBtn]="true"
+      >
         <form class="row g-3">
           <div class="col-md-6">
             <label class="form-label">{{ "PROPERTY_PMC" | translate }}</label>

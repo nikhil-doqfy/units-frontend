@@ -77,7 +77,9 @@
                   [title]="sub.title"
                   [description]="sub.description"
                 ></app-card-title>
+                @if(sub.showInvitePmcBtn){
                 <app-invite-pmc-btn />
+                }
               </div>
               <div class="cmnStepFrmOuter">
                 <app-dash-form>
