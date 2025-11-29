@@ -181,7 +181,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       return 'assets/userDefaultProImg.png';
     }
 
-    return `data:image/${p.profile_image_type};base64,${p.profile_image}`;
+    return p.profile_image;
   }
 
   private getRouteTitle(route: any): string {

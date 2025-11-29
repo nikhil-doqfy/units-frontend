@@ -137,8 +137,8 @@
           >
           <app-custom-select
             [options]="propertyList"
-            key="id"
-            value="property_name"
+            key="key"
+            value="value"
             formControlName="property"
           ></app-custom-select>
           @if (isInvalid(tenantForm, 'property').status) {

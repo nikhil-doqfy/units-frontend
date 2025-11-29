@@ -98,7 +98,7 @@ export class TenantsComponent {
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
-
+  selectedTenant: any = null;
   tenantsList: any[] = [];
   tenantsFilter: Record<string, any> = {};
   totalRecords: number = 0;
@@ -122,14 +122,34 @@ export class TenantsComponent {
       });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    // Get current role
     this.themeService.currentRole$
       .pipe(takeUntil(this.destroy$))
       .subscribe((role) => {
         this.currentRole = role;
       });
-    this.getTenants();
+
+    // Check route param (id)
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        const id = params.get('id');
+
+        if (id) {
+          // Detail View
+          this.showDetailView = true;
+          this.loadDetailView(+id);
+        } else {
+          // Listing View
+          this.showDetailView = false;
+          this.getTenants();
+        }
+      });
   }
+
+
+
 
   private getTenants() {
     this.tenantsFilter = {
@@ -146,7 +166,7 @@ export class TenantsComponent {
           this.tenantsList = resp?.content?.tenants ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
         },
-        error: (err) => {},
+        error: (err) => { },
       });
   }
 
@@ -258,46 +278,45 @@ export class TenantsComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(): void {
-    this.showDetailView = true;
-  }
+
 
   handleBackClick(): void {
-    this.showDetailView = false;
+    this.router.navigate(['/dashboard/tenants']);
   }
+
+  // ------------------------- Access tenant form data -------------------------
 
   onTenantSave(component: AddTenantFormComponent, modal: NgbActiveModal) {
-    const tenantForm = component?.tenantForm;
-    if (tenantForm.invalid) {
-      tenantForm.markAllAsTouched();
-      return;
-    }
+    component.submitTenantForm();
 
-    const formValue = tenantForm.value;
+    modal.close();
 
-    const payload = {
-      profile_image: formValue.imageBase64,
-      first_name: formValue.firstName,
-      last_name: formValue.lastName,
-      email: formValue.email,
-      contact_number: formValue.contactNumber,
-      emirate_id: formValue.emiratesID,
-      property_id: formValue.property,
-    };
-
-    this.tenantsService
-      .addTenant(payload)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          modal.close('Save click');
-          this.alertService.success(response.message);
-        },
-      });
+    this.getTenants();
   }
+
+
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+
+
+  // ------------------------- Handel show details function -------------------------
+
+  handleViewClick(tenantId: number): void {
+    this.router.navigate(['/dashboard/tenants/detail', tenantId]);
+
+  }
+
+  loadDetailView(tenantId: number): void {
+    this.tenantsService.getTenantsDetailsView({ tenant_id: tenantId }).subscribe({
+      next: (resp: any) => {
+        this.selectedTenant = resp.content;
+      },
+      error: (err) => console.error('Detail API Error:', err),
+    });
+  }
+
 }

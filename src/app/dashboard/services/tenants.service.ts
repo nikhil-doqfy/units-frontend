@@ -28,4 +28,13 @@ export class TenantsService {
   addTenant(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/tenant/details/`, data);
   }
+
+
+  getTenantsDetailsView(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/tenant/details/${queryString}`
+    );
+  }
+
 }

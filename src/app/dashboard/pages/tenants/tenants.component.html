@@ -76,12 +76,13 @@
             <tr>
               <td>
                 <app-table-img-item
-                  img="../../../../assets/userDefaultProImg.png"
+                  [img]="tenant?.profile_image || '../../../../assets/userDefaultProImg.png'"
                   [title]="tenant?.full_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick()"
+                  (clicked)="handleViewClick(tenant.id)"
                 />
               </td>
+
               <td>{{ tenant?.tenant_number }}</td>
               <td>{{ tenant.mobile_number | maskPhone }}</td>
 
@@ -211,19 +212,20 @@
   </ng-template>
 </ng-container>
 
-<ng-container *ngIf="showDetailView">
+<ng-container *ngIf="showDetailView && selectedTenant">
   <app-table-view-card
-    [title]="'Richard'"
-    [imgSrc]="'../../../assets/user/user-2.png'"
+    [title]="selectedTenant?.tenant_details?.first_name + ' ' + selectedTenant?.tenant_details?.last_name"
+    [imgSrc]="selectedTenant?.tenant_details?.profile_image || ''"
+
     [items]="[
-      { label: 'Email', value: 'Richard@gmail.com' },
-      { label: 'Phone Number', value: '+97-7007836367' },
-      { label: 'Emirates ID', value: 'Afc25' },
-      { label: 'City', value: 'Bengaluru' },
-      { label: 'Locality', value: '' },
-      { label: 'Postal Code', value: '5621009' },
-      { label: 'Address Line 1', value: 'Koramangala' },
-      { label: 'Address Line 2', value: 'Bellandur' },
+      { label: 'Email', value: selectedTenant?.tenant_details.email},
+      { label: 'Phone Number', value: selectedTenant.tenant_details?.contact_number},
+      { label: 'Emirates ID', value: selectedTenant.tenant_details?.emirate_id},
+      { label: 'City', value: selectedTenant.tenant_details?.city},
+      { label: 'Locality', value: selectedTenant.tenant_details?.location},
+      { label: 'Postal Code', value: selectedTenant.tenant_details?.postal_code},
+      { label: 'Address Line 1', value: selectedTenant.tenant_details?.address},
+      { label: 'Address Line 2',  value: selectedTenant.tenant_details?.address},
       {
         label: 'Linked Property',
         value: 'Prestige Builders',

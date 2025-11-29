@@ -100,7 +100,7 @@ export class MyProfileComponent {
     if (!content?.profile_image) {
       this.getBase64();
     } else {
-      this.userImage = `data:image/${content.profile_image_type};base64,${content.profile_image}`;
+      this.userImage = content.profile_image;
     }
 
     this.profile = {
@@ -170,7 +170,7 @@ export class MyProfileComponent {
           ? this.profile.name
           : this.profile.lastName,
       contact_number: this.profile.contact,
-      profile_image: this.userImage.split(',')[1],
+      profile_image: this.userImage,
       profile_image_type: this.fileType,
     };
 
