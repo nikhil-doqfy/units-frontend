@@ -1,220 +1,240 @@
 .tmpltRadioOuter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding-bottom: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding-bottom: 60px;
 }
 
 .tmpltRadio {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .tmpltRadio label {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .tmpltRadio label input {
-    display: none;
+  display: none;
 }
 
 .tmpltRadio label span {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    min-width: 200px;
-    height: 90px;
-    padding: 16px 16px 16px 48px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 15px 0 #00000040;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 200px;
+  height: 90px;
+  padding: 16px 16px 16px 48px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 15px 0 #00000040;
 }
 
 .tmpltRadio label span::before {
-    background-color: var(--whiteBg);
-    position: absolute;
-    content: "";
-    left: 16px;
-    top: 40px;
-    width: 14px;
-    height: 14px;
-    border: 1px solid var(--greyDarkBorder3);
-    border-radius: 14px;
-    transition: all 0.3s ease 0s;
+  background-color: var(--whiteBg);
+  position: absolute;
+  content: "";
+  left: 16px;
+  top: 40px;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--greyDarkBorder3);
+  border-radius: 14px;
+  transition: all 0.3s ease 0s;
 }
 
-.tmpltRadio label input:checked~span::before {
-    border: 3px solid var(--activeBorder);
+.tmpltRadio label input:checked ~ span::before {
+  border: 3px solid var(--activeBorder);
 }
 
 .tmpltRadio label span em {
-    font-size: 14px;
-    color: var(--greyText);
-    font-weight: 500;
-    font-style: normal;
-    line-height: 18px;
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 500;
+  font-style: normal;
+  line-height: 18px;
 }
 
 .tmpltRadio label span .newIcon {
-    position: relative;
-    width: 35px;
-    height: 20px;
+  position: relative;
+  width: 35px;
+  height: 20px;
 }
 
 .tmpltRadio label span .newIcon img {
-    position: absolute;
-    width: 55px;
-    left: -10px;
-    top: -16px;
-    max-width: inherit;
+  position: absolute;
+  width: 55px;
+  left: -10px;
+  top: -16px;
+  max-width: inherit;
+}
+
+.tmpltRadio .templateCard {
+  flex-direction: column;
+  align-items: start !important;
+  max-width: 265px;
+  justify-content: center;
+  height: 130px !important;
+}
+
+.tmpltRadio label span p {
+  font-size: 12px;
+  color: var(--greyText);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 16px;
+  margin-bottom: 0;
+  overflow-y: auto;
 }
 
 .tmpltOr {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 90px;
-    z-index: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90px;
+  z-index: 1;
 }
 
 .tmpltOr::before {
-    background-color: var(--muteBg1);
-    position: absolute;
-    content: "";
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    z-index: -1;
+  background-color: var(--muteBg1);
+  position: absolute;
+  content: "";
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  z-index: -1;
 }
 
 .tmpltOr span {
-    background-color: var(--whiteBg);
-    font-size: 12px;
-    color: var(--greyText);
-    font-weight: 500;
-    line-height: 16px;
+  background-color: var(--whiteBg);
+  font-size: 12px;
+  color: var(--greyText);
+  font-weight: 500;
+  line-height: 16px;
 }
 
 .tmpltUpld {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 200px;
-    padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 200px;
+  padding: 16px;
 }
 
 .tmpltUpldIcon {
-    position: relative;
-    height: 58px;
+  position: relative;
+  height: 58px;
 }
 
 .tmpltUpldIcon i {
-    background-color: var(--muteBg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    min-width: 56px;
-    height: 56px;
-    border: 1px dashed var(--muteBorder2);
-    border-radius: 56px;
-    pointer-events: none;
+  background-color: var(--muteBg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  min-width: 56px;
+  height: 56px;
+  border: 1px dashed var(--muteBorder2);
+  border-radius: 56px;
+  pointer-events: none;
 }
 
 .tmpltUpldIcon input {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 56px;
-    height: 56px;
-    border-radius: 56px;
-    opacity: 0;
-    cursor: pointer;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 56px;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .tmpltUpld span {
-    font-size: 14px;
-    color: var(--greyText);
-    font-weight: 500;
-    line-height: 18px;
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 500;
+  line-height: 18px;
 }
 
 .agrmntCntntOuter {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  gap: 12px;
 }
 
 .agrmntCntntView {
-    text-align: center;
-    padding: 20px;
-    width: calc(100% - 333px);
-    border: 1px solid var(--muteBorder1);
-    border-radius: 8px;
+  text-align: center;
+  padding: 20px;
+  width: calc(100% - 333px);
+  border: 1px solid var(--muteBorder1);
+  border-radius: 8px;
 }
 
-.agrmntCntntView+.agrmntCntntView {
-    margin-top: 16px;
+.agrmntCntntView + .agrmntCntntView {
+  margin-top: 16px;
 }
 
 .agrmntCntntView div,
 .agrmntCntntView p {
-    font-size: 14px;
-    color: var(--blackText);
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    line-height: 22px;
-    margin: 0;
+  font-size: 14px;
+  color: var(--blackText);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  line-height: 22px;
+  margin: 0;
 }
 
 .agrmntCntntView div strong,
 .agrmntCntntView p strong,
 .agrmntCntntView div b,
 .agrmntCntntView p b {
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .editTempltOuter {
-    background-color: var(--whiteBg);
-    width: 333px;
-    min-width: 333px;
-    border: 1px solid var(--muteBorder1);
-    border-radius: 6px 6px 16px 16px;
-    box-shadow: 4px 4px 15px 0 #00000040;
+  background-color: var(--whiteBg);
+  width: 333px;
+  min-width: 333px;
+  border: 1px solid var(--muteBorder1);
+  border-radius: 6px 6px 16px 16px;
+  box-shadow: 4px 4px 15px 0 #00000040;
 }
 
 .editTempltHdr {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--muteBorder2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--muteBorder2);
 }
 
 .editTempltHdr h4 {
-    font-size: 14px;
-    color: var(--greyText3);
-    font-weight: 400;
-    line-height: 18px;
-    margin: 0;
+  font-size: 14px;
+  color: var(--greyText3);
+  font-weight: 400;
+  line-height: 18px;
+  margin: 0;
 }
 
 .editTempltHdr button {
-    background-color: transparent;
-    color: var(--greyDarkText4);
-    padding: 0;
-    border: 0;
-    transition: all 0.3s ease 0s;
+  background-color: transparent;
+  color: var(--greyDarkText4);
+  padding: 0;
+  border: 0;
+  transition: all 0.3s ease 0s;
 }
 
 .editTempltHdr button:hover {
-    color: var(--blackText);
+  color: var(--blackText);
 }
 
 .editTempltBdy {
-    padding: 16px;
+  padding: 16px;
 }

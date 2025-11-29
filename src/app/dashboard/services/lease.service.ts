@@ -49,4 +49,20 @@ export class LeaseService {
       data
     );
   }
+
+  getTemplateData(params: Record<string, any>) {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/get/template/fields/${queryString}`
+    );
+  }
+
+  getTemplateContent(url: string): Observable<string> {
+    let finalUrl = new URL(url, this.SERVER_ADDRESS);
+
+    console.log(`${this.SERVER_ADDRESS}/${url}`);
+    return this.http.get(`${finalUrl}`, {
+      responseType: 'text',
+    });
+  }
 }

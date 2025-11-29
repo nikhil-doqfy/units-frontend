@@ -257,7 +257,20 @@ export class PropertiesComponent {
   }
 
   handleExportClick(): void {
-    console.log('Export button clicked');
+    this.propertyService.getExcelFileOfProperty({}).subscribe((resp) => {
+      console.log('response:--->', resp);
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(resp);
+
+      // Create a temporary link element
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'property_export.csv'; // filename
+      a.click();
+
+      // Release memory
+      window.URL.revokeObjectURL(url);
+    });
   }
 
   handleEditClick(id: number): void {

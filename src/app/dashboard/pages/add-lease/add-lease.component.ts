@@ -20,6 +20,14 @@ import { LeaseFormService } from '../../services/lease-form.service';
 import { StepEngine } from '../../model/step-engine/step-engine';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { FormService } from '../../../shared/services/form.service';
+import { LeaseService } from '../../services/lease.service';
+import { firstValueFrom } from 'rxjs';
+
+interface OptionsParams {
+  param: string;
+  key: string;
+  setter: (value: any) => void;
+}
 
 @Component({
   selector: 'app-add-lease',
@@ -46,6 +54,7 @@ export class AddLeaseComponent {
   private sharedService = inject(SharedService);
   private sharedAPIService = inject(SharedApiService);
   private leaseFormService = inject(LeaseFormService);
+  private leaseService = inject(LeaseService);
   private formService = inject(FormService);
 
   breadcrumbData = [
@@ -56,12 +65,15 @@ export class AddLeaseComponent {
 
   propertyDetailsForm = this.leaseFormService.leasePropertyDetailsForm;
   commercialDetailsForm = this.leaseFormService.leaseCommercialDetailsForm;
-  documentLayoutForm = this.leaseFormService.leaseDocumentsForm;
+  documentLayoutForm = this.leaseFormService.leaseDocumentLayoutForm;
   negotiationForm = this.leaseFormService.leaseNegotiationForm;
   documentsForm = this.leaseFormService.leaseDocumentsForm;
 
   propertyList: any[] = [];
   tenantList: any[] = [];
+  templateList: any[] = [];
+  templateFields: any[] = [];
+  templateContent = '';
 
   engine!: StepEngine;
   steps: StepSchema[] = [];
@@ -76,19 +88,90 @@ export class AddLeaseComponent {
     this.engine = new StepEngine(this.steps);
     this.leaseFormService.setEngine(this.engine);
 
-    this.getOptionType(['TENANTS_LIST', 'PMC_PROPERTIES']);
+    this.getOptionType([
+      {
+        param: 'TENANTS_LIST',
+        key: 'tenants_list',
+        setter: (v) => (this.tenantList = v),
+      },
+      {
+        param: 'PMC_PROPERTIES',
+        key: 'pmc_properties',
+        setter: (v) => (this.propertyList = v),
+      },
+    ]);
+
+    this.engine.currentIndex
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((index) => {
+        console.log('index:---', index);
+        if (index === 3) this.getTemplateData();
+      });
   }
 
-  getOptionType(options: string[]) {
+  getOptionType(options: OptionsParams[]) {
+    const type = options.map((o) => o.param).join(',');
+
     this.sharedAPIService
-      .getOptions({ option_type: options.join(',') })
+      .getOptions({ option_type: type })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (res: any) => {
-          const content = res?.content;
-          this.tenantList = content?.tenants_list || [];
-          this.propertyList = content?.pmc_properties || [];
+        next: (res) => {
+          const content = res?.content || {};
+
+          options.forEach((o) => o.setter(content[o.key] || []));
         },
+      });
+  }
+
+  get documentLayout() {
+    return this.documentLayoutForm.get('documentLayout')?.value;
+  }
+
+  onLayoutChange(event: any) {
+    const value = event?.target?.value;
+    if (!value) return;
+
+    if (value === 'predefinedTemplate') {
+      this.getOptionType([
+        {
+          param: 'PREDEFINED_TEMPLATES',
+          key: 'predefined_templates',
+          setter: (v) => (this.templateList = v),
+        },
+      ]);
+    }
+  }
+
+  getTemplateData() {
+    const templateId = this.documentLayoutForm.get('template')?.value;
+    if (!templateId && this.documentLayout !== 'predefinedTemplate') return;
+
+    this.leaseService
+      .getTemplateData({ template_id: templateId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: async (resp: any) => {
+          let content = resp.content;
+          if (content.template_path) {
+            this.handeleTemplateUrl(content.template_path);
+          }
+        },
+      });
+  }
+
+  extractHtmlBody(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    return doc.body.innerHTML;
+  }
+
+  handeleTemplateUrl(url: string) {
+    this.leaseService
+      .getTemplateContent(url)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp) => {
+        const cleanHtml = this.extractHtmlBody(resp);
       });
   }
 
