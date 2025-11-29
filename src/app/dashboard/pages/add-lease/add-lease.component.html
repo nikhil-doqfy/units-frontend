@@ -19,11 +19,11 @@
           value="value"
           formControlName="property"
         ></app-custom-select>
-         @if (isInvalid(propertyDetailsForm, 'property').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailsForm, "property").msg }}
-          </small>
-          }
+        @if (isInvalid(propertyDetailsForm, 'property').status) {
+        <small class="errorMsg">
+          {{ isInvalid(propertyDetailsForm, "property").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "TENANT" | translate }}</label>
@@ -33,95 +33,91 @@
           value="value"
           formControlName="tenant"
         ></app-custom-select>
-         @if (isInvalid(propertyDetailsForm, 'tenant').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailsForm, "tenant").msg }}
-          </small>
-          }
+        @if (isInvalid(propertyDetailsForm, 'tenant').status) {
+        <small class="errorMsg">
+          {{ isInvalid(propertyDetailsForm, "tenant").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "START_DATE" | translate }}</label>
         <div class="datePicker">
           <input
             class="form-control"
-            placeholder="DD-MM-YYYY"
-            name="dp"
+            placeholder="YYYY-MM-DD"
             ngbDatepicker
-            #d="ngbDatepicker"
+            #startDate="ngbDatepicker"
             formControlName="startDate"
           />
-          <button type="button" (click)="d.toggle()">
+          <button type="button" (click)="startDate.toggle()">
             <app-date-icon />
           </button>
         </div>
-         @if (isInvalid(propertyDetailsForm, 'startDate').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailsForm, "startDate").msg }}
-          </small>
-          }
+        @if (isInvalid(propertyDetailsForm, 'startDate').status) {
+        <small class="errorMsg">
+          {{ isInvalid(propertyDetailsForm, "startDate").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "END_DATE" | translate }}</label>
         <div class="datePicker">
           <input
             class="form-control"
-            placeholder="DD-MM-YYYY"
-            name="dp"
+            placeholder="YYYY-MM-DD"
             ngbDatepicker
-            #d="ngbDatepicker"
+            #endDate="ngbDatepicker"
             formControlName="endDate"
           />
-          <button type="button" (click)="d.toggle()">
+          <button type="button" (click)="endDate.toggle()">
             <app-date-icon />
           </button>
         </div>
-         @if (isInvalid(propertyDetailsForm, 'endDate').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailsForm, "endDate").msg }}
-          </small>
-          }
+        @if (isInvalid(propertyDetailsForm, 'endDate').status) {
+        <small class="errorMsg">
+          {{ isInvalid(propertyDetailsForm, "endDate").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "GRACE_START_DATE" | translate }}</label>
         <div class="datePicker">
           <input
             class="form-control"
-            placeholder="DD-MM-YYYY"
-            name="dp"
+            placeholder="YYYY-MM-DD"
             ngbDatepicker
-            #d="ngbDatepicker"
+            #graceStartDate="ngbDatepicker"
             formControlName="graceStartDate"
           />
-          <button type="button" (click)="d.toggle()">
+          <button type="button" (click)="graceStartDate.toggle()">
             <app-date-icon />
           </button>
         </div>
-         @if (isInvalid(propertyDetailsForm, 'graceStartDate').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailsForm, "graceStartDate").msg }}
-          </small>
-          }
+        @if (isInvalid(propertyDetailsForm, 'graceStartDate').status) {
+        <small class="errorMsg">
+          {{ isInvalid(propertyDetailsForm, "graceStartDate").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-6">
         <label class="form-label">{{ "GRACE_END_DATE" | translate }}</label>
         <div class="datePicker">
           <input
             class="form-control"
-            placeholder="DD-MM-YYYY"
-            name="dp"
+            placeholder="YYYY-MM-DD"
             ngbDatepicker
-            #d="ngbDatepicker"
+            #graceEndDate="ngbDatepicker"
             formControlName="graceEndDate"
           />
-          <button type="button" (click)="d.toggle()">
+          <button type="button" (click)="graceEndDate.toggle()">
             <app-date-icon />
           </button>
         </div>
-         @if (isInvalid(propertyDetailsForm, 'graceEndDate').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailsForm, "graceEndDate").msg }}
-          </small>
-          }
+        @if (isInvalid(propertyDetailsForm, 'graceEndDate').status) {
+        <small class="errorMsg">
+          {{ isInvalid(propertyDetailsForm, "graceEndDate").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-12">
         <label class="form-label">{{ "REMARKS" | translate }}</label>
@@ -131,11 +127,11 @@
           [placeholder]="'WRITE_HERE' | translate"
           formControlName="remark"
         ></textarea>
-         @if (isInvalid(propertyDetailsForm, 'remark').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailsForm, "remark").msg }}
-          </small>
-          }
+        @if (isInvalid(propertyDetailsForm, 'remark').status) {
+        <small class="errorMsg">
+          {{ isInvalid(propertyDetailsForm, "remark").msg }}
+        </small>
+        }
       </div>
     </form>
   </app-step-pane>
@@ -154,11 +150,11 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="annualAmount"
         />
-         @if (isInvalid(commercialDetailsForm, 'annualAmount').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "annualAmount").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'annualAmount').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "annualAmount").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{
@@ -170,11 +166,11 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="actualAnnualAmount"
         />
-         @if (isInvalid(commercialDetailsForm, 'actualAnnualAmount').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "actualAnnualAmount").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'actualAnnualAmount').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "actualAnnualAmount").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "BOOKING_AMOUNT" | translate }}</label>
@@ -184,11 +180,11 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="bookingAmount"
         />
-         @if (isInvalid(commercialDetailsForm, 'bookingAmount').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "bookingAmount").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'bookingAmount').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "bookingAmount").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "MAINTENCE_CHARGES" | translate }}</label>
@@ -198,11 +194,11 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="maintenanceCharges"
         />
-         @if (isInvalid(commercialDetailsForm, 'maintenanceCharges').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "maintenanceCharges").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'maintenanceCharges').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "maintenanceCharges").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "RENT" | translate }}</label>
@@ -212,11 +208,11 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="rent"
         />
-         @if (isInvalid(commercialDetailsForm, 'rent').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "rent").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'rent').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "rent").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "SECURITY_DEPOSIT" | translate }}</label>
@@ -226,11 +222,11 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="securityDeposite"
         />
-         @if (isInvalid(commercialDetailsForm, 'securityDeposite').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "securityDeposite").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'securityDeposite').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "securityDeposite").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "COMMISION_IN %" | translate }}</label>
@@ -240,25 +236,25 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="commission"
         />
-         @if (isInvalid(commercialDetailsForm, 'commission').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "commission").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'commission').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "commission").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "NOTICE_PERIOD" | translate }}</label>
-         <input
+        <input
           type="number"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="noticePeriod"
         />
-         @if (isInvalid(commercialDetailsForm, 'noticePeriod').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "noticePeriod").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'noticePeriod').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "noticePeriod").msg }}
+        </small>
+        }
       </div>
       <div class="col-md-3">
         <label class="form-label">{{
@@ -270,11 +266,11 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="discount"
         />
-         @if (isInvalid(commercialDetailsForm, 'propertyName').status) {
-          <small class="errorMsg">
-            {{ isInvalid(commercialDetailsForm, "propertyName").msg }}
-          </small>
-          }
+        @if (isInvalid(commercialDetailsForm, 'discount').status) {
+        <small class="errorMsg">
+          {{ isInvalid(commercialDetailsForm, "discount").msg }}
+        </small>
+        }
       </div>
     </form>
   </app-step-pane>
@@ -284,10 +280,16 @@
     [title]="'DOCUMENT_LAYOUT' | translate"
     [description]="'SELECT' | translate"
   >
-    <div class="tmpltRadioOuter">
+    <form class="tmpltRadioOuter" [formGroup]="documentLayoutForm">
       <div class="tmpltRadio">
         <label>
-          <input type="radio" name="documentLayout" value="" checked />
+          <input
+            type="radio"
+            name="documentLayout"
+            value="createLayoutByAI"
+            formControlName="documentLayout"
+            (change)="onLayoutChange($event)"
+          />
           <span>
             <i>
               <img
@@ -308,7 +310,13 @@
           </span>
         </label>
         <label>
-          <input type="radio" name="documentLayout" value="" />
+          <input
+            type="radio"
+            name="documentLayout"
+            value="predefinedTemplate"
+            formControlName="documentLayout"
+            (change)="onLayoutChange($event)"
+          />
           <span>
             <i>
               <img
@@ -338,7 +346,27 @@
           >{{ "UPLOAD" | translate }} <br />{{ "TEMPLATE" | translate }}</span
         >
       </div>
-    </div>
+    </form>
+    @if (documentLayout === 'predefinedTemplate') {
+    <form [formGroup]="documentLayoutForm">
+      <div class="tmpltRadio">
+        @for (template of templateList; track $index) {
+        <label>
+          <input
+            type="radio"
+            name="template"
+            [value]="template.key"
+            formControlName="template"
+          />
+          <span class="templateCard">
+            <em>{{ template.value }}</em>
+            <p>{{ template.description ?? "N/A" }}</p>
+          </span>
+        </label>
+        }
+      </div>
+    </form>
+    }
   </app-step-pane>
 
   <!-- Step Negotiation Content -->

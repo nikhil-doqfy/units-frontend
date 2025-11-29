@@ -105,12 +105,17 @@ export class StepFormLayoutComponent implements AfterContentInit {
         this.spinner.show();
         const result = await this.engine.saveStep(this.currentStep);
 
+        const currentStep = this.engine.getCurrentStep();
+
+        if (result.local) {
+          if (currentStep) this.engine.setStepFormMode(currentStep.id, 'EDIT'); // set edit mode for local
+        }
+
         if (result?.content?.id) {
           this.engine.setFormId(result?.content?.id); // set form id for next form or edit
         }
 
         if (result?.status === 201) {
-          const currentStep = this.engine.getCurrentStep();
           if (currentStep) this.engine.setStepFormMode(currentStep.id, 'EDIT'); // set edit mode afte post
         }
         this.showAlert(result.message);

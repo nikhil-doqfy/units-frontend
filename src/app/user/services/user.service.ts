@@ -30,4 +30,34 @@ export class UserService {
       `${this.SERVER_ADDRESS}/user/user/management${queryString}`
     );
   }
+
+
+
+  // ------------------------- Add new user -------------------------
+  addNewUser(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/user/user/management`, data);
+  }
+
+
+  // ------------------------- Edit new user -------------------------
+  editUserManagement(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/user/user/management`, data);
+  }
+
+
+
+  // ------------------------- Delete user -------------------------
+  DeleteUser(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.delete(
+      `${this.SERVER_ADDRESS}/user/user/management${queryString}`
+    );
+  }
+
+  // ------------------------- User activate -------------------------
+  activateUser(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/user/toggle/user/active`, data);
+  }
+
+
 }

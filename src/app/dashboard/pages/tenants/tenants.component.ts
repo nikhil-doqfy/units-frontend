@@ -89,7 +89,6 @@ export class TenantsComponent {
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Tenants', link: '' },
   ];
-  selectedTenant: any = null;
 
   currentRole: UserRole = 'owner';
   closeResult: WritableSignal<string> = signal('');
@@ -100,7 +99,7 @@ export class TenantsComponent {
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
-
+  selectedTenant: any = null;
   tenantsList: any[] = [];
   tenantsFilter: Record<string, any> = {};
   totalRecords: number = 0;
@@ -273,7 +272,7 @@ export class TenantsComponent {
 
   handleViewClick(tenantID: number): void {
     // this.showDetailView = true;
-    this.router.navigate(['/dashboard/tenant/details/', tenantID]);
+    this.router.navigate(['/dashboard/tenants/detail/', tenantID]);
   }
 
   handleBackClick(): void {
@@ -281,33 +280,13 @@ export class TenantsComponent {
     this.router.navigate(['/dashboard/tenants']);
   }
 
+  // ------------------------- Access tenant form data -------------------------
+
   onTenantSave(component: AddTenantFormComponent, modal: NgbActiveModal) {
-    const tenantForm = component?.tenantForm;
-    if (tenantForm.invalid) {
-      tenantForm.markAllAsTouched();
-      return;
-    }
+    component.submitTenantForm();
 
-    const formValue = tenantForm.value;
-
-    const payload = {
-      profile_image: formValue.imageBase64,
-      first_name: formValue.firstName,
-      last_name: formValue.lastName,
-      email: formValue.email,
-      contact_number: formValue.contactNumber,
-      emirate_id: formValue.emiratesID,
-      property_id: formValue.property,
-    };
-    this.tenantsService
-      .addTenant(payload)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          modal.close('Save click');
-          this.alertService.success(response.message);
-        },
-      });
+    modal.close();
+    this.getTenants();
   }
 
   getTenantDetails(tenantID: number): void {
@@ -316,7 +295,7 @@ export class TenantsComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp: any) => {
-          this.selectedTenant = resp.content?.tenant_details;
+          this.selectedTenant = resp.content;
         },
         error: (err) => console.error('Detail API Error:', err),
       });

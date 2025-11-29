@@ -135,13 +135,12 @@ export class StepEngine {
       ? step.mapOut(step.formGroup.value)
       : step.formGroup.value;
 
-    console.log('payload:--->', payload);
     const handler = step.save;
 
     if (!handler) {
       // no server save; mark complete locally
       this.setStepStatus(step.id, 'COMPLETED');
-      return { local: true };
+      return { local: true, message: 'Save successfully' };
     }
 
     this.setStepStatus(step.id, 'ONGOING');

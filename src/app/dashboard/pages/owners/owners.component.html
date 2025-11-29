@@ -68,7 +68,7 @@
                 <app-table-img-item
                   [img]="
                     owner?.profile_image
-                      ? 'data:image/png;base64,' + owner?.profile_image
+                      ? owner?.profile_image
                       : '../../../../assets/userDefaultProImg.png'
                   "
                   [clickable]="true"
