@@ -15,6 +15,9 @@ import {
 } from '@angular/forms';
 import { FileService } from '../../../../shared/services/file.service';
 import { FormService } from '../../../../shared/services/form.service';
+import { TenantsService } from '../../../services/tenants.service';
+import { AlertService } from '../../../../shared/services/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-tenant-form',
@@ -36,6 +39,10 @@ export class AddTenantFormComponent {
   private fileService = inject(FileService);
   private formService = inject(FormService);
   private destroy$ = new Subject<void>();
+  private tenantService = inject(TenantsService)
+  private alertService = inject(AlertService)
+  private router = inject(Router)
+
 
   tenantForm!: FormGroup;
   propertyList = [];
@@ -72,6 +79,11 @@ export class AddTenantFormComponent {
     this.fileInput.nativeElement.click();
   }
 
+
+
+
+  // ------------------------- Tenant onFileSelected  -------------------------
+
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -95,6 +107,32 @@ export class AddTenantFormComponent {
 
   get imageBase64() {
     return this.tenantForm.get('imageBase64')?.value;
+  }
+
+
+  // ------------------------- Add tenant form -------------------------
+
+  submitTenantForm() {
+    this.tenantForm.markAllAsTouched();
+    if (!this.tenantForm.valid) return;
+    var TenenatData = this.tenantForm.value;
+    var data: any = {
+      first_name: TenenatData.firstName,
+      last_name: TenenatData.lastName,
+      email: TenenatData.email,
+      contact_number: TenenatData.contactNumber,
+      emirate_id: TenenatData.emiratesID,
+      property_id: TenenatData.property?.key,
+      profile_image: TenenatData.imageBase64,
+      file_name: TenenatData.imageFile
+    };
+    this.tenantService.addTenant(data).subscribe((resp: any) => {
+      if (resp.status === 201) {
+        this.alertService.success(resp.message);
+        this.router.navigate(['/dashboard/tenants']);
+      }
+    });
+
   }
 
   ngOnDestroy() {

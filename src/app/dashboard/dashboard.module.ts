@@ -69,7 +69,7 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
       },
       {
-        path: 'tenant/details/:id',
+        path: 'tenants/detail/:id',
         component: TenantsComponent,
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
       },
