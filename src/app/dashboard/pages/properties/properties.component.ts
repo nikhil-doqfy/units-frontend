@@ -66,7 +66,6 @@ import { SharedService } from '../../../shared.service';
   styleUrl: './properties.component.css',
 })
 export class PropertiesComponent {
-  [x: string]: any;
   private propertyService = inject(PropertyService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
@@ -109,6 +108,13 @@ export class PropertiesComponent {
         this.currentPage = 1;
         this.getProperties();
       });
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.propertiesFilter['property_id'] = +id;
+      this.showDetailView = true;
+      this.getProperties();
+    }
   }
 
   ngOnInit() {
@@ -128,6 +134,7 @@ export class PropertiesComponent {
 
   onPropertyViewChange() {
     if (this.propertyView === 'all-properties') {
+      delete this.propertiesFilter['property_id'];
       this.getProperties();
     } else if (this.propertyView === 'my-properties') {
     }
@@ -284,27 +291,15 @@ export class PropertiesComponent {
 
   handleBackClick(): void {
     this.showDetailView = false;
+    this.router.navigate(['/dashboard/properties']);
   }
 
   selectedProperties: any = null;
 
-  handleViewClick(propertiesID: number): void {
-    this.showDetailView = true;
-
-    this.router.navigate(['/dashboard/property/details/', propertiesID]);
+  handleViewClick(propertyId: number): void {
+    this.router.navigate(['/dashboard/property/details/', propertyId]);
   }
 
-  loadDetailView(propertiesID: number): void {
-    this.propertyService
-      .getProperties({ properties_id: propertiesID })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (resp: any) => {
-          this.selectedProperties = resp.content;
-        },
-        error: (err) => console.error('Detail API Error:', err),
-      });
-  }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

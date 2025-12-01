@@ -35,6 +35,7 @@
                 name="property"
                 value="all-properties"
                 [(ngModel)]="propertyView"
+                (change)="onPropertyViewChange()"
               />
               <span
                 >{{ "ALL_PROPERTIES" | translate }} <i>({{ totalRecords }})</i>
@@ -428,7 +429,7 @@
               </td>
               <td>
                 <app-table-img-item
-                  img="../../../../assets/property/property-list-2.png"
+                  [img]="property?.images?.[0]?.data ?? '../../../../assets/property/property-img-default.svg'"
                   size="md"
                   [title]="property.property_name"
                   [clickable]="true"
@@ -441,7 +442,7 @@
                 "
               >
                 <app-table-img-item
-                  img="../../../../assets/user/user-2.png"
+                  [img]="property?.tenants?.[0]?.profile_image ?? '../../../../assets/userDefaultProImg.png'"
                   [title]="property.tenants?.[0]?.tenant_name || 'N/A'"
                 />
               </td>
