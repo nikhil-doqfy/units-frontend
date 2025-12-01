@@ -166,12 +166,31 @@ export class AddLeaseComponent {
     return doc.body.innerHTML;
   }
 
+  extractVariables(html: string) {
+    const regex = /\$\{([^}]+)\}/g;
+    const variables: string[] = [];
+    let processed = html;
+
+    processed = processed.replace(regex, (_, varName) => {
+      variables.push(varName.trim());
+      return `<span data-var="${varName.trim()}"></span>`;
+    });
+
+    return { processedTemplate: processed, variables };
+  }
+
   handeleTemplateUrl(url: string) {
     this.leaseService
       .getTemplateContent(url)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp) => {
         const cleanHtml = this.extractHtmlBody(resp);
+
+        const { processedTemplate, variables } =
+          this.extractVariables(cleanHtml);
+
+        console.log('processedTemplate:---', processedTemplate);
+        console.log('variables:---', variables);
       });
   }
 

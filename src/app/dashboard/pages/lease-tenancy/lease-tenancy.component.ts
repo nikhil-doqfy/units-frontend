@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
@@ -19,6 +19,10 @@ import { DashTitleComponent } from '../../../shared/component/dash-title/dash-ti
 import { TranslateModule } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
+import { Subject } from 'rxjs';
+import { LeaseService } from '../../services/lease.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-lease-tenancy',
@@ -47,6 +51,7 @@ import { SharedService } from '../../../shared.service';
 export class LeaseTenancyComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private leaseService = inject(LeaseService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Lease', link: '' },
@@ -54,15 +59,65 @@ export class LeaseTenancyComponent {
 
   currentRole: UserRole = 'owner';
 
-  constructor(private router: Router, private themeService: ThemeService) {
+  componentName = 'LeaseTenancyComponent';
+  leaseList: any[] = [];
+  leaseFilter: Record<string, any> = {};
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+
+  private onLeaseSearch$ = new Subject<string>();
+
+  constructor(
+    private router: Router,
+    private themeService: ThemeService,
+    private destroyRef: DestroyRef
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
 
   ngOnInit() {
-    this.themeService.currentRole$.subscribe((role) => {
-      this.currentRole = role;
-    });
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+
+    this.getLease();
+  }
+
+  getLease() {
+    this.leaseFilter = {
+      ...this.leaseFilter,
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
+
+    this.leaseService
+      .getLeasePropertyDetails(this.leaseFilter)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.leaseList = resp?.content || [];
+          console.log('leaseList:--->', this.leaseList);
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+        },
+      });
+  }
+
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getLease();
+  }
+
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getLease();
   }
 
   goToAddLease(): void {
@@ -75,6 +130,10 @@ export class LeaseTenancyComponent {
 
   handleExportClick(): void {
     console.log('Export button clicked');
+  }
+
+  handleEditClick(leaseId: number) {
+    this.router.navigate(['dashboard/edit-lease', leaseId]);
   }
 
   handleDownloadClick(): void {

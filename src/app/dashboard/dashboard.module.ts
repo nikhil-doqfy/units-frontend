@@ -84,6 +84,11 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.ADD_LEASE' },
       },
       {
+        path: 'edit-lease/:id',
+        component: AddLeaseComponent,
+        data: { titleKey: 'PAGE_TITLE.EDIT_LEASE' },
+      },
+      {
         path: 'owners',
         component: OwnersComponent,
         data: { titleKey: 'PAGE_TITLE.OWNERS' },
