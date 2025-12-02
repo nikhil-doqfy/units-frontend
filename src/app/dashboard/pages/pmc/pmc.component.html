@@ -5,12 +5,16 @@
         <div class="col-md">
           <app-table-title
             [title]="'All_PMC' | translate"
-            subtitle="(240)"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="{{ 'SEARCH_HERE' | translate }}" />
+            <app-table-search
+              placeholder="{{ 'SEARCH_HERE' | translate }}"
+              (onValueChange)="searchTextChange($event)"
+            />
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
@@ -41,127 +45,25 @@
             </tr>
           </thead>
           <tbody>
-            @for (property of pmcList; track $index){
+            @for (pmc of pmcList; track $index){
             <tr>
-              <td>VC89021</td>
-              <td>4 Property</td>
+              <td>{{ pmc?.code || "N/A" }}</td>
+              <td>{{ pmc?.property_handling || "N/A" }}</td>
               <td class="cursor" (click)="handleViewClick()">
-                3 g real estate
+                {{ pmc?.pmc_name || "N/A" }}
               </td>
-              <td>2:4</td>
-              <td>Al Nahda St - Al Qusais Industrial Area 2 - Dubai</td>
+              <td>{{ pmc?.tenancy_ratio || "N/A" }}</td>
+              <td>{{ pmc?.address || "N/A" }}</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
+                  <!-- <app-table-action-btn
                     type="edit"
                     (clicked)="handleEditClick()"
                   />
                   <app-table-action-btn
                     type="delete"
                     (clicked)="handleDeleteClick()"
-                  />
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC78012</td>
-              <td>5 Property</td>
-              <td class="cursor" (click)="handleViewClick()">
-                Prestige Builders
-              </td>
-              <td>2:4</td>
-              <td>Sheikh Zayed Road - Trade Centre - Dubai</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  />
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC67908</td>
-              <td>1 Property</td>
-              <td class="cursor" (click)="handleViewClick()">
-                Tata Constructions
-              </td>
-              <td>5:7</td>
-              <td>Al Maktoum Rd - Deira - Dubai</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  />
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC56890</td>
-              <td>11 Property</td>
-              <td class="cursor" (click)="handleViewClick()">
-                Godrej Properties
-              </td>
-              <td>1:9</td>
-              <td>Al Maktoum Rd - Deira - Dubai</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  />
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC45789</td>
-              <td>2 Property</td>
-              <td class="cursor" (click)="handleViewClick()">L&T Realty</td>
-              <td>1:2</td>
-              <td>Al Wasl Rd - Al Safa 1 - Dubai</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  />
+                  /> -->
                   <app-table-action-dropdown
                     [dropdownItems]="documentActions"
                     (actionClicked)="handleDropdownAction($event)"
@@ -180,8 +82,19 @@
       </div>
     </div>
     <div class="cmmnTblFtr">
-      <app-table-select />
-      <app-table-pagination />
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 

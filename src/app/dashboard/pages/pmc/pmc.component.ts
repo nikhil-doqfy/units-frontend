@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
@@ -31,6 +32,11 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { debounceTime, Subject } from 'rxjs';
+import { PmcService } from '../../services/pmc.service';
+import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-pmc',
@@ -61,12 +67,15 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
   styleUrl: './pmc.component.css',
 })
 export class PMCComponent {
+  private pmcService = inject(PmcService);
+  private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'PMC', link: '' },
   ];
   private translate = inject(TranslateService);
   private modalService = inject(NgbModal);
+  componentName = 'PMCComponent';
   closeResult: WritableSignal<string> = signal('');
   pmcList: any[] = [];
   showDetailView: boolean = false;
@@ -76,7 +85,24 @@ export class PMCComponent {
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
 
-  constructor(private router: Router) {}
+  pmcFilter: Record<string, any> = {};
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  private onPMCSearch$ = new Subject<string>();
+
+  constructor(private router: Router, private destroyRef: DestroyRef) {
+    this.onPMCSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText: string) => {
+        if (searchText?.trim()) this.pmcFilter['search'] = searchText.trim();
+        else delete this.pmcFilter['search'];
+
+        this.currentPage = 1;
+        this.getPMC();
+      });
+  }
 
   ngOnInit() {
     const lang = localStorage.getItem('language') || 'en';
@@ -84,7 +110,58 @@ export class PMCComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
+
+    this.loadBreadcrumb();
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
+
+    this.getPMC();
   }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.PMC', link: '' },
+    ]);
+  }
+
+  getPMC() {
+    this.pmcFilter = {
+      ...this.pmcFilter,
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
+    this.pmcService
+      .getPMC(this.pmcFilter)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        this.pmcList = resp?.content ?? [];
+        this.totalRecords = resp?.pagination?.total_records ?? 0;
+      });
+  }
+
+  onRefresh() {
+    this.getPMC();
+  }
+
+  searchTextChange(search: string): void {
+    this.onPMCSearch$.next(search);
+  }
+
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getPMC();
+  }
+
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getPMC();
+  }
+
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }

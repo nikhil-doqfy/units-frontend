@@ -1,0 +1,23 @@
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { SharedService } from '../../shared.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PmcService {
+  private http = inject(HttpClient);
+  private sharedService = inject(SharedService);
+  private SERVER_ADDRESS = environment.SERVER_ADDRESS;
+
+  constructor() {}
+
+  getPMC(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/pmc/owner/view/list/${queryString}`
+    );
+  }
+}
