@@ -19,6 +19,13 @@ export class UserService {
     );
   }
 
+  changePassword(data: any) {
+    return this.http.post(
+      `${environment.SERVER_ADDRESS}/auth/change/password`,
+      data
+    );
+  }
+
   editUserProfile(data: Record<string, any>): Observable<any> {
     return this.http.put(`${this.SERVER_ADDRESS}/user/profile/view/`, data);
   }

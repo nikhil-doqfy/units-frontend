@@ -21,6 +21,9 @@ import { StorageService } from '../../shared/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { AlertService } from '../../shared/services/alert.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PasswordPopupComponent } from '../../password-popup/password-popup.component';
+import { PasswordPopupbtnComponent } from '../../password-popupbtn/password-popupbtn.component';
+import { AuthService } from '../../auth/services/auth.service';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -32,6 +35,8 @@ import { TranslateService } from '@ngx-translate/core';
     DashFormComponent,
     EditIconComponent,
     TranslateModule,
+
+    PasswordPopupbtnComponent,
   ],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css',
@@ -42,8 +47,10 @@ export class MyProfileComponent {
   private storageService = inject(StorageService);
   private http = inject(HttpClient);
   private alertService = inject(AlertService);
+
   @ViewChild('fileInput') fileInput!: ElementRef;
   currentLanguage = 'en';
+  isOpen: boolean = false;
   userImage: string = '';
   fileType: string = 'png';
   editUserMode = false;
@@ -77,6 +84,18 @@ export class MyProfileComponent {
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
     this.getUserProfileData();
+  }
+
+  showPasswordPopup = false;
+  togglePopup() {
+    this.isOpen = !this.isOpen;
+  }
+  openPasswordPopup() {
+    this.showPasswordPopup = true;
+  }
+
+  closePasswordPopup() {
+    this.showPasswordPopup = false;
   }
 
   getUserProfileData() {
@@ -198,10 +217,12 @@ export class MyProfileComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: any) => {
-          this.storageService.updateUserName(
-            this.profile.firstName,
-            this.profile.lastName
-          );
+          this.storageService.saveUserProfile(payload);
+          // this.storageService.updateUserName(
+          //   this.profile.firstName,
+          //   this.profile.lastName
+          // );
+          this.profile = this.storageService.getUserProfile();
           this.getUserProfileData();
           this.editUserMode = false;
           this.changedFields = {};
@@ -213,6 +234,28 @@ export class MyProfileComponent {
         },
       });
   }
+
+  // handlePasswordChange(event: any) {
+  //   const payload = {
+  //     current_password: event.oldPassword,
+  //     new_password: event.newPassword,
+  //     new_confirm_password: event.newPassword,
+  //   };
+
+  //   this.userService.changePassword(payload).subscribe({
+  //     next: (res: any) => {
+  //       this.alertService.success(
+  //         res?.message || 'Password updated successfully!'
+  //       );
+  //       this.closePasswordPopup();
+  //     },
+  //     error: (err) => {
+  //       this.alertService.error(
+  //         err?.error?.message || 'Failed to change password'
+  //       );
+  //     },
+  //   });
+  // }
 
   cancelUser() {
     this.editUserMode = false;

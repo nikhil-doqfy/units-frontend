@@ -195,7 +195,6 @@ export class LoginComponent implements OnInit {
 
     this.authService.sendOtp(payload).subscribe({
       next: (resp: any) => {
-        console.log('monali', this.email);
         console.log('OTP response:--->', resp);
         this.alertService.success(resp?.message || 'OTP sent successfully');
         this.otpSent = true;

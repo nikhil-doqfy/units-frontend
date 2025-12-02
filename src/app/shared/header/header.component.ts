@@ -247,7 +247,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       next: (resp: any) => {
         this.modalService.dismissAll();
         this.router.navigate(['/auth/login']);
-        console.log('monali');
+
         this.alertService.success(resp.message);
       },
       error: (error: any) => {
