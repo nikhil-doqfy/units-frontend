@@ -128,7 +128,8 @@ export class StepFormLayoutComponent implements AfterContentInit {
           this.onFinish();
         } else {
           this.currentStep++;
-          this.engine.goTo(this.currentStep);
+          // this.engine.goTo(this.currentStep);
+          this.goToStep(this.currentStep);
         }
       } catch (err) {
         console.error('Save failed:', err);

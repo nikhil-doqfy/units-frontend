@@ -73,6 +73,7 @@ export class LeaseFormService {
   initLeaseNegotiationForm() {
     this.leaseNegotiationForm = this.formBuilder.group({
       templateValues: ['', [Validators.required]],
+      dynamicVariables: this.formBuilder.group({}),
     });
   }
 
@@ -215,7 +216,7 @@ export class LeaseFormService {
       rent: content.rent,
       securityDeposite: content.security_deposit,
       commission: content.commission_percentage,
-      noticePeriod: content,
+      noticePeriod: content.notice_period,
       discount: content.discount,
     };
   }

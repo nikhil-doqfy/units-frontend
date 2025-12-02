@@ -1,8 +1,20 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
@@ -22,6 +34,7 @@ import { StepSchema } from '../../model/step-engine/step-schema';
 import { FormService } from '../../../shared/services/form.service';
 import { LeaseService } from '../../services/lease.service';
 import { firstValueFrom } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface OptionsParams {
   param: string;
@@ -56,6 +69,7 @@ export class AddLeaseComponent {
   private leaseFormService = inject(LeaseFormService);
   private leaseService = inject(LeaseService);
   private formService = inject(FormService);
+  private sanitizer = inject(DomSanitizer);
 
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
@@ -80,6 +94,12 @@ export class AddLeaseComponent {
 
   isInvalid = this.formService.isInvalid;
 
+  processedTemplate: SafeHtml = '';
+  variableNodes: Record<string, HTMLElement[]> = {};
+  fields: any;
+
+  @ViewChild('docContainer', { static: false }) docContainer!: ElementRef;
+
   constructor(private router: Router, private destroyRef: DestroyRef) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -87,6 +107,12 @@ export class AddLeaseComponent {
     this.steps = this.leaseFormService.buildLeaseSteps();
     this.engine = new StepEngine(this.steps);
     this.leaseFormService.setEngine(this.engine);
+
+    const formId = this.route.snapshot.paramMap.get('id');
+    if (formId) {
+      this.engine.setFormId(+formId);
+      this.engine.loadStep(0);
+    }
 
     this.getOptionType([
       {
@@ -145,18 +171,19 @@ export class AddLeaseComponent {
 
   getTemplateData() {
     const templateId = this.documentLayoutForm.get('template')?.value;
-    if (!templateId && this.documentLayout !== 'predefinedTemplate') return;
+    if (!templateId) return;
 
     this.leaseService
       .getTemplateData({ template_id: templateId })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: async (resp: any) => {
-          let content = resp.content;
-          if (content.template_path) {
-            this.handeleTemplateUrl(content.template_path);
-          }
-        },
+      .subscribe((resp: any) => {
+        const content = resp.content;
+
+        if (content.template_path) {
+          this.buildDynamicForm(content.fields); // build form from metadata
+          this.subscribeToVariableChanges();
+          this.handleTemplateUrl(content.template_path); // fetch HTML
+        }
       });
   }
 
@@ -166,32 +193,97 @@ export class AddLeaseComponent {
     return doc.body.innerHTML;
   }
 
-  extractVariables(html: string) {
-    const regex = /\$\{([^}]+)\}/g;
-    const variables: string[] = [];
-    let processed = html;
-
-    processed = processed.replace(regex, (_, varName) => {
-      variables.push(varName.trim());
-      return `<span data-var="${varName.trim()}"></span>`;
+  injectVariableSpans(html: string) {
+    return html.replace(/\$\{([^}]+)\}/g, (_match, key) => {
+      return `<span data-var="${key}" class="doc-var"></span>`;
     });
-
-    return { processedTemplate: processed, variables };
   }
 
-  handeleTemplateUrl(url: string) {
+  handleTemplateUrl(url: string) {
     this.leaseService
       .getTemplateContent(url)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp) => {
         const cleanHtml = this.extractHtmlBody(resp);
 
-        const { processedTemplate, variables } =
-          this.extractVariables(cleanHtml);
+        // Inject span for each back-end-defined variable
+        const processed = this.injectVariableSpans(cleanHtml);
+        console.log('processed:', processed);
 
-        console.log('processedTemplate:---', processedTemplate);
-        console.log('variables:---', variables);
+        this.processedTemplate =
+          this.sanitizer.bypassSecurityTrustHtml(processed);
+
+        // Wait for HTML to render
+        setTimeout(() => this.onDocRendered(), 0);
       });
+  }
+
+  buildDynamicForm(fields: any[]) {
+    this.fields = fields;
+
+    const dynamicGroup = this.leaseFormService.leaseNegotiationForm.get(
+      'dynamicVariables'
+    ) as FormGroup;
+
+    fields.forEach((field) => {
+      dynamicGroup.addControl(
+        field.id_attribute,
+        new FormControl('', this.buildValidators(field))
+      );
+    });
+  }
+
+  buildValidators(field: any) {
+    const validators = [];
+
+    if (field.required) validators.push(Validators.required);
+    if (field.min_length)
+      validators.push(Validators.minLength(field.min_length));
+    if (field.max_length)
+      validators.push(Validators.maxLength(field.max_length));
+    if (field.pattern) validators.push(Validators.pattern(field.pattern));
+
+    return validators;
+  }
+
+  subscribeToVariableChanges() {
+    const dynamicGroup = this.negotiationForm.get(
+      'dynamicVariables'
+    ) as FormGroup;
+
+    dynamicGroup.valueChanges.subscribe((values) => {
+      Object.entries(values).forEach(([key, value]) => {
+        const nodes = this.variableNodes[key] || [];
+        nodes.forEach((node) => {
+          node.textContent = String(value) ?? '';
+          if (String(value).trim().length > 0) {
+            node.setAttribute('data-filled', 'true');
+          } else {
+            node.removeAttribute('data-filled');
+          }
+        });
+      });
+    });
+  }
+  onDocRendered() {
+    const container = this.docContainer.nativeElement;
+    console.log(container);
+    const nodes = container.querySelectorAll('[data-var]');
+
+    this.variableNodes = {}; // reset before repopulating
+
+    nodes.forEach((node: HTMLElement) => {
+      const key = node.getAttribute('data-var');
+      if (!key) return;
+
+      if (!this.variableNodes[key]) {
+        this.variableNodes[key] = [];
+      }
+
+      this.variableNodes[key].push(node);
+    });
+
+    console.log('Collected variableNodes:', this.variableNodes);
   }
 
   submitLease(): void {
