@@ -227,6 +227,7 @@ export class PMCComponent {
       .subscribe((resp: any) => {
         this.alertService.success(resp.message);
         modal.close('Save click');
+        this.getPMC();
       });
   }
 
