@@ -29,7 +29,7 @@ import { FilterIconComponent } from '../../component/icons/filter-icon/filter-ic
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
@@ -65,12 +65,12 @@ export class PMCComponent {
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'PMC', link: '' },
   ];
-
+  private translate = inject(TranslateService);
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
   pmcList: any[] = [];
   showDetailView: boolean = false;
-
+  currentLanguage = 'en';
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -78,6 +78,13 @@ export class PMCComponent {
 
   constructor(private router: Router) {}
 
+  ngOnInit() {
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
+  }
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }

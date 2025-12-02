@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RaiseComplaintCardComponent } from '../../component/raise-complaint-card/raise-complaint-card.component';
 import { SendIconComponent } from '../../component/icons/send-icon/send-icon.component';
 import { FAQAccordianCardComponent } from '../../component/faq-accordian-card/faq-accordian-card.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 
 @Component({
@@ -23,15 +23,25 @@ import { SharedService } from '../../../shared.service';
   styleUrls: ['./raise-complaint.component.css'],
 })
 export class RaiseComplaintComponent {
+  private translate = inject(TranslateService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/properties' },
     { label: 'Raise Complaint', link: '' },
   ];
+  currentLanguage = 'en';
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+  }
+
+  ngOnInit() {
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
   }
   faqList = [
     {

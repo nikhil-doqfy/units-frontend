@@ -112,15 +112,6 @@
                   "
               /></i>
               <span class="list">
-                <!-- {{
-                  userProfile?.user_type === "PROPERTY_MANAGER"
-                    ? userProfile?.company_name
-                    : userProfile?.first_name + " " + userProfile?.last_name ||
-                      userProfile?.user_type === "OWNER" ||
-                      userProfile?.user_type === "TENANT"
-                    ? userProfile?.first_name + " " + userProfile?.last_name
-                    : userProfile?.company_name
-                }} -->
                 {{ userProfile?.first_name + " " + userProfile?.last_name }}
               </span>
               <em>
@@ -140,17 +131,6 @@
               <div class="hdrUserDrpdwnTop">
                 <div class="hdrUserDrpdwnTopInfo">
                   <p>
-                    <!-- {{
-                      userProfile?.user_type === "PROPERTY_MANAGER"
-                        ? userProfile?.company_name
-                        : userProfile?.first_name +
-                            " " +
-                            userProfile?.last_name ||
-                          userProfile?.user_type === "OWNER" ||
-                          userProfile?.user_type === "TENANT"
-                        ? userProfile?.first_name + " " + userProfile?.last_name
-                        : userProfile?.company_name
-                    }} -->
                     {{ userProfile?.first_name + " " + userProfile?.last_name }}
                   </p>
                   <span>User ID: {{ userProfile?.email }}</span>

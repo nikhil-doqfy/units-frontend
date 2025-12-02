@@ -22,7 +22,7 @@ import { ProgressBarTableComponent } from '../../component/progress-bar-table/pr
 import { ChequeStatusComponent } from '../../component/charts/cheque-status/cheque-status.component';
 import { DonutChartComponent } from '../../component/charts/donut/donut.component';
 import { LineChartComponent } from '../../component/charts/line/line.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { HomeService } from '../../services/home.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -60,18 +60,35 @@ export class HomeComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private homeService = inject(HomeService);
+  private translate = inject(TranslateService);
 
-  breadcrumbData = [{ label: 'Dashboard', link: '' }];
   model: NgbDateStruct | null = null;
-
+  currentLanguage = 'en';
   private destroy$ = new Subject<void>();
-
+  breadcrumbData = [
+    { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
+  ];
   constructor(private cd: ChangeDetectorRef) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
 
   ngOnInit(): void {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs({
+      key: 'PAGE_TITLE.DASHBOARD',
+      link: '/dashboard/home',
+    });
+
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
     this.getStats();
   }
 

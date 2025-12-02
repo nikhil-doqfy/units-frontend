@@ -27,7 +27,7 @@ import { TablePaginationComponent } from '../../../dashboard/component/table-pag
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { AddStaffFormComponent } from '../../component/forms/add-staff-form/add-staff-form.component';
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { OwnerService } from '../../services/owner.service';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -87,8 +87,9 @@ export class StaffComponent {
   private sharedService = inject(SharedService);
   private destroy$ = new Subject<void>();
   private onStaffSearch$ = new Subject<string>();
+  private translate = inject(TranslateService);
   closeResult: WritableSignal<string> = signal('');
-
+  currentLanguage = 'en';
   showDetailView: boolean = false;
 
   documentActions = [
@@ -113,6 +114,20 @@ export class StaffComponent {
   }
 
   ngOnInit(): void {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.STAFF', link: '' },
+    ]);
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
     const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {

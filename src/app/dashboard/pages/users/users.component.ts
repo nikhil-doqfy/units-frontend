@@ -26,7 +26,7 @@ import { AddUserFormComponent } from '../../component/forms/add-user-form/add-us
 import { UserService } from '../../../user/services/user.service';
 import { pipe, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -80,12 +80,14 @@ export class UsersComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
+  currentLanguage = 'en';
   userTypeList: any = [];
   private modalService = inject(NgbModal);
   private userService = inject(UserService);
   private alertService = inject(AlertService);
   private sharedApiService = inject(SharedApiService);
   private destroy$ = new Subject<void>();
+  private translate = inject(TranslateService);
   closeResult: WritableSignal<string> = signal('');
 
   constructor(private router: Router) {
@@ -95,6 +97,20 @@ export class UsersComponent {
 
   // ------------------------- call ngOnInit -------------------------
   ngOnInit(): void {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.USERS', link: '' },
+    ]);
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
     this.getUser();
   }
 

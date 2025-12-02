@@ -31,7 +31,7 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { InviteOwnerFormComponent } from '../../component/forms/invite-owner-form/invite-owner-form.component';
 import { SendIconComponent } from '../../component/icons/send-icon/send-icon.component';
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OwnerService } from '../../services/owner.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { InvitePMCFormComponent } from '../../component/forms/invite-pmc-form/invite-pmc-form.component';
@@ -86,13 +86,13 @@ export class OwnersComponent {
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
-
+  private translate = inject(TranslateService);
   private destroy$ = new Subject<void>();
   private onOwnerSearch$ = new Subject<string>();
 
   closeResult: WritableSignal<string> = signal('');
   showDetailView: boolean = false;
-
+  currentLanguage = 'en';
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -114,6 +114,20 @@ export class OwnersComponent {
   }
 
   ngOnInit(): void {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.OWNERS', link: '' },
+    ]);
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
     this.getOwner();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {

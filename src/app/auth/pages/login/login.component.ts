@@ -185,7 +185,6 @@ export class LoginComponent implements OnInit {
   }
 
   sendOtp(): void {
-    console.log('seda', this.email);
     if (this.otpForm.invalid) {
       this.alertService.error('Please enter a valid email');
       return;
@@ -195,8 +194,6 @@ export class LoginComponent implements OnInit {
 
     this.authService.sendOtp(payload).subscribe({
       next: (resp: any) => {
-        console.log('monali', this.email);
-        console.log('OTP response:--->', resp);
         this.alertService.success(resp?.message || 'OTP sent successfully');
         this.otpSent = true;
         this.emailLocked = true;

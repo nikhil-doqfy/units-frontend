@@ -16,7 +16,7 @@ import { TableActionButtonComponent } from '../../component/table-action-btn/tab
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { DashTitleComponent } from '../../../shared/component/dash-title/dash-title.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 import { Subject } from 'rxjs';
@@ -51,12 +51,13 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 export class LeaseTenancyComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
   private leaseService = inject(LeaseService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Lease', link: '' },
   ];
-
+  currentLanguage = 'en';
   currentRole: UserRole = 'owner';
 
   componentName = 'LeaseTenancyComponent';
@@ -79,6 +80,8 @@ export class LeaseTenancyComponent {
   }
 
   ngOnInit() {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {
@@ -86,6 +89,21 @@ export class LeaseTenancyComponent {
       });
 
     this.getLease();
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.LEASE', link: '' },
+    ]);
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
+    this.themeService.currentRole$.subscribe((role) => {
+      this.currentRole = role;
+    });
   }
 
   getLease() {

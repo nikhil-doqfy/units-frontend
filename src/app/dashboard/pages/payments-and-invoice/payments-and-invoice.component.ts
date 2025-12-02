@@ -13,7 +13,7 @@ import { ExportIconComponent } from '../../component/icons/export-icon/export-ic
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 
@@ -42,6 +42,7 @@ import { SharedService } from '../../../shared.service';
 export class PaymentsAndInvoiceComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
   selected: string = 'Property Name: All';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
@@ -53,12 +54,19 @@ export class PaymentsAndInvoiceComponent {
   maintenanceCharges = 'AED12';
   dueTime = '5 Days';
   lastDate = '29/09/2025';
-
+  currentLanguage = 'en';
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
 
+  ngOnInit() {
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
+  }
   onOptionSelected(option: string) {
     this.selected = option;
   }
