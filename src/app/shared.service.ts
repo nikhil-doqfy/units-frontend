@@ -129,4 +129,18 @@ export class SharedService {
       this.title.setTitle(`${translated} | Doqfy`);
     });
   }
+
+  getObjectToEpoch(date: { year: number; month: number; day: number }): number {
+    return new Date(date.year, date.month - 1, date.day).getTime();
+  }
+
+  getEpochToObject(epoch: number) {
+    const date = new Date(epoch);
+
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+    };
+  }
 }

@@ -92,4 +92,10 @@ export class PropertyService {
       data
     );
   }
+
+  getExcelFileOfProperty(data: Record<string, any>) {
+    return this.http.get(`${this.SERVER_ADDRESS}/export/property/csv`, {
+      responseType: 'blob',
+    });
+  }
 }

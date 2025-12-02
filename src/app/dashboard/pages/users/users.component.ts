@@ -8,7 +8,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
 
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
@@ -24,6 +28,12 @@ import { pipe, Subject, takeUntil } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
+import { AlertService } from '../../../shared/services/alert.service';
+import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
+import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-users',
@@ -41,6 +51,10 @@ import { SharedService } from '../../../shared.service';
     AddUserFormComponent,
     TableImgItemComponent,
     TranslateModule,
+    TableFilterButtonComponent,
+    FilterIconComponent,
+    CustomSelectComponent,
+    FilterPopupButtonComponent,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
@@ -57,7 +71,9 @@ export class UsersComponent {
   users: any[] = [];
   newUsers: any[] = [];
   deletedUsers: any[] = [];
-
+  selectedFilter: any;
+  selectedUserType: any = null;
+  selectedUser: any = null;
   userData: Record<string, any> = {};
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
@@ -65,8 +81,11 @@ export class UsersComponent {
   currentPage: number = 1;
   totalPages: number = 1;
   currentLanguage = 'en';
+  userTypeList: any = [];
   private modalService = inject(NgbModal);
   private userService = inject(UserService);
+  private alertService = inject(AlertService);
+  private sharedApiService = inject(SharedApiService);
   private destroy$ = new Subject<void>();
   private translate = inject(TranslateService);
   closeResult: WritableSignal<string> = signal('');
@@ -200,5 +219,103 @@ export class UsersComponent {
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() - 30);
     return currentDate.getTime();
+  }
+
+  // ------------------------- Access user form data -------------------------
+
+  onUserSave(component: AddUserFormComponent, modal: NgbActiveModal) {
+    component.submitUserForm();
+
+    modal.close();
+
+    this.getUser();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // ------------------------- Delete user from listing -------------------------
+
+  onDeleteClick(userId: any, index: number): void {
+    var self = this;
+    this.alertService.confirm(this.deleteUserById, userId, self, index);
+  }
+
+  deleteUserById(userId: any, self: any, index: number): void {
+    self.userService.DeleteUser({ user_id: userId }).subscribe((resp: any) => {
+      if (resp.status === 200) {
+        self.alertService.success(resp.message);
+        self.users.splice(index, 1);
+        self.getUser();
+      }
+    });
+  }
+
+  // ------------------------- User status activate -------------------------
+
+  toggleUserStatus(userId: number): void {
+    var data = { user_id: userId };
+    this.userService.activateUser(data).subscribe((resp: any) => {
+      if (resp.status == 200) {
+        this.alertService.success(resp.message);
+      }
+    });
+  }
+
+  onOptionSelectedFilter(option: string) {
+    this.selectedFilter = option;
+  }
+
+  // ------------------------- Access user type  -------------------------
+
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.userTypeList = response?.content?.user_types;
+        },
+      });
+  }
+
+  handleFilterClick(): void {
+    console.log('Filter button clicked');
+    this.getOptionTypes(['USER_TYPES']);
+  }
+
+  onOptionSelectedUserType(option: any) {
+    this.selectedUserType = option;
+
+    if (option && option.value) {
+      this.userData['user_type'] = option.key;
+    } else {
+      delete this.userData['user_type'];
+    }
+  }
+
+  // ------------ apply form headers filter  ------------
+  applyFilter() {
+    this.currentPage = 1;
+    this.getUser();
+  }
+
+  openEditUserModal(userId: number, modalRef: any) {
+    this.userService.accessUserManagement({ user_id: userId }).subscribe({
+      next: (resp: any) => {
+        this.selectedUser = resp?.content?.data[0];
+
+        this.modalService.open(modalRef, {
+          ariaLabelledBy: 'modal-title',
+          windowClass: 'mdlCommon',
+          centered: true,
+        });
+      },
+      error: () => {
+        this.alertService.error('Unable to fetch user details');
+      },
+    });
   }
 }

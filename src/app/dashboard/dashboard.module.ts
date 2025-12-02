@@ -69,7 +69,7 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
       },
       {
-        path: 'tenant/details/:id',
+        path: 'tenants/detail/:id',
         component: TenantsComponent,
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
       },
@@ -82,6 +82,11 @@ export const routes: Routes = [
         path: 'add-lease',
         component: AddLeaseComponent,
         data: { titleKey: 'PAGE_TITLE.ADD_LEASE' },
+      },
+      {
+        path: 'edit-lease/:id',
+        component: AddLeaseComponent,
+        data: { titleKey: 'PAGE_TITLE.EDIT_LEASE' },
       },
       {
         path: 'owners',

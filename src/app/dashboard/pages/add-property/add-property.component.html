@@ -1,6 +1,8 @@
 <app-step-form-layout
   [leftCardTitle]="'PROPERTY_DETAILS' | translate"
   finishButtonText="{{ 'ADD_PROPERTY' | translate }}"
+  [engine]="engine"
+  [stepSchema]="steps"
   (finish)="submitProperty()"
 >
   <!-- Step Basic Details Content -->
@@ -333,7 +335,11 @@
     </app-step-pane>
 
     <ng-container *ngIf="currentRole === 'owner'">
-      <app-step-pane [title]="'ADD_PMC' | translate" [secondCard]="true">
+      <app-step-pane
+        [title]="'ADD_PMC' | translate"
+        [secondCard]="true"
+        [showInvitePmcBtn]="true"
+      >
         <form class="row g-3">
           <div class="col-md-6">
             <label class="form-label">{{ "PROPERTY_PMC" | translate }}</label>

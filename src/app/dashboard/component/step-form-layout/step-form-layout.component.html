@@ -12,7 +12,7 @@
             <button
               type="button"
               (click)="goToStep(i)"
-              [disabled]="getStatus(i) === 'READY_TO_START'"
+              [disabled]="getStatus(i) === 'LOCKED' || getStatus(i) === 'READY'"
             >
               <span>{{ step.title }}</span>
               <i *ngIf="i < currentStep">
@@ -77,7 +77,9 @@
                   [title]="sub.title"
                   [description]="sub.description"
                 ></app-card-title>
+                @if(sub.showInvitePmcBtn){
                 <app-invite-pmc-btn />
+                }
               </div>
               <div class="cmnStepFrmOuter">
                 <app-dash-form>
