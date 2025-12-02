@@ -17,7 +17,7 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-invite-pmc-form />
+    <app-invite-pmc-form #invitePmcForm />
   </div>
   <div class="modal-footer">
     <button
@@ -30,7 +30,7 @@
     <button
       type="button"
       class="btn btnCommon"
-      (click)="modal.close('Save click')"
+      (click)="invitePmc(modal, invitePmcForm)"
     >
       <i><app-send-icon /></i>{{ "SEND_INVITATION" | translate }}
     </button>

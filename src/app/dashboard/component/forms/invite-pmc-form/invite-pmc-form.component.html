@@ -1,5 +1,5 @@
 <app-modal-form-card>
-  <form>
+  <form [formGroup]="invitePmcForm">
     <div class="mb-0">
       <label for="email" class="form-label"
         >{{ "EMAIL_ADDRESS" | translate }}<span>*</span></label
@@ -8,8 +8,14 @@
         class="form-control"
         type="email"
         name="email"
+        formControlName="email"
         [placeholder]="'ENTER_EMAIL_ADDRESS_HERE' | translate"
       />
+      @if (isInvalid(invitePmcForm, 'email').status) {
+      <small class="errorMsg">
+        {{ isInvalid(invitePmcForm, "email").msg }}
+      </small>
+      }
     </div>
   </form>
 </app-modal-form-card>

@@ -9,7 +9,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
@@ -37,6 +41,7 @@ import { PmcService } from '../../services/pmc.service';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-pmc',
@@ -69,6 +74,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 export class PMCComponent {
   private pmcService = inject(PmcService);
   private sharedService = inject(SharedService);
+  private alertService = inject(AlertService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'PMC', link: '' },
@@ -196,6 +202,33 @@ export class PMCComponent {
       default:
         return `with: ${reason}`;
     }
+  }
+
+  assignProperty(
+    modal: NgbActiveModal,
+    component: AssignPropertyFormComponent
+  ) {
+    const form = component.assignedPrpertyForm;
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    let values = form.value;
+
+    let data: any = {
+      property_id: values.myProperty.key,
+      pmc_id: values.pmc.key,
+    };
+
+    this.pmcService
+      .editPMC(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        this.alertService.success(resp.message);
+        modal.close('Save click');
+        this.getPMC();
+      });
   }
 
   handleEditClick(): void {

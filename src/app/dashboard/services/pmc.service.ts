@@ -20,4 +20,12 @@ export class PmcService {
       `${this.SERVER_ADDRESS}/pmc/owner/view/list/${queryString}`
     );
   }
+
+  editPMC(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/pmc/owner/view/list/`, data);
+  }
+
+  addPmcToInvite(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/invite/owner/pmc`, data);
+  }
 }
