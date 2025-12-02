@@ -119,7 +119,6 @@ export class LeaseTenancyComponent {
       .subscribe({
         next: (resp: any) => {
           this.leaseList = resp?.content || [];
-          console.log('leaseList:--->', this.leaseList);
           this.totalRecords = resp?.pagination?.total_records ?? 0;
         },
       });

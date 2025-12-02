@@ -375,40 +375,13 @@
     [description]="'FILL_IN_THE_BELOW_TEMPLATE' | translate"
   >
     <div class="agrmntCntntOuter">
-      <div class="agrmntCntntView">
-        <br />
-        <div>{{ "BY_AND_BETWEEN" | translate }}</div>
-        <br />
-        <div>
-          <strong>{{ "DOQFY" | translate }}</strong>
-        </div>
-        <br />
-        <div>{{ "AND" | translate }}</div>
-        <div>
-          <strong>{{ "ZEN" | translate }}</strong>
-        </div>
-        <br />
-        <div>
-          {{ "NON_DISCLOSURE_AGREEMENT" | translate }}
-        </div>
-        <br />
-        <div>{{ "BY_AND_BETWEEN" | translate }}</div>
-        <br />
-        <div>
-          <strong>{{ "DOQFY" | translate }}</strong> ,{{ "" | translate }}
-        </div>
-        <br />
-        <div>{{ "AND" | translate }}</div>
-        <br />
-        <div>
-          <strong>{{ "ZEN" | translate }}</strong> ,
-          {{ "FIRST_PARTY_DETAILS" | translate }}
-        </div>
-        <br />
-        <div>
-          {{ "PARTY_DEFINITION" | translate }}
-        </div>
-      </div>
+      <div
+        class="agrmntCntntView"
+        #docContainer
+        [innerHTML]="processedTemplate"
+        (DOMNodeInserted)="onDocRendered()"
+        (DOMNodeRemoved)="onDocRendered()"
+      ></div>
       <div class="editTempltOuter">
         <div class="editTempltHdr">
           <h4>{{ "EDIT_TEMPLATE" | translate }}</h4>
@@ -416,60 +389,21 @@
             <app-cross-icon />
           </button>
         </div>
-        <div class="editTempltBdy">
-          <div class="mb-3">
-            <label class="form-label">{{
-              "TOKEN_MAPPED_ACC" | translate
-            }}</label>
-            <input
-              type="text"
-              class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
-            />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ "TOKEN_EMI" | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
-            />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{
-              "TOKEN_CALCULATE_PF" | translate
-            }}</label>
-            <input
-              type="text"
-              class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
-            />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ "TOKEN_TENURE" | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
-            />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ "TOKEN_PIN" | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
-            />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ "TOKEN_DATE" | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
-            />
-          </div>
-        </div>
+        <form class="editTempltBdy" [formGroup]="negotiationForm">
+          <ng-container formGroupName="dynamicVariables">
+            @for (field of fields; track $index) {
+            <div class="mb-3">
+              <label class="form-label">{{ field?.label }}</label>
+              <input
+                [type]="field.html_tag.toLowerCase()"
+                class="form-control"
+                [formControlName]="field.id_attribute"
+                [placeholder]="'ENTER_HERE' | translate"
+              />
+            </div>
+            }
+          </ng-container>
+        </form>
       </div>
     </div>
   </app-step-pane>
