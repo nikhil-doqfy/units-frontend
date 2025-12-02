@@ -111,20 +111,20 @@
       ></button>
     </div>
     <div class="modal-body">
-      <app-assign-property-form />
+      <app-assign-property-form #assignPropertyForm />
     </div>
     <div class="modal-footer">
       <button
         type="button"
         class="btn btnCommon btnTransparent"
-        (click)="modal.dismiss('Save click')"
+        (click)="modal.dismiss('Cancel click')"
       >
         {{ "CANCEL" | translate }}
       </button>
       <button
         type="button"
         class="btn btnCommon"
-        (click)="modal.close('Save click')"
+        (click)="assignProperty(modal, assignPropertyForm)"
       >
         {{ "ASSIGN_PROPERTY" | translate }}
       </button>
