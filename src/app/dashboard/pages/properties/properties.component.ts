@@ -33,6 +33,29 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 
+type PropertyImages = Record<'imgSrc', string>;
+
+interface SectionItems {
+  label: string;
+  value: string;
+}
+
+interface Section {
+  title: string;
+  items: SectionItems[];
+}
+
+interface PropertyDetails {
+  name: string;
+  location: string;
+  status: string;
+  rent: string;
+  bhk: string;
+  sqft: string;
+  propertyImages: PropertyImages[];
+  sections: Section[];
+}
+
 @Component({
   selector: 'app-properties',
   standalone: true,
@@ -125,6 +148,7 @@ export class PropertiesComponent {
 
         if (this.currentRole === 'tenant') {
           this.propertyView = 'my-properties';
+          this.getProperties();
         } else {
           this.propertyView = 'all-properties';
           this.getProperties();
@@ -135,8 +159,12 @@ export class PropertiesComponent {
   onPropertyViewChange() {
     if (this.propertyView === 'all-properties') {
       delete this.propertiesFilter['property_id'];
+      this.propertiesFilter['all'] = true;
       this.getProperties();
     } else if (this.propertyView === 'my-properties') {
+      delete this.propertiesFilter['property_id'];
+      delete this.propertiesFilter['all'];
+      this.getProperties();
     }
   }
 
@@ -154,6 +182,12 @@ export class PropertiesComponent {
         next: (response: any) => {
           this.propertiesList = response?.content ?? [];
           this.totalRecords = response?.pagination?.total_records ?? 0;
+          if (
+            this.propertyView === 'my-properties' ||
+            this.propertiesFilter['property_id']
+          ) {
+            this.handlePropertyDetails();
+          }
         },
       });
   }
@@ -179,73 +213,162 @@ export class PropertiesComponent {
     this.getProperties();
   }
 
-  property = {
-    name: 'Premium Villa',
-    location: 'Bengaluru, Koramangala',
-    status: 'Available',
-    rent: '₹ 45,000 / month',
-    bhk: '2 BHK',
-    sqft: '1200 Sqft',
+  property: PropertyDetails = {
+    name: '--',
+    location: '--',
+    status: '--',
+    rent: '--',
+    bhk: '--',
+    sqft: '--',
     propertyImages: [
       {
-        imgSrc: 'assets/property/property-img-1.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
       {
-        imgSrc: 'assets/property/property-img-2.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
       {
-        imgSrc: 'assets/property/property-img-3.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
       {
-        imgSrc: 'assets/property/property-img-4.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
       {
-        imgSrc: 'assets/property/property-img-5.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
     ],
     sections: [
       {
         title: 'Property details',
         items: [
-          { label: 'Phone Number', value: '+91-7007836367' },
-          { label: 'Property Code', value: 'owner@villa.com' },
-          { label: 'City', value: 'Bengaluru' },
+          { label: 'Phone Number', value: '--' },
+          { label: 'Property Code', value: '--' },
+          { label: 'City', value: '--' },
           { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '5621009' },
-          { label: 'Address Line 1', value: 'Koramangala' },
-          { label: 'Address Line 2 ', value: 'Bellandur' },
+          { label: 'Postal Code', value: '--' },
+          { label: 'Address Line 1', value: '--' },
+          { label: 'Address Line 2 ', value: '--' },
         ],
       },
       {
         title: 'Property Costing',
-        items: [{ label: 'Rent Cost', value: 'AED31,224' }],
+        items: [{ label: 'Rent Cost', value: '--' }],
       },
       {
         title: 'Tenant details',
         items: [
-          { label: 'Name', value: 'Richard' },
-          { label: 'Email', value: 'Richard@gmail.com' },
-          { label: 'Phone Number', value: '+97-7007836367' },
-          { label: 'Emirates ID', value: 'Afc25' },
-          { label: 'City', value: 'Bengaluru' },
+          { label: 'Name', value: '--' },
+          { label: 'Email', value: '--' },
+          { label: 'Phone Number', value: '--' },
+          { label: 'Emirates ID', value: '--' },
+          { label: 'City', value: '--' },
           { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '5621009' },
-          { label: 'Address Line 1', value: 'Koramangala' },
-          { label: 'Address Line 2', value: 'Bellandur' },
+          { label: 'Postal Code', value: '--' },
+          { label: 'Address Line 1', value: '--' },
+          { label: 'Address Line 2', value: '--' },
         ],
       },
       {
         title: 'Owner details',
         items: [
-          { label: 'Name', value: 'Ali Musfiq Rahman' },
-          { label: 'Emirates ID', value: '784198657395715' },
-          { label: 'Residence Visa', value: '20120247736538' },
-          { label: 'Trade License', value: '247334' },
-          { label: 'Owner Code', value: '5621009' },
+          { label: 'Name', value: '--' },
+          { label: 'Emirates ID', value: '--' },
+          { label: 'Residence Visa', value: '--' },
+          { label: 'Trade License', value: '--' },
+          { label: 'Owner Code', value: '--' },
         ],
       },
     ],
   };
+
+  handlePropertyDetails() {
+    const data: any = this.propertiesList[0];
+    let basicDetails = {
+      name: data?.property_name ?? 'N/A',
+      location: data?.address ?? 'N/A',
+      status: data?.rental_status ?? 'N/A',
+      rent: data?.commercial_info?.rent ?? 'N/A',
+      bhk: data?.bedrooms ? `${data?.bedrooms} BHK` : 'N/A',
+      sqft: data?.area_of_property
+        ? `${data?.area_of_property} ${data?.area_unit}`
+        : `N/A`,
+    };
+    let propertyImages: PropertyImages[] = data?.images?.length
+      ? data?.images.map((i: any) => ({ imgSrc: i.data }))
+      : Array.from({ length: 5 }).map((_, i) => ({
+          imgSrc: 'assets/property/property-img-default.svg',
+        }));
+
+    let sections: Section[] = [
+      {
+        title: 'Property details',
+        items: [
+          {
+            label: 'Phone Number',
+            value: data?.owner_info?.contact_number ?? 'N/A',
+          },
+          { label: 'Property Code', value: data?.property_code ?? 'N/A' },
+          { label: 'City', value: data?.address ?? 'N/A' },
+          { label: 'Locality', value: data?.address ?? 'N/A' },
+          { label: 'Postal Code', value: data?.address ?? 'N/A' },
+          { label: 'Address Line 1', value: data?.address ?? 'N/A' },
+          { label: 'Address Line 2 ', value: data?.address ?? 'N/A' },
+        ],
+      },
+      {
+        title: 'Property Costing',
+        items: [
+          { label: 'Rent Cost', value: data?.commercial_info?.rent ?? 'N/A' },
+        ],
+      },
+      {
+        title: 'Tenant details',
+        items: [
+          { label: 'Name', value: data?.tenants?.[0]?.tenant_name ?? 'N/A' },
+          { label: 'Email', value: data?.tenants?.[0]?.tenant_name ?? 'N/A' },
+          {
+            label: 'Phone Number',
+            value: data?.tenants?.[0]?.contact_number ?? 'N/A',
+          },
+          {
+            label: 'Emirates ID',
+            value: data?.tenants?.[0]?.emirate_id ?? 'N/A',
+          },
+          { label: 'City', value: data?.tenants?.[0]?.country ?? 'N/A' },
+          { label: 'Locality', value: data?.tenants?.[0]?.country ?? 'N/A' },
+          { label: 'Postal Code', value: data?.tenants?.[0]?.country ?? 'N/A' },
+          {
+            label: 'Address Line 1',
+            value: data?.tenants?.[0]?.country ?? 'N/A',
+          },
+          {
+            label: 'Address Line 2',
+            value: data?.tenants?.[0]?.country ?? 'N/A',
+          },
+        ],
+      },
+      {
+        title: 'Owner details',
+        items: [
+          { label: 'Name', value: data?.owner_info?.owner_name ?? 'N/A' },
+          {
+            label: 'Emirates ID',
+            value: data?.owner_info?.emirate_id ?? 'N/A',
+          },
+          {
+            label: 'Residence Visa',
+            value: data?.owner_info?.uae_residence_visa ?? 'N/A',
+          },
+          {
+            label: 'Trade License',
+            value: data?.owner_info?.trade_license ?? 'N/A',
+          },
+          { label: 'Owner Code', value: data?.owner_info?.owner_code ?? 'N/A' },
+        ],
+      },
+    ];
+    this.property = { ...basicDetails, propertyImages, sections };
+  }
 
   onOptionSelected(option: string) {
     this.selected = option;
