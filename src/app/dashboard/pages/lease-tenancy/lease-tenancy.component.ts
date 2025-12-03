@@ -137,6 +137,9 @@ export class LeaseTenancyComponent {
     this.currentPage = event.currentPage;
     this.getLease();
   }
+  searchTextChange(search: string): void {
+    this.onLeaseSearch$.next(search);
+  }
 
   goToAddLease(): void {
     this.router.navigate(['/dashboard/add-lease']);
