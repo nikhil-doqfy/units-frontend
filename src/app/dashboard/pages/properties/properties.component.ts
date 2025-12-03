@@ -188,6 +188,7 @@ export class PropertiesComponent {
   private getProperties() {
     this.propertiesFilter = {
       ...this.propertiesFilter,
+      search: this.propertiesFilter['search'] || '',
       limit: this.rowsPerPage,
       page: this.currentPage,
     };

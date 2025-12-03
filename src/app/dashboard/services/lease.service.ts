@@ -21,6 +21,16 @@ export class LeaseService {
     );
   }
 
+  getExcelFileOflease(params: any): Observable<Blob> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/export/lease/tenecy/csv${queryString}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+
   addLeasePropertyDetails(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/lease/property/view/`, data);
   }

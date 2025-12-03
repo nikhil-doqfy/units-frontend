@@ -109,6 +109,7 @@ export class LeaseTenancyComponent {
   getLease() {
     this.leaseFilter = {
       ...this.leaseFilter,
+      search: this.leaseFilter['search'] || '',
       limit: this.rowsPerPage,
       page: this.currentPage,
     };
@@ -146,6 +147,21 @@ export class LeaseTenancyComponent {
   }
 
   handleExportClick(): void {
+    this.leaseService.getExcelFileOflease({}).subscribe((resp) => {
+      console.log('response:--->', resp);
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(resp);
+
+      // Create a temporary link element
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'lease_export.csv'; // filename
+      a.click();
+
+      // Release memory
+      window.URL.revokeObjectURL(url);
+    });
+
     console.log('Export button clicked');
   }
 

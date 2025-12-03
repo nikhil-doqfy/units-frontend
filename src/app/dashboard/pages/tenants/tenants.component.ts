@@ -161,6 +161,7 @@ export class TenantsComponent {
   private getTenants() {
     this.tenantsFilter = {
       ...this.tenantsFilter,
+      search: this.tenantsFilter['search'] || '',
       limit: this.rowsPerPage,
       page: this.currentPage,
     };
@@ -207,6 +208,17 @@ export class TenantsComponent {
   }
 
   handleExportClick(): void {
+    this.tenantsService.getExcelFileOfTenant({}).subscribe((resp) => {
+      const url = window.URL.createObjectURL(resp);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'tenant_export.csv';
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    });
+
     console.log('Export button clicked');
   }
 
