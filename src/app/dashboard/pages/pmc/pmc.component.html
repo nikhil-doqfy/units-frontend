@@ -5,12 +5,16 @@
         <div class="col-md">
           <app-table-title
             [title]="'All_PMC' | translate"
-            subtitle="(240)"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="{{ 'SEARCH_HERE' | translate }}" />
+            <app-table-search
+              [placeholder]="'SEARCH_HERE' | translate"
+              (onValueChange)="searchTextChange($event)"
+            />
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
@@ -43,13 +47,13 @@
           <tbody>
             @for (property of pmcList; track $index){
             <tr>
-              <td>VC89021</td>
-              <td>4 Property</td>
-              <td class="cursor" (click)="handleViewClick()">
-                3 g real estate
+              <td>{{ property.code }}</td>
+              <td>{{ property.property_handling }}</td>
+              <td class="cursor" (click)="handleViewClick(property.id)">
+                {{ property.pmc_name }}
               </td>
-              <td>2:4</td>
-              <td>Al Nahda St - Al Qusais Industrial Area 2 - Dubai</td>
+              <td>{{ property.tenancy_ratio }}</td>
+              <td>{{ property.address }}</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
@@ -68,7 +72,7 @@
                 </div>
               </td>
             </tr>
-            <tr>
+            <!-- <tr>
               <td>VC78012</td>
               <td>5 Property</td>
               <td class="cursor" (click)="handleViewClick()">
@@ -169,7 +173,7 @@
                   </app-table-action-dropdown>
                 </div>
               </td>
-            </tr>
+            </tr> -->
             }@empty {
             <tr>
               <td colspan="20" align="center"><app-no-data></app-no-data></td>

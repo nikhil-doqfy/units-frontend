@@ -6,7 +6,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -31,7 +31,11 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
-
+import { PmcService } from '../../pmc.service';
+import { SharedService } from '../../../shared.service';
+import { AlertService } from '../../../shared/services/alert.service';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 @Component({
   selector: 'app-pmc',
   standalone: true,
@@ -65,18 +69,106 @@ export class PMCComponent {
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'PMC', link: '' },
   ];
-
-  private modalService = inject(NgbModal);
-  closeResult: WritableSignal<string> = signal('');
+  selectedPmc: any = null;
   pmcList: any[] = [];
-  showDetailView: boolean = false;
+  pmcData: Record<string, any> = {};
 
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 1;
+  private modalService = inject(NgbModal);
+  private pmcService = inject(PmcService);
+  private alertService = inject(AlertService);
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
+
+  private destroy$ = new Subject<void>();
+  private onPmcSearch$ = new Subject<string>();
+  closeResult: WritableSignal<string> = signal('');
+
+  showDetailView: boolean = false;
+  componentName: string = 'PmcComponent';
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.onPmcSearch$
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .subscribe((searchText) => {
+        if (searchText?.trim()) this.pmcData['search'] = searchText.trim();
+        else delete this.pmcData['search'];
+
+        this.currentPage = 1;
+        this.getpmc();
+      });
+  }
+
+  ngOnInit(): void {
+    this.getpmc();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      // Detail view
+      this.showDetailView = true;
+      // this.loadDetailView(+id);
+    } else {
+      // Listing view
+      this.showDetailView = false;
+      // this.getpmc();
+    }
+
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
+
+  onRefresh() {
+    this.getpmc();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  //--------------------------getpmcDetails--------------------------------------------------------
+  getpmc(): void {
+    this.pmcData = {
+      ...this.pmcData,
+      limit: this.rowsPerPage,
+      page_number: this.currentPage,
+    };
+
+    this.pmcService.getPmcDetails(this.pmcData).subscribe({
+      next: (resp: any) => {
+        this.pmcList = resp?.content?.pmcList ?? [];
+        this.totalRecords = resp?.pagination?.total_records ?? 0;
+        this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+      },
+    });
+  }
+
+  //--------------------------------pagination component----------------------------------------------------
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getpmc();
+  }
+
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getpmc();
+  }
+
+  searchTextChange(search: string) {
+    this.onPmcSearch$.next(search);
+  }
+
+  //----------------------modal-----------------------------------------------
 
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
@@ -122,12 +214,14 @@ export class PMCComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(): void {
+  handleViewClick(pmcID: number): void {
     this.showDetailView = true;
+    this.router.navigate(['/dashboard/owners/detail/', pmcID]);
   }
 
   handleBackClick(): void {
     this.showDetailView = false;
+    this.router.navigate(['/dashboard/pmc']);
   }
 
   handleDownloadDocumentClick(): void {
@@ -137,4 +231,13 @@ export class PMCComponent {
   handlePreviewDocumentClick(): void {
     console.log('Preview Document button clicked');
   }
+
+  // loadDetailView(pmcID: number): void {
+  //   this.pmcService.getPmcDetails({ pmc_id: pmcID }).subscribe({
+  //     next: (resp: any) => {
+  //       this.selectedPmc = resp.content;
+  //     },
+  //     error: (err) => console.error('Detail API Error:', err),
+  //   });
+  // }
 }

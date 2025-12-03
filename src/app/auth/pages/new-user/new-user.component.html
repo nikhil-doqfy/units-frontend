@@ -41,7 +41,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="selectedRole === 'property-manager'">
-        <div class="mb-2">
+        <div class="mb-2 col-span-2">
           <label for="companyName" class="form-label">Company Name</label>
           <input
             class="form-control"
@@ -56,7 +56,7 @@
           }
         </div>
 
-        <div class="mb-2">
+        <!-- <div class="mb-2">
           <label for="emiratesId" class="form-label">Company Emirates ID</label>
           <input
             class="form-control"
@@ -69,9 +69,9 @@
             {{ isInvalid(signupForm, "company_emirate_id").msg }}
           </small>
           }
-        </div>
+        </div> -->
       </ng-container>
-
+      <!-- 
       <ng-container *ngIf="selectedRole === 'tenant'">
         <div class="mb-2 col-span-2">
           <label for="emiratesId" class="form-label">Emirates ID</label>
@@ -87,7 +87,7 @@
           </small>
           }
         </div>
-      </ng-container>
+      </ng-container> -->
 
       <div class="mb-2">
         <label for="email" class="form-label justify-content-between"
