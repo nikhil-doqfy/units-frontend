@@ -237,4 +237,6 @@
 
 .editTempltBdy {
   padding: 16px;
+  max-height: calc(100dvh - 144px);
+  overflow-y: auto;
 }

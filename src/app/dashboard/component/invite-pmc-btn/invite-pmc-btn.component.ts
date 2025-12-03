@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
@@ -7,13 +8,20 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
 
 import { TableFilterButtonComponent } from '../table-filter-btn/table-filter-btn.component';
 import { InviteIconComponent } from '../icons/invite-icon/invite-icon.component';
 import { InvitePMCFormComponent } from '../forms/invite-pmc-form/invite-pmc-form.component';
 import { SendIconComponent } from '../icons/send-icon/send-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { PmcService } from '../../services/pmc.service';
+import { AlertService } from '../../../shared/services/alert.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-invite-pmc-btn',
@@ -31,6 +39,9 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class InvitePMCButtonComponent {
   private modalService = inject(NgbModal);
+  private pmcService = inject(PmcService);
+  private alertService = inject(AlertService);
+  private destroyRef = inject(DestroyRef);
   closeResult: WritableSignal<string> = signal('');
 
   openInvitePMCModal(invitePMCContent: TemplateRef<any>) {
@@ -59,5 +70,28 @@ export class InvitePMCButtonComponent {
       default:
         return `with: ${reason}`;
     }
+  }
+
+  invitePmc(modal: NgbActiveModal, component: InvitePMCFormComponent) {
+    const form = component.invitePmcForm;
+
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    const values: any = form.value;
+
+    const data = {
+      email: values.email,
+    };
+
+    this.pmcService
+      .addPmcToInvite(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        this.alertService.success(resp.message);
+        modal.close('Save click');
+      });
   }
 }

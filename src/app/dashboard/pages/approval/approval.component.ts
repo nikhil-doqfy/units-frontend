@@ -13,7 +13,7 @@ import { TablePaginationComponent } from '../../../dashboard/component/table-pag
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 @Component({
@@ -41,11 +41,12 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
 export class ApprovalComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Approval', link: '' },
   ];
-
+  currentLanguage = 'en';
   showDetailView: boolean = false;
 
   constructor(private router: Router) {
@@ -53,6 +54,22 @@ export class ApprovalComponent {
     this.sharedService.setTitle(key);
   }
 
+  ngOnInit() {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.APPROVAL', link: '' },
+    ]);
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
+  }
   handleRejectClick(): void {
     console.log('Reject button clicked');
   }

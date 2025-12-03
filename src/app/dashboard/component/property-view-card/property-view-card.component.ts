@@ -6,6 +6,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   ViewChild,
   ElementRef,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -79,42 +80,44 @@ export class PropertyViewCardComponent {
     breakpoints: this.swiperBreakpoints,
   };
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const mainEl = this.mainSwiper?.nativeElement;
-      const thumbEl = this.thumbSwiper?.nativeElement;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['propertyImages'] && this.propertyImages.length > 0) {
+      this.initSwipersSafely();
+    }
+  }
 
-      if (thumbEl) {
-        Object.assign(thumbEl, {
-          navigation: true,
-          breakpoints: {
-            // Mobile → horizontal
-            0: {
-              direction: 'horizontal',
-              slidesPerView: 4,
-            },
-            // Desktop → vertical
-            768: {
-              direction: 'vertical',
-              slidesPerView: 4,
-            },
-          },
-        });
-        thumbEl.initialize();
-        this.thumbsSwiper = thumbEl.swiper;
-      }
+  initSwipersSafely() {
+    requestAnimationFrame(() => {
+      this.initSwipers();
+    });
+  }
 
-      if (mainEl) {
-        Object.assign(mainEl, {
-          thumbs: { swiper: this.thumbsSwiper },
-          navigation: false,
-          effect: 'fade',
-          fadeEffect: { crossFade: true },
-          pagination: false,
-          autoplay: false,
-        });
-        mainEl.initialize();
-      }
-    }, 200);
+  initSwipers() {
+    const mainEl = this.mainSwiper?.nativeElement;
+    const thumbEl = this.thumbSwiper?.nativeElement;
+
+    if (!mainEl || !thumbEl) return;
+
+    Object.assign(thumbEl, {
+      navigation: true,
+      breakpoints: {
+        0: { direction: 'horizontal', slidesPerView: 4 },
+        768: { direction: 'vertical', slidesPerView: 4 },
+      },
+    });
+
+    thumbEl.initialize();
+    this.thumbsSwiper = thumbEl.swiper;
+
+    Object.assign(mainEl, {
+      thumbs: { swiper: this.thumbsSwiper },
+      navigation: false,
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      pagination: false,
+      autoplay: false,
+    });
+
+    mainEl.initialize();
   }
 }

@@ -20,7 +20,7 @@ import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plu
 import { BackIconComponent } from '../../component/icons/back-icon/back-icon.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { AddRoleFormComponent } from '../../component/forms/add-role-form/add-role-form.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 
@@ -48,11 +48,12 @@ import { SharedService } from '../../../shared.service';
 export class RolesAndPermissionsComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Roles & Permissions', link: '' },
   ];
-
+  currentLanguage = 'en';
   showDetailView: boolean = false;
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
@@ -60,6 +61,24 @@ export class RolesAndPermissionsComponent {
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+  }
+
+  ngOnInit(): void {
+    this.loadBreadcrumb();
+    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.ROLES_PERMISSIONS', link: '' },
+    ]);
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
+    const id = this.route.snapshot.paramMap.get('id');
   }
 
   openAddRoleModal(addRoleContent: TemplateRef<any>) {

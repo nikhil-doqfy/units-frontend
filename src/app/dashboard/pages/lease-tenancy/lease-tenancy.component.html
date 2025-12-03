@@ -17,7 +17,7 @@
       <div class="col-md">
         <app-table-title
           [title]="'LEASE/TENANCY' | translate"
-          subtitle="(240)"
+          [subtitle]="'(' + totalRecords + ')'"
         ></app-table-title>
       </div>
       <div class="col-md-auto">
@@ -59,22 +59,32 @@
           </tr>
         </thead>
         <tbody>
-          <!-- @for (property of tenancyList; track $index){ -->
+          @for (lease of leaseList; track $index){
           <tr>
-            <td>LP9021</td>
+            <td>{{ lease.property_code ?? "N/A" }}</td>
             <td>
               <app-table-img-item
-                img="../../../../assets/user/user-1.png"
-                title="Jensi"
+                [img]="
+                  lease?.tenant?.profile_image ??
+                  '../../../../assets/userDefaultProImg.png'
+                "
+                [title]="lease.tenant.name ?? 'N/A'"
               />
             </td>
-            <td>+91-70******23</td>
-            <td>09/09/2025 - 09/19/2025</td>
+            <td>{{ lease?.contact_number ?? "N/A" }}</td>
             <td>
-              <app-badge title="Active" status="green" />
+              {{ lease?.lease_start_date | date : "dd/MM/yyyy" }} -
+              {{ lease?.lease_end_date | date : "dd/MM/yyyy" }}
+            </td>
+            <td>
+              <app-badge [title]="lease?.lease_status | titlecase" status="green" />
             </td>
             <td align="center">
               <div class="cmmnTblActnBtnDiv">
+                <app-table-action-btn
+                  type="edit"
+                  (clicked)="handleEditClick(lease.id)"
+                />
                 <app-table-action-btn
                   type="download"
                   (clicked)="handleDownloadClick()"
@@ -86,121 +96,28 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <td>LP8021</td>
-            <td>
-              <app-table-img-item
-                img="../../../../assets/user/user-2.png"
-                title="Richard"
-              />
-            </td>
-            <td>+91-99******76</td>
-            <td>09/09/2025 - 09/19/2025</td>
-            <td>
-              <app-badge title="Draft" status="blue" />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <app-table-action-btn
-                  type="download"
-                  (clicked)="handleDownloadClick()"
-                />
-                <app-table-action-btn
-                  type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>VC79021</td>
-            <td>
-              <app-table-img-item
-                img="../../../../assets/user/user-3.png"
-                title="Thaomas"
-              />
-            </td>
-            <td>+91-89******12</td>
-            <td>09/09/2025 - 09/19/2025</td>
-            <td>
-              <app-badge title="In Active" status="orange" />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <app-table-action-btn
-                  type="download"
-                  (clicked)="handleDownloadClick()"
-                />
-                <app-table-action-btn
-                  type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>VC69021</td>
-            <td>
-              <app-table-img-item
-                img="../../../../assets/user/user-4.png"
-                title="Akshay"
-              />
-            </td>
-            <td>+91-90******45</td>
-            <td>09/09/2025 - 09/19/2025</td>
-            <td>
-              <app-badge title="Active" status="green" />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <app-table-action-btn
-                  type="download"
-                  (clicked)="handleDownloadClick()"
-                />
-                <app-table-action-btn
-                  type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>VC59021</td>
-            <td>
-              <app-table-img-item
-                img="../../../../assets/user/user-5.png"
-                title="Avanshi"
-              />
-            </td>
-            <td>+91-78******90</td>
-            <td>09/09/2025 - 09/19/2025</td>
-            <td>
-              <app-badge title="Active" status="green" />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <app-table-action-btn
-                  type="download"
-                  (clicked)="handleDownloadClick()"
-                />
-                <app-table-action-btn
-                  type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-              </div>
-            </td>
-          </tr>
-          <!-- }@empty {
+          }@empty {
           <tr>
             <td colspan="20" align="center"><app-no-data></app-no-data></td>
           </tr>
-          } -->
+          }
         </tbody>
       </table>
     </div>
   </div>
   <div class="cmmnTblFtr">
-    <app-table-select />
-    <app-table-pagination />
+    <app-table-select
+      [componentName]="componentName"
+      [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (rowsPerPageChange)="onPageSizeChange($event)"
+    />
+    <app-table-pagination
+      [componentName]="componentName"
+      [currentPage]="currentPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage"
+      (pageChange)="onPageChange($event)"
+    />
   </div>
 </div>

@@ -57,10 +57,10 @@ export class LeaseService {
     );
   }
 
-  getTemplateContent(url: string): Observable<string> {
+  getTemplateContent(url: string): Observable<any> {
     let finalUrl = new URL(url, this.SERVER_ADDRESS);
 
-    console.log(`${this.SERVER_ADDRESS}/${url}`);
+    console.log(`${finalUrl}`);
     return this.http.get(`${finalUrl}`, {
       responseType: 'text',
     });

@@ -2080,3 +2080,8 @@ linearGradient .authBgPatt stop:last-child {
 }
 
 /***Responsive Css End***/
+
+span.doc-var:not([data-filled])::after {
+  content: "[" attr(data-var) "]";
+  font-style: italic;
+}
