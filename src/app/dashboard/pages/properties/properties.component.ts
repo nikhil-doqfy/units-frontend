@@ -145,6 +145,20 @@ export class PropertiesComponent {
   ngOnInit() {
     this.loadBreadcrumb();
     this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+
+    this.themeService.currentRole$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((role) => {
+      this.currentRole = role;
+
+      if (this.currentRole === 'tenant') {
+        this.propertyView = 'my-properties';
+        this.getProperties();
+      } else {
+        this.propertyView = 'all-properties';
+        this.getProperties();
+      }
+    });
   }
 
   async loadBreadcrumb() {
@@ -158,19 +172,6 @@ export class PropertiesComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    this.themeService.currentRole$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((role) => {
-        this.currentRole = role;
-
-        if (this.currentRole === 'tenant') {
-          this.propertyView = 'my-properties';
-          this.getProperties();
-        } else {
-          this.propertyView = 'all-properties';
-          this.getProperties();
-        }
-      });
   }
 
   onPropertyViewChange() {

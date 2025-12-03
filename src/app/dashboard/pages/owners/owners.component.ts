@@ -39,6 +39,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-owners',
@@ -63,6 +64,7 @@ import { SharedService } from '../../../shared.service';
     TableViewCardComponent,
     TranslateModule,
     MaskPhonePipe,
+    NoDataComponent,
   ],
   templateUrl: './owners.component.html',
   styleUrl: './owners.component.css',
@@ -101,6 +103,9 @@ export class OwnersComponent {
   componentName: string = 'OwnersComponent';
 
   constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+
     // ------------------------- Search debounce time -------------------------
     this.onOwnerSearch$
       .pipe(debounceTime(1000), takeUntil(this.destroy$))
@@ -111,6 +116,15 @@ export class OwnersComponent {
         this.currentPage = 1;
         this.getOwner();
       });
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.showDetailView = true;
+      this.loadDetailView(+id);
+    } else {
+      this.showDetailView = false;
+      this.getOwner();
+    }
   }
 
   ngOnInit(): void {
@@ -123,25 +137,12 @@ export class OwnersComponent {
       { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
       { key: 'PAGE_TITLE.OWNERS', link: '' },
     ]);
+
     const lang = localStorage.getItem('language') || 'en';
     this.currentLanguage = lang;
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    this.getOwner();
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      // Detail view
-      this.showDetailView = true;
-      this.loadDetailView(+id);
-    } else {
-      // Listing view
-      this.showDetailView = false;
-      this.getOwner();
-    }
-
-    const key = this.route.snapshot.data['titleKey'];
-    this.sharedService.setTitle(key);
   }
 
   onRefresh() {
@@ -163,7 +164,7 @@ export class OwnersComponent {
 
     this.ownerService.getOwnerDetails(this.ownerData).subscribe({
       next: (resp: any) => {
-        this.owners = resp?.content?.owners ?? [];
+        this.owners = resp?.content ?? [];
         this.totalRecords = resp?.pagination?.total_records ?? 0;
         this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
       },
@@ -276,6 +277,11 @@ export class OwnersComponent {
   // ------------------------- Handel show details function -------------------------
   handleViewClick(ownerID: number): void {
     this.router.navigate(['/dashboard/owners/detail/', ownerID]);
+  }
+
+  refreshDetailsView() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) this.loadDetailView(+id);
   }
 
   loadDetailView(ownerID: number): void {
