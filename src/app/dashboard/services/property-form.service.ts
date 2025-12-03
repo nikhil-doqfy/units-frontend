@@ -4,6 +4,7 @@ import { PropertyService } from './property.service';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { StepSchema } from '../model/step-engine/step-schema';
 import { StepEngine } from '../model/step-engine/step-engine';
+import { StorageService } from '../../shared/services/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ import { StepEngine } from '../model/step-engine/step-engine';
 export class PropertyFormService {
   private formBuilder = inject(FormBuilder);
   private propertyService = inject(PropertyService);
+  private storageService = inject(StorageService);
   private engine = new BehaviorSubject<StepEngine | null>(null);
 
   propertyBasicDetailsForm!: FormGroup;
@@ -57,7 +59,15 @@ export class PropertyFormService {
       cycle: ['', [Validators.required]],
       noticePeriod: ['', [Validators.required]],
       commission: ['', [Validators.required]],
+      pmc: [''],
     });
+
+    if (this.storageService.getUserRole() === 'owner') {
+      this.propertyCommercialsForm
+        .get('pmc')
+        ?.setValidators([Validators.required]);
+      this.propertyCommercialsForm.updateValueAndValidity();
+    }
   }
 
   initPropertyImagesForm() {
@@ -241,6 +251,7 @@ export class PropertyFormService {
       cycle: content.cycle,
       noticePeriod: content.notice_period,
       commission: content.commission_percent,
+      pmc: content?.pmc,
     };
   }
 
@@ -307,6 +318,9 @@ export class PropertyFormService {
       notice_period: value.noticePeriod,
       commission_percent: value.commission,
     };
+    if (this.storageService.getUserRole() === 'owner') {
+      data['pmc_id'] = value.pmc.key;
+    }
     return data;
   }
 

@@ -8,6 +8,7 @@ export class StorageService {
   private USER_KEY = 'user_profile';
   private STATUS_KEY = 'userRegestrationStatusKey';
   private LANGUAGE = 'language';
+  private USER_ROLE = 'userRole';
   constructor() {}
 
   setToken(token: string): void {
@@ -41,6 +42,11 @@ export class StorageService {
     const user = localStorage.getItem(this.USER_KEY);
     return user ? JSON.parse(user) : null;
   }
+
+  getUserRole(): string | null {
+    return localStorage.getItem(this.USER_ROLE);
+  }
+
   removeToken() {
     localStorage.removeItem(this.TOKEN_KEY);
   }
