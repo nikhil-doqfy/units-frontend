@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
@@ -24,6 +24,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -46,6 +47,7 @@ import {
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   loginForm!: FormGroup;
 
   isLoading = false;
@@ -68,17 +70,11 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-
     private themeService: ThemeService,
     private authService: AuthService,
     private storageService: StorageService,
     private alertService: AlertService
   ) {
-    this.themeService.setRole(this.selectedRole);
-  }
-
-  onRoleChange(): void {
-    this.currentRole = this.selectedRole;
     this.themeService.setRole(this.selectedRole);
   }
 
@@ -89,14 +85,22 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required],
       role: [this.selectedRole],
     });
-    this.loginForm.get('role')?.valueChanges.subscribe((value) => {
-      this.selectedRole = value;
-      this.onRoleChange();
-    });
+    this.loginForm
+      .get('role')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.selectedRole = value;
+        this.onRoleChange();
+      });
     this.otpForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       otp: [''],
     });
+  }
+
+  onRoleChange(): void {
+    this.currentRole = this.selectedRole;
+    this.themeService.setRole(this.selectedRole);
   }
 
   getUserType(): string {
@@ -128,16 +132,19 @@ export class LoginComponent implements OnInit {
   }
 
   login(payload: any): void {
-    this.authService.login(payload).subscribe({
-      next: (resp: any) => {
-        this.alertService.success(resp.message);
-        this.goToDashboard();
-      },
-      error: (err) => {
-        console.log(err);
-        this.alertService.error(err?.error?.message || 'Login failed');
-      },
-    });
+    this.authService
+      .login(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp.message);
+          this.goToDashboard();
+        },
+        error: (err) => {
+          console.log(err);
+          this.alertService.error(err?.error?.message || 'Login failed');
+        },
+      });
   }
 
   onOtpChange(evt: any) {
@@ -192,19 +199,22 @@ export class LoginComponent implements OnInit {
 
     const payload = { email: this.otpForm.value.email };
 
-    this.authService.sendOtp(payload).subscribe({
-      next: (resp: any) => {
-        this.alertService.success(resp?.message || 'OTP sent successfully');
-        this.otpSent = true;
-        this.emailLocked = true;
-        this.otpTimer = 60;
-        this.startOtpTimer();
-      },
-      error: (err) => {
-        console.log('OTP error:--->', err);
-        this.alertService.error(err?.error?.message || 'Failed to send OTP');
-      },
-    });
+    this.authService
+      .sendOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp?.message || 'OTP sent successfully');
+          this.otpSent = true;
+          this.emailLocked = true;
+          this.otpTimer = 60;
+          this.startOtpTimer();
+        },
+        error: (err) => {
+          console.log('OTP error:--->', err);
+          this.alertService.error(err?.error?.message || 'Failed to send OTP');
+        },
+      });
   }
 
   signInWithOtp(): void {
@@ -226,17 +236,20 @@ export class LoginComponent implements OnInit {
   }
 
   verifyOtp(payload: any): void {
-    this.authService.verifyOtp(payload).subscribe({
-      next: (resp: any) => {
-        this.alertService.success(resp.message);
-        this.isOTPVerified = true;
-        clearInterval(this.timerInterval);
-      },
-      error: (err) => {
-        console.log('OTP verify error: ', err.err);
-        this.alertService.error(err?.error?.message || 'Invalid OTP');
-      },
-    });
+    this.authService
+      .verifyOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp.message);
+          this.isOTPVerified = true;
+          clearInterval(this.timerInterval);
+        },
+        error: (err) => {
+          console.log('OTP verify error: ', err.err);
+          this.alertService.error(err?.error?.message || 'Invalid OTP');
+        },
+      });
   }
 
   changeEmail(): void {

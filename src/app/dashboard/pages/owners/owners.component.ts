@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
@@ -33,13 +34,14 @@ import { SendIconComponent } from '../../component/icons/send-icon/send-icon.com
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OwnerService } from '../../services/owner.service';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 import { InvitePMCFormComponent } from '../../component/forms/invite-pmc-form/invite-pmc-form.component';
 import { AlertService } from '../../../shared/services/alert.service';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-owners',
@@ -89,7 +91,7 @@ export class OwnersComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private translate = inject(TranslateService);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
   private onOwnerSearch$ = new Subject<string>();
 
   closeResult: WritableSignal<string> = signal('');
@@ -108,7 +110,7 @@ export class OwnersComponent {
 
     // ------------------------- Search debounce time -------------------------
     this.onOwnerSearch$
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
       .subscribe((searchText) => {
         if (searchText?.trim()) this.ownerData['search'] = searchText.trim();
         else delete this.ownerData['search'];
@@ -129,7 +131,9 @@ export class OwnersComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
   }
 
   async loadBreadcrumb() {
@@ -149,11 +153,6 @@ export class OwnersComponent {
     this.getOwner();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   // ------------------------- Fetched owner Details -------------------------
   getOwner(): void {
     this.ownerData = {
@@ -162,13 +161,16 @@ export class OwnersComponent {
       page_number: this.currentPage,
     };
 
-    this.ownerService.getOwnerDetails(this.ownerData).subscribe({
-      next: (resp: any) => {
-        this.owners = resp?.content ?? [];
-        this.totalRecords = resp?.pagination?.total_records ?? 0;
-        this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
-      },
-    });
+    this.ownerService
+      .getOwnerDetails(this.ownerData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.owners = resp?.content ?? [];
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+        },
+      });
   }
 
   // ------------------------- Pagination component -------------------------
@@ -233,7 +235,7 @@ export class OwnersComponent {
     let payload = { email: form.value.email };
     this.ownerService
       .addOwnerToInvite(payload)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.alertService.success(resp.message);
@@ -285,11 +287,14 @@ export class OwnersComponent {
   }
 
   loadDetailView(ownerID: number): void {
-    this.ownerService.getOwnerDetails({ owner_id: ownerID }).subscribe({
-      next: (resp: any) => {
-        this.selectedOwner = resp.content;
-      },
-      error: (err) => console.error('Detail API Error:', err),
-    });
+    this.ownerService
+      .getOwnerDetails({ owner_id: ownerID })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.selectedOwner = resp.content;
+        },
+        error: (err) => console.error('Detail API Error:', err),
+      });
   }
 }

@@ -130,7 +130,6 @@ export class AddLeaseComponent {
     this.engine.currentIndex
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((index) => {
-        console.log('index:---', index);
         if (index === 3) this.getTemplateData();
       });
   }
@@ -251,19 +250,21 @@ export class AddLeaseComponent {
       'dynamicVariables'
     ) as FormGroup;
 
-    dynamicGroup.valueChanges.subscribe((values) => {
-      Object.entries(values).forEach(([key, value]) => {
-        const nodes = this.variableNodes[key] || [];
-        nodes.forEach((node) => {
-          node.textContent = String(value) ?? '';
-          if (String(value).trim().length > 0) {
-            node.setAttribute('data-filled', 'true');
-          } else {
-            node.removeAttribute('data-filled');
-          }
+    dynamicGroup.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((values) => {
+        Object.entries(values).forEach(([key, value]) => {
+          const nodes = this.variableNodes[key] || [];
+          nodes.forEach((node) => {
+            node.textContent = String(value) ?? '';
+            if (String(value).trim().length > 0) {
+              node.setAttribute('data-filled', 'true');
+            } else {
+              node.removeAttribute('data-filled');
+            }
+          });
         });
       });
-    });
   }
   onDocRendered() {
     const container = this.docContainer.nativeElement;

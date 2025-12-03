@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
@@ -6,7 +12,6 @@ import { CustomSelectComponent } from '../../custom-select/custom-select.compone
 import { UploadIconComponent } from '../../icons/upload-icon/upload-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
-import { Subject, takeUntil } from 'rxjs';
 import {
   FormBuilder,
   FormGroup,
@@ -18,6 +23,7 @@ import { FormService } from '../../../../shared/services/form.service';
 import { TenantsService } from '../../../services/tenants.service';
 import { AlertService } from '../../../../shared/services/alert.service';
 import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-tenant-form',
@@ -38,11 +44,10 @@ export class AddTenantFormComponent {
   private formBuilder = inject(FormBuilder);
   private fileService = inject(FileService);
   private formService = inject(FormService);
-  private destroy$ = new Subject<void>();
-  private tenantService = inject(TenantsService)
-  private alertService = inject(AlertService)
-  private router = inject(Router)
-
+  private destroyRef = inject(DestroyRef);
+  private tenantService = inject(TenantsService);
+  private alertService = inject(AlertService);
+  private router = inject(Router);
 
   tenantForm!: FormGroup;
   propertyList = [];
@@ -67,7 +72,7 @@ export class AddTenantFormComponent {
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.propertyList = response?.content?.owner_properties;
@@ -78,9 +83,6 @@ export class AddTenantFormComponent {
   triggerFileInput() {
     this.fileInput.nativeElement.click();
   }
-
-
-
 
   // ------------------------- Tenant onFileSelected  -------------------------
 
@@ -109,7 +111,6 @@ export class AddTenantFormComponent {
     return this.tenantForm.get('imageBase64')?.value;
   }
 
-
   // ------------------------- Add tenant form -------------------------
 
   submitTenantForm() {
@@ -124,19 +125,16 @@ export class AddTenantFormComponent {
       emirate_id: TenenatData.emiratesID,
       property_id: TenenatData.property?.key,
       profile_image: TenenatData.imageBase64,
-      file_name: TenenatData.imageFile
+      file_name: TenenatData.imageFile,
     };
-    this.tenantService.addTenant(data).subscribe((resp: any) => {
-      if (resp.status === 201) {
-        this.alertService.success(resp.message);
-        this.router.navigate(['/dashboard/tenants']);
-      }
-    });
-
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.tenantService
+      .addTenant(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        if (resp.status === 201) {
+          this.alertService.success(resp.message);
+          this.router.navigate(['/dashboard/tenants']);
+        }
+      });
   }
 }

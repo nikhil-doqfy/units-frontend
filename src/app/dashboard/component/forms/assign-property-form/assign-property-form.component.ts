@@ -35,6 +35,7 @@ export class AssignPropertyFormComponent {
   private formBuilder = inject(FormBuilder);
   private formService = inject(FormService);
   private sharedAPIService = inject(SharedApiService);
+  private destroyRef = inject(DestroyRef);
 
   isInvalid = this.formService.isInvalid;
   myPropertyList: { key: number; value: string }[] = [];
@@ -44,7 +45,7 @@ export class AssignPropertyFormComponent {
     pmc: ['', [Validators.required]],
   });
 
-  constructor(private destroyRef: DestroyRef) {
+  constructor() {
     this.getOptionType([
       {
         param: 'OWNER_PROPERTIES',

@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { AuthTitleComponent } from '../../component/auth-title/auth-title.component';
 import { AuthFormComponent } from '../../component/auth-form/auth-form.component';
 import { CommonModule } from '@angular/common';
@@ -13,6 +19,7 @@ import { DeleteIconComponent } from '../../../dashboard/component/icons/delete-i
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { FileService } from '../../../shared/services/file.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-upload-document',
   standalone: true,
@@ -32,6 +39,7 @@ import { FileService } from '../../../shared/services/file.service';
 export class UploadDocumentComponent {
   private alert = inject(AlertService);
   private fileService = inject(FileService);
+  private destroyRef = inject(DestroyRef);
   @ViewChild('emiratesIdInput') emiratesIdInput!: ElementRef<HTMLInputElement>;
   @ViewChild('uaeVisaInput') uaeVisaInput!: ElementRef<HTMLInputElement>;
   @ViewChild('dldCertInput') dldCertInput!: ElementRef<HTMLInputElement>;
@@ -190,11 +198,14 @@ export class UploadDocumentComponent {
       paylod['manage_through'] = data['manageThrough'];
     }
 
-    this.authService.signUp(paylod).subscribe({
-      next: (resp: any) => {
-        this.alert.success(resp?.message || 'Signup successful');
-        this.router.navigate(['/auth/login']);
-      },
-    });
+    this.authService
+      .signUp(paylod)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alert.success(resp?.message || 'Signup successful');
+          this.router.navigate(['/auth/login']);
+        },
+      });
   }
 }

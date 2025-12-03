@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
@@ -28,13 +29,13 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { AddStaffFormComponent } from '../../component/forms/add-staff-form/add-staff-form.component';
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
-import { OwnerService } from '../../services/owner.service';
+import { debounceTime, Subject } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
 import { StaffService } from '../../services/staff.service';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-staff',
@@ -85,7 +86,7 @@ export class StaffComponent {
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
   private onStaffSearch$ = new Subject<string>();
   private translate = inject(TranslateService);
   closeResult: WritableSignal<string> = signal('');
@@ -102,7 +103,7 @@ export class StaffComponent {
     this.sharedService.setTitle(key);
     // ------------------------- Search debounce time -------------------------
     this.onStaffSearch$
-      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
       .subscribe((searchText) => {
         if (searchText?.trim())
           this.staffRolesData['search'] = searchText.trim();
@@ -115,7 +116,9 @@ export class StaffComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
   }
 
   async loadBreadcrumb() {
@@ -143,11 +146,6 @@ export class StaffComponent {
 
   onRefresh() {
     this.getStaffRoleDetails();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   handleDropdownAction(action: string) {
@@ -220,7 +218,7 @@ export class StaffComponent {
 
     this.staffService
       .accessStaffRoleDetails(this.staffRolesData)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.staffRoles = resp?.content ?? [];
@@ -255,11 +253,14 @@ export class StaffComponent {
   }
 
   loadDetailView(staffId: number): void {
-    this.staffService.accessStaffRoleDetails({ id: staffId }).subscribe({
-      next: (resp: any) => {
-        this.selectedStaff = resp.content;
-      },
-      error: (err) => console.error('Detail API Error:', err),
-    });
+    this.staffService
+      .accessStaffRoleDetails({ id: staffId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.selectedStaff = resp.content;
+        },
+        error: (err) => console.error('Detail API Error:', err),
+      });
   }
 }

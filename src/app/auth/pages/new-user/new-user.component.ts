@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   OnInit,
   TemplateRef,
@@ -33,6 +34,7 @@ import { TimerTextComponent } from '../../component/timer-text/timer-text.compon
 import { VerifyIconEditComponent } from '../../../icon/verify-icon-edit/verify-icon-edit.component';
 import { HeadphoneIconComponent } from '../../../icon/headphone-icon/headphone-icon.component';
 import { FormService } from '../../../shared/services/form.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-new-user',
   standalone: true,
@@ -51,8 +53,8 @@ import { FormService } from '../../../shared/services/form.service';
     ReactiveFormsModule,
     ContactNumberComponent,
     TimerTextComponent,
-    VerifyIconEditComponent,
-    HeadphoneIconComponent,
+    // VerifyIconEditComponent,
+    // HeadphoneIconComponent,
   ],
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css',
@@ -60,6 +62,7 @@ import { FormService } from '../../../shared/services/form.service';
 export class NewUserComponent implements OnInit {
   private formService = inject(FormService);
   private modalService = inject(NgbModal);
+  private destroyRef = inject(DestroyRef);
   isInvalid = this.formService.isInvalid;
   signupForm!: FormGroup;
   otp = '';
@@ -104,10 +107,13 @@ export class NewUserComponent implements OnInit {
       confirmPassword: [''],
       role: [this.selectedRole],
     });
-    this.signupForm.get('role')?.valueChanges.subscribe((value) => {
-      this.selectedRole = value;
-      this.onRoleChange();
-    });
+    this.signupForm
+      .get('role')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.selectedRole = value;
+        this.onRoleChange();
+      });
 
     this.onUserTypeChange(this.currentRole);
   }
@@ -258,21 +264,24 @@ export class NewUserComponent implements OnInit {
 
     const payload = { email: this.signupForm.value.email, purpose: 'signup' };
 
-    this.auth.sendOtp(payload).subscribe({
-      next: (resp: any) => {
-        if (!this.isOtpVerificationModalOpen) {
-          this.openOtpVerifyModal();
-        }
-        this.alert.success(resp?.message);
-        this.otpSent = true;
-        this.emailLocked = true;
-        this.otpTimer = 60;
-        this.startOtpTimer();
-      },
-      error: (err) => {
-        console.log('OTP error:--->', err);
-      },
-    });
+    this.auth
+      .sendOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          if (!this.isOtpVerificationModalOpen) {
+            this.openOtpVerifyModal();
+          }
+          this.alert.success(resp?.message);
+          this.otpSent = true;
+          this.emailLocked = true;
+          this.otpTimer = 60;
+          this.startOtpTimer();
+        },
+        error: (err) => {
+          console.log('OTP error:--->', err);
+        },
+      });
   }
 
   resendOtp(): void {
@@ -287,18 +296,21 @@ export class NewUserComponent implements OnInit {
     };
     let data = { ...this.signupForm.value, userType: this.currentRole };
     this.auth.signupData = data;
-    this.auth.verifyOtp(payload).subscribe({
-      next: (resp: any) => {
-        this.alert.success(resp.message);
-        console.log('OTP verified successfully');
-        this.router.navigate(['/auth/validation']);
-        this.modalService.dismissAll();
-      },
-      error: (err) => {
-        console.log('OTP verify error: ', err);
-        this.alert.error(err?.error?.message || 'Invalid OTP');
-      },
-    });
+    this.auth
+      .verifyOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alert.success(resp.message);
+          console.log('OTP verified successfully');
+          this.router.navigate(['/auth/validation']);
+          this.modalService.dismissAll();
+        },
+        error: (err) => {
+          console.log('OTP verify error: ', err);
+          this.alert.error(err?.error?.message || 'Invalid OTP');
+        },
+      });
   }
 
   goToLogin(): void {
