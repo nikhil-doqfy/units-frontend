@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -16,6 +16,7 @@ import { DocumentTypeItemComponent } from '../../component/document-type-item/do
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-approval',
   standalone: true,
@@ -42,6 +43,7 @@ export class ApprovalComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Approval', link: '' },
@@ -56,7 +58,9 @@ export class ApprovalComponent {
 
   ngOnInit() {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
   }
 
   async loadBreadcrumb() {

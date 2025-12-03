@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   inject,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -20,6 +21,7 @@ import { PasswordIconComponent } from '../auth/component/icons/password-icon/pas
 import { PasswordHideIconComponent } from '../auth/component/icons/password-hide-icon/password-hide-icon.component';
 import { PasswordShowIconComponent } from '../auth/component/icons/password-show-icon/password-show-icon.component';
 import { CrossIconComponent } from '../dashboard/component/icons/cross-icon/cross-icon.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-password-popup',
   standalone: true,
@@ -38,6 +40,7 @@ import { CrossIconComponent } from '../dashboard/component/icons/cross-icon/cros
 })
 export class PasswordPopupComponent {
   private userService = inject(UserService);
+  private destroyRef = inject(DestroyRef);
   oldPassword: string = '';
   isOpen: boolean = false;
   newPassword: string = '';
@@ -95,20 +98,23 @@ export class PasswordPopupComponent {
 
     console.log('Payload sending:', payload);
 
-    this.userService.changePassword(payload).subscribe({
-      next: (res) => {
-        console.log('Password changed successfully', res);
-        alert('Password changed successfully!');
+    this.userService
+      .changePassword(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          console.log('Password changed successfully', res);
+          alert('Password changed successfully!');
 
-        this.submitPassword.emit({
-          oldPassword: payload.current_password,
-          newPassword: payload.new_password,
-        });
-      },
-      error: (err) => {
-        console.error('Password change failed', err);
-        alert(err.error?.message || 'Password change failed!');
-      },
-    });
+          this.submitPassword.emit({
+            oldPassword: payload.current_password,
+            newPassword: payload.new_password,
+          });
+        },
+        error: (err) => {
+          console.error('Password change failed', err);
+          alert(err.error?.message || 'Password change failed!');
+        },
+      });
   }
 }

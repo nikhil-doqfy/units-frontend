@@ -1,4 +1,11 @@
-import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
@@ -16,11 +23,11 @@ import {
 } from '@angular/forms';
 import { FormService } from '../../../../shared/services/form.service';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
-import { Subject, takeUntil } from 'rxjs';
 import { FileService } from '../../../../shared/services/file.service';
 import { UserService } from '../../../../user/services/user.service';
 import { AlertService } from '../../../../shared/services/alert.service';
 import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-user-form',
@@ -43,7 +50,7 @@ export class AddUserFormComponent {
   private formService = inject(FormService);
   private formBuilder = inject(FormBuilder);
   private sharedApiService = inject(SharedApiService);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
   private fileService = inject(FileService);
   private userService = inject(UserService);
   private alertService = inject(AlertService);
@@ -123,7 +130,7 @@ export class AddUserFormComponent {
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.userTypeList = response?.content?.user_types;
@@ -184,17 +191,15 @@ export class AddUserFormComponent {
       data['user_id'] = this.editData.id;
       this.editUser(data);
     } else
-      this.userService.addNewUser(data).subscribe((resp: any) => {
-        if (resp.status === 201) {
-          this.alertService.success(resp.message);
-          this.router.navigate(['/dashboard/users']);
-        }
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+      this.userService
+        .addNewUser(data)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((resp: any) => {
+          if (resp.status === 201) {
+            this.alertService.success(resp.message);
+            this.router.navigate(['/dashboard/users']);
+          }
+        });
   }
 
   onOptionSelected(option: string) {
@@ -212,12 +217,15 @@ export class AddUserFormComponent {
   // ------------------------- Patched user details -------------------------
 
   editUser(data: any) {
-    this.userService.editUserManagement(data).subscribe((resp: any) => {
-      if (resp.status == 200) {
-        this.alertService.success(resp.message);
-        this.router.navigate(['/dashboard/users']);
-      }
-    });
+    this.userService
+      .editUserManagement(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        if (resp.status == 200) {
+          this.alertService.success(resp.message);
+          this.router.navigate(['/dashboard/users']);
+        }
+      });
   }
 
   patchEditUserForm() {

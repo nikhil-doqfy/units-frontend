@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
@@ -34,6 +35,7 @@ import { FilterIconComponent } from '../../component/icons/filter-icon/filter-ic
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-users',
@@ -86,7 +88,7 @@ export class UsersComponent {
   private userService = inject(UserService);
   private alertService = inject(AlertService);
   private sharedApiService = inject(SharedApiService);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   closeResult: WritableSignal<string> = signal('');
 
@@ -98,7 +100,9 @@ export class UsersComponent {
   // ------------------------- call ngOnInit -------------------------
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
   }
 
   async loadBreadcrumb() {
@@ -164,7 +168,7 @@ export class UsersComponent {
 
     this.userService
       .accessUserManagement(this.userData)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.users = resp?.content?.data;
@@ -231,11 +235,6 @@ export class UsersComponent {
     this.getUser();
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   // ------------------------- Delete user from listing -------------------------
 
   onDeleteClick(userId: any, index: number): void {
@@ -244,24 +243,30 @@ export class UsersComponent {
   }
 
   deleteUserById(userId: any, self: any, index: number): void {
-    self.userService.DeleteUser({ user_id: userId }).subscribe((resp: any) => {
-      if (resp.status === 200) {
-        self.alertService.success(resp.message);
-        self.users.splice(index, 1);
-        self.getUser();
-      }
-    });
+    self.userService
+      .DeleteUser({ user_id: userId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        if (resp.status === 200) {
+          self.alertService.success(resp.message);
+          self.users.splice(index, 1);
+          self.getUser();
+        }
+      });
   }
 
   // ------------------------- User status activate -------------------------
 
   toggleUserStatus(userId: number): void {
     var data = { user_id: userId };
-    this.userService.activateUser(data).subscribe((resp: any) => {
-      if (resp.status == 200) {
-        this.alertService.success(resp.message);
-      }
-    });
+    this.userService
+      .activateUser(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        if (resp.status == 200) {
+          this.alertService.success(resp.message);
+        }
+      });
   }
 
   onOptionSelectedFilter(option: string) {
@@ -273,7 +278,7 @@ export class UsersComponent {
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.userTypeList = response?.content?.user_types;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -16,6 +16,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 @Component({
   selector: 'app-reset-password',
   standalone: true,
@@ -34,6 +36,7 @@ import {
   styleUrl: './reset-password.component.css',
 })
 export class ResetPasswordComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   resetForm!: FormGroup;
   email: string = '';
   otp = '';
@@ -81,17 +84,19 @@ export class ResetPasswordComponent implements OnInit {
       password: this.resetForm.get('password')?.value,
       confirm_password: this.resetForm.get('confirm_password')?.value,
     };
-    console.log('Payload sending:', payload);
-    this.auth.resetPassword(payload).subscribe({
-      next: () => {
-        alert('Password reset successful!');
-        this.router.navigate(['/auth/login']);
-      },
-      error: (err) => {
-        console.log(err);
-        alert(err.error?.message || 'Something went wrong');
-      },
-    });
+    this.auth
+      .resetPassword(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          alert('Password reset successful!');
+          this.router.navigate(['/auth/login']);
+        },
+        error: (err) => {
+          console.log(err);
+          alert(err.error?.message || 'Something went wrong');
+        },
+      });
   }
 
   goToDashboard(): void {

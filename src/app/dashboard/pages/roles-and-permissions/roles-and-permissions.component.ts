@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
@@ -23,6 +24,7 @@ import { AddRoleFormComponent } from '../../component/forms/add-role-form/add-ro
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-roles-and-permissions',
@@ -49,6 +51,7 @@ export class RolesAndPermissionsComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Roles & Permissions', link: '' },
@@ -65,7 +68,9 @@ export class RolesAndPermissionsComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
   }
 
   async loadBreadcrumb() {
@@ -78,7 +83,6 @@ export class RolesAndPermissionsComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    const id = this.route.snapshot.paramMap.get('id');
   }
 
   openAddRoleModal(addRoleContent: TemplateRef<any>) {

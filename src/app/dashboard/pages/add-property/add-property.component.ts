@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
@@ -18,6 +18,7 @@ import { UploadFileModel } from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { StepEngine } from '../../model/step-engine/step-engine';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type UploadImageType =
   | 'INTERIOR'
@@ -59,6 +60,7 @@ export class AddPropertyComponent {
   private formService = inject(FormService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private destroyRef = inject(DestroyRef);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Properties', link: '/dashboard/properties' },
@@ -83,8 +85,6 @@ export class AddPropertyComponent {
     documents: 1,
   };
 
-  private destroy$ = new Subject<void>();
-
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -102,7 +102,7 @@ export class AddPropertyComponent {
 
   ngOnInit() {
     this.themeService.currentRole$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {
         this.currentRole = role;
       });
@@ -113,7 +113,7 @@ export class AddPropertyComponent {
   getOptionType(options: string[]) {
     this.sharedAPIService
       .getOptions({ option_type: options.join(',') })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.propertyType = response?.content?.property_types;
@@ -218,10 +218,5 @@ export class AddPropertyComponent {
     const key = cfg.formKey;
 
     return (form.value[key] || []).filter((x: any) => x.type === type);
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

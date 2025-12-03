@@ -98,19 +98,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
-    this.translate.onLangChange.subscribe((event: any) => {
-      this.currentLanguage = event.lang;
-      this.pageTitle = this.getRouteTitle(this.router.routerState.root);
-    });
+    this.subscriptions.add(
+      this.translate.onLangChange.subscribe((event: any) => {
+        this.currentLanguage = event.lang;
+        this.pageTitle = this.getRouteTitle(this.router.routerState.root);
+      })
+    );
 
     translate.use(storage.getLanguage());
     this.updateDirection();
   }
 
   ngOnInit() {
-    this.sharedService.breadcrumb$.subscribe((res) => {
-      this.breadcrumbData = res; // instantly update UI
-    });
+    this.subscriptions.add(
+      this.sharedService.breadcrumb$.subscribe((res) => {
+        this.breadcrumbData = res; // instantly update UI
+      })
+    );
     // ✅ Handle refresh case
     this.pageTitle = this.getRouteTitle(this.router.routerState.root);
 
@@ -150,9 +154,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.isProfileActive = this.router.url.includes('/user/my-profile');
 
-    this.themeService.currentRole$.subscribe((role) => {
-      this.currentRole = role;
-    });
+    this.subscriptions.add(
+      this.themeService.currentRole$.subscribe((role) => {
+        this.currentRole = role;
+      })
+    );
   }
 
   async setLanguage(lang: string) {
@@ -243,19 +249,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout().subscribe({
-      next: (resp: any) => {
-        this.modalService.dismissAll();
-        this.router.navigate(['/auth/login']);
+    this.subscriptions.add(
+      this.authService.logout().subscribe({
+        next: (resp: any) => {
+          this.modalService.dismissAll();
+          this.router.navigate(['/auth/login']);
 
-        this.alertService.success(resp.message);
-      },
-      error: (error: any) => {
-        this.modalService.dismissAll();
-        this.router.navigate(['/auth/login']);
-        localStorage.clear();
-      },
-    });
+          this.alertService.success(resp.message);
+        },
+        error: (error: any) => {
+          this.modalService.dismissAll();
+          this.router.navigate(['/auth/login']);
+          localStorage.clear();
+        },
+      })
+    );
   }
 
   private getDismissReason(reason: any): string {

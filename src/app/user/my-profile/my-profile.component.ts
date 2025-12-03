@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   ElementRef,
   inject,
   OnDestroy,
@@ -24,6 +25,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { PasswordPopupComponent } from '../../password-popup/password-popup.component';
 import { PasswordPopupbtnComponent } from '../../password-popupbtn/password-popupbtn.component';
 import { AuthService } from '../../auth/services/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -47,6 +49,7 @@ export class MyProfileComponent {
   private storageService = inject(StorageService);
   private http = inject(HttpClient);
   private alertService = inject(AlertService);
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild('fileInput') fileInput!: ElementRef;
   currentLanguage = 'en';
@@ -56,7 +59,6 @@ export class MyProfileComponent {
   editUserMode = false;
   editOtherDetailsMode = false;
   changedFields: any = {};
-  private destroy$ = new Subject<void>();
 
   profile = {
     firstName: '',
@@ -101,7 +103,7 @@ export class MyProfileComponent {
   getUserProfileData() {
     this.userService
       .getUserProfile({})
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: any) => {
           const content = response?.content;
@@ -113,14 +115,17 @@ export class MyProfileComponent {
   getBase64() {
     const fileUrl = 'assets/userDefaultProImg.png';
 
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => {
-        this.userImage = reader.result as string;
-        this.fileType = 'png';
-      };
-    });
+    this.http
+      .get(fileUrl, { responseType: 'blob' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((blob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          this.userImage = reader.result as string;
+          this.fileType = 'png';
+        };
+      });
   }
 
   setUserFormData(content: any) {
@@ -214,7 +219,7 @@ export class MyProfileComponent {
   saveUser(payload: Record<string, any>) {
     this.userService
       .editUserProfile(payload)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res: any) => {
           this.storageService.saveUserProfile(payload);
@@ -235,28 +240,6 @@ export class MyProfileComponent {
       });
   }
 
-  // handlePasswordChange(event: any) {
-  //   const payload = {
-  //     current_password: event.oldPassword,
-  //     new_password: event.newPassword,
-  //     new_confirm_password: event.newPassword,
-  //   };
-
-  //   this.userService.changePassword(payload).subscribe({
-  //     next: (res: any) => {
-  //       this.alertService.success(
-  //         res?.message || 'Password updated successfully!'
-  //       );
-  //       this.closePasswordPopup();
-  //     },
-  //     error: (err) => {
-  //       this.alertService.error(
-  //         err?.error?.message || 'Failed to change password'
-  //       );
-  //     },
-  //   });
-  // }
-
   cancelUser() {
     this.editUserMode = false;
     this.changedFields = {};
@@ -270,10 +253,5 @@ export class MyProfileComponent {
   cancelOtherDetails() {
     this.editOtherDetailsMode = false;
     this.changedFields = {};
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

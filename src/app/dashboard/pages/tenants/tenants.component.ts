@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
@@ -37,13 +38,14 @@ import { TableViewCardComponent } from '../../component/table-view-card/table-vi
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { TenantsService } from '../../services/tenants.service';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-tenants',
@@ -82,6 +84,7 @@ export class TenantsComponent {
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private destroyRef = inject(DestroyRef);
 
   componentName: string = 'TenantsComponent';
 
@@ -107,14 +110,13 @@ export class TenantsComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   private onTenantsSearch$ = new Subject<string>();
-  private destroy$ = new Subject<void>();
   private translate = inject(TranslateService);
   currentLanguage = 'en';
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
     this.onTenantsSearch$
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
         if (value?.trim()) this.tenantsFilter['search'] = value.trim();
         else delete this.tenantsFilter['search'];
@@ -126,7 +128,9 @@ export class TenantsComponent {
 
   ngOnInit() {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
   }
 
   async loadBreadcrumb() {
@@ -149,7 +153,7 @@ export class TenantsComponent {
     }
 
     this.themeService.currentRole$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {
         this.currentRole = role;
       });
@@ -167,7 +171,7 @@ export class TenantsComponent {
 
     this.tenantsService
       .getTenants(this.tenantsFilter)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.tenantsList = resp?.content?.tenants ?? [];
@@ -268,7 +272,7 @@ export class TenantsComponent {
     let payload = { email: form.value.email };
     this.tenantsService
       .addTenantToInvite(payload)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.alertService.success(resp.message);
@@ -307,17 +311,12 @@ export class TenantsComponent {
   getTenantDetails(tenantID: number): void {
     this.tenantsService
       .getTenantDetails({ tenant_id: tenantID })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.selectedTenant = resp.content;
         },
         error: (err) => console.error('Detail API Error:', err),
       });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,10 +28,11 @@ import { CardTitleComponent } from '../../../shared/component/card-title/card-ti
 import { DashTitleComponent } from '../../../shared/component/dash-title/dash-title.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PropertyService } from '../../services/property.service';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type PropertyImages = Record<'imgSrc', string>;
 
@@ -118,14 +119,14 @@ export class PropertiesComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   private onPropertySearch$ = new Subject<string>();
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   currentLanguage = 'en';
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
     this.onPropertySearch$
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
         if (value?.trim()) this.propertiesFilter['search'] = value.trim();
         else delete this.propertiesFilter['search'];
@@ -144,21 +145,23 @@ export class PropertiesComponent {
 
   ngOnInit() {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
 
     this.themeService.currentRole$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((role) => {
-      this.currentRole = role;
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
 
-      if (this.currentRole === 'tenant') {
-        this.propertyView = 'my-properties';
-        this.getProperties();
-      } else {
-        this.propertyView = 'all-properties';
-        this.getProperties();
-      }
-    });
+        if (this.currentRole === 'tenant') {
+          this.propertyView = 'my-properties';
+          this.getProperties();
+        } else {
+          this.propertyView = 'all-properties';
+          this.getProperties();
+        }
+      });
   }
 
   async loadBreadcrumb() {
@@ -195,7 +198,7 @@ export class PropertiesComponent {
 
     this.propertyService
       .getProperties(this.propertiesFilter)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: any) => {
           this.propertiesList = response?.content ?? [];
@@ -405,20 +408,23 @@ export class PropertiesComponent {
   }
 
   handleExportClick(): void {
-    this.propertyService.getExcelFileOfProperty({}).subscribe((resp) => {
-      console.log('response:--->', resp);
-      // Create a URL for the blob
-      const url = window.URL.createObjectURL(resp);
+    this.propertyService
+      .getExcelFileOfProperty({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp) => {
+        console.log('response:--->', resp);
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(resp);
 
-      // Create a temporary link element
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'property_export.csv'; // filename
-      a.click();
+        // Create a temporary link element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'property_export.csv'; // filename
+        a.click();
 
-      // Release memory
-      window.URL.revokeObjectURL(url);
-    });
+        // Release memory
+        window.URL.revokeObjectURL(url);
+      });
   }
 
   handleEditClick(id: number): void {
@@ -439,10 +445,5 @@ export class PropertiesComponent {
 
   handleViewClick(propertyId: number): void {
     this.router.navigate(['/dashboard/property/details/', propertyId]);
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

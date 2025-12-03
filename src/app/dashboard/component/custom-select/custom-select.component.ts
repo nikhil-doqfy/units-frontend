@@ -7,6 +7,8 @@ import {
   OnDestroy,
   OnInit,
   forwardRef,
+  inject,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -16,6 +18,7 @@ import { ArrowUpIconComponent } from '../../../shared/component/icons/arrow-up-i
 
 import { CustomSelectService } from './custom-select.service'; // 👈 Import the service
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-custom-select',
@@ -31,9 +34,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
 })
-export class CustomSelectComponent
-  implements OnInit, OnDestroy, ControlValueAccessor
-{
+export class CustomSelectComponent implements OnInit, ControlValueAccessor {
+  private destroyRef = inject(DestroyRef);
+
   @Input() isFilter: boolean = false;
   @Input() isPlain: boolean = false;
   @Input() isSmall: boolean = false;
@@ -48,8 +51,6 @@ export class CustomSelectComponent
 
   isDropdownOpen = false;
 
-  private subscription!: Subscription;
-
   // CVA callbacks
   private onChange = (_: any) => {};
   private onTouched = () => {};
@@ -58,13 +59,13 @@ export class CustomSelectComponent
   constructor(private dropdownService: CustomSelectService) {}
 
   ngOnInit() {
-    this.subscription = this.dropdownService.openDropdown$.subscribe(
-      (openComponent) => {
+    this.dropdownService.openDropdown$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((openComponent) => {
         if (openComponent !== this) {
           this.isDropdownOpen = false; // Close if another component is opened
         }
-      }
-    );
+      });
   }
 
   toggleDropdown() {
@@ -110,11 +111,5 @@ export class CustomSelectComponent
 
   setDisabledState(isDisabled: boolean) {
     this.isDisabled = isDisabled;
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 }

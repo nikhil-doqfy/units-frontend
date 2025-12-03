@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -8,6 +8,7 @@ import { DashBodyComponent } from '../shared/component/dash-body/dash-body.compo
 import { HeaderComponent } from '../shared/header/header.component';
 import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { FooterComponent } from '../shared/footer/footer.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +27,8 @@ import { FooterComponent } from '../shared/footer/footer.component';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
+  private destroyRef = inject(DestroyRef);
+
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
 
   currentLang = 'en';
@@ -34,9 +37,11 @@ export class DashboardComponent {
     this.currentLang = this.translate.currentLang || 'en';
 
     // Listen for language change
-    this.translate.onLangChange.subscribe((event: any) => {
-      this.currentLang = event.lang;
-    });
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event: any) => {
+        this.currentLang = event.lang;
+      });
   }
 
   onRouteActivate(componentInstance: any) {

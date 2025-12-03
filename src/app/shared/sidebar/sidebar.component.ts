@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -7,9 +7,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { SharedService } from '../../shared.service';
 
-import { MenuOpenIconComponent } from "../component/icons/menu-open-icon/menu-open-icon.component";
-import { MenuCloseIconComponent } from "../component/icons/menu-close-icon/menu-close-icon.component";
-import { SearchIconComponent } from "../component/icons/search-icon/search-icon.component";
+import { MenuOpenIconComponent } from '../component/icons/menu-open-icon/menu-open-icon.component';
+import { MenuCloseIconComponent } from '../component/icons/menu-close-icon/menu-close-icon.component';
+import { SearchIconComponent } from '../component/icons/search-icon/search-icon.component';
 import { SidebarHeadingComponent } from './sidebar-heading/sidebar-heading.component';
 import { SidebarItemComponent } from './sidebar-item/sidebar-item.component';
 import { DashboardIconComponent } from '../component/icons/dashboard-icon/dashboard-icon.component';
@@ -25,16 +25,40 @@ import { DocumentationIconComponent } from '../component/icons/documentation-ico
 import { PaymentInvoiceIconComponent } from '../component/icons/payment-invoice-icon/payment-invoice-icon.component';
 import { RaiseComplaintIconComponent } from '../component/icons/raise-complaint-icon/raise-complaint-icon.component';
 import { PrivacyPolicyIconComponent } from '../component/icons/privacy-policy-icon/privacy-policy-icon.component';
-import { SidebarSupportComponent } from "./sidebar-support/sidebar-support.component";
+import { SidebarSupportComponent } from './sidebar-support/sidebar-support.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, MenuOpenIconComponent, MenuCloseIconComponent, SearchIconComponent, SidebarHeadingComponent, SidebarItemComponent, DashboardIconComponent, PropertyIconComponent, PMCIconComponent, TenantIconComponent, LeaseTenancyIconComponent, OwnerIconComponent, ApprovalIconComponent, StaffIconComponent, RolesPermissionsIconComponent, DocumentationIconComponent, PaymentInvoiceIconComponent, RaiseComplaintIconComponent, PrivacyPolicyIconComponent, SidebarSupportComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    MenuOpenIconComponent,
+    MenuCloseIconComponent,
+    SearchIconComponent,
+    SidebarHeadingComponent,
+    SidebarItemComponent,
+    DashboardIconComponent,
+    PropertyIconComponent,
+    PMCIconComponent,
+    TenantIconComponent,
+    LeaseTenancyIconComponent,
+    OwnerIconComponent,
+    ApprovalIconComponent,
+    StaffIconComponent,
+    RolesPermissionsIconComponent,
+    DocumentationIconComponent,
+    PaymentInvoiceIconComponent,
+    RaiseComplaintIconComponent,
+    PrivacyPolicyIconComponent,
+    SidebarSupportComponent,
+    TranslateModule,
+  ],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   currentRole: UserRole = 'owner';
   selected: string = '';
   openSidebarValue = true;
@@ -49,16 +73,23 @@ export class SidebarComponent implements OnInit {
     private translate: TranslateService
   ) {
     this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.urlAfterRedirects;
         if (event.id !== 1 && window.innerWidth <= 767) {
           this.sharedService.toggleSidebar();
         }
       });
-    this.translate.onLangChange.subscribe((event:any) => {
-      this.currentLanguage = event.lang;
-    });
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event: any) => {
+        this.currentLanguage = event.lang;
+      });
     translate.use('en');
   }
 
@@ -72,13 +103,17 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sharedService.openSidebarValue$.subscribe((value) => {
-      this.openSidebarValue = value;
-    });
+    this.sharedService.openSidebarValue$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.openSidebarValue = value;
+      });
 
-    this.themeService.currentRole$.subscribe(role => {
-      this.currentRole = role;
-    });
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
   }
 
   handleOpenPopup() {
