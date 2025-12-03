@@ -19,7 +19,7 @@ import { DashTitleComponent } from '../../../shared/component/dash-title/dash-ti
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
-import { Subject } from 'rxjs';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { LeaseService } from '../../services/lease.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
@@ -69,7 +69,7 @@ export class LeaseTenancyComponent {
   currentPage: number = 1;
 
   private onLeaseSearch$ = new Subject<string>();
-
+  private destroy$ = new Subject<void>();
   constructor(
     private router: Router,
     private themeService: ThemeService,
@@ -77,6 +77,16 @@ export class LeaseTenancyComponent {
   ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
+    this.onLeaseSearch$
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .subscribe((searchText) => {
+        if (searchText?.trim()) this.leaseFilter['search'] = searchText.trim();
+        else delete this.leaseFilter['search'];
+
+        this.currentPage = 1;
+        this.getLease();
+      });
   }
 
   ngOnInit() {
