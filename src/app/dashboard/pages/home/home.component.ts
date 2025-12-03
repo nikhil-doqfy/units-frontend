@@ -76,6 +76,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadBreadcrumb();
     this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.getStats();
   }
 
   async loadBreadcrumb() {
@@ -89,7 +90,6 @@ export class HomeComponent implements OnInit {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    this.getStats();
   }
 
   stats: any = {
