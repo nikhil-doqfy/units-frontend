@@ -99,8 +99,6 @@ export class NewUserComponent implements OnInit {
       first_name: [''],
       last_name: [''],
       company_name: [''],
-      emirate_id: [''],
-      company_emirate_id: [''],
       contact_number: [''],
       email: ['', [Validators.email]],
       password: [''],
@@ -129,7 +127,6 @@ export class NewUserComponent implements OnInit {
     ],
     'property-manager': [
       'company_name',
-      'company_emirate_id',
       'contact_number',
       'email',
       'password',
@@ -138,7 +135,6 @@ export class NewUserComponent implements OnInit {
     tenant: [
       'first_name',
       'last_name',
-      'emirate_id',
       'contact_number',
       'email',
       'password',

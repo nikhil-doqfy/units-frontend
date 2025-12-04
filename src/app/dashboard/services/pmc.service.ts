@@ -25,6 +25,15 @@ export class PmcService {
     return this.http.put(`${this.SERVER_ADDRESS}/pmc/owner/view/list/`, data);
   }
 
+  getExcelFileOfPmc(params: any): Observable<Blob> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/export/pmc/csv${queryString}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
   addPmcToInvite(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/invite/owner/pmc`, data);
   }

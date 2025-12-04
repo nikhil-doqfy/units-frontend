@@ -89,7 +89,6 @@ export class TenantsComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
-
   componentName: string = 'TenantsComponent';
 
   breadcrumbData = [
@@ -169,6 +168,7 @@ export class TenantsComponent {
   private getTenants() {
     this.tenantsFilter = {
       ...this.tenantsFilter,
+
       limit: this.rowsPerPage,
       page: this.currentPage,
     };
@@ -216,7 +216,28 @@ export class TenantsComponent {
   }
 
   handleExportClick(): void {
-    console.log('Export button clicked');
+    this.tenantsService
+      .getExcelFileOfTenant({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          const url = window.URL.createObjectURL(resp);
+
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'tenant_export.csv';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+
+          this.alertService.success('File downloaded successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(
+            err?.error?.message || 'Failed to download tenant file'
+          );
+        },
+      });
   }
 
   //   applyFilter() {

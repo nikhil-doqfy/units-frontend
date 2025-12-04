@@ -49,8 +49,12 @@
             <tr>
               <td>{{ pmc?.code || "N/A" }}</td>
               <td>{{ pmc?.property_handling || "N/A" }}</td>
-              <td class="cursor" (click)="handleViewClick()">
-                {{ pmc?.pmc_name || "N/A" }}
+              <td>
+                <app-table-img-item
+                  [title]="pmc?.pmc_name || 'N/A'"
+                  [clickable]="true"
+                  (clicked)="handleViewClick(pmc?.id)"
+                />
               </td>
               <td>{{ pmc?.tenancy_ratio || "N/A" }}</td>
               <td>{{ pmc?.address || "N/A" }}</td>
@@ -134,20 +138,20 @@
 
 <ng-container *ngIf="showDetailView">
   <app-table-view-card
-    [title]="'Prestige Builders'"
+    [title]="pmcList[0]?.company_name || 'N/A'"
     [imgSrc]="''"
     [headerItems]="[
-      { label: 'Company Code', value: 'VC78012' },
-      { label: 'Email', value: 'owner28@gmail.com' }
+      { label: 'Company Code', value: pmcList[0]?.company_code || 'N/A' },
+      { label: 'Email', value: pmcList[0]?.email }
     ]"
     [items]="[
-      { label: 'Phone Number', value: '+97-7007836367' },
-      { label: 'Company', value: 'Afc25' },
-      { label: 'City', value: 'Bengaluru' },
-      { label: 'Locality', value: '' },
-      { label: 'Postal Code', value: '5621009' },
-      { label: 'Address Line 1', value: 'Koramangala' },
-      { label: 'Address Line 2', value: 'Bellandur' }
+      { label: 'Phone Number', value: pmcList[0]?.phone_number || 'N/A' },
+      { label: 'Company', value: pmcList[0]?.company_name || 'N/A' },
+      { label: 'City', value: pmcList[0]?.city || 'N/A' },
+      { label: 'Locality', value: pmcList[0]?.locality || 'N/A' },
+      { label: 'Postal Code', value: pmcList[0]?.postal_code || 'N/A' },
+      { label: 'Address Line 1', value: pmcList[0]?.address_line_1 || 'N/A' },
+      { label: 'Address Line 2', value: pmcList[0]?.address_line_2 || 'N/A' }
     ]"
     (back)="handleBackClick()"
   ></app-table-view-card>
@@ -155,18 +159,14 @@
   <div class="mt-3">
     <app-white-card title="PMC Documents">
       <div class="row g-2">
+        @for(document of pmcList[0]?.documents; track $index){
         <div class="col-auto">
-          <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+          <app-document-type-item
+            [title]="document?.file_name"
+            [size]="document?.size || ''"
+          />
         </div>
-        <div class="col-auto">
-          <app-document-type-item title="Finances.pdf" size="1.2 MB" />
-        </div>
-        <div class="col-auto">
-          <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-        </div>
-        <div class="col-auto">
-          <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-        </div>
+        }
       </div>
     </app-white-card>
   </div>
@@ -222,18 +222,32 @@
             </tr>
           </thead>
           <tbody>
+            @for(property of pmcList[0]?.properties_assigned; track $index){
             <tr>
-              <td>LP9021</td>
+              <td>{{ property?.property_code || "N/A" }}</td>
               <td>
                 <app-table-img-item
-                  img="../../assets/property/property-list-1.png"
+                  [img]="
+                    property?.property_images?.[0]?.data ||
+                    '../../assets/property/property-img-default.svg'
+                  "
                   size="md"
-                  title="Novatis AG..."
+                  [title]="property?.property_name"
                 />
               </td>
-              <td>N/A</td>
-              <td>Vacant</td>
-              <td>1BHK</td>
+              <td>
+                @if(property?.tennat && property?.tennat?.name){
+                <app-table-img-item
+                  [img]="
+                    property?.tennat?.profile_image ||
+                    '../../assets/userDefaultProImg.png'
+                  "
+                  [title]="property?.tennat?.name"
+                />
+                }@else {N/A}
+              </td>
+              <td>{{ property.tenancy_status }}</td>
+              <td>{{ property.dimension }}</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
@@ -247,126 +261,7 @@
                 </div>
               </td>
             </tr>
-            <tr>
-              <td>LP8021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Agriculture...."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-2.png"
-                  title="Richard"
-                />
-              </td>
-              <td>Occupied</td>
-              <td>2BHK</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC79021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Honda..."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-3.png"
-                  title="Thaomas"
-                />
-              </td>
-              <td>Occupied</td>
-              <td>5BHK</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC69021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="TVS"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-4.png"
-                  title="Akshay"
-                />
-              </td>
-              <td>Occupied</td>
-              <td>1RK</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC59021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Samsung"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-5.png"
-                  title="Avanshi"
-                />
-              </td>
-              <td>Occupied</td>
-              <td>1BHK</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
+            }
           </tbody>
         </table>
       </div>
