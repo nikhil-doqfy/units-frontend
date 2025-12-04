@@ -91,7 +91,9 @@ export class LeaseTenancyComponent {
 
   ngOnInit() {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {

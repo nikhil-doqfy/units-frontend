@@ -125,7 +125,7 @@ export class SharedService {
   }
 
   setTitle(key: string) {
-    this.translate.get(key).subscribe((translated: string) => {
+    this.translate.stream(key).subscribe((translated: string) => {
       this.title.setTitle(`${translated} | Doqfy`);
     });
   }

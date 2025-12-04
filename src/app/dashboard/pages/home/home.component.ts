@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectorRef,
+  DestroyRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -26,6 +32,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { HomeService } from '../../services/home.service';
 import { Subject, takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
@@ -61,10 +68,10 @@ export class HomeComponent implements OnInit {
   private sharedService = inject(SharedService);
   private homeService = inject(HomeService);
   private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
 
   model: NgbDateStruct | null = null;
   currentLanguage = 'en';
-  private destroy$ = new Subject<void>();
   breadcrumbData = [
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
@@ -75,7 +82,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange.subscribe(() => this.loadBreadcrumb());
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
     this.getStats();
   }
 
@@ -105,7 +114,7 @@ export class HomeComponent implements OnInit {
   getStats() {
     this.homeService
       .getDashboardStatistics()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         this.stats = res.content;
       });
@@ -146,10 +155,5 @@ export class HomeComponent implements OnInit {
 
   handleFilterClick(): void {
     console.log('Filter button clicked');
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }
