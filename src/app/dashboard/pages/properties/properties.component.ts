@@ -413,17 +413,16 @@ export class PropertiesComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp) => {
         console.log('response:--->', resp);
-        // Create a URL for the blob
+
         const url = window.URL.createObjectURL(resp);
 
-        // Create a temporary link element
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'property_export.csv'; // filename
+        a.download = 'property_export.csv';
         a.click();
 
-        // Release memory
         window.URL.revokeObjectURL(url);
+        this.alertService.success('File downloaded successfully!');
       });
   }
 

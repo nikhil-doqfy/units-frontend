@@ -273,6 +273,22 @@ export class OwnersComponent {
   }
 
   handleExportClick(): void {
+    this.ownerService
+      .getExcelFileOfowner({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp) => {
+        console.log('response:--->', resp);
+
+        const url = window.URL.createObjectURL(resp);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'property_export.csv';
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+        this.alertService.success('File downloaded successfully!');
+      });
     console.log('Export button clicked');
   }
 
