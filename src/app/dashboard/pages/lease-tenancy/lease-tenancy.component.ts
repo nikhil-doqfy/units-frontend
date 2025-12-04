@@ -23,6 +23,7 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { LeaseService } from '../../services/lease.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-lease-tenancy',
@@ -51,6 +52,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 export class LeaseTenancyComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private alertService = inject(AlertService);
   private translate = inject(TranslateService);
   private leaseService = inject(LeaseService);
   breadcrumbData = [
@@ -164,23 +166,28 @@ export class LeaseTenancyComponent {
   handleExportClick(): void {
     this.leaseService
       .getExcelFileOflease({})
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp) => {
-        console.log('response:--->', resp);
-        // Create a URL for the blob
-        const url = window.URL.createObjectURL(resp);
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          console.log('response:--->', resp);
 
-        // Create a temporary link element
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'lease_export.csv'; // filename
-        a.click();
+          const url = window.URL.createObjectURL(resp);
 
-        // Release memory
-        window.URL.revokeObjectURL(url);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'lease_export.csv';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+
+          this.alertService.success('File downloaded successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(
+            err?.error?.message || 'Failed to download lease file'
+          );
+        },
       });
-
-    console.log('Export button clicked');
   }
 
   handleEditClick(leaseId: number) {

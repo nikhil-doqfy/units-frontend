@@ -135,7 +135,7 @@ export class PMCComponent {
   getPMC() {
     this.pmcFilter = {
       ...this.pmcFilter,
-      search: this.pmcFilter['search'] || '',
+
       limit: this.rowsPerPage,
       page: this.currentPage,
     };
@@ -174,21 +174,28 @@ export class PMCComponent {
   }
 
   handleExportClick(): void {
-    this.pmcService.getExcelFileOfPmc({}).subscribe((resp) => {
-      console.log('response:--->', resp);
-      // Create a URL for the blob
-      const url = window.URL.createObjectURL(resp);
+    this.pmcService
+      .getExcelFileOfPmc({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          console.log('response:--->', resp);
 
-      // Create a temporary link element
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'pmc_export.csv'; // filename
-      a.click();
+          const url = window.URL.createObjectURL(resp);
 
-      // Release memory
-      window.URL.revokeObjectURL(url);
-    });
-    console.log('Export button clicked');
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'pmc_export.csv';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+
+          this.alertService.success('File downloaded successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Download failed');
+        },
+      });
   }
 
   openAssignPropertyModal(assignPropertyContent: TemplateRef<any>) {
