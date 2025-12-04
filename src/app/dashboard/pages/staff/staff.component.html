@@ -14,13 +14,43 @@
               placeholder="Search here..."
               (onValueChange)="searchTextChange($event)"
             />
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-              (clicked)="handleFilterClick()"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
+            <app-filter-popup-btn>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{
+                        "STAFF_ROLE" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="staffRole"
+                        key="key"
+                        value="value"
+                        placeholder="Select staff role"
+                        (optionSelected)="selectedstaffRole = $event"
+                      >
+                      </app-custom-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"

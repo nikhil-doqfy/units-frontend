@@ -134,6 +134,7 @@
   "USER_NAME": " User Name",
   "PHONE": "Phone",
   "ROLE": "Role",
+  "LEASE_STATUS": "LEASE STATUS",
   "EMAIL": "Email",
   "CREATED_ON": "Created On",
   "LAST_LOGIN": "Last Login",

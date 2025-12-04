@@ -15,13 +15,38 @@
               [placeholder]="'SEARCH_HERE' | translate"
               (onValueChange)="searchTextChange($event)"
             />
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-              (clicked)="handleFilterClick()"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
+            <app-filter-popup-btn>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{
+                        "USER TYPE" | translate
+                      }}</label>
+                      <app-custom-select> </app-custom-select>
+                      <!-- [options]="userTypeList"
+                      placeholder="Select User Type"
+                      [selectedOption]="selectedUserType"
+                      (optionSelected)="onOptionSelectedUserType($event)"
+                      (click)="handleFilterClick()" -->
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button type="button" class="btn btnCommon">
+                  <!-- (click)="applyFilter()" -->
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"

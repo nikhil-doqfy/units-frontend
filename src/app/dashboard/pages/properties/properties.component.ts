@@ -33,6 +33,8 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 type PropertyImages = Record<'imgSrc', string>;
 
@@ -85,13 +87,14 @@ interface PropertyDetails {
     DashTitleComponent,
     TranslateModule,
     NoDataComponent,
+    FilterPopupButtonComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',
 })
 export class PropertiesComponent {
   private propertyService = inject(PropertyService);
-
+  private sharedApiService = inject(SharedApiService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
 
@@ -111,8 +114,9 @@ export class PropertiesComponent {
   ];
 
   showDetailView: boolean = false;
-
+  rentalStatus: any = [];
   propertiesList: any[] = [];
+  selectedrentalstatus: any = null;
   propertiesFilter: Record<string, any> = {};
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
@@ -162,6 +166,7 @@ export class PropertiesComponent {
           this.getProperties();
         }
       });
+    this.getOptionTypes(['RENTAL_STATUS']);
   }
 
   async loadBreadcrumb() {
@@ -301,7 +306,20 @@ export class PropertiesComponent {
       },
     ],
   };
-
+  onOptionSelectedFilter(option: string) {
+    this.selectedrentalstatus = option;
+  }
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.rentalStatus = response?.content?.rental_status;
+          console.log('data', this.rentalStatus);
+        },
+      });
+  }
   handlePropertyDetails() {
     const data: any = this.propertiesList[0];
     let basicDetails = {
@@ -401,6 +419,12 @@ export class PropertiesComponent {
 
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
+  }
+
+  applyFilter() {
+    this.propertiesFilter['rental_status'] = this.selectedrentalstatus.key;
+    this.currentPage = 1;
+    this.getProperties();
   }
 
   handleFilterClick(): void {
