@@ -168,6 +168,8 @@ export class UploadDocumentComponent {
     const selctedUsertype = this.getUserType();
 
     const paylod: Record<string, any> = {
+      first_name: data['first_name'],
+      last_name: data['last_name'],
       email: data['email'],
       password: data['password'],
       confirm_password: data['confirmPassword'],
@@ -183,17 +185,12 @@ export class UploadDocumentComponent {
 
     if (selctedUsertype === 'PROPERTY_MANAGER') {
       paylod['company_name'] = data['company_name'];
-      paylod['company_emirate_id'] = data['company_emirate_id'];
-      paylod['first_name'] = data['company_name'];
-      paylod['last_name'] = data['company_name'];
+      paylod['company_emirate_id'] = data['emirateId'];
+      paylod['manage_through'] = data['manageThrough'];
     } else if (selctedUsertype === 'TENANT') {
-      paylod['first_name'] = data['first_name'];
-      paylod['last_name'] = data['last_name'];
-      paylod['emirate_id'] = data['emirate_id'];
+      paylod['emirate_id'] = data['emirateId'];
       paylod['manage_through'] = data['manageThrough'];
     } else if (selctedUsertype === 'OWNER') {
-      paylod['first_name'] = data['first_name'];
-      paylod['last_name'] = data['last_name'];
       paylod['emirate_id'] = data['emirateId'];
       paylod['manage_through'] = data['manageThrough'];
     }

@@ -21,6 +21,14 @@ export class TenantsService {
     );
   }
 
+  getExcelFileOfTenant(params: any): Observable<Blob> {
+    const query = this.sharedService.getQueryString(params);
+
+    return this.http.get(`${this.SERVER_ADDRESS}/export/tenant/csv${query}`, {
+      responseType: 'blob',
+    });
+  }
+
   getTenantDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
@@ -36,12 +44,10 @@ export class TenantsService {
     return this.http.post(`${this.SERVER_ADDRESS}/tenant/details/`, data);
   }
 
-
   getTenantsDetailsView(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
       `${this.SERVER_ADDRESS}/tenant/details/${queryString}`
     );
   }
-
 }

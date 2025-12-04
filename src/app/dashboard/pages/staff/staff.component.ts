@@ -157,6 +157,20 @@ export class StaffComponent {
   }
 
   handleExportClick(): void {
+    this.staffService.getExcelFileOfStaff({}).subscribe((resp) => {
+      console.log('response:--->', resp);
+
+      const url = window.URL.createObjectURL(resp);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'staff_export.csv';
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+      this.alertService.success('File downloaded successfully!');
+    });
+
     console.log('Export button clicked');
   }
 
