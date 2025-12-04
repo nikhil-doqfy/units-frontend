@@ -57,7 +57,7 @@ import { AlertService } from '../../../shared/services/alert.service';
     TableActionButtonComponent,
     TableActionDropdownComponent,
     TablePaginationComponent,
-    SendIconComponent,
+    // SendIconComponent,
     AssignPropertyFormComponent,
     TableViewCardComponent,
     WhiteCardComponent,
@@ -75,6 +75,9 @@ export class PMCComponent {
   private pmcService = inject(PmcService);
   private sharedService = inject(SharedService);
   private alertService = inject(AlertService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'PMC', link: '' },
@@ -98,7 +101,7 @@ export class PMCComponent {
   currentPage: number = 1;
   private onPMCSearch$ = new Subject<string>();
 
-  constructor(private router: Router, private destroyRef: DestroyRef) {
+  constructor(private destroyRef: DestroyRef) {
     this.onPMCSearch$
       .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
       .subscribe((searchText: string) => {
@@ -122,7 +125,15 @@ export class PMCComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
 
-    this.getPMC();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.showDetailView = true;
+      this.pmcFilter['pmc_id'] = +id;
+      this.getPMC();
+    } else {
+      this.showDetailView = false;
+      this.getPMC();
+    }
   }
 
   async loadBreadcrumb() {
@@ -261,12 +272,12 @@ export class PMCComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(): void {
-    this.showDetailView = true;
+  handleViewClick(pmcId: number): void {
+    this.router.navigate(['/dashboard/pmc/detail/', pmcId]);
   }
 
   handleBackClick(): void {
-    this.showDetailView = false;
+    this.router.navigate(['/dashboard/pmc']);
   }
 
   handleDownloadDocumentClick(): void {

@@ -64,6 +64,11 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.PMC' },
       },
       {
+        path: 'pmc/detail/:id',
+        component: PMCComponent,
+        data: { titleKey: 'PAGE_TITLE.PMC' },
+      },
+      {
         path: 'tenants',
         component: TenantsComponent,
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
