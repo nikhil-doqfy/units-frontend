@@ -69,7 +69,6 @@ export class LeaseTenancyComponent {
   currentPage: number = 1;
 
   private onLeaseSearch$ = new Subject<string>();
-  private destroy$ = new Subject<void>();
   constructor(
     private router: Router,
     private themeService: ThemeService,
@@ -79,7 +78,7 @@ export class LeaseTenancyComponent {
     this.sharedService.setTitle(key);
 
     this.onLeaseSearch$
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
       .subscribe((searchText) => {
         if (searchText?.trim()) this.leaseFilter['search'] = searchText.trim();
         else delete this.leaseFilter['search'];
@@ -113,15 +112,16 @@ export class LeaseTenancyComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    this.themeService.currentRole$.subscribe((role) => {
-      this.currentRole = role;
-    });
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
   }
 
   getLease() {
     this.leaseFilter = {
       ...this.leaseFilter,
-      search: this.leaseFilter['search'] || '',
       limit: this.rowsPerPage,
       page: this.currentPage,
     };
@@ -162,20 +162,23 @@ export class LeaseTenancyComponent {
   }
 
   handleExportClick(): void {
-    this.leaseService.getExcelFileOflease({}).subscribe((resp) => {
-      console.log('response:--->', resp);
-      // Create a URL for the blob
-      const url = window.URL.createObjectURL(resp);
+    this.leaseService
+      .getExcelFileOflease({})
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp) => {
+        console.log('response:--->', resp);
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(resp);
 
-      // Create a temporary link element
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'lease_export.csv'; // filename
-      a.click();
+        // Create a temporary link element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'lease_export.csv'; // filename
+        a.click();
 
-      // Release memory
-      window.URL.revokeObjectURL(url);
-    });
+        // Release memory
+        window.URL.revokeObjectURL(url);
+      });
 
     console.log('Export button clicked');
   }
