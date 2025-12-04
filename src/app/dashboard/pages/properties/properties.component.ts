@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,6 +32,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
+import { AlertService } from '../../../shared/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type PropertyImages = Record<'imgSrc', string>;
@@ -91,10 +92,10 @@ interface PropertyDetails {
 })
 export class PropertiesComponent {
   private propertyService = inject(PropertyService);
-
+  private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
-
+  private destroyRef = inject(DestroyRef);
   componentName: string = 'PropertiesComponent';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
@@ -119,7 +120,6 @@ export class PropertiesComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   private onPropertySearch$ = new Subject<string>();
-  private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   currentLanguage = 'en';
   constructor(private router: Router, private themeService: ThemeService) {
@@ -413,17 +413,16 @@ export class PropertiesComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp) => {
         console.log('response:--->', resp);
-        // Create a URL for the blob
+
         const url = window.URL.createObjectURL(resp);
 
-        // Create a temporary link element
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'property_export.csv'; // filename
+        a.download = 'property_export.csv';
         a.click();
 
-        // Release memory
         window.URL.revokeObjectURL(url);
+        this.alertService.success('File downloaded successfully!');
       });
   }
 

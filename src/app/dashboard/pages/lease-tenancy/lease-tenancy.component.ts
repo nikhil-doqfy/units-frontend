@@ -19,10 +19,11 @@ import { DashTitleComponent } from '../../../shared/component/dash-title/dash-ti
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
-import { Subject } from 'rxjs';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { LeaseService } from '../../services/lease.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-lease-tenancy',
@@ -51,6 +52,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 export class LeaseTenancyComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private alertService = inject(AlertService);
   private translate = inject(TranslateService);
   private leaseService = inject(LeaseService);
   breadcrumbData = [
@@ -69,7 +71,6 @@ export class LeaseTenancyComponent {
   currentPage: number = 1;
 
   private onLeaseSearch$ = new Subject<string>();
-
   constructor(
     private router: Router,
     private themeService: ThemeService,
@@ -77,6 +78,16 @@ export class LeaseTenancyComponent {
   ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
+    this.onLeaseSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText) => {
+        if (searchText?.trim()) this.leaseFilter['search'] = searchText.trim();
+        else delete this.leaseFilter['search'];
+
+        this.currentPage = 1;
+        this.getLease();
+      });
   }
 
   ngOnInit() {
@@ -103,9 +114,11 @@ export class LeaseTenancyComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    this.themeService.currentRole$.subscribe((role) => {
-      this.currentRole = role;
-    });
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
   }
 
   getLease() {
@@ -138,6 +151,9 @@ export class LeaseTenancyComponent {
     this.currentPage = event.currentPage;
     this.getLease();
   }
+  searchTextChange(search: string): void {
+    this.onLeaseSearch$.next(search);
+  }
 
   goToAddLease(): void {
     this.router.navigate(['/dashboard/add-lease']);
@@ -148,7 +164,30 @@ export class LeaseTenancyComponent {
   }
 
   handleExportClick(): void {
-    console.log('Export button clicked');
+    this.leaseService
+      .getExcelFileOflease({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          console.log('response:--->', resp);
+
+          const url = window.URL.createObjectURL(resp);
+
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'lease_export.csv';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+
+          this.alertService.success('File downloaded successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(
+            err?.error?.message || 'Failed to download lease file'
+          );
+        },
+      });
   }
 
   handleEditClick(leaseId: number) {

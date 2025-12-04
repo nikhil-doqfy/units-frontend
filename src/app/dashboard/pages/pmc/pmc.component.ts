@@ -7,7 +7,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   ModalDismissReasons,
@@ -135,6 +135,7 @@ export class PMCComponent {
   getPMC() {
     this.pmcFilter = {
       ...this.pmcFilter,
+
       limit: this.rowsPerPage,
       page: this.currentPage,
     };
@@ -173,7 +174,28 @@ export class PMCComponent {
   }
 
   handleExportClick(): void {
-    console.log('Export button clicked');
+    this.pmcService
+      .getExcelFileOfPmc({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          console.log('response:--->', resp);
+
+          const url = window.URL.createObjectURL(resp);
+
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'pmc_export.csv';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+
+          this.alertService.success('File downloaded successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Download failed');
+        },
+      });
   }
 
   openAssignPropertyModal(assignPropertyContent: TemplateRef<any>) {

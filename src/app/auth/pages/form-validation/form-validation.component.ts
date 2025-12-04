@@ -42,7 +42,7 @@ export class FormValidationComponent {
       this.router.navigate(['/auth/new-user']);
       return;
     }
-    console.log(this.authService.signupData);
+
     this.detailForm = formBuilder.group({
       manageThrough: ['MYSELF', [Validators.required]],
       emirateId: ['', [Validators.required]],
