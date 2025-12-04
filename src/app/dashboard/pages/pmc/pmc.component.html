@@ -49,7 +49,7 @@
             <tr>
               <td>{{ pmc?.code || "N/A" }}</td>
               <td>{{ pmc?.property_handling || "N/A" }}</td>
-              <td class="cursor">
+              <td class="cursor" (click)="handleViewClick()">
                 {{ pmc?.pmc_name || "N/A" }}
               </td>
               <td>{{ pmc?.tenancy_ratio || "N/A" }}</td>

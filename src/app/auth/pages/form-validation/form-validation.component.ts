@@ -42,16 +42,9 @@ export class FormValidationComponent {
       this.router.navigate(['/auth/new-user']);
       return;
     }
-    console.log(this.authService.signupData);
 
-    // const userType = this.authService.signupData['userType'];
     this.detailForm = formBuilder.group({
       manageThrough: ['MYSELF', [Validators.required]],
-
-      // company_emirate_id: [
-      //   '',
-      //   userType === 'PROPERTY_MANAGER' ? Validators.required : [],
-      // ],
       emirateId: ['', [Validators.required]],
       residenceVisa: ['', [Validators.required]],
       tradeLicense: ['', [Validators.required]],

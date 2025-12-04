@@ -254,14 +254,12 @@ export class PMCComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(pmcID: number): void {
+  handleViewClick(): void {
     this.showDetailView = true;
-    this.router.navigate(['/dashboard/owners/detail/', pmcID]);
   }
 
   handleBackClick(): void {
     this.showDetailView = false;
-    this.router.navigate(['/dashboard/pmc']);
   }
 
   handleDownloadDocumentClick(): void {
@@ -271,13 +269,4 @@ export class PMCComponent {
   handlePreviewDocumentClick(): void {
     console.log('Preview Document button clicked');
   }
-
-  // loadDetailView(pmcID: number): void {
-  //   this.pmcService.getPmcDetails({ pmc_id: pmcID }).subscribe({
-  //     next: (resp: any) => {
-  //       this.selectedPmc = resp.content;
-  //     },
-  //     error: (err) => console.error('Detail API Error:', err),
-  //   });
-  // }
 }
