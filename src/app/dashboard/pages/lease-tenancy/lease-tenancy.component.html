@@ -54,6 +54,13 @@
               <button
                 type="button"
                 class="btn btnCommon"
+                (click)="removeFilter()"
+              >
+                {{ "REMOVE_ALL" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btnCommon"
                 (click)="applyFilter()"
               >
                 {{ "APPLY" | translate }}
@@ -121,12 +128,15 @@
                 />
                 <app-table-action-btn
                   type="download"
-                  (clicked)="handleDownloadClick()"
+                  (click)="handleDownloadPdf(lease.id)"
                 />
+                <!-- (clicked)="handleDownloadClick()" -->
                 <app-table-action-btn
                   type="preview"
-                  (clicked)="handlePreviewClick()"
+                  (click)="handleViewPdf(lease.id)"
                 />
+
+                <!-- (clicked)="handlePreviewClick()" -->
               </div>
             </td>
           </tr>

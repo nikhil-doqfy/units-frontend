@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -17,6 +23,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ApprovalService } from '../../approval.service';
+import { AlertService } from '../../../shared/services/alert.service';
+import { debounceTime, Subject } from 'rxjs';
+import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 @Component({
   selector: 'app-approval',
   standalone: true,
@@ -44,20 +54,59 @@ export class ApprovalComponent {
   private sharedService = inject(SharedService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  private approvalService = inject(ApprovalService);
+  private alertService = inject(AlertService);
+  private onOwnerSearch$ = new Subject<string>();
+  selectedTenant: any = null;
+  closeResult: WritableSignal<string> = signal('');
+  // ApprovalList: any[] = [];
+  leaseDocuments: any[] = [];
+
+  documentsByType: any = {
+    EMIRATES_ID: [],
+    PASSPORT_SELF: [],
+    PASSPORT_FAMILY: [],
+    EMPLOYMENT_PROOF: [],
+    VISA_SELF: [],
+    VISA_FAMILY: [],
+    BANK_STATEMENT: [],
+  };
+  approvedList: any[] = [];
+
+  pendingList: any[] = [];
+  rejectedList: any[] = [];
+  approvalData: Record<string, any> = {};
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 1;
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Approval', link: '' },
   ];
+  componentName: string = 'ApprovalComponent';
   currentLanguage = 'en';
   showDetailView: boolean = false;
-
+  currentStatus = 'IN_QUE';
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
+    this.onOwnerSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText) => {
+        if (searchText?.trim()) this.approvalData['search'] = searchText.trim();
+        else delete this.approvalData['search'];
+
+        this.currentPage = 1;
+        this.loadApprovalList();
+      });
   }
 
   ngOnInit() {
     this.loadBreadcrumb();
+
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
@@ -73,20 +122,199 @@ export class ApprovalComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
+
+    const tenantId = Number(this.route.snapshot.paramMap.get('tenantId'));
+    const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+
+    if (tenantId || leaseId) {
+      this.showDetailView = true;
+      this.approveTenant(tenantId, leaseId);
+    } else {
+      this.showDetailView = false;
+      this.loadApprovalList();
+    }
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
   }
-  handleRejectClick(): void {
+
+  loadApprovalList(status?: string): void {
+    console.log(
+      'Approval List API params:',
+      this.approvalData,
+      'Status:',
+      status
+    );
+
+    this.approvalData = {
+      ...this.approvalData,
+      limit: this.rowsPerPage,
+      page_number: this.currentPage,
+    };
+    // this.approvalData['limit'] = this.rowsPerPage;
+    // this.approvalData['page_number'] = this.currentPage;
+
+    if (status) {
+      this.approvalData['status'] = status;
+    } else {
+      delete this.approvalData['status'];
+    }
+
+    this.approvalService
+      .getApprovalList(this.approvalData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          if (status === 'APPROVED') {
+            this.approvedList = resp?.content ?? [];
+          }
+
+          if (status === 'REJECTED') {
+            this.rejectedList = resp?.content ?? [];
+          }
+
+          if (status === 'PENDING' || !status) {
+            this.pendingList = resp?.content ?? [];
+          }
+        },
+        error: (err) => console.error('Approval List API Error:', err),
+      });
+  }
+  // refreshDetailsView() {
+  //   const id = this.route.snapshot.paramMap.get('id');
+  //   if (id) this.approveTenant(+id);
+  // }
+
+  mapDocumentsByType() {
+    // clear arrays
+    Object.keys(this.documentsByType).forEach((key) => {
+      this.documentsByType[key] = [];
+    });
+
+    this.leaseDocuments.forEach((doc) => {
+      if (this.documentsByType[doc.type]) {
+        this.documentsByType[doc.type].push(doc);
+      }
+    });
+  }
+
+  changeStatus(status: string) {
+    this.currentStatus = status;
+    this.currentPage = 1;
+    this.loadApprovalList(status);
+  }
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.loadApprovalList();
+  }
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.loadApprovalList();
+  }
+
+  searchTextChange(search: string) {
+    this.onOwnerSearch$.next(search);
+  }
+  handleRejectClick(leaseId: number): void {
+    const params = {
+      lease_id: leaseId,
+      approval_status: 'REJECTED',
+    };
+    this.approvalData = {
+      ...this.approvalData,
+      limit: this.rowsPerPage,
+      page_number: this.currentPage,
+    };
+
+    this.approvalService
+      .getApprovalList(params, 'PUT')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          this.alertService.success('Tenant Rejected Successfully');
+
+          this.pendingList = resp?.content ?? [];
+          this.loadApprovalList();
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+        },
+        error: (err) => {
+          this.alertService.error('Rejection failed');
+          console.error(err);
+        },
+      });
+
     console.log('Reject button clicked');
   }
 
-  handleApproveClick(): void {
+  handleApproveClick(leaseId: number): void {
+    const params = {
+      lease_id: leaseId,
+      approval_status: 'APPROVED',
+    };
+    this.approvalData = {
+      ...this.approvalData,
+      limit: this.rowsPerPage,
+      page_number: this.currentPage,
+    };
+
+    this.approvalService
+      .getApprovalList(params, 'PUT')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          this.alertService.success('Tenant Approved Successfully');
+
+          this.approvedList = resp?.content ?? [];
+
+          this.loadApprovalList();
+        },
+        error: (err) => {
+          this.alertService.error('Approval failed');
+          console.error(err);
+        },
+      });
     console.log('Approve button clicked');
   }
 
-  handleViewClick(): void {
-    this.showDetailView = true;
+  approveTenant(tenantId: number, leaseId: number) {
+    const params = {
+      lease_id: leaseId,
+
+      tenant_id: tenantId,
+    };
+
+    console.log('Tenant API params:', params);
+    this.approvalService
+      .getApprovalList(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          this.selectedTenant = resp.content;
+
+          this.leaseDocuments = resp.content?.lease_documents || [];
+
+          // 2️⃣ mapping call करा
+          this.mapDocumentsByType();
+          this.alertService.success('teanant data fetched');
+        },
+        error: (err) => {
+          this.alertService.error('Approval failed');
+          console.error(err);
+        },
+      });
+  }
+
+  handleViewClick(tenantId: number, leaseId: number): void {
+    this.router.navigate(['/dashboard/approval/list/', tenantId, leaseId]);
   }
 
   handleBackClick(): void {
+    this.router.navigate(['/dashboard/approval']);
+    this.loadApprovalList();
     this.showDetailView = false;
+    this.selectedTenant = null;
   }
 }

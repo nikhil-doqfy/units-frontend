@@ -157,10 +157,13 @@ export class StaffComponent {
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
-  onOptionSelectedFilter(option: any) {
-    this.selectedstaffRole = option;
-  }
+  removeFilter() {
+    this.selectedstaffRole = null;
+    delete this.staffRolesData['staff_role'];
 
+    this.currentPage = 1;
+    this.getStaffRoleDetails();
+  }
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })

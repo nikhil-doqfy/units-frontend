@@ -307,8 +307,12 @@ export class PropertiesComponent {
       },
     ],
   };
-  onOptionSelectedFilter(option: string) {
-    this.selectedrentalstatus = option;
+  removeFilter() {
+    this.selectedrentalstatus = null;
+    delete this.propertiesFilter['rental_status'];
+
+    this.currentPage = 1;
+    this.getProperties();
   }
   getOptionTypes(options: string[]) {
     this.sharedApiService

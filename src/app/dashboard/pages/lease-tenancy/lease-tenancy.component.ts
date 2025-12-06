@@ -173,8 +173,42 @@ export class LeaseTenancyComponent {
     this.router.navigate(['/dashboard/add-lease']);
   }
 
-  onOptionSelectedFilter(option: string) {
-    this.selectedleasestatus = option;
+  handleViewPdf(leaseId: number): void {
+    this.leaseService
+      .getLeasePdf(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: Blob) => {
+        const fileURL = window.URL.createObjectURL(
+          new Blob([resp], { type: 'application/pdf' })
+        );
+
+        window.open(fileURL, '_blank');
+      });
+  }
+
+  handleDownloadPdf(leaseId: number): void {
+    this.leaseService
+      .getLeasePdf(leaseId, 'download')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: Blob) => {
+        const blob = new Blob([resp], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `lease_${leaseId}.pdf`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+        this.alertService.success('PDF downloaded successfully!');
+      });
+  }
+
+  removeFilter() {
+    this.selectedleasestatus = null;
+    delete this.leaseFilter['lease_status'];
+    this.currentPage = 1;
+    this.getLease();
   }
   getOptionTypes(options: string[]) {
     this.sharedApiService
@@ -191,15 +225,6 @@ export class LeaseTenancyComponent {
     console.log('Filter button clicked');
   }
 
-  onOptionSelectedUserType(option: any) {
-    this.selectedFilter = option;
-
-    // if (option && option.value) {
-    //   this.leaseFilter['LEASE_STATUS'] = option.key;
-    // } else {
-    //   delete this.leaseFilter['LEASE_STATUS'];
-    // }
-  }
   handleExportClick(): void {
     this.leaseService
       .getExcelFileOflease({})

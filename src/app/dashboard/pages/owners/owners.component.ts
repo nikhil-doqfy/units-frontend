@@ -42,6 +42,9 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-owners',
@@ -67,6 +70,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TranslateModule,
     MaskPhonePipe,
     NoDataComponent,
+    FilterPopupButtonComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './owners.component.html',
   styleUrl: './owners.component.css',
@@ -77,14 +82,17 @@ export class OwnersComponent {
     { label: 'Owners', link: '' },
   ];
   selectedOwner: any = null;
+  private sharedApiService = inject(SharedApiService);
   owners: any[] = [];
+  selectedrentalstatus: any = null;
   ownerData: Record<string, any> = {};
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
-
+  ownerId = 1;
+  rentalStatus: any = [];
   private modalService = inject(NgbModal);
   private ownerService = inject(OwnerService);
   private alertService = inject(AlertService);
@@ -123,6 +131,8 @@ export class OwnersComponent {
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
+
+      this.getOptionTypes(['RENTAL_STATUS']);
     } else {
       this.showDetailView = false;
       this.getOwner();
@@ -134,6 +144,7 @@ export class OwnersComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
+    this.getOwner();
   }
 
   async loadBreadcrumb() {
@@ -171,6 +182,11 @@ export class OwnersComponent {
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
       });
+  }
+  applyFilter() {
+    this.ownerData['rental_status'] = this.selectedrentalstatus.key;
+    this.currentPage = 1;
+    this.getOwner();
   }
 
   // ------------------------- Pagination component -------------------------
@@ -273,6 +289,11 @@ export class OwnersComponent {
   }
 
   handleExportClick(): void {
+    // const tableData = this.selectedOwner?.properties;
+
+    // if (!tableData || tableData.length === 0) {
+    //   return;
+    // }
     this.ownerService
       .getExcelFileOfowner({})
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -290,6 +311,67 @@ export class OwnersComponent {
         this.alertService.success('File downloaded successfully!');
       });
     console.log('Export button clicked');
+  }
+
+  handleExportInternalTable(): void {
+    const tableData = this.selectedOwner?.properties;
+    if (!tableData || tableData.length === 0) {
+      return;
+    }
+
+    const csvContent = this.convertTableToCSV(tableData);
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${this.selectedOwner.full_name}_properties.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+
+    this.alertService.success('Owner properties exported successfully!');
+  }
+
+  private convertTableToCSV(data: any[]): string {
+    if (!data || data.length === 0) return '';
+
+    const headers = ['Owner Name', 'Code', 'Property Name', 'Tenant Name'];
+
+    const rows = data.map((prop) => [
+      this.selectedOwner.full_name || '',
+      this.selectedOwner.owner_number || '',
+      prop.property_name || '',
+      prop.tenant_name || 'Vacant',
+    ]);
+
+    const csvString =
+      headers.join(',') +
+      '\n' +
+      rows.map((r) => r.map((v) => `"${v}"`).join(',')).join('\n');
+
+    return csvString;
+  }
+
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.rentalStatus = response?.content?.rental_status;
+          console.log('data', this.rentalStatus);
+        },
+      });
+  }
+
+  removeFilter() {
+    this.selectedrentalstatus = null;
+    delete this.ownerData['rental_status'];
+
+    this.currentPage = 1;
+    this.getOwner();
   }
 
   // ------------------------- Handel show details function -------------------------

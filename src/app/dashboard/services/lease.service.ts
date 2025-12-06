@@ -31,6 +31,18 @@ export class LeaseService {
     );
   }
 
+  getLeasePdf(leaseId: number, type?: 'download') {
+    let url = `${this.SERVER_ADDRESS}/get/lease/pdf?lease_id=${leaseId}`;
+
+    if (type === 'download') {
+      url += `&type=download`;
+    }
+
+    return this.http.get(url, {
+      responseType: 'blob', // ✅ IMPORTANT
+    });
+  }
+
   addLeasePropertyDetails(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/lease/property/view/`, data);
   }

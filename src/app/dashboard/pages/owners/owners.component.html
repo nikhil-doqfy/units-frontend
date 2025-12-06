@@ -193,17 +193,63 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="Search here..." />
-            <app-table-filter-btn
+            <!-- <app-table-filter-btn
               title="Filter"
               [hasIcon]="true"
-              (clicked)="handleExportClick()"
+              (clicked)="handleFilterClick()"
             >
               <app-filter-icon />
-            </app-table-filter-btn>
+            </app-table-filter-btn> -->
+
+            <app-filter-popup-btn>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{
+                        "RENTAL_STATUS" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="rentalStatus"
+                        key="key"
+                        value="value"
+                        placeholder="Select rental status"
+                        (optionSelected)="selectedrentalstatus = $event"
+                      >
+                      </app-custom-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
+
             <app-table-filter-btn
               title="Export"
               [hasIcon]="true"
-              (clicked)="handleExportClick()"
+              (clicked)="handleExportInternalTable()"
             >
               <app-export-icon />
             </app-table-filter-btn>

@@ -110,6 +110,13 @@
                   <button
                     type="button"
                     class="btn btnCommon"
+                    (click)="removeFilter()"
+                  >
+                    {{ "REMOVE_ALL" | translate }}
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btnCommon"
                     (click)="applyFilter()"
                   >
                     {{ "APPLY" | translate }}
