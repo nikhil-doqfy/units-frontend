@@ -70,9 +70,16 @@ export class LeaseService {
   getTemplateContent(url: string): Observable<any> {
     let finalUrl = new URL(url, this.SERVER_ADDRESS);
 
-    console.log(`${finalUrl}`);
     return this.http.get(`${finalUrl}`, {
       responseType: 'text',
     });
+  }
+
+  addTemplateData(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/save/template`, data);
+  }
+
+  editTemplateData(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/save/template`, data);
   }
 }
