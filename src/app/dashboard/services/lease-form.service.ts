@@ -113,6 +113,9 @@ export class LeaseFormService {
         id: 'NEGOTIATION',
         title: 'Negotiation',
         formGroup: this.leaseNegotiationForm,
+        save: (payload, context) =>
+          this.saveNegotiationDetails(payload, context),
+        mapOut: (value) => this.mapOutNegotiationDetails(value),
       },
       {
         id: 'UPLOAD_EJARI',
@@ -233,6 +236,33 @@ export class LeaseFormService {
       notice_period: value.noticePeriod,
       discount: value.discount,
     };
+
+    return data;
+  }
+
+  saveNegotiationDetails(payload: Record<string, any>, context: any) {
+    const mode = this.engine()?.getCurrentStepFormMode();
+    payload['lease_id'] = context.formId;
+    if (mode === 'EDIT') {
+      return this.leaseService.editTemplateData(payload);
+    } else {
+      return this.leaseService.addTemplateData(payload);
+    }
+  }
+
+  mapOutNegotiationDetails(value: any): Record<string, any> {
+    let data: any = {};
+
+    const docLayoutFormValue = this.leaseDocumentLayoutForm.value;
+    const selectedDocLayout = docLayoutFormValue.documentLayout;
+
+    if (selectedDocLayout === 'predefinedTemplate') {
+      data = {
+        ...data,
+        values: value.templateValues,
+        template_id: docLayoutFormValue.template,
+      };
+    }
 
     return data;
   }
