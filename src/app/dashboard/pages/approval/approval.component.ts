@@ -72,7 +72,8 @@ export class ApprovalComponent {
     BANK_STATEMENT: [],
   };
   approvedList: any[] = [];
-
+  tenantList: any[] = [];
+  currentStatus: 'APPROVED' | 'REJECTED' | 'PENDING' = 'PENDING';
   pendingList: any[] = [];
   rejectedList: any[] = [];
   approvalData: Record<string, any> = {};
@@ -88,7 +89,6 @@ export class ApprovalComponent {
   componentName: string = 'ApprovalComponent';
   currentLanguage = 'en';
   showDetailView: boolean = false;
-  currentStatus = 'IN_QUE';
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -133,59 +133,50 @@ export class ApprovalComponent {
       this.showDetailView = false;
       this.loadApprovalList();
     }
-    const key = this.route.snapshot.data['titleKey'];
-    this.sharedService.setTitle(key);
   }
 
-  loadApprovalList(status?: string): void {
+  approvalList: any[] = [];
+
+  loadApprovalList(): void {
     console.log(
       'Approval List API params:',
       this.approvalData,
       'Status:',
-      status
+      this.currentStatus
     );
 
     this.approvalData = {
       ...this.approvalData,
       limit: this.rowsPerPage,
       page_number: this.currentPage,
+      status: this.currentStatus,
     };
-    // this.approvalData['limit'] = this.rowsPerPage;
-    // this.approvalData['page_number'] = this.currentPage;
-
-    if (status) {
-      this.approvalData['status'] = status;
-    } else {
-      delete this.approvalData['status'];
-    }
 
     this.approvalService
       .getApprovalList(this.approvalData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          if (status === 'APPROVED') {
-            this.approvedList = resp?.content ?? [];
-          }
-
-          if (status === 'REJECTED') {
-            this.rejectedList = resp?.content ?? [];
-          }
-
-          if (status === 'PENDING' || !status) {
-            this.pendingList = resp?.content ?? [];
-          }
+          this.tenantList = resp?.content ?? [];
         },
         error: (err) => console.error('Approval List API Error:', err),
       });
   }
-  // refreshDetailsView() {
-  //   const id = this.route.snapshot.paramMap.get('id');
-  //   if (id) this.approveTenant(+id);
-  // }
+
+  refreshDetailsView() {
+    const tenantId = Number(this.route.snapshot.paramMap.get('tenantId'));
+    const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+
+    if (tenantId || leaseId) {
+      this.showDetailView = true;
+      this.approveTenant(tenantId, leaseId);
+    } else {
+      this.showDetailView = false;
+      this.loadApprovalList();
+    }
+  }
 
   mapDocumentsByType() {
-    // clear arrays
     Object.keys(this.documentsByType).forEach((key) => {
       this.documentsByType[key] = [];
     });
@@ -197,10 +188,10 @@ export class ApprovalComponent {
     });
   }
 
-  changeStatus(status: string) {
+  changeStatus(status: 'APPROVED' | 'REJECTED' | 'PENDING') {
     this.currentStatus = status;
     this.currentPage = 1;
-    this.loadApprovalList(status);
+    this.loadApprovalList();
   }
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
@@ -221,12 +212,13 @@ export class ApprovalComponent {
     const params = {
       lease_id: leaseId,
       approval_status: 'REJECTED',
-    };
-    this.approvalData = {
+
       ...this.approvalData,
       limit: this.rowsPerPage,
       page_number: this.currentPage,
     };
+    this.approvalData['limit'] = this.rowsPerPage;
+    this.approvalData['page_number'] = this.currentPage;
 
     this.approvalService
       .getApprovalList(params, 'PUT')
@@ -254,6 +246,7 @@ export class ApprovalComponent {
       lease_id: leaseId,
       approval_status: 'APPROVED',
     };
+    console.log('Step 1 - Params to approve:', params);
     this.approvalData = {
       ...this.approvalData,
       limit: this.rowsPerPage,
@@ -292,11 +285,12 @@ export class ApprovalComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
-          this.selectedTenant = resp.content;
+          console.log('FULL RESPONSE --->', resp);
+          console.log('CONTENT --->', resp?.content);
+          this.selectedTenant = resp.content.tenant_details;
 
           this.leaseDocuments = resp.content?.lease_documents || [];
 
-          // 2️⃣ mapping call करा
           this.mapDocumentsByType();
           this.alertService.success('teanant data fetched');
         },

@@ -1,5 +1,5 @@
 // const HOSTNAME = 'units-api.doqfy.in';
-const HOSTNAME = '192.168.1.6';
+const HOSTNAME = '192.168.1.11';
 export const environment = {
   production: false,
   enableLogging: true,

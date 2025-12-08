@@ -186,7 +186,7 @@ export class OwnersComponent {
   applyFilter() {
     this.ownerData['rental_status'] = this.selectedrentalstatus.key;
     this.currentPage = 1;
-    this.getOwner();
+    this.loadDetailView(this.selectedOwner.id);
   }
 
   // ------------------------- Pagination component -------------------------
@@ -289,11 +289,6 @@ export class OwnersComponent {
   }
 
   handleExportClick(): void {
-    // const tableData = this.selectedOwner?.properties;
-
-    // if (!tableData || tableData.length === 0) {
-    //   return;
-    // }
     this.ownerService
       .getExcelFileOfowner({})
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -313,47 +308,38 @@ export class OwnersComponent {
     console.log('Export button clicked');
   }
 
-  handleExportInternalTable(): void {
-    const tableData = this.selectedOwner?.properties;
-    if (!tableData || tableData.length === 0) {
+  handleExportInternalTable() {
+    console.log('Selected Owner at export:', this.selectedOwner);
+    if (this.selectedOwner?.owner_id) {
+      this.alertService.error('Owner not selected');
       return;
     }
 
-    const csvContent = this.convertTableToCSV(tableData);
+    const params = {
+      owner_id: this.selectedOwner.owner_id,
+    };
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${this.selectedOwner.full_name}_properties.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    console.log('Export params:', params);
 
-    this.alertService.success('Owner properties exported successfully!');
+    this.ownerService
+      .getExcelFileOfowner(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp) => {
+        console.log('Export response:', resp);
+
+        const url = window.URL.createObjectURL(resp);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'owner_properties_export.xlsx';
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+        this.alertService.success('File downloaded successfully!');
+      });
+
+    console.log('Export button clicked');
   }
-
-  private convertTableToCSV(data: any[]): string {
-    if (!data || data.length === 0) return '';
-
-    const headers = ['Owner Name', 'Code', 'Property Name', 'Tenant Name'];
-
-    const rows = data.map((prop) => [
-      this.selectedOwner.full_name || '',
-      this.selectedOwner.owner_number || '',
-      prop.property_name || '',
-      prop.tenant_name || 'Vacant',
-    ]);
-
-    const csvString =
-      headers.join(',') +
-      '\n' +
-      rows.map((r) => r.map((v) => `"${v}"`).join(',')).join('\n');
-
-    return csvString;
-  }
-
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
@@ -371,7 +357,7 @@ export class OwnersComponent {
     delete this.ownerData['rental_status'];
 
     this.currentPage = 1;
-    this.getOwner();
+    this.loadDetailView(this.selectedOwner.id);
   }
 
   // ------------------------- Handel show details function -------------------------
@@ -386,7 +372,10 @@ export class OwnersComponent {
 
   loadDetailView(ownerID: number): void {
     this.ownerService
-      .getOwnerDetails({ owner_id: ownerID })
+      .getOwnerDetails({
+        owner_id: ownerID,
+        rental_status: this.ownerData['rental_status'],
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {

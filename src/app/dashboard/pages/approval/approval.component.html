@@ -82,11 +82,12 @@
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
                   <th>{{ "CONTACT_NUMBER" | translate }}</th>
                   <th>{{ "EMAIL_ADDRESS" | translate }}</th>
-                  <th width="200"></th>
+                  <!-- <th width="200"></th> -->
                 </tr>
               </thead>
+
               <tbody>
-                @for (approval of pendingList; track $index){
+                @for (approval of tenantList; track $index){
                 <tr>
                   <td>
                     <app-table-img-item
@@ -108,111 +109,8 @@
                   </td>
                   <td>{{ approval.mobile_number }}</td>
                   <td>{{ approval.email }}</td>
+
                   <!-- <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td> 
-                </tr>
-                 <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-2.png"
-                      title="Richard"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>LP8021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-99******76</td>
-                  <td>jensi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-3.png"
-                      title="Thaomas"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC79021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-89******12</td>
-                  <td>thaomas&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-4.png"
-                      title="Akshay"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC69021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-90******45</td>
-                  <td>akshay&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-5.png"
-                      title="JeAvanshinsi"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC59021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-78******90</td>
-                  <td>avanshi&#64;example.com</td>-->
-                  <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
                         type="reject"
@@ -223,7 +121,7 @@
                         (clicked)="handleApproveClick(approval.lease_id)"
                       />
                     </div>
-                  </td>
+                  </td> -->
                 </tr>
                 }@empty {
                 <tr>
@@ -265,10 +163,10 @@
                   <th>Date Requested</th>
                   <th>Contact Number</th>
                   <th>Email Address</th>
-                  <th width="200"></th>
+                  <!-- <th width="200"></th> -->
                 </tr>
               </thead>
-              @for (approval of approvedList; track $index){
+              @for (approval of tenantList; track $index){
               <tbody>
                 <tr>
                   <td>
@@ -289,110 +187,7 @@
                   </td>
                   <td>{{ approval.mobile_number }}</td>
                   <td>{{ approval.email }}</td>
-                  <!-- <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-2.png"
-                      title="Richard"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>LP8021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-99******76</td>
-                  <td>jensi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-3.png"
-                      title="Thaomas"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC79021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-89******12</td>
-                  <td>thaomas&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-4.png"
-                      title="Akshay"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC69021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-90******45</td>
-                  <td>akshay&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-5.png"
-                      title="JeAvanshinsi"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC59021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-78******90</td>
-                  <td>avanshi&#64;example.com</td>-->
+                  <!-- 
                   <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
@@ -404,9 +199,8 @@
                         (clicked)="handleApproveClick(approval.lease_id)"
                       />
                     </div>
-                  </td>
+                  </td> -->
                 </tr>
-                <!-- </tr> -->
               </tbody>
 
               }@empty {
@@ -447,10 +241,10 @@
                   <th>Date Requested</th>
                   <th>Contact Number</th>
                   <th>Email Address</th>
-                  <th width="200"></th>
+                  <!-- <th width="200"></th> -->
                 </tr>
               </thead>
-              @for (approval of rejectedList; track $index){
+              @for (approval of tenantList; track $index){
               <tbody>
                 <tr>
                   <td>
@@ -463,7 +257,6 @@
                       [clickable]="true"
                       [title]="approval.tenant_name"
                     />
-                    <!-- (clicked)="handleViewClick('APPROVED')" -->
                   </td>
                   <td>{{ approval.emirates_id }}</td>
                   <td>
@@ -471,110 +264,7 @@
                   </td>
                   <td>{{ approval.mobile_number }}</td>
                   <td>{{ approval.email }}</td>
-                  <!-- <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-2.png"
-                      title="Richard"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>LP8021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-99******76</td>
-                  <td>jensi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-3.png"
-                      title="Thaomas"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC79021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-89******12</td>
-                  <td>thaomas&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-4.png"
-                      title="Akshay"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC69021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-90******45</td>
-                  <td>akshay&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-5.png"
-                      title="JeAvanshinsi"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC59021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-78******90</td>
-                  <td>avanshi&#64;example.com</td>-->
+                  <!-- 
                   <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
@@ -587,9 +277,10 @@
                         (clicked)="handleApproveClick(approval.lease_id)"
                       />
                     </div>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
+
               }@empty {
               <tr>
                 <td colspan="20" align="center">
@@ -637,10 +328,14 @@
     ]"
     (back)="handleBackClick()"
   >
-    <app-table-action-btn type="rejectOrange" />
-    <!-- (clicked)="handleRejectClick()" -->
-    <app-table-action-btn type="approve" />
-    <!-- (clicked)="handleApproveClick()" -->
+    <app-table-action-btn
+      type="rejectOrange"
+      (clicked)="handleRejectClick(selectedTenant.lease_id)"
+    />
+    <app-table-action-btn
+      type="approve"
+      (clicked)="handleApproveClick(selectedTenant.lease_id)"
+    />
   </app-table-view-card>
 
   <div class="mt-3">
@@ -915,11 +610,3 @@
     </app-white-card>
   </div>
 </ng-container>
-<!-- </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div></div
-></ng-container> -->
