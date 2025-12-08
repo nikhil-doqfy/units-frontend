@@ -207,7 +207,6 @@ export class AddLeaseComponent {
 
         // Inject span for each back-end-defined variable
         const processed = this.injectVariableSpans(cleanHtml);
-        console.log('processed:', processed);
 
         this.processedTemplate =
           this.sanitizer.bypassSecurityTrustHtml(processed);
@@ -250,6 +249,7 @@ export class AddLeaseComponent {
       'dynamicVariables'
     ) as FormGroup;
 
+    // On form value change then make changes to UI by subscribing
     dynamicGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((values) => {
@@ -262,10 +262,14 @@ export class AddLeaseComponent {
             } else {
               node.removeAttribute('data-filled');
             }
+            this.negotiationForm
+              .get('templateValues')
+              ?.patchValue(dynamicGroup.value);
           });
         });
       });
   }
+
   onDocRendered() {
     const container = this.docContainer.nativeElement;
     console.log(container);
@@ -283,8 +287,6 @@ export class AddLeaseComponent {
 
       this.variableNodes[key].push(node);
     });
-
-    console.log('Collected variableNodes:', this.variableNodes);
   }
 
   submitLease(): void {
