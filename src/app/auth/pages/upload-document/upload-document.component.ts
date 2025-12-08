@@ -127,7 +127,7 @@ export class UploadDocumentComponent {
       name: file.name,
       size: this.formatFileSize(file.size),
       file,
-      base64: base64.split(',')[1],
+      base64: base64,
     };
 
     const index = this.uploadedList.findIndex((f) => f.type === type);
@@ -175,7 +175,8 @@ export class UploadDocumentComponent {
       confirm_password: data['confirmPassword'],
       mobile_number: data['contact_number'],
       user_type: selctedUsertype,
-      emirate_id: data['emirate_id'],
+      manage_through: data['manageThrough'],
+      emirate_id: data['emirateId'],
       uae_residence_visa: data['residenceVisa'],
       trade_license_number: data['tradeLicense'],
       emirates_id_doc: getDocumentBase64('emiratesId'),
@@ -186,13 +187,6 @@ export class UploadDocumentComponent {
     if (selctedUsertype === 'PROPERTY_MANAGER') {
       paylod['company_name'] = data['company_name'];
       paylod['company_emirate_id'] = data['emirateId'];
-      paylod['manage_through'] = data['manageThrough'];
-    } else if (selctedUsertype === 'TENANT') {
-      paylod['emirate_id'] = data['emirateId'];
-      paylod['manage_through'] = data['manageThrough'];
-    } else if (selctedUsertype === 'OWNER') {
-      paylod['emirate_id'] = data['emirateId'];
-      paylod['manage_through'] = data['manageThrough'];
     }
 
     this.authService
