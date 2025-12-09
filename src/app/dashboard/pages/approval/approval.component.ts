@@ -149,6 +149,7 @@ export class ApprovalComponent {
       ...this.approvalData,
       limit: this.rowsPerPage,
       page_number: this.currentPage,
+      status: this.currentStatus,
     };
 
     this.approvalService
@@ -211,20 +212,26 @@ export class ApprovalComponent {
   searchTextChange(search: string) {
     this.onOwnerSearch$.next(search);
   }
-  handleRejectClick(leaseId: number): void {
+
+  handleRejectClick(): void {
+    const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+
+    if (!leaseId) {
+      console.error('LeaseId not found in URL');
+      return;
+    }
     const params = {
       lease_id: leaseId,
       approval_status: 'REJECTED',
     };
 
     this.approvalService
-      .getApprovalList(params, 'PUT')
+      .updateApprovalStatus(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
           this.alertService.success('Tenant Rejected Successfully');
 
-          this.pendingList = resp?.content ?? [];
           this.loadApprovalList();
         },
         error: (err) => {
@@ -236,20 +243,25 @@ export class ApprovalComponent {
     console.log('Reject button clicked');
   }
 
-  handleApproveClick(leaseId: number): void {
+  handleApproveClick(): void {
+    const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+
+    if (!leaseId) {
+      console.error('LeaseId not found in URL');
+      return;
+    }
     const params = {
       lease_id: leaseId,
       approval_status: 'APPROVED',
     };
 
+    console.log('PUT payload --->', params);
     this.approvalService
-      .getApprovalList(params, 'PUT')
+      .updateApprovalStatus(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
           this.alertService.success('Tenant Approved Successfully');
-
-          this.approvedList = resp?.content ?? [];
 
           this.loadApprovalList();
         },
@@ -258,6 +270,7 @@ export class ApprovalComponent {
           console.error(err);
         },
       });
+
     console.log('Approve button clicked');
   }
 

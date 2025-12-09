@@ -361,14 +361,8 @@
     ]"
     (back)="handleBackClick()"
   >
-    <app-table-action-btn
-      type="rejectOrange"
-      (clicked)="handleRejectClick(selectedTenant.lease_id)"
-    />
-    <app-table-action-btn
-      type="approve"
-      (clicked)="handleApproveClick(selectedTenant.lease_id)"
-    />
+    <app-table-action-btn type="rejectOrange" (clicked)="handleRejectClick()" />
+    <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
   </app-table-view-card>
 
   <div class="mt-3">
