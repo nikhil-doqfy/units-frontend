@@ -89,6 +89,7 @@ export class ApprovalComponent {
   componentName: string = 'ApprovalComponent';
   currentLanguage = 'en';
   showDetailView: boolean = false;
+
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -291,7 +292,7 @@ export class ApprovalComponent {
   }
 
   handleViewClick(tenantId: number, leaseId: number): void {
-    this.router.navigate(['/dashboard/approval/list/', tenantId, leaseId]);
+    this.router.navigate(['/dashboard/approval/detail/', tenantId, leaseId]);
   }
 
   handleBackClick(): void {
