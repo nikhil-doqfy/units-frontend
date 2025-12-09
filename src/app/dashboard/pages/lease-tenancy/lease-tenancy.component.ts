@@ -173,29 +173,16 @@ export class LeaseTenancyComponent {
     this.router.navigate(['/dashboard/add-lease']);
   }
 
-  // handleViewPdf(leaseId: number): void {
-  //   this.leaseService
-  //     .getLeasePdf(leaseId)
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((resp: Blob) => {
-  //       const fileURL = window.URL.createObjectURL(
-  //         new Blob([resp], { type: 'application/pdf' })
-  //       );
-
-  //       window.open(fileURL, '_blank');
-  //     });
-  // }
-
   handleViewPdf(leaseId: number): void {
     this.leaseService
-      .getLeasePdf(leaseId) // JSON response
+      .getLeasePdf(leaseId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           const pdfUrl = resp?.content?.pdf_url;
 
           if (pdfUrl) {
-            window.open(pdfUrl, '_blank'); // ✅ Preview in new tab
+            window.open(pdfUrl, '_blank');
           } else {
             this.alertService.error('PDF URL not found.');
           }
