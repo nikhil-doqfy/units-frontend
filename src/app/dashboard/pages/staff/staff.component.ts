@@ -36,7 +36,9 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 @Component({
   selector: 'app-staff',
   standalone: true,
@@ -60,6 +62,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TranslateModule,
     MaskPhonePipe,
     TranslateModule,
+    FilterPopupButtonComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',
@@ -72,15 +76,15 @@ export class StaffComponent {
 
   componentName: string = 'StaffComponent';
   selectedStaff: any = null;
-
-  staffRoles: any[] = [];
+  selectedstaffRole: any = null;
+  staffRoles: any = [];
   staffRolesData: Record<string, any> = {};
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
-
+  staffRole: any = [];
   private modalService = inject(NgbModal);
   private staffService = inject(StaffService);
   private alertService = inject(AlertService);
@@ -89,6 +93,7 @@ export class StaffComponent {
   private destroyRef = inject(DestroyRef);
   private onStaffSearch$ = new Subject<string>();
   private translate = inject(TranslateService);
+  private sharedApiService = inject(SharedApiService);
   closeResult: WritableSignal<string> = signal('');
   currentLanguage = 'en';
   showDetailView: boolean = false;
@@ -142,6 +147,7 @@ export class StaffComponent {
       this.showDetailView = false;
       this.getStaffRoleDetails();
     }
+    this.getOptionTypes(['STAFF_ROLE']);
   }
 
   onRefresh() {
@@ -151,7 +157,24 @@ export class StaffComponent {
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
+  removeFilter() {
+    this.selectedstaffRole = null;
+    delete this.staffRolesData['staff_role'];
 
+    this.currentPage = 1;
+    this.getStaffRoleDetails();
+  }
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.staffRole = response?.content?.staff_role;
+          console.log('data', this.staffRole);
+        },
+      });
+  }
   handleFilterClick(): void {
     console.log('Filter button clicked');
   }
@@ -172,6 +195,11 @@ export class StaffComponent {
     });
 
     console.log('Export button clicked');
+  }
+  applyFilter() {
+    this.staffRolesData['staff_role'] = this.selectedstaffRole.key;
+    this.currentPage = 1;
+    this.getStaffRoleDetails();
   }
 
   openAddStaffModal(addStaffContent: TemplateRef<any>) {

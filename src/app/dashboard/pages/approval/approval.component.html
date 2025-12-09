@@ -18,6 +18,7 @@
               role="tab"
               aria-controls="inQue-tab-pane"
               aria-selected="true"
+              (click)="changeStatus('PENDING')"
             >
               {{ "IN_QUE" | translate }}
             </button>
@@ -32,6 +33,7 @@
               role="tab"
               aria-controls="accepted-tab-pane"
               aria-selected="false"
+              (click)="changeStatus('APPROVED')"
             >
               <i><app-accept-icon /></i> {{ "ACCEPTED" | translate }}
             </button>
@@ -46,6 +48,7 @@
               role="tab"
               aria-controls="rejected-tab-pane"
               aria-selected="false"
+              (click)="changeStatus('REJECTED')"
             >
               <i><app-reject-icon /></i>{{ "REJECTED" | translate }}
             </button>
@@ -79,148 +82,54 @@
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
                   <th>{{ "CONTACT_NUMBER" | translate }}</th>
                   <th>{{ "EMAIL_ADDRESS" | translate }}</th>
-                  <th width="200"></th>
+                  <!-- <th width="200"></th> -->
                 </tr>
               </thead>
+
               <tbody>
-                <!-- @for (property of ApprovalList; track $index){ -->
+                @for (approval of tenantList; track $index){
                 <tr>
                   <td>
                     <app-table-img-item
-                      img="../../../../assets/user/user-1.png"
-                      title="Jensi"
+                      [img]="
+                        approval?.profile_image
+                          ? approval?.profile_image
+                          : '../../../../assets/userDefaultProImg.png'
+                      "
                       [clickable]="true"
-                      (clicked)="handleViewClick()"
+                      (clicked)="
+                        handleViewClick(approval.id, approval.lease_id)
+                      "
+                      [title]="approval.tenant_name"
                     />
                   </td>
-                  <td>LP9021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-70******23</td>
-                  <td>jensi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
+                  <td>{{ approval.emirates_id }}</td>
                   <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-2.png"
-                      title="Richard"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
+                    {{ approval?.date_request ? approval.date_request : "N/A" }}
                   </td>
-                  <td>LP8021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-99******76</td>
-                  <td>jensi&#64;example.com</td>
-                  <td align="center">
+                  <td>{{ approval.mobile_number }}</td>
+                  <td>{{ approval.email }}</td>
+
+                  <!-- <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
                         type="reject"
-                        (clicked)="handleRejectClick()"
+                        (clicked)="handleRejectClick(approval.lease_id)"
                       />
                       <app-table-action-btn
                         type="approve"
-                        (clicked)="handleApproveClick()"
+                        (clicked)="handleApproveClick(approval.lease_id)"
                       />
                     </div>
-                  </td>
+                  </td> -->
                 </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-3.png"
-                      title="Thaomas"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC79021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-89******12</td>
-                  <td>thaomas&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-4.png"
-                      title="Akshay"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC69021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-90******45</td>
-                  <td>akshay&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-5.png"
-                      title="JeAvanshinsi"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC59021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-78******90</td>
-                  <td>avanshi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <!-- }@empty {
+                }@empty {
                 <tr>
                   <td colspan="20" align="center">
                     <app-no-data></app-no-data>
                   </td>
                 </tr>
-                } -->
+                }
               </tbody>
             </table>
           </div>
@@ -238,6 +147,7 @@
       aria-labelledby="accepted-tab"
       tabindex="0"
     >
+      <!-- accepted  -->
       <div class="cmmnTblOuter">
         <div class="cmmnTblBody">
           <div class="table-responsive">
@@ -253,141 +163,53 @@
                   <th>Date Requested</th>
                   <th>Contact Number</th>
                   <th>Email Address</th>
-                  <th width="200"></th>
+                  <!-- <th width="200"></th> -->
                 </tr>
               </thead>
+              @for (approval of tenantList; track $index){
               <tbody>
                 <tr>
                   <td>
                     <app-table-img-item
-                      img="../../../../assets/user/user-1.png"
-                      title="Jensi"
+                      [img]="
+                        approval?.profile_image
+                          ? approval?.profile_image
+                          : '../../../../assets/userDefaultProImg.png'
+                      "
                       [clickable]="true"
-                      (clicked)="handleViewClick()"
+                      [title]="approval.tenant_name"
                     />
+                    <!-- (clicked)="handleViewClick()" -->
                   </td>
-                  <td>LP9021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-70******23</td>
-                  <td>jensi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
+                  <td>{{ approval.emirates_id }}</td>
                   <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-2.png"
-                      title="Richard"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
+                    {{ approval?.date_request ? approval.date_request : "N/A" }}
                   </td>
-                  <td>LP8021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-99******76</td>
-                  <td>jensi&#64;example.com</td>
+                  <td>{{ approval.mobile_number }}</td>
+                  <td>{{ approval.email }}</td>
+                  <!-- 
                   <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
                         type="reject"
-                        (clicked)="handleRejectClick()"
+                        (clicked)="handleRejectClick(approval.lease_id)"
                       />
                       <app-table-action-btn
                         type="approve"
-                        (clicked)="handleApproveClick()"
+                        (clicked)="handleApproveClick(approval.lease_id)"
                       />
                     </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-3.png"
-                      title="Thaomas"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC79021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-89******12</td>
-                  <td>thaomas&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-4.png"
-                      title="Akshay"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC69021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-90******45</td>
-                  <td>akshay&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-5.png"
-                      title="JeAvanshinsi"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC59021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-78******90</td>
-                  <td>avanshi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
+
+              }@empty {
+              <tr>
+                <td colspan="20" align="center">
+                  <app-no-data></app-no-data>
+                </td>
+              </tr>
+              }
             </table>
           </div>
         </div>
@@ -419,141 +241,53 @@
                   <th>Date Requested</th>
                   <th>Contact Number</th>
                   <th>Email Address</th>
-                  <th width="200"></th>
+                  <!-- <th width="200"></th> -->
                 </tr>
               </thead>
+              @for (approval of tenantList; track $index){
               <tbody>
                 <tr>
                   <td>
                     <app-table-img-item
-                      img="../../../../assets/user/user-1.png"
-                      title="Jensi"
+                      [img]="
+                        approval?.profile_image
+                          ? approval?.profile_image
+                          : '../../../../assets/userDefaultProImg.png'
+                      "
                       [clickable]="true"
-                      (clicked)="handleViewClick()"
+                      [title]="approval.tenant_name"
                     />
                   </td>
-                  <td>LP9021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-70******23</td>
-                  <td>jensi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
+                  <td>{{ approval.emirates_id }}</td>
                   <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-2.png"
-                      title="Richard"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
+                    {{ approval?.date_request ? approval.date_request : "N/A" }}
                   </td>
-                  <td>LP8021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-99******76</td>
-                  <td>jensi&#64;example.com</td>
+                  <td>{{ approval.mobile_number }}</td>
+                  <td>{{ approval.email }}</td>
+                  <!-- 
                   <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
                         type="reject"
-                        (clicked)="handleRejectClick()"
+                        (clicked)="handleRejectClick(approval.lease_id)"
                       />
+
                       <app-table-action-btn
                         type="approve"
-                        (clicked)="handleApproveClick()"
+                        (clicked)="handleApproveClick(approval.lease_id)"
                       />
                     </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-3.png"
-                      title="Thaomas"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC79021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-89******12</td>
-                  <td>thaomas&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-4.png"
-                      title="Akshay"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC69021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-90******45</td>
-                  <td>akshay&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      img="../../../../assets/user/user-5.png"
-                      title="JeAvanshinsi"
-                      [clickable]="true"
-                      (clicked)="handleViewClick()"
-                    />
-                  </td>
-                  <td>VC59021</td>
-                  <td>25-09-2025</td>
-                  <td>+91-78******90</td>
-                  <td>avanshi&#64;example.com</td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick()"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick()"
-                      />
-                    </div>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
+
+              }@empty {
+              <tr>
+                <td colspan="20" align="center">
+                  <app-no-data></app-no-data>
+                </td>
+              </tr>
+              }
             </table>
           </div>
         </div>
@@ -566,30 +300,42 @@
   </div>
 </ng-container>
 
-<ng-container *ngIf="showDetailView">
+<ng-container *ngIf="showDetailView && selectedTenant">
   <app-table-view-card
-    [title]="'Jensi'"
-    [imgSrc]="'../../../assets/user/user-2.png'"
+    [title]="selectedTenant?.full_name"
+    [imgSrc]="selectedTenant?.profile_image"
     [headerItems]="[
-      { label: 'Contact', value: '+91-8987898765' },
-      { label: 'Email', value: 'owner28@gmail.com' }
+      { label: 'Contact', value: selectedTenant?.mobile_number },
+      { label: 'Email', value: selectedTenant?.email }
     ]"
     [items]="[
-      { label: 'Emirates ID:', value: '784198657395715' },
-      { label: 'Nationality', value: 'India' },
-      { label: 'Tenant No', value: '247334' },
-      { label: 'Passport Self', value: '--' },
-      { label: 'Passport For Family Member (If any)', value: '--' },
-      { label: 'Passport Expiry', value: '2025-09-24' },
-      { label: 'Employment Proof', value: 'RAF28' },
-      { label: 'Visa Expiry', value: '2025-09-30' },
-      { label: 'Visa Self', value: '--' },
-      { label: 'Visa For Family Member (If any)', value: '--' }
+      { label: 'Emirates ID:', value: selectedTenant?.emirates_id },
+      { label: 'Nationality', value: selectedTenant?.nationality },
+      { label: 'Tenant No', value: selectedTenant?.tenant_number },
+      { label: 'Passport Self', value: selectedTenant?.passport_self || '--' },
+      {
+        label: 'Passport For Family Member (If any)',
+        value: selectedTenant?.passport_family_member || '--'
+      },
+      { label: 'Passport Expiry', value: selectedTenant?.passport_expiry },
+      { label: 'Employment Proof', value: selectedTenant?.employment_proof },
+      { label: 'Visa Expiry', value: selectedTenant?.visa_expiry },
+      { label: 'Visa Self', value: selectedTenant?.visa_self || '--' },
+      {
+        label: 'Visa For Family Member (If any)',
+        value: selectedTenant?.visa_family_member || '--'
+      }
     ]"
     (back)="handleBackClick()"
   >
-    <app-table-action-btn type="rejectOrange" (clicked)="handleRejectClick()" />
-    <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+    <app-table-action-btn
+      type="rejectOrange"
+      (clicked)="handleRejectClick(selectedTenant.lease_id)"
+    />
+    <app-table-action-btn
+      type="approve"
+      (clicked)="handleApproveClick(selectedTenant.lease_id)"
+    />
   </app-table-view-card>
 
   <div class="mt-3">
@@ -706,11 +452,18 @@
             tabindex="0"
           >
             <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              <div
+                class="col-auto"
+                *ngFor="let item of documentsByType.EMIRATES_ID"
+              >
+                <app-document-type-item
+                  [title]="item.file_name"
+                  size="1.2 MB"
+                  [fileUrl]="item.data"
+                />
               </div>
               <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
+                <app-document-type-item title="dsfds.pdf" size="1.2 MB" />
               </div>
               <div class="col-auto">
                 <app-document-type-item title="Marketing.pdf" size="1.2 MB" />

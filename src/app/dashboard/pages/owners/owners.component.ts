@@ -42,6 +42,9 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-owners',
@@ -67,6 +70,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TranslateModule,
     MaskPhonePipe,
     NoDataComponent,
+    FilterPopupButtonComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './owners.component.html',
   styleUrl: './owners.component.css',
@@ -77,14 +82,17 @@ export class OwnersComponent {
     { label: 'Owners', link: '' },
   ];
   selectedOwner: any = null;
+  private sharedApiService = inject(SharedApiService);
   owners: any[] = [];
+  selectedrentalstatus: any = null;
   ownerData: Record<string, any> = {};
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
-
+  ownerId = 1;
+  rentalStatus: any = [];
   private modalService = inject(NgbModal);
   private ownerService = inject(OwnerService);
   private alertService = inject(AlertService);
@@ -123,6 +131,8 @@ export class OwnersComponent {
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
+
+      this.getOptionTypes(['RENTAL_STATUS']);
     } else {
       this.showDetailView = false;
       this.getOwner();
@@ -134,6 +144,7 @@ export class OwnersComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
+    this.getOwner();
   }
 
   async loadBreadcrumb() {
@@ -171,6 +182,11 @@ export class OwnersComponent {
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
       });
+  }
+  applyFilter() {
+    this.ownerData['rental_status'] = this.selectedrentalstatus.key;
+    this.currentPage = 1;
+    this.loadDetailView(this.selectedOwner.id);
   }
 
   // ------------------------- Pagination component -------------------------
@@ -292,6 +308,58 @@ export class OwnersComponent {
     console.log('Export button clicked');
   }
 
+  handleExportInternalTable() {
+    console.log('Selected Owner at export:', this.selectedOwner);
+    if (this.selectedOwner?.owner_id) {
+      this.alertService.error('Owner not selected');
+      return;
+    }
+
+    const params = {
+      owner_id: this.selectedOwner.owner_id,
+    };
+
+    console.log('Export params:', params);
+
+    this.ownerService
+      .getExcelFileOfowner(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp) => {
+        console.log('Export response:', resp);
+
+        const url = window.URL.createObjectURL(resp);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'owner_properties_export.xlsx';
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+        this.alertService.success('File downloaded successfully!');
+      });
+
+    console.log('Export button clicked');
+  }
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.rentalStatus = response?.content?.rental_status;
+          console.log('data', this.rentalStatus);
+        },
+      });
+  }
+
+  removeFilter() {
+    this.selectedrentalstatus = null;
+    delete this.ownerData['rental_status'];
+
+    this.currentPage = 1;
+    this.loadDetailView(this.selectedOwner.id);
+  }
+
   // ------------------------- Handel show details function -------------------------
   handleViewClick(ownerID: number): void {
     this.router.navigate(['/dashboard/owners/detail/', ownerID]);
@@ -304,7 +372,10 @@ export class OwnersComponent {
 
   loadDetailView(ownerID: number): void {
     this.ownerService
-      .getOwnerDetails({ owner_id: ownerID })
+      .getOwnerDetails({
+        owner_id: ownerID,
+        rental_status: this.ownerData['rental_status'],
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {

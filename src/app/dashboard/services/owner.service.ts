@@ -26,9 +26,13 @@ export class OwnerService {
   addOwnerToInvite(data: Record<'email', string>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/invite/pmc/owner`, data);
   }
-  getExcelFileOfowner(data: Record<string, any>) {
-    return this.http.get(`${this.SERVER_ADDRESS}/export/owner/csv`, {
-      responseType: 'blob',
-    });
+  getExcelFileOfowner(params: any) {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/export/owner/csv?${queryString}`,
+      {
+        responseType: 'blob',
+      }
+    );
   }
 }

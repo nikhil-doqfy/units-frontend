@@ -46,6 +46,8 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-tenants',
@@ -74,6 +76,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TranslateModule,
     NoDataComponent,
     MaskPhonePipe,
+    FilterPopupButtonComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
@@ -208,6 +212,7 @@ export class TenantsComponent {
 
   handleFilterClick(): void {
     console.log('Filter button clicked');
+    //  this.getOptionTypes(['USER_TYPES']);
   }
 
   handleExportClick(): void {
@@ -235,6 +240,10 @@ export class TenantsComponent {
       });
   }
 
+  //   applyFilter() {
+  //   this.currentPage = 1;
+  //   this.getUser();
+  // }
   openAddTenantModal(addTenantContent: TemplateRef<any>) {
     const modalRef = this.modalService.open(addTenantContent, {
       ariaLabelledBy: 'modal-title',

@@ -23,6 +23,9 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { LeaseService } from '../../services/lease.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
@@ -45,6 +48,8 @@ import { AlertService } from '../../../shared/services/alert.service';
     DashTitleComponent,
     TranslateModule,
     NoDataComponent,
+    CustomSelectComponent,
+    FilterPopupButtonComponent,
   ],
   templateUrl: './lease-tenancy.component.html',
   styleUrl: './lease-tenancy.component.css',
@@ -55,6 +60,7 @@ export class LeaseTenancyComponent {
   private alertService = inject(AlertService);
   private translate = inject(TranslateService);
   private leaseService = inject(LeaseService);
+  private sharedApiService = inject(SharedApiService);
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Lease', link: '' },
@@ -62,6 +68,9 @@ export class LeaseTenancyComponent {
   currentLanguage = 'en';
   currentRole: UserRole = 'owner';
 
+  leaseStatus: any = [];
+  selectedFilter: any;
+  selectedleasestatus: any = null;
   componentName = 'LeaseTenancyComponent';
   leaseList: any[] = [];
   leaseFilter: Record<string, any> = {};
@@ -102,6 +111,7 @@ export class LeaseTenancyComponent {
       });
 
     this.getLease();
+    this.getOptionTypes(['LEASE_STATUS']);
   }
 
   async loadBreadcrumb() {
@@ -138,7 +148,11 @@ export class LeaseTenancyComponent {
         },
       });
   }
-
+  applyFilter() {
+    this.leaseFilter['lease_status'] = this.selectedleasestatus.key;
+    this.currentPage = 1;
+    this.getLease();
+  }
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
@@ -159,6 +173,54 @@ export class LeaseTenancyComponent {
     this.router.navigate(['/dashboard/add-lease']);
   }
 
+  handleViewPdf(leaseId: number): void {
+    this.leaseService
+      .getLeasePdf(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: Blob) => {
+        const fileURL = window.URL.createObjectURL(
+          new Blob([resp], { type: 'application/pdf' })
+        );
+
+        window.open(fileURL, '_blank');
+      });
+  }
+
+  handleDownloadPdf(leaseId: number): void {
+    this.leaseService
+      .getLeasePdf(leaseId, 'download')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: Blob) => {
+        const blob = new Blob([resp], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `lease_${leaseId}.pdf`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+        this.alertService.success('PDF downloaded successfully!');
+      });
+  }
+
+  removeFilter() {
+    this.selectedleasestatus = null;
+    delete this.leaseFilter['lease_status'];
+    this.currentPage = 1;
+    this.getLease();
+  }
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.leaseStatus = response?.content?.lease_status;
+          console.log('data', this.leaseStatus);
+        },
+      });
+  }
   handleFilterClick(): void {
     console.log('Filter button clicked');
   }
