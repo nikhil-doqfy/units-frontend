@@ -149,7 +149,7 @@ export class ApprovalComponent {
       ...this.approvalData,
       limit: this.rowsPerPage,
       page_number: this.currentPage,
-      status: this.currentStatus,
+      // status: this.currentStatus,
     };
 
     this.approvalService
@@ -158,6 +158,9 @@ export class ApprovalComponent {
       .subscribe({
         next: (resp: any) => {
           this.tenantList = resp?.content ?? [];
+
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
         error: (err) => console.error('Approval List API Error:', err),
       });
@@ -200,6 +203,7 @@ export class ApprovalComponent {
     this.loadApprovalList();
   }
   onPageChange(event: PageChange): void {
+    console.log('Page change fired:', event);
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
     this.loadApprovalList();
@@ -245,13 +249,15 @@ export class ApprovalComponent {
     const params = {
       lease_id: leaseId,
       approval_status: 'APPROVED',
-    };
-    console.log('Step 1 - Params to approve:', params);
-    this.approvalData = {
+
       ...this.approvalData,
       limit: this.rowsPerPage,
       page_number: this.currentPage,
     };
+    console.log('Step 1 - Params to approve:', params);
+
+    this.approvalData['limit'] = this.rowsPerPage;
+    this.approvalData['page_number'] = this.currentPage;
 
     this.approvalService
       .getApprovalList(params, 'PUT')
@@ -263,6 +269,9 @@ export class ApprovalComponent {
           this.approvedList = resp?.content ?? [];
 
           this.loadApprovalList();
+
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
         error: (err) => {
           this.alertService.error('Approval failed');

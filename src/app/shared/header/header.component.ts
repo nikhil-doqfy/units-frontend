@@ -98,6 +98,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
+
+    const savedLang = this.storage.getLanguage() || 'en';
+
+    this.currentLang = savedLang;
+    this.translate.use(savedLang);
+    this.updateDirection();
     this.subscriptions.add(
       this.translate.onLangChange.subscribe((event: any) => {
         this.currentLanguage = event.lang;
