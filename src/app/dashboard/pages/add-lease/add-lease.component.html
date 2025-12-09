@@ -418,71 +418,71 @@
         <li class="nav-item" role="presentation">
           <button
             class="nav-link active"
-            id="propertyFloorPlan-tab"
+            id="emiratesId-tab"
             data-bs-toggle="tab"
-            data-bs-target="#propertyFloorPlan-tab-pane"
+            data-bs-target="#emiratesId-tab-pane"
             type="button"
             role="tab"
-            aria-controls="propertyFloorPlan-tab-pane"
+            aria-controls="emiratesId-tab-pane"
             aria-selected="true"
           >
-            {{ "PROPERTY_FLOOR_PLAN" | translate }}
+            {{ "EMIRATES_ID" | translate }}
           </button>
         </li>
         <li class="nav-item" role="presentation">
           <button
             class="nav-link"
-            id="tenantDoc-tab"
+            id="passportSelf-tab"
             data-bs-toggle="tab"
-            data-bs-target="#tenantDoc-tab-pane"
+            data-bs-target="#passportSelf-tab-pane"
             type="button"
             role="tab"
-            aria-controls="tenantDoc-tab-pane"
+            aria-controls="passportSelf-tab-pane"
             aria-selected="false"
           >
-            {{ "TENANT_DOC" | translate }}
+            {{ "Passport" | translate }}
           </button>
         </li>
         <li class="nav-item" role="presentation">
           <button
             class="nav-link"
-            id="ejariCertificates-tab"
+            id="passportFamily-tab"
             data-bs-toggle="tab"
-            data-bs-target="#ejariCertificates-tab-pane"
+            data-bs-target="#passportFamily-tab-pane"
             type="button"
             role="tab"
-            aria-controls="ejariCertificates-tab-pane"
+            aria-controls="passportFamily-tab-pane"
             aria-selected="false"
           >
-            {{ "EJARI_CERTIFICATES" | translate }}
+            {{ "Family Passport" | translate }}
           </button>
         </li>
         <li class="nav-item" role="presentation">
           <button
             class="nav-link"
-            id="pmcDocs-tab"
+            id="employmentProof-tab"
             data-bs-toggle="tab"
-            data-bs-target="#pmcDocs-tab-pane"
+            data-bs-target="#employmentProof-tab-pane"
             type="button"
             role="tab"
-            aria-controls="pmcDocs-tab-pane"
+            aria-controls="employmentProof-tab-pane"
             aria-selected="false"
           >
-            {{ "PMC_DOCS" | translate }}
+            {{ "Employment Proof" | translate }}
           </button>
         </li>
         <li class="nav-item" role="presentation">
           <button
             class="nav-link"
-            id="cheque-tab"
+            id="visa-tab"
             data-bs-toggle="tab"
-            data-bs-target="#cheque-tab-pane"
+            data-bs-target="#visa-tab-pane"
             type="button"
             role="tab"
-            aria-controls="cheque-tab-pane"
+            aria-controls="visa-tab-pane"
             aria-selected="false"
           >
-            {{ "CHEQUES" | translate }}
+            {{ "Visa" | translate }}
           </button>
         </li>
       </ul>
@@ -491,57 +491,109 @@
       <div class="tab-content" id="documentsTabContent">
         <div
           class="tab-pane fade show active"
-          id="propertyFloorPlan-tab-pane"
+          id="emiratesId-tab-pane"
           role="tabpanel"
-          aria-labelledby="propertyFloorPlan-tab"
+          aria-labelledby="emiratesId-tab"
           tabindex="0"
         >
-          <app-upload-document />
+          <app-upload-document
+            [isMultipleFiles]="true"
+            [fileTypes]="['jpg', 'jpeg', 'png']"
+            [maxSize]="20"
+            (uploadProgress)="onUpload('EMIRATES_ID', $event)"
+          />
+
+          <div class="uploads-list" *ngIf="getItems('EMIRATES_ID').length">
+            <app-file-upload-item
+              *ngFor="let image of getItems('EMIRATES_ID')"
+              [item]="image"
+              (remove)="remove('EMIRATES_ID', image)"
+            ></app-file-upload-item>
+          </div>
         </div>
         <div
           class="tab-pane fade"
-          id="tenantDoc-tab-pane"
+          id="passportSelf-tab-pane"
           role="tabpanel"
-          aria-labelledby="tenantDoc-tab"
+          aria-labelledby="passportSelf-tab"
           tabindex="0"
         >
-          <app-upload-document />
+          <app-upload-document
+            [isMultipleFiles]="true"
+            [fileTypes]="['jpg', 'jpeg', 'png']"
+            [maxSize]="20"
+            (uploadProgress)="onUpload('PASSPORT_SELF', $event)"
+          />
+          <div class="uploads-list" *ngIf="getItems('PASSPORT_SELF').length">
+            <app-file-upload-item
+              *ngFor="let image of getItems('PASSPORT_SELF')"
+              [item]="image"
+              (remove)="remove('PASSPORT_SELF', image)"
+            ></app-file-upload-item>
+          </div>
         </div>
         <div
           class="tab-pane fade"
-          id="ejariCertificates-tab-pane"
+          id="passportFamily-tab-pane"
           role="tabpanel"
-          aria-labelledby="ejariCertificates-tab"
+          aria-labelledby="passportFamily-tab"
           tabindex="0"
         >
-          <app-upload-document />
+          <app-upload-document
+            [isMultipleFiles]="true"
+            [fileTypes]="['jpg', 'jpeg', 'png']"
+            [maxSize]="20"
+            (uploadProgress)="onUpload('PASSPORT_FAMILY', $event)"
+          />
+          <div class="uploads-list" *ngIf="getItems('PASSPORT_FAMILY').length">
+            <app-file-upload-item
+              *ngFor="let image of getItems('PASSPORT_FAMILY')"
+              [item]="image"
+              (remove)="remove('PASSPORT_FAMILY', image)"
+            ></app-file-upload-item>
+          </div>
         </div>
         <div
           class="tab-pane fade"
-          id="ejariCertificates-tab-pane"
+          id="employmentProof-tab-pane"
           role="tabpanel"
-          aria-labelledby="ejariCertificates-tab"
+          aria-labelledby="employmentProof-tab"
           tabindex="0"
         >
-          <app-upload-document />
+          <app-upload-document
+            [isMultipleFiles]="true"
+            [fileTypes]="['jpg', 'jpeg', 'png']"
+            [maxSize]="20"
+            (uploadProgress)="onUpload('EMPLOYMENT_PROOF', $event)"
+          />
+          <div class="uploads-list" *ngIf="getItems('EMPLOYMENT_PROOF').length">
+            <app-file-upload-item
+              *ngFor="let image of getItems('EMPLOYMENT_PROOF')"
+              [item]="image"
+              (remove)="remove('EMPLOYMENT_PROOF', image)"
+            ></app-file-upload-item>
+          </div>
         </div>
         <div
           class="tab-pane fade"
-          id="pmcDocs-tab-pane"
+          id="visa-tab-pane"
           role="tabpanel"
-          aria-labelledby="pmcDocs-tab"
+          aria-labelledby="visa-tab"
           tabindex="0"
         >
-          <app-upload-document />
-        </div>
-        <div
-          class="tab-pane fade"
-          id="cheque-tab-pane"
-          role="tabpanel"
-          aria-labelledby="cheque-tab"
-          tabindex="0"
-        >
-          <app-upload-document />
+          <app-upload-document
+            [isMultipleFiles]="true"
+            [fileTypes]="['jpg', 'jpeg', 'png']"
+            [maxSize]="20"
+            (uploadProgress)="onUpload('VISA_SELF', $event)"
+          />
+          <div class="uploads-list" *ngIf="getItems('VISA_SELF').length">
+            <app-file-upload-item
+              *ngFor="let image of getItems('VISA_SELF')"
+              [item]="image"
+              (remove)="remove('VISA_SELF', image)"
+            ></app-file-upload-item>
+          </div>
         </div>
       </div>
     </div>

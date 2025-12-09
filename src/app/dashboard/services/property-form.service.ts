@@ -191,7 +191,6 @@ export class PropertyFormService {
     payload['property_id'] = context.formId;
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
-      payload['property_id'] = context.formId;
       return this.propertyService.editCommercialDetailsOfProperty(payload);
     } else {
       return this.propertyService.addCommercialDetailsOfProperty(payload);
@@ -202,7 +201,6 @@ export class PropertyFormService {
     payload['property_id'] = context.formId;
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
-      payload['property_id'] = context.formId;
       return this.propertyService.editPropertyImages(payload);
     } else {
       return this.propertyService.addPropertyImages(payload);
@@ -213,7 +211,6 @@ export class PropertyFormService {
     payload['property_id'] = context.formId;
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
-      payload['property_id'] = context.formId;
       return this.propertyService.editPropertyDocuments(payload);
     } else {
       return this.propertyService.addPropertyDocuments(payload);

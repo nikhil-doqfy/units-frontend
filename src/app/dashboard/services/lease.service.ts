@@ -94,4 +94,11 @@ export class LeaseService {
   editTemplateData(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/save/template`, data);
   }
+
+  addEjariDocuments(data: Record<string, any>): Observable<any> {
+    return this.http.post(
+      `${this.SERVER_ADDRESS}/lease/ejari/documents/view/`,
+      data
+    );
+  }
 }

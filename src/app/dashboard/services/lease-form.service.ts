@@ -120,7 +120,9 @@ export class LeaseFormService {
       {
         id: 'UPLOAD_EJARI',
         title: 'Documents',
-        formGroup: this.leaseDocumentLayoutForm,
+        formGroup: this.leaseDocumentsForm,
+        save: (payload, context) => this.saveDocumentsDetails(payload, context),
+        mapOut: (value) => this.mapOutDocumentDetails(value),
       },
     ];
 
@@ -244,7 +246,7 @@ export class LeaseFormService {
     const mode = this.engine()?.getCurrentStepFormMode();
     payload['lease_id'] = context.formId;
     if (mode === 'EDIT') {
-      return this.leaseService.editTemplateData(payload);
+      return this.leaseService.addEjariDocuments(payload);
     } else {
       return this.leaseService.addTemplateData(payload);
     }
@@ -265,5 +267,27 @@ export class LeaseFormService {
     }
 
     return data;
+  }
+
+  saveDocumentsDetails(payload: Record<string, any>, context: any) {
+    const mode = this.engine()?.getCurrentStepFormMode();
+    payload['lease_id'] = context.formId;
+    if (mode === 'EDIT') {
+      return this.leaseService.addEjariDocuments(payload);
+    } else {
+      return this.leaseService.addEjariDocuments(payload);
+    }
+  }
+
+  mapOutDocumentDetails(value: any): Record<string, any> {
+    const documents = value.documents
+      .filter((i: any) => !i?.backendId)
+      .map((i: any) => ({
+        data: i.base64,
+        file_name: i.file_name,
+        type: i.type,
+      }));
+
+    return { documents };
   }
 }
