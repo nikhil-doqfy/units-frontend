@@ -35,12 +35,32 @@ import { FormService } from '../../../shared/services/form.service';
 import { LeaseService } from '../../services/lease.service';
 import { firstValueFrom } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { UploadFileModel } from '../../../shared/model/shared.model';
+import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 
 interface OptionsParams {
   param: string;
   key: string;
   setter: (value: any) => void;
 }
+
+type UploadImageType =
+  | 'EMIRATES_ID'
+  | 'PASSPORT_SELF'
+  | 'PASSPORT_FAMILY'
+  | 'EMPLOYMENT_PROOF'
+  | 'VISA_SELF'
+  | 'VISA_FAMILY'
+  | 'BANK_STATEMENT';
+
+type FormKey = 'documents';
+
+interface UploadConfig {
+  form: FormGroup;
+  formKey: FormKey;
+}
+
+type UploadConfigRecord = Record<UploadImageType, UploadConfig>;
 
 @Component({
   selector: 'app-add-lease',
@@ -58,6 +78,7 @@ interface OptionsParams {
     UploadDocumentComponent,
     CrossIconComponent,
     ReactiveFormsModule,
+    FileUploadItemComponent,
   ],
   templateUrl: './add-lease.component.html',
   styleUrl: './add-lease.component.css',
@@ -97,6 +118,10 @@ export class AddLeaseComponent {
   processedTemplate: SafeHtml = '';
   variableNodes: Record<string, HTMLElement[]> = {};
   fields: any;
+
+  uploadIdCounter = {
+    documents: 1,
+  };
 
   @ViewChild('docContainer', { static: false }) docContainer!: ElementRef;
 
@@ -287,6 +312,100 @@ export class AddLeaseComponent {
 
       this.variableNodes[key].push(node);
     });
+  }
+
+  onUpload(type: UploadImageType, event: UploadFileModel) {
+    this.handleUploadEvent(type, event);
+  }
+
+  getUploadConfig(type: UploadImageType): UploadConfig {
+    const uploadConfig: UploadConfigRecord = {
+      EMIRATES_ID: {
+        form: this.documentsForm,
+        formKey: 'documents',
+      },
+      PASSPORT_SELF: {
+        form: this.documentsForm,
+        formKey: 'documents',
+      },
+
+      PASSPORT_FAMILY: {
+        form: this.documentsForm,
+        formKey: 'documents',
+      },
+      EMPLOYMENT_PROOF: {
+        form: this.documentsForm,
+        formKey: 'documents',
+      },
+      VISA_SELF: {
+        form: this.documentsForm,
+        formKey: 'documents',
+      },
+      VISA_FAMILY: {
+        form: this.documentsForm,
+        formKey: 'documents',
+      },
+      BANK_STATEMENT: {
+        form: this.documentsForm,
+        formKey: 'documents',
+      },
+    };
+
+    return uploadConfig[type];
+  }
+
+  private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {
+    const { form, formKey } = this.getUploadConfig(type);
+    const items = [...(form.value[formKey] || [])];
+
+    const index = items.findIndex((x) => x.tempId === event.tempId);
+    const counterKey = 'documents';
+
+    const payload = {
+      id: index === -1 ? this.uploadIdCounter[counterKey]++ : items[index].id,
+      tempId: event.tempId,
+      file_name: event.file.name,
+      file: event.file,
+      base64: event.base64,
+      status: event.status ?? 'uploading',
+      progress: event.progress ?? 0,
+      type,
+    };
+
+    if (index === -1) items.push(payload);
+    else items[index] = { ...items[index], ...payload };
+
+    form.patchValue({ [formKey]: items });
+  }
+
+  remove(type: UploadImageType, item: any) {
+    if (item?.backendId) {
+      this.removeItem(type, item?.backendId, true);
+    } else {
+      this.removeItem(type, item.id);
+    }
+  }
+
+  removeItem(type: UploadImageType, id: number, isBackend = false) {
+    const cfg = this.getUploadConfig(type);
+    const form = cfg.form;
+    const key = cfg.formKey;
+
+    console.log(form.value[key]);
+
+    const filtered = isBackend
+      ? (form.value[key] || []).filter((x: any) => x.backendId !== id)
+      : (form.value[key] || []).filter((x: any) => x.id !== id);
+
+    form.patchValue({ [key]: filtered });
+  }
+
+  getItems(type: UploadImageType) {
+    const cfg = this.getUploadConfig(type);
+    const form = cfg.form;
+    const key = cfg.formKey;
+
+    return (form.value[key] || []).filter((x: any) => x.type === type);
   }
 
   submitLease(): void {
