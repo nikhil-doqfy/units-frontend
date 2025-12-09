@@ -173,16 +173,36 @@ export class LeaseTenancyComponent {
     this.router.navigate(['/dashboard/add-lease']);
   }
 
+  // handleViewPdf(leaseId: number): void {
+  //   this.leaseService
+  //     .getLeasePdf(leaseId)
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((resp: Blob) => {
+  //       const fileURL = window.URL.createObjectURL(
+  //         new Blob([resp], { type: 'application/pdf' })
+  //       );
+
+  //       window.open(fileURL, '_blank');
+  //     });
+  // }
+
   handleViewPdf(leaseId: number): void {
     this.leaseService
-      .getLeasePdf(leaseId)
+      .getLeasePdf(leaseId) // JSON response
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp: Blob) => {
-        const fileURL = window.URL.createObjectURL(
-          new Blob([resp], { type: 'application/pdf' })
-        );
+      .subscribe({
+        next: (resp: any) => {
+          const pdfUrl = resp?.content?.pdf_url;
 
-        window.open(fileURL, '_blank');
+          if (pdfUrl) {
+            window.open(pdfUrl, '_blank'); // ✅ Preview in new tab
+          } else {
+            this.alertService.error('PDF URL not found.');
+          }
+        },
+        error: () => {
+          this.alertService.error('Failed to open PDF preview.');
+        },
       });
   }
 
@@ -190,17 +210,17 @@ export class LeaseTenancyComponent {
     this.leaseService
       .getLeasePdf(leaseId, 'download')
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp: Blob) => {
-        const blob = new Blob([resp], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `lease_${leaseId}.pdf`;
-        a.click();
-
-        window.URL.revokeObjectURL(url);
-        this.alertService.success('PDF downloaded successfully!');
+      .subscribe((resp: any) => {
+        const pdfUrl = resp?.content?.pdf_url;
+        if (pdfUrl) {
+          const a = document.createElement('a');
+          a.href = pdfUrl;
+          a.download = `lease_${leaseId}.pdf`;
+          a.click();
+          this.alertService.success('PDF downloaded successfully!');
+        } else {
+          this.alertService.error('PDF URL not found.');
+        }
       });
   }
 

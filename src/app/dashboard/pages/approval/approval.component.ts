@@ -149,7 +149,6 @@ export class ApprovalComponent {
       ...this.approvalData,
       limit: this.rowsPerPage,
       page_number: this.currentPage,
-      // status: this.currentStatus,
     };
 
     this.approvalService
@@ -216,13 +215,7 @@ export class ApprovalComponent {
     const params = {
       lease_id: leaseId,
       approval_status: 'REJECTED',
-
-      ...this.approvalData,
-      limit: this.rowsPerPage,
-      page_number: this.currentPage,
     };
-    this.approvalData['limit'] = this.rowsPerPage;
-    this.approvalData['page_number'] = this.currentPage;
 
     this.approvalService
       .getApprovalList(params, 'PUT')
@@ -233,8 +226,6 @@ export class ApprovalComponent {
 
           this.pendingList = resp?.content ?? [];
           this.loadApprovalList();
-          this.totalRecords = resp?.pagination?.total_records ?? 0;
-          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
         error: (err) => {
           this.alertService.error('Rejection failed');
@@ -249,15 +240,7 @@ export class ApprovalComponent {
     const params = {
       lease_id: leaseId,
       approval_status: 'APPROVED',
-
-      ...this.approvalData,
-      limit: this.rowsPerPage,
-      page_number: this.currentPage,
     };
-    console.log('Step 1 - Params to approve:', params);
-
-    this.approvalData['limit'] = this.rowsPerPage;
-    this.approvalData['page_number'] = this.currentPage;
 
     this.approvalService
       .getApprovalList(params, 'PUT')
@@ -269,9 +252,6 @@ export class ApprovalComponent {
           this.approvedList = resp?.content ?? [];
 
           this.loadApprovalList();
-
-          this.totalRecords = resp?.pagination?.total_records ?? 0;
-          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
         error: (err) => {
           this.alertService.error('Approval failed');

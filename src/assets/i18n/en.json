@@ -214,6 +214,7 @@
   "COUNTRY": "Country",
   "TIME_ZONE": "Time Zone",
   "STATE": "State",
+  "USER_TYPE": "User Type",
   "SAVE_CHANGES": "Save changes",
   "OTHER_DETAILS": "Other details",
   "POSTAL_CODE": "Postal Code",

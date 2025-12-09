@@ -31,6 +31,18 @@ export class LeaseService {
     );
   }
 
+  // getLeasePdf(leaseId: number, type?: 'download') {
+  //   let url = `${this.SERVER_ADDRESS}/get/lease/pdf?lease_id=${leaseId}`;
+
+  //   if (type === 'download') {
+  //     url += `&type=download`;
+  //   }
+
+  //   return this.http.get(url, {
+  //     responseType: 'blob', // ✅ IMPORTANT
+  //   });
+  // }
+
   getLeasePdf(leaseId: number, type?: 'download') {
     let url = `${this.SERVER_ADDRESS}/get/lease/pdf?lease_id=${leaseId}`;
 
@@ -38,9 +50,8 @@ export class LeaseService {
       url += `&type=download`;
     }
 
-    return this.http.get(url, {
-      responseType: 'blob', // ✅ IMPORTANT
-    });
+    // remove responseType: 'blob', take JSON
+    return this.http.get(url); // JSON response expected
   }
 
   addLeasePropertyDetails(data: Record<string, any>): Observable<any> {
