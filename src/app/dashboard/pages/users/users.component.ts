@@ -64,11 +64,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class UsersComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private modalService = inject(NgbModal);
+  private userService = inject(UserService);
+  private alertService = inject(AlertService);
+  private sharedApiService = inject(SharedApiService);
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+
+  componentName: string = 'UsersComponent';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Users', link: '' },
   ];
-  componentName: string = 'UsersComponent';
   activeTab: 'all' | 'deleted' = 'all'; // track current tab
   users: any[] = [];
   newUsers: any[] = [];
@@ -84,12 +91,6 @@ export class UsersComponent {
   totalPages: number = 1;
   currentLanguage = 'en';
   userTypeList: any = [];
-  private modalService = inject(NgbModal);
-  private userService = inject(UserService);
-  private alertService = inject(AlertService);
-  private sharedApiService = inject(SharedApiService);
-  private destroyRef = inject(DestroyRef);
-  private translate = inject(TranslateService);
   closeResult: WritableSignal<string> = signal('');
 
   constructor(private router: Router) {
@@ -103,6 +104,8 @@ export class UsersComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
+
+    this.getUser();
   }
 
   async loadBreadcrumb() {
@@ -115,7 +118,6 @@ export class UsersComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    this.getUser();
   }
 
   onRefresh() {

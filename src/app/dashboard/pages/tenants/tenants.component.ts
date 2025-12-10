@@ -59,7 +59,7 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
     TableSelectComponent,
     TableSearchComponent,
     TableFilterButtonComponent,
-    FilterIconComponent,
+    // FilterIconComponent,
     ExportIconComponent,
     PlusIconComponent,
     InviteIconComponent,
@@ -76,8 +76,8 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
     TranslateModule,
     NoDataComponent,
     MaskPhonePipe,
-    FilterPopupButtonComponent,
-    CustomSelectComponent,
+    // FilterPopupButtonComponent,
+    // CustomSelectComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
@@ -115,9 +115,11 @@ export class TenantsComponent {
   private onTenantsSearch$ = new Subject<string>();
   private translate = inject(TranslateService);
   currentLanguage = 'en';
+
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
     this.onTenantsSearch$
       .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
@@ -127,6 +129,15 @@ export class TenantsComponent {
         this.currentPage = 1;
         this.getTenants();
       });
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.showDetailView = true;
+      this.getTenantDetails(+id);
+    } else {
+      this.showDetailView = false;
+      this.getTenants();
+    }
   }
 
   ngOnInit() {
@@ -134,6 +145,12 @@ export class TenantsComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
+
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
   }
 
   async loadBreadcrumb() {
@@ -146,23 +163,6 @@ export class TenantsComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.showDetailView = true;
-      this.getTenantDetails(+id);
-    } else {
-      this.showDetailView = false;
-      this.getTenants();
-    }
-
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
-      });
-
-    const key = this.route.snapshot.data['titleKey'];
-    this.sharedService.setTitle(key);
   }
 
   private getTenants() {

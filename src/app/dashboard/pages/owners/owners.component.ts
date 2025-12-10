@@ -144,7 +144,6 @@ export class OwnersComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
-    this.getOwner();
   }
 
   async loadBreadcrumb() {
