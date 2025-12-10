@@ -124,6 +124,17 @@ export class StaffComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
+
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.showDetailView = true;
+      this.loadDetailView(+id);
+    } else {
+      this.showDetailView = false;
+      this.getStaffRoleDetails();
+    }
+    this.getOptionTypes(['STAFF_ROLE']);
   }
 
   async loadBreadcrumb() {
@@ -136,18 +147,6 @@ export class StaffComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
-    const id = this.route.snapshot.paramMap.get('id');
-
-    if (id) {
-      // Detail view
-      this.showDetailView = true;
-      this.loadDetailView(+id);
-    } else {
-      // Listing view
-      this.showDetailView = false;
-      this.getStaffRoleDetails();
-    }
-    this.getOptionTypes(['STAFF_ROLE']);
   }
 
   onRefresh() {
