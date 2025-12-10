@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,10 +9,16 @@ import { CommonModule } from '@angular/common';
   styleUrl: './document-type-item.component.css',
 })
 export class DocumentTypeItemComponent {
+  [x: string]: any;
   @Input() title!: string;
   @Input() size!: string;
   @Input() fileUrl!: string;
+  @Output() clicked = new EventEmitter<void>();
 
+  onClick(): void {
+    console.log('✅ Document clicked');
+    this.clicked.emit();
+  }
   get fileExtension(): string {
     return this.title?.split('.').pop()?.toLowerCase() || '';
   }

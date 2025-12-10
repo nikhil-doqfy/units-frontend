@@ -44,6 +44,15 @@ export class TenantsService {
     return this.http.post(`${this.SERVER_ADDRESS}/tenant/details/`, data);
   }
 
+  getLeasePdf(leaseId: number, type?: 'download') {
+    let url = `${this.SERVER_ADDRESS}/get/lease/pdf?lease_id=${leaseId}`;
+
+    if (type === 'download') {
+      url += `&type=download`;
+    }
+
+    return this.http.get(url);
+  }
   getTenantsDetailsView(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
