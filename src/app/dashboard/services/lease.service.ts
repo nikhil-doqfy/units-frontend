@@ -38,9 +38,7 @@ export class LeaseService {
       url += `&type=download`;
     }
 
-    return this.http.get(url, {
-      responseType: 'blob', // ✅ IMPORTANT
-    });
+    return this.http.get(url);
   }
 
   addLeasePropertyDetails(data: Record<string, any>): Observable<any> {

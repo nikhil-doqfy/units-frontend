@@ -57,11 +57,11 @@ export class ApprovalComponent {
   private approvalService = inject(ApprovalService);
   private alertService = inject(AlertService);
   private onOwnerSearch$ = new Subject<string>();
+
+  componentName: string = 'ApprovalComponent';
   selectedTenant: any = null;
   closeResult: WritableSignal<string> = signal('');
-  // ApprovalList: any[] = [];
   leaseDocuments: any[] = [];
-
   documentsByType: any = {
     EMIRATES_ID: [],
     PASSPORT_SELF: [],
@@ -71,11 +71,8 @@ export class ApprovalComponent {
     VISA_FAMILY: [],
     BANK_STATEMENT: [],
   };
-  approvedList: any[] = [];
   tenantList: any[] = [];
   currentStatus: 'APPROVED' | 'REJECTED' | 'PENDING' = 'PENDING';
-  pendingList: any[] = [];
-  rejectedList: any[] = [];
   approvalData: Record<string, any> = {};
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
@@ -86,9 +83,9 @@ export class ApprovalComponent {
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Approval', link: '' },
   ];
-  componentName: string = 'ApprovalComponent';
   currentLanguage = 'en';
   showDetailView: boolean = false;
+
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -106,6 +103,7 @@ export class ApprovalComponent {
 
   ngOnInit() {
     this.loadBreadcrumb();
+    this.refreshDetailsView();
 
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -122,29 +120,22 @@ export class ApprovalComponent {
     this.translate.use(lang);
     const direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = direction;
+  }
 
+  refreshDetailsView() {
     const tenantId = Number(this.route.snapshot.paramMap.get('tenantId'));
     const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
 
     if (tenantId || leaseId) {
       this.showDetailView = true;
-      this.approveTenant(tenantId, leaseId);
+      this.getApprovalTenant(tenantId, leaseId);
     } else {
       this.showDetailView = false;
       this.loadApprovalList();
     }
   }
 
-  approvalList: any[] = [];
-
   loadApprovalList(): void {
-    console.log(
-      'Approval List API params:',
-      this.approvalData,
-      'Status:',
-      this.currentStatus
-    );
-
     this.approvalData = {
       ...this.approvalData,
       limit: this.rowsPerPage,
@@ -158,22 +149,96 @@ export class ApprovalComponent {
       .subscribe({
         next: (resp: any) => {
           this.tenantList = resp?.content ?? [];
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
-        error: (err) => console.error('Approval List API Error:', err),
       });
   }
 
-  refreshDetailsView() {
-    const tenantId = Number(this.route.snapshot.paramMap.get('tenantId'));
+  changeStatus(status: 'APPROVED' | 'REJECTED' | 'PENDING') {
+    this.currentStatus = status;
+    this.currentPage = 1;
+    this.loadApprovalList();
+  }
+
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.loadApprovalList();
+  }
+
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.loadApprovalList();
+  }
+
+  searchTextChange(search: string) {
+    this.onOwnerSearch$.next(search);
+  }
+
+  handleRejectClick(): void {
     const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
 
-    if (tenantId || leaseId) {
-      this.showDetailView = true;
-      this.approveTenant(tenantId, leaseId);
-    } else {
-      this.showDetailView = false;
-      this.loadApprovalList();
+    if (!leaseId) {
+      console.error('LeaseId not found in URL');
+      return;
     }
+
+    const data = {
+      lease_id: leaseId,
+      approval_status: 'REJECTED',
+    };
+
+    this.editTenantApprovalStatus(data);
+  }
+
+  handleApproveClick(): void {
+    const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+
+    if (!leaseId) {
+      console.error('LeaseId not found in URL');
+      return;
+    }
+
+    const data = {
+      lease_id: leaseId,
+      approval_status: 'APPROVED',
+    };
+
+    this.editTenantApprovalStatus(data);
+  }
+
+  editTenantApprovalStatus(data: Record<string, any>) {
+    this.approvalService
+      .editApproval(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          this.alertService.success(resp.message);
+          this.refreshDetailsView();
+        },
+      });
+  }
+
+  getApprovalTenant(tenantId: number, leaseId: number) {
+    const params = {
+      lease_id: leaseId,
+      tenant_id: tenantId,
+    };
+
+    this.approvalService
+      .getApprovalList(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          this.selectedTenant = resp.content.tenant_details;
+          this.leaseDocuments = resp.content?.lease_documents || [];
+
+          this.mapDocumentsByType();
+        },
+      });
   }
 
   mapDocumentsByType() {
@@ -188,121 +253,8 @@ export class ApprovalComponent {
     });
   }
 
-  changeStatus(status: 'APPROVED' | 'REJECTED' | 'PENDING') {
-    this.currentStatus = status;
-    this.currentPage = 1;
-    this.loadApprovalList();
-  }
-  onPageSizeChange(event: PageSizeChange): void {
-    if (event.componentName !== this.componentName) return;
-    this.rowsPerPage = event.pageSize;
-    this.currentPage = 1;
-    this.loadApprovalList();
-  }
-  onPageChange(event: PageChange): void {
-    if (event.componentName !== this.componentName) return;
-    this.currentPage = event.currentPage;
-    this.loadApprovalList();
-  }
-
-  searchTextChange(search: string) {
-    this.onOwnerSearch$.next(search);
-  }
-  handleRejectClick(leaseId: number): void {
-    const params = {
-      lease_id: leaseId,
-      approval_status: 'REJECTED',
-
-      ...this.approvalData,
-      limit: this.rowsPerPage,
-      page_number: this.currentPage,
-    };
-    this.approvalData['limit'] = this.rowsPerPage;
-    this.approvalData['page_number'] = this.currentPage;
-
-    this.approvalService
-      .getApprovalList(params, 'PUT')
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp) => {
-          this.alertService.success('Tenant Rejected Successfully');
-
-          this.pendingList = resp?.content ?? [];
-          this.loadApprovalList();
-          this.totalRecords = resp?.pagination?.total_records ?? 0;
-          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
-        },
-        error: (err) => {
-          this.alertService.error('Rejection failed');
-          console.error(err);
-        },
-      });
-
-    console.log('Reject button clicked');
-  }
-
-  handleApproveClick(leaseId: number): void {
-    const params = {
-      lease_id: leaseId,
-      approval_status: 'APPROVED',
-    };
-    console.log('Step 1 - Params to approve:', params);
-    this.approvalData = {
-      ...this.approvalData,
-      limit: this.rowsPerPage,
-      page_number: this.currentPage,
-    };
-
-    this.approvalService
-      .getApprovalList(params, 'PUT')
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp) => {
-          this.alertService.success('Tenant Approved Successfully');
-
-          this.approvedList = resp?.content ?? [];
-
-          this.loadApprovalList();
-        },
-        error: (err) => {
-          this.alertService.error('Approval failed');
-          console.error(err);
-        },
-      });
-    console.log('Approve button clicked');
-  }
-
-  approveTenant(tenantId: number, leaseId: number) {
-    const params = {
-      lease_id: leaseId,
-
-      tenant_id: tenantId,
-    };
-
-    console.log('Tenant API params:', params);
-    this.approvalService
-      .getApprovalList(params)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp) => {
-          console.log('FULL RESPONSE --->', resp);
-          console.log('CONTENT --->', resp?.content);
-          this.selectedTenant = resp.content.tenant_details;
-
-          this.leaseDocuments = resp.content?.lease_documents || [];
-
-          this.mapDocumentsByType();
-          this.alertService.success('teanant data fetched');
-        },
-        error: (err) => {
-          this.alertService.error('Approval failed');
-          console.error(err);
-        },
-      });
-  }
-
   handleViewClick(tenantId: number, leaseId: number): void {
-    this.router.navigate(['/dashboard/approval/list/', tenantId, leaseId]);
+    this.router.navigate(['/dashboard/approval/detail/', tenantId, leaseId]);
   }
 
   handleBackClick(): void {

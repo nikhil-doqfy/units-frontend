@@ -135,8 +135,19 @@
           </div>
         </div>
         <div class="cmmnTblFtr">
-          <app-table-select />
-          <app-table-pagination />
+          <app-table-select
+            [componentName]="componentName"
+            [rowsPerPage]="rowsPerPage"
+            [rowsPerPageOptions]="rowsPerPageOptions"
+            (rowsPerPageChange)="onPageSizeChange($event)"
+          />
+          <app-table-pagination
+            [componentName]="componentName"
+            [currentPage]="currentPage"
+            [totalRecords]="totalRecords"
+            [rowsPerPage]="rowsPerPage"
+            (pageChange)="onPageChange($event)"
+          />
         </div>
       </div>
     </div>
@@ -214,8 +225,19 @@
           </div>
         </div>
         <div class="cmmnTblFtr">
-          <app-table-select />
-          <app-table-pagination />
+          <app-table-select
+            [componentName]="componentName"
+            [rowsPerPage]="rowsPerPage"
+            [rowsPerPageOptions]="rowsPerPageOptions"
+            (rowsPerPageChange)="onPageSizeChange($event)"
+          />
+          <app-table-pagination
+            [componentName]="componentName"
+            [currentPage]="currentPage"
+            [totalRecords]="totalRecords"
+            [rowsPerPage]="rowsPerPage"
+            (pageChange)="onPageChange($event)"
+          />
         </div>
       </div>
     </div>
@@ -292,8 +314,19 @@
           </div>
         </div>
         <div class="cmmnTblFtr">
-          <app-table-select />
-          <app-table-pagination />
+          <app-table-select
+            [componentName]="componentName"
+            [rowsPerPage]="rowsPerPage"
+            [rowsPerPageOptions]="rowsPerPageOptions"
+            (rowsPerPageChange)="onPageSizeChange($event)"
+          />
+          <app-table-pagination
+            [componentName]="componentName"
+            [currentPage]="currentPage"
+            [totalRecords]="totalRecords"
+            [rowsPerPage]="rowsPerPage"
+            (pageChange)="onPageChange($event)"
+          />
         </div>
       </div>
     </div>
@@ -328,14 +361,8 @@
     ]"
     (back)="handleBackClick()"
   >
-    <app-table-action-btn
-      type="rejectOrange"
-      (clicked)="handleRejectClick(selectedTenant.lease_id)"
-    />
-    <app-table-action-btn
-      type="approve"
-      (clicked)="handleApproveClick(selectedTenant.lease_id)"
-    />
+    <app-table-action-btn type="rejectOrange" (clicked)="handleRejectClick()" />
+    <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
   </app-table-view-card>
 
   <div class="mt-3">

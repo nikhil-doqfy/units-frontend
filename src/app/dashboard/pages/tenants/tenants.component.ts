@@ -179,6 +179,7 @@ export class TenantsComponent {
       .subscribe({
         next: (resp: any) => {
           this.tenantsList = resp?.content?.tenants ?? [];
+          console.log(' TENANT OBJECT:', this.tenantsList[0]);
           this.totalRecords = resp?.pagination?.total_records ?? 0;
         },
         error: (err) => {},
@@ -213,6 +214,30 @@ export class TenantsComponent {
   handleFilterClick(): void {
     console.log('Filter button clicked');
     //  this.getOptionTypes(['USER_TYPES']);
+  }
+
+  handleViewPdf(): void {
+    // console.log(' handleViewPdf called with leaseId:', leaseId);
+
+    const leaseId = Number(this.route.snapshot.paramMap.get('id'));
+    // const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+    this.tenantsService
+      .getLeasePdf(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const pdfUrl = resp?.content?.pdf_url;
+
+          if (pdfUrl) {
+            window.open(pdfUrl, '_blank');
+          } else {
+            this.alertService.error('PDF URL not found.');
+          }
+        },
+        error: () => {
+          this.alertService.error('Failed to open PDF preview.');
+        },
+      });
   }
 
   handleExportClick(): void {

@@ -12,27 +12,14 @@ export class ApprovalService {
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
 
   constructor() {}
-  // ------------------------- getApprovalList -------------------------
-  // getApprovalList(params: Record<string, any>): Observable<any> {
-  //   const queryString = this.sharedService.getQueryString(params);
-  //   return this.http.get(
-  //     `${this.SERVER_ADDRESS}/pmc/approval/list${queryString}`
-  //   );
-  // }
-
-  getApprovalList(
-    params: Record<string, any>,
-    method: 'GET' | 'PUT' = 'GET'
-  ): Observable<any> {
+  getApprovalList(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/pmc/approval/list${queryString}`
+    );
+  }
 
-    if (method === 'GET') {
-      return this.http.get(
-        `${this.SERVER_ADDRESS}/pmc/approval/list${queryString}`
-      );
-    } else {
-      // PUT method for approve/reject
-      return this.http.put(`${this.SERVER_ADDRESS}/pmc/approval/list`, params);
-    }
+  editApproval(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/pmc/approval/list`, data);
   }
 }
