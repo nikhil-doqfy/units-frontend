@@ -213,14 +213,15 @@ export class TenantsComponent {
 
   handleFilterClick(): void {
     console.log('Filter button clicked');
-    //  this.getOptionTypes(['USER_TYPES']);
   }
 
-  handleViewPdf(): void {
-    // console.log(' handleViewPdf called with leaseId:', leaseId);
-
-    const leaseId = Number(this.route.snapshot.paramMap.get('id'));
-    // const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+  handleViewPdf(leaseId: any): void {
+    if (!leaseId) {
+      this.alertService.error('Lease ID not found.');
+      return;
+    }
+    // const lease_id = Number(this.route.snapshot.paramMap.get('lease_id'));
+    console.log(' handleViewPdf called with leaseId:', leaseId);
     this.tenantsService
       .getLeasePdf(leaseId)
       .pipe(takeUntilDestroyed(this.destroyRef))

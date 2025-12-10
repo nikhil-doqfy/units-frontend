@@ -83,7 +83,7 @@
                   "
                   [title]="tenant?.full_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick(tenant.id)"
+                  (clicked)="handleViewClick(tenant.lease_id)"
                 />
               </td>
 
@@ -101,7 +101,7 @@
                 <app-document-type-item
                   title="Lease_001.pdf"
                   subtitle="1.2 MB"
-                  (clicked)="handleViewPdf()"
+                  (clicked)="handleViewPdf(tenant.lease_id)"
                 />
               </td>
               <td align="center">

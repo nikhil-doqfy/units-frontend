@@ -21,6 +21,7 @@ export class FormService {
     const errors = control.errors || {};
     const defaultMessages: Record<string, string> = {
       required: 'This field is required.',
+      email: 'Please enter a valid email address.',
       pattern: 'Please enter a valid value.',
       maxlength: 'You have entered too many characters.',
       minlength: 'You need to enter more characters.',
