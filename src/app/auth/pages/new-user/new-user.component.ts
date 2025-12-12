@@ -35,6 +35,7 @@ import { VerifyIconEditComponent } from '../../../icon/verify-icon-edit/verify-i
 import { HeadphoneIconComponent } from '../../../icon/headphone-icon/headphone-icon.component';
 import { FormService } from '../../../shared/services/form.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CrossIconComponent } from '../../../dashboard/component/icons/cross-icon/cross-icon.component';
 @Component({
   selector: 'app-new-user',
   standalone: true,
@@ -53,8 +54,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     ReactiveFormsModule,
     ContactNumberComponent,
     TimerTextComponent,
-    // VerifyIconEditComponent,
-    // HeadphoneIconComponent,
+    CrossIconComponent,
   ],
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css',
@@ -94,15 +94,45 @@ export class NewUserComponent implements OnInit {
   timerInterval: any;
   showResend = false;
 
+  nameValidators = [
+    Validators.required,
+    Validators.pattern(/^[A-Za-z ]+$/),
+    Validators.minLength(2),
+    Validators.maxLength(30),
+  ];
   ngOnInit() {
     this.signupForm = this.fb.group({
-      first_name: [''],
-      last_name: [''],
-      company_name: [''],
-      contact_number: [''],
+      first_name: ['', this.nameValidators],
+      last_name: ['', this.nameValidators],
+      company_name: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z .-]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50),
+        ],
+      ],
+      contact_number: [
+        '',
+        [
+          Validators.pattern(/^\d+$/),
+          Validators.minLength(6),
+          Validators.maxLength(15),
+        ],
+      ],
       email: ['', [Validators.email]],
-      password: [''],
-      confirmPassword: [''],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).+$/
+          ),
+        ],
+      ],
+      confirmPassword: ['', Validators.required],
       role: [this.selectedRole],
     });
     this.signupForm
@@ -112,10 +142,18 @@ export class NewUserComponent implements OnInit {
         this.selectedRole = value;
         this.onRoleChange();
       });
+    this.addConfirmPasswordListener();
 
     this.onUserTypeChange(this.currentRole);
   }
 
+  addConfirmPasswordListener() {
+    this.signupForm.get('confirmPassword')?.valueChanges.subscribe(() => {
+      this.passwordMismatch =
+        this.signupForm.get('password')?.value !==
+        this.signupForm.get('confirmPassword')?.value;
+    });
+  }
   roleFieldMap: Record<string, string[]> = {
     owner: [
       'first_name',

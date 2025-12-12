@@ -85,11 +85,42 @@
             formControlName="contact_number"
             placeholder="Enter your number"
           />
-          @if (isInvalid(signupForm, 'Contact_Number').status) {
+          <!-- VALIDATION MESSAGES -->
+          <small
+            class="errorMsg"
+            *ngIf="
+              signupForm.get('contact_number')?.touched &&
+              signupForm.get('contact_number')?.errors
+            "
+          >
+            <span
+              *ngIf="signupForm.get('contact_number')?.errors?.['required']"
+            >
+              Contact number is required.
+            </span>
+
+            <span *ngIf="signupForm.get('contact_number')?.errors?.['pattern']">
+              Only numbers are allowed.
+            </span>
+
+            <span
+              *ngIf="signupForm.get('contact_number')?.errors?.['minlength']"
+            >
+              Minimum 6 digits required.
+            </span>
+
+            <span
+              *ngIf="signupForm.get('contact_number')?.errors?.['maxlength']"
+            >
+              Maximum 15 digits allowed.
+            </span>
+          </small>
+
+          <!-- @if (isInvalid(signupForm, 'Contact_Number').status) {
           <small class="errorMsg">
             {{ isInvalid(signupForm, "Contact_Number").msg }}
           </small>
-          }
+          } -->
         </div>
       </div>
     </div>
@@ -193,14 +224,21 @@
                 signupForm.get("email")?.value
               }}</span>
             </p>
-            <button
+            <!-- <button
               type="button"
               (click)="modal.dismiss('Cross click')"
               class="btn p-0 border-0 bg-transparent position-absolute top-1 end-0 mt-0 m-4"
             >
-              <!-- <app-verify-icon-edit></app-verify-icon-edit> -->
-            </button>
+              <app-verify-icon-edit></app-verify-icon-edit>
+            </button> -->
           </div>
+          <button
+            type="button"
+            class="close-btn"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <app-cross-icon />
+          </button>
         </h4>
       </div>
     </div>

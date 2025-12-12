@@ -45,7 +45,6 @@
   gap: 10px;
 }
 
-/***Header Dropdown Css Start***/
 .hdrDrpdwn .hdrDrpdwnBtn {
   background-color: transparent;
   position: relative;
@@ -57,6 +56,23 @@
   gap: 0.5rem;
   padding: 0;
   border: 0;
+  /* 
+  background: var(--whiteBg);
+  color: var(--greyText);
+  box-shadow: 0 0 6px 0 #00000026;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0 12px;
+  line-height: 40px;
+
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s; */
 }
 
 .hdrDrpdwn .hdrDrpdwnBtn::after {
@@ -122,7 +138,6 @@
   right: inherit !important;
 }
 
-/***Language Dropdown Css Start***/
 .hdrLanguageDrpdwn .hdrDrpdwnBtn em {
   font-style: normal;
   width: 16px;
@@ -145,9 +160,6 @@
   display: block;
 }
 
-/***Language Dropdown Css Start***/
-
-/***User Dropdown Css Start***/
 .hdrUserDrpdwn .hdrDrpdwnBtn {
   background-color: var(--whiteBg);
   color: var(--greyText);
@@ -311,9 +323,6 @@
   margin: 0;
 }
 
-/***User Dropdown Css End***/
-/***Header Dropdown Css End***/
-
 @media (max-width: 1699px) {
 }
 
@@ -405,4 +414,244 @@
   .hdrNotiDrpdwnMenu.hdrDrpdwnMenu {
     width: 220px;
   }
+}
+/***--------------------------------notification css----------------------------------------------------------***/
+/***Notification Dropdown Css Start***/
+
+.hdrDrpdwnBtns {
+  background: var(--ownerGradientBg);
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}
+.hdrNotiDrpdwnMenu.hdrDrpdwnMenu {
+  width: 400px;
+  right: -30px !important;
+  border: 1px solid var(--greyBorder6);
+  overflow: hidden;
+}
+
+.hdrNotiDrpdwnMenu.hdrDrpdwnMenu::before {
+  left: 100%;
+  top: -10px;
+  margin-left: -47px;
+  display: none;
+}
+
+.hdrNotiDrpdwnHdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 16px;
+}
+
+.hdrNotiDrpdwnHdr h5 {
+  font-size: 16px;
+  color: var(--greyDarkText1);
+  font-weight: 600;
+  line-height: 22px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hdrNotiDrpdwnHdr button {
+  background-color: transparent;
+  font-size: 12px;
+  color: var(--activeText);
+  font-weight: 600;
+  padding: 0;
+  border: 0;
+}
+
+.hdrNotiDrpdwnList {
+  max-height: 352px;
+  overflow: auto;
+}
+
+.hdrNotiDrpdwnList + .hdrNotiDrpdwnList {
+  margin-top: 20px;
+}
+
+.hdrNotiDrpdwnLbl {
+  font-size: 11px;
+  color: var(--greyText);
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.hdrNotiDrpdwnLbl + .hdrNotiDrpdwnLbl {
+  margin-top: 24px;
+}
+
+.hdrNotiDrpdwnCol {
+  position: relative;
+  background-color: var(--whiteBg);
+  padding: 16px 60px 16px 16px;
+  transition: all 0.4s ease 0s;
+}
+
+.hdrNotiDrpdwnCol + .hdrNotiDrpdwnCol {
+  border-top: 1px solid var(--greyBorder6);
+}
+
+.unread.hdrNotiDrpdwnCol {
+  background-color: var(--primaryLightBg);
+}
+
+.hdrNotiDrpdwnCol:hover {
+  background-color: var(--primaryLightBg1);
+}
+
+.hdrNotiDrpdwnTtl h5 {
+  font-size: 16px;
+  color: var(--blackText);
+  font-weight: 600;
+  line-height: 18px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hdrNotiDrpdwnTtl h5 span {
+  background-color: var(--primaryBg);
+  width: 8px;
+  min-width: 8px;
+  height: 8px;
+  border-radius: 8px;
+  display: none;
+}
+
+.unread .hdrNotiDrpdwnTtl h5 span {
+  display: block;
+}
+
+.hdrNotiDrpdwnTtl p {
+  font-size: 13px;
+  color: var(--blackText2);
+  font-weight: 400;
+  margin: 5px 0 0 0;
+}
+
+.hdrNotiDrpdwnTime {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.hdrNotiDrpdwnTime span {
+  font-size: 12px;
+  color: var(--greyText4);
+  font-weight: 400;
+}
+
+.hdrNotiDrpdwnDlt {
+  background-color: var(--redLightBg2);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 40px;
+  opacity: 0;
+  transition: all 0.4s ease 0s;
+}
+
+.hdrNotiDrpdwnCol:hover .hdrNotiDrpdwnDlt {
+  opacity: 1;
+}
+
+.hdrNotiDrpdwnDlt button {
+  background-color: transparent;
+  color: var(--redBg);
+  padding: 0;
+  border: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hdrNotiEmptyCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 352px;
+  padding: 24px;
+}
+
+.hdrNotiEmptyInfo {
+  text-align: center;
+}
+
+.hdrNotiEmptyIcon {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto;
+}
+
+.hdrNotiEmptyInfo h4 {
+  font-size: 14px;
+  color: var(--greyDarkText);
+  font-weight: 500;
+  line-height: 18px;
+  margin: 10px 0 0 0;
+}
+
+.hdrNotiEmptyNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 30px;
+}
+
+.hdrNotiEmptyNote p {
+  font-size: 13px;
+  color: var(--blackText8);
+  font-weight: 500;
+  line-height: 18px;
+  margin: 0;
+}
+
+/***Notification Dropdown Css End***/
+/***Notification Offcanvas Css Start***/
+.notificationOffcanvas .offcanvas-header {
+  padding-bottom: 8px;
+}
+
+.notificationOffcanvas .hdrNotiDrpdwnHdr {
+  padding: 0;
+}
+
+.notificationOffcanvas .btn-close {
+  box-shadow: none;
+}
+
+.notificationOffcanvas .offcanvas-body {
+  padding: 0;
+}
+
+.notificationOffcanvas .hdrNotiDrpdwnList {
+  max-height: calc(100vh - 90px);
+}
+
+.notificationOffcanvas .hdrNotiDrpdwnTtl h5 {
+  font-size: 15px;
 }

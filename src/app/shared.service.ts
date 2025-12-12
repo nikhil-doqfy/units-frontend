@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,6 +22,7 @@ export class SharedService {
     | { key: string; link?: string }[] = [];
 
   breadcrumb$ = new BehaviorSubject<{ label: string; link: string }[]>([]);
+  http: any;
 
   constructor() {
     this.initializeSidebarState(); // Initialize the sidebar state properly
@@ -142,5 +144,26 @@ export class SharedService {
       month: date.getMonth() + 1,
       day: date.getDate(),
     };
+  }
+
+  //------------------notification----------------------------------------------------
+
+  getNotifications(queryParams: any) {
+    var queryString = this.getQueryString(queryParams);
+    return this.http.get(
+      `${environment.SERVER_ADDRESS}/notifications/` + queryString
+    );
+  }
+  readNotification(data: any) {
+    return this.http.put(
+      `${environment.SERVER_ADDRESS}/notifications/read/`,
+      data
+    );
+  }
+  deleteNotification(queryParams: any) {
+    var queryString = this.getQueryString(queryParams);
+    return this.http.delete(
+      `${environment.SERVER_ADDRESS}/notifications/` + queryString
+    );
   }
 }

@@ -45,9 +45,22 @@ export class FormValidationComponent {
 
     this.detailForm = formBuilder.group({
       manageThrough: ['MYSELF', [Validators.required]],
-      emirateId: ['', [Validators.required]],
-      residenceVisa: ['', [Validators.required]],
-      tradeLicense: ['', [Validators.required]],
+      emirateId: [
+        '',
+        [Validators.required, Validators.pattern(/^(784-\d{4}-\d{7}-\d{1})$/)],
+      ],
+      residenceVisa: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{3}\/\d{7}\/\d{6}$/)],
+      ],
+      tradeLicense: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z0-9-]+$/),
+          Validators.minLength(3),
+        ],
+      ],
     });
   }
   goToResetPassword(): void {

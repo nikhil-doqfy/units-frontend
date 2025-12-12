@@ -148,8 +148,20 @@ export class UploadDocumentComponent {
   isUploaded(type: string): boolean {
     return !!this.uploadedFiles[type];
   }
+  validateRequiredDocs(): boolean {
+    const requiredDocs = ['emiratesId', 'uaeVisa', 'dldCert'];
+    return requiredDocs.every((doc) =>
+      this.uploadedList.some((file) => file.type === doc)
+    );
+  }
 
   onLogin() {
+    if (!this.validateRequiredDocs()) {
+      this.alert.info(
+        'Please upload all required documents before proceeding.'
+      );
+      return;
+    }
     const isBase64AvailabeForAll = this.uploadedList.every((f) => f.base64);
     if (!isBase64AvailabeForAll) {
       this.alert.info(
