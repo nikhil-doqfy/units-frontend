@@ -1,7 +1,10 @@
 <div class="upload-item">
   <div class="icon">
     <i>
-      <app-pdf-icon *ngIf="getFileExtension(item.file?.name) === 'pdf'" />
+      <img
+        src="../../../../assets/pdfIcon.png"
+        *ngIf="getFileExtension(item.file?.name) === 'pdf'"
+      />
       <img
         src="../../../../assets/pngIcon.png"
         *ngIf="

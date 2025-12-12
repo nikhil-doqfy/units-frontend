@@ -86,7 +86,12 @@
             placeholder="Enter your number"
           />
           <!-- VALIDATION MESSAGES -->
-          <small
+          @if (isInvalid(signupForm, 'contact_number').status) {
+          <small class="errorMsg">
+            {{ isInvalid(signupForm, "contact_number").msg }}
+          </small>
+          }
+          <!-- <small
             class="errorMsg"
             *ngIf="
               signupForm.get('contact_number')?.touched &&
@@ -114,7 +119,7 @@
             >
               Maximum 15 digits allowed.
             </span>
-          </small>
+          </small> -->
 
           <!-- @if (isInvalid(signupForm, 'Contact_Number').status) {
           <small class="errorMsg">
