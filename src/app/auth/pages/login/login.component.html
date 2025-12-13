@@ -47,6 +47,7 @@
         </i>
       </div>
     </div>
+
     <div class="d-flex align-items-center justify-content-between mb-4">
       <app-field-link title="Sign In using OTP" (click)="switchToOtp()" />
       <app-field-link title="Forgot password?" (click)="goToForgotPassword()" />
@@ -83,6 +84,7 @@
         </label>
       </div>
     </div>
+
     <div class="frmBtns">
       <button type="submit" class="btn btnCommon btnMinWidth">Sign In</button>
     </div>
@@ -154,6 +156,37 @@
       />
     </div>
 
+    <div class="loginRoleSelection mb-4">
+      <div class="loginRoleOptions">
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="owner"
+            (change)="onRoleChange()"
+          />
+          <span>Owner</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="property-manager"
+            (change)="onRoleChange()"
+          />
+          <span>Property Manager</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="tenant"
+            (change)="onRoleChange()"
+          />
+          <span>Tenant</span>
+        </label>
+      </div>
+    </div>
     <div class="frmBtns">
       <button
         type="submit"
