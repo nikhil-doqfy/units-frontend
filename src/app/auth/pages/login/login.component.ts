@@ -99,7 +99,15 @@ export class LoginComponent implements OnInit {
     this.otpForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       otp: [''],
+      role: [this.selectedRole],
     });
+    this.otpForm
+      .get('role')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.selectedRole = value;
+        this.onRoleChange();
+      });
   }
 
   handleFilterCloseClick(): void {
