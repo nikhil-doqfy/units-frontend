@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit {
   getUserType(): string {
     const userTypes: any = {
       owner: 'OWNER',
-      'property-manager': 'PROPERTY_MANAGER',
+      'property-manager': 'COMPANY_USER',
       tenant: 'TENANT',
     };
 
@@ -132,7 +132,7 @@ export class LoginComponent implements OnInit {
     let payload = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password,
-      user_type: this.getUserType(),
+      user_role: this.getUserType(),
     };
 
     this.login(payload);
@@ -204,7 +204,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const payload = { email: this.otpForm.value.email };
+    const payload = { email: this.otpForm.value.email, purpose: 'login' };
 
     this.authService
       .sendOtp(payload)
@@ -235,7 +235,7 @@ export class LoginComponent implements OnInit {
     };
 
     if (this.isOTPVerified) {
-      payload['user_type'] = this.getUserType();
+      payload['user_role'] = this.getUserType();
       this.login(payload);
     } else {
       this.verifyOtp(payload);
