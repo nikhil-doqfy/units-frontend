@@ -119,11 +119,7 @@ export class LeaseTenancyComponent {
       { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
       { key: 'PAGE_TITLE.LEASE', link: '' },
     ]);
-    const lang = localStorage.getItem('language') || 'en';
-    this.currentLanguage = lang;
-    this.translate.use(lang);
-    const direction = lang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.dir = direction;
+    this.sharedService.initLanguage();
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {

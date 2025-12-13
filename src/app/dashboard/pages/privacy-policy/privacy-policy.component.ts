@@ -26,10 +26,6 @@ export class PrivacyPolicyComponent {
     this.sharedService.setTitle(key);
   }
   ngOnInit() {
-    const lang = localStorage.getItem('language') || 'en';
-    this.currentLanguage = lang;
-    this.translate.use(lang);
-    const direction = lang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.dir = direction;
+    this.sharedService.initLanguage();
   }
 }

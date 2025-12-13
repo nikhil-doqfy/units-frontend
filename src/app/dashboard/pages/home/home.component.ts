@@ -93,12 +93,7 @@ export class HomeComponent implements OnInit {
       key: 'PAGE_TITLE.DASHBOARD',
       link: '/dashboard/home',
     });
-
-    const lang = localStorage.getItem('language') || 'en';
-    this.currentLanguage = lang;
-    this.translate.use(lang);
-    const direction = lang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.dir = direction;
+    this.sharedService.initLanguage();
   }
 
   stats: any = {
