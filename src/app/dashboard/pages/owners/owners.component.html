@@ -80,14 +80,7 @@
               <td>{{ owner.mobile_number | maskPhone }}</td>
               <td>
                 <app-table-multi-img-item
-                  [images]="[
-                    'assets/property/property-list-1.png',
-                    'assets/property/property-list-2.png',
-                    'assets/property/property-list-2.png',
-                    'assets/property/property-list-2.png',
-                    'assets/property/property-list-2.png',
-                    'assets/property/property-list-3.png'
-                  ]"
+                  [images]="owner.propertyImages || 'N/A'"
                   size="md"
                 ></app-table-multi-img-item>
               </td>

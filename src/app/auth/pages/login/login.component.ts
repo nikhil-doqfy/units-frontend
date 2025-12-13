@@ -25,6 +25,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormService } from '../../../shared/services/form.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -47,9 +48,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
+  private formService = inject(FormService);
   private destroyRef = inject(DestroyRef);
   loginForm!: FormGroup;
-
+  isOpen = false;
   isLoading = false;
   currentRole: UserRole = 'owner';
   selectedRole: UserRole = 'owner';
@@ -66,6 +68,8 @@ export class LoginComponent implements OnInit {
   otpTimer = 60;
   timerDisplay = '1:00';
   timerInterval: any;
+
+  isInvalid = this.formService.isInvalid;
   otpForm!: FormGroup;
   constructor(
     private router: Router,
@@ -98,6 +102,9 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  handleFilterCloseClick(): void {
+    this.isOpen = false;
+  }
   onRoleChange(): void {
     this.currentRole = this.selectedRole;
     this.themeService.setRole(this.selectedRole);

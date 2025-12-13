@@ -1,14 +1,16 @@
 <div class="upload-item">
   <div class="icon">
     <i>
-      <app-pdf-icon
+      <img
+        src="../../../../assets/pdfIcon.png"
         *ngIf="getFileExtension(item.file?.name) === 'pdf'"
-      ></app-pdf-icon>
-      <app-png-icon
+      />
+      <img
+        src="../../../../assets/pngIcon.png"
         *ngIf="
           ['png', 'jpg', 'jpeg'].includes(getFileExtension(item.file?.name))
         "
-      ></app-png-icon>
+      />
     </i>
   </div>
 
@@ -24,7 +26,7 @@
           <progress [value]="item.progress" max="100"></progress>
         </div>
 
-        <!-- <div *ngSwitchCase="'done'" class="success">Upload complete</div> -->
+        <div *ngSwitchCase="'done'" class="success">Upload complete</div>
 
         <div *ngSwitchCase="'error'" class="error">
           {{ item.errorMessage }}

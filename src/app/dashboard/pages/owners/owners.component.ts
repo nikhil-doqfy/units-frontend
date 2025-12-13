@@ -176,7 +176,18 @@ export class OwnersComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.owners = resp?.content ?? [];
+          this.owners = (resp?.content ?? []).map((o: any) => {
+            const images =
+              o.properties?.flatMap((p: any) => p.images || [0]) || [];
+
+            return {
+              ...o,
+              propertyImages: images.length
+                ? images
+                : ['assets/property/property-img-default.svg'],
+            };
+          });
+
           this.totalRecords = resp?.pagination?.total_records ?? 0;
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },

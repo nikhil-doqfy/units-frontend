@@ -175,6 +175,7 @@ export class AddPropertyComponent {
 
     const payload = {
       id: index === -1 ? this.uploadIdCounter[counterKey]++ : items[index].id,
+
       tempId: event.tempId,
       file_name: event.file.name,
       file: event.file,

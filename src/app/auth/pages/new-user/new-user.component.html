@@ -85,9 +85,10 @@
             formControlName="contact_number"
             placeholder="Enter your number"
           />
-          @if (isInvalid(signupForm, 'Contact_Number').status) {
+          <!-- VALIDATION MESSAGES -->
+          @if (isInvalid(signupForm, 'contact_number').status) {
           <small class="errorMsg">
-            {{ isInvalid(signupForm, "Contact_Number").msg }}
+            {{ isInvalid(signupForm, "contact_number").msg }}
           </small>
           }
         </div>
@@ -193,14 +194,21 @@
                 signupForm.get("email")?.value
               }}</span>
             </p>
-            <button
+            <!-- <button
               type="button"
               (click)="modal.dismiss('Cross click')"
               class="btn p-0 border-0 bg-transparent position-absolute top-1 end-0 mt-0 m-4"
             >
-              <!-- <app-verify-icon-edit></app-verify-icon-edit> -->
-            </button>
+              <app-verify-icon-edit></app-verify-icon-edit>
+            </button> -->
           </div>
+          <button
+            type="button"
+            class="close-btn"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <app-cross-icon />
+          </button>
         </h4>
       </div>
     </div>

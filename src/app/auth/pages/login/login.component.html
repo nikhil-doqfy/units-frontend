@@ -21,6 +21,11 @@
           placeholder="Enter your email"
           autocomplete="email"
         />
+        @if (isInvalid(loginForm, 'email').status) {
+        <small class="errorMsg">
+          {{ isInvalid(loginForm, "email").msg }}
+        </small>
+        }
       </div>
     </div>
     <div class="mb-2">
@@ -110,6 +115,11 @@
           formControlName="email"
           [readonly]="emailLocked"
         />
+        @if (isInvalid(loginForm, 'email').status) {
+        <small class="errorMsg">
+          {{ isInvalid(loginForm, "email").msg }}
+        </small>
+        }
         <button type="button" *ngIf="!otpSent" (click)="sendOtp()">
           Send OTP
         </button>

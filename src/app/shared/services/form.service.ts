@@ -7,11 +7,20 @@ import { FormGroup } from '@angular/forms';
 export class FormService {
   constructor() {}
 
+  message = {
+    contact_number: {
+      required: 'Contact number is required.',
+      pattern: 'Only numbers are allowed.',
+      minlength: 'Minimum 6 digits required.',
+      maxlength: 'Maximum 15 digits allowed.',
+    },
+  };
   isInvalid(
     form: FormGroup,
     controlName: string,
     messages?: string | Record<string, any>
   ) {
+    const message = messages || this.message;
     const control = form.get(controlName);
     if (!control) return { status: false, msg: '' };
 
@@ -21,6 +30,7 @@ export class FormService {
     const errors = control.errors || {};
     const defaultMessages: Record<string, string> = {
       required: 'This field is required.',
+      email: 'Please enter a valid email address.',
       pattern: 'Please enter a valid value.',
       maxlength: 'You have entered too many characters.',
       minlength: 'You need to enter more characters.',
