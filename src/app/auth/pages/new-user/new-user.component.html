@@ -91,41 +91,6 @@
             {{ isInvalid(signupForm, "contact_number").msg }}
           </small>
           }
-          <!-- <small
-            class="errorMsg"
-            *ngIf="
-              signupForm.get('contact_number')?.touched &&
-              signupForm.get('contact_number')?.errors
-            "
-          >
-            <span
-              *ngIf="signupForm.get('contact_number')?.errors?.['required']"
-            >
-              Contact number is required.
-            </span>
-
-            <span *ngIf="signupForm.get('contact_number')?.errors?.['pattern']">
-              Only numbers are allowed.
-            </span>
-
-            <span
-              *ngIf="signupForm.get('contact_number')?.errors?.['minlength']"
-            >
-              Minimum 6 digits required.
-            </span>
-
-            <span
-              *ngIf="signupForm.get('contact_number')?.errors?.['maxlength']"
-            >
-              Maximum 15 digits allowed.
-            </span>
-          </small> -->
-
-          <!-- @if (isInvalid(signupForm, 'Contact_Number').status) {
-          <small class="errorMsg">
-            {{ isInvalid(signupForm, "Contact_Number").msg }}
-          </small>
-          } -->
         </div>
       </div>
     </div>
