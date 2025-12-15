@@ -47,11 +47,18 @@ export class AuthService {
     );
   }
 
+  changePassword(data: any) {
+    return this.http.post(
+      `${environment.SERVER_ADDRESS}/auth/change/password`,
+      data
+    );
+  }
+
   logout(data: Record<string, any>): Observable<any> {
     return this.http.post(`${environment.SERVER_ADDRESS}/auth/logout`, data);
   }
 
   signUp(data: Record<string, any>) {
-    return this.http.post(`${environment.SERVER_ADDRESS}/user/signup/`, data);
+    return this.http.post(`${environment.SERVER_ADDRESS}/user/signup`, data);
   }
 }

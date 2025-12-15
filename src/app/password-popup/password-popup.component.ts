@@ -22,6 +22,7 @@ import { PasswordHideIconComponent } from '../auth/component/icons/password-hide
 import { PasswordShowIconComponent } from '../auth/component/icons/password-show-icon/password-show-icon.component';
 import { CrossIconComponent } from '../dashboard/component/icons/cross-icon/cross-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../auth/services/auth.service';
 @Component({
   selector: 'app-password-popup',
   standalone: true,
@@ -39,7 +40,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './password-popup.component.css',
 })
 export class PasswordPopupComponent {
-  private userService = inject(UserService);
+  private authService = inject(AuthService);
   private destroyRef = inject(DestroyRef);
   oldPassword: string = '';
   isOpen: boolean = false;
@@ -98,7 +99,7 @@ export class PasswordPopupComponent {
 
     console.log('Payload sending:', payload);
 
-    this.userService
+    this.authService
       .changePassword(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
