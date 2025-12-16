@@ -58,7 +58,7 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <ng-container *ngIf="propertyView === 'my-properties'">
-              <app-custom-select
+              <!-- <app-custom-select
                 [options]="[
                   'Falcom city',
                   'Novatis AG...',
@@ -72,7 +72,7 @@
                 (optionSelected)="onOptionSelected($event)"
                 [isFilter]="true"
               >
-              </app-custom-select>
+              </app-custom-select> -->
             </ng-container>
             <ng-container *ngIf="propertyView === 'all-properties'">
               <app-table-search
@@ -462,15 +462,18 @@
             @for (property of propertiesList; track $index) {
             <tr>
               <td *ngIf="currentRole === 'property-manager'">
-                {{ property.id }}
+                {{ property.property_id }}
               </td>
               <td>
                 <app-table-img-item
-                  [img]="property?.images?.[0]?.data ?? '../../../../assets/property/property-img-default.svg'"
+                  [img]="
+                    property?.property_image ??
+                    '../../../../assets/property/property-img-default.svg'
+                  "
                   size="md"
                   [title]="property.property_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick(property.id)"
+                  (clicked)="handleViewClick(property.property_id)"
                 />
               </td>
               <td
@@ -478,16 +481,23 @@
                   currentRole === 'owner' || currentRole === 'property-manager'
                 "
               >
+                @if (property?.tenant_name) {
                 <app-table-img-item
-                  [img]="property?.tenants?.[0]?.profile_image ?? '../../../../assets/userDefaultProImg.png'"
-                  [title]="property.tenants?.[0]?.tenant_name || 'N/A'"
+                  [img]="
+                    property?.tenant_profile_image ??
+                    '../../../../assets/userDefaultProImg.png'
+                  "
+                  [title]="property?.tenant_name || 'N/A'"
                 />
+                }@else {N/A}
               </td>
               <td *ngIf="currentRole === 'owner'">
                 <app-badge
-                  [title]="property.rental_status"
+                  [title]="property.agreement_expiration || 'N/A'"
                   [status]="
-                    property.rental_status === 'Available' ? 'green' : 'red'
+                    getAgreementExpirationStatusColor(
+                      property.agreement_expiration
+                    )
                   "
                 />
               </td>
@@ -496,7 +506,7 @@
                   currentRole === 'tenant' || currentRole === 'property-manager'
                 "
               >
-                {{ property?.owner_info?.owner_name || "N/A" }}
+                {{ property?.owner_name || "N/A" }}
               </td>
               <td
                 *ngIf="
@@ -504,17 +514,17 @@
                 "
               >
                 <app-badge
-                  [title]="property.rental_status"
+                  [title]="property.tenancy_status"
                   [status]="
-                    property.rental_status === 'Available' ? 'green' : 'red'
+                    property.tenancy_status === 'Available' ? 'red' : 'green'
                   "
                 />
               </td>
               <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                {{ property.bedrooms }}
+                {{ property.dimension }}
               </td>
               <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                {{ property?.pmc_info?.company_name || "N/A" }}
+                {{ property?.company_name || "N/A" }}
               </td>
               <td
                 *ngIf="
@@ -527,10 +537,10 @@
                     type="edit"
                     (clicked)="handleEditClick(property.id)"
                   />
-                  <app-table-action-btn
+                  <!-- <app-table-action-btn
                     type="delete"
                     (clicked)="handleDeleteClick()"
-                  />
+                  /> -->
                   <app-table-action-dropdown
                     [dropdownItems]="documentActions"
                     (actionClicked)="handleDropdownAction($event)"
