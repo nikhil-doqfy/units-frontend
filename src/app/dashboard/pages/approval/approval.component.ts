@@ -57,7 +57,6 @@ export class ApprovalComponent {
   private approvalService = inject(ApprovalService);
   private alertService = inject(AlertService);
   private onOwnerSearch$ = new Subject<string>();
-
   componentName: string = 'ApprovalComponent';
   selectedTenant: any = null;
   closeResult: WritableSignal<string> = signal('');
@@ -115,11 +114,13 @@ export class ApprovalComponent {
       { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
       { key: 'PAGE_TITLE.APPROVAL', link: '' },
     ]);
-    const lang = localStorage.getItem('language') || 'en';
-    this.currentLanguage = lang;
-    this.translate.use(lang);
-    const direction = lang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.dir = direction;
+
+    this.sharedService.initLanguage();
+    // const lang = localStorage.getItem('language') || 'en';
+    // this.currentLanguage = lang;
+    // this.translate.use(lang);
+    // const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    // document.documentElement.dir = direction;
   }
 
   refreshDetailsView() {

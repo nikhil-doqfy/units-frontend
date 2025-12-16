@@ -26,6 +26,7 @@ import { PasswordPopupComponent } from '../../password-popup/password-popup.comp
 import { PasswordPopupbtnComponent } from '../../password-popupbtn/password-popupbtn.component';
 import { AuthService } from '../../auth/services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SharedService } from '../../shared.service';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -50,6 +51,7 @@ export class MyProfileComponent {
   private http = inject(HttpClient);
   private alertService = inject(AlertService);
   private destroyRef = inject(DestroyRef);
+  private sharedService = inject(SharedService);
 
   @ViewChild('fileInput') fileInput!: ElementRef;
   currentLanguage = 'en';
@@ -80,11 +82,7 @@ export class MyProfileComponent {
   };
 
   ngOnInit() {
-    const lang = localStorage.getItem('language') || 'en';
-    this.currentLanguage = lang;
-    this.translate.use(lang);
-    const direction = lang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.dir = direction;
+    this.sharedService.initLanguage();
     this.getUserProfileData();
   }
 

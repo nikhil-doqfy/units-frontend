@@ -67,6 +67,17 @@ export class SharedService {
     }
   }
 
+  currentLanguage: string = 'en';
+
+  initLanguage() {
+    const lang = localStorage.getItem('language') || 'en';
+    this.currentLanguage = lang;
+    this.translate.use(lang);
+
+    const direction = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
+  }
+
   // Toggle the sidebar open/close
   toggleSidebar() {
     const currentValue = this.openSidebarValueSource.value;
