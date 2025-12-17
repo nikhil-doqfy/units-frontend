@@ -94,7 +94,7 @@ export class UploadDocumentComponent {
   getUserType(): string {
     const userTypes: any = {
       owner: 'OWNER',
-      'property-manager': 'PROPERTY_MANAGER',
+      'property-manager': 'COMPANY_USER',
       tenant: 'TENANT',
     };
 
@@ -185,9 +185,8 @@ export class UploadDocumentComponent {
       email: data['email'],
       password: data['password'],
       confirm_password: data['confirmPassword'],
-      mobile_number: data['contact_number'],
-      user_type: selctedUsertype,
-      manage_through: data['manageThrough'],
+      contact_number: data['contact_number'],
+      user_role: selctedUsertype,
       emirate_id: data['emirateId'],
       uae_residence_visa: data['residenceVisa'],
       trade_license_number: data['tradeLicense'],
@@ -196,9 +195,10 @@ export class UploadDocumentComponent {
       dld_certificate_doc: getDocumentBase64('dldCert'),
     };
 
-    if (selctedUsertype === 'PROPERTY_MANAGER') {
+    if (selctedUsertype === 'COMPANY_USER') {
       paylod['company_name'] = data['company_name'];
-      paylod['company_emirate_id'] = data['emirateId'];
+    } else if (selctedUsertype === 'OWNER') {
+      paylod['manage_through'] = data['manageThrough'];
     }
 
     this.authService

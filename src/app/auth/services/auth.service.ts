@@ -14,12 +14,12 @@ export class AuthService {
 
   constructor(
     private storageService: StorageService,
-    private http: HttpClient,
-    private storage: StorageService
+    private http: HttpClient
   ) {}
+
   login(data: any) {
     return this.http
-      .post(`${environment.SERVER_ADDRESS}/auth/login/`, data)
+      .post(`${environment.SERVER_ADDRESS}/auth/login`, data)
       .pipe(
         map((resp: any) => {
           this.storageService.setToken(resp['content'].access_token);
@@ -28,42 +28,37 @@ export class AuthService {
         })
       );
   }
-  refreshToken(refreshToken: string) {
-    return this.http.post<{ accessToken: string }>('/api/auth/refresh', {
-      refreshToken,
-    });
-  }
-
-  signup(data: any): Observable<any> {
-    return this.http.post(`${environment.SERVER_ADDRESS}/user/signup/`, data);
-  }
 
   sendOtp(data: any) {
-    return this.http.post(
-      `${environment.SERVER_ADDRESS}/auth/password/otp/send/`,
-      data
-    );
+    return this.http.post(`${environment.SERVER_ADDRESS}/auth/otp/send`, data);
   }
 
   verifyOtp(data: any) {
     return this.http.post(
-      `${environment.SERVER_ADDRESS}/auth/password/otp/verify/`,
+      `${environment.SERVER_ADDRESS}/auth/otp/verify`,
       data
     );
   }
 
   resetPassword(data: any) {
     return this.http.post(
-      `${environment.SERVER_ADDRESS}/auth/password/reset/`,
+      `${environment.SERVER_ADDRESS}/auth/password/reset`,
       data
     );
   }
 
-  logout(): Observable<any> {
-    return this.http.post(`${environment.SERVER_ADDRESS}/auth/logout/`, {});
+  changePassword(data: any) {
+    return this.http.post(
+      `${environment.SERVER_ADDRESS}/auth/change/password`,
+      data
+    );
+  }
+
+  logout(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${environment.SERVER_ADDRESS}/auth/logout`, data);
   }
 
   signUp(data: Record<string, any>) {
-    return this.http.post(`${environment.SERVER_ADDRESS}/user/signup/`, data);
+    return this.http.post(`${environment.SERVER_ADDRESS}/user/signup`, data);
   }
 }

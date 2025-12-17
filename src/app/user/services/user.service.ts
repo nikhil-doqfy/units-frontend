@@ -14,20 +14,11 @@ export class UserService {
 
   getUserProfile(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/user/profile/view${queryString}`
-    );
-  }
-
-  changePassword(data: any) {
-    return this.http.post(
-      `${environment.SERVER_ADDRESS}/auth/change/password`,
-      data
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/user/profile${queryString}`);
   }
 
   editUserProfile(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/user/profile/view/`, data);
+    return this.http.put(`${this.SERVER_ADDRESS}/user/profile`, data);
   }
 
   // ------------------------- Access user service management -------------------------
@@ -38,20 +29,15 @@ export class UserService {
     );
   }
 
-
-
   // ------------------------- Add new user -------------------------
   addNewUser(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/user/user/management`, data);
   }
 
-
   // ------------------------- Edit new user -------------------------
   editUserManagement(data: Record<string, any>): Observable<any> {
     return this.http.put(`${this.SERVER_ADDRESS}/user/user/management`, data);
   }
-
-
 
   // ------------------------- Delete user -------------------------
   DeleteUser(params: Record<string, any>): Observable<any> {
@@ -63,8 +49,9 @@ export class UserService {
 
   // ------------------------- User activate -------------------------
   activateUser(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/user/toggle/user/active`, data);
+    return this.http.put(
+      `${this.SERVER_ADDRESS}/user/toggle/user/active`,
+      data
+    );
   }
-
-
 }

@@ -100,24 +100,24 @@ export class PropertiesComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+
   componentName: string = 'PropertiesComponent';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Properties', link: '' },
   ];
-
   currentRole: UserRole = 'owner';
   propertyView: 'my-properties' | 'all-properties' = 'all-properties';
   selected: string = 'Falcom city';
-
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
-
   showDetailView: boolean = false;
   rentalStatus: any = [];
   propertiesList: any[] = [];
+  propertyDetails: Record<string, any> = {};
   selectedrentalstatus: any = null;
   propertiesFilter: Record<string, any> = {};
   totalRecords: number = 0;
@@ -125,8 +125,9 @@ export class PropertiesComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   private onPropertySearch$ = new Subject<string>();
-  private translate = inject(TranslateService);
   currentLanguage = 'en';
+  currentPropertyId!: number;
+
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -142,9 +143,9 @@ export class PropertiesComponent {
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
+      this.currentPropertyId = +id;
       this.propertiesFilter['property_id'] = +id;
       this.showDetailView = true;
-      this.getProperties();
     }
   }
 
@@ -161,13 +162,15 @@ export class PropertiesComponent {
 
         if (this.currentRole === 'tenant') {
           this.propertyView = 'my-properties';
-          this.getProperties();
+          if (!this.currentPropertyId)
+            this.propertiesFilter['MY_PROPERTY'] = true;
         } else {
           this.propertyView = 'all-properties';
-          this.getProperties();
+          this.getOptionTypes(['RENTAL_STATUS']);
         }
+
+        this.getProperties();
       });
-    this.getOptionTypes(['RENTAL_STATUS']);
   }
 
   async loadBreadcrumb() {
@@ -182,11 +185,11 @@ export class PropertiesComponent {
   onPropertyViewChange() {
     if (this.propertyView === 'all-properties') {
       delete this.propertiesFilter['property_id'];
-      this.propertiesFilter['all'] = true;
+      delete this.propertiesFilter['MY_PROPERTY'];
       this.getProperties();
     } else if (this.propertyView === 'my-properties') {
       delete this.propertiesFilter['property_id'];
-      delete this.propertiesFilter['all'];
+      this.propertiesFilter['MY_PROPERTY'] = true;
       this.getProperties();
     }
   }
@@ -203,13 +206,12 @@ export class PropertiesComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: any) => {
-          this.propertiesList = response?.content ?? [];
-          this.totalRecords = response?.pagination?.total_records ?? 0;
-          if (
-            this.propertyView === 'my-properties' ||
-            this.propertiesFilter['property_id']
-          ) {
+          if (this.propertyView === 'my-properties' || this.showDetailView) {
             this.handlePropertyDetails();
+            this.propertyDetails = response?.content ?? {};
+          } else {
+            this.propertiesList = response?.content ?? [];
+            this.totalRecords = response?.pagination?.total_records ?? 0;
           }
         },
       });
@@ -234,6 +236,18 @@ export class PropertiesComponent {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
     this.getProperties();
+  }
+
+  getAgreementExpirationStatusColor(status: string): string {
+    if (!status) return '';
+
+    let colorMapimg: any = {
+      Expired: 'red',
+      'About to Expire': 'orange',
+      Ongoing: 'green',
+    };
+
+    return colorMapimg[status];
   }
 
   property: PropertyDetails = {
@@ -428,17 +442,11 @@ export class PropertiesComponent {
     this.getProperties();
   }
 
-  handleFilterClick(): void {
-    console.log('Filter button clicked');
-  }
-
   handleExportClick(): void {
     this.propertyService
       .getExcelFileOfProperty({})
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp) => {
-        console.log('response:--->', resp);
-
         const url = window.URL.createObjectURL(resp);
 
         const a = document.createElement('a');
@@ -451,9 +459,11 @@ export class PropertiesComponent {
       });
   }
 
-  handleEditClick(id: number): void {
-    console.log('Edit button clicked');
-    this.router.navigate(['/dashboard/edit-property', id]);
+  handleEditClick(propertyId: number): void {
+    if (!propertyId) {
+      throw new Error('Property ID not found!');
+    }
+    this.router.navigate(['/dashboard/edit-property', propertyId]);
   }
 
   handleDeleteClick(): void {
@@ -465,9 +475,10 @@ export class PropertiesComponent {
     this.router.navigate(['/dashboard/properties']);
   }
 
-  selectedProperties: any = null;
-
   handleViewClick(propertyId: number): void {
+    if (!propertyId) {
+      throw new Error('Property ID not found!');
+    }
     this.router.navigate(['/dashboard/property/details/', propertyId]);
   }
 }

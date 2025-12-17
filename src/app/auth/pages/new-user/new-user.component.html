@@ -3,13 +3,7 @@
 <app-auth-form>
   <form class="mb-4" [formGroup]="signupForm">
     <div class="grid-2">
-      <ng-container
-        *ngIf="
-          selectedRole === 'owner' ||
-          selectedRole === 'tenant' ||
-          selectedRole === 'property-manager'
-        "
-      >
+      <ng-container>
         <div class="mb-2">
           <label for="companyName" class="form-label">Frist Name</label>
           <input
@@ -51,7 +45,12 @@
           />
           @if (isInvalid(signupForm, 'company_name').status) {
           <small class="errorMsg">
-            {{ isInvalid(signupForm, "company_name").msg }}
+            {{
+              isInvalid(signupForm, "company_name", {
+                pattern:
+                  "Use 2-50 characters. Letters, numbers, and common symbols are allowed."
+              }).msg
+            }}
           </small>
           }
         </div>

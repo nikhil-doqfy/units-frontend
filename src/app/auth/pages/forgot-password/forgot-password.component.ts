@@ -110,7 +110,10 @@ export class ForgotPasswordComponent {
     }
 
     // let payload = { email: this.email };
-    let payload = { email: this.forgetForm.value.email };
+    let payload = {
+      email: this.forgetForm.value.email,
+      purpose: 'reset_password',
+    };
     this.authService
       .sendOtp(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -17,7 +17,7 @@ export class PropertyService {
   getProperties(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/property/details/list/view/${queryString}`
+      `${this.SERVER_ADDRESS}/property/details${queryString}`
     );
   }
 
