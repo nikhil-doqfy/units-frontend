@@ -139,8 +139,8 @@ export class StaffComponent {
 
   async loadBreadcrumb() {
     this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.STAFF', link: '' },
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.STAFF', link: '' },
     ]);
     this.sharedService.initLanguage();
   }

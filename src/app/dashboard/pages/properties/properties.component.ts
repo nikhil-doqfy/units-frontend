@@ -29,7 +29,11 @@ import { DashTitleComponent } from '../../../shared/component/dash-title/dash-ti
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject } from 'rxjs';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -103,10 +107,7 @@ export class PropertiesComponent {
   private translate = inject(TranslateService);
 
   componentName: string = 'PropertiesComponent';
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Properties', link: '' },
-  ];
+  breadcrumbData: BreadCrumb[] = [];
   currentRole: UserRole = 'owner';
   propertyView: 'my-properties' | 'all-properties' = 'all-properties';
   selected: string = 'Falcom city';
@@ -150,10 +151,9 @@ export class PropertiesComponent {
   }
 
   ngOnInit() {
+    this.setOnLangChange();
+    this.sharedService.initLanguage();
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
 
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -166,20 +166,41 @@ export class PropertiesComponent {
             this.propertiesFilter['MY_PROPERTY'] = true;
         } else {
           this.propertyView = 'all-properties';
-          this.getOptionTypes(['RENTAL_STATUS']);
+          if (!this.showDetailView) this.getOptionTypes(['RENTAL_STATUS']);
         }
 
         this.getProperties();
       });
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.PROPERTIES', link: '' },
-    ]);
+  setOnLangChange() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
 
-    this.sharedService.initLanguage();
+  async loadBreadcrumb() {
+    if (this.currentPropertyId) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    }
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   onPropertyViewChange() {

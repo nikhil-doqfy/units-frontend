@@ -155,8 +155,8 @@ export class TenantsComponent {
 
   async loadBreadcrumb() {
     this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.TENANTS', link: '' },
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.TENANTS', link: '' },
     ]);
     this.sharedService.initLanguage();
   }

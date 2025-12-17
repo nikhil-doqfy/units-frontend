@@ -17,3 +17,8 @@ export interface UploadFileModel {
   base64?: string;
   errorMessage?: string;
 }
+
+export interface BreadCrumb {
+  label: string;
+  link: string;
+}

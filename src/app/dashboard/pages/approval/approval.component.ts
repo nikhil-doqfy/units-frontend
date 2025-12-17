@@ -111,8 +111,8 @@ export class ApprovalComponent {
 
   async loadBreadcrumb() {
     this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.APPROVAL', link: '' },
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.APPROVAL', link: '' },
     ]);
 
     this.sharedService.initLanguage();

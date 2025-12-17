@@ -134,8 +134,8 @@ export class PMCComponent {
 
   async loadBreadcrumb() {
     this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.PMC', link: '' },
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.PMC', link: '' },
     ]);
   }
 

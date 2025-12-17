@@ -89,10 +89,12 @@ export class HomeComponent implements OnInit {
   }
 
   async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs({
-      key: 'PAGE_TITLE.DASHBOARD',
-      link: '/dashboard/home',
-    });
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      {
+        label: 'PAGE_TITLE.DASHBOARD',
+        link: '/dashboard/home',
+      },
+    ]);
     this.sharedService.initLanguage();
   }
 

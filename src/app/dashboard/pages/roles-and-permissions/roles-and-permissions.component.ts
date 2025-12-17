@@ -75,8 +75,8 @@ export class RolesAndPermissionsComponent {
 
   async loadBreadcrumb() {
     this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.ROLES_PERMISSIONS', link: '' },
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.ROLES_PERMISSIONS', link: '' },
     ]);
     this.sharedService.initLanguage();
   }

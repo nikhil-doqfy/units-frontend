@@ -33,15 +33,15 @@
             [stats]="[
               {
                 label: ('TOTAL' | translate),
-                value: stats?.total_properties ?? 'N/A'
+                value: stats?.properties?.total ?? 'N/A'
               },
               {
                 label: ('RENTED' | translate),
-                value: stats?.occupied_properties ?? 'N/A'
+                value: stats?.properties?.rented ?? 'N/A'
               },
               {
                 label: ('VACANT' | translate),
-                value: stats?.vacant_properties ?? 'N/A'
+                value: stats?.properties?.vacant ?? 'N/A'
               }
             ]"
           >
@@ -56,15 +56,15 @@
             [stats]="[
               {
                 label: ('ACTIVE' | translate),
-                value: stats?.active_leases ?? 'N/A'
+                value: stats?.tenants?.active ?? 'N/A'
               },
               {
                 label: ('UPCOMING RENEWALS' | translate),
-                value: stats?.upcoming_renewals ?? 'N/A'
+                value: stats?.tenants?.upcoming_renewals ?? 'N/A'
               },
               {
                 label: ('NEGOTIATIONS' | translate),
-                value: stats?.negotiations ?? 'N/A'
+                value: stats?.tenants?.negotiations ?? 'N/A'
               }
             ]"
           >
