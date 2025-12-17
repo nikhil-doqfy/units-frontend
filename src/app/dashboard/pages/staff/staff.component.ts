@@ -32,7 +32,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { debounceTime, Subject } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
 import { StaffService } from '../../services/staff.service';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -69,12 +73,17 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
   styleUrl: './staff.component.css',
 })
 export class StaffComponent {
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Staff', link: '' },
-  ];
+  private modalService = inject(NgbModal);
+  private staffService = inject(StaffService);
+  private alertService = inject(AlertService);
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+  private sharedApiService = inject(SharedApiService);
 
   componentName: string = 'StaffComponent';
+  breadcrumbData: BreadCrumb[] = [];
   selectedStaff: any = null;
   selectedstaffRole: any = null;
   staffRoles: any = [];
@@ -85,19 +94,10 @@ export class StaffComponent {
   currentPage: number = 1;
   totalPages: number = 1;
   staffRole: any = [];
-  private modalService = inject(NgbModal);
-  private staffService = inject(StaffService);
-  private alertService = inject(AlertService);
-  private route = inject(ActivatedRoute);
-  private sharedService = inject(SharedService);
-  private destroyRef = inject(DestroyRef);
   private onStaffSearch$ = new Subject<string>();
-  private translate = inject(TranslateService);
-  private sharedApiService = inject(SharedApiService);
   closeResult: WritableSignal<string> = signal('');
   currentLanguage = 'en';
   showDetailView: boolean = false;
-
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -106,27 +106,8 @@ export class StaffComponent {
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-    // ------------------------- Search debounce time -------------------------
-    this.onStaffSearch$
-      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
-      .subscribe((searchText) => {
-        if (searchText?.trim())
-          this.staffRolesData['search'] = searchText.trim();
-        else delete this.staffRolesData['search'];
-
-        this.currentPage = 1;
-        this.getStaffRoleDetails();
-      });
-  }
-
-  ngOnInit(): void {
-    this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
-
+    this.initStaffSearchListener();
     const id = this.route.snapshot.paramMap.get('id');
-
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
@@ -134,15 +115,35 @@ export class StaffComponent {
       this.showDetailView = false;
       this.getStaffRoleDetails();
     }
+  }
+
+  ngOnInit(): void {
+    this.loadBreadcrumb();
     this.getOptionTypes(['STAFF_ROLE']);
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
   }
 
   async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+    this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
       { label: 'PAGE_TITLE.STAFF', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   onRefresh() {
@@ -152,6 +153,7 @@ export class StaffComponent {
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
+
   removeFilter() {
     this.selectedstaffRole = null;
     delete this.staffRolesData['staff_role'];
@@ -159,6 +161,7 @@ export class StaffComponent {
     this.currentPage = 1;
     this.getStaffRoleDetails();
   }
+
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
@@ -170,14 +173,13 @@ export class StaffComponent {
         },
       });
   }
+
   handleFilterClick(): void {
     console.log('Filter button clicked');
   }
 
   handleExportClick(): void {
     this.staffService.getExcelFileOfStaff({}).subscribe((resp) => {
-      console.log('response:--->', resp);
-
       const url = window.URL.createObjectURL(resp);
 
       const a = document.createElement('a');
@@ -191,6 +193,7 @@ export class StaffComponent {
 
     console.log('Export button clicked');
   }
+
   applyFilter() {
     this.staffRolesData['staff_role'] = this.selectedstaffRole.key;
     this.currentPage = 1;
@@ -277,6 +280,19 @@ export class StaffComponent {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
     this.getStaffRoleDetails();
+  }
+
+  initStaffSearchListener() {
+    this.onStaffSearch$
+      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText) => {
+        if (searchText?.trim())
+          this.staffRolesData['search'] = searchText.trim();
+        else delete this.staffRolesData['search'];
+
+        this.currentPage = 1;
+        this.getStaffRoleDetails();
+      });
   }
 
   searchTextChange(search: string) {

@@ -22,7 +22,11 @@ import { SharedService } from '../../../shared.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { LeaseService } from '../../services/lease.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
@@ -61,13 +65,10 @@ export class LeaseTenancyComponent {
   private translate = inject(TranslateService);
   private leaseService = inject(LeaseService);
   private sharedApiService = inject(SharedApiService);
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Lease', link: '' },
-  ];
+
+  breadcrumbData: BreadCrumb[] = [];
   currentLanguage = 'en';
   currentRole: UserRole = 'owner';
-
   leaseStatus: any = [];
   selectedFilter: any;
   selectedleasestatus: any = null;
@@ -80,6 +81,7 @@ export class LeaseTenancyComponent {
   currentPage: number = 1;
 
   private onLeaseSearch$ = new Subject<string>();
+
   constructor(
     private router: Router,
     private themeService: ThemeService,
@@ -87,44 +89,46 @@ export class LeaseTenancyComponent {
   ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-
-    this.onLeaseSearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((searchText) => {
-        if (searchText?.trim()) this.leaseFilter['search'] = searchText.trim();
-        else delete this.leaseFilter['search'];
-
-        this.currentPage = 1;
-        this.getLease();
-      });
+    this.initLeaseSearchListener();
   }
 
   ngOnInit() {
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
-      });
-
+    this.initCurrentRoleListener();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
     this.getLease();
     this.getOptionTypes(['LEASE_STATUS']);
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { label: 'PAGE_TITLE.LEASE', link: '' },
-    ]);
-    this.sharedService.initLanguage();
+  initCurrentRoleListener() {
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {
         this.currentRole = role;
       });
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.LEASE', link: '' },
+    ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   getLease() {
@@ -144,11 +148,13 @@ export class LeaseTenancyComponent {
         },
       });
   }
+
   applyFilter() {
     this.leaseFilter['lease_status'] = this.selectedleasestatus.key;
     this.currentPage = 1;
     this.getLease();
   }
+
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
@@ -161,6 +167,19 @@ export class LeaseTenancyComponent {
     this.currentPage = event.currentPage;
     this.getLease();
   }
+
+  initLeaseSearchListener() {
+    this.onLeaseSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText) => {
+        if (searchText?.trim()) this.leaseFilter['search'] = searchText.trim();
+        else delete this.leaseFilter['search'];
+
+        this.currentPage = 1;
+        this.getLease();
+      });
+  }
+
   searchTextChange(search: string): void {
     this.onLeaseSearch$.next(search);
   }

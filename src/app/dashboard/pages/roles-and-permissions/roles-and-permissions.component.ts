@@ -25,6 +25,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BreadCrumb } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-roles-and-permissions',
@@ -42,7 +43,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TablePaginationComponent,
     AddRoleFormComponent,
     TranslateModule,
-    NoDataComponent,
+    // NoDataComponent,
   ],
   templateUrl: './roles-and-permissions.component.html',
   styleUrl: './roles-and-permissions.component.css',
@@ -52,13 +53,11 @@ export class RolesAndPermissionsComponent {
   private sharedService = inject(SharedService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Roles & Permissions', link: '' },
-  ];
+  private modalService = inject(NgbModal);
+
+  breadcrumbData: BreadCrumb[] = [];
   currentLanguage = 'en';
   showDetailView: boolean = false;
-  private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
 
   constructor(private router: Router) {
@@ -68,17 +67,30 @@ export class RolesAndPermissionsComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
+    this.initLanguageListener();
+    this.sharedService.initLanguage();
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
       { label: 'PAGE_TITLE.ROLES_PERMISSIONS', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   openAddRoleModal(addRoleContent: TemplateRef<any>) {

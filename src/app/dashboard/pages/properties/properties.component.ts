@@ -132,16 +132,7 @@ export class PropertiesComponent {
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-    this.onPropertySearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => {
-        if (value?.trim()) this.propertiesFilter['search'] = value.trim();
-        else delete this.propertiesFilter['search'];
-
-        this.currentPage = 1;
-        this.getProperties();
-      });
-
+    this.initPropertySearchListener();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.currentPropertyId = +id;
@@ -151,10 +142,13 @@ export class PropertiesComponent {
   }
 
   ngOnInit() {
-    this.setOnLangChange();
+    this.initLanguageListener();
     this.sharedService.initLanguage();
     this.loadBreadcrumb();
+    this.initCurrentRoleListener();
+  }
 
+  initCurrentRoleListener() {
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {
@@ -173,7 +167,7 @@ export class PropertiesComponent {
       });
   }
 
-  setOnLangChange() {
+  initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
@@ -182,7 +176,7 @@ export class PropertiesComponent {
       });
   }
 
-  async loadBreadcrumb() {
+  loadBreadcrumb() {
     if (this.currentPropertyId) {
       this.setBreadCrumb([
         { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
@@ -240,6 +234,18 @@ export class PropertiesComponent {
 
   onRefresh() {
     this.getProperties();
+  }
+
+  initPropertySearchListener() {
+    this.onPropertySearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        if (value?.trim()) this.propertiesFilter['search'] = value.trim();
+        else delete this.propertiesFilter['search'];
+
+        this.currentPage = 1;
+        this.getProperties();
+      });
   }
 
   searchTextChange(search: string): void {

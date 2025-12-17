@@ -37,7 +37,11 @@ import { OwnerService } from '../../services/owner.service';
 import { debounceTime, Subject } from 'rxjs';
 import { InvitePMCFormComponent } from '../../component/forms/invite-pmc-form/invite-pmc-form.component';
 import { AlertService } from '../../../shared/services/alert.service';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
@@ -77,10 +81,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
   styleUrl: './owners.component.css',
 })
 export class OwnersComponent {
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Owners', link: '' },
-  ];
+  breadcrumbData: BreadCrumb[] = [];
   selectedOwner: any = null;
   private sharedApiService = inject(SharedApiService);
   owners: any[] = [];
@@ -115,17 +116,7 @@ export class OwnersComponent {
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-
-    // ------------------------- Search debounce time -------------------------
-    this.onOwnerSearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((searchText) => {
-        if (searchText?.trim()) this.ownerData['search'] = searchText.trim();
-        else delete this.ownerData['search'];
-
-        this.currentPage = 1;
-        this.getOwner();
-      });
+    this.initOwnerSearchListener();
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -140,18 +131,31 @@ export class OwnersComponent {
   }
 
   ngOnInit(): void {
+    this.sharedService.initLanguage();
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
+    this.initLanguageListener();
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
       { label: 'PAGE_TITLE.OWNERS', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   onRefresh() {
@@ -206,6 +210,18 @@ export class OwnersComponent {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
     this.getOwner();
+  }
+
+  initOwnerSearchListener() {
+    this.onOwnerSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText) => {
+        if (searchText?.trim()) this.ownerData['search'] = searchText.trim();
+        else delete this.ownerData['search'];
+
+        this.currentPage = 1;
+        this.getOwner();
+      });
   }
 
   searchTextChange(search: string) {

@@ -33,6 +33,7 @@ import { SharedService } from '../../../shared.service';
 import { HomeService } from '../../services/home.service';
 import { Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BreadCrumb } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-home',
@@ -82,20 +83,33 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
     this.getStats();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
       {
         label: 'PAGE_TITLE.DASHBOARD',
         link: '/dashboard/home',
       },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   stats: any = {

@@ -26,7 +26,11 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { AddUserFormComponent } from '../../component/forms/add-user-form/add-user-form.component';
 import { UserService } from '../../../user/services/user.service';
 import { pipe, Subject, takeUntil } from 'rxjs';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -72,10 +76,7 @@ export class UsersComponent {
   private translate = inject(TranslateService);
 
   componentName: string = 'UsersComponent';
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Users', link: '' },
-  ];
+  breadcrumbData: BreadCrumb[] = [];
   activeTab: 'all' | 'deleted' = 'all'; // track current tab
   users: any[] = [];
   newUsers: any[] = [];
@@ -101,19 +102,31 @@ export class UsersComponent {
   // ------------------------- call ngOnInit -------------------------
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
-
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
     this.getUser();
   }
 
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
   async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+    this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
       { label: 'PAGE_TITLE.USERS', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   onRefresh() {

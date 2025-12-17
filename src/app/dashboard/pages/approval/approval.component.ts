@@ -26,7 +26,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApprovalService } from '../../approval.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { debounceTime, Subject } from 'rxjs';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 @Component({
   selector: 'app-approval',
   standalone: true,
@@ -57,6 +61,7 @@ export class ApprovalComponent {
   private approvalService = inject(ApprovalService);
   private alertService = inject(AlertService);
   private onOwnerSearch$ = new Subject<string>();
+
   componentName: string = 'ApprovalComponent';
   selectedTenant: any = null;
   closeResult: WritableSignal<string> = signal('');
@@ -88,34 +93,36 @@ export class ApprovalComponent {
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-
-    this.onOwnerSearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((searchText) => {
-        if (searchText?.trim()) this.approvalData['search'] = searchText.trim();
-        else delete this.approvalData['search'];
-
-        this.currentPage = 1;
-        this.loadApprovalList();
-      });
+    this.initOwnerSearchLisner();
   }
 
   ngOnInit() {
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
     this.refreshDetailsView();
-
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
+    this.initLanguageListener();
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
       { label: 'PAGE_TITLE.APPROVAL', link: '' },
     ]);
+  }
 
-    this.sharedService.initLanguage();
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   refreshDetailsView() {
@@ -168,6 +175,18 @@ export class ApprovalComponent {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
     this.loadApprovalList();
+  }
+
+  initOwnerSearchLisner() {
+    this.onOwnerSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText) => {
+        if (searchText?.trim()) this.approvalData['search'] = searchText.trim();
+        else delete this.approvalData['search'];
+
+        this.currentPage = 1;
+        this.loadApprovalList();
+      });
   }
 
   searchTextChange(search: string) {
