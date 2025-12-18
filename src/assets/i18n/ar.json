@@ -13,12 +13,15 @@
     "APPROVAL": "الموافقات",
     "STAFF": "الموظفون",
     "USERS": "المستخدمون",
+    "ADD": "يضيف",
     "ROLES_PERMISSIONS": "الأدوار والصلاحيات",
     "DOCUMENTATIONS": "المستندات",
     "PAYMENTS_INVOICE": "المدفوعات والفواتير",
     "PAY_MY_DUES": "ادفع مستحقاتي",
     "RAISE_COMPLAINT": "تقديم شكوى",
-    "PRIVACY_POLICY": "سياسة الخصوصية"
+    "PRIVACY_POLICY": "سياسة الخصوصية",
+    "RENTAL_AMOUNT": "مبلغ الإيجار",
+    "RENTAL": "تأجير"
   },
   "ADD_PROPERTY": "إضافة عقار",
   "NEW_LEASE": "عقد جديد",
@@ -313,6 +316,7 @@
   "SELECT": "يختار",
   "TEMPLATE": "نموذج",
   "OR": "أو",
+
   "CLICK_SELECT": "انقر لتحديد الملف",
   "UPLOAD": "رفع",
   "NEGOTIATION": "Negotiation",

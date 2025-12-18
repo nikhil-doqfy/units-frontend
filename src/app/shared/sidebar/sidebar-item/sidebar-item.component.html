@@ -1,6 +1,13 @@
 <div class="dashSdbrItem" [class.dashSdbrSmallItem]="!openSidebarValue">
-  <a routerLink="{{ href }}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-    ariaCurrentWhenActive="page" placement="right" ngbTooltip="{{ title }}" tooltipClass="tltpCommon">
+  <a
+    routerLink="{{ href }}"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    ariaCurrentWhenActive="page"
+    placement="right"
+    ngbTooltip="{{ title }}"
+    tooltipClass="tltpCommon"
+  >
     <i><ng-content /></i>
     <span>{{ title }}</span>
   </a>

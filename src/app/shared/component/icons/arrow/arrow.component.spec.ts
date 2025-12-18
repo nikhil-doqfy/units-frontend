@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MonthFilterComponent } from './month-filter.component';
+import { ArrowComponent } from './arrow.component';
 
-describe('MonthFilterComponent', () => {
-  let component: MonthFilterComponent;
-  let fixture: ComponentFixture<MonthFilterComponent>;
+describe('ArrowComponent', () => {
+  let component: ArrowComponent;
+  let fixture: ComponentFixture<ArrowComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MonthFilterComponent]
+      imports: [ArrowComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(MonthFilterComponent);
+    fixture = TestBed.createComponent(ArrowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

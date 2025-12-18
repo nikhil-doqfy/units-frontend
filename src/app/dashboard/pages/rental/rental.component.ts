@@ -1,14 +1,130 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, Input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SharedService } from '../../../shared.service';
+import { ThemeService, UserRole } from '../../../theme.service';
+import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
+import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { ColumnChartComponent } from '../../component/charts/column/column.component';
+import { TableTitleComponent } from '../../component/table-title/table-title.component';
+import { TableSearchComponent } from '../../component/table-search/table-search.component';
+import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
+import { TableSelectComponent } from '../../component/table-select/table-select.component';
+import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 
 @Component({
   selector: 'app-rental',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    WhiteCardComponent,
+    ArrowComponent,
+    CustomSelectComponent,
+    ColumnChartComponent,
+    TableTitleComponent,
+    TableSearchComponent,
+    TablePaginationComponent,
+    TableSelectComponent,
+    TableViewCardComponent,
+  ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',
 })
 export class RentalComponent {
-  selectedMonth = 'Nov 2025';
+  private sharedService = inject(SharedService);
+  private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
+
+  constructor(
+    private router: Router,
+    private destroyRef: DestroyRef,
+    private themeService: ThemeService
+  ) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+
+    this.sharedService.showDetail$.subscribe((value) => {
+      this.showDetailView = value;
+    });
+  }
+
+  @Input() data: any;
+  @Input() selectedMonth: string = 'Nov 2025';
+
+  currentRole: UserRole = 'owner';
+  showDetailView: boolean = false;
+  currentLanguage = 'en';
+  selected: string = 'property:All';
+  selectedLease: any = null;
+  breadcrumbData = [
+    { label: 'Dashboard', link: '/dashboard/home' },
+    { label: 'Rental', link: '' },
+  ];
+
+  componentName = 'RentalComponent';
+  totalRecords = 0;
+  rowsPerPageOptions = [10, 25, 50, 100];
+  rowsPerPage = 10;
+  currentPage = 1;
+
+  leases = [
+    {
+      title: 'Abhram | Khaleejia Building | 302',
+      leaseNo: 'LV-24-0908',
+      status: 'Active',
+      tenantNo: '98909897',
+      from: '28/02/24',
+      to: '28/02/25',
+      unitType: 'Residential',
+      yearRent: '67,000',
+      otherCharges: '13,000',
+      vat: '--',
+      total: '1,00,000',
+    },
+    {
+      title: 'Al Najah | Platinum Tower | 1201',
+      leaseNo: 'LK-24-1011',
+      status: 'Inactive',
+      tenantNo: '87654321',
+      from: '01/03/24',
+      to: '28/02/25',
+      unitType: 'Commercial',
+      yearRent: '83,000',
+      otherCharges: '17,000',
+      vat: '4,000 @ 5%',
+      total: '1,04,000',
+    },
+    {
+      title: 'Basil | Emerald Heights | 507',
+      leaseNo: 'LM-24-1112',
+      status: 'Active',
+      tenantNo: '23456789',
+      from: '15/01/24',
+      to: '14/01/25',
+      unitType: 'Mixed-Use',
+      yearRent: '75,000',
+      otherCharges: '10,000',
+      vat: '--',
+      total: '85,000',
+    },
+    {
+      title: 'Zara | Sapphire Tower | 805',
+      leaseNo: 'LN-24-2022',
+      status: 'Active',
+      tenantNo: '12345678',
+      from: '01/04/24',
+      to: '31/03/25',
+      unitType: 'Office',
+      yearRent: '90,000',
+      otherCharges: '15,000',
+      vat: '5,000',
+      total: '1,10,000',
+    },
+  ];
 
   summaryData = [
     {
@@ -35,4 +151,53 @@ export class RentalComponent {
     380000, 350000, 310000, 380000, 300000, 350000, 370000, 420000, 280000,
     340000, 410000, 230000,
   ];
+
+  ngOnInit() {
+    this.loadBreadcrumb();
+
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
+
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+  }
+
+  async loadBreadcrumb() {
+    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { key: 'PAGE_TITLE.RENTAL', link: '' },
+    ]);
+
+    this.sharedService.initLanguage();
+
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+  }
+
+  toAddRenatlAcc() {
+    this.router.navigate(['dashboard/add-rentalaccount']);
+  }
+
+  onMonthChange(month: string) {
+    this.selectedMonth = month;
+  }
+
+  onOptionSelected(option: string) {
+    this.selected = option;
+  }
+
+  searchTextChange(event: string) {
+    throw new Error('Method not implemented.');
+  }
+
+  onRefresh() {
+    throw new Error('Method not implemented.');
+  }
 }

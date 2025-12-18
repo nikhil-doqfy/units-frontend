@@ -1,16 +1,232 @@
-<!-- <div class="dashboard-container">
-   Top Cards
-  <div class="summary-grid">
-    <app-summary-card
-      *ngFor="let item of summaryData"
-      [data]="item"
-    ></app-summary-card>
+<app-white-card class="monthly-summary-card">
+  <div class="rent-card">
+    <div
+      class="d-flex justify-content-between align-items-center mb-3 flex-wrap"
+    >
+      <div class="metric">
+        <div class="metric-value">
+          AED 1,20,573
+          <span class="percentage text-success">
+            12% <app-arrow></app-arrow> last month
+          </span>
+        </div>
+        <div class="metric-label">Total Amount Received</div>
+      </div>
 
-    <app-month-filter
-      [(selectedMonth)]="selectedMonth"
-    ></app-month-filter>
+      <div class="metric">
+        <div class="metric-value">
+          AED 2,20,789
+          <span class="badge text-success">5678 Cheques</span>
+        </div>
+        <div class="metric-label">Cheques Approved</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-value">
+          AED 20,573
+          <span class="badge text-warning">1124 Cheques</span>
+        </div>
+        <div class="metric-label">Cheques Deposited</div>
+      </div>
+
+      <div>
+        <app-custom-select
+          [options]="[
+            'Falcom city',
+            'Novatis AG...',
+            'Agriculture',
+            'Honda',
+            'TVS',
+            'Samsung'
+          ]"
+          [placeholder]="selected"
+          [selectedOption]="selected"
+          (optionSelected)="onOptionSelected($event)"
+          [isFilter]="true"
+        >
+        </app-custom-select>
+      </div>
+    </div>
   </div>
 
-   Chart 
-  <app-bar-chart [data]="chartData"></app-bar-chart>
-</div> -->
+  <app-column-chart></app-column-chart>
+</app-white-card>
+
+<div class="mt-3">
+  <app-white-card>
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'Rent Amounts' | translate"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
+          >
+          </app-table-title>
+        </div>
+
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search
+              placeholder="{{ 'SEARCH_HERE' | translate }}"
+              (onValueChange)="searchTextChange($event)"
+            >
+            </app-table-search>
+
+            <app-custom-select
+              [options]="[
+                'Falcom city',
+                'Novatis AG...',
+                'Agriculture',
+                'Honda',
+                'TVS',
+                'Samsung'
+              ]"
+              [placeholder]="selected"
+              [selectedOption]="selected"
+              (optionSelected)="onOptionSelected($event)"
+              [isFilter]="true"
+            >
+            </app-custom-select>
+
+            <app-custom-select
+              [options]="[
+                'Falcom city',
+                'Novatis AG...',
+                'Agriculture',
+                'Honda',
+                'TVS',
+                'Samsung'
+              ]"
+              [placeholder]="selected"
+              [selectedOption]="selected"
+              (optionSelected)="onOptionSelected($event)"
+              [isFilter]="true"
+            >
+            </app-custom-select>
+
+            <app-custom-select
+              [options]="[
+                'Falcom city',
+                'Novatis AG...',
+                'Agriculture',
+                'Honda',
+                'TVS',
+                'Samsung'
+              ]"
+              [placeholder]="selected"
+              [selectedOption]="selected"
+              (optionSelected)="onOptionSelected($event)"
+              [isFilter]="true"
+            >
+            </app-custom-select>
+
+            <button
+              type="button"
+              class="btn btnCommon btnMinWidth d-none d-xl-flex"
+              (click)="toAddRenatlAcc()"
+            >
+              {{ "Add New Account" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lease-wrapper">
+      <div class="lease-card" *ngFor="let l of leases">
+        <div class="lease-header">
+          <h4>{{ l.title }}</h4>
+          <div class="right">
+            <span class="lease-no">Lease No: {{ l.leaseNo }}</span>
+            <span class="status" [ngClass]="l.status.toLowerCase()">
+              {{ l.status }}
+            </span>
+          </div>
+        </div>
+
+        <div class="lease-grid">
+          <div>
+            <label>Tenant No</label>
+            <span>{{ l.tenantNo }}</span>
+          </div>
+
+          <div>
+            <label>Period From</label>
+            <span>{{ l.from }}</span>
+          </div>
+
+          <div>
+            <label>Period To</label>
+            <span>{{ l.to }}</span>
+          </div>
+
+          <div>
+            <label>Unit Type</label>
+            <span>{{ l.unitType }}</span>
+          </div>
+
+          <div>
+            <label>Year Rent</label>
+            <span>{{ l.yearRent }}</span>
+          </div>
+
+          <div>
+            <label>Other Charges</label>
+            <span>{{ l.otherCharges }}</span>
+          </div>
+
+          <div>
+            <label>Vat</label>
+            <span>{{ l.vat }}</span>
+          </div>
+
+          <div>
+            <label>Total Rent</label>
+            <strong>{{ l.total }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+      >
+      </app-table-select>
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+      >
+      </app-table-pagination>
+    </div>
+  </app-white-card>
+</div>
+
+<ng-container *ngIf="showDetailView">
+  <app-table-view-card
+    [title]="selectedLease?.title"
+    [imgSrc]="''"
+    [headerItems]="[
+      { label: 'Lease No', value: selectedLease?.leaseNo },
+      { label: 'Status', value: selectedLease?.status }
+    ]"
+    [items]="[
+      { label: 'Tenant No', value: selectedLease?.tenantNo },
+      { label: 'Period From', value: selectedLease?.from },
+      { label: 'Period To', value: selectedLease?.to },
+      { label: 'Unit Type', value: selectedLease?.unitType },
+      { label: 'Year Rent', value: selectedLease?.yearRent },
+      { label: 'Other Charges', value: selectedLease?.otherCharges },
+      { label: 'VAT', value: selectedLease?.vat },
+      { label: 'Total Rent', value: selectedLease?.total }
+    ]"
+    (back)="showDetailView = false"
+  >
+  </app-table-view-card>
+</ng-container>

@@ -20,6 +20,8 @@ import { PaymentsAndInvoiceComponent } from './pages/payments-and-invoice/paymen
 import { PayMyDuesComponent } from './pages/pay-my-dues/pay-my-dues.component';
 import { RaiseComplaintComponent } from './pages/raise-complaint/raise-complaint.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { RentalComponent } from './pages/rental/rental.component';
+import { AddRentalaccountComponent } from './pages/add-rentalaccount/add-rentalaccount.component';
 
 export const routes: Routes = [
   {
@@ -92,6 +94,16 @@ export const routes: Routes = [
         path: 'edit-lease/:id',
         component: AddLeaseComponent,
         data: { titleKey: 'PAGE_TITLE.EDIT_LEASE' },
+      },
+      {
+        path: 'rental',
+        component: RentalComponent,
+        data: { titleKey: 'PAGE_TITLE.RENTAL_AMOUNT' },
+      },
+      {
+        path: 'add-rentalaccount',
+        component: AddRentalaccountComponent,
+        data: { titleKey: 'PAGE_TITLE.ADD' },
       },
       {
         path: 'owners',

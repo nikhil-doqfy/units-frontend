@@ -11,6 +11,7 @@ export class SharedService {
   private translate = inject(TranslateService);
   private openSidebarValueKey = 'openSidebarValue';
   private openRightSidebarValueKey = 'openRightSidebarValue';
+  private showDetailSource = new BehaviorSubject<boolean>(false);
 
   private openSidebarValueSource = new BehaviorSubject<boolean>(false); // Default to closed
   openSidebarValue$ = this.openSidebarValueSource.asObservable();
@@ -176,5 +177,14 @@ export class SharedService {
     return this.http.delete(
       `${environment.SERVER_ADDRESS}/notifications/` + queryString
     );
+  }
+
+  showDetail$ = this.showDetailSource.asObservable();
+  showDetails() {
+    this.showDetailSource.next(true);
+  }
+
+  hideDetails() {
+    this.showDetailSource.next(false);
   }
 }
