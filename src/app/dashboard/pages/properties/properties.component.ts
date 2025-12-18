@@ -125,14 +125,17 @@ export class PropertiesComponent {
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
-  private onPropertySearch$ = new Subject<string>();
   currentLanguage = 'en';
   currentPropertyId!: number;
+  propertyDocumentType: any[] = [];
+  propertyDocuments: Record<string, any[]> = {};
+  activeDocTypeKey!: string;
+
+  private onPropertySearch$ = new Subject<string>();
 
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-    this.initPropertySearchListener();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.currentPropertyId = +id;
@@ -142,10 +145,11 @@ export class PropertiesComponent {
   }
 
   ngOnInit() {
-    this.initLanguageListener();
-    this.sharedService.initLanguage();
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
     this.initCurrentRoleListener();
+    this.initPropertySearchListener();
   }
 
   initCurrentRoleListener() {
@@ -154,17 +158,33 @@ export class PropertiesComponent {
       .subscribe((role) => {
         this.currentRole = role;
 
-        if (this.currentRole === 'tenant') {
+        if (role === 'tenant' && !this.currentPropertyId) {
           this.propertyView = 'my-properties';
-          if (!this.currentPropertyId)
-            this.propertiesFilter['MY_PROPERTY'] = true;
-        } else {
-          this.propertyView = 'all-properties';
-          if (!this.showDetailView) this.getOptionTypes(['RENTAL_STATUS']);
+          this.propertiesFilter['MY_PROPERTY'] = true;
         }
-
         this.getProperties();
+        this.getOptionTypes();
       });
+  }
+
+  getOptionTypes() {
+    if (this.showDetailView || this.propertyView === 'my-properties') {
+      this.sharedApiService.getOptionsType([
+        {
+          param: 'PROPERTY_DOCUMENT_CHOICE',
+          key: 'Property_Document',
+          setter: (v) => (this.propertyDocumentType = v),
+        },
+      ]);
+    } else {
+      this.sharedApiService.getOptionsType([
+        {
+          param: 'TENANCY_STATUS',
+          key: 'tenancy_status',
+          setter: (v) => (this.rentalStatus = v),
+        },
+      ]);
+    }
   }
 
   initLanguageListener() {
@@ -180,13 +200,13 @@ export class PropertiesComponent {
     if (this.currentPropertyId) {
       this.setBreadCrumb([
         { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.PROPERTIES', link: '' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
+        { label: 'PROPERTY_DETAILS', link: '' },
       ]);
     } else {
       this.setBreadCrumb([
         { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
-        { label: 'PROPERTY_DETAILS', link: '' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '' },
       ]);
     }
   }
@@ -201,12 +221,12 @@ export class PropertiesComponent {
     if (this.propertyView === 'all-properties') {
       delete this.propertiesFilter['property_id'];
       delete this.propertiesFilter['MY_PROPERTY'];
-      this.getProperties();
     } else if (this.propertyView === 'my-properties') {
       delete this.propertiesFilter['property_id'];
       this.propertiesFilter['MY_PROPERTY'] = true;
-      this.getProperties();
     }
+    this.getProperties();
+    this.getOptionTypes();
   }
 
   private getProperties() {
@@ -222,8 +242,8 @@ export class PropertiesComponent {
       .subscribe({
         next: (response: any) => {
           if (this.propertyView === 'my-properties' || this.showDetailView) {
-            this.handlePropertyDetails();
             this.propertyDetails = response?.content ?? {};
+            this.handlePropertyDetails();
           } else {
             this.propertiesList = response?.content ?? [];
             this.totalRecords = response?.pagination?.total_records ?? 0;
@@ -275,6 +295,14 @@ export class PropertiesComponent {
     };
 
     return colorMapimg[status];
+  }
+
+  removeFilter() {
+    this.selectedrentalstatus = null;
+    delete this.propertiesFilter['tenancy_status'];
+
+    this.currentPage = 1;
+    this.getProperties();
   }
 
   property: PropertyDetails = {
@@ -344,111 +372,160 @@ export class PropertiesComponent {
       },
     ],
   };
-  removeFilter() {
-    this.selectedrentalstatus = null;
-    delete this.propertiesFilter['rental_status'];
 
-    this.currentPage = 1;
-    this.getProperties();
-  }
-  getOptionTypes(options: string[]) {
-    this.sharedApiService
-      .getOptions({ option_type: options.join(',') })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.rentalStatus = response?.content?.rental_status;
-          console.log('data', this.rentalStatus);
-        },
-      });
-  }
-  handlePropertyDetails() {
-    const data: any = this.propertiesList[0];
-    let basicDetails = {
-      name: data?.property_name ?? 'N/A',
-      location: data?.address ?? 'N/A',
-      status: data?.rental_status ?? 'N/A',
-      rent: data?.commercial_info?.rent ?? 'N/A',
-      bhk: data?.bedrooms ? `${data?.bedrooms} BHK` : 'N/A',
-      sqft: data?.area_of_property
-        ? `${data?.area_of_property} ${data?.area_unit}`
-        : `N/A`,
+  getBasicDetailsOfProperty(data: Record<string, any>) {
+    return {
+      name: `${data?.['property_unit']?.['property_unit_name']}, ${data?.['parent_property']?.['property_name']}`,
+      location: `${data?.['parent_property']?.['state']?.['value']}, ${data?.['parent_property']?.['city']?.['value']}`,
+      status: data?.['property_unit']?.['status'] || 'N/A',
+      rent: data?.['property_unit']?.['commercial_details']?.['rent'] ?? 'N/A',
+      bhk: data?.['property_unit']?.['dimension'] || 'N/A',
+      sqft: data?.['property_unit']?.['area_of_property'] ?? 'N/A',
     };
-    let propertyImages: PropertyImages[] = data?.images?.length
-      ? data?.images.map((i: any) => ({ imgSrc: i.data }))
+  }
+
+  getPropertyImages(data: Record<string, any>): PropertyImages[] {
+    const images = data?.['images'].map((img: any) => ({ imgSrc: img.url }));
+
+    return images.length
+      ? images
       : Array.from({ length: 5 }).map((_, i) => ({
           imgSrc: 'assets/property/property-img-default.svg',
         }));
+  }
 
-    let sections: Section[] = [
+  getOtherDetailsOfProperty(data: Record<string, any>): Section[] {
+    return [
       {
         title: 'Property details',
         items: [
           {
             label: 'Phone Number',
-            value: data?.owner_info?.contact_number ?? 'N/A',
+            value: data?.['owner']?.['contact_number'] || 'N/A',
           },
-          { label: 'Property Code', value: data?.property_code ?? 'N/A' },
-          { label: 'City', value: data?.address ?? 'N/A' },
-          { label: 'Locality', value: data?.address ?? 'N/A' },
-          { label: 'Postal Code', value: data?.address ?? 'N/A' },
-          { label: 'Address Line 1', value: data?.address ?? 'N/A' },
-          { label: 'Address Line 2 ', value: data?.address ?? 'N/A' },
+          {
+            label: 'Property Code',
+            value: data?.['property_unit']?.['property_code'] || 'N/A',
+          },
+          {
+            label: 'City',
+            value: data?.['parent_property']?.['city']?.['value'] || 'N/A',
+          },
+          {
+            label: 'Locality',
+            value: data?.['parent_property']?.['locality'] || 'N/A',
+          },
+          {
+            label: 'Postal Code',
+            value: data?.['parent_property']?.['postal_code'] || 'N/A',
+          },
+          {
+            label: 'Address Line 1',
+            value: data?.['property_unit']?.['address'] || 'N/A',
+          },
+          {
+            label: 'Address Line 2 ',
+            value: data?.['parent_property']?.['additional_address'] || 'N/A',
+          },
         ],
       },
       {
         title: 'Property Costing',
         items: [
-          { label: 'Rent Cost', value: data?.commercial_info?.rent ?? 'N/A' },
+          {
+            label: 'Rent Cost',
+            value:
+              data?.['property_unit']?.['commercial_details']?.['rent'] ??
+              'N/A',
+          },
         ],
       },
       {
         title: 'Tenant details',
         items: [
-          { label: 'Name', value: data?.tenants?.[0]?.tenant_name ?? 'N/A' },
-          { label: 'Email', value: data?.tenants?.[0]?.tenant_name ?? 'N/A' },
+          {
+            label: 'Name',
+            value: `${data?.['tenant']?.['first_name']} ${data?.['tenant']?.['last_name']}`,
+          },
+          { label: 'Email', value: data?.['tenant']?.['email'] || 'N/A' },
           {
             label: 'Phone Number',
-            value: data?.tenants?.[0]?.contact_number ?? 'N/A',
+            value: data?.['tenant']?.['contact_number'] || 'N/A',
           },
           {
             label: 'Emirates ID',
-            value: data?.tenants?.[0]?.emirate_id ?? 'N/A',
+            value: data?.['tenant']?.['emirate_id'] || 'N/A',
           },
-          { label: 'City', value: data?.tenants?.[0]?.country ?? 'N/A' },
-          { label: 'Locality', value: data?.tenants?.[0]?.country ?? 'N/A' },
-          { label: 'Postal Code', value: data?.tenants?.[0]?.country ?? 'N/A' },
+          {
+            label: 'City',
+            value: data?.['tenant']?.['city']?.['value'] || 'N/A',
+          },
+          { label: 'Locality', value: data?.['tenant']?.['locality'] || 'N/A' },
+          {
+            label: 'Postal Code',
+            value: data?.['tenant']?.['postal_code'] || 'N/A',
+          },
           {
             label: 'Address Line 1',
-            value: data?.tenants?.[0]?.country ?? 'N/A',
+            value: data?.['tenant']?.['address'] || 'N/A',
           },
           {
             label: 'Address Line 2',
-            value: data?.tenants?.[0]?.country ?? 'N/A',
+            value: data?.['tenant']?.['additional_address'] || 'N/A',
           },
         ],
       },
       {
         title: 'Owner details',
         items: [
-          { label: 'Name', value: data?.owner_info?.owner_name ?? 'N/A' },
+          {
+            label: 'Name',
+            value: `${data?.['owner']?.['first_name']} ${data?.['owner']?.['last_name']}`,
+          },
           {
             label: 'Emirates ID',
-            value: data?.owner_info?.emirate_id ?? 'N/A',
+            value: data?.['postal_code']?.['emirate_id'] || 'N/A',
           },
           {
             label: 'Residence Visa',
-            value: data?.owner_info?.uae_residence_visa ?? 'N/A',
+            value: data?.['postal_code']?.['uae_residence_visa'] || 'N/A',
           },
           {
             label: 'Trade License',
-            value: data?.owner_info?.trade_license ?? 'N/A',
+            value: data?.['postal_code']?.['trade_license'] || 'N/A',
           },
-          { label: 'Owner Code', value: data?.owner_info?.owner_code ?? 'N/A' },
+          {
+            label: 'Owner Code',
+            value: data?.['postal_code']?.['owner_code'] || 'N/A',
+          },
         ],
       },
     ];
+  }
+
+  handlePropertyDetails() {
+    let basicDetails = this.getBasicDetailsOfProperty(this.propertyDetails);
+    let propertyImages = this.getPropertyImages(this.propertyDetails);
+    let sections = this.getOtherDetailsOfProperty(this.propertyDetails);
     this.property = { ...basicDetails, propertyImages, sections };
+
+    this.propertyDocumentType.map(
+      (type: any) => (this.propertyDocuments[type.key] = [])
+    );
+
+    this.activeDocTypeKey = this.propertyDocumentType[0]?.key;
+
+    this.propertyDetails?.['documents'].map((doc: any) => {
+      if (this.propertyDocuments[doc.type]) {
+        this.propertyDocuments[doc.type].push(doc);
+      } else {
+        // this.propertyDocuments[doc.type] = [doc];
+      }
+    });
+  }
+
+  onDocTabClick(type: any) {
+    this.activeDocTypeKey = type.key;
   }
 
   onOptionSelected(option: string) {
@@ -464,7 +541,7 @@ export class PropertiesComponent {
   }
 
   applyFilter() {
-    this.propertiesFilter['rental_status'] = this.selectedrentalstatus.key;
+    this.propertiesFilter['tenancy_status'] = this.selectedrentalstatus.key;
     this.currentPage = 1;
     this.getProperties();
   }

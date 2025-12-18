@@ -22,3 +22,9 @@ export interface BreadCrumb {
   label: string;
   link: string;
 }
+
+export interface OptionsParams {
+  param: string;
+  key: string;
+  setter: (value: any) => void;
+}
