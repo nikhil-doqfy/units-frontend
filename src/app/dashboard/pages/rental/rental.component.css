@@ -4,10 +4,10 @@
   border-radius: 12px;
   padding: 16px;
   height: 84px;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
   cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .rent-card:hover {
@@ -16,14 +16,6 @@
   cursor: pointer;
 }
 
-/* .card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-} */
-
 .card-top h4 {
   font-size: 15px;
   font-weight: 600;
@@ -31,11 +23,7 @@
 
 .metric-value {
   font-weight: 600;
-
-  font-style: bold;
-
   font-size: 16px;
-
   line-height: 24px;
 }
 
@@ -49,13 +37,10 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-
   padding: 2px 8px;
   border-radius: 999px;
-
   background: var(--green--100);
   color: var(--green--700);
-
   font-size: 12px;
   font-weight: 500;
   line-height: 1;
@@ -113,58 +98,59 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+}
 
-  h4 {
-    font-size: 15px;
-    font-weight: 600;
-    margin: 0;
-  }
+.lease-header h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
 
-  .right {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
+.lease-header .right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
 
-  .lease-no {
-    font-size: 13px;
-    color: #666;
-  }
+.lease-no {
+  font-size: 13px;
+  color: #666;
+}
 
-  .status {
-    font-size: 13px;
-    font-weight: 500;
+.lease-header .status {
+  font-size: 13px;
+  font-weight: 500;
+}
 
-    &.active {
-      color: #1fa750;
-    }
-    &.inactive {
-      color: #999;
-    }
-  }
+.lease-header .status.active {
+  color: #1fa750;
+}
+
+.lease-header .status.inactive {
+  color: #999;
 }
 
 .lease-grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   gap: 12px;
+}
 
-  label {
-    display: block;
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 2px;
-  }
+.lease-grid label {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 2px;
+}
 
-  span,
-  strong {
-    font-size: 13px;
-    color: #111;
-  }
+.lease-grid span,
+.lease-grid strong {
+  font-size: 13px;
+  color: #111;
+}
 
-  strong {
-    font-weight: 600;
-  }
+.lease-grid strong {
+  font-weight: 600;
 }
 
 @media (max-width: 1024px) {
@@ -177,4 +163,175 @@
   .lease-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.lease-card {
+  background-color: #fff;
+  border: 1px solid #eef1f5;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.lease-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Header styling */
+.lease-card .lease-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.lease-card .lease-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 4px;
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+  /* border-bottom: 2px solid black; underline only under title */
+}
+
+.lease-card .lease-header h4:hover {
+  box-shadow: inset 0 -0.5px 0 #000;
+}
+
+/* Optional: lease number and status */
+.lease-card .lease-header .right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.lease-card .lease-header .lease-no {
+  font-size: 13px;
+  color: #666;
+}
+
+.lease-card .lease-header .status {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lease-card .lease-header .status.active {
+  color: #1fa750;
+}
+
+.lease-card .lease-header .status.inactive {
+  color: #dc2626;
+}
+
+/* Grid inside card */
+.lease-card .lease-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 12px;
+}
+
+.lease-card .lease-grid label {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.lease-card .lease-grid span,
+.lease-card .lease-grid strong {
+  font-size: 13px;
+  color: #111;
+}
+
+.lease-card .lease-grid strong {
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .lease-card .lease-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .lease-card .lease-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.status-track {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+/* STEP */
+.status-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 70px;
+}
+
+.status-step .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-step .text {
+  color: #374151;
+  font-weight: 400;
+}
+
+.status-line {
+  width: 45px;
+  height: 1px;
+}
+
+.status-step.done .dot {
+  background: #22c55e;
+}
+
+.status-line.done {
+  background: #22c55e;
+}
+
+.status-step.progress .dot {
+  border: 2px solid #f97316;
+  background: #fff;
+}
+
+.status-line.progress {
+  border-top: 1px dotted #6b7280;
+}
+
+.status-step.danger .dot {
+  border: 2px solid #ef4444;
+  background: #fff;
+}
+
+.status-line.danger {
+  border-top: 1px dotted #ef4444;
+}
+
+Replace Cheque Link .replace-link {
+  font-size: 12px;
+  color: #2563eb;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.replace-link:hover {
+  text-decoration: underline;
 }

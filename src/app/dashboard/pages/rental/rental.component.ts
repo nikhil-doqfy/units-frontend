@@ -14,6 +14,11 @@ import { TableSearchComponent } from '../../component/table-search/table-search.
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
+import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
+import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
+import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
+import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
+import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
 
 @Component({
   selector: 'app-rental',
@@ -30,6 +35,11 @@ import { TableViewCardComponent } from '../../component/table-view-card/table-vi
     TablePaginationComponent,
     TableSelectComponent,
     TableViewCardComponent,
+    TableActionButtonComponent,
+    TableImgItemComponent,
+    ExportIconComponent,
+    FilterIconComponent,
+    TableFilterButtonComponent,
   ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',
@@ -64,13 +74,12 @@ export class RentalComponent {
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Rental', link: '' },
   ];
-
   componentName = 'RentalComponent';
   totalRecords = 0;
   rowsPerPageOptions = [10, 25, 50, 100];
   rowsPerPage = 10;
   currentPage = 1;
-
+  pmcList: any[] = [];
   leases = [
     {
       title: 'Abhram | Khaleejia Building | 302',
@@ -124,6 +133,19 @@ export class RentalComponent {
       vat: '5,000',
       total: '1,10,000',
     },
+  ];
+  chequeStatusList = [
+    { status: 'Credited', amount: 9000 },
+    { status: 'InProgress', amount: 9000 },
+    { status: 'Bounce', amount: 9000 },
+  ];
+
+  otherChargesList = [
+    { label: 'Admin Fee', base: 32.71, vat: 1.64, total: 34.35 },
+    { label: 'Ejari Charge Disb...', base: 175.65, vat: 1.64, total: 175.65 },
+    { label: 'Gas Charges', base: 1000.0, vat: 50.0, total: 1050.0 },
+    { label: 'Commission - Dubai', base: 1200.0, vat: 60.0, total: 1260.0 },
+    { label: 'Security Deposit', base: 2400.0, vat: 0.0, total: 2400.0 },
   ];
 
   summaryData = [
@@ -181,6 +203,15 @@ export class RentalComponent {
       });
   }
 
+  showMenu = false;
+  onLeaseClick(lease: any) {
+    this.selectedLease = lease;
+    this.showDetailView = true;
+  }
+
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
   toAddRenatlAcc() {
     this.router.navigate(['dashboard/add-rentalaccount']);
   }
@@ -196,8 +227,25 @@ export class RentalComponent {
   searchTextChange(event: string) {
     throw new Error('Method not implemented.');
   }
+  handleEditClick(): void {
+    console.log('Edit button clicked');
+  }
+
+  handleExportClick(): void {}
+
+  handleBackClick(): void {
+    this.showDetailView = false;
+    this.router.navigate(['/dashboard/rental']);
+  }
 
   onRefresh() {
     throw new Error('Method not implemented.');
+  }
+  handleDownloadDocumentClick(): void {
+    console.log('Download Document button clicked');
+  }
+
+  handlePreviewDocumentClick(): void {
+    console.log('Preview Document button clicked');
   }
 }
