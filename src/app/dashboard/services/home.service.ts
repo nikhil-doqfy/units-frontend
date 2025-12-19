@@ -15,6 +15,6 @@ export class HomeService {
   constructor() {}
 
   getDashboardStatistics(): Observable<any> {
-    return this.http.get(`${this.SERVER_ADDRESS}/property/statistics`);
+    return this.http.get(`${this.SERVER_ADDRESS}/statistics`);
   }
 }

@@ -462,7 +462,7 @@
             @for (property of propertiesList; track $index) {
             <tr>
               <td *ngIf="currentRole === 'property-manager'">
-                {{ property.property_id }}
+                {{ property.property_unit_id }}
               </td>
               <td>
                 <app-table-img-item
@@ -473,7 +473,7 @@
                   size="md"
                   [title]="property.property_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick(property.property_id)"
+                  (clicked)="handleViewClick(property.property_unit_id)"
                 />
               </td>
               <td
@@ -521,7 +521,7 @@
                 />
               </td>
               <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                {{ property.dimension }}
+                {{ property.dimension || "N/A" }}
               </td>
               <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
                 {{ property?.company_name || "N/A" }}
@@ -535,7 +535,7 @@
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
                     type="edit"
-                    (clicked)="handleEditClick(property.id)"
+                    (clicked)="handleEditClick(property.property_unit_id)"
                   />
                   <!-- <app-table-action-btn
                     type="delete"
@@ -596,190 +596,53 @@
     <app-white-card title="All Documents">
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              id="rentalDocument-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#rentalDocument-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="rentalDocument-tab-pane"
-              aria-selected="true"
-            >
-              Rental Document
-            </button>
-          </li>
+          @for (type of propertyDocumentType; track type.key;) {
           <li class="nav-item" role="presentation">
             <button
               class="nav-link"
-              id="tenantDoc-tab"
+              [class.active]="type.key === activeDocTypeKey"
+              [id]="type.key + '-tab'"
               data-bs-toggle="tab"
-              data-bs-target="#tenantDoc-tab-pane"
+              [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
               type="button"
               role="tab"
-              aria-controls="tenantDoc-tab-pane"
-              aria-selected="false"
+              [attr.aria-controls]="type.key + '-tab-pane'"
+              [attr.aria-selected]="type.key === activeDocTypeKey"
+              (click)="onDocTabClick(type)"
             >
-              Tenant Doc
+              {{ type.value }}
             </button>
           </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="ejariCerificates-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#ejariCerificates-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="ejariCerificates-tab-pane"
-              aria-selected="false"
-            >
-              Ejari Cerificates
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="ownerDocs-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#ownerDocs-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="ownerDocs-tab-pane"
-              aria-selected="false"
-            >
-              Owner Docs
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="cheque-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#cheque-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="cheque-tab-pane"
-              aria-selected="false"
-            >
-              Cheque
-            </button>
-          </li>
+          }
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="myTabContent">
+          @for(type of propertyDocumentType; track type.key; let i = $index){
           <div
-            class="tab-pane fade show active"
-            id="rentalDocument-tab-pane"
+            [ngClass]="{
+              'tab-pane': true,
+              fade: true,
+              show: type.key === activeDocTypeKey,
+              active: type.key === activeDocTypeKey
+            }"
+            [id]="type.key + '-tab-pane'"
             role="tabpanel"
-            aria-labelledby="rentalDocument-tab"
-            tabindex="0"
+            [attr.aria-labelledby]="type.key + '-tab'"
+            [tabindex]="i"
           >
             <div class="row g-2">
+              @for(docsGroup of propertyDocuments[activeDocTypeKey]; track
+              docsGroup.id){
               <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+                <app-document-type-item [title]="docsGroup.file_name" />
               </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
+              }@empty {
+              <div class="col-auto m-auto">Documents not available!</div>
+              }
             </div>
           </div>
-          <div
-            class="tab-pane fade"
-            id="tenantDoc-tab-pane"
-            role="tabpanel"
-            aria-labelledby="tenantDoc-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="ejariCerificates-tab-pane"
-            role="tabpanel"
-            aria-labelledby="ejariCerificates-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="ownerDocs-tab-pane"
-            role="tabpanel"
-            aria-labelledby="ownerDocs-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="cheque-tab-pane"
-            role="tabpanel"
-            aria-labelledby="cheque-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
+          }
         </div>
       </div>
     </app-white-card>

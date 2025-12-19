@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin, map, tap } from 'rxjs';
 import { environment } from '../environments/environment';
+import { BreadCrumb } from './shared/model/shared.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -18,9 +19,7 @@ export class SharedService {
 
   private openRightSidebarValueSource = new BehaviorSubject<boolean>(false);
   openRightSidebarValue$ = this.openRightSidebarValueSource.asObservable();
-  currentbreadcrumb:
-    | { key: string; link?: string }
-    | { key: string; link?: string }[] = [];
+  currentbreadcrumb: BreadCrumb[] = [];
 
   breadcrumb$ = new BehaviorSubject<{ label: string; link: string }[]>([]);
   http: any;
@@ -29,28 +28,21 @@ export class SharedService {
     this.initializeSidebarState(); // Initialize the sidebar state properly
   }
 
-  async getBreadcrumbs(
-    items: { key: string; link?: string } | { key: string; link?: string }[]
-  ): Promise<{ label: string; link: string }[]> {
-    // Convert single object to array
-    const list = Array.isArray(items) ? items : [items];
-    this.currentbreadcrumb = list;
-    const promises = list.map((item) =>
-      this.translate
-        .get(item.key)
-        .toPromise()
-        .then((translated) => {
-          return { label: translated, link: item.link || '' };
-        })
-    );
-    const translatedList = await Promise.all(promises);
+  getBreadcrumbs(crumbs: BreadCrumb[]) {
+    this.currentbreadcrumb = crumbs;
 
-    // 🔥 Emit event so HeaderComponent updates without refresh
-    this.breadcrumb$.next(translatedList);
-
-    return translatedList;
-    return Promise.all(promises);
+    return forkJoin(
+      crumbs.map((crumb) =>
+        this.translate.get(crumb.label).pipe(
+          map((translated) => ({
+            label: translated,
+            link: crumb.link,
+          }))
+        )
+      )
+    ).pipe(tap((translatedList) => this.breadcrumb$.next(translatedList)));
   }
+
   // Detect if the user is on a mobile device
   private isMobile(): boolean {
     return window.innerWidth <= 991; // Adjust breakpoint as needed

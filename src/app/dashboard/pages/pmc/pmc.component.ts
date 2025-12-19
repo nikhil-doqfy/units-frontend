@@ -40,7 +40,11 @@ import { debounceTime, Subject } from 'rxjs';
 import { PmcService } from '../../services/pmc.service';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
@@ -78,10 +82,7 @@ export class PMCComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'PMC', link: '' },
-  ];
+  breadcrumbData: BreadCrumb[] = [];
   private translate = inject(TranslateService);
   private modalService = inject(NgbModal);
   componentName = 'PMCComponent';
@@ -102,25 +103,7 @@ export class PMCComponent {
   private onPMCSearch$ = new Subject<string>();
 
   constructor(private destroyRef: DestroyRef) {
-    this.onPMCSearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((searchText: string) => {
-        if (searchText?.trim()) this.pmcFilter['search'] = searchText.trim();
-        else delete this.pmcFilter['search'];
-
-        this.currentPage = 1;
-        this.getPMC();
-      });
-  }
-
-  ngOnInit() {
-    this.sharedService.initLanguage();
-
-    this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
-
+    this.initPMCSearchListener();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.showDetailView = true;
@@ -132,11 +115,32 @@ export class PMCComponent {
     }
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.PMC', link: '' },
+  ngOnInit() {
+    this.sharedService.initLanguage();
+    this.loadBreadcrumb();
+    this.initLanguageListener();
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.PMC', link: '' },
     ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   getPMC() {
@@ -157,6 +161,18 @@ export class PMCComponent {
 
   onRefresh() {
     this.getPMC();
+  }
+
+  initPMCSearchListener() {
+    this.onPMCSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText: string) => {
+        if (searchText?.trim()) this.pmcFilter['search'] = searchText.trim();
+        else delete this.pmcFilter['search'];
+
+        this.currentPage = 1;
+        this.getPMC();
+      });
   }
 
   searchTextChange(search: string): void {
