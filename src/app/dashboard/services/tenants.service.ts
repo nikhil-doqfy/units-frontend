@@ -16,15 +16,13 @@ export class TenantsService {
 
   getTenants(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/tenant/list/view${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/tenant/table${queryString}`);
   }
 
   getExcelFileOfTenant(params: any): Observable<Blob> {
     const query = this.sharedService.getQueryString(params);
 
-    return this.http.get(`${this.SERVER_ADDRESS}/export/property/csv${query}`, {
+    return this.http.get(`${this.SERVER_ADDRESS}/export/property${query}`, {
       responseType: 'blob',
     });
   }

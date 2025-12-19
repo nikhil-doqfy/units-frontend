@@ -16,9 +16,7 @@ export class PmcService {
 
   getPMC(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/pmc/owner/view/list/${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/owner/pmc${queryString}`);
   }
 
   editPMC(data: Record<string, any>): Observable<any> {

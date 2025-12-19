@@ -245,61 +245,78 @@
       { label: 'VAT', value: '--' },
       { label: 'Total Rent', value: '1,00,000' }
     ]"
-    [showEdit]="false"
+    [showEdit]="true"
     (edit)="handleEditClick()"
     (back)="handleBackClick()"
   >
-    <div class="three-dot-wrapper">
-      <button class="dot-btn" (click)="toggleMenu()">⋮</button>
-
-      <div class="dot-menu" *ngIf="showMenu">
-        <button>Renew Account</button>
-        <button class="danger">Terminate Account</button>
-      </div>
+    <div rental>
+      Content projection is a pattern in which you insert content into another
+      component.
     </div>
-    <div class="other-charges-section mt-3">
-      <div class="charge-block">
-        <label>Admin Fee</label>
-        <div class="amounts">
-          <span>32.71 + 1.64</span>
-          <strong>34.35</strong>
-        </div>
-      </div>
-
-      <div class="charge-block">
-        <label>Ejari Charge Disb...</label>
-        <div class="amounts">
-          <span>175.65 + 1.64</span>
-          <strong>175.65</strong>
-        </div>
-      </div>
-
-      <div class="charge-block">
-        <label>Gas Charges</label>
-        <div class="amounts">
-          <span>1,000.00 + 50.00</span>
-          <strong>1,050.00</strong>
-        </div>
-      </div>
-
-      <div class="charge-block">
-        <label>Commission - Dubai</label>
-        <div class="amounts">
-          <span>1,200.00 + 60.00</span>
-          <strong>1,260.00</strong>
-        </div>
-      </div>
-
-      <div class="charge-block">
-        <label>Security Deposit</label>
-        <div class="amounts">
-          <span>2,400.00 + 0.00</span>
-          <strong>2,400.00</strong>
-        </div>
-      </div>
+    <div class="extraSection">
+      <h5>Rental Mode</h5>
+      <p>Payment Type: Cheque</p>
+      <p>Status: Active</p>
     </div>
-    <ng-content></ng-content>
   </app-table-view-card>
+  <!-- OTHER CHARGES SECTION -->
+  <div class="other-charges-box mt-3">
+    <h6 class="section-title">OTHER CHARGES</h6>
+
+    <div class="charges-grid">
+      <div class="charge-item">
+        <label>Admin Fee <span>VAT &#64;5%</span></label>
+        <small>32.71 + 1.64</small>
+        <strong>34.35</strong>
+      </div>
+
+      <div class="charge-item">
+        <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
+        <small>175.65 + 1.64</small>
+        <strong>175.65</strong>
+      </div>
+
+      <div class="charge-item">
+        <label>Gas Charges <span>VAT &#64;5%</span></label>
+        <small>1,000.00 + 50.00</small>
+        <strong>1,050.00</strong>
+      </div>
+
+      <div class="charge-item">
+        <label>Commission - Dubai <span>VAT &#64;5%</span></label>
+        <small>1,200.00 + 60.00</small>
+        <strong>1,260.00</strong>
+      </div>
+
+      <div class="charge-item">
+        <label>Security Deposit <span>VAT &#64;nill</span></label>
+        <small>2,400.00 + 0.00</small>
+        <strong>2,400.00</strong>
+      </div>
+    </div>
+
+    <div class="payment-info">
+      <div>
+        <label>Status</label>
+        <span class="paid">Paid</span>
+      </div>
+
+      <div>
+        <label>Payment Type</label>
+        <strong>Cheque</strong>
+      </div>
+
+      <div>
+        <label>Cheque Number</label>
+        <strong>6738398268291</strong>
+      </div>
+
+      <div>
+        <label>Total Amount</label>
+        <strong>11,260.00</strong>
+      </div>
+    </div>
+  </div>
 
   <div class="cmmnTblOuter mt-3">
     <div class="cmmnTblHdr">

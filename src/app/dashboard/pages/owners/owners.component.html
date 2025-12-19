@@ -73,11 +73,11 @@
                   "
                   [clickable]="true"
                   (clicked)="handleViewClick(owner.id)"
-                  [title]="owner.full_name"
+                  [title]="owner.first_name + '' + ' ' + owner.last_name"
                 />
               </td>
               <td>{{ owner.owner_number || "N/A" }}</td>
-              <td>{{ owner.mobile_number | maskPhone }}</td>
+              <td>{{ owner.contact_number | maskPhone }}</td>
               <td>
                 <app-table-multi-img-item
                   [images]="owner.propertyImages || 'N/A'"

@@ -182,7 +182,7 @@ export class UsersComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.users = resp?.content?.data;
+          this.users = resp?.content ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },

@@ -1,9 +1,8 @@
-<!-- Header -->
 <div class="page-header">
   <h3>{{ isEditMode ? "Edit" : "Add New Rental Account" }}</h3>
   <div class="actions">
     <button
-      class="btn-primary"
+      class="btn-primary btnCommon"
       (click)="isEditMode ? onSaveChanges() : onEdit()"
     >
       {{ isEditMode ? "Save Changes" : "Update Account" }}
@@ -12,13 +11,11 @@
   </div>
 </div>
 
-<!-- Form Card -->
 <div class="card">
   <div class="form-grid">
-    <!-- Tenant Photo -->
     <div class="photo-upload">
       <div class="circle">
-        <i class="icon">⤴</i>
+        <i><app-upload-icon /></i>
       </div>
       <label>Tenant Photo <span>*</span></label>
       <small>Max 5MB, PNG</small>
@@ -126,44 +123,36 @@
         <tbody>
           @for (row of [1,2,3,4,5]; track $index) {
           <tr>
-            <!-- Bank Name -->
             <td>
               <select class="form-control">
                 <option value=""></option>
               </select>
             </td>
 
-            <!-- Bank Account -->
             <td>
               <input type="text" class="form-control" placeholder="" />
             </td>
 
-            <!-- Cheque Number -->
             <td>
               <input type="text" class="form-control" placeholder="" />
             </td>
 
-            <!-- Cheque Date -->
             <td>
               <input type="date" class="form-control" />
             </td>
 
-            <!-- Payment Type -->
             <td>
               <!-- <input type="text" class="form-control" /> -->
             </td>
 
-            <!-- Purpose -->
             <td>
               <!-- <input type="text" class="form-control" /> -->
             </td>
 
-            <!-- Amount -->
             <td>
               <!-- <input type="text" class="form-control" /> -->
             </td>
 
-            <!-- Status -->
             <td></td>
           </tr>
           }
@@ -222,9 +211,7 @@
           <tr>
             <th>{{ "Description" | translate }}</th>
             <th>
-              <button type="button">
-                {{ "Amount" | translate }}
-              </button>
+              {{ "Amount" | translate }}
             </th>
             <th>{{ "Tax Code" | translate }}</th>
             <th>{{ "VAT" | translate }}</th>
@@ -278,7 +265,6 @@
             <span>Cash</span>
           </div>
 
-          <!-- Row 1 -->
           <div class="row g-3 mb-3">
             <div class="col-md-4">
               <label class="form-label">Amount</label>
@@ -298,7 +284,6 @@
             </div>
           </div>
 
-          <!-- Cheque -->
           <div *ngIf="!isCash">
             <label class="form-label">Cheque</label>
 

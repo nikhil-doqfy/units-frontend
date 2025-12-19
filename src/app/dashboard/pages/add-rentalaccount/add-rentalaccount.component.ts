@@ -12,6 +12,7 @@ import { TableSelectComponent } from '../../component/table-select/table-select.
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
 import { Subscription } from 'rxjs';
+import { UploadIconComponent } from '../../component/icons/upload-icon/upload-icon.component';
 
 @Component({
   selector: 'app-add-rentalaccount',
@@ -25,6 +26,7 @@ import { Subscription } from 'rxjs';
     TableSelectComponent,
     TablePaginationComponent,
     TableFilterButtonComponent,
+    UploadIconComponent,
   ],
   templateUrl: './add-rentalaccount.component.html',
   styleUrl: './add-rentalaccount.component.css',

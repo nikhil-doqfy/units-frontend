@@ -80,17 +80,17 @@
               <td>
                 <app-table-img-item
                   [img]="
-                    tenant?.profile_image ||
+                    tenant?.tenant_profile_image ||
                     '../../../../assets/userDefaultProImg.png'
                   "
-                  [title]="tenant?.full_name"
+                  [title]="tenant?.tenant_name"
                   [clickable]="true"
                   (clicked)="handleViewClick(tenant.lease_id)"
                 />
               </td>
 
               <td>{{ tenant?.tenant_number }}</td>
-              <td>{{ tenant.mobile_number | maskPhone }}</td>
+              <td>{{ tenant.contact_number | maskPhone }}</td>
 
               <td>
                 <app-table-img-item

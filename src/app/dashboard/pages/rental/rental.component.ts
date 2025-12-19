@@ -19,6 +19,7 @@ import { TableImgItemComponent } from '../../component/table-img-item/table-img-
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
+import { BreadCrumb } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-rental',
@@ -36,7 +37,6 @@ import { TableFilterButtonComponent } from '../../component/table-filter-btn/tab
     TableSelectComponent,
     TableViewCardComponent,
     TableActionButtonComponent,
-    TableImgItemComponent,
     ExportIconComponent,
     FilterIconComponent,
     TableFilterButtonComponent,
@@ -174,35 +174,71 @@ export class RentalComponent {
     340000, 410000, 230000,
   ];
 
+  // ngOnInit() {
+  //   this.loadBreadcrumb();
+
+  //   this.translate.onLangChange
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe(() => this.loadBreadcrumb());
+
+  //   this.themeService.currentRole$
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((role) => {
+  //       this.currentRole = role;
+  //     });
+  // }
+
+  // async loadBreadcrumb() {
+  //   this.breadcrumbData = await this.sharedService.getBreadcrumbs([
+  //     { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+  //     { key: 'PAGE_TITLE.RENTAL', link: '' },
+  //   ]);
+
+  //   this.sharedService.initLanguage();
+
+  //   this.themeService.currentRole$
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((role) => {
+  //       this.currentRole = role;
+  //     });
+  // }
+
   ngOnInit() {
     this.loadBreadcrumb();
+    this.initCurrentRoleListener();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+  }
 
+  initCurrentRoleListener() {
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+  }
+
+  initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
-
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
       });
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.RENTAL', link: '' },
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.rental', link: '' },
     ]);
-
-    this.sharedService.initLanguage();
-
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
-      });
   }
 
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   showMenu = false;
   onLeaseClick(lease: any) {
     this.selectedLease = lease;

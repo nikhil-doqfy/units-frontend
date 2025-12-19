@@ -335,3 +335,226 @@ Replace Cheque Link .replace-link {
 .replace-link:hover {
   text-decoration: underline;
 }
+
+/* ===== MOBILE FIX (same file, only add this) ===== */
+
+@media (max-width: 768px) {
+  .rent-card {
+    height: auto;
+    padding: 12px;
+  }
+
+  .rent-card .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .metric {
+    width: 100%;
+  }
+
+  .metric-value {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+  }
+
+  .percentage {
+    margin-top: 4px;
+    font-size: 11px;
+  }
+
+  app-custom-select {
+    width: 100%;
+  }
+}
+
+.other-charges-box {
+  background: #f7f9fb;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #eef1f5;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+/* GRID */
+.charges-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.charge-item label {
+  font-size: 12px;
+  color: #475569;
+}
+
+.charge-item label span {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.charge-item small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin: 4px 0;
+}
+
+.charge-item strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* PAYMENT INFO */
+/* .payment-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 12px;
+}
+
+.payment-info label {
+  font-size: 12px;
+  color: #64748b;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.payment-info strong,
+.payment-info span {
+  font-size: 13px;
+  font-weight: 600;
+} */
+
+/* ===== PAYMENT INFO SPACING FIX (same as above section) ===== */
+
+.payment-info {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* grid-template-columns: repeat(4, 1fr); */
+  gap: 16px; /* SAME gap as charges-grid */
+  margin-top: 16px; /* SAME vertical spacing */
+  padding-top: 0; /* remove extra top spacing */
+  border-top: none; /* remove separator line */
+}
+
+/* keep text alignment consistent */
+.payment-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* RESPONSIVE – same behavior as upper section */
+@media (max-width: 1024px) {
+  .payment-info {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .payment-info {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.paid {
+  color: #16a34a;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .charges-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .payment-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .charges-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .payment-info {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.menu-wrapper {
+  position: relative;
+}
+
+.dots-btn {
+  background: #6f8b91;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* DROPDOWN */
+.menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: #fff;
+  border-radius: 10px;
+  min-width: 200px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.menu-item {
+  width: 100%;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #f3f4f6;
+}
+
+.menu-item.danger {
+  color: #dc2626;
+}
+
+.menu-item.danger:hover {
+  background: #fee2e2;
+}
+.cmmnTblViewExtra {
+  margin-top: 16px;
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.rentalExtraSection h5 {
+  margin-bottom: 6px;
+}

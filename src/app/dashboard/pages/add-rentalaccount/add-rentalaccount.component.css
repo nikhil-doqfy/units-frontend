@@ -268,3 +268,92 @@ input[type="checkbox"] {
 .charges-table tbody tr {
   border-bottom: none !important;
 }
+
+/* ===== MOBILE RESPONSIVE FIX (same code, only add this) ===== */
+
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 12px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .page-header .actions {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .photo-upload {
+    grid-row: auto;
+    text-align: left;
+  }
+
+  input,
+  select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .phone {
+    flex-direction: column;
+  }
+
+  .phone .code {
+    width: 100%;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .table-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .other-charges-card {
+    padding: 12px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .charges-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .desc-cell span {
+    max-width: 160px;
+  }
+}
