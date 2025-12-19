@@ -177,7 +177,6 @@ table {
   border: 1px solid #eef0f3;
 }
 
-/* Header */
 .header {
   display: flex;
   justify-content: space-between;
@@ -215,7 +214,6 @@ table {
   font-weight: 600;
 }
 
-/* Table */
 .charges-table {
   width: 100%;
   border-collapse: collapse;
@@ -238,7 +236,6 @@ table {
   vertical-align: middle;
 }
 
-/* Description column */
 .desc-cell {
   display: flex;
   align-items: center;
@@ -253,7 +250,6 @@ table {
   display: inline-block;
 }
 
-/* Checkbox */
 input[type="checkbox"] {
   width: 14px;
   height: 14px;
@@ -268,8 +264,6 @@ input[type="checkbox"] {
 .charges-table tbody tr {
   border-bottom: none !important;
 }
-
-/* ===== MOBILE RESPONSIVE FIX (same code, only add this) ===== */
 
 @media (max-width: 768px) {
   .page-wrapper {

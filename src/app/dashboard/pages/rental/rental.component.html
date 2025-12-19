@@ -249,74 +249,64 @@
     (edit)="handleEditClick()"
     (back)="handleBackClick()"
   >
-    <div rental>
-      Content projection is a pattern in which you insert content into another
-      component.
-    </div>
-    <div class="extraSection">
-      <h5>Rental Mode</h5>
-      <p>Payment Type: Cheque</p>
-      <p>Status: Active</p>
+    <div rental class="other-charges-box mt-3">
+      <h6 class="section-title">OTHER CHARGES</h6>
+
+      <div class="charges-grid">
+        <div class="charge-item">
+          <label>Admin Fee <span>VAT &#64;5%</span></label>
+          <small>32.71 + 1.64</small>
+          <strong>34.35</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
+          <small>175.65 + 1.64</small>
+          <strong>175.65</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Gas Charges <span>VAT &#64;5%</span></label>
+          <small>1,000.00 + 50.00</small>
+          <strong>1,050.00</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Commission - Dubai <span>VAT &#64;5%</span></label>
+          <small>1,200.00 + 60.00</small>
+          <strong>1,260.00</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Security Deposit <span>VAT &#64;nill</span></label>
+          <small>2,400.00 + 0.00</small>
+          <strong>2,400.00</strong>
+        </div>
+      </div>
+
+      <div class="payment-info">
+        <div>
+          <label>Status</label>
+          <span class="paid">Paid</span>
+        </div>
+
+        <div>
+          <label>Payment Type</label>
+          <strong>Cheque</strong>
+        </div>
+
+        <div>
+          <label>Cheque Number</label>
+          <strong>6738398268291</strong>
+        </div>
+
+        <div>
+          <label>Total Amount</label>
+          <strong>11,260.00</strong>
+        </div>
+      </div>
     </div>
   </app-table-view-card>
-  <!-- OTHER CHARGES SECTION -->
-  <div class="other-charges-box mt-3">
-    <h6 class="section-title">OTHER CHARGES</h6>
-
-    <div class="charges-grid">
-      <div class="charge-item">
-        <label>Admin Fee <span>VAT &#64;5%</span></label>
-        <small>32.71 + 1.64</small>
-        <strong>34.35</strong>
-      </div>
-
-      <div class="charge-item">
-        <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
-        <small>175.65 + 1.64</small>
-        <strong>175.65</strong>
-      </div>
-
-      <div class="charge-item">
-        <label>Gas Charges <span>VAT &#64;5%</span></label>
-        <small>1,000.00 + 50.00</small>
-        <strong>1,050.00</strong>
-      </div>
-
-      <div class="charge-item">
-        <label>Commission - Dubai <span>VAT &#64;5%</span></label>
-        <small>1,200.00 + 60.00</small>
-        <strong>1,260.00</strong>
-      </div>
-
-      <div class="charge-item">
-        <label>Security Deposit <span>VAT &#64;nill</span></label>
-        <small>2,400.00 + 0.00</small>
-        <strong>2,400.00</strong>
-      </div>
-    </div>
-
-    <div class="payment-info">
-      <div>
-        <label>Status</label>
-        <span class="paid">Paid</span>
-      </div>
-
-      <div>
-        <label>Payment Type</label>
-        <strong>Cheque</strong>
-      </div>
-
-      <div>
-        <label>Cheque Number</label>
-        <strong>6738398268291</strong>
-      </div>
-
-      <div>
-        <label>Total Amount</label>
-        <strong>11,260.00</strong>
-      </div>
-    </div>
-  </div>
 
   <div class="cmmnTblOuter mt-3">
     <div class="cmmnTblHdr">
@@ -413,7 +403,6 @@
           </tbody>
 
           <tbody>
-            <!-- ROW 1 -->
             <tr>
               <td>CHQ-AX104</td>
               <td>EIB</td>
@@ -422,51 +411,20 @@
               <td>10/10/2024</td>
               <td>Cheque</td>
               <td>Rent</td>
-              <!-- <td>
-                <div class="status-track">
-                  <span class="dot active"></span>
-                  <span class="line active"></span>
-                  <span class="dot active"></span>
-                  <div class="labels">
-                    <span>Disburse</span>
-                    <span>Credited</span>
-                  </div>
-                </div>
-              </td> -->
 
               <td>
                 <div class="status-track">
-                  <!-- DISBURSE -->
                   <div class="status-step done">
                     <span class="dot"></span>
                     <span class="text">Disburse</span>
                   </div>
 
-                  <!-- LINE -->
                   <span class="status-line done"></span>
-
-                  <!-- CREDITED / INPROGRESS / BOUNCE -->
-                  <!-- 🔹 Credited -->
 
                   <div class="status-step done">
                     <span class="dot"></span>
                     <span class="text">Credited</span>
                   </div>
-
-                  <!-- 🔹 InProgress -->
-                  <!--
-    <div class="status-step progress">
-      <span class="dot"></span>
-      <span class="text">InProgress</span>
-    </div>
-    -->
-
-                  <!-- 🔹 Bounce -->
-                  <!-- <div class="status-step danger">
-                    <span class="dot"></span>
-                    <span class="text">Bounce</span>
-                    <a class="replace-link">Replace Cheque</a>
-                  </div> -->
                 </div>
               </td>
 
@@ -482,7 +440,6 @@
               </td>
             </tr>
 
-            <!-- ROW 2 -->
             <tr>
               <td>CHQ-AX105</td>
               <td>EIB</td>
@@ -491,51 +448,20 @@
               <td>11/01/2024</td>
               <td>Cheque</td>
               <td>Rent</td>
-              <!-- <td>
-                <div class="status-track">
-                  <span class="dot active"></span>
-                  <span class="line active"></span>
-                  <span class="dot active"></span>
-                  <div class="labels">
-                    <span>Disburse</span>
-                    <span>Credited</span>
-                  </div>
-                </div>
-              </td> -->
 
               <td>
                 <div class="status-track">
-                  <!-- DISBURSE -->
                   <div class="status-step done">
                     <span class="dot"></span>
                     <span class="text">Disburse</span>
                   </div>
 
-                  <!-- LINE -->
                   <span class="status-line done"></span>
-
-                  <!-- CREDITED / INPROGRESS / BOUNCE -->
-                  <!-- 🔹 Credited -->
 
                   <div class="status-step done">
                     <span class="dot"></span>
                     <span class="text">Credited</span>
                   </div>
-
-                  <!-- 🔹 InProgress -->
-                  <!--
-    <div class="status-step progress">
-      <span class="dot"></span>
-      <span class="text">InProgress</span>
-    </div>
-    -->
-
-                  <!-- 🔹 Bounce -->
-                  <!-- <div class="status-step danger">
-                    <span class="dot"></span>
-                    <span class="text">Bounce</span>
-                    <a class="replace-link">Replace Cheque</a>
-                  </div> -->
                 </div>
               </td>
 
@@ -551,7 +477,6 @@
               </td>
             </tr>
 
-            <!-- ROW 3 -->
             <tr>
               <td>--</td>
               <td>EIB</td>
@@ -562,36 +487,17 @@
               <td>Rent</td>
               <td>
                 <div class="status-track">
-                  <!-- DISBURSE -->
                   <div class="status-step done">
                     <span class="dot"></span>
                     <span class="text">Disburse</span>
                   </div>
 
-                  <!-- LINE -->
                   <span class="status-line done"></span>
-
-                  <!-- CREDITED / INPROGRESS / BOUNCE -->
-                  <!-- 🔹 Credited -->
-
-                  <!-- <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Credited</span>
-                  </div> -->
-
-                  <!-- 🔹 InProgress -->
 
                   <div class="status-step danger">
                     <span class="dot"></span>
                     <span class="text">InProgress</span>
                   </div>
-
-                  <!-- 🔹 Bounce -->
-                  <!-- <div class="status-step danger">
-                    <span class="dot"></span>
-                    <span class="text">Bounce</span>
-                    <a class="replace-link">Replace Cheque</a>
-                  </div> -->
                 </div>
               </td>
 
@@ -607,7 +513,6 @@
               </td>
             </tr>
 
-            <!-- ROW 4 -->
             <tr>
               <td>--</td>
               <td>EIB</td>
@@ -616,46 +521,16 @@
               <td>12/01/2024</td>
               <td>Cheque</td>
               <td>Other Charges</td>
-              <!-- <td>
-                <div class="status-track">
-                  <span class="dot active"></span>
-                  <span class="line danger"></span>
-                  <span class="dot danger"></span>
-                  <div class="labels">
-                    <span>Disburse</span>
-                    <span>Bounce</span>
-                  </div>
-                </div>
-              </td> -->
 
               <td>
                 <div class="status-track">
-                  <!-- DISBURSE -->
                   <div class="status-step done">
                     <span class="dot"></span>
                     <span class="text">Disburse</span>
                   </div>
 
-                  <!-- LINE -->
                   <span class="status-line done"></span>
 
-                  <!-- CREDITED / INPROGRESS / BOUNCE -->
-                  <!-- 🔹 Credited -->
-
-                  <!-- <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Credited</span>
-                  </div> -->
-
-                  <!-- 🔹 InProgress -->
-                  <!--
-    <div class="status-step progress">
-      <span class="dot"></span>
-      <span class="text">InProgress</span>
-    </div>
-    -->
-
-                  <!-- 🔹 Bounce -->
                   <div class="status-step danger">
                     <span class="dot"></span>
                     <span class="text">Bounce</span>
@@ -676,7 +551,6 @@
               </td>
             </tr>
 
-            <!-- ROW 5 -->
             <tr>
               <td>CHQ-AX109</td>
               <td>EIB</td>
@@ -687,37 +561,17 @@
               <td>Rent</td>
               <td>
                 <div class="status-track">
-                  <!-- DISBURSE -->
                   <div class="status-step done">
                     <span class="dot"></span>
                     <span class="text">Disburse</span>
                   </div>
 
-                  <!-- LINE -->
                   <span class="status-line done"></span>
-
-                  <!-- CREDITED / INPROGRESS / BOUNCE -->
-                  <!-- 🔹 Credited -->
 
                   <div class="status-step done">
                     <span class="dot"></span>
                     <span class="text">Credited</span>
                   </div>
-
-                  <!-- 🔹 InProgress -->
-                  <!--
-    <div class="status-step progress">
-      <span class="dot"></span>
-      <span class="text">InProgress</span>
-    </div>
-    -->
-
-                  <!-- 🔹 Bounce -->
-                  <!-- <div class="status-step danger">
-                    <span class="dot"></span>
-                    <span class="text">Bounce</span>
-                    <a class="replace-link">Replace Cheque</a>
-                  </div> -->
                 </div>
               </td>
 

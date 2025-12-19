@@ -1,3 +1,526 @@
+/* .rent-card {
+  background: #fff;
+  border: 1px solid #eef1f5;
+  border-radius: 12px;
+  padding: 16px;
+  height: 84px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.rent-card:hover {
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  cursor: pointer;
+}
+
+.card-top h4 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.metric-value {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.lease-info {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+}
+
+.percentage {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--green--100);
+  color: var(--green--700);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.status.active {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.status.inactive {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 16px;
+}
+
+.cell label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.cell span,
+.cell strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.total strong {
+  font-weight: 700;
+}
+
+@media (max-width: 1200px) {
+  .card-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.lease-wrapper {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.lease-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.lease-header h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.lease-header .right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.lease-no {
+  font-size: 13px;
+  color: #666;
+}
+
+.lease-header .status {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lease-header .status.active {
+  color: #1fa750;
+}
+
+.lease-header .status.inactive {
+  color: #999;
+}
+
+.lease-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 12px;
+}
+
+.lease-grid label {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.lease-grid span,
+.lease-grid strong {
+  font-size: 13px;
+  color: #111;
+}
+
+.lease-grid strong {
+  font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+  .lease-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .lease-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.lease-card {
+  background-color: #fff;
+  border: 1px solid #eef1f5;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.lease-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.lease-card .lease-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.lease-card .lease-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 4px;
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.lease-card .lease-header h4:hover {
+  box-shadow: inset 0 -0.5px 0 #000;
+}
+
+.lease-card .lease-header .right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.lease-card .lease-header .lease-no {
+  font-size: 13px;
+  color: #666;
+}
+
+.lease-card .lease-header .status {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lease-card .lease-header .status.active {
+  color: #1fa750;
+}
+
+.lease-card .lease-header .status.inactive {
+  color: #dc2626;
+}
+
+.lease-card .lease-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 12px;
+}
+
+.lease-card .lease-grid label {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.lease-card .lease-grid span,
+.lease-card .lease-grid strong {
+  font-size: 13px;
+  color: #111;
+}
+
+.lease-card .lease-grid strong {
+  font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+  .lease-card .lease-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .lease-card .lease-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.status-track {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.status-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 70px;
+}
+
+.status-step .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-step .text {
+  color: #374151;
+  font-weight: 400;
+}
+
+.status-line {
+  width: 45px;
+  height: 1px;
+}
+
+.status-step.done .dot {
+  background: #22c55e;
+}
+
+.status-line.done {
+  background: #22c55e;
+}
+
+.status-step.progress .dot {
+  border: 2px solid #f97316;
+  background: #fff;
+}
+
+.status-line.progress {
+  border-top: 1px dotted #6b7280;
+}
+
+.status-step.danger .dot {
+  border: 2px solid #ef4444;
+  background: #fff;
+}
+
+.status-line.danger {
+  border-top: 1px dotted #ef4444;
+}
+
+Replace Cheque Link .replace-link {
+  font-size: 12px;
+  color: #2563eb;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.replace-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .rent-card {
+    height: auto;
+    padding: 12px;
+  }
+
+  .rent-card .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .metric {
+    width: 100%;
+  }
+
+  .metric-value {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+  }
+
+  .percentage {
+    margin-top: 4px;
+    font-size: 11px;
+  }
+
+  app-custom-select {
+    width: 100%;
+  }
+}
+
+.other-charges-box {
+  background: #f7f9fb;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #eef1f5;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.charges-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.charge-item label {
+  font-size: 12px;
+  color: #475569;
+}
+
+.charge-item label span {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.charge-item small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin: 4px 0;
+}
+
+.charge-item strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.payment-info {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.payment-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (max-width: 1024px) {
+  .payment-info {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .payment-info {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.paid {
+  color: #16a34a;
+}
+
+@media (max-width: 1024px) {
+  .charges-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .payment-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .charges-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .payment-info {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.menu-wrapper {
+  position: relative;
+}
+
+.dots-btn {
+  background: #6f8b91;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: #fff;
+  border-radius: 10px;
+  min-width: 200px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.menu-item {
+  width: 100%;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #f3f4f6;
+}
+
+.menu-item.danger {
+  color: #dc2626;
+}
+
+.menu-item.danger:hover {
+  background: #fee2e2;
+}
+.cmmnTblViewExtra {
+  margin-top: 16px;
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.rentalExtraSection h5 {
+  margin-bottom: 6px;
+} */
+
 .rent-card {
   background: #fff;
   border: 1px solid #eef1f5;
@@ -180,7 +703,6 @@
   transform: translateY(-2px);
 }
 
-/* Header styling */
 .lease-card .lease-header {
   display: flex;
   justify-content: space-between;
@@ -198,14 +720,12 @@
   border-bottom: 2px solid transparent;
   transition: border-color 0.3s ease;
   cursor: pointer;
-  /* border-bottom: 2px solid black; underline only under title */
 }
 
 .lease-card .lease-header h4:hover {
   box-shadow: inset 0 -0.5px 0 #000;
 }
 
-/* Optional: lease number and status */
 .lease-card .lease-header .right {
   display: flex;
   gap: 12px;
@@ -230,7 +750,6 @@
   color: #dc2626;
 }
 
-/* Grid inside card */
 .lease-card .lease-grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -254,7 +773,6 @@
   font-weight: 600;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
   .lease-card .lease-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -274,7 +792,6 @@
   font-size: 13px;
 }
 
-/* STEP */
 .status-step {
   display: flex;
   flex-direction: column;
@@ -336,8 +853,6 @@ Replace Cheque Link .replace-link {
   text-decoration: underline;
 }
 
-/* ===== MOBILE FIX (same file, only add this) ===== */
-
 @media (max-width: 768px) {
   .rent-card {
     height: auto;
@@ -387,7 +902,6 @@ Replace Cheque Link .replace-link {
   margin-bottom: 12px;
 }
 
-/* GRID */
 .charges-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -419,48 +933,21 @@ Replace Cheque Link .replace-link {
   color: #111827;
 }
 
-/* PAYMENT INFO */
-/* .payment-info {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 12px;
-}
-
-.payment-info label {
-  font-size: 12px;
-  color: #64748b;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.payment-info strong,
-.payment-info span {
-  font-size: 13px;
-  font-weight: 600;
-} */
-
-/* ===== PAYMENT INFO SPACING FIX (same as above section) ===== */
-
 .payment-info {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  /* grid-template-columns: repeat(4, 1fr); */
-  gap: 16px; /* SAME gap as charges-grid */
-  margin-top: 16px; /* SAME vertical spacing */
-  padding-top: 0; /* remove extra top spacing */
-  border-top: none; /* remove separator line */
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 0;
+  border-top: none;
 }
 
-/* keep text alignment consistent */
 .payment-info > div {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-/* RESPONSIVE – same behavior as upper section */
 @media (max-width: 1024px) {
   .payment-info {
     grid-template-columns: repeat(3, 1fr);
@@ -477,7 +964,6 @@ Replace Cheque Link .replace-link {
   color: #16a34a;
 }
 
-/* RESPONSIVE */
 @media (max-width: 1024px) {
   .charges-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -496,65 +982,4 @@ Replace Cheque Link .replace-link {
   .payment-info {
     grid-template-columns: repeat(1, 1fr);
   }
-}
-
-.menu-wrapper {
-  position: relative;
-}
-
-.dots-btn {
-  background: #6f8b91;
-  border: none;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  font-size: 18px;
-  color: #fff;
-  cursor: pointer;
-}
-
-/* DROPDOWN */
-.menu-dropdown {
-  position: absolute;
-  right: 0;
-  top: 40px;
-  background: #fff;
-  border-radius: 10px;
-  min-width: 200px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  z-index: 20;
-}
-
-.menu-item {
-  width: 100%;
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: none;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.menu-item:hover {
-  background: #f3f4f6;
-}
-
-.menu-item.danger {
-  color: #dc2626;
-}
-
-.menu-item.danger:hover {
-  background: #fee2e2;
-}
-.cmmnTblViewExtra {
-  margin-top: 16px;
-  padding: 12px;
-  border-top: 1px solid #e5e7eb;
-}
-
-.rentalExtraSection h5 {
-  margin-bottom: 6px;
 }

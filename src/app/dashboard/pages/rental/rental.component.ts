@@ -15,7 +15,6 @@ import { TablePaginationComponent } from '../../component/table-pagination/table
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
-import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -70,16 +69,19 @@ export class RentalComponent {
   currentLanguage = 'en';
   selected: string = 'property:All';
   selectedLease: any = null;
+  showMenu = false;
+
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Rental', link: '' },
   ];
   componentName = 'RentalComponent';
+
   totalRecords = 0;
   rowsPerPageOptions = [10, 25, 50, 100];
   rowsPerPage = 10;
   currentPage = 1;
-  pmcList: any[] = [];
+
   leases = [
     {
       title: 'Abhram | Khaleejia Building | 302',
@@ -230,7 +232,7 @@ export class RentalComponent {
   loadBreadcrumb() {
     this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { label: 'PAGE_TITLE.rental', link: '' },
+      { label: 'PAGE_TITLE.RENTAL', link: '' },
     ]);
   }
 
@@ -239,7 +241,7 @@ export class RentalComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-  showMenu = false;
+
   onLeaseClick(lease: any) {
     this.selectedLease = lease;
     this.showDetailView = true;

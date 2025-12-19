@@ -33,13 +33,18 @@ export class TableViewCardComponent {
   @ContentChildren(TableActionButtonComponent)
   projectedButtons!: QueryList<TableActionButtonComponent>;
   hasProjectedContent = false;
+  @ContentChild('[rental]', { static: false }) rentalContent!: any;
+
   @ContentChild('extraSection', { read: ElementRef })
   extraSection!: ElementRef;
 
   hasExtraSection = false;
+
   ngAfterContentInit() {
     this.hasProjectedContent = this.projectedButtons.length > 0;
-    this.hasExtraSection = !!this.extraSection;
+    return !!this.rentalContent;
+
+    console.log('Projected rental content:', this.rentalContent);
   }
 
   get titleInitial(): string {

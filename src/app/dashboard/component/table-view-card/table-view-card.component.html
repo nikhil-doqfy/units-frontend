@@ -38,13 +38,6 @@
         >
           <i><app-back-icon /></i> Back
         </button>
-        <div class="Zippy">
-          <ng-content [select]="rental"></ng-content>
-        </div>
-
-        <!-- <div *ngIf="hasExtraSection" class="cmmnTblViewExtra">
-          <ng-content select="[extraSection]"></ng-content>
-        </div> -->
       </div>
       <ng-template #noActionButtons>
         <button
@@ -77,5 +70,8 @@
         </p>
       </li>
     </ul>
+    <div class="Zippy">
+      <ng-content select="[rental]"></ng-content>
+    </div>
   </div>
 </div>

@@ -41,7 +41,6 @@ export class AddRentalaccountComponent implements OnInit {
   isCash = false;
   private showDetailSubscription!: Subscription;
   ngOnInit(): void {
-    // SharedService चा subscription setup करा
     this.showDetailSubscription = this.sharedService.showDetail$.subscribe(
       (value: boolean) => {
         this.showDetailView = value;
