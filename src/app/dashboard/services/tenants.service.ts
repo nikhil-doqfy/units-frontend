@@ -22,7 +22,7 @@ export class TenantsService {
   getExcelFileOfTenant(params: any): Observable<Blob> {
     const query = this.sharedService.getQueryString(params);
 
-    return this.http.get(`${this.SERVER_ADDRESS}/export/property${query}`, {
+    return this.http.get(`${this.SERVER_ADDRESS}/export/tenant/csv${query}`, {
       responseType: 'blob',
     });
   }
