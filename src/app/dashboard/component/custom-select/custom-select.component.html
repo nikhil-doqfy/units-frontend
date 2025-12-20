@@ -22,9 +22,26 @@
       <app-arrow-up-icon />
     </i>
   </div>
+  <div *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
+    <input
+      type="text"
+      [placeholder]="allowAddOption ? 'Search or Add...' : 'Add option...'"
+      [(ngModel)]="filterText"
+      (ngModelChange)="onInputChange($event)"
+      (click)="$event.stopPropagation()"
+    />
+  
+    <button
+      *ngIf="allowAddOption"
+      class="addBtn"
+      (click)="addOption(); $event.stopPropagation()"
+    >
+      Add
+    </button>
+  </div>
   <ul *ngIf="isDropdownOpen" class="customSelectDropdown">
     <li
-      *ngFor="let option of options"
+      *ngFor="let option of displayOptions"
       (click)="selectOption(option); $event.stopPropagation()"
       [class.active]="option[key] === selectedOption?.[key]"
     >

@@ -136,6 +136,8 @@ export class PropertiesComponent {
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+    this.sharedService.initLanguage();
+    this.loadBreadcrumb();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.currentPropertyId = +id;
@@ -145,8 +147,6 @@ export class PropertiesComponent {
   }
 
   ngOnInit() {
-    this.loadBreadcrumb();
-    this.sharedService.initLanguage();
     this.initLanguageListener();
     this.initCurrentRoleListener();
     this.initPropertySearchListener();

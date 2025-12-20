@@ -107,7 +107,7 @@ export class AddPropertyComponent {
         this.currentRole = role;
       });
 
-    this.getOptionType(['PROPERTY_TYPES', 'PMC_LIST']);
+    this.getOptionType(['PROPERTY_TYPE', 'PMC_LIST']);
   }
 
   getOptionType(options: string[]) {
@@ -116,7 +116,7 @@ export class AddPropertyComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.propertyType = response?.content?.property_types;
+          this.propertyType = response?.content?.property_type;
           this.PMC_List = response?.content?.pmc_list;
         },
       });

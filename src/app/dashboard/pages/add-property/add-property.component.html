@@ -13,6 +13,22 @@
     >
       <form class="row g-3" [formGroup]="basicDetailsForm">
         <div class="col-md-6">
+          <label class="form-label">{{ "PROPERTY_TYPE" | translate }}</label>
+          <app-custom-select
+            [options]="propertyType"
+            key="key"
+            value="value"
+            [showFilterInput]="true"
+            [allowAddOption]="true"
+            formControlName="propertyType"
+          ></app-custom-select>
+          @if (isInvalid(basicDetailsForm, 'propertyType').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "propertyType").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
           <label class="form-label">{{ "PROPERTY_NAME" | translate }}</label>
           <input
             type="text"

@@ -9,6 +9,8 @@ import {
   forwardRef,
   inject,
   DestroyRef,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -17,13 +19,22 @@ import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-do
 import { ArrowUpIconComponent } from '../../../shared/component/icons/arrow-up-icon/arrow-up-icon.component';
 
 import { CustomSelectService } from './custom-select.service'; // 👈 Import the service
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-custom-select',
   standalone: true,
-  imports: [CommonModule, ArrowDownIconComponent, ArrowUpIconComponent],
+  imports: [
+    CommonModule,
+    ArrowDownIconComponent,
+    ArrowUpIconComponent,
+    FormsModule,
+  ],
   templateUrl: './custom-select.component.html',
   styleUrls: ['./custom-select.component.css'],
   providers: [
@@ -46,10 +57,15 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   @Input() key: string = 'key';
   @Input() value: string = 'value';
   @Input() selectedOption: any | null = null;
+  @Input() showFilterInput: boolean = false;
+  @Input() allowAddOption: boolean = false;
 
   @Output() optionSelected = new EventEmitter<string>();
+  @Output() onOptionAdded = new EventEmitter<any>();
 
   isDropdownOpen = false;
+  filterText: string = '';
+  displayOptions: any[] = [];
 
   // CVA callbacks
   private onChange = (_: any) => {};
@@ -57,6 +73,12 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   isDisabled = false;
 
   constructor(private dropdownService: CustomSelectService) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes?.['options']) {
+      this.displayOptions = [...this.options];
+    }
+  }
 
   ngOnInit() {
     this.dropdownService.openDropdown$
@@ -111,5 +133,37 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean) {
     this.isDisabled = isDisabled;
+  }
+
+  onInputChange(value: string) {
+    this.filterText = value;
+
+    if (!value.trim()) {
+      this.displayOptions = [...this.options];
+      return;
+    }
+
+    if (this.showFilterInput || this.allowAddOption) {
+      const search = value.toLowerCase();
+      this.displayOptions = this.options.filter((opt: any) =>
+        String(opt[this.value]).toLowerCase().includes(search)
+      );
+    }
+  }
+
+  addOption() {
+    if (!this.filterText?.trim()) return;
+
+    const newOption = {
+      [this.key]: this.filterText.trim(),
+      [this.value]: this.filterText.trim(),
+    };
+
+    this.options = [...this.options, newOption];
+    this.displayOptions = [...this.options];
+    this.selectedOption = newOption;
+
+    this.onOptionAdded.emit(this.options);
+    this.filterText = '';
   }
 }
