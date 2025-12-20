@@ -77,7 +77,7 @@ export class UsersComponent {
 
   componentName: string = 'UsersComponent';
   breadcrumbData: BreadCrumb[] = [];
-  activeTab: 'all' | 'deleted' = 'all'; // track current tab
+  activeTab: 'all' | 'deleted' = 'all';
   users: any[] = [];
   newUsers: any[] = [];
   deletedUsers: any[] = [];

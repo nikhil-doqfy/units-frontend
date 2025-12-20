@@ -22,6 +22,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PmcService } from '../../services/pmc.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Validators } from '@angular/forms';
+import { CustomSelectComponent } from '../../../auth/component/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-invite-pmc-btn',
@@ -33,6 +35,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     InviteIconComponent,
     InvitePMCFormComponent,
     SendIconComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './invite-pmc-btn.component.html',
   styleUrl: './invite-pmc-btn.component.css',
@@ -74,7 +77,15 @@ export class InvitePMCButtonComponent {
 
   invitePmc(modal: NgbActiveModal, component: InvitePMCFormComponent) {
     const form = component.invitePmcForm;
-
+    const payload = component.getPayload();
+    if (
+      !payload.email ||
+      !payload.invitation_type ||
+      !payload.property_unit_id
+    ) {
+      this.alertService.error('All fields are required');
+      return;
+    }
     if (form.invalid) {
       form.markAllAsTouched();
       return;

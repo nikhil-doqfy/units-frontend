@@ -33,6 +33,6 @@ export class PmcService {
     );
   }
   addPmcToInvite(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/invite/owner/pmc`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/invitation`, data);
   }
 }
