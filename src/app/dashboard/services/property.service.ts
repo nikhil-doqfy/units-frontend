@@ -98,4 +98,11 @@ export class PropertyService {
       responseType: 'blob',
     });
   }
+
+  getParentPropertyData(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/parent/property${queryString}`
+    );
+  }
 }

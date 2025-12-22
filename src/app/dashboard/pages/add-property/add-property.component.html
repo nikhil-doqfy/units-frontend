@@ -21,6 +21,7 @@
             [showFilterInput]="true"
             [allowAddOption]="true"
             formControlName="property"
+            (optionSelected)="onPropertySelect($event)"
           ></app-custom-select>
           @if (isInvalid(basicDetailsForm, 'property').status) {
           <small class="errorMsg">
@@ -154,7 +155,7 @@
           <input
             type="text"
             class="form-control"
-            [placeholder]="'ENTER_ADDRESS_HERE' | translate"
+            [placeholder]="'ENTER_HERE' | translate"
             formControlName="locality"
           />
           @if (isInvalid(basicDetailsForm, 'locality').status) {
@@ -188,6 +189,20 @@
           @if (isInvalid(basicDetailsForm, 'addressLine2').status) {
           <small class="errorMsg">
             {{ isInvalid(basicDetailsForm, "addressLine2").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ "POSTAL_CODE" | translate }}</label>
+          <input
+            type="number"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="postalCode"
+          />
+          @if (isInvalid(basicDetailsForm, 'postalCode').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "postalCode").msg }}
           </small>
           }
         </div>

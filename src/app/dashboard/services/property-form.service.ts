@@ -45,6 +45,7 @@ export class PropertyFormService {
       locality: ['', [Validators.required]],
       addressLine1: ['', [Validators.required]],
       addressLine2: ['', [Validators.required]],
+      postalCode: ['', [Validators.required]],
       NoOfBedrooms: ['', [Validators.required]],
       areaOfProperty: ['', [Validators.required]],
       NoOfFloors: ['', [Validators.required]],

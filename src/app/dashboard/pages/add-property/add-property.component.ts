@@ -22,6 +22,7 @@ import { FileUploadItemComponent } from '../../component/file-upload-item/file-u
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { StepEngine } from '../../model/step-engine/step-engine';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PropertyService } from '../../services/property.service';
 
 type UploadImageType =
   | 'INTERIOR'
@@ -59,6 +60,7 @@ type UploadConfigRecord = Record<UploadImageType, UploadConfig>;
 })
 export class AddPropertyComponent {
   private propertyFormService = inject(PropertyFormService);
+  private propertyService = inject(PropertyService);
   private sharedAPIService = inject(SharedApiService);
   private formService = inject(FormService);
   private route = inject(ActivatedRoute);
@@ -153,6 +155,27 @@ export class AddPropertyComponent {
 
   getOptionsTypes(option: OptionsParams[]) {
     this.sharedAPIService.getOptionsType(option);
+  }
+
+  onPropertySelect(data: any) {
+    if (typeof data?.key !== 'number') return;
+
+    this.propertyService.getParentPropertyData({ id: data.key }).subscribe({
+      next: (response: any) => {
+        let content = response?.content;
+        this.basicDetailsForm.patchValue({
+          NoOfFloors: content?.total_floors,
+          addressLine2: content?.addressLine2,
+          locality: content?.locality,
+          postalCode: content?.postal_code,
+          propertyType: content?.property_type,
+          country: content?.country,
+          state: content?.state,
+          city: content?.city,
+        });
+        console.log('basicDetailsForm:--', this.basicDetailsForm.value);
+      },
+    });
   }
 
   onCountrySelect(data: any) {
