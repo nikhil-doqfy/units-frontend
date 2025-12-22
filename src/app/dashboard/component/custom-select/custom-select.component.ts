@@ -25,6 +25,7 @@ import {
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-custom-select',
@@ -47,6 +48,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   private destroyRef = inject(DestroyRef);
+  private alertService = inject(AlertService);
 
   @Input() isFilter: boolean = false;
   @Input() isPlain: boolean = false;
@@ -75,7 +77,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   constructor(private dropdownService: CustomSelectService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes?.['options']) {
+    if (changes?.['options'].currentValue) {
       this.displayOptions = [...this.options];
     }
   }
@@ -152,17 +154,28 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   addOption() {
-    if (!this.filterText?.trim()) return;
+    const text = this.filterText?.trim();
+    if (!text) return;
+
+    const exists = this.options.some(
+      (opt: any) => String(opt[this.value]).toLowerCase() === text.toLowerCase()
+    );
+
+    if (exists) {
+      this.alertService.error('Option already exists');
+      return;
+    }
 
     const newOption = {
-      [this.key]: this.filterText.trim(),
-      [this.value]: this.filterText.trim(),
+      [this.key]: text,
+      [this.value]: text,
     };
 
     this.options = [...this.options, newOption];
     this.displayOptions = [...this.options];
     this.selectedOption = newOption;
 
+    this.onChange(newOption);
     this.onOptionAdded.emit(this.options);
     this.filterText = '';
   }

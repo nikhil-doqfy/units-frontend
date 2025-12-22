@@ -14,7 +14,10 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
-import { UploadFileModel } from '../../../shared/model/shared.model';
+import {
+  OptionsParams,
+  UploadFileModel,
+} from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { StepEngine } from '../../model/step-engine/step-engine';
@@ -69,8 +72,12 @@ export class AddPropertyComponent {
 
   currentRole: UserRole = 'owner';
   isInvalid = this.formService.isInvalid;
+  propertyList: any[] = [];
   propertyType: any[] = [];
   PMC_List: any[] = [];
+  country: any[] = [];
+  state: any[] = [];
+  city: any[] = [];
 
   basicDetailsForm = this.propertyFormService.propertyBasicDetailsForm;
   commercialsForm = this.propertyFormService.propertyCommercialsForm;
@@ -101,25 +108,77 @@ export class AddPropertyComponent {
   }
 
   ngOnInit() {
+    let options: OptionsParams[] = [];
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {
         this.currentRole = role;
+        if (role === 'owner') {
+          options.push({
+            param: 'OWNER_COMPANY_USER',
+            key: 'company_user',
+            setter: (v) => {
+              this.PMC_List = v;
+            },
+          });
+        }
       });
 
-    this.getOptionType(['PROPERTY_TYPE', 'PMC_LIST']);
+    options.push(
+      {
+        param: 'PARENT_PROPERTY',
+        key: 'property',
+        setter: (v) => {
+          this.propertyList = v;
+        },
+      },
+      {
+        param: 'PROPERTY_TYPE',
+        key: 'property_type',
+        setter: (v) => {
+          this.propertyType = v;
+        },
+      },
+      {
+        param: 'COUNTRY',
+        key: 'country',
+        setter: (v) => {
+          this.country = v;
+        },
+      }
+    );
+
+    this.getOptionsTypes(options);
   }
 
-  getOptionType(options: string[]) {
-    this.sharedAPIService
-      .getOptions({ option_type: options.join(',') })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.propertyType = response?.content?.property_type;
-          this.PMC_List = response?.content?.pmc_list;
+  getOptionsTypes(option: OptionsParams[]) {
+    this.sharedAPIService.getOptionsType(option);
+  }
+
+  onCountrySelect(data: any) {
+    this.getOptionsTypes([
+      {
+        param: 'STATE',
+        params: { country_id: data.key },
+        key: 'state',
+        setter: (v) => {
+          this.state = v;
         },
-      });
+      },
+    ]);
+  }
+
+  onStateSelect(data: any) {
+    this.getOptionsTypes([
+      {
+        param: 'CITY',
+        params: { state_id: data.key },
+        key: 'city',
+        setter: (v) => {
+          this.city = v;
+        },
+      },
+    ]);
   }
 
   submitProperty(): void {

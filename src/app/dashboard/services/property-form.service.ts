@@ -33,12 +33,18 @@ export class PropertyFormService {
 
   initPropertyBasicDetailsForm() {
     this.propertyBasicDetailsForm = this.formBuilder.group({
-      propertyName: ['', [Validators.required]],
+      property: ['', [Validators.required]],
+      propertyUnitName: ['', [Validators.required]],
       propertyType: ['', [Validators.required]],
       landArea: ['', [Validators.required]],
       landDMNo: ['', [Validators.required]],
       apartmentNo: ['', [Validators.required]],
-      address: ['', [Validators.required]],
+      country: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      locality: ['', [Validators.required]],
+      addressLine1: ['', [Validators.required]],
+      addressLine2: ['', [Validators.required]],
       NoOfBedrooms: ['', [Validators.required]],
       areaOfProperty: ['', [Validators.required]],
       NoOfFloors: ['', [Validators.required]],

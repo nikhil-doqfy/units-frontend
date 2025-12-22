@@ -25,6 +25,7 @@ export interface BreadCrumb {
 
 export interface OptionsParams {
   param: string;
+  params?: Record<string, any>;
   key: string;
   setter: (value: any) => void;
 }

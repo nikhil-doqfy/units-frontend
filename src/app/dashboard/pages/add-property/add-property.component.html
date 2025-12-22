@@ -13,32 +13,34 @@
     >
       <form class="row g-3" [formGroup]="basicDetailsForm">
         <div class="col-md-6">
-          <label class="form-label">{{ "PROPERTY_TYPE" | translate }}</label>
+          <label class="form-label">{{ "PROPERETY" | translate }}</label>
           <app-custom-select
-            [options]="propertyType"
+            [options]="propertyList"
             key="key"
             value="value"
             [showFilterInput]="true"
             [allowAddOption]="true"
-            formControlName="propertyType"
+            formControlName="property"
           ></app-custom-select>
-          @if (isInvalid(basicDetailsForm, 'propertyType').status) {
+          @if (isInvalid(basicDetailsForm, 'property').status) {
           <small class="errorMsg">
-            {{ isInvalid(basicDetailsForm, "propertyType").msg }}
+            {{ isInvalid(basicDetailsForm, "property").msg }}
           </small>
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">{{ "PROPERTY_NAME" | translate }}</label>
+          <label class="form-label">
+            {{ "PROPERTY_UNIT_NAME" | translate }}
+          </label>
           <input
             type="text"
             class="form-control"
             [placeholder]="'ENTER_HERE' | translate"
-            formControlName="propertyName"
+            formControlName="propertyUnitName"
           />
-          @if (isInvalid(basicDetailsForm, 'propertyName').status) {
+          @if (isInvalid(basicDetailsForm, 'propertyUnitName').status) {
           <small class="errorMsg">
-            {{ isInvalid(basicDetailsForm, "propertyName").msg }}
+            {{ isInvalid(basicDetailsForm, "propertyUnitName").msg }}
           </small>
           }
         </div>
@@ -104,16 +106,88 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">{{ "ADDRESS" | translate }}</label>
+          <label class="form-label">{{ "COUNTRY" | translate }}</label>
+          <app-custom-select
+            [options]="country"
+            key="key"
+            value="value"
+            formControlName="country"
+            (optionSelected)="onCountrySelect($event)"
+          ></app-custom-select>
+          @if (isInvalid(basicDetailsForm, 'country').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "country").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ "STATE" | translate }}</label>
+          <app-custom-select
+            [options]="state"
+            key="key"
+            value="value"
+            formControlName="state"
+            (optionSelected)="onStateSelect($event)"
+          ></app-custom-select>
+          @if (isInvalid(basicDetailsForm, 'state').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "state").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ "CITY" | translate }}</label>
+          <app-custom-select
+            [options]="city"
+            key="key"
+            value="value"
+            formControlName="city"
+          ></app-custom-select>
+          @if (isInvalid(basicDetailsForm, 'city').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "city").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ "LOCALITY" | translate }}</label>
           <input
             type="text"
             class="form-control"
             [placeholder]="'ENTER_ADDRESS_HERE' | translate"
-            formControlName="address"
+            formControlName="locality"
           />
-          @if (isInvalid(basicDetailsForm, 'address').status) {
+          @if (isInvalid(basicDetailsForm, 'locality').status) {
           <small class="errorMsg">
-            {{ isInvalid(basicDetailsForm, "address").msg }}
+            {{ isInvalid(basicDetailsForm, "locality").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ "ADDRESS_LINE_1" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_ADDRESS_HERE' | translate"
+            formControlName="addressLine1"
+          />
+          @if (isInvalid(basicDetailsForm, 'addressLine1').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "addressLine1").msg }}
+          </small>
+          }
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ "ADDRESS_LINE_2" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_ADDRESS_HERE' | translate"
+            formControlName="addressLine2"
+          />
+          @if (isInvalid(basicDetailsForm, 'addressLine2').status) {
+          <small class="errorMsg">
+            {{ isInvalid(basicDetailsForm, "addressLine2").msg }}
           </small>
           }
         </div>

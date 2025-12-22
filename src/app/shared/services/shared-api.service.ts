@@ -23,8 +23,10 @@ export class SharedApiService {
 
   getOptionsType(options: OptionsParams[]) {
     const type = options.map((o) => o.param).join(',');
+    let params = {};
+    options.forEach((o) => (params = { ...params, ...o.params }));
 
-    this.getOptions({ option_type: type }).subscribe({
+    this.getOptions({ option_type: type, ...params }).subscribe({
       next: (res) => {
         const content = res?.content || {};
 
