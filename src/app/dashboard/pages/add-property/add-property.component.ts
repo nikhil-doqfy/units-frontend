@@ -173,7 +173,6 @@ export class AddPropertyComponent {
           state: content?.state,
           city: content?.city,
         });
-        console.log('basicDetailsForm:--', this.basicDetailsForm.value);
       },
     });
   }

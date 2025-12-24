@@ -151,7 +151,7 @@ export class PropertyFormService {
 
   getBasicDetails(context: any) {
     return this.propertyService
-      .getBasicDetails({
+      .getProperty({
         property_id: context.formId,
       })
       .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
@@ -188,9 +188,9 @@ export class PropertyFormService {
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
       payload['property_id'] = context.formId;
-      return this.propertyService.editBasicDetailsOfProperty(payload);
+      return this.propertyService.editProperty(payload);
     } else {
-      return this.propertyService.addBasicDetailsOfProperty(payload);
+      return this.propertyService.addProperty(payload);
     }
   }
 
@@ -227,13 +227,17 @@ export class PropertyFormService {
   patchBasicDetails(response: any) {
     const content: any = response.content;
     return {
-      propertyId: content.id,
-      propertyName: content.property_name,
-      propertyType: content.property_type,
+      property: {
+        key: content?.property?.id,
+        value: content?.property?.property_name,
+      },
+      propertyUnitName: content?.property_unit_name,
+      propertyType: content?.property?.property_type,
       landArea: content.land_area,
       landDMNo: content.land_dm_no,
       apartmentNo: content.apartment_no,
-      address: content.address,
+      addressLine1: content.address,
+      addressLine2: content?.property?.additional_address,
       NoOfBedrooms: content.bedrooms,
       areaOfProperty: content.area_of_property,
       NoOfFloors: content.no_of_floors,

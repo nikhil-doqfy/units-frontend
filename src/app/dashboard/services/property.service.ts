@@ -21,6 +21,19 @@ export class PropertyService {
     );
   }
 
+  getProperty(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/save/property${queryString}`);
+  }
+
+  addProperty(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/save/property`, data);
+  }
+
+  editProperty(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/save/property`, data);
+  }
+
   getBasicDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(

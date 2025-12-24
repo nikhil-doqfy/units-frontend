@@ -169,6 +169,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
     const newOption = {
       [this.key]: text,
       [this.value]: text,
+      isNew: true,
     };
 
     this.options = [...this.options, newOption];
