@@ -35,7 +35,7 @@ export class TenantsService {
   }
 
   addTenantToInvite(data: Record<'email', string>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/invite/tenant/pmc`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/invitation`, data);
   }
 
   addTenant(data: Record<string, any>): Observable<any> {

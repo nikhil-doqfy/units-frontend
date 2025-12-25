@@ -9,7 +9,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
@@ -102,12 +106,12 @@ export class StaffComponent {
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
-
+  assignedProperties: any[] = [];
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
     this.initStaffSearchListener();
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('staff_id');
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
@@ -119,7 +123,7 @@ export class StaffComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.getOptionTypes(['STAFF_ROLE']);
+    this.getOptionTypes(['ROLE']);
     this.sharedService.initLanguage();
     this.initLanguageListener();
   }
@@ -154,9 +158,16 @@ export class StaffComponent {
     console.log(`${action} action clicked`);
   }
 
+  onUserSave(component: AddStaffFormComponent, modal: NgbActiveModal) {
+    component.submitStaffForm();
+
+    // modal.close();
+
+    this.getStaffRoleDetails();
+  }
   removeFilter() {
     this.selectedstaffRole = null;
-    delete this.staffRolesData['staff_role'];
+    delete this.staffRolesData['role'];
 
     this.currentPage = 1;
     this.getStaffRoleDetails();
@@ -168,7 +179,7 @@ export class StaffComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.staffRole = response?.content?.staff_role;
+          this.staffRole = response?.content?.role;
           console.log('data', this.staffRole);
         },
       });
@@ -195,7 +206,7 @@ export class StaffComponent {
   }
 
   applyFilter() {
-    this.staffRolesData['staff_role'] = this.selectedstaffRole.key;
+    this.staffRolesData['role'] = this.selectedstaffRole.key;
     this.currentPage = 1;
     this.getStaffRoleDetails();
   }
@@ -301,17 +312,18 @@ export class StaffComponent {
 
   // ------------------------- Handel show details function -------------------------
 
-  handleViewClick(staffId: number): void {
-    this.router.navigate(['/dashboard/staff/detail', staffId]);
+  handleViewClick(staff_id: number): void {
+    this.router.navigate(['/dashboard/staff/detail', staff_id]);
   }
 
-  loadDetailView(staffId: number): void {
+  loadDetailView(staff_id: number): void {
     this.staffService
-      .accessStaffRoleDetails({ id: staffId })
+      .accessStaffRoleDetails({ staff_id: staff_id })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.selectedStaff = resp.content;
+          this.assignedProperties = resp?.content?.assigned_properties ?? [];
         },
         error: (err) => console.error('Detail API Error:', err),
       });

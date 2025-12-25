@@ -47,9 +47,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Admin</td>
-              <td>15 Sep 2024</td>
+            <tr *ngFor="let role of roles">
+              <td>{{ role.name }}</td>
+              <td>{{ role.createdAt }}</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn

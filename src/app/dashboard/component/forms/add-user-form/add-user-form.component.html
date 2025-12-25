@@ -140,6 +140,10 @@
             key="key"
             value="value"
             formControlName="role"
+            placeholder="Select User Type"
+            [selectedOption]="selectedUserType"
+            (optionSelected)="onOptionSelectedUserType($event)"
+            (click)="handleFilterClick()"
           ></app-custom-select>
 
           @if (isInvalid(userForm, 'role').status) {

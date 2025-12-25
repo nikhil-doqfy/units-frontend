@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
 
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
 import { TranslateModule } from '@ngx-translate/core';
@@ -22,54 +22,47 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class InvitePMCFormComponent {
   private fb = inject(FormBuilder);
+
   private sharedApiService = inject(SharedApiService);
-
-  userTypeList: any[] = [];
+  private destroyRef = inject(DestroyRef);
   propertyList: any[] = [];
-
+  selectedProperty: string | null = null;
   invitePmcForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    invitation_type: [null, Validators.required],
+    invitation_type: ['OWNER_TO_PMC', Validators.required],
     property_unit_id: [null, Validators.required],
   });
 
   ngOnInit() {
-    // this.getOptionsType([
-    //   {
-    //     param: 'INVITATION_TYPE',
-    //     key: 'INVITATION_TYPE',
-    //     setter: (data: any[]) => (this.userTypeList = data),
-    //   },
-    //   {
-    //     param: 'PROPERTY',
-    //     key: 'PROPERTY',
-    //     setter: (data: any[]) => (this.propertyList = data),
-    //   },
-    // ]);
-
-    this.getOptionsType(['PROPERTY_UNIT']);
+    this.getOptionTypes(['PROPERTY_UNIT']);
   }
 
-  getOptionsType(options: any[]) {
-    const type = options.map((o) => o.param).join(',');
+  getOptionTypes(options: string[]) {
+    console.log('Option types sending:', options);
 
-    this.sharedApiService.getOptions({ option_type: type }).subscribe({
-      next: (res: any) => {
-        const content = res?.content || {};
-        options.forEach((o) => o.setter(content[o.key] || []));
-      },
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: any) => {
+          // this.propertyList = response?.content?.property_unit ?? [];
+          this.propertyList = response?.content?.property_unit ?? [];
+          console.log('PROPERTY LIST:', this.propertyList);
+        },
+      });
+  }
+
+  onOptionSelectedPropertyUnit(option: any) {
+    console.log('PROPERTY UNIT FROM SELECT:', option);
+    this.selectedProperty = option?.value ?? null;
+    this.invitePmcForm.patchValue({
+      property_unit_id: option?.key ?? null,
     });
   }
 
   onInvitationTypeSelect(option: any) {
     this.invitePmcForm.patchValue({
       invitation_type: option?.key,
-    });
-  }
-
-  onPropertySelect(option: any) {
-    this.invitePmcForm.patchValue({
-      property_unit_id: option?.key,
     });
   }
 

@@ -101,13 +101,14 @@ export class PMCComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   private onPMCSearch$ = new Subject<string>();
-
+  assignedProperties: any[] = [];
   constructor(private destroyRef: DestroyRef) {
     this.initPMCSearchListener();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.showDetailView = true;
-      this.pmcFilter['pmc_id'] = +id;
+      this.loadDetailView(+id);
+      // this.pmcFilter['company_id'] = +id;
       this.getPMC();
     } else {
       this.showDetailView = false;
@@ -284,8 +285,12 @@ export class PMCComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(pmcId: number): void {
-    this.router.navigate(['/dashboard/pmc/detail/', pmcId]);
+  handleViewClick(companyId: number): void {
+    if (!companyId && companyId !== 0) {
+      console.warn('Invalid companyId:', companyId);
+      return; // stop navigation if companyId is undefined
+    }
+    this.router.navigate(['/dashboard/pmc/detail/', companyId]);
   }
 
   handleBackClick(): void {
@@ -298,5 +303,22 @@ export class PMCComponent {
 
   handlePreviewDocumentClick(): void {
     console.log('Preview Document button clicked');
+  }
+  loadDetailView(company_id: number): void {
+    this.pmcService
+      .getPMC({
+        company_id: company_id,
+        limit: this.rowsPerPage,
+        page: this.currentPage,
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.pmcList = [resp?.content?.company_profile];
+          this.assignedProperties = resp?.content?.properties || [];
+          this.totalRecords = resp?.pagination?.total_records || 0;
+        },
+        error: (err) => console.error('Detail API Error:', err),
+      });
   }
 }

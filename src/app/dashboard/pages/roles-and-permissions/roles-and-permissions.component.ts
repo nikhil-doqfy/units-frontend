@@ -62,6 +62,10 @@ export class RolesAndPermissionsComponent {
   showDetailView: boolean = false;
   closeResult: WritableSignal<string> = signal('');
 
+  roles: any[] = [];
+  tableLoading = false;
+  currentPage = 1;
+  pageSize = 10;
   constructor(
     private router: Router,
     private roleService: RoleAndPermissionsService,
@@ -78,6 +82,8 @@ export class RolesAndPermissionsComponent {
     this.loadBreadcrumb();
     this.initLanguageListener();
     this.sharedService.initLanguage();
+
+    this.fetchRoles();
   }
 
   initLanguageListener() {
@@ -116,6 +122,8 @@ export class RolesAndPermissionsComponent {
         this.isLoading = false;
         this.successMessage = 'Role created successfully!';
         this.modalService.dismissAll(); // Close modal
+
+        this.fetchRoles();
       },
       error: (err) => {
         this.isLoading = false;
@@ -123,6 +131,26 @@ export class RolesAndPermissionsComponent {
       },
     });
   }
+
+  fetchRoles(): void {
+    this.tableLoading = true;
+
+    this.roleService
+      .getRoles({
+        page: this.currentPage,
+        limit: this.pageSize,
+      })
+      .subscribe({
+        next: (res) => {
+          this.roles = res?.content || []; // ✅ ONLY content
+          this.tableLoading = false;
+        },
+        error: () => {
+          this.tableLoading = false;
+        },
+      });
+  }
+
   openAddRoleModal(addRoleContent: TemplateRef<any>) {
     this.modalService
       .open(addRoleContent, {

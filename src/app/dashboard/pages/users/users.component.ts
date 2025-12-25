@@ -241,7 +241,7 @@ export class UsersComponent {
   onUserSave(component: AddUserFormComponent, modal: NgbActiveModal) {
     component.submitUserForm();
 
-    modal.close();
+    // modal.close();
 
     this.getUser();
   }

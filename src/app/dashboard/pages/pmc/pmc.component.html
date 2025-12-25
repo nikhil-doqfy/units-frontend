@@ -53,7 +53,7 @@
                 <app-table-img-item
                   [title]="pmc?.company_name || 'N/A'"
                   [clickable]="true"
-                  (clicked)="handleViewClick(pmc?.id)"
+                  (clicked)="handleViewClick(pmc?.company_id)"
                 />
               </td>
               <td>{{ pmc?.tenancy_ratio || "N/A" }}</td>
@@ -222,7 +222,7 @@
             </tr>
           </thead>
           <tbody>
-            @for(property of pmcList[0]?.properties_assigned; track $index){
+            @for(property of assignedProperties; track $index){
             <tr>
               <td>{{ property?.property_code || "N/A" }}</td>
               <td>
@@ -265,6 +265,21 @@
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 </ng-container>

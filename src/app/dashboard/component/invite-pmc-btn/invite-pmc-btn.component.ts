@@ -78,6 +78,8 @@ export class InvitePMCButtonComponent {
   invitePmc(modal: NgbActiveModal, component: InvitePMCFormComponent) {
     const form = component.invitePmcForm;
     const payload = component.getPayload();
+    console.log('FORM VALUE:', form.value);
+    console.log('PAYLOAD:', payload);
     if (
       !payload.email ||
       !payload.invitation_type ||
@@ -95,6 +97,8 @@ export class InvitePMCButtonComponent {
 
     const data = {
       email: values.email,
+      invitation_type: values.invitation_type,
+      property_unit_id: values.property_unit_id,
     };
 
     this.pmcService

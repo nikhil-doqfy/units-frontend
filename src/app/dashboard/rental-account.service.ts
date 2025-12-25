@@ -7,20 +7,24 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class RoleAndPermissionsService {
+export class RentalAccountService {
   private http = inject(HttpClient);
   private sharedService = inject(SharedService);
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
+
   constructor() {}
-
-  createRole(data: { name: string; permissions?: string[] }): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/user/add_role`, data);
-  }
-
-  getRoles(params: Record<string, any>): Observable<any> {
+  getOwnerRentAmounts(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/user/role_table${queryString}`
+      `${this.SERVER_ADDRESS}/payment/owner_rent_amounts${queryString}`
+    );
+  }
+  getLeaseDetailsById(leaseId: number): Observable<any> {
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/payment/access_rental_account/`,
+      {
+        params: { lease_id: leaseId },
+      }
     );
   }
 }

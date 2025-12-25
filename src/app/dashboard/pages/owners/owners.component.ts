@@ -118,7 +118,7 @@ export class OwnersComponent {
     this.sharedService.setTitle(key);
     this.initOwnerSearchListener();
 
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('owner_id');
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
@@ -384,25 +384,26 @@ export class OwnersComponent {
   }
 
   // ------------------------- Handel show details function -------------------------
-  handleViewClick(ownerID: number): void {
-    this.router.navigate(['/dashboard/owners/detail/', ownerID]);
+  handleViewClick(owner_id: number): void {
+    this.router.navigate(['/dashboard/owners/detail/', owner_id]);
   }
 
   refreshDetailsView() {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('owner_id');
     if (id) this.loadDetailView(+id);
   }
 
-  loadDetailView(ownerID: number): void {
+  loadDetailView(owner_id: number): void {
     this.ownerService
       .getOwnerDetails({
-        owner_id: ownerID,
+        owner_id: owner_id,
         rental_status: this.ownerData['rental_status'],
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.selectedOwner = resp.content;
+          this.selectedOwner = resp.content.owner_details;
+          this.selectedOwner.table = resp?.content?.table || [];
         },
         error: (err) => console.error('Detail API Error:', err),
       });
