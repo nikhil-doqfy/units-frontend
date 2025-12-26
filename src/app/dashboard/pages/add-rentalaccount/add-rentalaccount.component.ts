@@ -163,7 +163,6 @@ export class AddRentalaccountComponent implements OnInit {
 
   handleFilterClick(): void {
     this.getOptionTypes(['RENTAL_ACCOUNT_LEASE']);
-    // this.getOptionTypes(['PROPERTY_UNIT']);
     console.log('Filter button clicked');
   }
 
