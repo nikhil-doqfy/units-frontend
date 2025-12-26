@@ -64,7 +64,7 @@
           <select class="code">
             <option>+91</option>
           </select>
-          <input type="text" />
+          <input type="text" formControlName="contact_number" />
         </div>
       </div>
 
@@ -150,9 +150,9 @@
             <th width="200">{{ "Status" | translate }}</th>
           </tr>
         </thead>
-        <tbody>
+        <!-- <tbody>
           @for (row of [1,2,3,4,5]; track $index) {
-          <tr>
+          <tr *ngFor="let row of rentalPayments; track: $index">
             <td>
               <select class="form-control">
                 <option value=""></option>
@@ -172,18 +172,82 @@
             </td>
 
             <td>
-              <!-- <input type="text" class="form-control" /> -->
+              <input type="text" class="form-control" />
             </td>
 
             <td>
-              <!-- <input type="text" class="form-control" /> -->
+              <input type="text" class="form-control" />
             </td>
 
             <td>
-              <!-- <input type="text" class="form-control" /> -->
+              <input type="text" class="form-control" />
             </td>
 
             <td></td>
+          </tr>
+        }
+        </tbody> -->
+
+        <tbody>
+          @for (row of rentalPayments; track $index) {
+          <tr>
+            <!-- Bank Name -->
+            <td>
+              <select class="form-control">
+                <option value="">{{ row.bank || "Select Bank" }}</option>
+              </select>
+            </td>
+
+            <!-- Bank Account -->
+            <td>
+              <input
+                type="text"
+                class="form-control"
+                [value]="row.bank_account"
+              />
+            </td>
+
+            <!-- Cheque Number -->
+            <td>
+              <input
+                type="text"
+                class="form-control"
+                [value]="row.cheque_number"
+              />
+            </td>
+
+            <!-- Cheque Date -->
+            <td>
+              <input
+                type="date"
+                class="form-control"
+                [value]="row.cheque_date | date : 'yyyy-MM-dd'"
+              />
+            </td>
+
+            <!-- Payment Type -->
+            <td>
+              {{ row.payment_type?.value || "-" }}
+            </td>
+
+            <!-- Purpose -->
+            <td>
+              {{ row.purpose || "-" }}
+            </td>
+
+            <!-- Amount -->
+            <td>
+              {{ row.amount }}
+            </td>
+
+            <!-- Status -->
+            <td>
+              {{ row.status }}
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="8" class="text-center">No records found</td>
           </tr>
           }
         </tbody>
