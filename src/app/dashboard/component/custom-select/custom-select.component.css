@@ -1,147 +1,171 @@
 .customSelect {
-    position: relative;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease 0s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease 0s;
 }
 
 .customSelectInput {
-    background-color: var(--whiteBg);
-    font-size: 14px;
-    color: var(--greyText);
-    font-weight: 400;
-    padding: 8px 12px;
-    border: 1px solid var(--formBorder);
-    border-radius: 6px;
-    width: 100%;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-    z-index: 1;
+  background-color: var(--whiteBg);
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 400;
+  padding: 8px 12px;
+  border: 1px solid var(--formBorder);
+  border-radius: 6px;
+  width: 100%;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  z-index: 1;
 }
 
 .customSelect.show .customSelectInput,
 .customSelect .customSelectInput:hover {
-    border-color: var(--greyBorder);
+  border-color: var(--greyBorder);
 }
 
 .customSelectGrey .customSelectInput {
-    background-color: var(--muteBg);
-    font-size: 14px;
-    color: var(--greyText);
-    font-weight: 500;
-    height: 30px;
-    border-color: var(--muteBorder1);
-    padding: 4px 8px;
+  background-color: var(--muteBg);
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 500;
+  height: 30px;
+  border-color: var(--muteBorder1);
+  padding: 4px 8px;
 }
 
 .customSelectFilter .customSelectInput {
-    color: var(--greyDarkText1);
-    padding: 0 8px;
-    max-width: 150px;
-    height: 38px;
-    border: 0;
-    border-radius: 10px;
-    box-shadow: 0 0 6px 0 #00000026;
-    gap: 8px;
+  color: var(--greyDarkText1);
+  padding: 0 8px;
+  max-width: 150px;
+  height: 38px;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 0 6px 0 #00000026;
+  gap: 8px;
 }
 
 .customSelectFilter.customSelect.show .customSelectInput,
 .customSelectFilter.customSelect .customSelectInput:hover {
-    background-color: var(--muteBg);
-    color: var(--greyText);
+  background-color: var(--muteBg);
+  color: var(--greyText);
 }
 
 .customSelectSmall .customSelectInput {
-    max-width: 125px;
+  max-width: 125px;
 }
 
 .customSelectPlain.customSelectFilter .customSelectInput {
-    height: auto;
-    padding: 0;
-    box-shadow: none;
+  height: auto;
+  padding: 0;
+  box-shadow: none;
 }
 
 .customSelectPlain.customSelectFilter.customSelect.show .customSelectInput,
 .customSelectPlain.customSelectFilter.customSelect .customSelectInput:hover {
-    background-color: var(--whiteBg);
+  background-color: var(--whiteBg);
 }
 
 .customSelectInput .customSelectPlaceholder {
-    color: var(--lightText);
+  color: var(--lightText);
 }
 
-.customSelectInput>span {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+.customSelectInput > span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.customSelectInput>i {
-    color: var(--blackText4);
-    pointer-events: none;
+.customSelectInput > i {
+  color: var(--blackText4);
+  pointer-events: none;
 }
 
 .customSelectDropdown {
-    background-color: var(--whiteBg);
-    position: absolute;
-    left: 0;
-    top: 100%;
-    right: 0;
-    width: 100%;
-    padding: 4px;
-    border: 1px solid var(--lightBorder);
-    border-radius: 6px;
-    box-shadow: 4px 4px 15px 0 #00000026;
-    min-width: 180px;
-    max-height: 167px;
-    overflow: auto;
-    z-index: 2;
+  background-color: var(--whiteBg);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  padding: 4px;
+  border: 1px solid var(--lightBorder);
+  border-radius: 6px;
+  box-shadow: 4px 4px 15px 0 #00000026;
+  min-width: 180px;
+  max-height: 167px;
+  overflow: auto;
+  z-index: 2;
 }
 
 .customSelectFilter .customSelectDropdown {
-    min-width: 160px;
-    max-height: 173px;
-    left: inherit;
+  min-width: 160px;
+  max-height: 173px;
+  left: inherit;
 }
 
 .customSelectPlain .customSelectDropdown {
-    left: inherit;
+  left: inherit;
 }
 
 .customSelectDropdown li {
-    font-size: 14px;
-    color: var(--greyText);
-    font-weight: 400;
-    line-height: 20px;
-    padding: 10px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 400;
+  line-height: 20px;
+  padding: 10px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
 }
 
-.customSelectDropdown li+li {
-    border-top: 1px solid var(--formBorder);
+.customSelectDropdown li + li {
+  border-top: 1px solid var(--formBorder);
 }
 
 .customSelectFilter .customSelectDropdown li {
-    font-size: 12px;
-    color: var(--greyText);
-    padding: 6px 8px;
-    max-height: 171px;
+  font-size: 12px;
+  color: var(--greyText);
+  padding: 6px 8px;
+  max-height: 171px;
 }
 
 .customSelectDropdown li:hover {
-    background: var(--muteBg1);
-    color: var(--blackText);
+  background: var(--muteBg1);
+  color: var(--blackText);
 }
 
 .customSelectDropdown li.active,
 .customSelectDropdown li.active:hover {
-    background: var(--activeExtraLightBg);
-    color: var(--blackText);
+  background: var(--activeExtraLightBg);
+  color: var(--blackText);
+}
+
+.customSelectSearch {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+}
+
+.customSelectSearch input {
+  flex: 1;
+  height: 30px;
+  padding: 4px 8px;
+  border: 1px solid var(--formBorder);
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.customSelectSearch .addBtn {
+  padding: 0 10px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--activeExtraLightBg);
+  color: var(--blackText);
+  cursor: pointer;
 }

@@ -14,6 +14,7 @@ export class StepPaneComponent {
   @Input() description!: string;
   @Input() secondCard: boolean = false;
   @Input() showInvitePmcBtn: boolean = false;
+  @Input() showInviteOwnerBtn: boolean = false;
   @ViewChild('paneContent', { static: true }) content!: TemplateRef<any>;
 }
 

@@ -22,6 +22,7 @@ import { StepEngine } from '../../model/step-engine/step-engine';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
+import { InviteOwnerBtnComponent } from '../invite-owner-btn/invite-owner-btn.component';
 
 interface StepGroup {
   main: StepPaneComponent;
@@ -38,6 +39,7 @@ interface StepGroup {
     DashFormComponent,
     InvitePMCButtonComponent,
     TranslateModule,
+    InviteOwnerBtnComponent,
   ],
   templateUrl: './step-form-layout.component.html',
   styleUrls: ['./step-form-layout.component.css'],
