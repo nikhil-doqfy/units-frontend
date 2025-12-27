@@ -178,7 +178,7 @@ export class TenantsComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.tenantsList = resp?.content?.tenants ?? [];
+          this.tenantsList = resp?.content ?? [];
           console.log(' TENANT OBJECT:', this.tenantsList[0]);
           this.totalRecords = resp?.pagination?.total_records ?? 0;
         },

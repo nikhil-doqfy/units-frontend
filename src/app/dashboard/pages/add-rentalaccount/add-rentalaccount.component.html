@@ -1,0 +1,313 @@
+<div class="page-header">
+  <h3>{{ isEditMode ? "Edit" : "Add New Rental Account" }}</h3>
+  <div class="actions">
+    <button
+      class="btn-primary btnCommon"
+      (click)="isEditMode ? onSaveChanges() : onEdit()"
+    >
+      {{ isEditMode ? "Save Changes" : "Update Account" }}
+    </button>
+    <span class="close" (click)="onClose()">×</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="form-grid">
+    <div class="photo-upload">
+      <div class="circle">
+        <i><app-upload-icon /></i>
+      </div>
+      <label>Tenant Photo <span>*</span></label>
+      <small>Max 5MB, PNG</small>
+    </div>
+
+    <div>
+      <label>Link Property <span>*</span></label>
+      <select>
+        <option>--Select--</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Tenant Name <span>*</span></label>
+      <select>
+        <option>--Select--</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Email Address <span>*</span></label>
+      <input type="email" placeholder="Enter email here" />
+    </div>
+
+    <div>
+      <label>Contact Number <span>*</span></label>
+      <div class="phone">
+        <select class="code">
+          <option>+91</option>
+        </select>
+        <input type="text" />
+      </div>
+    </div>
+
+    <div>
+      <label>Period From <span>*</span></label>
+      <input type="date" />
+    </div>
+
+    <div>
+      <label>Period To <span>*</span></label>
+      <input type="date" />
+    </div>
+
+    <div>
+      <label>Unit Type <span>*</span></label>
+      <select>
+        <option>--Select--</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Rent <span>*</span></label>
+      <input type="text" placeholder="Enter Amount here" />
+    </div>
+  </div>
+</div>
+
+<div class="mb-3 d-xl-none">
+  <div class="row align-items-center justify-content-between g-3">
+    <div class="col-auto"></div>
+  </div>
+</div>
+
+<div class="cmmnTblOuter">
+  <div class="cmmnTblHdr">
+    <div class="row g-3 align-items-center">
+      <div class="col-md">
+        <app-table-title
+          [title]="'Banks & Cheques' | translate"
+          [subtitle]="'(' + totalRecords + ')'"
+        ></app-table-title>
+      </div>
+      <div class="col-md-auto">
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+          <app-table-filter-btn
+            [title]="'Add Cheque | Scan Cheque' | translate"
+            [hasIcon]="true"
+          >
+            <app-plus-icon />
+          </app-table-filter-btn>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cmmnTblBody">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>{{ "Bank Name" | translate }}</th>
+            <th>
+              <button type="button">
+                {{ "Bank Accouunt" | translate }}
+              </button>
+            </th>
+            <th>{{ "Cheque  number" | translate }}</th>
+            <th>{{ "Cheque Date" | translate }}</th>
+            <th>{{ "Payment Type" | translate }}</th>
+            <th width="200">{{ "Purpose" | translate }}</th>
+            <th width="200">{{ "Amount" | translate }}</th>
+            <th width="200">{{ "Status" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of [1,2,3,4,5]; track $index) {
+          <tr>
+            <td>
+              <select class="form-control">
+                <option value=""></option>
+              </select>
+            </td>
+
+            <td>
+              <input type="text" class="form-control" placeholder="" />
+            </td>
+
+            <td>
+              <input type="text" class="form-control" placeholder="" />
+            </td>
+
+            <td>
+              <input type="date" class="form-control" />
+            </td>
+
+            <td>
+              <!-- <input type="text" class="form-control" /> -->
+            </td>
+
+            <td>
+              <!-- <input type="text" class="form-control" /> -->
+            </td>
+
+            <td>
+              <!-- <input type="text" class="form-control" /> -->
+            </td>
+
+            <td></td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="cmmnTblFtr">
+    <app-table-select
+      [componentName]="componentName"
+      [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (rowsPerPageChange)="onPageSizeChange($event)"
+    />
+    <app-table-pagination
+      [componentName]="componentName"
+      [currentPage]="currentPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage"
+      (pageChange)="onPageChange($event)"
+    />
+  </div>
+</div>
+<!----other chnagres section ------------------------------------------------------------------------------------->
+<div class="mb-3 d-xl-none">
+  <div class="row align-items-center justify-content-between g-3">
+    <div class="col-auto"></div>
+  </div>
+</div>
+
+<div class="cmmnTblOuter mt-3">
+  <div class="cmmnTblHdr">
+    <div class="row g-3 align-items-center">
+      <div class="col-md">
+        <app-table-title
+          [title]="'Other Charges' | translate"
+        ></app-table-title>
+      </div>
+      <div class="col-md-auto">
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+          <app-table-filter-btn
+            [title]="'Add Charges' | translate"
+            (clicked)="openAddChargesModal(addChargesContent)"
+          ></app-table-filter-btn>
+          <button class="btn total-btn">
+            Total : {{ totalAmount | number : "1.0-0" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cmmnTblBody">
+    <div class="table-responsive">
+      <table class="charges-table">
+        <thead>
+          <tr>
+            <th>{{ "Description" | translate }}</th>
+            <th>
+              {{ "Amount" | translate }}
+            </th>
+            <th>{{ "Tax Code" | translate }}</th>
+            <th>{{ "VAT" | translate }}</th>
+            <th>{{ "Total Amount" | translate }}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let c of charges">
+            <td>
+              <label class="checkbox">
+                <input type="checkbox" [(ngModel)]="c.checked" />
+                <span class="desc-cell"></span>
+                {{ c.label }}
+              </label>
+            </td>
+            <td>{{ c.amount | number : "1.2-2" }}</td>
+            <td>{{ c.tax }}</td>
+            <td>{{ c.vat | number : "1.2-2" }}</td>
+            <td>{{ c.total | number : "1.2-2" }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #addChargesContent let-modal>
+        <div class="modal-header">
+          <h6 class="modal-title" id="modal-title">Add charges</h6>
+
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <span>Cheque</span>
+
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="cashSwitch"
+                (change)="onPaymentToggle($event)"
+              />
+            </div>
+
+            <span>Cash</span>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Amount</label>
+              <input type="text" class="form-control" placeholder="11,000" />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Bank</label>
+              <select class="form-select">
+                <option>EIB</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Account Number</label>
+              <input type="text" class="form-control" value="89475639" />
+            </div>
+          </div>
+
+          <div *ngIf="!isCash">
+            <label class="form-label">Cheque</label>
+
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter number here"
+              />
+
+              <button class="btn btn-outline">
+                <i class="bi bi-upc-scan"></i>
+                Scan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btnPrimary btnCommon" (click)="addCharge(modal)">
+            Add Cheque
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

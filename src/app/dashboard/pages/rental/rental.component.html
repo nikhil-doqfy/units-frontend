@@ -1,0 +1,610 @@
+<app-white-card class="monthly-summary-card" *ngIf="!showDetailView">
+  <div class="rent-card">
+    <div
+      class="d-flex justify-content-between align-items-center mb-3 flex-wrap"
+    >
+      <div class="metric">
+        <div class="metric-value">
+          AED 1,20,573
+          <span class="percentage text-success">
+            12% <app-arrow></app-arrow> last month
+          </span>
+        </div>
+        <div class="metric-label">Total Amount Received</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-value">
+          AED 2,20,789
+          <span class="badge text-success">5678 Cheques</span>
+        </div>
+        <div class="metric-label">Cheques Approved</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-value">
+          AED 20,573
+          <span class="badge text-warning">1124 Cheques</span>
+        </div>
+        <div class="metric-label">Cheques Deposited</div>
+      </div>
+
+      <div>
+        <app-custom-select
+          [options]="[
+            'Falcom city',
+            'Novatis AG...',
+            'Agriculture',
+            'Honda',
+            'TVS',
+            'Samsung'
+          ]"
+          [placeholder]="selected"
+          [selectedOption]="selected"
+          (optionSelected)="onOptionSelected($event)"
+          [isFilter]="true"
+        >
+        </app-custom-select>
+      </div>
+    </div>
+  </div>
+
+  <app-column-chart></app-column-chart>
+</app-white-card>
+
+<div class="mt-3" *ngIf="!showDetailView">
+  <app-white-card>
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'Rent Amounts' | translate"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
+          >
+          </app-table-title>
+        </div>
+
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search
+              placeholder="{{ 'SEARCH_HERE' | translate }}"
+              (onValueChange)="searchTextChange($event)"
+            >
+            </app-table-search>
+
+            <app-custom-select
+              [options]="[
+                'Falcom city',
+                'Novatis AG...',
+                'Agriculture',
+                'Honda',
+                'TVS',
+                'Samsung'
+              ]"
+              [placeholder]="selected"
+              [selectedOption]="selected"
+              (optionSelected)="onOptionSelected($event)"
+              [isFilter]="true"
+            >
+            </app-custom-select>
+
+            <app-custom-select
+              [options]="[
+                'Falcom city',
+                'Novatis AG...',
+                'Agriculture',
+                'Honda',
+                'TVS',
+                'Samsung'
+              ]"
+              [placeholder]="selected"
+              [selectedOption]="selected"
+              (optionSelected)="onOptionSelected($event)"
+              [isFilter]="true"
+            >
+            </app-custom-select>
+
+            <app-custom-select
+              [options]="[
+                'Falcom city',
+                'Novatis AG...',
+                'Agriculture',
+                'Honda',
+                'TVS',
+                'Samsung'
+              ]"
+              [placeholder]="selected"
+              [selectedOption]="selected"
+              (optionSelected)="onOptionSelected($event)"
+              [isFilter]="true"
+            >
+            </app-custom-select>
+
+            <button
+              type="button"
+              class="btn btnCommon btnMinWidth d-none d-xl-flex"
+              (click)="toAddRenatlAcc()"
+            >
+              {{ "Add New Account" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lease-wrapper">
+      <div
+        class="lease-card"
+        *ngFor="let l of leases"
+        (click)="onLeaseClick(l)"
+      >
+        <div class="lease-header">
+          <h4>{{ l.title }}</h4>
+          <div class="right">
+            <span class="lease-no">Lease No: {{ l.leaseNo }}</span>
+            <span class="status" [ngClass]="l.status.toLowerCase()">
+              {{ l.status }}
+            </span>
+          </div>
+        </div>
+
+        <div class="lease-grid">
+          <div>
+            <label>Tenant No</label>
+            <span>{{ l.tenantNo }}</span>
+          </div>
+
+          <div>
+            <label>Period From</label>
+            <span>{{ l.from }}</span>
+          </div>
+
+          <div>
+            <label>Period To</label>
+            <span>{{ l.to }}</span>
+          </div>
+
+          <div>
+            <label>Unit Type</label>
+            <span>{{ l.unitType }}</span>
+          </div>
+
+          <div>
+            <label>Year Rent</label>
+            <span>{{ l.yearRent }}</span>
+          </div>
+
+          <div>
+            <label>Other Charges</label>
+            <span>{{ l.otherCharges }}</span>
+          </div>
+
+          <div>
+            <label>Vat</label>
+            <span>{{ l.vat }}</span>
+          </div>
+
+          <div>
+            <label>Total Rent</label>
+            <strong>{{ l.total }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+      >
+      </app-table-select>
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+      >
+      </app-table-pagination>
+    </div>
+  </app-white-card>
+</div>
+
+<!-- <ng-container *ngIf="showDetailView">
+  <app-table-view-card
+    [title]="this.leases[0].title"
+    [imgSrc]="''"
+    [items]="[
+      { label: 'Tenant No', value: selectedLease?.tenantNo },
+      { label: 'Period From', value: selectedLease?.from },
+      { label: 'Period To', value: selectedLease?.to },
+      { label: 'Unit Type', value: selectedLease?.unitType },
+      { label: 'Year Rent', value: selectedLease?.yearRent },
+      { label: 'Other Charges', value: selectedLease?.otherCharges },
+      { label: 'VAT', value: selectedLease?.vat },
+      { label: 'Total Rent', value: selectedLease?.total }
+    ]"
+    (back)="showDetailView = false"
+  >
+  </app-table-view-card>
+</ng-container> -->
+
+<ng-container *ngIf="showDetailView">
+  <app-table-view-card
+    [title]="this.leases[0].title"
+    [imgSrc]="''"
+    [items]="[
+      { label: 'Tenant No', value: '98909897' },
+      { label: 'Period From', value: '28/02/24' },
+      { label: 'Period To', value: '28/02/25' },
+      { label: 'Unit Type', value: 'Residential' },
+      { label: 'Year Rent', value: '67,000' },
+      { label: 'Other Charges', value: '13,000' },
+      { label: 'VAT', value: '--' },
+      { label: 'Total Rent', value: '1,00,000' }
+    ]"
+    [showEdit]="true"
+    (edit)="handleEditClick()"
+    (back)="handleBackClick()"
+  >
+    <div rental class="other-charges-box mt-3">
+      <h6 class="section-title">OTHER CHARGES</h6>
+
+      <div class="charges-grid">
+        <div class="charge-item">
+          <label>Admin Fee <span>VAT &#64;5%</span></label>
+          <small>32.71 + 1.64</small>
+          <strong>34.35</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
+          <small>175.65 + 1.64</small>
+          <strong>175.65</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Gas Charges <span>VAT &#64;5%</span></label>
+          <small>1,000.00 + 50.00</small>
+          <strong>1,050.00</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Commission - Dubai <span>VAT &#64;5%</span></label>
+          <small>1,200.00 + 60.00</small>
+          <strong>1,260.00</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Security Deposit <span>VAT &#64;nill</span></label>
+          <small>2,400.00 + 0.00</small>
+          <strong>2,400.00</strong>
+        </div>
+      </div>
+
+      <div class="payment-info">
+        <div>
+          <label>Status</label>
+          <span class="paid">Paid</span>
+        </div>
+
+        <div>
+          <label>Payment Type</label>
+          <strong>Cheque</strong>
+        </div>
+
+        <div>
+          <label>Cheque Number</label>
+          <strong>6738398268291</strong>
+        </div>
+
+        <div>
+          <label>Total Amount</label>
+          <strong>11,260.00</strong>
+        </div>
+      </div>
+    </div>
+  </app-table-view-card>
+
+  <div class="cmmnTblOuter mt-3">
+    <div class="cmmnTblHdr">
+      <div class="row align-items-center">
+        <div class="col-md">
+          <app-table-title
+            title="Rent Trnsactions"
+            subtitle="(5)"
+          ></app-table-title>
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search placeholder="Search here..." />
+            <app-table-filter-btn
+              title="Filter"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
+              <app-filter-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              title="Export"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cmmnTblBody">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>
+                <button type="button">Bank Name</button>
+              </th>
+              <th>
+                <button type="button">Bank Account</button>
+              </th>
+              <th>Cheque Number</th>
+              <th>Cheque Date</th>
+              <th>Payment Type</th>
+              <th>Purpose</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- @for(property of pmcList[0]?.properties_assigned; track $index){
+            <tr>
+              <td>{{ property?.property_code || "N/A" }}</td>
+              <td>
+                <app-table-img-item
+                  [img]="
+                    property?.property_images?.[0]?.data ||
+                    '../../assets/property/property-img-default.svg'
+                  "
+                  size="md"
+                  [title]="property?.property_name"
+                />
+              </td>
+              <td>
+                @if(property?.tennat && property?.tennat?.name){
+                <app-table-img-item
+                  [img]="
+                    property?.tennat?.profile_image ||
+                    '../../assets/userDefaultProImg.png'
+                  "
+                  [title]="property?.tennat?.name"
+                />
+                }@else {N/A}
+              </td>
+              <td>{{ property.tenancy_status }}</td>
+              <td>{{ property.dimension }}</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn
+                    type="download"
+                    (clicked)="handleDownloadDocumentClick()"
+                  />
+                  <app-table-action-btn
+                    type="preview"
+                    (clicked)="handlePreviewDocumentClick()"
+                  />
+                </div>
+              </td>
+            </tr>
+            } -->
+          </tbody>
+
+          <tbody>
+            <tr>
+              <td>CHQ-AX104</td>
+              <td>EIB</td>
+              <td>20394857</td>
+              <td>928374</td>
+              <td>10/10/2024</td>
+              <td>Cheque</td>
+              <td>Rent</td>
+
+              <td>
+                <div class="status-track">
+                  <div class="status-step done">
+                    <span class="dot"></span>
+                    <span class="text">Disburse</span>
+                  </div>
+
+                  <span class="status-line done"></span>
+
+                  <div class="status-step done">
+                    <span class="dot"></span>
+                    <span class="text">Credited</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>9,000</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>CHQ-AX105</td>
+              <td>EIB</td>
+              <td>89475639</td>
+              <td>857493</td>
+              <td>11/01/2024</td>
+              <td>Cheque</td>
+              <td>Rent</td>
+
+              <td>
+                <div class="status-track">
+                  <div class="status-step done">
+                    <span class="dot"></span>
+                    <span class="text">Disburse</span>
+                  </div>
+
+                  <span class="status-line done"></span>
+
+                  <div class="status-step done">
+                    <span class="dot"></span>
+                    <span class="text">Credited</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>9,000</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>--</td>
+              <td>EIB</td>
+              <td>39576849</td>
+              <td>746382</td>
+              <td>11/15/2024</td>
+              <td>Cheque</td>
+              <td>Rent</td>
+              <td>
+                <div class="status-track">
+                  <div class="status-step done">
+                    <span class="dot"></span>
+                    <span class="text">Disburse</span>
+                  </div>
+
+                  <span class="status-line done"></span>
+
+                  <div class="status-step danger">
+                    <span class="dot"></span>
+                    <span class="text">InProgress</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>9,000</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>--</td>
+              <td>EIB</td>
+              <td>94837659</td>
+              <td>635271</td>
+              <td>12/01/2024</td>
+              <td>Cheque</td>
+              <td>Other Charges</td>
+
+              <td>
+                <div class="status-track">
+                  <div class="status-step done">
+                    <span class="dot"></span>
+                    <span class="text">Disburse</span>
+                  </div>
+
+                  <span class="status-line done"></span>
+
+                  <div class="status-step danger">
+                    <span class="dot"></span>
+                    <span class="text">Bounce</span>
+                    <a class="replace-link">Replace Cheque</a>
+                  </div>
+                </div>
+              </td>
+
+              <td>9,000</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>CHQ-AX109</td>
+              <td>EIB</td>
+              <td>69304857</td>
+              <td>524160</td>
+              <td>12/15/2024</td>
+              <td>Cheque</td>
+              <td>Rent</td>
+              <td>
+                <div class="status-track">
+                  <div class="status-step done">
+                    <span class="dot"></span>
+                    <span class="text">Disburse</span>
+                  </div>
+
+                  <span class="status-line done"></span>
+
+                  <div class="status-step done">
+                    <span class="dot"></span>
+                    <span class="text">Credited</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>9,000</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+      >
+      </app-table-select>
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+      >
+      </app-table-pagination>
+    </div>
+  </div>
+</ng-container>

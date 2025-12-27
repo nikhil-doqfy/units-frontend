@@ -17,9 +17,7 @@ export class OwnerService {
   // ------------------------- getOwnerDetails -------------------------
   getOwnerDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/owner/details/list/view/${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/company/owners${queryString}`);
   }
 
   // ------------------------- addOwnerToInvite -------------------------

@@ -47,17 +47,17 @@
           <tbody>
             @for (pmc of pmcList; track $index){
             <tr>
-              <td>{{ pmc?.code || "N/A" }}</td>
+              <td>{{ pmc?.compnay_code || "N/A" }}</td>
               <td>{{ pmc?.property_handling || "N/A" }}</td>
               <td>
                 <app-table-img-item
-                  [title]="pmc?.pmc_name || 'N/A'"
+                  [title]="pmc?.company_name || 'N/A'"
                   [clickable]="true"
                   (clicked)="handleViewClick(pmc?.id)"
                 />
               </td>
               <td>{{ pmc?.tenancy_ratio || "N/A" }}</td>
-              <td>{{ pmc?.address || "N/A" }}</td>
+              <td>{{ pmc?.company_address || "N/A" }}</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <!-- <app-table-action-btn

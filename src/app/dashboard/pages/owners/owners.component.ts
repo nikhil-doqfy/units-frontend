@@ -178,7 +178,9 @@ export class OwnersComponent {
         next: (resp: any) => {
           this.owners = (resp?.content ?? []).map((o: any) => {
             const images =
-              o.properties?.flatMap((p: any) => p.images || [0]) || [];
+              o.properties?.flatMap((p: any) =>
+                p?.image?.data ? [p.image.data] : []
+              ) || [];
 
             return {
               ...o,

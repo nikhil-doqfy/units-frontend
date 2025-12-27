@@ -1,8 +1,17 @@
-import { Component, Input, Output, EventEmitter, ContentChildren, QueryList, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ContentChildren,
+  QueryList,
+  ElementRef,
+  ContentChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { BackIconComponent } from "../icons/back-icon/back-icon.component";
-import { EditIconComponent } from "../../../user/component/icons/edit-icon/edit-icon.component";
+import { BackIconComponent } from '../icons/back-icon/back-icon.component';
+import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
 import { TableActionButtonComponent } from '../table-action-btn/table-action-btn.component';
 
 @Component({
@@ -10,7 +19,7 @@ import { TableActionButtonComponent } from '../table-action-btn/table-action-btn
   standalone: true,
   imports: [CommonModule, BackIconComponent, EditIconComponent],
   templateUrl: './table-view-card.component.html',
-  styleUrls: ['./table-view-card.component.css']
+  styleUrls: ['./table-view-card.component.css'],
 })
 export class TableViewCardComponent {
   @Input() title!: string;
@@ -21,12 +30,21 @@ export class TableViewCardComponent {
 
   @Output() edit = new EventEmitter<void>();
   @Output() back = new EventEmitter<void>();
-
-  @ContentChildren(TableActionButtonComponent) projectedButtons!: QueryList<TableActionButtonComponent>;
+  @ContentChildren(TableActionButtonComponent)
+  projectedButtons!: QueryList<TableActionButtonComponent>;
   hasProjectedContent = false;
+  @ContentChild('[rental]', { static: false }) rentalContent!: any;
+
+  @ContentChild('extraSection', { read: ElementRef })
+  extraSection!: ElementRef;
+
+  hasExtraSection = false;
 
   ngAfterContentInit() {
     this.hasProjectedContent = this.projectedButtons.length > 0;
+    return !!this.rentalContent;
+
+    console.log('Projected rental content:', this.rentalContent);
   }
 
   get titleInitial(): string {
@@ -39,5 +57,20 @@ export class TableViewCardComponent {
 
   onBackClick() {
     this.back.emit();
+  }
+  showMenu = false;
+
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
+
+  onRenew() {
+    this.showMenu = false;
+    console.log('Renew Rental clicked');
+  }
+
+  onTerminate() {
+    this.showMenu = false;
+    console.log('Terminate Rental clicked');
   }
 }

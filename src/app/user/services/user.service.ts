@@ -25,7 +25,7 @@ export class UserService {
   accessUserManagement(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/user/user/management${queryString}`
+      `${this.SERVER_ADDRESS}/user/management${queryString}`
     );
   }
 

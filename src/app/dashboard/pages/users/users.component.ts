@@ -182,7 +182,7 @@ export class UsersComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.users = resp?.content?.data;
+          this.users = resp?.content ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
@@ -287,33 +287,36 @@ export class UsersComponent {
   // ------------------------- Access user type  -------------------------
 
   getOptionTypes(options: string[]) {
+    console.log('Option types sending:', options);
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.userTypeList = response?.content?.user_types;
+          this.userTypeList = response?.content?.user_role ?? [];
         },
       });
   }
 
   handleFilterClick(): void {
+    this.getOptionTypes(['USER_ROLE']);
     console.log('Filter button clicked');
-    this.getOptionTypes(['USER_TYPES']);
   }
 
   onOptionSelectedUserType(option: any) {
+    console.log('OPTION FROM SELECT:', option);
     this.selectedUserType = option;
 
     if (option && option.value) {
-      this.userData['user_type'] = option.key;
+      this.userData['role'] = option.key;
     } else {
-      delete this.userData['user_type'];
+      delete this.userData['role'];
     }
   }
 
   // ------------ apply form headers filter  ------------
   applyFilter() {
+    console.log(this.userData);
     this.currentPage = 1;
     this.getUser();
   }

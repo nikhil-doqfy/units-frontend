@@ -68,6 +68,8 @@
                   <i><app-sorting-icon /></i>
                 </button>
               </th>
+              <th>{{ "EJARI_CERTIFICATE" | translate }}</th>
+
               <th>{{ "RENTAL_AGREEMENT" | translate }}</th>
               <th width="200"></th>
             </tr>
@@ -78,17 +80,17 @@
               <td>
                 <app-table-img-item
                   [img]="
-                    tenant?.profile_image ||
+                    tenant?.tenant_profile_image ||
                     '../../../../assets/userDefaultProImg.png'
                   "
-                  [title]="tenant?.full_name"
+                  [title]="tenant?.tenant_name"
                   [clickable]="true"
                   (clicked)="handleViewClick(tenant.lease_id)"
                 />
               </td>
 
               <td>{{ tenant?.tenant_number }}</td>
-              <td>{{ tenant.mobile_number | maskPhone }}</td>
+              <td>{{ tenant.contact_number | maskPhone }}</td>
 
               <td>
                 <app-table-img-item
@@ -96,6 +98,16 @@
                   size="md"
                   [title]="tenant.property_assigned ?? 'N/A'"
                 />
+              </td>
+              <td>
+                <app-document-type-item
+                  title="Lease_001.pdf"
+                  subtitle="1.2 MB"
+                  (clicked)="handleViewPdf(tenant.lease_id)"
+                />
+                <ng-template #waitingDoc>
+                  <span class="waiting-text">Waiting for document</span>
+                </ng-template>
               </td>
               <td>
                 <app-document-type-item

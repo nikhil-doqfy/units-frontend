@@ -13,12 +13,16 @@
     "APPROVAL": "Approvals",
     "STAFF": "Staff",
     "USERS": "Users",
+
+    "ADD": "Add",
     "ROLES_PERMISSIONS": "Roles & Permissions",
     "DOCUMENTATIONS": "Documentations",
     "PAYMENTS_INVOICE": "Payments & Invoice",
     "PAY_MY_DUES": "Pay my Dues",
     "RAISE_COMPLAINT": "Raise Complaint",
-    "PRIVACY_POLICY": "Privacy Policy"
+    "PRIVACY_POLICY": "Privacy Policy",
+    "RENTAL_AMOUNT": "Rental Amount",
+    "RENTAL": "Rental"
   },
   "ADD_PROPERTY": "Add Property",
   "NEW_LEASE": "New Lease",
@@ -29,6 +33,7 @@
   "CANCEL": "Cancel",
   "SEARCH_HERE": "Search here...",
   "MENU": "Menu",
+
   "DASHBOARD": "Dashboard",
   "SEND_INVITATION": "Send Invitation",
   "PROPERTIES": "Properties",
@@ -240,6 +245,7 @@
   "SQ-FT": "Sq-ft",
   "ADD_TENANT": "Add Tenant",
   "EXPORT": "Export",
+  "EJARI_CERTIFICATE": "Ejari Certificate",
   "FIRST_PARTY_DETAILS": "a has its registered office at Bangalore (hereinafter referred to as the “FIRST PARTY”, which expression shall,  be deemed to mean and include its successors and permitted assigns).",
   "LAND_DM_NO(AFFECTION PLAN)": "Land DM No (Affection Plan)",
   "PARTY_DEFINITION": "“FIRST PARTY” and “SECOND PARTY” are hereinafter referred to individually as a “Party” and collectively as the “Parties”.",

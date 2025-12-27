@@ -27,6 +27,7 @@ import { RaiseComplaintIconComponent } from '../component/icons/raise-complaint-
 import { PrivacyPolicyIconComponent } from '../component/icons/privacy-policy-icon/privacy-policy-icon.component';
 import { SidebarSupportComponent } from './sidebar-support/sidebar-support.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RentalIconComponent } from '../component/icons/rental-icon/rental-icon.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -53,6 +54,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     PrivacyPolicyIconComponent,
     SidebarSupportComponent,
     TranslateModule,
+    RentalIconComponent,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
