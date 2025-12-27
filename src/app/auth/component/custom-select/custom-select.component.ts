@@ -31,9 +31,8 @@ export class CustomSelectComponent implements OnInit {
   @Input() placeholder: string = '--select--';
   @Output() optionSelected = new EventEmitter<string>();
 
-  selectedOption: string | null = null;
+  @Input() selectedOption: string | null = null;
   isDropdownOpen = false;
-
   private destroyRef = inject(DestroyRef);
 
   constructor(private dropdownService: CustomSelectService) {}

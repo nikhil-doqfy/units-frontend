@@ -111,7 +111,7 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.OWNERS' },
       },
       {
-        path: 'owners/detail/:id',
+        path: 'owners/detail/:owner_id',
         component: OwnersComponent,
         data: { titleKey: 'PAGE_TITLE.OWNERS' },
       },
@@ -131,7 +131,7 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.STAFF' },
       },
       {
-        path: 'staff/detail/:id',
+        path: 'staff/detail/:staff_id',
         component: StaffComponent,
         data: { titleKey: 'PAGE_TITLE.STAFF' },
       },

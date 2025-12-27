@@ -1,18 +1,34 @@
-<div class="customSelect" [class.customSelectFilter]="isFilter" [class.customSelectSmall]="isSmall"
-    [class.show]="isDropdownOpen" (click)="toggleDropdown()">
-    <div class="customSelectInput">
-        <span *ngIf="!selectedOption" class="customSelectPlaceholder" [innerHTML]="placeholder">{{ placeholder}}</span>
-        <span *ngIf="selectedOption">{{ selectedOption }}</span>
-        <i *ngIf="!isDropdownOpen">
-            <app-arrow-down-icon />
-        </i>
-        <i *ngIf="isDropdownOpen">
-            <app-arrow-up-icon />
-        </i>
-    </div>
-    <ul *ngIf="isDropdownOpen" class="customSelectDropdown">
-        <li *ngFor="let option of options" (click)="selectOption(option)" [class.active]="option === selectedOption">
-            {{ option }}
-        </li>
-    </ul>
+<div
+  class="customSelect"
+  [class.customSelectFilter]="isFilter"
+  [class.customSelectSmall]="isSmall"
+  [class.show]="isDropdownOpen"
+  (click)="toggleDropdown()"
+>
+  <div class="customSelectInput">
+    <span
+      *ngIf="!selectedOption"
+      class="customSelectPlaceholder"
+      [innerHTML]="placeholder"
+      >{{ placeholder }}</span
+    >
+    <span *ngIf="selectedOption">{{
+      selectedOption ? selectedOption : "Select"
+    }}</span>
+    <i *ngIf="!isDropdownOpen">
+      <app-arrow-down-icon />
+    </i>
+    <i *ngIf="isDropdownOpen">
+      <app-arrow-up-icon />
+    </i>
+  </div>
+  <ul *ngIf="isDropdownOpen" class="customSelectDropdown">
+    <li
+      *ngFor="let option of options"
+      (click)="selectOption(option)"
+      [class.active]="option === selectedOption"
+    >
+      {{ option }}
+    </li>
+  </ul>
 </div>

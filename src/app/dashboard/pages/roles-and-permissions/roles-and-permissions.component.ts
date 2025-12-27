@@ -26,6 +26,8 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RoleAndPermissionsService } from '../../../services/role-and-permissions.service';
 
 @Component({
   selector: 'app-roles-and-permissions',
@@ -60,7 +62,18 @@ export class RolesAndPermissionsComponent {
   showDetailView: boolean = false;
   closeResult: WritableSignal<string> = signal('');
 
-  constructor(private router: Router) {
+  roles: any[] = [];
+  tableLoading = false;
+  currentPage = 1;
+  pageSize = 10;
+  constructor(
+    private router: Router,
+    private roleService: RoleAndPermissionsService,
+    private fb: FormBuilder
+  ) {
+    this.roleForm = this.fb.group({
+      name: ['', Validators.required],
+    });
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
@@ -69,6 +82,8 @@ export class RolesAndPermissionsComponent {
     this.loadBreadcrumb();
     this.initLanguageListener();
     this.sharedService.initLanguage();
+
+    this.fetchRoles();
   }
 
   initLanguageListener() {
@@ -91,6 +106,49 @@ export class RolesAndPermissionsComponent {
     this.sharedService
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
+  }
+
+  roleForm: FormGroup;
+  isLoading = false;
+  successMessage = '';
+  errorMessage = '';
+
+  createRole() {
+    if (this.roleForm.invalid) return;
+
+    this.isLoading = true;
+    this.roleService.createRole(this.roleForm.value).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.successMessage = 'Role created successfully!';
+        this.modalService.dismissAll(); // Close modal
+
+        this.fetchRoles();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err?.error?.message || 'Failed to create role.';
+      },
+    });
+  }
+
+  fetchRoles(): void {
+    this.tableLoading = true;
+
+    this.roleService
+      .getRoles({
+        page: this.currentPage,
+        limit: this.pageSize,
+      })
+      .subscribe({
+        next: (res) => {
+          this.roles = res?.content || []; // ✅ ONLY content
+          this.tableLoading = false;
+        },
+        error: () => {
+          this.tableLoading = false;
+        },
+      });
   }
 
   openAddRoleModal(addRoleContent: TemplateRef<any>) {

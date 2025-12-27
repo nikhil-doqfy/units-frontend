@@ -107,13 +107,13 @@
                   img="../../../../assets/user/user-1.png"
                   [title]="staff.staff_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick(staff.id)"
+                  (clicked)="handleViewClick(staff.staff_id)"
                 >
                 </app-table-img-item>
               </td>
 
               <td>{{ staff.staff_id }}</td>
-              <td>{{ staff.phone_number | maskPhone }}</td>
+              <td>{{ staff.contact_number | maskPhone }}</td>
 
               <td>
                 <app-table-multi-img-item
@@ -130,8 +130,10 @@
                 </app-table-multi-img-item>
               </td>
 
-              <td>{{ staff.tanancy_ration || "_" }}</td>
-              <td>{{ staff.staff_role?.name }}</td>
+              <td>{{ staff.tenancy_ratio || "_" }}</td>
+              <td>
+                {{ staff.roles?.length ? staff.roles.join(", ") : "_" }}
+              </td>
 
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
@@ -194,7 +196,7 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-add-staff-form />
+    <app-add-staff-form #AddStaffFormComponent [editData]="selectedStaff" />
   </div>
   <div class="modal-footer">
     <button
@@ -205,10 +207,11 @@
       {{ "CANCEL" | translate }}
     </button>
     <button
-      type="button"
+      type="submit"
       class="btn btnCommon"
-      (click)="modal.close('Save click')"
+      (click)="onUserSave(AddStaffFormComponent, modal)"
     >
+      <!-- (click)="modal.close('Save click')" -->
       {{ "SUBMIT_DETAILS" | translate }}
     </button>
   </div>
@@ -219,15 +222,20 @@
     [title]="selectedStaff.staff_name"
     [imgSrc]="'../../../assets/user/user-2.png'"
     [items]="[
-      { label: 'Email', value: selectedStaff.user_email },
-      { label: 'Phone Number', value: selectedStaff.phone_number },
-      { label: 'Emirates ID', value: selectedStaff.emirates_id },
+      { label: 'Email', value: selectedStaff.email },
+      { label: 'Phone Number', value: selectedStaff.contact_number },
+      { label: 'Emirates ID', value: selectedStaff.emirate_id },
       { label: 'City', value: selectedStaff.city },
       { label: 'Locality', value: selectedStaff.locality },
       { label: 'Postal Code', value: selectedStaff.postal_code },
-      { label: 'Address Line 1', value: selectedStaff.address_line_1 },
-      { label: 'Address Line 2', value: selectedStaff.address_line_2 },
-      { label: 'Staff Role', value: selectedStaff.staff_role?.name },
+      { label: 'Address Line 1', value: selectedStaff.address },
+      { label: 'Address Line 2', value: selectedStaff.additional_address },
+      {
+        label: 'Staff Role',
+        value: selectedStaff.roles?.length
+          ? selectedStaff.roles.join(', ')
+          : 'N/A'
+      },
       {
         label: 'Assigned Property',
         value:
@@ -293,8 +301,64 @@
               <th width="200">Document</th>
             </tr>
           </thead>
+
           <tbody>
+            @for (property of assignedProperties; track $index) {
             <tr>
+              <!-- Property Code -->
+              <td>{{ property.property_code || "_" }}</td>
+
+              <!-- Property Name + Image -->
+              <td>
+                <app-table-img-item
+                  [img]="
+                    property.property_image?.data ||
+                    'assets/property/property-list-1.png'
+                  "
+                  size="md"
+                  [title]="property.property_name"
+                />
+              </td>
+
+              <!-- Tenant Name -->
+              <td>
+                {{ property.tenant_name || "N/A" }}
+              </td>
+
+              <!-- Assigned Staff -->
+              <td>
+                {{ selectedStaff?.staff_name || "_" }}
+              </td>
+
+              <!-- Owner Name -->
+              <td>
+                {{ property.owner_name || "N/A" }}
+              </td>
+
+              <!-- Document Actions -->
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn
+                    type="download"
+                    (clicked)="handleDownloadDocumentClick()"
+                  />
+                  <app-table-action-btn
+                    type="preview"
+                    (clicked)="handlePreviewDocumentClick()"
+                  />
+                </div>
+              </td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="6" align="center">No Properties Assigned</td>
+            </tr>
+            }
+          </tbody>
+
+          <!-- <tbody>
+            <tr>
+              @for (property of assignedProperties; track $index) {
               <td>LP9021</td>
               <td>
                 <app-table-img-item
@@ -439,9 +503,19 @@
                 </div>
               </td>
             </tr>
+            } @empty {
+            <tr>
+              <td colspan="6" align="center">No Properties Assigned</td>
+            </tr>
+            }
           </tbody>
         </table>
       </div>
     </div>
   </div>
-</ng-container>
+</ng-container> -->
+        </table>
+      </div>
+    </div>
+  </div></ng-container
+>

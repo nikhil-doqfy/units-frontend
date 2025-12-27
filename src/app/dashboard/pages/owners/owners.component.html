@@ -66,7 +66,7 @@
                       : '../../../../assets/userDefaultProImg.png'
                   "
                   [clickable]="true"
-                  (clicked)="handleViewClick(owner.id)"
+                  (clicked)="handleViewClick(owner.owner_id)"
                   [title]="owner.first_name + '' + ' ' + owner.last_name"
                 />
               </td>
@@ -120,15 +120,15 @@
     [title]="selectedOwner.full_name"
     [imgSrc]="selectedOwner?.profile_image || ''"
     [headerItems]="[
-      { label: 'Contact', value: '+91-' + selectedOwner?.mobile_number },
+      { label: 'Contact', value: '+91-' + selectedOwner?.contact_number },
       { label: 'Email', value: selectedOwner.email }
     ]"
     [items]="[
       { label: 'Emirates ID', value: selectedOwner.emirate_id },
       { label: 'Residence Visa', value: selectedOwner.uae_residence_visa },
       { label: 'Trade License', value: selectedOwner.trade_license_number },
-      { label: 'Owner Code', value: selectedOwner.owner_number },
-      { label: 'Role', value: selectedOwner.user_type }
+      { label: 'Owner Code', value: selectedOwner.owner_code },
+      { label: 'Role', value: selectedOwner.role }
     ]"
     (back)="handleBackClick()"
   ></app-table-view-card>
@@ -139,7 +139,7 @@
         <div class="col-md">
           <app-table-title
             title="Owner Properties"
-            [subtitle]="'(' + selectedOwner?.properties.length + ')'"
+            [subtitle]="'(' + (selectedOwner?.properties?.length || 0) + ')'"
             (onRefresh)="refreshDetailsView()"
           ></app-table-title>
         </div>
@@ -232,7 +232,7 @@
             </tr>
           </thead>
           <tbody>
-            @for(property of selectedOwner?.properties; track $index){
+            @for(property of selectedOwner?.table; track $index){
             <tr>
               <td>{{ property?.property_code || "N/A" }}</td>
               <td>
@@ -282,6 +282,21 @@
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 </ng-container>

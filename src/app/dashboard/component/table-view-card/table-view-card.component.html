@@ -47,16 +47,6 @@
         >
           <i><app-back-icon /></i> Back
         </button>
-        <div class="threeDotWrap">
-          <button class="threeDotBtn" (click)="toggleMenu()">⋮</button>
-
-          <div class="threeDotDropdown" *ngIf="showMenu">
-            <button class="dropItem" (click)="onRenew()">Renew Rental</button>
-            <button class="dropItem danger" (click)="onTerminate()">
-              Terminate Rental
-            </button>
-          </div>
-        </div>
       </ng-template>
     </div>
   </div>
@@ -70,7 +60,7 @@
         </p>
       </li>
     </ul>
-    <div class="Zippy">
+    <div class="rentalActions">
       <ng-content select="[rental]"></ng-content>
     </div>
   </div>

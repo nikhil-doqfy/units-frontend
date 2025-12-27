@@ -19,6 +19,7 @@ import { ExportIconComponent } from '../../component/icons/export-icon/export-ic
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
 import { BreadCrumb } from '../../../shared/model/shared.model';
+import { RentalAccountService } from '../../rental-account.service';
 
 @Component({
   selector: 'app-rental',
@@ -82,60 +83,60 @@ export class RentalComponent {
   rowsPerPage = 10;
   currentPage = 1;
 
-  leases = [
-    {
-      title: 'Abhram | Khaleejia Building | 302',
-      leaseNo: 'LV-24-0908',
-      status: 'Active',
-      tenantNo: '98909897',
-      from: '28/02/24',
-      to: '28/02/25',
-      unitType: 'Residential',
-      yearRent: '67,000',
-      otherCharges: '13,000',
-      vat: '--',
-      total: '1,00,000',
-    },
-    {
-      title: 'Al Najah | Platinum Tower | 1201',
-      leaseNo: 'LK-24-1011',
-      status: 'Inactive',
-      tenantNo: '87654321',
-      from: '01/03/24',
-      to: '28/02/25',
-      unitType: 'Commercial',
-      yearRent: '83,000',
-      otherCharges: '17,000',
-      vat: '4,000 @ 5%',
-      total: '1,04,000',
-    },
-    {
-      title: 'Basil | Emerald Heights | 507',
-      leaseNo: 'LM-24-1112',
-      status: 'Active',
-      tenantNo: '23456789',
-      from: '15/01/24',
-      to: '14/01/25',
-      unitType: 'Mixed-Use',
-      yearRent: '75,000',
-      otherCharges: '10,000',
-      vat: '--',
-      total: '85,000',
-    },
-    {
-      title: 'Zara | Sapphire Tower | 805',
-      leaseNo: 'LN-24-2022',
-      status: 'Active',
-      tenantNo: '12345678',
-      from: '01/04/24',
-      to: '31/03/25',
-      unitType: 'Office',
-      yearRent: '90,000',
-      otherCharges: '15,000',
-      vat: '5,000',
-      total: '1,10,000',
-    },
-  ];
+  // leases = [
+  //   {
+  //     title: 'Abhram | Khaleejia Building | 302',
+  //     leaseNo: 'LV-24-0908',
+  //     status: 'Active',
+  //     tenantNo: '98909897',
+  //     from: '28/02/24',
+  //     to: '28/02/25',
+  //     unitType: 'Residential',
+  //     yearRent: '67,000',
+  //     otherCharges: '13,000',
+  //     vat: '--',
+  //     total: '1,00,000',
+  //   },
+  //   {
+  //     title: 'Al Najah | Platinum Tower | 1201',
+  //     leaseNo: 'LK-24-1011',
+  //     status: 'Inactive',
+  //     tenantNo: '87654321',
+  //     from: '01/03/24',
+  //     to: '28/02/25',
+  //     unitType: 'Commercial',
+  //     yearRent: '83,000',
+  //     otherCharges: '17,000',
+  //     vat: '4,000 @ 5%',
+  //     total: '1,04,000',
+  //   },
+  //   {
+  //     title: 'Basil | Emerald Heights | 507',
+  //     leaseNo: 'LM-24-1112',
+  //     status: 'Active',
+  //     tenantNo: '23456789',
+  //     from: '15/01/24',
+  //     to: '14/01/25',
+  //     unitType: 'Mixed-Use',
+  //     yearRent: '75,000',
+  //     otherCharges: '10,000',
+  //     vat: '--',
+  //     total: '85,000',
+  //   },
+  //   {
+  //     title: 'Zara | Sapphire Tower | 805',
+  //     leaseNo: 'LN-24-2022',
+  //     status: 'Active',
+  //     tenantNo: '12345678',
+  //     from: '01/04/24',
+  //     to: '31/03/25',
+  //     unitType: 'Office',
+  //     yearRent: '90,000',
+  //     otherCharges: '15,000',
+  //     vat: '5,000',
+  //     total: '1,10,000',
+  //   },
+  // ];
   chequeStatusList = [
     { status: 'Credited', amount: 9000 },
     { status: 'InProgress', amount: 9000 },
@@ -210,6 +211,7 @@ export class RentalComponent {
     this.initCurrentRoleListener();
     this.sharedService.initLanguage();
     this.initLanguageListener();
+    this.getLeases();
   }
 
   initCurrentRoleListener() {
@@ -241,6 +243,37 @@ export class RentalComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
+  private rentalAccountService = inject(RentalAccountService);
+
+  leases: any[] = [];
+
+  getLeases() {
+    const params = {
+      page: this.currentPage,
+      limit: this.rowsPerPage,
+      // search: this.searchText || '',
+    };
+
+    this.rentalAccountService.getOwnerRentAmounts(params).subscribe({
+      next: (res) => {
+        this.leases = res.content.map((item: any) => ({
+          title: `${item.property_name} - ${item.room_no}`,
+          leaseNo: item.lease_no,
+          status: item.lease_status,
+          tenantNo: item.tenant_no ?? '-',
+          // from: this.formatDate(item.period_from),
+          // to: this.formatDate(item.period_to),
+          unitType: item.unit_type,
+          yearRent: item.year_rent,
+          otherCharges: item.other_charges,
+          vat: item.vat,
+          total: item.total_rent,
+        }));
+
+        this.totalRecords = res.total_records ?? this.leases.length;
+      },
+    });
+  }
 
   onLeaseClick(lease: any) {
     this.selectedLease = lease;
@@ -251,7 +284,7 @@ export class RentalComponent {
     this.showMenu = !this.showMenu;
   }
   toAddRenatlAcc() {
-    this.router.navigate(['dashboard/add-rentalaccount']);
+    this.router.navigate(['/dashboard/add-rentalaccount']);
   }
 
   onMonthChange(month: string) {

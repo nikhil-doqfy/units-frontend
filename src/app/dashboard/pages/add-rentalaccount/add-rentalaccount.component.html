@@ -12,66 +12,96 @@
 </div>
 
 <div class="card">
-  <div class="form-grid">
-    <div class="photo-upload">
-      <div class="circle">
-        <i><app-upload-icon /></i>
+  <form [formGroup]="rentalForm">
+    <div class="form-grid">
+      <div class="photo-upload">
+        <div class="circle">
+          <i><app-upload-icon /></i>
+        </div>
+        <label>Tenant Photo <span>*</span></label>
+        <small>Max 5MB, PNG</small>
       </div>
-      <label>Tenant Photo <span>*</span></label>
-      <small>Max 5MB, PNG</small>
-    </div>
-
+      <!-- 
     <div>
       <label>Link Property <span>*</span></label>
-      <select>
-        <option>--Select--</option>
-      </select>
-    </div>
+      <app-custom-select> </app-custom-select>
+    </div> -->
 
-    <div>
-      <label>Tenant Name <span>*</span></label>
-      <select>
-        <option>--Select--</option>
-      </select>
-    </div>
+      <div class="mb-0">
+        <label for="assignedProperty" class="form-label"
+          >{{ "LEASE" | translate }}<span>*</span></label
+        >
+        <app-custom-select
+          [options]="assignedPropertyList"
+          key="key"
+          value="value"
+          placeholder="Select Property"
+          [selectedOption]="selectedAssignedProperty"
+          (optionSelected)="onAssignedPropertySelected($event)"
+          (click)="onLinkPropertyClick()"
+        >
+          <!-- (click)="handleFilterClick()" -->
+        </app-custom-select>
+      </div>
 
-    <div>
-      <label>Email Address <span>*</span></label>
-      <input type="email" placeholder="Enter email here" />
-    </div>
+      <div>
+        <label>Tenant Name <span>*</span></label>
+        <app-custom-select> </app-custom-select>
+      </div>
 
-    <div>
-      <label>Contact Number <span>*</span></label>
-      <div class="phone">
-        <select class="code">
-          <option>+91</option>
-        </select>
-        <input type="text" />
+      <div>
+        <label>Email Address <span>*</span></label>
+        <input
+          type="email"
+          placeholder="Enter email here"
+          formControlName="email"
+        />
+      </div>
+
+      <div>
+        <label>Contact Number <span>*</span></label>
+        <div class="phone">
+          <select class="code">
+            <option>+91</option>
+          </select>
+          <input type="text" />
+        </div>
+      </div>
+
+      <div>
+        <label>Period From <span>*</span></label>
+        <input type="date" />
+      </div>
+
+      <div>
+        <label>Period To <span>*</span></label>
+        <div class="datePicker">
+          <input
+            class="form-control"
+            placeholder="YYYY-MM-DD"
+            formControlName="startDate"
+          />
+          <button type="button">
+            <app-date-icon />
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label>Unit Type <span>*</span></label>
+        <app-custom-select> </app-custom-select>
+      </div>
+
+      <div>
+        <label>Rent <span>*</span></label>
+        <input
+          type="text"
+          placeholder="Enter Amount here"
+          formControlName="rent"
+        />
       </div>
     </div>
-
-    <div>
-      <label>Period From <span>*</span></label>
-      <input type="date" />
-    </div>
-
-    <div>
-      <label>Period To <span>*</span></label>
-      <input type="date" />
-    </div>
-
-    <div>
-      <label>Unit Type <span>*</span></label>
-      <select>
-        <option>--Select--</option>
-      </select>
-    </div>
-
-    <div>
-      <label>Rent <span>*</span></label>
-      <input type="text" placeholder="Enter Amount here" />
-    </div>
-  </div>
+  </form>
 </div>
 
 <div class="mb-3 d-xl-none">

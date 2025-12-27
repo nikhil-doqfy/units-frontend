@@ -1,6 +1,18 @@
 <app-modal-form-card>
   <form [formGroup]="pmcOwnerForm">
     <div class="mb-0">
+      <div class="col-md-6">
+        <label class="form-label"> {{ "PROPERTY_NAME" | translate }} * </label>
+
+        <app-custom-select
+          [options]="propertyList"
+          placeholder="Select Property"
+          key="key"
+          value="value"
+          [selectedOption]="selectedProperty"
+          (optionSelected)="onOptionSelectedPropertyUnit($event)"
+        ></app-custom-select>
+      </div>
       <label for="email" class="form-label">
         {{ "EMAIL_ADDRESS" | translate }}<span>*</span>
       </label>

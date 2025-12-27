@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
@@ -13,6 +13,11 @@ import { TablePaginationComponent } from '../../component/table-pagination/table
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
 import { Subscription } from 'rxjs';
 import { UploadIconComponent } from '../../component/icons/upload-icon/upload-icon.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { DateIconComponent } from '../../component/icons/date-icon/date-icon.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RentalAccountService } from '../../rental-account.service';
 
 @Component({
   selector: 'app-add-rentalaccount',
@@ -27,6 +32,9 @@ import { UploadIconComponent } from '../../component/icons/upload-icon/upload-ic
     TablePaginationComponent,
     TableFilterButtonComponent,
     UploadIconComponent,
+    CustomSelectComponent,
+    DateIconComponent,
+    ReactiveFormsModule, // ✅ MUST
   ],
   templateUrl: './add-rentalaccount.component.html',
   styleUrl: './add-rentalaccount.component.css',
@@ -59,6 +67,7 @@ export class AddRentalaccountComponent implements OnInit {
   leaseList: any;
   leaseStatus: any;
   selectedleasestatus: any;
+  private destroyRef = inject(DestroyRef);
 
   charges = [
     {
@@ -150,7 +159,40 @@ export class AddRentalaccountComponent implements OnInit {
       checked: false,
     },
   ];
+  private sharedApiService = inject(SharedApiService);
 
+  handleFilterClick(): void {
+    this.getOptionTypes(['RENTAL_ACCOUNT_LEASE']);
+    console.log('Filter button clicked');
+  }
+
+  getOptionTypes(options: string[]) {
+    // this.sharedApiService
+    //   .getOptions({ option_type: options.join(',') })
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe({
+    //     next: (response) => {
+    //       this.staffRole = response?.content?.role;
+    //       console.log('data', this.staffRole);
+    //       if (this.editData?.staff_role) {
+    //         this.selectedStaffRole = this.staffRole.find(
+    //           (r) => r.key === this.editData.staff_role.key
+    //         );
+    //       }
+    //     },
+    //   });
+  }
+
+  // onAssignedPropertySelected(option: any) {
+  // this.selectedAssignedProperty = option;
+  // if (option?.value) {
+  //   this.staffForm.patchValue({
+  //     assigned_property: option.value,
+  //   });
+  // } else {
+  //   this.staffForm.patchValue({ assigned_property: null });
+  // }
+  // }
   onEdit() {
     this.isEditMode = true;
   }
@@ -158,6 +200,7 @@ export class AddRentalaccountComponent implements OnInit {
   onSaveChanges() {
     this.sharedService.showDetails();
     console.log('Saved changes!');
+    this.router.navigate(['/dashboard/rental']);
   }
 
   openAddChargesModal(content: any) {
@@ -208,4 +251,69 @@ export class AddRentalaccountComponent implements OnInit {
   handleBackClick() {
     throw new Error('Method not implemented.');
   }
+
+  //------------------------------------------------------------rental add ---------------------------------------------------------------------------
+  private api = inject(SharedApiService);
+  private rentalAccountService = inject(RentalAccountService);
+  assignedPropertyList: any[] = [];
+  selectedAssignedProperty: any = null;
+
+  private fb = inject(FormBuilder);
+  rentalForm = this.fb.group({
+    tenantName: [''],
+    email: [''],
+    contactNumber: [''],
+    periodFrom: [''],
+    periodTo: [''],
+    unitType: [''],
+    rent: [''],
+  });
+  onLinkPropertyClick(): void {
+    this.api
+      .getOptions({ option_type: 'RENTAL_ACCOUNT_LEASE' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.assignedPropertyList = res?.content?.lease_data || [];
+        },
+        error: (err) => console.error(err),
+      });
+  }
+
+  private formatDate(timestamp: number): string {
+    if (!timestamp) return '';
+    return new Date(timestamp * 1000).toISOString().split('T')[0];
+  }
+
+  onAssignedPropertySelected(option: any): void {
+    this.selectedAssignedProperty = option;
+    if (!option?.key) return;
+
+    this.rentalAccountService
+      .getLeaseDetailsById(option.key)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          const lease = res?.content?.[0];
+          if (lease) {
+            this.mapLeaseDetails(lease);
+          }
+        },
+        error: (err) => console.error(err),
+      });
+  }
+
+  private mapLeaseDetails(lease: any): void {
+    this.rentalForm.patchValue({
+      tenantName: lease?.tenant?.first_name ?? '',
+      email: '',
+      contactNumber: '',
+      unitType: lease?.lease_property?.property_unit_name ?? '',
+      rent: lease?.rent ?? '',
+      periodFrom: this.formatDate(lease?.lease_start_date),
+      periodTo: this.formatDate(lease?.lease_end_date),
+    });
+  }
+  //     this.periodFrom = this.formatDate(data?.lease_start_date);
+  // this.periodTo = this.formatDate(data?.lease_end_date);
 }

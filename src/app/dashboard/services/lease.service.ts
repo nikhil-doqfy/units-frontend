@@ -16,9 +16,7 @@ export class LeaseService {
 
   getLeasePropertyDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/lease/property/view/${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/lease/tenancy${queryString}`);
   }
 
   getExcelFileOflease(params: any): Observable<Blob> {

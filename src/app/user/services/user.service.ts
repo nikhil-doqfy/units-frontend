@@ -31,19 +31,20 @@ export class UserService {
 
   // ------------------------- Add new user -------------------------
   addNewUser(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/user/user/management`, data);
+    console.log('Adding new user with data:', data);
+    return this.http.post(`${this.SERVER_ADDRESS}/user/management`, data);
   }
 
   // ------------------------- Edit new user -------------------------
   editUserManagement(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/user/user/management`, data);
+    return this.http.put(`${this.SERVER_ADDRESS}/user/management`, data);
   }
 
   // ------------------------- Delete user -------------------------
   DeleteUser(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.delete(
-      `${this.SERVER_ADDRESS}/user/user/management${queryString}`
+      `${this.SERVER_ADDRESS}/user/management${queryString}`
     );
   }
 
