@@ -94,6 +94,7 @@
   "OCCUPIED": "Occupied",
   "BOTH": "Both",
   "PROPERTY_NAME": "Property Name",
+  "PROPERTY_UNIT": "Property Unit",
   "PROPERTY_UNIT_NAME": "Property Unit Name",
   "TENANT_NAME": "Tenant Name",
   "AGREEMENT_EXPIRATION": "Agreement Expiration",

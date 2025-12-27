@@ -9,7 +9,6 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { PropertyFormService } from '../../services/property-form.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -24,23 +23,18 @@ import { StepEngine } from '../../model/step-engine/step-engine';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PropertyService } from '../../services/property.service';
 
-type UploadImageType =
-  | 'INTERIOR'
-  | 'EXTERIOR'
-  | 'FLOOR_PLAN_DOCUMENT'
-  | 'TENANT_DOCUMENT'
-  | 'EJARI_CERTIFICATE'
-  | 'PMC_DOCUMENT'
-  | 'CHEQUE_DOCUMENT';
-
 type FormKey = 'images' | 'documents';
+
+interface UplodTypeModal {
+  typeKey: string;
+  typeLabel: string;
+  formKey: FormKey;
+}
 
 interface UploadConfig {
   form: FormGroup;
   formKey: FormKey;
 }
-
-type UploadConfigRecord = Record<UploadImageType, UploadConfig>;
 
 @Component({
   selector: 'app-add-property',
@@ -77,6 +71,7 @@ export class AddPropertyComponent {
   propertyList: any[] = [];
   propertyType: any[] = [];
   PMC_List: any[] = [];
+  ownerList: any[] = [];
   country: any[] = [];
   state: any[] = [];
   city: any[] = [];
@@ -89,6 +84,10 @@ export class AddPropertyComponent {
   engine!: StepEngine;
   steps: StepSchema[] = [];
 
+  imageUploadTypes: UplodTypeModal[] = [];
+  documetUploadTypes: UplodTypeModal[] = [];
+  activeImageTab!: string;
+  activeDocTab!: string;
   uploadIdCounter = {
     images: 1,
     documents: 1,
@@ -111,20 +110,27 @@ export class AddPropertyComponent {
 
   ngOnInit() {
     let options: OptionsParams[] = [];
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
-        if (role === 'owner') {
-          options.push({
-            param: 'OWNER_COMPANY_USER',
-            key: 'company_user',
-            setter: (v) => {
-              this.PMC_List = v;
-            },
-          });
-        }
+    this.currentRole = this.themeService.getRole();
+
+    if (this.currentRole === 'owner') {
+      options.push({
+        param: 'OWNER_COMPANY_USER',
+        key: 'company_user',
+        setter: (v) => {
+          this.PMC_List = v;
+        },
       });
+    }
+
+    if (this.currentRole === 'property-manager') {
+      options.push({
+        param: 'OWNER_DETAILS',
+        key: 'owners',
+        setter: (v) => {
+          this.ownerList = v;
+        },
+      });
+    }
 
     options.push(
       {
@@ -147,10 +153,35 @@ export class AddPropertyComponent {
         setter: (v) => {
           this.country = v;
         },
+      },
+      {
+        param: 'PROPERTY_DOCUMENT_CHOICE',
+        key: 'Property_Document',
+        setter: (v) => {
+          this.documetUploadTypes = this.getProcessUploadTypes(v, 'documents');
+          this.activeDocTab = v[0]?.key;
+        },
+      },
+      {
+        param: 'PROPERTY_IMAGE_CHOICE',
+        key: 'Property_Image',
+        setter: (v) => {
+          this.imageUploadTypes = this.getProcessUploadTypes(v, 'images');
+          this.activeImageTab = v[0]?.key;
+        },
       }
     );
 
     this.getOptionsTypes(options);
+  }
+
+  getProcessUploadTypes(data: any, formKey: FormKey): UplodTypeModal[] {
+    const types = data.map((item: any) => ({
+      typeKey: item.key,
+      typeLabel: item.value,
+      formKey,
+    }));
+    return types;
   }
 
   getOptionsTypes(option: OptionsParams[]) {
@@ -207,47 +238,27 @@ export class AddPropertyComponent {
     this.router.navigate(['dashboard/properties']);
   }
 
-  getUploadConfig(type: UploadImageType): UploadConfig {
-    const uploadConfig: UploadConfigRecord = {
-      EXTERIOR: {
-        form: this.imagesForm,
-        formKey: 'images',
-      },
-      INTERIOR: {
-        form: this.imagesForm,
-        formKey: 'images',
-      },
+  getUploadConfig(type: string): UploadConfig {
+    const combineTypeModal: UplodTypeModal[] = [
+      ...this.imageUploadTypes,
+      ...this.documetUploadTypes,
+    ];
+    const cfg = combineTypeModal.find((modal) => modal.typeKey === type);
 
-      FLOOR_PLAN_DOCUMENT: {
-        form: this.documentationForm,
-        formKey: 'documents',
-      },
-      TENANT_DOCUMENT: {
-        form: this.documentationForm,
-        formKey: 'documents',
-      },
-      EJARI_CERTIFICATE: {
-        form: this.documentationForm,
-        formKey: 'documents',
-      },
-      PMC_DOCUMENT: {
-        form: this.documentationForm,
-        formKey: 'documents',
-      },
-      CHEQUE_DOCUMENT: {
-        form: this.documentationForm,
-        formKey: 'documents',
-      },
+    if (!cfg) throw new Error('Invalid Type');
+
+    return {
+      form:
+        cfg.formKey === 'documents' ? this.documentationForm : this.imagesForm,
+      formKey: cfg.formKey,
     };
-
-    return uploadConfig[type];
   }
 
-  onUpload(type: UploadImageType, event: UploadFileModel) {
+  onUpload(type: string, event: UploadFileModel) {
     this.handleUploadEvent(type, event);
   }
 
-  private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {
+  private handleUploadEvent(type: string, event: UploadFileModel) {
     const { form, formKey } = this.getUploadConfig(type);
     const items = [...(form.value[formKey] || [])];
 
@@ -272,7 +283,7 @@ export class AddPropertyComponent {
     form.patchValue({ [formKey]: items });
   }
 
-  remove(type: UploadImageType, item: any) {
+  remove(type: string, item: any) {
     if (item?.backendId) {
       this.removeItem(type, item?.backendId, true);
     } else {
@@ -280,7 +291,7 @@ export class AddPropertyComponent {
     }
   }
 
-  removeItem(type: UploadImageType, id: number, isBackend = false) {
+  removeItem(type: string, id: number, isBackend = false) {
     const cfg = this.getUploadConfig(type);
     const form = cfg.form;
     const key = cfg.formKey;
@@ -294,7 +305,7 @@ export class AddPropertyComponent {
     form.patchValue({ [key]: filtered });
   }
 
-  getItems(type: UploadImageType) {
+  getItems(type: string) {
     const cfg = this.getUploadConfig(type);
     const form = cfg.form;
     const key = cfg.formKey;

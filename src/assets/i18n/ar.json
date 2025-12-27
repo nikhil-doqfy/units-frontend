@@ -95,6 +95,7 @@
   "OCCUPIED": "مشغول",
   "BOTH": "كلاهما",
   "PROPERTY_NAME": "اسم العقار",
+  "PROPERTY_UNIT": "وحدة العقار",
   "PROPERTY_UNIT_NAME": "اسم الوحدة العقارية",
   "TENANT_NAME": "اسم المستأجر",
   "AGREEMENT_EXPIRATION": "انتهاء صلاحية الاتفاقية",

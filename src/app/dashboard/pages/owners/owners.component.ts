@@ -49,6 +49,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { InviteOwnerBtnComponent } from '../../component/invite-owner-btn/invite-owner-btn.component';
 
 @Component({
   selector: 'app-owners',
@@ -63,7 +64,6 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     TableFilterButtonComponent,
     FilterIconComponent,
     ExportIconComponent,
-    InviteIconComponent,
     TableActionButtonComponent,
     TableActionDropdownComponent,
     TablePaginationComponent,
@@ -76,6 +76,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     NoDataComponent,
     FilterPopupButtonComponent,
     CustomSelectComponent,
+    InviteOwnerBtnComponent,
   ],
   templateUrl: './owners.component.html',
   styleUrl: './owners.component.css',
@@ -255,30 +256,6 @@ export class OwnersComponent {
       default:
         return `with: ${reason}`;
     }
-  }
-
-  // ------------------------- Invited by PMC TO Owner -------------------------
-
-  sendInvite(
-    inviteFormRef: InviteOwnerFormComponent,
-    modal?: NgbActiveModal | any
-  ) {
-    const form = inviteFormRef.pmcOwnerForm;
-    if (form.invalid) {
-      form.markAllAsTouched();
-      return;
-    }
-
-    let payload = { email: form.value.email };
-    this.ownerService
-      .addOwnerToInvite(payload)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp: any) => {
-          this.alertService.success(resp.message);
-          modal?.close('Save click');
-        },
-      });
   }
 
   handleEditClick(): void {

@@ -463,6 +463,31 @@
         </form>
       </app-step-pane>
     </ng-container>
+
+    <ng-container *ngIf="currentRole === 'property-manager'">
+      <app-step-pane
+        [title]="'ADD_PMC' | translate"
+        [secondCard]="true"
+        [showInviteOwnerBtn]="true"
+      >
+        <form class="row g-3" [formGroup]="commercialsForm">
+          <div class="col-md-6">
+            <label class="form-label">{{ "OWNER" | translate }}</label>
+            <app-custom-select
+              [options]="ownerList"
+              key="key"
+              value="value"
+              formControlName="owner"
+            ></app-custom-select>
+            @if (isInvalid(commercialsForm, 'pmc').status) {
+            <small class="errorMsg">
+              {{ isInvalid(commercialsForm, "pmc").msg }}
+            </small>
+            }
+          </div>
+        </form>
+      </app-step-pane>
+    </ng-container>
   </ng-container>
 
   <!-- Step Property Images Content -->
@@ -473,82 +498,56 @@
     >
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="propertyImagesTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              id="exterior-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#exterior-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="exterior-tab-pane"
-              aria-selected="true"
-            >
-              {{ "EXTERIOR" | translate }}
-            </button>
-          </li>
+          @for (type of imageUploadTypes; track $index) {
           <li class="nav-item" role="presentation">
             <button
               class="nav-link"
-              id="interior-tab"
+              [class.active]="type.typeKey === activeImageTab"
+              [id]="type.typeKey + '-tab'"
               data-bs-toggle="tab"
-              data-bs-target="#interior-tab-pane"
+              [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
               type="button"
               role="tab"
-              aria-controls="interior-tab-pane"
-              aria-selected="false"
+              [attr.aria-controls]="type.typeKey + '-tab-pane'"
+              [attr.aria-selected]="type.typeKey === activeImageTab"
             >
-              {{ "INTERIOR" | translate }}
+              {{ type.typeLabel }}
             </button>
           </li>
+          }
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="propertyImagesTabContent">
+          @for (type of imageUploadTypes; track $index) {
           <div
-            class="tab-pane fade show active"
-            id="exterior-tab-pane"
+            [ngClass]="{
+              'tab-pane': true,
+              fade: true,
+              show: type.typeKey === activeImageTab,
+              active: type.typeKey === activeImageTab
+            }"
+            [id]="type.typeKey + '-tab-pane'"
             role="tabpanel"
-            aria-labelledby="exterior-tab"
-            tabindex="0"
+            [attr.aria-labelledby]="type.typeKey + '-tab'"
+            [tabindex]="$index"
           >
             <app-upload-document
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('EXTERIOR', $event)"
+              (uploadProgress)="onUpload(type.typeKey, $event)"
             ></app-upload-document>
 
-            <div class="uploads-list" *ngIf="getItems('EXTERIOR').length">
+            <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
               <app-file-upload-item
-                *ngFor="let image of getItems('EXTERIOR')"
+                *ngFor="let image of getItems(type.typeKey)"
                 [item]="image"
-                (remove)="remove('EXTERIOR', image)"
+                (remove)="remove(type.typeKey, image)"
               ></app-file-upload-item>
             </div>
           </div>
-          <div
-            class="tab-pane fade"
-            id="interior-tab-pane"
-            role="tabpanel"
-            aria-labelledby="interior-tab"
-            tabindex="0"
-          >
-            <app-upload-document
-              [isMultipleFiles]="true"
-              [fileTypes]="['jpg', 'jpeg', 'png']"
-              [maxSize]="20"
-              (uploadProgress)="onUpload('INTERIOR', $event)"
-            />
-
-            <div class="uploads-list" *ngIf="getItems('INTERIOR').length">
-              <app-file-upload-item
-                *ngFor="let image of getItems('INTERIOR')"
-                [item]="image"
-                (remove)="remove('INTERIOR', image)"
-              />
-            </div>
-          </div>
+          }
         </div>
       </div>
     </app-step-pane>
@@ -562,202 +561,56 @@
     >
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="documentsTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              id="propertyFloorPlan-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#propertyFloorPlan-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="propertyFloorPlan-tab-pane"
-              aria-selected="true"
-            >
-              {{ "PROPERTY_FLOOR_PLAN" | translate }}
-            </button>
-          </li>
+          @for (type of documetUploadTypes; track $index) {
           <li class="nav-item" role="presentation">
             <button
               class="nav-link"
-              id="tenantDoc-tab"
+              [class.active]="type.typeKey === activeDocTab"
+              [id]="type.typeKey + '-tab'"
               data-bs-toggle="tab"
-              data-bs-target="#tenantDoc-tab-pane"
+              [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
               type="button"
               role="tab"
-              aria-controls="tenantDoc-tab-pane"
-              aria-selected="false"
+              [attr.aria-controls]="type.typeKey + '-tab-pane'"
+              [attr.aria-selected]="type.typeKey === activeDocTab"
             >
-              {{ "TENANT_DOC" | translate }}
+              {{ type.typeLabel }}
             </button>
           </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="ejariCertificates-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#ejariCertificates-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="ejariCertificates-tab-pane"
-              aria-selected="false"
-            >
-              {{ "EJARI_CERTIFICATES" | translate }}
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="pmcDocs-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#pmcDocs-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="pmcDocs-tab-pane"
-              aria-selected="false"
-            >
-              {{ "PMC_DOCS" | translate }}
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="cheque-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#cheque-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="cheque-tab-pane"
-              aria-selected="false"
-            >
-              {{ "CHEQUES" | translate }}
-            </button>
-          </li>
+          }
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="documentsTabContent">
+          @for (type of documetUploadTypes; track $index) {
           <div
-            class="tab-pane fade show active"
-            id="propertyFloorPlan-tab-pane"
+            [ngClass]="{
+              'tab-pane': true,
+              fade: true,
+              show: type.typeKey === activeDocTab,
+              active: type.typeKey === activeDocTab
+            }"
+            [id]="type.typeKey + '-tab-pane'"
             role="tabpanel"
-            aria-labelledby="propertyFloorPlan-tab"
-            tabindex="0"
+            [attr.aria-labelledby]="type.typeKey + '-tab'"
+            [tabindex]="$index"
           >
             <app-upload-document
               [isMultipleFiles]="true"
               [fileTypes]="['jpg', 'jpeg', 'png']"
               [maxSize]="20"
-              (uploadProgress)="onUpload('FLOOR_PLAN_DOCUMENT', $event)"
+              (uploadProgress)="onUpload(type.typeKey, $event)"
             />
 
-            <div
-              class="uploads-list"
-              *ngIf="getItems('FLOOR_PLAN_DOCUMENT').length"
-            >
+            <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
               <app-file-upload-item
-                *ngFor="let image of getItems('FLOOR_PLAN_DOCUMENT')"
+                *ngFor="let image of getItems(type.typeKey)"
                 [item]="image"
-                (remove)="remove('FLOOR_PLAN_DOCUMENT', image)"
+                (remove)="remove(type.typeKey, image)"
               />
             </div>
           </div>
-          <div
-            class="tab-pane fade"
-            id="tenantDoc-tab-pane"
-            role="tabpanel"
-            aria-labelledby="tenantDoc-tab"
-            tabindex="0"
-          >
-            <app-upload-document
-              [isMultipleFiles]="true"
-              [fileTypes]="['jpg', 'jpeg', 'png']"
-              [maxSize]="20"
-              (uploadProgress)="onUpload('TENANT_DOCUMENT', $event)"
-            />
-
-            <div
-              class="uploads-list"
-              *ngIf="getItems('TENANT_DOCUMENT').length"
-            >
-              <app-file-upload-item
-                *ngFor="let image of getItems('TENANT_DOCUMENT')"
-                [item]="image"
-                (remove)="remove('TENANT_DOCUMENT', image)"
-              />
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="ejariCertificates-tab-pane"
-            role="tabpanel"
-            aria-labelledby="ejariCertificates-tab"
-            tabindex="0"
-          >
-            <app-upload-document
-              [isMultipleFiles]="true"
-              [fileTypes]="['jpg', 'jpeg', 'png']"
-              [maxSize]="20"
-              (uploadProgress)="onUpload('EJARI_CERTIFICATE', $event)"
-            />
-
-            <div
-              class="uploads-list"
-              *ngIf="getItems('EJARI_CERTIFICATE').length"
-            >
-              <app-file-upload-item
-                *ngFor="let image of getItems('EJARI_CERTIFICATE')"
-                [item]="image"
-                (remove)="remove('EJARI_CERTIFICATE', image)"
-              />
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="pmcDocs-tab-pane"
-            role="tabpanel"
-            aria-labelledby="pmcDocs-tab"
-            tabindex="0"
-          >
-            <app-upload-document
-              [isMultipleFiles]="true"
-              [fileTypes]="['jpg', 'jpeg', 'png']"
-              [maxSize]="20"
-              (uploadProgress)="onUpload('PMC_DOCUMENT', $event)"
-            />
-
-            <div class="uploads-list" *ngIf="getItems('PMC_DOCUMENT').length">
-              <app-file-upload-item
-                *ngFor="let image of getItems('PMC_DOCUMENT')"
-                [item]="image"
-                (remove)="remove('PMC_DOCUMENT', image)"
-              />
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="cheque-tab-pane"
-            role="tabpanel"
-            aria-labelledby="cheque-tab"
-            tabindex="0"
-          >
-            <app-upload-document
-              [isMultipleFiles]="true"
-              [fileTypes]="['jpg', 'jpeg', 'png']"
-              [maxSize]="20"
-              (uploadProgress)="onUpload('CHEQUE_DOCUMENT', $event)"
-            />
-
-            <div
-              class="uploads-list"
-              *ngIf="getItems('CHEQUE_DOCUMENT').length"
-            >
-              <app-file-upload-item
-                *ngFor="let image of getItems('CHEQUE_DOCUMENT')"
-                [item]="image"
-                (remove)="remove('CHEQUE_DOCUMENT', image)"
-              />
-            </div>
-          </div>
+          }
         </div>
       </div>
     </app-step-pane>

@@ -31,7 +31,7 @@ export class DocumentTypeItemComponent {
         return 'assets/pngIcon.png';
       case 'jpg':
       case 'jpeg':
-        return 'assets/jpgIcon.png';
+        return 'assets/pngIcon.png';
       default:
         return 'assets/fileIcon.png';
     }
