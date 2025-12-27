@@ -33,12 +33,19 @@ export class PropertyFormService {
 
   initPropertyBasicDetailsForm() {
     this.propertyBasicDetailsForm = this.formBuilder.group({
-      propertyName: ['', [Validators.required]],
+      property: ['', [Validators.required]],
+      propertyUnitName: ['', [Validators.required]],
       propertyType: ['', [Validators.required]],
       landArea: ['', [Validators.required]],
       landDMNo: ['', [Validators.required]],
       apartmentNo: ['', [Validators.required]],
-      address: ['', [Validators.required]],
+      country: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      locality: ['', [Validators.required]],
+      addressLine1: ['', [Validators.required]],
+      addressLine2: ['', [Validators.required]],
+      postalCode: ['', [Validators.required]],
       NoOfBedrooms: ['', [Validators.required]],
       areaOfProperty: ['', [Validators.required]],
       NoOfFloors: ['', [Validators.required]],
@@ -60,14 +67,15 @@ export class PropertyFormService {
       noticePeriod: ['', [Validators.required]],
       commission: ['', [Validators.required]],
       pmc: [''],
+      owner: [''],
     });
 
-    if (this.storageService.getUserRole() === 'owner') {
-      this.propertyCommercialsForm
-        .get('pmc')
-        ?.setValidators([Validators.required]);
-      this.propertyCommercialsForm.updateValueAndValidity();
-    }
+    // if (this.storageServigetPropertyce.getUserRole() === 'owner') {
+    //   this.propertyCommercialsForm
+    //     .get('pmc')
+    //     ?.setValidators([Validators.required]);
+    //   this.propertyCommercialsForm.updateValueAndValidity();
+    // }
   }
 
   initPropertyImagesForm() {
@@ -144,34 +152,34 @@ export class PropertyFormService {
 
   getBasicDetails(context: any) {
     return this.propertyService
-      .getBasicDetails({
-        property_id: context.formId,
+      .getProperty({
+        property_unit_id: context.formId,
       })
-      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
+      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_status)));
   }
 
   getCommercialDetails(context: any) {
     return this.propertyService
-      .getCommercialDetails({
-        property_id: context.formId,
+      .getProperty({
+        property_unit_id: context.formId,
       })
-      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
+      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_status)));
   }
 
   getImageDetails(context: any) {
     return this.propertyService
       .getPropertyImages({
-        property_id: context.formId,
+        property_unit_id: context.formId,
       })
-      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
+      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_status)));
   }
 
   getDocumentDetails(context: any) {
     return this.propertyService
       .getPropertyDocuments({
-        property_id: context.formId,
+        property_unit_id: context.formId,
       })
-      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_choice)));
+      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_status)));
   }
 
   saveBasicDetails(
@@ -180,25 +188,25 @@ export class PropertyFormService {
   ): Observable<any> {
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
-      payload['property_id'] = context.formId;
-      return this.propertyService.editBasicDetailsOfProperty(payload);
+      payload['property_unit_id'] = context.formId;
+      return this.propertyService.editProperty(payload);
     } else {
-      return this.propertyService.addBasicDetailsOfProperty(payload);
+      return this.propertyService.addProperty(payload);
     }
   }
 
   saveCommercialDetails(payload: Record<string, any>, context: any) {
-    payload['property_id'] = context.formId;
+    payload['property_unit_id'] = context.formId;
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
-      return this.propertyService.editCommercialDetailsOfProperty(payload);
+      return this.propertyService.editProperty(payload);
     } else {
-      return this.propertyService.addCommercialDetailsOfProperty(payload);
+      return this.propertyService.editProperty(payload);
     }
   }
 
   saveImagesDetails(payload: Record<string, any>, context: any) {
-    payload['property_id'] = context.formId;
+    payload['property_unit_id'] = context.formId;
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
       return this.propertyService.editPropertyImages(payload);
@@ -208,7 +216,7 @@ export class PropertyFormService {
   }
 
   saveDocumentsDetails(payload: Record<string, any>, context: any) {
-    payload['property_id'] = context.formId;
+    payload['property_unit_id'] = context.formId;
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
       return this.propertyService.editPropertyDocuments(payload);
@@ -220,13 +228,22 @@ export class PropertyFormService {
   patchBasicDetails(response: any) {
     const content: any = response.content;
     return {
-      propertyId: content.id,
-      propertyName: content.property_name,
-      propertyType: content.property_type,
+      property: {
+        key: content?.property?.id,
+        value: content?.property?.property_name,
+      },
+      propertyUnitName: content?.property_unit_name,
+      propertyType: content?.property?.property_type,
       landArea: content.land_area,
       landDMNo: content.land_dm_no,
       apartmentNo: content.apartment_no,
-      address: content.address,
+      country: content?.property?.country,
+      state: content?.property?.state,
+      city: content?.property?.city,
+      locality: content?.property?.locality,
+      addressLine1: content.address,
+      addressLine2: content?.property?.additional_address,
+      postalCode: content?.property?.postal_code,
       NoOfBedrooms: content.bedrooms,
       areaOfProperty: content.area_of_property,
       NoOfFloors: content.no_of_floors,
@@ -248,7 +265,8 @@ export class PropertyFormService {
       cycle: content.cycle,
       noticePeriod: content.notice_period,
       commission: content.commission_percent,
-      pmc: content?.pmc,
+      pmc: content?.compnay,
+      owner: content?.owner,
     };
   }
 
@@ -284,24 +302,33 @@ export class PropertyFormService {
 
   mapOutBasicDetails(value: any): Record<string, any> {
     const data: any = {
-      property_name: value.propertyName,
-      property_type: value.propertyType.key,
-      land_area: value.landArea,
+      property_unit_name: value.propertyUnitName,
       land_dm_no: value.landDMNo,
-      apartment_no: value.apartmentNo,
-      address: value.address,
-      bedrooms: value.NoOfBedrooms,
       area_of_property: value.areaOfProperty,
-      no_of_floors: value.NoOfFloors,
       no_of_parking: value.NoOfParking,
-      balcony: value.NoOfBalcony,
-      plot_no: value.plotNo,
       makani_no: value.makaniNo,
       dewa_no: value.dewaNo,
+      property_type: value.propertyType.key,
+      land_area: value.landArea,
+      apartment_no: value.apartmentNo,
+      bedrooms: value.NoOfBedrooms,
+      balcony: value.NoOfBalcony,
+      plot_no: value.plotNo,
+      area_unit: 'SQFT',
+      land_area_unit: 'SQFT',
       apartment_floor_no: '',
-      area_unit: 'Sq-ft',
-      land_area_unit: 'Sq-ft',
+      no_of_floors: value.NoOfFloors,
+      address: value.addressLine1,
     };
+    if (value.property?.isNew) {
+      data['parent_property_name'] = value.property.value;
+      data['additional_address'] = value.addressLine2;
+      data['locality'] = value.locality;
+      data['postal_code'] = value.postalCode;
+      data['city_id'] = value.city.key;
+    } else {
+      data['parent_property_id'] = value.property.key;
+    }
     return data;
   }
 
@@ -316,7 +343,9 @@ export class PropertyFormService {
       commission_percent: value.commission,
     };
     if (this.storageService.getUserRole() === 'owner') {
-      data['pmc_id'] = value.pmc.key;
+      data['company_id'] = value.pmc?.key;
+    } else if (this.storageService.getUserRole() === 'property-manager') {
+      data['owner_id'] = value.owner?.key;
     }
     return data;
   }
