@@ -24,7 +24,10 @@ import { BadgeComponent } from '../../component/badge/badge.component';
 import { ColumnChartComponent } from '../../component/charts/column/column.component';
 import { StackedColumnChartComponent } from '../../component/charts/stacked-column/stacked-column.component';
 import { GroupBarChartComponent } from '../../component/charts/group-bar/group-bar.component';
-import { ProgressBarTableComponent } from '../../component/progress-bar-table/progress-bar-table.component';
+import {
+  ProgressBarTableComponent,
+  ProgressRow,
+} from '../../component/progress-bar-table/progress-bar-table.component';
 import { ChequeStatusComponent } from '../../component/charts/cheque-status/cheque-status.component';
 import { DonutChartComponent } from '../../component/charts/donut/donut.component';
 import { LineChartComponent } from '../../component/charts/line/line.component';
@@ -34,6 +37,7 @@ import { HomeService } from '../../services/home.service';
 import { Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-home',
@@ -71,6 +75,7 @@ export class HomeComponent implements OnInit {
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
+  propertyData: ProgressRow[] = [];
   model: NgbDateStruct | null = null;
   currentLanguage = 'en';
   breadcrumbData = [
@@ -128,21 +133,49 @@ export class HomeComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         this.stats = res.content;
+        this.propertyData = res.content.top_properties.map(
+          ({ rank, name, occupancy_rate }: any) => ({
+            id: rank,
+            name,
+            value: occupancy_rate,
+          })
+        );
       });
   }
-  propertyData = [
-    { id: '01', name: 'Dubai Hills Golf Club', value: 45 },
-    { id: '02', name: 'Silicon Central Mall', value: 29 },
-    { id: '03', name: 'Falconcity', value: 18 },
-    { id: '04', name: 'Majan', value: 25 },
-  ];
+  // propertyData = [
+  //   { id: '01', name: 'Dubai Hills Golf Club', value: 45 },
+  //   { id: '02', name: 'Silicon Central Mall', value: 29 },
+  //   { id: '03', name: 'Falconcity', value: 18 },
+  //   { id: '04', name: 'Majan', value: 25 },
+  // ];
 
   selectedMonthly: string = 'Oct 2025';
   selectedFilter: string = '';
 
-  selectedOccupancy: string = 'Falcon city of wonders';
+  // selectedOccupancy: string = 'Falcon city of wonders';
   selectedChequesAging: string = 'All';
   selectedPropertiesOwned: string = 'Falcon city of wonders';
+  private sharedApiService = inject(SharedApiService);
+
+  occupancyOptions: any[] = [];
+  selectedOccupancy: any = 'All';
+  getOccupancyOptions() {
+    this.sharedApiService
+      .getOptions({ option_type: 'PARENT_PROPERTY' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.occupancyOptions = resp?.content?.property ?? [];
+          this.occupancyOptions.unshift({
+            key: 'ALL',
+            value: 'All',
+          });
+
+          this.selectedOccupancy = this.occupancyOptions[0];
+        },
+        error: (err) => console.error(err),
+      });
+  }
 
   onOptionSelectedMonthly(option: string) {
     this.selectedMonthly = option;

@@ -97,17 +97,21 @@
                           : '../../../../assets/userDefaultProImg.png'
                       "
                       [clickable]="true"
-                      (clicked)="
-                        handleViewClick(approval.id, approval.lease_id)
-                      "
-                      [title]="approval.tenant_name"
+                      (clicked)="handleViewClick(approval.tenant_id)"
+                      [title]="approval.name"
                     />
                   </td>
-                  <td>{{ approval.emirates_id }}</td>
+                  <td>
+                    {{ approval.emirates_id ? approval.emirates_id : "N/A" }}
+                  </td>
                   <td>
                     {{ approval?.date_request ? approval.date_request : "N/A" }}
                   </td>
-                  <td>{{ approval.mobile_number }}</td>
+                  <td>
+                    {{
+                      approval.contact_number ? approval.contact_number : "N/A"
+                    }}
+                  </td>
                   <td>{{ approval.email }}</td>
 
                   <!-- <td align="center">
@@ -335,14 +339,14 @@
 
 <ng-container *ngIf="showDetailView && selectedTenant">
   <app-table-view-card
-    [title]="selectedTenant?.full_name"
+    [title]="selectedTenant?.first_name + ' ' + selectedTenant?.last_name"
     [imgSrc]="selectedTenant?.profile_image"
     [headerItems]="[
-      { label: 'Contact', value: selectedTenant?.mobile_number },
+      { label: 'Contact', value: selectedTenant?.contact_number },
       { label: 'Email', value: selectedTenant?.email }
     ]"
     [items]="[
-      { label: 'Emirates ID:', value: selectedTenant?.emirates_id },
+      { label: 'Emirates ID:', value: selectedTenant?.emirate_id },
       { label: 'Nationality', value: selectedTenant?.nationality },
       { label: 'Tenant No', value: selectedTenant?.tenant_number },
       { label: 'Passport Self', value: selectedTenant?.passport_self || '--' },

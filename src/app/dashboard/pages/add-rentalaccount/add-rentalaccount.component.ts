@@ -333,6 +333,4 @@ export class AddRentalaccountComponent implements OnInit {
       periodTo: this.formatDate(lease?.lease_end_date),
     });
   }
-  //     this.periodFrom = this.formatDate(data?.lease_start_date);
-  // this.periodTo = this.formatDate(data?.lease_end_date);
 }

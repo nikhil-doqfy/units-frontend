@@ -222,6 +222,33 @@ export class PMCComponent {
       });
   }
 
+  handleInternalTableExport(): void {
+    if (!this.showDetailView) return;
+
+    const payload = {
+      company_id: this.route.snapshot.paramMap.get('id'),
+      // Add filters if needed
+    };
+
+    this.pmcService
+      .getExcelFileOfPmc(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `assigned_properties_export.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('Internal table exported successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
+        },
+      });
+  }
+
   openAssignPropertyModal(assignPropertyContent: TemplateRef<any>) {
     this.modalService
       .open(assignPropertyContent, {
@@ -314,7 +341,7 @@ export class PMCComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.pmcList = [resp?.content?.company_profile];
+          // this.pmcList = [resp?.content?.company_profile];
           this.assignedProperties = resp?.content?.properties || [];
           this.totalRecords = resp?.pagination?.total_records || 0;
         },

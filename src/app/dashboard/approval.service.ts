@@ -15,7 +15,7 @@ export class ApprovalService {
   getApprovalList(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/pmc/approval/list${queryString}`
+      `${this.SERVER_ADDRESS}/tenants_Approved_Rejected${queryString}`
     );
   }
 

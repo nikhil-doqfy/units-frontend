@@ -22,7 +22,7 @@ export class LeaseService {
   getExcelFileOflease(params: any): Observable<Blob> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/export/lease/tenecy/csv${queryString}`,
+      `${this.SERVER_ADDRESS}/lease_tenancy_csv${queryString}`,
       {
         responseType: 'blob',
       }

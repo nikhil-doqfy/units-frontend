@@ -185,6 +185,31 @@ export class StaffComponent {
       });
   }
 
+  handleInternalTableExport(): void {
+    if (!this.showDetailView) return;
+
+    const payload = {
+      staff_id: this.selectedStaff.staff_id,
+    };
+
+    this.staffService
+      .getExcelFileOfStaff(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `assigned_properties_export.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('Internal table exported successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
+        },
+      });
+  }
   handleFilterClick(): void {
     console.log('Filter button clicked');
   }

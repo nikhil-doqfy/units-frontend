@@ -212,25 +212,6 @@
   </app-white-card>
 </div>
 
-<!-- <ng-container *ngIf="showDetailView">
-  <app-table-view-card
-    [title]="this.leases[0].title"
-    [imgSrc]="''"
-    [items]="[
-      { label: 'Tenant No', value: selectedLease?.tenantNo },
-      { label: 'Period From', value: selectedLease?.from },
-      { label: 'Period To', value: selectedLease?.to },
-      { label: 'Unit Type', value: selectedLease?.unitType },
-      { label: 'Year Rent', value: selectedLease?.yearRent },
-      { label: 'Other Charges', value: selectedLease?.otherCharges },
-      { label: 'VAT', value: selectedLease?.vat },
-      { label: 'Total Rent', value: selectedLease?.total }
-    ]"
-    (back)="showDetailView = false"
-  >
-  </app-table-view-card>
-</ng-container> -->
-
 <ng-container *ngIf="showDetailView">
   <app-table-view-card
     [title]="this.leases[0].title"

@@ -94,6 +94,16 @@ export class ApprovalComponent {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
     this.initOwnerSearchLisner();
+
+    const id = this.route.snapshot.paramMap.get('tenant_id');
+
+    if (id) {
+      this.showDetailView = true;
+      this.getApprovalDetails(+id);
+    } else {
+      this.showDetailView = false;
+      this.loadApprovalList();
+    }
   }
 
   ngOnInit() {
@@ -125,18 +135,7 @@ export class ApprovalComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  refreshDetailsView() {
-    const tenantId = Number(this.route.snapshot.paramMap.get('tenantId'));
-    const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
-
-    if (tenantId || leaseId) {
-      this.showDetailView = true;
-      this.getApprovalTenant(tenantId, leaseId);
-    } else {
-      this.showDetailView = false;
-      this.loadApprovalList();
-    }
-  }
+  refreshDetailsView() {}
 
   loadApprovalList(): void {
     this.approvalData = {
@@ -151,7 +150,7 @@ export class ApprovalComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.tenantList = resp?.content ?? [];
+          this.tenantList = resp?.content.tenants ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
@@ -194,15 +193,15 @@ export class ApprovalComponent {
   }
 
   handleRejectClick(): void {
-    const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+    const tenant_id = Number(this.route.snapshot.paramMap.get('tenant_id'));
 
-    if (!leaseId) {
+    if (!tenant_id) {
       console.error('LeaseId not found in URL');
       return;
     }
 
     const data = {
-      lease_id: leaseId,
+      tenant_id: tenant_id,
       approval_status: 'REJECTED',
     };
 
@@ -210,15 +209,15 @@ export class ApprovalComponent {
   }
 
   handleApproveClick(): void {
-    const leaseId = Number(this.route.snapshot.paramMap.get('leaseId'));
+    const tenant_id = Number(this.route.snapshot.paramMap.get('tenant_id'));
 
-    if (!leaseId) {
+    if (!tenant_id) {
       console.error('LeaseId not found in URL');
       return;
     }
 
     const data = {
-      lease_id: leaseId,
+      tenant_id: tenant_id,
       approval_status: 'APPROVED',
     };
 
@@ -237,9 +236,8 @@ export class ApprovalComponent {
       });
   }
 
-  getApprovalTenant(tenantId: number, leaseId: number) {
+  getApprovalTenant(tenantId: number) {
     const params = {
-      lease_id: leaseId,
       tenant_id: tenantId,
     };
 
@@ -248,7 +246,8 @@ export class ApprovalComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
-          this.selectedTenant = resp.content.tenant_details;
+          console.log('TENANTS:', resp?.content?.tenants);
+          this.selectedTenant = resp.content.tenants;
           this.leaseDocuments = resp.content?.lease_documents || [];
 
           this.mapDocumentsByType();
@@ -268,8 +267,8 @@ export class ApprovalComponent {
     });
   }
 
-  handleViewClick(tenantId: number, leaseId: number): void {
-    this.router.navigate(['/dashboard/approval/detail/', tenantId, leaseId]);
+  handleViewClick(tenantId: number): void {
+    this.router.navigate(['/dashboard/approval/detail/', tenantId]);
   }
 
   handleBackClick(): void {
@@ -277,5 +276,17 @@ export class ApprovalComponent {
     this.loadApprovalList();
     this.showDetailView = false;
     this.selectedTenant = null;
+  }
+  getApprovalDetails(tenantId: number): void {
+    this.approvalService
+      .getApprovalList({ tenant_id: tenantId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.selectedTenant = resp?.content?.[0]?.user ?? null;
+          this.leaseDocuments = resp?.content?.lease_documents ?? [];
+          this.mapDocumentsByType();
+        },
+      });
   }
 }

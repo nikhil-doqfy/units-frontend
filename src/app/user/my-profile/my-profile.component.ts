@@ -27,6 +27,8 @@ import { PasswordPopupbtnComponent } from '../../password-popupbtn/password-popu
 import { AuthService } from '../../auth/services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../shared.service';
+import { CustomSelectComponent } from '../../dashboard/component/custom-select/custom-select.component';
+import { SharedApiService } from '../../shared/services/shared-api.service';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -38,8 +40,8 @@ import { SharedService } from '../../shared.service';
     DashFormComponent,
     EditIconComponent,
     TranslateModule,
-
     PasswordPopupbtnComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css',
@@ -52,8 +54,11 @@ export class MyProfileComponent {
   private alertService = inject(AlertService);
   private destroyRef = inject(DestroyRef);
   private sharedService = inject(SharedService);
+  private sharedApiService = inject(SharedApiService);
 
   @ViewChild('fileInput') fileInput!: ElementRef;
+  stateList: any[] = [];
+  selectedState: any = null;
   currentLanguage = 'en';
   isOpen: boolean = false;
   userImage: string = '';
@@ -61,7 +66,10 @@ export class MyProfileComponent {
   editUserMode = false;
   editOtherDetailsMode = false;
   changedFields: any = {};
-
+  countryList: any[] = [];
+  selectedCountry: any = null;
+  cityList: any[] = [];
+  selectedCity: any = null;
   profile = {
     firstName: '',
     lastName: '',
@@ -75,6 +83,8 @@ export class MyProfileComponent {
 
   otherDetails = {
     country: '',
+    city: '',
+    cityId: null,
     timeZone: '',
     address: '',
     state: '',
@@ -149,6 +159,8 @@ export class MyProfileComponent {
       country: content?.country,
       timeZone: content?.time_zone,
       address: content?.address,
+      city: content?.city,
+      cityId: content?.city_id,
       state: content?.state,
       postalCode: content?.postal_code,
     };
@@ -183,7 +195,6 @@ export class MyProfileComponent {
     this.changedFields[fieldName] = true;
   }
 
-  // User edit toggles
   enableUserEdit() {
     this.editUserMode = true;
   }
@@ -205,10 +216,12 @@ export class MyProfileComponent {
 
   saveOtherDetails() {
     const payload: Record<string, any> = {
-      country: this.otherDetails.country,
+      // country: this.otherDetails.country,
       time_zone: this.otherDetails.timeZone,
+      // city: this.otherDetails.city,
+      city_id: this.selectedCity.key,
       address: this.otherDetails.address,
-      state: this.otherDetails.state,
+      // state: this.otherDetails.state,
       postal_code: this.otherDetails.postalCode,
     };
     this.saveUser(payload);
@@ -237,19 +250,119 @@ export class MyProfileComponent {
         },
       });
   }
-
+  handleviewclick() {
+    this.getOptionTypes(['COUNTRY']);
+  }
   cancelUser() {
     this.editUserMode = false;
     this.changedFields = {};
   }
 
-  // Other Details edit toggles
   enableOtherDetailsEdit() {
+    console.log('Edit mode enabled');
     this.editOtherDetailsMode = true;
+
+    this.selectedCountry = this.countryList.find(
+      (c) => c.value === this.otherDetails.country
+    );
   }
 
   cancelOtherDetails() {
     this.editOtherDetailsMode = false;
     this.changedFields = {};
+  }
+
+  onCountrySelected(option: any) {
+    this.selectedCountry = option;
+
+    if (option?.value) {
+      this.otherDetails.country = option.value;
+    } else {
+      this.otherDetails.country = '';
+    }
+
+    if (option?.key) {
+      this.otherDetails.country = option.value;
+
+      this.otherDetails.state = '';
+      this.otherDetails.city = '';
+      this.selectedState = null;
+      this.selectedCity = null;
+      this.stateList = [];
+      this.cityList = [];
+    }
+    this.otherDetails.country = option?.value;
+    this.onFieldChange('country');
+  }
+
+  onStateSelected(option: any) {
+    this.selectedState = option;
+    this.otherDetails.state = option?.value || '';
+    this.otherDetails.city = '';
+    this.selectedCity = null;
+    this.otherDetails.cityId = null;
+    this.cityList = [];
+
+    this.onFieldChange('state');
+  }
+
+  onCitySelected(option: any) {
+    this.selectedCity = option;
+    this.otherDetails.city = option?.value || '';
+    this.otherDetails.cityId = option?.key || null;
+    this.onFieldChange('city');
+  }
+  handleviewclickcity() {
+    this.getCityOptions(this.selectedState.key);
+  }
+  getCityOptions(stateId: number) {
+    this.sharedApiService
+      .getOptions({
+        option_type: 'CITY',
+        state_id: stateId,
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          this.cityList = res?.content?.city || [];
+        },
+        error: () => {
+          this.cityList = [];
+        },
+      });
+  }
+
+  getStateOptions(countryId: number | string) {
+    this.sharedApiService
+      .getOptions({
+        option_type: 'STATE',
+        country_id: countryId,
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          console.log('STATE API RESPONSE:', response);
+          this.stateList = response?.content?.state || [];
+        },
+        error: (err) => {
+          console.error('State API error', err);
+          this.stateList = [];
+        },
+      });
+  }
+
+  handleviewclicks() {
+    this.getStateOptions(this.selectedCountry?.key);
+  }
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          console.log('COUNTRY API RESPONSE:', response.content.COUNTRY);
+          this.countryList = response.content.country;
+        },
+      });
   }
 }

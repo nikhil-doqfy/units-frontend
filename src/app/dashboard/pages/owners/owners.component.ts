@@ -322,7 +322,7 @@ export class OwnersComponent {
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'property_export.csv';
+        a.download = 'owner_export.csv';
         a.click();
 
         window.URL.revokeObjectURL(url);
@@ -331,37 +331,63 @@ export class OwnersComponent {
     console.log('Export button clicked');
   }
 
-  handleExportInternalTable() {
-    console.log('Selected Owner at export:', this.selectedOwner);
-    if (this.selectedOwner?.owner_id) {
-      this.alertService.error('Owner not selected');
-      return;
-    }
+  // handleExportInternalTable() {
+  //   console.log('Selected Owner at export:', this.selectedOwner);
+  //   if (this.selectedOwner?.owner_id) {
+  //     this.alertService.error('Owner not selected');
+  //     return;
+  //   }
 
-    const params = {
+  //   const params = {
+  //     owner_id: this.selectedOwner.owner_id,
+  //   };
+
+  //   console.log('Export params:', params);
+
+  //   this.ownerService
+  //     .getExcelFileOfowner(params)
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((resp) => {
+  //       console.log('Export response:', resp);
+
+  //       const url = window.URL.createObjectURL(resp);
+
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = 'owner_properties_export.xlsx';
+  //       a.click();
+
+  //       window.URL.revokeObjectURL(url);
+  //       this.alertService.success('File downloaded successfully!');
+  //     });
+
+  //   console.log('Export button clicked');
+  // }
+
+  handleInternalTableExport(): void {
+    if (!this.showDetailView) return;
+
+    const payload = {
       owner_id: this.selectedOwner.owner_id,
     };
 
-    console.log('Export params:', params);
-
     this.ownerService
-      .getExcelFileOfowner(params)
+      .getExcelFileOfowner(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp) => {
-        console.log('Export response:', resp);
-
-        const url = window.URL.createObjectURL(resp);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'owner_properties_export.xlsx';
-        a.click();
-
-        window.URL.revokeObjectURL(url);
-        this.alertService.success('File downloaded successfully!');
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `assigned_properties_export.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('Internal table exported successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
+        },
       });
-
-    console.log('Export button clicked');
   }
   getOptionTypes(options: string[]) {
     this.sharedApiService

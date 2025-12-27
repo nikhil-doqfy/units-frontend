@@ -193,18 +193,13 @@
       >
         <ng-container card-actions>
           <app-custom-select
-            [options]="[
-              'All',
-              'Dubai hiils golf club',
-              'Sillicon central mall',
-              'Falcon city of wonders',
-              'Majan'
-            ]"
+            [options]="occupancyOptions"
             [placeholder]="selectedOccupancy"
             [selectedOption]="selectedOccupancy"
             (optionSelected)="onOptionSelectedOccupancy($event)"
             [isFilter]="true"
             [isSmall]="true"
+            (click)="getOccupancyOptions()"
           >
           </app-custom-select>
         </ng-container>

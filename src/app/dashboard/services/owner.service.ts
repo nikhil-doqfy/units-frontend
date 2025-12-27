@@ -27,7 +27,7 @@ export class OwnerService {
   getExcelFileOfowner(params: any) {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/export/owner/csv?${queryString}`,
+      `${this.SERVER_ADDRESS}/company_owners_csv${queryString}`,
       {
         responseType: 'blob',
       }

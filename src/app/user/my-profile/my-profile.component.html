@@ -179,12 +179,26 @@
           <div class="myPrflFrmGrp" [class.changed]="changedFields.country">
             <label for="country">{{ "COUNTRY" | translate }}</label>
             <input
+              *ngIf="!editOtherDetailsMode; else editCountryTpl"
               type="text"
               name="country"
               [(ngModel)]="otherDetails.country"
               [disabled]="!editOtherDetailsMode"
               (input)="onFieldChange('country')"
             />
+
+            <ng-template #editCountryTpl>
+              <app-custom-select
+                [options]="countryList"
+                key="key"
+                value="value"
+                placeholder="Select Country"
+                [selectedOption]="selectedCountry"
+                (optionSelected)="onCountrySelected($event)"
+                (click)="handleviewclick()"
+              >
+              </app-custom-select>
+            </ng-template>
           </div>
           <div class="myPrflFrmGrp" [class.changed]="changedFields.timeZone">
             <label for="timeZone">{{ "TIME_ZONE" | translate }}</label>
@@ -197,7 +211,16 @@
             />
           </div>
           <div class="myPrflFrmGrp" [class.changed]="changedFields.address">
-            <label for="address">{{ "ADDRESS" | translate }}</label>
+            <label for="address">{{ "ADDRESS LINE 1" | translate }}</label>
+            <textarea
+              name="address"
+              [(ngModel)]="otherDetails.address"
+              [disabled]="!editOtherDetailsMode"
+              (input)="onFieldChange('address')"
+            ></textarea>
+          </div>
+          <div class="myPrflFrmGrp" [class.changed]="changedFields.address">
+            <label for="address">{{ "ADDRESS LINE 2" | translate }}</label>
             <textarea
               name="address"
               [(ngModel)]="otherDetails.address"
@@ -208,13 +231,51 @@
           <div class="myPrflFrmGrp" [class.changed]="changedFields.state">
             <label for="state">{{ "STATE" | translate }}</label>
             <input
+              *ngIf="!editOtherDetailsMode; else editStateTpl"
               type="text"
               name="state"
               [(ngModel)]="otherDetails.state"
               [disabled]="!editOtherDetailsMode"
               (input)="onFieldChange('state')"
             />
+            <ng-template #editStateTpl>
+              <app-custom-select
+                [options]="stateList"
+                key="key"
+                value="value"
+                placeholder="Select State"
+                [selectedOption]="selectedState"
+                (optionSelected)="onStateSelected($event)"
+                (click)="handleviewclicks()"
+              >
+              </app-custom-select>
+            </ng-template>
           </div>
+          <div class="myPrflFrmGrp" [class.changed]="changedFields.city">
+            <label>{{ "CITY" | translate }}</label>
+
+            <input
+              *ngIf="!editOtherDetailsMode; else editCityTpl"
+              type="text"
+              name="city"
+              [(ngModel)]="otherDetails.city"
+              [disabled]="true"
+            />
+
+            <ng-template #editCityTpl>
+              <app-custom-select
+                [options]="cityList"
+                key="key"
+                value="value"
+                placeholder="Select City"
+                [selectedOption]="selectedCity"
+                (optionSelected)="onCitySelected($event)"
+                (click)="handleviewclickcity()"
+              >
+              </app-custom-select>
+            </ng-template>
+          </div>
+
           <div class="myPrflFrmGrp" [class.changed]="changedFields.postalCode">
             <label for="postalCode">{{ "POSTAL_CODE" | translate }}</label>
             <input

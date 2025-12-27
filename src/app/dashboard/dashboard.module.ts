@@ -121,7 +121,7 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.APPROVAL' },
       },
       {
-        path: 'approval/detail/:tenantId/:leaseId',
+        path: 'approval/detail/:tenant_id',
         component: ApprovalComponent,
         data: { titleKey: 'PAGE_TITLE.APPROVAL' },
       },

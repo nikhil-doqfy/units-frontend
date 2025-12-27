@@ -21,11 +21,6 @@
         <label>Tenant Photo <span>*</span></label>
         <small>Max 5MB, PNG</small>
       </div>
-      <!-- 
-    <div>
-      <label>Link Property <span>*</span></label>
-      <app-custom-select> </app-custom-select>
-    </div> -->
 
       <div class="mb-0">
         <label for="assignedProperty" class="form-label"
@@ -150,55 +145,16 @@
             <th width="200">{{ "Status" | translate }}</th>
           </tr>
         </thead>
-        <!-- <tbody>
-          @for (row of [1,2,3,4,5]; track $index) {
-          <tr *ngFor="let row of rentalPayments; track: $index">
-            <td>
-              <select class="form-control">
-                <option value=""></option>
-              </select>
-            </td>
-
-            <td>
-              <input type="text" class="form-control" placeholder="" />
-            </td>
-
-            <td>
-              <input type="text" class="form-control" placeholder="" />
-            </td>
-
-            <td>
-              <input type="date" class="form-control" />
-            </td>
-
-            <td>
-              <input type="text" class="form-control" />
-            </td>
-
-            <td>
-              <input type="text" class="form-control" />
-            </td>
-
-            <td>
-              <input type="text" class="form-control" />
-            </td>
-
-            <td></td>
-          </tr>
-        }
-        </tbody> -->
 
         <tbody>
           @for (row of rentalPayments; track $index) {
           <tr>
-            <!-- Bank Name -->
             <td>
               <select class="form-control">
                 <option value="">{{ row.bank || "Select Bank" }}</option>
               </select>
             </td>
 
-            <!-- Bank Account -->
             <td>
               <input
                 type="text"
@@ -207,7 +163,6 @@
               />
             </td>
 
-            <!-- Cheque Number -->
             <td>
               <input
                 type="text"
@@ -216,7 +171,6 @@
               />
             </td>
 
-            <!-- Cheque Date -->
             <td>
               <input
                 type="date"
@@ -225,22 +179,18 @@
               />
             </td>
 
-            <!-- Payment Type -->
             <td>
               {{ row.payment_type?.value || "-" }}
             </td>
 
-            <!-- Purpose -->
             <td>
               {{ row.purpose || "-" }}
             </td>
 
-            <!-- Amount -->
             <td>
               {{ row.amount }}
             </td>
 
-            <!-- Status -->
             <td>
               {{ row.status }}
             </td>

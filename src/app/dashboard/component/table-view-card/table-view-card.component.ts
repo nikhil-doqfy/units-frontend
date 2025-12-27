@@ -43,8 +43,6 @@ export class TableViewCardComponent {
   ngAfterContentInit() {
     this.hasProjectedContent = this.projectedButtons.length > 0;
     return !!this.rentalContent;
-
-    console.log('Projected rental content:', this.rentalContent);
   }
 
   get titleInitial(): string {
