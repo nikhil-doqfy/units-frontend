@@ -92,14 +92,15 @@
                     <div class="row g-3">
                       <div class="col-md-6">
                         <label class="form-label">{{
-                          "RENTAL_STATUS" | translate
+                          "TENANCY_STATUS" | translate
                         }}</label>
                         <app-custom-select
                           [options]="rentalStatus"
                           key="key"
                           value="value"
-                          placeholder="Select rental status"
+                          placeholder="Select tenancy status"
                           (optionSelected)="selectedrentalstatus = $event"
+                          (click)="onRentalTenancyClick()"
                         >
                         </app-custom-select>
                       </div>

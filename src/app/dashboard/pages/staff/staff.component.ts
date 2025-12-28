@@ -123,7 +123,7 @@ export class StaffComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.getOptionTypes(['ROLE']);
+
     this.sharedService.initLanguage();
     this.initLanguageListener();
   }
@@ -337,6 +337,9 @@ export class StaffComponent {
 
   // ------------------------- Handel show details function -------------------------
 
+  onhandleSelectClick(): void {
+    this.getOptionTypes(['ROLE']);
+  }
   handleViewClick(staff_id: number): void {
     this.router.navigate(['/dashboard/staff/detail', staff_id]);
   }

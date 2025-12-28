@@ -35,6 +35,7 @@
                         value="value"
                         placeholder="Select staff role"
                         (optionSelected)="selectedstaffRole = $event"
+                        (click)="onhandleSelectClick()"
                       >
                       </app-custom-select>
                     </div>
@@ -305,10 +306,8 @@
           <tbody>
             @for (property of assignedProperties; track $index) {
             <tr>
-              <!-- Property Code -->
               <td>{{ property.property_code || "_" }}</td>
 
-              <!-- Property Name + Image -->
               <td>
                 <app-table-img-item
                   [img]="
@@ -320,22 +319,18 @@
                 />
               </td>
 
-              <!-- Tenant Name -->
               <td>
                 {{ property.tenant_name || "N/A" }}
               </td>
 
-              <!-- Assigned Staff -->
               <td>
                 {{ selectedStaff?.staff_name || "_" }}
               </td>
 
-              <!-- Owner Name -->
               <td>
                 {{ property.owner_name || "N/A" }}
               </td>
 
-              <!-- Document Actions -->
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
@@ -355,165 +350,6 @@
             </tr>
             }
           </tbody>
-
-          <!-- <tbody>
-            <tr>
-              @for (property of assignedProperties; track $index) {
-              <td>LP9021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-1.png"
-                  size="md"
-                  title="Novatis AG..."
-                />
-              </td>
-              <td>N/A</td>
-              <td>Staff 1</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>LP8021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Agriculture...."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-2.png"
-                  title="Richard"
-                />
-              </td>
-              <td>Staff 2</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC79021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Honda..."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-3.png"
-                  title="Thaomas"
-                />
-              </td>
-              <td>Staff 3</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC69021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="TVS"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-4.png"
-                  title="Akshay"
-                />
-              </td>
-              <td>Staff 4</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC59021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Samsung"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-5.png"
-                  title="Avanshi"
-                />
-              </td>
-              <td>Staff 5</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            } @empty {
-            <tr>
-              <td colspan="6" align="center">No Properties Assigned</td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</ng-container> -->
         </table>
       </div>
     </div>

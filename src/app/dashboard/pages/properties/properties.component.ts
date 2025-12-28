@@ -176,17 +176,22 @@ export class PropertiesComponent {
           setter: (v) => (this.propertyDocumentType = v),
         },
       ]);
-    } else {
-      this.sharedApiService.getOptionsType([
-        {
-          param: 'TENANCY_STATUS',
-          key: 'tenancy_status',
-          setter: (v) => (this.rentalStatus = v),
-        },
-      ]);
     }
   }
 
+  getTenancyStatusOptions() {
+    this.sharedApiService.getOptionsType([
+      {
+        param: 'TENANCY_STATUS',
+        key: 'tenancy_status',
+        setter: (v) => (this.rentalStatus = v),
+      },
+    ]);
+  }
+
+  onRentalTenancyClick() {
+    this.getTenancyStatusOptions();
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))

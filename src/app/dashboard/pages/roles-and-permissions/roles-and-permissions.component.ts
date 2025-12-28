@@ -45,7 +45,6 @@ import { RoleAndPermissionsService } from '../../../services/role-and-permission
     TablePaginationComponent,
     AddRoleFormComponent,
     TranslateModule,
-    // NoDataComponent,
   ],
   templateUrl: './roles-and-permissions.component.html',
   styleUrl: './roles-and-permissions.component.css',
@@ -121,7 +120,7 @@ export class RolesAndPermissionsComponent {
       next: () => {
         this.isLoading = false;
         this.successMessage = 'Role created successfully!';
-        this.modalService.dismissAll(); // Close modal
+        this.modalService.dismissAll();
 
         this.fetchRoles();
       },
@@ -142,7 +141,7 @@ export class RolesAndPermissionsComponent {
       })
       .subscribe({
         next: (res) => {
-          this.roles = res?.content || []; // ✅ ONLY content
+          this.roles = res?.content || [];
           this.tableLoading = false;
         },
         error: () => {

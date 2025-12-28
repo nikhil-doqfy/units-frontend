@@ -167,33 +167,7 @@ export class AddRentalaccountComponent implements OnInit {
     console.log('Filter button clicked');
   }
 
-  getOptionTypes(options: string[]) {
-    // this.sharedApiService
-    //   .getOptions({ option_type: options.join(',') })
-    //   .pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe({
-    //     next: (response) => {
-    //       this.staffRole = response?.content?.role;
-    //       console.log('data', this.staffRole);
-    //       if (this.editData?.staff_role) {
-    //         this.selectedStaffRole = this.staffRole.find(
-    //           (r) => r.key === this.editData.staff_role.key
-    //         );
-    //       }
-    //     },
-    //   });
-  }
-
-  // onAssignedPropertySelected(option: any) {
-  // this.selectedAssignedProperty = option;
-  // if (option?.value) {
-  //   this.staffForm.patchValue({
-  //     assigned_property: option.value,
-  //   });
-  // } else {
-  //   this.staffForm.patchValue({ assigned_property: null });
-  // }
-  // }
+  getOptionTypes(options: string[]) {}
   onEdit() {
     this.isEditMode = true;
   }

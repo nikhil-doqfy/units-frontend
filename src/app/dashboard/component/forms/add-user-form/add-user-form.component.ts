@@ -113,8 +113,6 @@ export class AddUserFormComponent {
       imageBase64: ['', Validators.required],
       imageFile: [''],
     });
-
-    this.getOptionTypes(['USER_TYPES']);
   }
 
   ngOnInit() {
@@ -150,7 +148,7 @@ export class AddUserFormComponent {
 
     if (option?.value) {
       this.userForm.patchValue({
-        role: option.key, // ✅ "OWNER"
+        role: option.key,
       });
     } else {
       this.userForm.patchValue({ role: null });

@@ -227,7 +227,6 @@ export class PMCComponent {
 
     const payload = {
       company_id: this.route.snapshot.paramMap.get('id'),
-      // Add filters if needed
     };
 
     this.pmcService
@@ -315,7 +314,7 @@ export class PMCComponent {
   handleViewClick(companyId: number): void {
     if (!companyId && companyId !== 0) {
       console.warn('Invalid companyId:', companyId);
-      return; // stop navigation if companyId is undefined
+      return;
     }
     this.router.navigate(['/dashboard/pmc/detail/', companyId]);
   }
@@ -341,7 +340,6 @@ export class PMCComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          // this.pmcList = [resp?.content?.company_profile];
           this.assignedProperties = resp?.content?.properties || [];
           this.totalRecords = resp?.pagination?.total_records || 0;
         },

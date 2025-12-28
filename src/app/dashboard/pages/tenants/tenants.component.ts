@@ -63,11 +63,9 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
     TableSelectComponent,
     TableSearchComponent,
     TableFilterButtonComponent,
-    // FilterIconComponent,
     ExportIconComponent,
     PlusIconComponent,
     InviteIconComponent,
-    // TableActionButtonComponent,
     TableActionDropdownComponent,
     TablePaginationComponent,
     SortingIconComponent,
@@ -80,8 +78,6 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
     TranslateModule,
     NoDataComponent,
     MaskPhonePipe,
-    // FilterPopupButtonComponent,
-    // CustomSelectComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
@@ -233,7 +229,6 @@ export class TenantsComponent {
       return;
     }
     // const lease_id = Number(this.route.snapshot.paramMap.get('lease_id'));
-    console.log(' handleViewPdf called with leaseId:', leaseId);
     this.tenantsService
       .getLeasePdf(leaseId)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -278,10 +273,9 @@ export class TenantsComponent {
       });
   }
 
-  //   applyFilter() {
-  //   this.currentPage = 1;
-  //   this.getUser();
-  // }
+  applyFilter() {
+    this.currentPage = 1;
+  }
   openAddTenantModal(addTenantContent: TemplateRef<any>) {
     const modalRef = this.modalService.open(addTenantContent, {
       ariaLabelledBy: 'modal-title',

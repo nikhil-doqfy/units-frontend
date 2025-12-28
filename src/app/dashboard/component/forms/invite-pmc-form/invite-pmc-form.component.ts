@@ -27,29 +27,33 @@ export class InvitePMCFormComponent {
   private destroyRef = inject(DestroyRef);
   propertyList: any[] = [];
   selectedProperty: string | null = null;
+  propertyUnitLoaded = false;
   invitePmcForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     invitation_type: ['OWNER_TO_PMC', Validators.required],
     property_unit_id: [null, Validators.required],
   });
 
-  ngOnInit() {
-    this.getOptionTypes(['PROPERTY_UNIT']);
-  }
+  ngOnInit() {}
 
   getOptionTypes(options: string[]) {
-    console.log('Option types sending:', options);
+    if (this.propertyUnitLoaded) {
+      return;
+    }
 
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: any) => {
-          // this.propertyList = response?.content?.property_unit ?? [];
           this.propertyList = response?.content?.property_unit ?? [];
+          this.propertyUnitLoaded = true;
           console.log('PROPERTY LIST:', this.propertyList);
         },
       });
+  }
+  onSelectClickPropertyUnit() {
+    this.getOptionTypes(['PROPERTY_UNIT']);
   }
 
   onOptionSelectedPropertyUnit(option: any) {

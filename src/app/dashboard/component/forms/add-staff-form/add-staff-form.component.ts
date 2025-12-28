@@ -62,12 +62,10 @@ export class AddStaffFormComponent {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
     });
-    this.getOptionTypes(['ROLE']);
   }
 
   ngOnInit(): void {
     console.log('AddStaffFormComponent INIT');
-    this.getAssignedProperties();
     if (this.editData) {
       this.patchEditForm();
       if (this.editData) {
@@ -97,9 +95,9 @@ export class AddStaffFormComponent {
       });
   }
 
-  getAssignedProperties() {
+  getAssignedProperties(options: string[]) {
     this.sharedApiService
-      .getOptions({ option_type: 'PROPERTY_UNIT' })
+      .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
@@ -127,9 +125,7 @@ export class AddStaffFormComponent {
   }
 
   handleFilterClick(): void {
-    this.getOptionTypes(['ROLE']);
     this.getOptionTypes(['PROPERTY_UNIT']);
-    console.log('Filter button clicked');
   }
   onOptionSelectedUserType(option: any) {
     console.log('OPTION FROM SELECT:', option);
@@ -147,6 +143,9 @@ export class AddStaffFormComponent {
     this.selectedType = option;
   }
 
+  handleStaffRole(): void {
+    this.getOptionTypes(['ROLE']);
+  }
   submitStaffForm() {
     console.log('SUBMIT CLICKED');
     this.staffForm.markAllAsTouched();

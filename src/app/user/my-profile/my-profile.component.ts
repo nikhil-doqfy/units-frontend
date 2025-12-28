@@ -216,12 +216,9 @@ export class MyProfileComponent {
 
   saveOtherDetails() {
     const payload: Record<string, any> = {
-      // country: this.otherDetails.country,
       time_zone: this.otherDetails.timeZone,
-      // city: this.otherDetails.city,
       city_id: this.selectedCity.key,
       address: this.otherDetails.address,
-      // state: this.otherDetails.state,
       postal_code: this.otherDetails.postalCode,
     };
     this.saveUser(payload);
@@ -234,10 +231,7 @@ export class MyProfileComponent {
       .subscribe({
         next: (res: any) => {
           this.storageService.saveUserProfile(payload);
-          // this.storageService.updateUserName(
-          //   this.profile.firstName,
-          //   this.profile.lastName
-          // );
+
           this.profile = this.storageService.getUserProfile();
           this.getUserProfileData();
           this.editUserMode = false;

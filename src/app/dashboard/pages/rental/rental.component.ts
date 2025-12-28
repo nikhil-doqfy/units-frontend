@@ -251,7 +251,6 @@ export class RentalComponent {
     const params = {
       page: this.currentPage,
       limit: this.rowsPerPage,
-      // search: this.searchText || '',
     };
 
     this.rentalAccountService.getOwnerRentAmounts(params).subscribe({

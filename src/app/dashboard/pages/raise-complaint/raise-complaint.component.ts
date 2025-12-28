@@ -46,34 +46,6 @@ export class RaiseComplaintComponent {
     this.sharedService.initLanguage();
     this.loadFaqs();
   }
-  // faqList = [
-  //   {
-  //     title: 'How do I add a new property to my account?',
-  //     content:
-  //       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-  //   },
-  //   {
-  //     title: 'Can I manage multiple properties from one account?',
-  //     content:
-  //       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-  //   },
-  //   {
-  //     title: 'How do tenants pay rent through the platform?',
-  //     content:
-  //       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-  //   },
-  //   {
-  //     title: 'Can I track maintenance requests and service updates?',
-  //     content:
-  //       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-  //   },
-  //   {
-  //     title: '{{"Is my property and tenant data secure?"|tra}}',
-  //     content:
-  //       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-  //   },
-  // ];
-
   loadFaqs() {
     this.complaintService.getFaqList().subscribe({
       next: (res: any) => {

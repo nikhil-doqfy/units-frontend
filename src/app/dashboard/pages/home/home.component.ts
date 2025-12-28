@@ -74,7 +74,16 @@ export class HomeComponent implements OnInit {
   private homeService = inject(HomeService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  private sharedApiService = inject(SharedApiService);
 
+  selectedMonthly: string = 'Oct 2025';
+  selectedFilter: string = '';
+
+  selectedChequesAging: string = 'All';
+  selectedPropertiesOwned: string = 'Falcon city of wonders';
+
+  occupancyOptions: any[] = [];
+  selectedOccupancy: any = 'All';
   propertyData: ProgressRow[] = [];
   model: NgbDateStruct | null = null;
   currentLanguage = 'en';
@@ -142,23 +151,7 @@ export class HomeComponent implements OnInit {
         );
       });
   }
-  // propertyData = [
-  //   { id: '01', name: 'Dubai Hills Golf Club', value: 45 },
-  //   { id: '02', name: 'Silicon Central Mall', value: 29 },
-  //   { id: '03', name: 'Falconcity', value: 18 },
-  //   { id: '04', name: 'Majan', value: 25 },
-  // ];
 
-  selectedMonthly: string = 'Oct 2025';
-  selectedFilter: string = '';
-
-  // selectedOccupancy: string = 'Falcon city of wonders';
-  selectedChequesAging: string = 'All';
-  selectedPropertiesOwned: string = 'Falcon city of wonders';
-  private sharedApiService = inject(SharedApiService);
-
-  occupancyOptions: any[] = [];
-  selectedOccupancy: any = 'All';
   getOccupancyOptions() {
     this.sharedApiService
       .getOptions({ option_type: 'PARENT_PROPERTY' })
