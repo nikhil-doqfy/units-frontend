@@ -136,35 +136,26 @@ export class PropertiesComponent {
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+    this.sharedService.initLanguage();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.currentPropertyId = +id;
       this.propertiesFilter['property_id'] = +id;
       this.showDetailView = true;
     }
+    this.loadBreadcrumb();
   }
 
   ngOnInit() {
-    this.loadBreadcrumb();
-    this.sharedService.initLanguage();
     this.initLanguageListener();
-    this.initCurrentRoleListener();
     this.initPropertySearchListener();
-  }
 
-  initCurrentRoleListener() {
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
-
-        if (role === 'tenant' && !this.currentPropertyId) {
-          this.propertyView = 'my-properties';
-          this.propertiesFilter['MY_PROPERTY'] = true;
-        }
-        this.getProperties();
-        this.getOptionTypes();
-      });
+    this.currentRole = this.themeService.getRole();
+    if (this.currentRole === 'tenant' && !this.currentPropertyId) {
+      this.propertyView = 'my-properties';
+      this.propertiesFilter['MY_PROPERTY'] = true;
+    }
+    this.getOptionTypes();
   }
 
   getOptionTypes() {
@@ -173,7 +164,9 @@ export class PropertiesComponent {
         {
           param: 'PROPERTY_DOCUMENT_CHOICE',
           key: 'Property_Document',
-          setter: (v) => (this.propertyDocumentType = v),
+          setter: (v) => {
+            (this.propertyDocumentType = v), this.getProperties();
+          },
         },
       ]);
     }
@@ -202,7 +195,7 @@ export class PropertiesComponent {
   }
 
   loadBreadcrumb() {
-    if (this.currentPropertyId) {
+    if (this.showDetailView) {
       this.setBreadCrumb([
         { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
         { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
@@ -230,8 +223,8 @@ export class PropertiesComponent {
       delete this.propertiesFilter['property_id'];
       this.propertiesFilter['MY_PROPERTY'] = true;
     }
-    this.getProperties();
     this.getOptionTypes();
+    this.getProperties();
   }
 
   private getProperties() {
@@ -514,7 +507,7 @@ export class PropertiesComponent {
     let sections = this.getOtherDetailsOfProperty(this.propertyDetails);
     this.property = { ...basicDetails, propertyImages, sections };
 
-    this.propertyDocumentType.map(
+    this.propertyDocumentType.forEach(
       (type: any) => (this.propertyDocuments[type.key] = [])
     );
 
