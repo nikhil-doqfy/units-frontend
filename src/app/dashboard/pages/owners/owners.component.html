@@ -248,11 +248,11 @@
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
                     type="download"
-                    (clicked)="handleDownloadDocumentClick()"
+                    (clicked)="handleDownloadPdf(property?.lease_id)"
                   />
                   <app-table-action-btn
                     type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
+                    (clicked)="handleViewPdf(property?.lease_id)"
                   />
                 </div>
               </td>

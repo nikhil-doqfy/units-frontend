@@ -178,7 +178,7 @@
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>
-        <app-column-chart></app-column-chart>
+        <app-column-chart [data]="monthlyRevenue"></app-column-chart>
       </app-white-card>
     </div>
   </div>
@@ -203,7 +203,10 @@
           >
           </app-custom-select>
         </ng-container>
-        <app-donut-chart [vacancy]="88" [occupied]="12"></app-donut-chart>
+        <app-donut-chart
+          [vacancy]="stats?.occupancy_data?.vacant_percent || 0"
+          [occupied]="stats?.occupancy_data?.occupied_percent || 0"
+        ></app-donut-chart>
       </app-white-card>
     </div>
     <div class="col-lg-7">
@@ -274,13 +277,9 @@
       >
         <ng-container card-actions>
           <app-custom-select
-            [options]="[
-              'All',
-              'Dubai hiils golf club',
-              'Sillicon central mall',
-              'Falcon city of wonders',
-              'Majan'
-            ]"
+            [options]="properties"
+            key="key"
+            value="value"
             [placeholder]="selectedChequesAging"
             [selectedOption]="selectedChequesAging"
             (optionSelected)="onOptionSelectedChequesAging($event)"
@@ -397,48 +396,33 @@
                   <th width="200">{{ "AMOUNT" | translate }}</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>#1234</td>
-                  <td>Dubai Hills golf club</td>
-                  <td>Ahmed</td>
-                  <td>0001234567</td>
+              <tbody *ngIf="chequeList.length; else noData">
+                <tr *ngFor="let c of chequeList; let i = index">
+                  <!-- <td>{{ i + 1 }}</td> -->
+                  <td>{{ c.lease_number }}</td>
+                  <td>{{ c.property_unit_name }}</td>
+                  <td>{{ c.tenant_name }}</td>
+                  <td>{{ c.cheque_number }}</td>
                   <td>
-                    <app-badge title="Pending" status="yellow" />
+                    <app-badge
+                      [title]="c.status"
+                      [status]="
+                        c.status === 'Payment Successful'
+                          ? 'light-green'
+                          : c.status === 'Payment Bounced'
+                          ? 'red'
+                          : 'yellow'
+                      "
+                    />
                   </td>
-                  <td>AED 1,20,573</td>
-                </tr>
-                <tr>
-                  <td>#1235</td>
-                  <td>Silicon central mall</td>
-                  <td>Abdullah</td>
-                  <td>9876543210</td>
-                  <td>
-                    <app-badge title="Realized" status="light-green" />
-                  </td>
-                  <td>AED 1,20,573</td>
-                </tr>
-                <tr>
-                  <td>#6789</td>
-                  <td>Majan</td>
-                  <td>Juma Al Majid</td>
-                  <td>1122334455</td>
-                  <td>
-                    <app-badge title="Bounce" status="red" />
-                  </td>
-                  <td>AED 1,20,573</td>
-                </tr>
-                <tr>
-                  <td>#8796</td>
-                  <td>Silicon valley</td>
-                  <td>Omar</td>
-                  <td>7654321098</td>
-                  <td>
-                    <app-badge title="Realized" status="light-green" />
-                  </td>
-                  <td>AED 1,20,573</td>
+                  <td>AED {{ c.amount | number }}</td>
                 </tr>
               </tbody>
+              <ng-template #noData>
+                <tr>
+                  <td colspan="6" class="text-center">No Data Found</td>
+                </tr>
+              </ng-template>
             </table>
           </div>
         </div>

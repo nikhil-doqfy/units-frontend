@@ -33,4 +33,13 @@ export class OwnerService {
       }
     );
   }
+  getOwnerPdf(leaseId: number, type?: 'download') {
+    let url = `${this.SERVER_ADDRESS}/lease_pdf?lease_id=${leaseId}`;
+
+    if (type === 'download') {
+      url += `&purpose=download`;
+    }
+
+    return this.http.get(url);
+  }
 }

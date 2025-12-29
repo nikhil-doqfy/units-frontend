@@ -30,10 +30,10 @@ export class LeaseService {
   }
 
   getLeasePdf(leaseId: number, type?: 'download') {
-    let url = `${this.SERVER_ADDRESS}/get/lease/pdf?lease_id=${leaseId}`;
+    let url = `${this.SERVER_ADDRESS}/lease_pdf?lease_id=${leaseId}`;
 
     if (type === 'download') {
-      url += `&type=download`;
+      url += `&purpose=download`;
     }
 
     return this.http.get(url);

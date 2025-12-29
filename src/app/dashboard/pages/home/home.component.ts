@@ -78,12 +78,19 @@ export class HomeComponent implements OnInit {
 
   selectedMonthly: string = 'Oct 2025';
   selectedFilter: string = '';
-
+  occupiedPercent = 0;
+  vacantPercent = 0;
   selectedChequesAging: string = 'All';
   selectedPropertiesOwned: string = 'Falcon city of wonders';
 
+  monthlyRevenue: any[] = [];
+  totalRevenue = 0;
+  mrr = 0;
   occupancyOptions: any[] = [];
+  selectedProperty: any = { key: 'ALL', value: 'All' };
+  properties: any[] = [];
   selectedOccupancy: any = 'All';
+  chequeData: any = null;
   propertyData: ProgressRow[] = [];
   model: NgbDateStruct | null = null;
   currentLanguage = 'en';
@@ -98,8 +105,11 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadBreadcrumb();
     this.getStats();
+    this.getMonthlyRevenue();
+    this.loadProperties();
     this.sharedService.initLanguage();
     this.initLanguageListener();
+    this.getChequeVisibility();
   }
 
   initLanguageListener() {
@@ -136,12 +146,55 @@ export class HomeComponent implements OnInit {
     negotiations: 0,
   };
 
-  getStats() {
+  loadProperties() {
+    this.sharedApiService
+      .getOptions({ option_type: 'PARENT_PROPERTY' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          this.properties = [
+            { key: 'ALL', value: 'All' },
+            ...res.content.property,
+          ];
+          this.loadChequeAging();
+        },
+        error: (err) => console.error(err),
+      });
+  }
+
+  loadChequeAging(property?: any) {
+    const params =
+      property && property.key !== 'ALL'
+        ? { property_unit_id: property.key }
+        : {};
     this.homeService
-      .getDashboardStatistics()
+      .getChequeAging(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => (this.chequeData = res?.content),
+        error: (err) => console.error(err),
+      });
+  }
+
+  // onPropertySelected(option: any) {
+  //   this.selectedProperty = option;
+  //   this.loadChequeAging(option);
+  // }
+
+  getAgingValue(key: string) {
+    return this.chequeData?.aging_breakup?.[key] || 0;
+  }
+  getStats(propertyId?: string) {
+    const params = propertyId ? { property_id: propertyId } : {};
+    this.homeService
+      .getDashboardStatistics(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         this.stats = res.content;
+        this.occupiedPercent =
+          res.content?.occupancy_data?.occupied_percent ?? 0;
+
+        this.vacantPercent = res.content?.occupancy_data?.vacant_percent ?? 0;
         this.propertyData = res.content.top_properties.map(
           ({ rank, name, occupancy_rate }: any) => ({
             id: rank,
@@ -152,6 +205,38 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  getMonthlyRevenue() {
+    this.homeService
+      .getMonthlyRevenue()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          const data = res?.content;
+          this.totalRevenue = res?.total_revenue ?? 0;
+          this.mrr = res?.MRR ?? 0;
+
+          this.monthlyRevenue = data?.monthly_revenue.map((item: any) => ({
+            name: `${item.month}/${item.year}`,
+            value: item.amount,
+          }));
+        },
+        error: (err) => console.error(err),
+      });
+  }
+
+  chequeList: any[] = [];
+
+  getChequeVisibility() {
+    this.homeService
+      .getChequeVisibility()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.chequeList = res?.content?.cheques || [];
+        },
+        error: (err) => console.error(err),
+      });
+  }
   getOccupancyOptions() {
     this.sharedApiService
       .getOptions({ option_type: 'PARENT_PROPERTY' })
@@ -178,12 +263,20 @@ export class HomeComponent implements OnInit {
     this.selectedFilter = option;
   }
 
-  onOptionSelectedOccupancy(option: string) {
+  onOptionSelectedOccupancy(option: any) {
     this.selectedOccupancy = option;
+
+    if (option.key === 'ALL') {
+      this.getStats();
+    } else {
+      this.getStats(option.key);
+    }
   }
 
   onOptionSelectedChequesAging(option: string) {
     this.selectedChequesAging = option;
+    //  this.selectedProperty = option;
+    this.loadChequeAging(option);
   }
 
   onOptionSelectedPropertiesOwned(option: string) {

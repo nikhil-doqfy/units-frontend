@@ -70,6 +70,7 @@ export class MyProfileComponent {
   selectedCountry: any = null;
   cityList: any[] = [];
   selectedCity: any = null;
+  selectedLocality: any;
   profile = {
     firstName: '',
     lastName: '',
@@ -89,6 +90,7 @@ export class MyProfileComponent {
     address: '',
     state: '',
     postalCode: '',
+    locality: '',
   };
 
   ngOnInit() {
@@ -136,6 +138,18 @@ export class MyProfileComponent {
       });
   }
 
+  localityList = [
+    { key: 1, value: 'Locality A' },
+    { key: 2, value: 'Locality B' },
+    { key: 3, value: 'Locality C' },
+  ];
+
+  onLocalitySelected(event: any) {
+    this.selectedLocality = event;
+    this.otherDetails.locality = event.value;
+  }
+
+  handleLocalityClick() {}
   setUserFormData(content: any) {
     if (!content?.profile_image) {
       this.getBase64();
@@ -163,6 +177,7 @@ export class MyProfileComponent {
       cityId: content?.city_id,
       state: content?.state,
       postalCode: content?.postal_code,
+      locality: content?.locality,
     };
   }
 

@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { FormService } from '../../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { CustomSelectComponent } from '../../../../auth/component/custom-select/custom-select.component';
+import { CustomSelectComponent } from '../../../component/custom-select/custom-select.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
 

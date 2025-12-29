@@ -275,6 +275,29 @@
               </app-custom-select>
             </ng-template>
           </div>
+          <div class="myPrflFrmGrp" [class.changed]="changedFields.locality">
+            <label>{{ "LOCALITY" | translate }}</label>
+
+            <input
+              *ngIf="!editOtherDetailsMode; else editLocalityTpl"
+              type="text"
+              name="locality"
+              [(ngModel)]="otherDetails.locality"
+              [disabled]="true"
+            />
+            <ng-template #editLocalityTpl>
+              <app-custom-select
+                [options]="localityList"
+                key="key"
+                value="value"
+                placeholder="Select Locality"
+                [selectedOption]="selectedLocality"
+                (optionSelected)="onLocalitySelected($event)"
+                (click)="handleLocalityClick()"
+              >
+              </app-custom-select>
+            </ng-template>
+          </div>
 
           <div class="myPrflFrmGrp" [class.changed]="changedFields.postalCode">
             <label for="postalCode">{{ "POSTAL_CODE" | translate }}</label>

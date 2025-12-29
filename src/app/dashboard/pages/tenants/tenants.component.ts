@@ -51,7 +51,6 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
-import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-tenants',

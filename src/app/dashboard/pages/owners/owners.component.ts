@@ -284,6 +284,50 @@ export class OwnersComponent {
     console.log(`${action} action clicked`);
   }
 
+  handleViewPdf(leaseId: number): void {
+    if (!leaseId) {
+      this.alertService.info('No tenant found for this property.');
+      return;
+    }
+    this.ownerService
+      .getOwnerPdf(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const pdfUrl = resp?.content?.pdf_url;
+
+          if (pdfUrl) {
+            window.open(pdfUrl, '_blank');
+          } else {
+            this.alertService.error('PDF URL not found.');
+          }
+        },
+        error: () => {
+          this.alertService.error('Failed to open PDF preview.');
+        },
+      });
+  }
+  handleDownloadPdf(leaseId: number): void {
+    if (!leaseId) {
+      this.alertService.info('No tenant found for this property.');
+      return;
+    }
+    this.ownerService
+      .getOwnerPdf(leaseId, 'download')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        const pdfUrl = resp?.content?.pdf_url;
+        if (pdfUrl) {
+          const a = document.createElement('a');
+          a.href = pdfUrl;
+          a.download = `lease_${leaseId}.pdf`;
+          a.click();
+          this.alertService.success('PDF downloaded successfully!');
+        } else {
+          this.alertService.error('PDF URL not found.');
+        }
+      });
+  }
   handleFilterClick(): void {
     console.log('Filter button clicked');
   }

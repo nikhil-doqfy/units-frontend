@@ -40,11 +40,11 @@ export class TenantsService {
     return this.http.post(`${this.SERVER_ADDRESS}/tenant/details/`, data);
   }
 
-  getLeasePdf(leaseId: number, type?: 'download') {
-    let url = `${this.SERVER_ADDRESS}/get/lease/pdf?lease_id=${leaseId}`;
+  getLeasePdf(leaseId: number, purpose?: 'download') {
+    let url = `${this.SERVER_ADDRESS}/lease_pdf?lease_id=${leaseId}`;
 
-    if (type === 'download') {
-      url += `&type=download`;
+    if (purpose === 'download') {
+      url += `&purpose=download`;
     }
 
     return this.http.get(url);

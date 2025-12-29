@@ -9,10 +9,9 @@ import {
 } from '@angular/forms';
 import { FormService } from '../../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { CustomSelectComponent } from '../../../../auth/component/custom-select/custom-select.component';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
+import { CustomSelectComponent } from '../../../component/custom-select/custom-select.component';
 @Component({
   selector: 'app-invite-tenant-form',
   standalone: true,
@@ -63,6 +62,7 @@ export class InviteTenantFormComponent {
   onOptionSelectedPropertyUnit(option: any) {
     console.log('PROPERTY UNIT FROM SELECT:', option);
     this.selectedProperty = option.label;
+
     if (option && option.value) {
       this.tenantForm.patchValue({
         property_unit_id: option?.value ?? null,

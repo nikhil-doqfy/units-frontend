@@ -149,7 +149,7 @@ export class PropertiesComponent {
   ngOnInit() {
     this.initLanguageListener();
     this.initPropertySearchListener();
-
+    this.getProperties();
     this.currentRole = this.themeService.getRole();
     if (this.currentRole === 'tenant' && !this.currentPropertyId) {
       this.propertyView = 'my-properties';
