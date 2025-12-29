@@ -192,19 +192,7 @@ export class AddStaffFormComponent {
         }
       });
   }
-  // ------------------ EDIT PATCH ------------------
 
-  // editUser(data: any) {
-  //   this.staffService
-  //     .editUserStaff(data)
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((resp: any) => {
-  //       if (resp.status == 200) {
-  //         this.alertService.success(resp.message);
-  //         this.router.navigate(['/dashboard/staff']);
-  //       }
-  //     });
-  // }
   patchEditForm() {
     if (!this.editData) return;
     this.selectedStaffRole = this.editData.role;
