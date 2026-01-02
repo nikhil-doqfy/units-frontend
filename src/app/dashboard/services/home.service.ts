@@ -24,9 +24,20 @@ export class HomeService {
   getChequeVisibility() {
     return this.http.get<any>(`${this.SERVER_ADDRESS}/cheque_visibility`);
   }
-  // Fetch cheque aging data (optionally filter by property_unit_id)
   getChequeAging(params?: any): Observable<any> {
     return this.http.get<any>(`${this.SERVER_ADDRESS}/cheque_aging`, {
+      params,
+    });
+  }
+
+  getOtherTypePayments(params?: any): Observable<any> {
+    return this.http.get<any>(`${this.SERVER_ADDRESS}/other_type_payments`, {
+      params,
+    });
+  }
+
+  getDashboardGraphDue(params?: any): Observable<any> {
+    return this.http.get<any>(`${this.SERVER_ADDRESS}/dashboard_graph_due`, {
       params,
     });
   }

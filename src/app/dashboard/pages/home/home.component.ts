@@ -107,9 +107,11 @@ export class HomeComponent implements OnInit {
     this.getStats();
     this.getMonthlyRevenue();
     this.loadProperties();
+    this.loadPayments();
     this.sharedService.initLanguage();
     this.initLanguageListener();
     this.getChequeVisibility();
+    this.loadDueGraph();
   }
 
   initLanguageListener() {
@@ -136,6 +138,13 @@ export class HomeComponent implements OnInit {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
+  monthlyData: any[] = [];
+
+  loadPayments() {
+    this.homeService.getOtherTypePayments().subscribe((res) => {
+      this.monthlyData = res.content.monthly_data;
+    });
+  }
   stats: any = {
     total_properties: 0,
     occupied_properties: 0,
@@ -253,6 +262,14 @@ export class HomeComponent implements OnInit {
         },
         error: (err) => console.error(err),
       });
+  }
+
+  loadDueGraph() {
+    this.homeService.getDashboardGraphDue().subscribe((res) => {
+      // this.monthlyData = res.content.year;
+      // this.monthlyData = res.content.overall;
+      this.monthlyData = res.content;
+    });
   }
 
   onOptionSelectedMonthly(option: string) {

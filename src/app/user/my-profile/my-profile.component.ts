@@ -86,6 +86,7 @@ export class MyProfileComponent {
     country: '',
     city: '',
     cityId: null,
+    additionalAddress: '',
     timeZone: '',
     address: '',
     state: '',
@@ -138,12 +139,6 @@ export class MyProfileComponent {
       });
   }
 
-  localityList = [
-    { key: 1, value: 'Locality A' },
-    { key: 2, value: 'Locality B' },
-    { key: 3, value: 'Locality C' },
-  ];
-
   onLocalitySelected(event: any) {
     this.selectedLocality = event;
     this.otherDetails.locality = event.value;
@@ -170,12 +165,13 @@ export class MyProfileComponent {
     };
 
     this.otherDetails = {
-      country: content?.country,
+      country: content?.country.value,
       timeZone: content?.time_zone,
       address: content?.address,
-      city: content?.city,
+      additionalAddress: content?.additional_address,
+      city: content?.city.value,
       cityId: content?.city_id,
-      state: content?.state,
+      state: content?.state.value,
       postalCode: content?.postal_code,
       locality: content?.locality,
     };
@@ -230,11 +226,14 @@ export class MyProfileComponent {
   }
 
   saveOtherDetails() {
+    console.log(' otherDetails: ', this.otherDetails);
     const payload: Record<string, any> = {
       time_zone: this.otherDetails.timeZone,
-      city_id: this.selectedCity.key,
+      city: this.otherDetails.cityId,
       address: this.otherDetails.address,
-      postal_code: this.otherDetails.postalCode,
+      additional_address: this.otherDetails.additionalAddress,
+      pin_code: this.otherDetails.postalCode,
+      locality: this.otherDetails.locality,
     };
     this.saveUser(payload);
   }
@@ -284,23 +283,8 @@ export class MyProfileComponent {
   onCountrySelected(option: any) {
     this.selectedCountry = option;
 
-    if (option?.value) {
-      this.otherDetails.country = option.value;
-    } else {
-      this.otherDetails.country = '';
-    }
-
-    if (option?.key) {
-      this.otherDetails.country = option.value;
-
-      this.otherDetails.state = '';
-      this.otherDetails.city = '';
-      this.selectedState = null;
-      this.selectedCity = null;
-      this.stateList = [];
-      this.cityList = [];
-    }
     this.otherDetails.country = option?.value;
+
     this.onFieldChange('country');
   }
 

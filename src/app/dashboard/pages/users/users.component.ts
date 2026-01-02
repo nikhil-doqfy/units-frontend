@@ -77,7 +77,7 @@ export class UsersComponent {
 
   componentName: string = 'UsersComponent';
   breadcrumbData: BreadCrumb[] = [];
-  activeTab: 'all' | 'deleted' = 'all';
+  activeTab: 'all' | 'deleted' | 'new' = 'all';
   users: any[] = [];
   newUsers: any[] = [];
   deletedUsers: any[] = [];
@@ -191,6 +191,7 @@ export class UsersComponent {
 
   // ------------------------- Fetched Active User Details -------------------------
   getActiveUser() {
+    this.activeTab = 'all';
     delete this.userData['is_deleted'];
     delete this.userData['start_date'];
     delete this.userData['end_date'];
@@ -200,6 +201,7 @@ export class UsersComponent {
 
   // ------------------------- Fetched Delated User Details -------------------------
   getDeletedUser(): void {
+    this.activeTab = 'deleted';
     delete this.userData['start_date'];
     delete this.userData['end_date'];
     this.userData['is_deleted'] = true;
@@ -209,6 +211,7 @@ export class UsersComponent {
 
   // ------------------------- Fetched New User Details -------------------------
   getNewUser(): void {
+    this.activeTab = 'new';
     delete this.userData['is_deleted'];
     this.userData['start_date'] = this.getPrevios30DayDateInEpoch();
     this.userData['end_date'] = new Date().getTime();
@@ -238,12 +241,13 @@ export class UsersComponent {
 
   // ------------------------- Access user form data -------------------------
 
-  onUserSave(component: AddUserFormComponent, modal: NgbActiveModal) {
-    component.submitUserForm();
+  onUserSave(success: boolean, modal: NgbActiveModal) {
+    // component.submitUserForm();
 
-    // modal.close();
-
-    this.getUser();
+    if (success) {
+      modal.close();
+      this.getUser();
+    }
   }
 
   // ------------------------- Delete user from listing -------------------------

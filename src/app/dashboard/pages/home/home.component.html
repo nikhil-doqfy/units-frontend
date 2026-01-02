@@ -194,7 +194,7 @@
         <ng-container card-actions>
           <app-custom-select
             [options]="occupancyOptions"
-            [placeholder]="selectedOccupancy"
+            placeholder="select property"
             [selectedOption]="selectedOccupancy"
             (optionSelected)="onOptionSelectedOccupancy($event)"
             [isFilter]="true"
@@ -262,7 +262,7 @@
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>
-        <app-line-chart></app-line-chart>
+        <app-line-chart [monthlyData]="monthlyData"></app-line-chart>
       </app-white-card>
     </div>
   </div>
@@ -280,14 +280,14 @@
             [options]="properties"
             key="key"
             value="value"
-            [placeholder]="selectedChequesAging"
-            [selectedOption]="selectedChequesAging"
+            placeholder="Select Property"
+            [selectedOption]="selectedProperty"
             (optionSelected)="onOptionSelectedChequesAging($event)"
             [isFilter]="true"
           >
           </app-custom-select>
         </ng-container>
-        <app-cheque-status></app-cheque-status>
+        <app-cheque-status [chequeData]="chequeData"></app-cheque-status>
       </app-white-card>
     </div>
     <div class="col-lg-7">
@@ -539,7 +539,9 @@
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>
-        <app-stacked-column-chart></app-stacked-column-chart>
+        <app-stacked-column-chart
+          [monthlyData]="monthlyData"
+        ></app-stacked-column-chart>
       </app-white-card>
     </div>
   </div>

@@ -20,6 +20,9 @@ export class ApprovalService {
   }
 
   editApproval(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/pmc/approval/list`, data);
+    return this.http.put(
+      `${this.SERVER_ADDRESS}/tenants_Approved_Rejected`,
+      data
+    );
   }
 }

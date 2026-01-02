@@ -135,14 +135,20 @@ export class ApprovalComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  refreshDetailsView() {}
+  refreshDetailsView() {
+    // if (this.showDetailView && this.selectedTenant?.tenant_id) {
+    //   this.getApprovalDetails(this.selectedTenant.tenant_id);
+    // } else {
+    //   // this.loadApprovalList();
+    // }
+  }
 
   loadApprovalList(): void {
     this.approvalData = {
       ...this.approvalData,
       limit: this.rowsPerPage,
       page_number: this.currentPage,
-      status: this.currentStatus,
+      tenant_status: this.currentStatus,
     };
 
     this.approvalService
@@ -202,7 +208,7 @@ export class ApprovalComponent {
 
     const data = {
       tenant_id: tenant_id,
-      approval_status: 'REJECTED',
+      tenant_status: 'REJECTED',
     };
 
     this.editTenantApprovalStatus(data);
@@ -218,7 +224,7 @@ export class ApprovalComponent {
 
     const data = {
       tenant_id: tenant_id,
-      approval_status: 'APPROVED',
+      tenant_status: 'APPROVED',
     };
 
     this.editTenantApprovalStatus(data);
@@ -231,6 +237,7 @@ export class ApprovalComponent {
       .subscribe({
         next: (resp) => {
           this.alertService.success(resp.message);
+
           this.refreshDetailsView();
         },
       });
@@ -248,6 +255,7 @@ export class ApprovalComponent {
         next: (resp) => {
           console.log('TENANTS:', resp?.content?.tenants);
           this.selectedTenant = resp.content.tenants;
+
           this.leaseDocuments = resp.content?.lease_documents || [];
 
           this.mapDocumentsByType();
@@ -273,7 +281,6 @@ export class ApprovalComponent {
 
   handleBackClick(): void {
     this.router.navigate(['/dashboard/approval']);
-    this.loadApprovalList();
     this.showDetailView = false;
     this.selectedTenant = null;
   }

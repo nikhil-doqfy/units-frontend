@@ -197,7 +197,11 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-add-staff-form #AddStaffFormComponent [editData]="selectedStaff" />
+    <app-add-staff-form
+      #AddStaffFormComponent
+      [editData]="selectedStaff"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
   </div>
   <div class="modal-footer">
     <button
@@ -210,7 +214,7 @@
     <button
       type="submit"
       class="btn btnCommon"
-      (click)="onUserSave(AddStaffFormComponent, modal)"
+      (click)="AddStaffFormComponent.submitStaffForm()"
     >
       <!-- (click)="modal.close('Save click')" -->
       {{ "SUBMIT_DETAILS" | translate }}

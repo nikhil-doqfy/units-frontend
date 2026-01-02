@@ -215,6 +215,7 @@ export class AddUserFormComponent {
       .subscribe((resp: any) => {
         if (resp.status === 201) {
           this.alertService.success(resp.message);
+          this.formSubmitted.emit(true);
           this.router.navigate(['/dashboard/users']);
         }
       });

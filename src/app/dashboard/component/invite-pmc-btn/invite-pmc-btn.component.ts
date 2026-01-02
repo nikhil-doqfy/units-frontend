@@ -35,7 +35,6 @@ import { CustomSelectComponent } from '../../../auth/component/custom-select/cus
     InviteIconComponent,
     InvitePMCFormComponent,
     SendIconComponent,
-    CustomSelectComponent,
   ],
   templateUrl: './invite-pmc-btn.component.html',
   styleUrl: './invite-pmc-btn.component.css',

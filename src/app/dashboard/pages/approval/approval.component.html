@@ -16,6 +16,7 @@
               data-bs-target="#inQue-tab-pane"
               type="button"
               role="tab"
+              [class.active]="currentStatus === 'PENDING'"
               aria-controls="inQue-tab-pane"
               aria-selected="true"
               (click)="changeStatus('PENDING')"
@@ -192,15 +193,21 @@
                           : '../../../../assets/userDefaultProImg.png'
                       "
                       [clickable]="true"
-                      [title]="approval.tenant_name"
+                      [title]="approval.name"
                     />
                     <!-- (clicked)="handleViewClick()" -->
                   </td>
-                  <td>{{ approval.emirates_id }}</td>
+                  <td>
+                    {{ approval?.emirates_id ? approval.emirates_id : "N/A" }}
+                  </td>
                   <td>
                     {{ approval?.date_request ? approval.date_request : "N/A" }}
                   </td>
-                  <td>{{ approval.mobile_number }}</td>
+                  <td>
+                    {{
+                      approval.contact_number ? approval.contact_number : "N/A"
+                    }}
+                  </td>
                   <td>{{ approval.email }}</td>
                   <!-- 
                   <td align="center">
@@ -281,14 +288,20 @@
                           : '../../../../assets/userDefaultProImg.png'
                       "
                       [clickable]="true"
-                      [title]="approval.tenant_name"
+                      [title]="approval.name"
                     />
                   </td>
-                  <td>{{ approval.emirates_id }}</td>
+                  <td>
+                    {{ approval?.emirates_id ? approval.emirates_id : "N/A" }}
+                  </td>
                   <td>
                     {{ approval?.date_request ? approval.date_request : "N/A" }}
                   </td>
-                  <td>{{ approval.mobile_number }}</td>
+                  <td>
+                    {{
+                      approval.contact_number ? approval.contact_number : "N/A"
+                    }}
+                  </td>
                   <td>{{ approval.email }}</td>
                   <!-- 
                   <td align="center">
@@ -365,8 +378,16 @@
     ]"
     (back)="handleBackClick()"
   >
-    <app-table-action-btn type="rejectOrange" (clicked)="handleRejectClick()" />
-    <app-table-action-btn type="approve" (clicked)="handleApproveClick()" />
+    <app-table-action-btn
+      rental
+      type="rejectOrange"
+      (clicked)="handleRejectClick()"
+    />
+    <app-table-action-btn
+      rental
+      type="approve"
+      (clicked)="handleApproveClick()"
+    />
   </app-table-view-card>
 
   <div class="mt-3">

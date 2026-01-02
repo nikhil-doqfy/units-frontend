@@ -77,8 +77,8 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   constructor(private dropdownService: CustomSelectService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes?.['options'].currentValue) {
-      this.displayOptions = [...this.options];
+    if (changes['options'] && changes['options'].currentValue) {
+      this.displayOptions = [...changes['options'].currentValue];
     }
   }
 
@@ -87,7 +87,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((openComponent) => {
         if (openComponent !== this) {
-          this.isDropdownOpen = false; // Close if another component is opened
+          this.isDropdownOpen = false;
         }
       });
   }

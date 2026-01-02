@@ -219,13 +219,18 @@
               (input)="onFieldChange('address')"
             ></textarea>
           </div>
-          <div class="myPrflFrmGrp" [class.changed]="changedFields.address">
-            <label for="address">{{ "ADDRESS LINE 2" | translate }}</label>
+          <div
+            class="myPrflFrmGrp"
+            [class.changed]="changedFields.additionalAddress"
+          >
+            <label for="additional_address">{{
+              "ADDRESS LINE 2" | translate
+            }}</label>
             <textarea
-              name="address"
-              [(ngModel)]="otherDetails.address"
+              name="additional_address"
+              [(ngModel)]="otherDetails.additionalAddress"
               [disabled]="!editOtherDetailsMode"
-              (input)="onFieldChange('address')"
+              (input)="onFieldChange('additional_address')"
             ></textarea>
           </div>
           <div class="myPrflFrmGrp" [class.changed]="changedFields.state">
@@ -279,13 +284,13 @@
             <label>{{ "LOCALITY" | translate }}</label>
 
             <input
-              *ngIf="!editOtherDetailsMode; else editLocalityTpl"
               type="text"
               name="locality"
               [(ngModel)]="otherDetails.locality"
-              [disabled]="true"
+              (input)="onFieldChange('locality')"
+              [disabled]="!editOtherDetailsMode"
             />
-            <ng-template #editLocalityTpl>
+            <!-- <ng-template #editLocalityTpl>
               <app-custom-select
                 [options]="localityList"
                 key="key"
@@ -296,7 +301,7 @@
                 (click)="handleLocalityClick()"
               >
               </app-custom-select>
-            </ng-template>
+            </ng-template> -->
           </div>
 
           <div class="myPrflFrmGrp" [class.changed]="changedFields.postalCode">

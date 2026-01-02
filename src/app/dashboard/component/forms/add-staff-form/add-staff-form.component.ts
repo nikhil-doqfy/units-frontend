@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, Input } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+} from '@angular/core';
 
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
 import { CustomSelectComponent } from '../../custom-select/custom-select.component';
@@ -46,6 +53,7 @@ export class AddStaffFormComponent {
 
   @Input() staffRole: any[] = [];
   @Input() editData: any = null;
+  @Output() formSubmitted: EventEmitter<any> = new EventEmitter();
   isInvalid = this.formService.isInvalid;
 
   staffForm!: FormGroup;
@@ -125,7 +133,7 @@ export class AddStaffFormComponent {
   }
 
   handleFilterClick(): void {
-    this.getOptionTypes(['PROPERTY_UNIT']);
+    this.getAssignedProperties(['PROPERTY_UNIT']);
   }
   onOptionSelectedUserType(option: any) {
     console.log('OPTION FROM SELECT:', option);
@@ -176,6 +184,7 @@ export class AddStaffFormComponent {
         .subscribe((resp: any) => {
           if (resp.status === 200) {
             this.alertService.success(resp.message);
+            this.formSubmitted.emit(true);
             this.router.navigate(['/dashboard/staff']);
           }
         });

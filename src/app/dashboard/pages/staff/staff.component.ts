@@ -158,12 +158,14 @@ export class StaffComponent {
     console.log(`${action} action clicked`);
   }
 
-  onUserSave(component: AddStaffFormComponent, modal: NgbActiveModal) {
-    component.submitStaffForm();
+  onUserSave(success: boolean, modal: NgbActiveModal) {
+    // component.submitStaffForm();
 
     // modal.close();
-
-    this.getStaffRoleDetails();
+    if (success) {
+      modal.close();
+      this.getStaffRoleDetails();
+    }
   }
   removeFilter() {
     this.selectedstaffRole = null;
