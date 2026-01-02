@@ -225,7 +225,7 @@ export class HomeComponent implements OnInit {
           this.mrr = res?.MRR ?? 0;
 
           this.monthlyRevenue = data?.monthly_revenue.map((item: any) => ({
-            name: `${item.month}/${item.year}`,
+            name: item.month_str,
             value: item.amount,
           }));
         },

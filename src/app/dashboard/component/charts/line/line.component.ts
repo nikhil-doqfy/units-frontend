@@ -33,7 +33,12 @@ export type ChartOptions = {
   styleUrls: ['./line.component.css'],
 })
 export class LineChartComponent implements OnChanges {
-  @Input() monthlyData: any;
+  @Input() monthlyData: {
+    monthName: string;
+    totalAmount: number;
+    receivedAmount: number;
+    dueAmount: number;
+  }[] = [];
   chartOptions: Partial<ChartOptions> = {
     series: [
       {
@@ -127,23 +132,16 @@ export class LineChartComponent implements OnChanges {
   // }
 
   ngOnChanges() {
-    if (!this.monthlyData || !Array.isArray(this.monthlyData.monthly_data)) {
-      return;
+    if (this.monthlyData) {
     }
 
-    const months = this.monthlyData.monthly_data.map((m: any) => m.month_str);
+    const months = this.monthlyData.map((m) => m.monthName);
 
-    const totalAmount = this.monthlyData.monthly_data.map(
-      (m: any) => m.total_amount
-    );
+    const totalAmount = this.monthlyData.map((m) => m.totalAmount);
 
-    const receivedAmount = this.monthlyData.monthly_data.map(
-      (m: any) => m.received_amount
-    );
+    const receivedAmount = this.monthlyData.map((m) => m.receivedAmount);
 
-    const dueAmount = this.monthlyData.monthly_data.map(
-      (m: any) => m.due_amount
-    );
+    const dueAmount = this.monthlyData.map((m) => m.dueAmount);
 
     this.chartOptions = {
       ...this.chartOptions,

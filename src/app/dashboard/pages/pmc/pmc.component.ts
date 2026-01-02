@@ -61,7 +61,6 @@ import { AlertService } from '../../../shared/services/alert.service';
     TableActionButtonComponent,
     TableActionDropdownComponent,
     TablePaginationComponent,
-    // SendIconComponent,
     AssignPropertyFormComponent,
     TableViewCardComponent,
     WhiteCardComponent,

@@ -7,7 +7,11 @@ import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.com
 import { DeleteIconComponent } from '../../component/icons/delete-icon/delete-icon.component';
 import { DocDownloadIconComponent } from '../icons/doc-download-icon/doc-download-icon.component';
 import { PreviewIconComponent } from '../icons/preview-icon/preview-icon.component';
-import { ViewIconComponent } from "../icons/view-icon/view-icon.component";
+import { ViewIconComponent } from '../icons/view-icon/view-icon.component';
+import { ApproveIconComponent } from '../../../icon/approve-icon/approve-icon.component';
+import { ArrowUpRightComponent } from '../../../icon/arrow-up-right/arrow-up-right.component';
+import { RejectIconComponent } from '../icons/reject-icon/reject-icon.component';
+import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
 
 @Component({
   selector: 'app-table-action-btn',
@@ -19,28 +23,59 @@ import { ViewIconComponent } from "../icons/view-icon/view-icon.component";
     DeleteIconComponent,
     DocDownloadIconComponent,
     PreviewIconComponent,
-    ViewIconComponent
+    ViewIconComponent,
+    ApproveIconComponent,
+    ArrowUpRightComponent,
+    RejectIconComponent,
+    DisableIconComponent,
   ],
   templateUrl: './table-action-btn.component.html',
-  styleUrls: ['./table-action-btn.component.css']
+  styleUrls: ['./table-action-btn.component.css'],
 })
 export class TableActionButtonComponent {
-
-  @Input() type!: 'edit' | 'delete' | 'download' | 'preview' | 'view' | 'renew' | 'reject' | 'rejectOrange' | 'approve';
+  @Input() type!:
+    | 'edit'
+    | 'delete'
+    | 'download'
+    | 'preview'
+    | 'up-arrow'
+    | 'view'
+    | 'complete'
+    | 'disable'
+    | 'renew'
+    | 'reject'
+    | 'rejectOrange'
+    | 'approve';
   @Output() clicked = new EventEmitter<void>();
 
   getTooltip(type: string): string {
     switch (type) {
-      case 'edit': return 'Edit';
-      case 'delete': return 'Delete';
-      case 'download': return 'Download';
-      case 'preview': return 'Preview';
-      case 'view': return 'View';
-      case 'renew': return '';
-      case 'reject': return '';
-      case 'rejectOrange': return '';
-      case 'approve': return '';
-      default: return '';
+      case 'edit':
+        return 'Edit';
+      case 'delete':
+        return 'Delete';
+      case 'download':
+        return 'Download';
+      case 'preview':
+        return 'Preview';
+      case 'up-arrow':
+        return 'up-arrow';
+      case 'complete':
+        return 'complete';
+      case 'disable':
+        return 'disable';
+      case 'view':
+        return 'View';
+      case 'renew':
+        return '';
+      case 'reject':
+        return '';
+      case 'rejectOrange':
+        return '';
+      case 'approve':
+        return '';
+      default:
+        return '';
     }
   }
 
