@@ -47,17 +47,17 @@
           <tbody>
             @for (pmc of pmcList; track $index){
             <tr>
-              <td>{{ pmc?.code || "N/A" }}</td>
+              <td>{{ pmc?.compnay_code || "N/A" }}</td>
               <td>{{ pmc?.property_handling || "N/A" }}</td>
               <td>
                 <app-table-img-item
-                  [title]="pmc?.pmc_name || 'N/A'"
+                  [title]="pmc?.company_name || 'N/A'"
                   [clickable]="true"
-                  (clicked)="handleViewClick(pmc?.id)"
+                  (clicked)="handleViewClick(pmc?.company_id)"
                 />
               </td>
               <td>{{ pmc?.tenancy_ratio || "N/A" }}</td>
-              <td>{{ pmc?.address || "N/A" }}</td>
+              <td>{{ pmc?.company_address || "N/A" }}</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <!-- <app-table-action-btn
@@ -192,7 +192,7 @@
             <app-table-filter-btn
               title="Export"
               [hasIcon]="true"
-              (clicked)="handleExportClick()"
+              (clicked)="handleInternalTableExport()"
             >
               <app-export-icon />
             </app-table-filter-btn>
@@ -222,7 +222,7 @@
             </tr>
           </thead>
           <tbody>
-            @for(property of pmcList[0]?.properties_assigned; track $index){
+            @for(property of assignedProperties; track $index){
             <tr>
               <td>{{ property?.property_code || "N/A" }}</td>
               <td>
@@ -265,6 +265,21 @@
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 </ng-container>

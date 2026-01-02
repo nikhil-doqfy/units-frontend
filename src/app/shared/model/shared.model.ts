@@ -17,3 +17,15 @@ export interface UploadFileModel {
   base64?: string;
   errorMessage?: string;
 }
+
+export interface BreadCrumb {
+  label: string;
+  link: string;
+}
+
+export interface OptionsParams {
+  param: string;
+  params?: Record<string, any>;
+  key: string;
+  setter: (value: any) => void;
+}

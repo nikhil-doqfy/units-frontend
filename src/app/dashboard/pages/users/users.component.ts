@@ -26,7 +26,11 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { AddUserFormComponent } from '../../component/forms/add-user-form/add-user-form.component';
 import { UserService } from '../../../user/services/user.service';
 import { pipe, Subject, takeUntil } from 'rxjs';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -72,11 +76,8 @@ export class UsersComponent {
   private translate = inject(TranslateService);
 
   componentName: string = 'UsersComponent';
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Users', link: '' },
-  ];
-  activeTab: 'all' | 'deleted' = 'all'; // track current tab
+  breadcrumbData: BreadCrumb[] = [];
+  activeTab: 'all' | 'deleted' | 'new' = 'all';
   users: any[] = [];
   newUsers: any[] = [];
   deletedUsers: any[] = [];
@@ -101,19 +102,31 @@ export class UsersComponent {
   // ------------------------- call ngOnInit -------------------------
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
-
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
     this.getUser();
   }
 
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
   async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.USERS', link: '' },
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.USERS', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   onRefresh() {
@@ -169,7 +182,7 @@ export class UsersComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.users = resp?.content?.data;
+          this.users = resp?.content ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
@@ -178,6 +191,7 @@ export class UsersComponent {
 
   // ------------------------- Fetched Active User Details -------------------------
   getActiveUser() {
+    this.activeTab = 'all';
     delete this.userData['is_deleted'];
     delete this.userData['start_date'];
     delete this.userData['end_date'];
@@ -187,6 +201,7 @@ export class UsersComponent {
 
   // ------------------------- Fetched Delated User Details -------------------------
   getDeletedUser(): void {
+    this.activeTab = 'deleted';
     delete this.userData['start_date'];
     delete this.userData['end_date'];
     this.userData['is_deleted'] = true;
@@ -196,6 +211,7 @@ export class UsersComponent {
 
   // ------------------------- Fetched New User Details -------------------------
   getNewUser(): void {
+    this.activeTab = 'new';
     delete this.userData['is_deleted'];
     this.userData['start_date'] = this.getPrevios30DayDateInEpoch();
     this.userData['end_date'] = new Date().getTime();
@@ -225,12 +241,13 @@ export class UsersComponent {
 
   // ------------------------- Access user form data -------------------------
 
-  onUserSave(component: AddUserFormComponent, modal: NgbActiveModal) {
-    component.submitUserForm();
+  onUserSave(success: boolean, modal: NgbActiveModal) {
+    // component.submitUserForm();
 
-    modal.close();
-
-    this.getUser();
+    if (success) {
+      modal.close();
+      this.getUser();
+    }
   }
 
   // ------------------------- Delete user from listing -------------------------
@@ -274,33 +291,36 @@ export class UsersComponent {
   // ------------------------- Access user type  -------------------------
 
   getOptionTypes(options: string[]) {
+    console.log('Option types sending:', options);
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.userTypeList = response?.content?.user_types;
+          this.userTypeList = response?.content?.user_role ?? [];
         },
       });
   }
 
   handleFilterClick(): void {
+    this.getOptionTypes(['USER_ROLE']);
     console.log('Filter button clicked');
-    this.getOptionTypes(['USER_TYPES']);
   }
 
   onOptionSelectedUserType(option: any) {
+    console.log('OPTION FROM SELECT:', option);
     this.selectedUserType = option;
 
     if (option && option.value) {
-      this.userData['user_type'] = option.key;
+      this.userData['role'] = option.key;
     } else {
-      delete this.userData['user_type'];
+      delete this.userData['role'];
     }
   }
 
   // ------------ apply form headers filter  ------------
   applyFilter() {
+    console.log(this.userData);
     this.currentPage = 1;
     this.getUser();
   }

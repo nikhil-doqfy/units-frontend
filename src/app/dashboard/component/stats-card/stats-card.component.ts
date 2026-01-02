@@ -1,6 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+export interface StatsItem {
+  label: string;
+  value: string | number;
 
+  // OPTIONAL (for badges / extra info)
+  badge?: string;
+  badgeClass?: string;
+
+  extra?: string;
+  extraClass?: string;
+}
 @Component({
   selector: 'app-stats-card',
   standalone: true,
@@ -10,5 +20,6 @@ import { CommonModule } from '@angular/common';
 })
 export class StatsCardComponent {
   @Input() title!: string | undefined;
-  @Input() stats: { label: string; value: string | number }[] = [];
+  // @Input() stats: { label: string; value: string | number }[] = [];
+  @Input() stats: StatsItem[] = [];
 }

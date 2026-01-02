@@ -1,5 +1,5 @@
 <app-modal-form-card>
-  <form>
+  <form [formGroup]="staffForm">
     <div class="row g-3">
       <div class="col-md-12">
         <div class="mb-0">
@@ -10,6 +10,7 @@
             class="form-control"
             type="text"
             name="staffName"
+            formControlName="staffName"
             [placeholder]="'ENTER_NAME_HERE' | translate"
           />
         </div>
@@ -23,6 +24,7 @@
             class="form-control"
             type="email"
             name="email"
+            formControlName="email"
             [placeholder]="'ENTER_EMAIL_HERE' | translate"
           />
         </div>
@@ -36,6 +38,7 @@
             class="form-control"
             type="number"
             name="contact"
+            formControlName="contactNumber"
             [placeholder]="'ENTER_CONTACT_HERE' | translate"
           />
         </div>
@@ -46,8 +49,14 @@
             >{{ "STAFF_ROLE" | translate }}<span>*</span></label
           >
           <app-custom-select
-            [options]="['Admin', 'Owner', 'PM', 'User', 'Lead']"
-            (optionSelected)="onOptionSelected($event)"
+            [options]="staffRole"
+            key="key"
+            value="value"
+            formControlName="role"
+            placeholder="Select User Type"
+            [selectedOption]="selectedStffRole"
+            (optionSelected)="onOptionSelectedUserType($event)"
+            (click)="handleStaffRole()"
           ></app-custom-select>
         </div>
       </div>
@@ -57,16 +66,15 @@
             >{{ "ASSIGNED_PROPERTY" | translate }}<span>*</span></label
           >
           <app-custom-select
-            [options]="[
-              'Falcom city',
-              'Novatis AG...',
-              'Agriculture',
-              'Honda',
-              'TVS',
-              'Samsung'
-            ]"
-            (optionSelected)="onOptionSelected($event)"
-          ></app-custom-select>
+            [options]="assignedPropertyList"
+            key="key"
+            value="value"
+            placeholder="Select Property"
+            [selectedOption]="selectedAssignedProperty"
+            (optionSelected)="onAssignedPropertySelected($event)"
+            (click)="handleFilterClick()"
+          >
+          </app-custom-select>
         </div>
       </div>
       <div class="col-md-6">
@@ -78,6 +86,7 @@
             class="form-control"
             type="text"
             name="password"
+            formControlName="password"
             [placeholder]="'ENTER_HERE' | translate"
           />
         </div>
@@ -91,6 +100,7 @@
             class="form-control"
             type="text"
             name="confirmPassword"
+            formControlName="confirmPassword"
             [placeholder]="'ENTER_HERE' | translate"
           />
         </div>

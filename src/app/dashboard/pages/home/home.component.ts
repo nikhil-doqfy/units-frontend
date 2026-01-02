@@ -24,7 +24,10 @@ import { BadgeComponent } from '../../component/badge/badge.component';
 import { ColumnChartComponent } from '../../component/charts/column/column.component';
 import { StackedColumnChartComponent } from '../../component/charts/stacked-column/stacked-column.component';
 import { GroupBarChartComponent } from '../../component/charts/group-bar/group-bar.component';
-import { ProgressBarTableComponent } from '../../component/progress-bar-table/progress-bar-table.component';
+import {
+  ProgressBarTableComponent,
+  ProgressRow,
+} from '../../component/progress-bar-table/progress-bar-table.component';
 import { ChequeStatusComponent } from '../../component/charts/cheque-status/cheque-status.component';
 import { DonutChartComponent } from '../../component/charts/donut/donut.component';
 import { LineChartComponent } from '../../component/charts/line/line.component';
@@ -33,6 +36,8 @@ import { SharedService } from '../../../shared.service';
 import { HomeService } from '../../services/home.service';
 import { Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BreadCrumb } from '../../../shared/model/shared.model';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-home',
@@ -69,7 +74,24 @@ export class HomeComponent implements OnInit {
   private homeService = inject(HomeService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  private sharedApiService = inject(SharedApiService);
 
+  selectedMonthly: string = 'Oct 2025';
+  selectedFilter: string = '';
+  occupiedPercent = 0;
+  vacantPercent = 0;
+  selectedChequesAging: string = 'All';
+  selectedPropertiesOwned: string = 'Falcon city of wonders';
+
+  monthlyRevenue: any[] = [];
+  totalRevenue = 0;
+  mrr = 0;
+  occupancyOptions: any[] = [];
+  selectedProperty: any = { key: 'ALL', value: 'All' };
+  properties: any[] = [];
+  selectedOccupancy: any = 'All';
+  chequeData: any = null;
+  propertyData: ProgressRow[] = [];
   model: NgbDateStruct | null = null;
   currentLanguage = 'en';
   breadcrumbData = [
@@ -82,20 +104,47 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
+    this.getStats();
+    this.getMonthlyRevenue();
+    this.loadProperties();
+    this.loadPayments();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+    this.getChequeVisibility();
+    this.loadDueGraph();
+  }
+
+  initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
-    this.getStats();
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs({
-      key: 'PAGE_TITLE.DASHBOARD',
-      link: '/dashboard/home',
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      {
+        label: 'PAGE_TITLE.DASHBOARD',
+        link: '/dashboard/home',
+      },
+    ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
+
+  monthlyData: any[] = [];
+
+  loadPayments() {
+    this.homeService.getOtherTypePayments().subscribe((res) => {
+      this.monthlyData = res.content.monthly_data;
     });
-    this.sharedService.initLanguage();
   }
-
   stats: any = {
     total_properties: 0,
     occupied_properties: 0,
@@ -106,27 +155,122 @@ export class HomeComponent implements OnInit {
     negotiations: 0,
   };
 
-  getStats() {
+  loadProperties() {
+    this.sharedApiService
+      .getOptions({ option_type: 'PARENT_PROPERTY' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          this.properties = [
+            { key: 'ALL', value: 'All' },
+            ...res.content.property,
+          ];
+          this.loadChequeAging();
+        },
+        error: (err) => console.error(err),
+      });
+  }
+
+  loadChequeAging(property?: any) {
+    const params =
+      property && property.key !== 'ALL'
+        ? { property_unit_id: property.key }
+        : {};
     this.homeService
-      .getDashboardStatistics()
+      .getChequeAging(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => (this.chequeData = res?.content),
+        error: (err) => console.error(err),
+      });
+  }
+
+  // onPropertySelected(option: any) {
+  //   this.selectedProperty = option;
+  //   this.loadChequeAging(option);
+  // }
+
+  getAgingValue(key: string) {
+    return this.chequeData?.aging_breakup?.[key] || 0;
+  }
+  getStats(propertyId?: string) {
+    const params = propertyId ? { property_id: propertyId } : {};
+    this.homeService
+      .getDashboardStatistics(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         this.stats = res.content;
+        this.occupiedPercent =
+          res.content?.occupancy_data?.occupied_percent ?? 0;
+
+        this.vacantPercent = res.content?.occupancy_data?.vacant_percent ?? 0;
+        this.propertyData = res.content.top_properties.map(
+          ({ rank, name, occupancy_rate }: any) => ({
+            id: rank,
+            name,
+            value: occupancy_rate,
+          })
+        );
       });
   }
-  propertyData = [
-    { id: '01', name: 'Dubai Hills Golf Club', value: 45 },
-    { id: '02', name: 'Silicon Central Mall', value: 29 },
-    { id: '03', name: 'Falconcity', value: 18 },
-    { id: '04', name: 'Majan', value: 25 },
-  ];
 
-  selectedMonthly: string = 'Oct 2025';
-  selectedFilter: string = '';
+  getMonthlyRevenue() {
+    this.homeService
+      .getMonthlyRevenue()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          const data = res?.content;
+          this.totalRevenue = res?.total_revenue ?? 0;
+          this.mrr = res?.MRR ?? 0;
 
-  selectedOccupancy: string = 'Falcon city of wonders';
-  selectedChequesAging: string = 'All';
-  selectedPropertiesOwned: string = 'Falcon city of wonders';
+          this.monthlyRevenue = data?.monthly_revenue.map((item: any) => ({
+            name: `${item.month}/${item.year}`,
+            value: item.amount,
+          }));
+        },
+        error: (err) => console.error(err),
+      });
+  }
+
+  chequeList: any[] = [];
+
+  getChequeVisibility() {
+    this.homeService
+      .getChequeVisibility()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.chequeList = res?.content?.cheques || [];
+        },
+        error: (err) => console.error(err),
+      });
+  }
+  getOccupancyOptions() {
+    this.sharedApiService
+      .getOptions({ option_type: 'PARENT_PROPERTY' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.occupancyOptions = resp?.content?.property ?? [];
+          this.occupancyOptions.unshift({
+            key: 'ALL',
+            value: 'All',
+          });
+
+          this.selectedOccupancy = this.occupancyOptions[0];
+        },
+        error: (err) => console.error(err),
+      });
+  }
+
+  loadDueGraph() {
+    this.homeService.getDashboardGraphDue().subscribe((res) => {
+      // this.monthlyData = res.content.year;
+      // this.monthlyData = res.content.overall;
+      this.monthlyData = res.content;
+    });
+  }
 
   onOptionSelectedMonthly(option: string) {
     this.selectedMonthly = option;
@@ -136,12 +280,20 @@ export class HomeComponent implements OnInit {
     this.selectedFilter = option;
   }
 
-  onOptionSelectedOccupancy(option: string) {
+  onOptionSelectedOccupancy(option: any) {
     this.selectedOccupancy = option;
+
+    if (option.key === 'ALL') {
+      this.getStats();
+    } else {
+      this.getStats(option.key);
+    }
   }
 
   onOptionSelectedChequesAging(option: string) {
     this.selectedChequesAging = option;
+    //  this.selectedProperty = option;
+    this.loadChequeAging(option);
   }
 
   onOptionSelectedPropertiesOwned(option: string) {

@@ -9,7 +9,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
@@ -32,7 +36,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { debounceTime, Subject } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
 import { StaffService } from '../../services/staff.service';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -69,12 +77,17 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
   styleUrl: './staff.component.css',
 })
 export class StaffComponent {
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Staff', link: '' },
-  ];
+  private modalService = inject(NgbModal);
+  private staffService = inject(StaffService);
+  private alertService = inject(AlertService);
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+  private sharedApiService = inject(SharedApiService);
 
   componentName: string = 'StaffComponent';
+  breadcrumbData: BreadCrumb[] = [];
   selectedStaff: any = null;
   selectedstaffRole: any = null;
   staffRoles: any = [];
@@ -85,48 +98,20 @@ export class StaffComponent {
   currentPage: number = 1;
   totalPages: number = 1;
   staffRole: any = [];
-  private modalService = inject(NgbModal);
-  private staffService = inject(StaffService);
-  private alertService = inject(AlertService);
-  private route = inject(ActivatedRoute);
-  private sharedService = inject(SharedService);
-  private destroyRef = inject(DestroyRef);
   private onStaffSearch$ = new Subject<string>();
-  private translate = inject(TranslateService);
-  private sharedApiService = inject(SharedApiService);
   closeResult: WritableSignal<string> = signal('');
   currentLanguage = 'en';
   showDetailView: boolean = false;
-
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
-
+  assignedProperties: any[] = [];
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-    // ------------------------- Search debounce time -------------------------
-    this.onStaffSearch$
-      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
-      .subscribe((searchText) => {
-        if (searchText?.trim())
-          this.staffRolesData['search'] = searchText.trim();
-        else delete this.staffRolesData['search'];
-
-        this.currentPage = 1;
-        this.getStaffRoleDetails();
-      });
-  }
-
-  ngOnInit(): void {
-    this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
-
-    const id = this.route.snapshot.paramMap.get('id');
-
+    this.initStaffSearchListener();
+    const id = this.route.snapshot.paramMap.get('staff_id');
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
@@ -134,15 +119,35 @@ export class StaffComponent {
       this.showDetailView = false;
       this.getStaffRoleDetails();
     }
-    this.getOptionTypes(['STAFF_ROLE']);
+  }
+
+  ngOnInit(): void {
+    this.loadBreadcrumb();
+
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
   }
 
   async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.STAFF', link: '' },
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.STAFF', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   onRefresh() {
@@ -152,21 +157,58 @@ export class StaffComponent {
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
+
+  onUserSave(success: boolean, modal: NgbActiveModal) {
+    // component.submitStaffForm();
+
+    // modal.close();
+    if (success) {
+      modal.close();
+      this.getStaffRoleDetails();
+    }
+  }
   removeFilter() {
     this.selectedstaffRole = null;
-    delete this.staffRolesData['staff_role'];
+    delete this.staffRolesData['role'];
 
     this.currentPage = 1;
     this.getStaffRoleDetails();
   }
+
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.staffRole = response?.content?.staff_role;
+          this.staffRole = response?.content?.role;
           console.log('data', this.staffRole);
+        },
+      });
+  }
+
+  handleInternalTableExport(): void {
+    if (!this.showDetailView) return;
+
+    const payload = {
+      staff_id: this.selectedStaff.staff_id,
+    };
+
+    this.staffService
+      .getExcelFileOfStaff(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `assigned_properties_export.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('Internal table exported successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
         },
       });
   }
@@ -176,8 +218,6 @@ export class StaffComponent {
 
   handleExportClick(): void {
     this.staffService.getExcelFileOfStaff({}).subscribe((resp) => {
-      console.log('response:--->', resp);
-
       const url = window.URL.createObjectURL(resp);
 
       const a = document.createElement('a');
@@ -191,8 +231,9 @@ export class StaffComponent {
 
     console.log('Export button clicked');
   }
+
   applyFilter() {
-    this.staffRolesData['staff_role'] = this.selectedstaffRole.key;
+    this.staffRolesData['role'] = this.selectedstaffRole.key;
     this.currentPage = 1;
     this.getStaffRoleDetails();
   }
@@ -279,23 +320,40 @@ export class StaffComponent {
     this.getStaffRoleDetails();
   }
 
+  initStaffSearchListener() {
+    this.onStaffSearch$
+      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText) => {
+        if (searchText?.trim())
+          this.staffRolesData['search'] = searchText.trim();
+        else delete this.staffRolesData['search'];
+
+        this.currentPage = 1;
+        this.getStaffRoleDetails();
+      });
+  }
+
   searchTextChange(search: string) {
     this.onStaffSearch$.next(search);
   }
 
   // ------------------------- Handel show details function -------------------------
 
-  handleViewClick(staffId: number): void {
-    this.router.navigate(['/dashboard/staff/detail', staffId]);
+  onhandleSelectClick(): void {
+    this.getOptionTypes(['ROLE']);
+  }
+  handleViewClick(staff_id: number): void {
+    this.router.navigate(['/dashboard/staff/detail', staff_id]);
   }
 
-  loadDetailView(staffId: number): void {
+  loadDetailView(staff_id: number): void {
     this.staffService
-      .accessStaffRoleDetails({ id: staffId })
+      .accessStaffRoleDetails({ staff_id: staff_id })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.selectedStaff = resp.content;
+          this.assignedProperties = resp?.content?.assigned_properties ?? [];
         },
         error: (err) => console.error('Detail API Error:', err),
       });

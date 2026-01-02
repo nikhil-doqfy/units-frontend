@@ -2,8 +2,10 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  EventEmitter,
   inject,
   Input,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -58,6 +60,7 @@ export class AddUserFormComponent {
 
   userImage: string | null = null;
   selectedType: string = '';
+  selectedUserType: any = null;
   hidePassword = false;
   hideConfirmPassword = false;
   userForm!: FormGroup;
@@ -68,6 +71,7 @@ export class AddUserFormComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @Input() editData: any = null;
 
+  @Output() formSubmitted: EventEmitter<any> = new EventEmitter();
   // ------------------------- Build user management form  -------------------------
 
   constructor() {
@@ -112,12 +116,11 @@ export class AddUserFormComponent {
       imageBase64: ['', Validators.required],
       imageFile: [''],
     });
-
-    this.getOptionTypes(['USER_TYPES']);
   }
 
   ngOnInit() {
     if (this.editData) {
+      console.log('Edit Data Received:', this.editData);
       this.patchEditUserForm();
       this.userForm.get('password')?.clearValidators();
       this.userForm.get('confirmPassword')?.clearValidators();
@@ -133,11 +136,27 @@ export class AddUserFormComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.userTypeList = response?.content?.user_types;
+          this.userTypeList = response?.content?.user_role ?? [];
         },
       });
   }
 
+  handleFilterClick(): void {
+    this.getOptionTypes(['USER_ROLE']);
+    console.log('Filter button clicked');
+  }
+  onOptionSelectedUserType(option: any) {
+    console.log('OPTION FROM SELECT:', option);
+    this.selectedUserType = option;
+
+    if (option?.value) {
+      this.userForm.patchValue({
+        role: option.key,
+      });
+    } else {
+      this.userForm.patchValue({ role: null });
+    }
+  }
   triggerFileInput() {
     this.fileInput.nativeElement.click();
   }
@@ -177,10 +196,8 @@ export class AddUserFormComponent {
       last_name: userData.lastName,
       email: userData.email,
       contact_number: userData.contactNumber,
-      role: {
-        key: this.editData.role?.key,
-        value: this.editData.role?.value,
-      },
+
+      role: userData.role,
       location: userData.location,
       profile_image: userData.imageBase64,
       password: userData.password,
@@ -188,18 +205,20 @@ export class AddUserFormComponent {
     };
 
     if (this.editData && this.editData.id) {
+      console.log('Editing user with data:', data);
       data['user_id'] = this.editData.id;
       this.editUser(data);
-    } else
-      this.userService
-        .addNewUser(data)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((resp: any) => {
-          if (resp.status === 201) {
-            this.alertService.success(resp.message);
-            this.router.navigate(['/dashboard/users']);
-          }
-        });
+    } else console.log('Adding new user with data:', data);
+    this.userService
+      .addNewUser(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        if (resp.status === 201) {
+          this.alertService.success(resp.message);
+          this.formSubmitted.emit(true);
+          this.router.navigate(['/dashboard/users']);
+        }
+      });
   }
 
   onOptionSelected(option: string) {
@@ -230,7 +249,7 @@ export class AddUserFormComponent {
 
   patchEditUserForm() {
     if (!this.editData) return;
-
+    this.selectedUserType = this.editData.role;
     this.userForm.patchValue({
       firstName: this.editData.first_name,
       lastName: this.editData.last_name,
@@ -238,11 +257,7 @@ export class AddUserFormComponent {
       contactNumber: this.editData.contact_number,
       location: this.editData.location,
 
-      role: {
-        key: this.editData.role?.key,
-        value: this.editData.role?.value,
-      },
-
+      role: this.editData.role.key,
       imageBase64: this.editData.profile_image || '',
       imageFile: '',
       password: '********',

@@ -68,6 +68,8 @@
                   <i><app-sorting-icon /></i>
                 </button>
               </th>
+              <th>{{ "EJARI_CERTIFICATE" | translate }}</th>
+
               <th>{{ "RENTAL_AGREEMENT" | translate }}</th>
               <th width="200"></th>
             </tr>
@@ -78,17 +80,17 @@
               <td>
                 <app-table-img-item
                   [img]="
-                    tenant?.profile_image ||
+                    tenant?.tenant_profile_image ||
                     '../../../../assets/userDefaultProImg.png'
                   "
-                  [title]="tenant?.full_name"
+                  [title]="tenant?.tenant_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick(tenant.lease_id)"
+                  (clicked)="handleViewClick(tenant.tenant_id)"
                 />
               </td>
 
-              <td>{{ tenant?.tenant_number }}</td>
-              <td>{{ tenant.mobile_number | maskPhone }}</td>
+              <td>{{ tenant?.user_code || "N/A" }}</td>
+              <td>{{ tenant.contact_number | maskPhone }}</td>
 
               <td>
                 <app-table-img-item
@@ -96,6 +98,16 @@
                   size="md"
                   [title]="tenant.property_assigned ?? 'N/A'"
                 />
+              </td>
+              <td>
+                <app-document-type-item
+                  title="Lease_001.pdf"
+                  subtitle="1.2 MB"
+                  (clicked)="handleViewPdf(tenant.lease_id)"
+                />
+                <ng-template #waitingDoc>
+                  <span class="waiting-text">Waiting for document</span>
+                </ng-template>
               </td>
               <td>
                 <app-document-type-item
@@ -219,35 +231,31 @@
 
 <ng-container *ngIf="showDetailView && selectedTenant">
   <app-table-view-card
-    [title]="
-      selectedTenant?.tenant_details?.first_name +
-      ' ' +
-      selectedTenant?.tenant_details?.last_name
-    "
-    [imgSrc]="selectedTenant?.tenant_details?.profile_image || ''"
+    [title]="selectedTenant?.first_name + ' ' + selectedTenant?.last_name"
+    [imgSrc]="selectedTenant?.profile_image || ''"
     [items]="[
-      { label: 'Email', value: selectedTenant?.tenant_details.email },
+      { label: 'Email', value: selectedTenant?.email },
       {
         label: 'Phone Number',
-        value: selectedTenant.tenant_details?.contact_number
+        value: selectedTenant?.contact_number
       },
       {
         label: 'Emirates ID',
-        value: selectedTenant.tenant_details?.emirate_id
+        value: selectedTenant?.emirate_id
       },
-      { label: 'City', value: selectedTenant.tenant_details?.city },
-      { label: 'Locality', value: selectedTenant.tenant_details?.location },
+      { label: 'City', value: selectedTenant?.city },
+      { label: 'Locality', value: selectedTenant?.location },
       {
         label: 'Postal Code',
-        value: selectedTenant.tenant_details?.postal_code
+        value: selectedTenant?.postal_code
       },
       {
         label: 'Address Line 1',
-        value: selectedTenant.tenant_details?.address
+        value: selectedTenant?.address
       },
       {
         label: 'Address Line 2',
-        value: selectedTenant.tenant_details?.address
+        value: selectedTenant?.address
       },
       {
         label: 'Linked Property',

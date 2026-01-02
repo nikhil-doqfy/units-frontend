@@ -6,7 +6,7 @@
 <app-auth-form>
   <form class="mt-2" [formGroup]="detailForm">
     <!-- Property Manage Through -->
-    <div class="mb-3">
+    <div class="mb-3" *ngIf="currentRole === 'owner'">
       <label class="form-label">Property Manage Through</label>
       <div class="d-flex gap-3">
         <label class="d-flex align-items-center gap-1">
@@ -42,7 +42,12 @@
       />
       @if (isInvalid(detailForm, 'emirateId').status) {
       <small class="errorMsg">
-        {{ isInvalid(detailForm, "emirateId").msg }}
+        {{
+          isInvalid(detailForm, "emirateId", {
+            pattern:
+              "Enter a valid Emirates ID (15 digits). Example: 784-1995-1234567-1"
+          }).msg
+        }}
       </small>
       }
     </div>
@@ -59,7 +64,12 @@
       />
       @if (isInvalid(detailForm, 'residenceVisa').status) {
       <small class="errorMsg">
-        {{ isInvalid(detailForm, "residenceVisa").msg }}
+        {{
+          isInvalid(detailForm, "residenceVisa", {
+            pattern:
+              "Enter a valid UAE Resident Visa number. Format: 201/1234567/123456"
+          }).msg
+        }}
       </small>
       }
     </div>
@@ -76,7 +86,12 @@
       />
       @if (isInvalid(detailForm, 'tradeLicense').status) {
       <small class="errorMsg">
-        {{ isInvalid(detailForm, "tradeLicense").msg }}
+        {{
+          isInvalid(detailForm, "tradeLicense", {
+            pattern:
+              " Enter a valid UAE Trade License number. Use 5-10 digits (numbers only)."
+          }).msg
+        }}
       </small>
       }
     </div>
@@ -89,7 +104,7 @@
       <button
         type="submit"
         class="btn btnCommon btn-wide"
-        (click)="goToResetPassword()"
+        (click)="goToUploadDocument()"
       >
         Next
       </button>

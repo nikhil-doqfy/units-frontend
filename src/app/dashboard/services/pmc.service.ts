@@ -16,25 +16,27 @@ export class PmcService {
 
   getPMC(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/pmc/owner/view/list/${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/owner/pmc${queryString}`);
   }
-
+  // ------------------------- getOwnerDetails -------------------------
+  // getPmcDetails(params: Record<string, any>): Observable<any> {
+  //   const queryString = this.sharedService.getQueryString(params);
+  //   return this.http.get(`${this.SERVER_ADDRESS}/owner/pmc${queryString}`);
+  // }
   editPMC(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/pmc/owner/view/list/`, data);
+    return this.http.put(`${this.SERVER_ADDRESS}/owner/pmc`, data);
   }
 
   getExcelFileOfPmc(params: any): Observable<Blob> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/export/pmc/csv${queryString}`,
+      `${this.SERVER_ADDRESS}/owner_compnay_csv${queryString}`,
       {
         responseType: 'blob',
       }
     );
   }
   addPmcToInvite(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/invite/owner/pmc`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/invitation`, data);
   }
 }

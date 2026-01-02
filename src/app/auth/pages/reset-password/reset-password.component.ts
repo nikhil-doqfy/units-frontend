@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AuthTitleComponent } from '../../component/auth-title/auth-title.component';
 import { AuthFormComponent } from '../../component/auth-form/auth-form.component';
@@ -17,6 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -37,64 +38,60 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class ResetPasswordComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private alertService = inject(AlertService);
+
   resetForm!: FormGroup;
   email: string = '';
   otp = '';
   password: string = '';
   confirm_password: string = '';
-
   showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private auth: AuthService,
-    private route: ActivatedRoute
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
     const data = history.state;
     this.email = data.email;
     this.otp = data.otp;
-    console.log(data);
     this.resetForm = this.fb.group({
       email: [this.email, [Validators.required, Validators.email]],
-
       otp: [this.otp, Validators.required],
       password: ['', Validators.required],
       confirm_password: ['', Validators.required],
     });
-    console.log('Email from state:', this.email);
   }
+
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   resetPassword() {
-    console.log('Form values:', this.resetForm.value);
-    console.log('Form valid?', this.resetForm.valid);
     if (this.resetForm.invalid) {
       this.resetForm.markAllAsTouched();
       return;
     }
+
     const payload = {
       email: this.resetForm.get('email')?.value,
       otp: this.resetForm.get('otp')?.value,
-
       password: this.resetForm.get('password')?.value,
       confirm_password: this.resetForm.get('confirm_password')?.value,
     };
+
     this.auth
       .resetPassword(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
-          alert('Password reset successful!');
+        next: (resp: any) => {
+          this.alertService.success(resp.message);
           this.router.navigate(['/auth/login']);
         },
         error: (err) => {
           console.log(err);
-          alert(err.error?.message || 'Something went wrong');
         },
       });
   }

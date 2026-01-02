@@ -14,57 +14,45 @@ export class UserService {
 
   getUserProfile(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/user/profile/view${queryString}`
-    );
-  }
-
-  changePassword(data: any) {
-    return this.http.post(
-      `${environment.SERVER_ADDRESS}/auth/change/password`,
-      data
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/user/profile${queryString}`);
   }
 
   editUserProfile(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/user/profile/view/`, data);
+    return this.http.put(`${this.SERVER_ADDRESS}/user/profile`, data);
   }
 
   // ------------------------- Access user service management -------------------------
   accessUserManagement(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/user/user/management${queryString}`
+      `${this.SERVER_ADDRESS}/user/management${queryString}`
     );
   }
 
-
-
   // ------------------------- Add new user -------------------------
   addNewUser(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/user/user/management`, data);
+    console.log('Adding new user with data:', data);
+    return this.http.post(`${this.SERVER_ADDRESS}/user/management`, data);
   }
-
 
   // ------------------------- Edit new user -------------------------
   editUserManagement(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/user/user/management`, data);
+    return this.http.put(`${this.SERVER_ADDRESS}/user/management`, data);
   }
-
-
 
   // ------------------------- Delete user -------------------------
   DeleteUser(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.delete(
-      `${this.SERVER_ADDRESS}/user/user/management${queryString}`
+      `${this.SERVER_ADDRESS}/user/management${queryString}`
     );
   }
 
   // ------------------------- User activate -------------------------
   activateUser(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/user/toggle/user/active`, data);
+    return this.http.put(
+      `${this.SERVER_ADDRESS}/user/toggle/user/active`,
+      data
+    );
   }
-
-
 }

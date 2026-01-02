@@ -35,6 +35,7 @@
                         value="value"
                         placeholder="Select staff role"
                         (optionSelected)="selectedstaffRole = $event"
+                        (click)="onhandleSelectClick()"
                       >
                       </app-custom-select>
                     </div>
@@ -107,13 +108,13 @@
                   img="../../../../assets/user/user-1.png"
                   [title]="staff.staff_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick(staff.id)"
+                  (clicked)="handleViewClick(staff.staff_id)"
                 >
                 </app-table-img-item>
               </td>
 
               <td>{{ staff.staff_id }}</td>
-              <td>{{ staff.phone_number | maskPhone }}</td>
+              <td>{{ staff.contact_number | maskPhone }}</td>
 
               <td>
                 <app-table-multi-img-item
@@ -130,8 +131,10 @@
                 </app-table-multi-img-item>
               </td>
 
-              <td>{{ staff.tanancy_ration || "_" }}</td>
-              <td>{{ staff.staff_role?.name }}</td>
+              <td>{{ staff.tenancy_ratio || "_" }}</td>
+              <td>
+                {{ staff.roles?.length ? staff.roles.join(", ") : "_" }}
+              </td>
 
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
@@ -194,7 +197,11 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-add-staff-form />
+    <app-add-staff-form
+      #AddStaffFormComponent
+      [editData]="selectedStaff"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
   </div>
   <div class="modal-footer">
     <button
@@ -205,10 +212,11 @@
       {{ "CANCEL" | translate }}
     </button>
     <button
-      type="button"
+      type="submit"
       class="btn btnCommon"
-      (click)="modal.close('Save click')"
+      (click)="AddStaffFormComponent.submitStaffForm()"
     >
+      <!-- (click)="modal.close('Save click')" -->
       {{ "SUBMIT_DETAILS" | translate }}
     </button>
   </div>
@@ -219,15 +227,20 @@
     [title]="selectedStaff.staff_name"
     [imgSrc]="'../../../assets/user/user-2.png'"
     [items]="[
-      { label: 'Email', value: selectedStaff.user_email },
-      { label: 'Phone Number', value: selectedStaff.phone_number },
-      { label: 'Emirates ID', value: selectedStaff.emirates_id },
+      { label: 'Email', value: selectedStaff.email },
+      { label: 'Phone Number', value: selectedStaff.contact_number },
+      { label: 'Emirates ID', value: selectedStaff.emirate_id },
       { label: 'City', value: selectedStaff.city },
       { label: 'Locality', value: selectedStaff.locality },
       { label: 'Postal Code', value: selectedStaff.postal_code },
-      { label: 'Address Line 1', value: selectedStaff.address_line_1 },
-      { label: 'Address Line 2', value: selectedStaff.address_line_2 },
-      { label: 'Staff Role', value: selectedStaff.staff_role?.name },
+      { label: 'Address Line 1', value: selectedStaff.address },
+      { label: 'Address Line 2', value: selectedStaff.additional_address },
+      {
+        label: 'Staff Role',
+        value: selectedStaff.roles?.length
+          ? selectedStaff.roles.join(', ')
+          : 'N/A'
+      },
       {
         label: 'Assigned Property',
         value:
@@ -264,7 +277,7 @@
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
-              (clicked)="handleExportClick()"
+              (clicked)="handleInternalTableExport()"
             >
               <app-export-icon />
             </app-table-filter-btn>
@@ -293,19 +306,35 @@
               <th width="200">Document</th>
             </tr>
           </thead>
+
           <tbody>
+            @for (property of assignedProperties; track $index) {
             <tr>
-              <td>LP9021</td>
+              <td>{{ property.property_code || "_" }}</td>
+
               <td>
                 <app-table-img-item
-                  img="../../assets/property/property-list-1.png"
+                  [img]="
+                    property.property_image?.data ||
+                    'assets/property/property-list-1.png'
+                  "
                   size="md"
-                  title="Novatis AG..."
+                  [title]="property.property_name"
                 />
               </td>
-              <td>N/A</td>
-              <td>Staff 1</td>
-              <td>Ali Musfiq Rahman</td>
+
+              <td>
+                {{ property.tenant_name || "N/A" }}
+              </td>
+
+              <td>
+                {{ selectedStaff?.staff_name || "_" }}
+              </td>
+
+              <td>
+                {{ property.owner_name || "N/A" }}
+              </td>
+
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
@@ -319,129 +348,14 @@
                 </div>
               </td>
             </tr>
+            } @empty {
             <tr>
-              <td>LP8021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Agriculture...."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-2.png"
-                  title="Richard"
-                />
-              </td>
-              <td>Staff 2</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
+              <td colspan="6" align="center">No Properties Assigned</td>
             </tr>
-            <tr>
-              <td>VC79021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Honda..."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-3.png"
-                  title="Thaomas"
-                />
-              </td>
-              <td>Staff 3</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC69021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="TVS"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-4.png"
-                  title="Akshay"
-                />
-              </td>
-              <td>Staff 4</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC59021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Samsung"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-5.png"
-                  title="Avanshi"
-                />
-              </td>
-              <td>Staff 5</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
+            }
           </tbody>
         </table>
       </div>
     </div>
-  </div>
-</ng-container>
+  </div></ng-container
+>

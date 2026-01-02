@@ -1,5 +1,5 @@
-import { Component, Input, ViewChild } from "@angular/core";
-
+import { Component, Input, ViewChild } from '@angular/core';
+import { OnChanges, SimpleChanges } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ChartComponent,
@@ -10,9 +10,8 @@ import {
   ApexFill,
   ApexYAxis,
   ApexTitleSubtitle,
-  NgApexchartsModule
-} from "ng-apexcharts";
-
+  NgApexchartsModule,
+} from 'ng-apexcharts';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -31,58 +30,73 @@ export type ChartOptions = {
   standalone: true,
   imports: [NgApexchartsModule],
   templateUrl: './column.component.html',
-  styleUrl: './column.component.css'
+  styleUrl: './column.component.css',
 })
-export class ColumnChartComponent {
-  @ViewChild("chart") chart!: ChartComponent;
+export class ColumnChartComponent implements OnChanges {
+  @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-
+  @Input() data: { name: string; value: number }[] = [];
   constructor() {
     this.chartOptions = {
       series: [
         {
-          name: "My-series",
-          data: [370000, 360000, 310000, 370000, 300000, 360000, 370000, 420000, 280000, 330000, 400000, 220000]
-        }
+          name: 'My-series',
+          data: [],
+        },
       ],
       chart: {
         height: 212,
-        type: "bar",
+        type: 'bar',
         toolbar: {
-          show: false
+          show: false,
         },
       },
-      colors: ["#2C7AFF"],
+      colors: ['#2C7AFF'],
       plotOptions: {
         bar: {
           borderRadius: 2,
-          horizontal: false
-        }
+          horizontal: false,
+        },
       },
       title: {
-        text: "",
-        align: "left"
+        text: '',
+        align: 'left',
       },
       xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        categories: [],
         axisBorder: { show: false },
-        axisTicks: { show: false }
+        axisTicks: { show: false },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       yaxis: {
-        min: 100000,
-        max: 500000,
+        // min: 100000,
+        // max: 500000,
         labels: {
-          formatter: (value) => "AED " + value.toLocaleString("en-IN")
+          formatter: (value) => 'AED ' + value.toLocaleString('en-IN'),
         },
         axisBorder: { show: false },
-        axisTicks: { show: false }
+        axisTicks: { show: false },
       },
       fill: {
-        opacity: 1
-      }
+        opacity: 1,
+      },
     };
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data?.length) {
+      this.chartOptions.series = [
+        {
+          name: 'My-series',
+          data: this.data.map((d) => d.value),
+        },
+      ];
+
+      this.chartOptions.xaxis = {
+        ...this.chartOptions.xaxis,
+        categories: this.data.map((d) => d.name),
+      };
+    }
   }
 }

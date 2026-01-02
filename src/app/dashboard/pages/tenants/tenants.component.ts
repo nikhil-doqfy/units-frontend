@@ -39,7 +39,11 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { TenantsService } from '../../services/tenants.service';
 import { debounceTime, Subject } from 'rxjs';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
@@ -47,7 +51,6 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
-import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-tenants',
@@ -59,11 +62,9 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
     TableSelectComponent,
     TableSearchComponent,
     TableFilterButtonComponent,
-    // FilterIconComponent,
     ExportIconComponent,
     PlusIconComponent,
     InviteIconComponent,
-    // TableActionButtonComponent,
     TableActionDropdownComponent,
     TablePaginationComponent,
     SortingIconComponent,
@@ -76,8 +77,6 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
     TranslateModule,
     NoDataComponent,
     MaskPhonePipe,
-    // FilterPopupButtonComponent,
-    // CustomSelectComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
@@ -89,18 +88,13 @@ export class TenantsComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+
   componentName: string = 'TenantsComponent';
-
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Tenants', link: '' },
-  ];
-
+  breadcrumbData: BreadCrumb[] = [];
   currentRole: UserRole = 'owner';
   closeResult: WritableSignal<string> = signal('');
-
   showDetailView: boolean = false;
-
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -113,22 +107,12 @@ export class TenantsComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   private onTenantsSearch$ = new Subject<string>();
-  private translate = inject(TranslateService);
   currentLanguage = 'en';
 
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-
-    this.onTenantsSearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => {
-        if (value?.trim()) this.tenantsFilter['search'] = value.trim();
-        else delete this.tenantsFilter['search'];
-
-        this.currentPage = 1;
-        this.getTenants();
-      });
+    this.initTenantSearchListener();
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -142,10 +126,12 @@ export class TenantsComponent {
 
   ngOnInit() {
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
+    this.initCurrentRoleListener();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+  }
 
+  initCurrentRoleListener() {
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((role) => {
@@ -153,18 +139,31 @@ export class TenantsComponent {
       });
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.TENANTS', link: '' },
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.TENANTS', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private getTenants() {
     this.tenantsFilter = {
       ...this.tenantsFilter,
-
       limit: this.rowsPerPage,
       page: this.currentPage,
     };
@@ -174,7 +173,7 @@ export class TenantsComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.tenantsList = resp?.content?.tenants ?? [];
+          this.tenantsList = resp?.content ?? [];
           console.log(' TENANT OBJECT:', this.tenantsList[0]);
           this.totalRecords = resp?.pagination?.total_records ?? 0;
         },
@@ -188,6 +187,18 @@ export class TenantsComponent {
 
   searchTextChange(search: string): void {
     this.onTenantsSearch$.next(search);
+  }
+
+  initTenantSearchListener() {
+    this.onTenantsSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        if (value?.trim()) this.tenantsFilter['search'] = value.trim();
+        else delete this.tenantsFilter['search'];
+
+        this.currentPage = 1;
+        this.getTenants();
+      });
   }
 
   onPageSizeChange(event: PageSizeChange): void {
@@ -217,7 +228,6 @@ export class TenantsComponent {
       return;
     }
     // const lease_id = Number(this.route.snapshot.paramMap.get('lease_id'));
-    console.log(' handleViewPdf called with leaseId:', leaseId);
     this.tenantsService
       .getLeasePdf(leaseId)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -262,10 +272,9 @@ export class TenantsComponent {
       });
   }
 
-  //   applyFilter() {
-  //   this.currentPage = 1;
-  //   this.getUser();
-  // }
+  applyFilter() {
+    this.currentPage = 1;
+  }
   openAddTenantModal(addTenantContent: TemplateRef<any>) {
     const modalRef = this.modalService.open(addTenantContent, {
       ariaLabelledBy: 'modal-title',

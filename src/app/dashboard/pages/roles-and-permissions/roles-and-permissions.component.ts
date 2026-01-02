@@ -25,6 +25,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BreadCrumb } from '../../../shared/model/shared.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RoleAndPermissionsService } from '../../../services/role-and-permissions.service';
 
 @Component({
   selector: 'app-roles-and-permissions',
@@ -42,7 +45,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TablePaginationComponent,
     AddRoleFormComponent,
     TranslateModule,
-    NoDataComponent,
   ],
   templateUrl: './roles-and-permissions.component.html',
   styleUrl: './roles-and-permissions.component.css',
@@ -52,33 +54,100 @@ export class RolesAndPermissionsComponent {
   private sharedService = inject(SharedService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Roles & Permissions', link: '' },
-  ];
+  private modalService = inject(NgbModal);
+
+  breadcrumbData: BreadCrumb[] = [];
   currentLanguage = 'en';
   showDetailView: boolean = false;
-  private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
 
-  constructor(private router: Router) {
+  roles: any[] = [];
+  tableLoading = false;
+  currentPage = 1;
+  pageSize = 10;
+  constructor(
+    private router: Router,
+    private roleService: RoleAndPermissionsService,
+    private fb: FormBuilder
+  ) {
+    this.roleForm = this.fb.group({
+      name: ['', Validators.required],
+    });
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
+    this.initLanguageListener();
+    this.sharedService.initLanguage();
+
+    this.fetchRoles();
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.ROLES_PERMISSIONS', link: '' },
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.ROLES_PERMISSIONS', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
+
+  roleForm: FormGroup;
+  isLoading = false;
+  successMessage = '';
+  errorMessage = '';
+
+  createRole() {
+    if (this.roleForm.invalid) return;
+
+    this.isLoading = true;
+    this.roleService.createRole(this.roleForm.value).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.successMessage = 'Role created successfully!';
+        this.modalService.dismissAll();
+
+        this.fetchRoles();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err?.error?.message || 'Failed to create role.';
+      },
+    });
+  }
+
+  fetchRoles(): void {
+    this.tableLoading = true;
+
+    this.roleService
+      .getRoles({
+        page: this.currentPage,
+        limit: this.pageSize,
+      })
+      .subscribe({
+        next: (res) => {
+          this.roles = res?.content || [];
+          this.tableLoading = false;
+        },
+        error: () => {
+          this.tableLoading = false;
+        },
+      });
   }
 
   openAddRoleModal(addRoleContent: TemplateRef<any>) {

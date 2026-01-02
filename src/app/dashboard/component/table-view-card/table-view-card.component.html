@@ -1,49 +1,67 @@
 <div class="cmmnTblViewCol">
-    <div class="cmmnTblViewHdr">
-        <div class="cmmnTblViewTtl">
-            <i>
-                <ng-container *ngIf="imgSrc; else noImg">
-                    <img [src]="imgSrc" alt="" />
-                </ng-container>
-                <ng-template #noImg>
-                    <div class="avatar">{{ titleInitial }}</div>
-                </ng-template>
-            </i>
-            <div>
-                <h4>{{ title }}</h4>
-                <ul *ngIf="headerItems.length > 0">
-                    <li *ngFor="let h of headerItems">
-                        {{ h.label }}: <span>{{ h.value || '--' }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="cmmnTblViewBtns">
-            <button *ngIf="showEdit" type="button" class="cmmnTblViewEditBtn" (click)="onEditClick()">
-                <app-edit-icon />
-            </button>
-            <div class="cmmnTblViewComboBtns" *ngIf="hasProjectedContent; else noActionButtons">
-                <button type="button" class="btn btnCommon btnWhite" (click)="onBackClick()">
-                    <i><app-back-icon /></i> Back
-                </button>
-                <div>
-                    <ng-content></ng-content>
-                </div>
-            </div>
-            <ng-template #noActionButtons>
-                <button type="button" class="btn btnCommon btnWhite" (click)="onBackClick()">
-                    <i><app-back-icon /></i> Back
-                </button>
-            </ng-template>
-        </div>
-    </div>
-    <div class="cmmnTblViewBdy">
-        <ul>
-            <li *ngFor="let item of items">
-                <span>{{ item.label }}</span>
-                <p *ngIf="!item.link">{{ item.value || '--' }}</p>
-                <p *ngIf="item.link"><a [href]="item.link">{{ item.value }}</a></p>
-            </li>
+  <div class="cmmnTblViewHdr">
+    <div class="cmmnTblViewTtl">
+      <i>
+        <ng-container *ngIf="imgSrc; else noImg">
+          <img [src]="imgSrc" alt="" />
+        </ng-container>
+        <ng-template #noImg>
+          <div class="avatar">{{ titleInitial }}</div>
+        </ng-template>
+      </i>
+      <div>
+        <h4>{{ title }}</h4>
+        <ul *ngIf="headerItems.length > 0">
+          <li *ngFor="let h of headerItems">
+            {{ h.label }}: <span>{{ h.value || "--" }}</span>
+          </li>
         </ul>
+      </div>
     </div>
+    <div class="cmmnTblViewBtns">
+      <button
+        *ngIf="showEdit"
+        type="button"
+        class="cmmnTblViewEditBtn"
+        (click)="onEditClick()"
+      >
+        <app-edit-icon />
+      </button>
+      <div
+        class="cmmnTblViewComboBtns"
+        *ngIf="hasProjectedContent; else noActionButtons"
+      >
+        <button
+          type="button"
+          class="btn btnCommon btnWhite"
+          (click)="onBackClick()"
+        >
+          <i><app-back-icon /></i> Back
+        </button>
+      </div>
+      <ng-template #noActionButtons>
+        <button
+          type="button"
+          class="btn btnCommon btnWhite"
+          (click)="onBackClick()"
+        >
+          <i><app-back-icon /></i> Back
+        </button>
+      </ng-template>
+    </div>
+  </div>
+  <div class="cmmnTblViewBdy">
+    <ul>
+      <li *ngFor="let item of items">
+        <span>{{ item.label }}</span>
+        <p *ngIf="!item.link">{{ item.value || "--" }}</p>
+        <p *ngIf="item.link">
+          <a [href]="item.link">{{ item.value }}</a>
+        </p>
+      </li>
+    </ul>
+    <div class="rentalActions">
+      <ng-content select="[rental]"></ng-content>
+    </div>
+  </div>
 </div>

@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 export class DocumentTypeItemComponent {
   [x: string]: any;
   @Input() title!: string;
+  @Input() subtitle!: string;
   @Input() size!: string;
   @Input() fileUrl!: string;
   @Output() clicked = new EventEmitter<void>();
@@ -31,7 +32,7 @@ export class DocumentTypeItemComponent {
         return 'assets/pngIcon.png';
       case 'jpg':
       case 'jpeg':
-        return 'assets/jpgIcon.png';
+        return 'assets/pngIcon.png';
       default:
         return 'assets/fileIcon.png';
     }

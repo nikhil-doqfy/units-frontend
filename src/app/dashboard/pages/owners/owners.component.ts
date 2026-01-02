@@ -37,7 +37,11 @@ import { OwnerService } from '../../services/owner.service';
 import { debounceTime, Subject } from 'rxjs';
 import { InvitePMCFormComponent } from '../../component/forms/invite-pmc-form/invite-pmc-form.component';
 import { AlertService } from '../../../shared/services/alert.service';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
@@ -45,6 +49,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { InviteOwnerBtnComponent } from '../../component/invite-owner-btn/invite-owner-btn.component';
 
 @Component({
   selector: 'app-owners',
@@ -59,7 +64,6 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     TableFilterButtonComponent,
     FilterIconComponent,
     ExportIconComponent,
-    InviteIconComponent,
     TableActionButtonComponent,
     TableActionDropdownComponent,
     TablePaginationComponent,
@@ -72,15 +76,13 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     NoDataComponent,
     FilterPopupButtonComponent,
     CustomSelectComponent,
+    InviteOwnerBtnComponent,
   ],
   templateUrl: './owners.component.html',
   styleUrl: './owners.component.css',
 })
 export class OwnersComponent {
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Owners', link: '' },
-  ];
+  breadcrumbData: BreadCrumb[] = [];
   selectedOwner: any = null;
   private sharedApiService = inject(SharedApiService);
   owners: any[] = [];
@@ -115,19 +117,9 @@ export class OwnersComponent {
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+    this.initOwnerSearchListener();
 
-    // ------------------------- Search debounce time -------------------------
-    this.onOwnerSearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((searchText) => {
-        if (searchText?.trim()) this.ownerData['search'] = searchText.trim();
-        else delete this.ownerData['search'];
-
-        this.currentPage = 1;
-        this.getOwner();
-      });
-
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('owner_id');
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
@@ -140,18 +132,31 @@ export class OwnersComponent {
   }
 
   ngOnInit(): void {
+    this.sharedService.initLanguage();
     this.loadBreadcrumb();
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadBreadcrumb());
+    this.initLanguageListener();
   }
 
-  async loadBreadcrumb() {
-    this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-      { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { key: 'PAGE_TITLE.OWNERS', link: '' },
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.OWNERS', link: '' },
     ]);
-    this.sharedService.initLanguage();
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   onRefresh() {
@@ -173,7 +178,9 @@ export class OwnersComponent {
         next: (resp: any) => {
           this.owners = (resp?.content ?? []).map((o: any) => {
             const images =
-              o.properties?.flatMap((p: any) => p.images || [0]) || [];
+              o.properties?.flatMap((p: any) =>
+                p?.image?.data ? [p.image.data] : []
+              ) || [];
 
             return {
               ...o,
@@ -206,6 +213,18 @@ export class OwnersComponent {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
     this.getOwner();
+  }
+
+  initOwnerSearchListener() {
+    this.onOwnerSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText) => {
+        if (searchText?.trim()) this.ownerData['search'] = searchText.trim();
+        else delete this.ownerData['search'];
+
+        this.currentPage = 1;
+        this.getOwner();
+      });
   }
 
   searchTextChange(search: string) {
@@ -241,30 +260,6 @@ export class OwnersComponent {
     }
   }
 
-  // ------------------------- Invited by PMC TO Owner -------------------------
-
-  sendInvite(
-    inviteFormRef: InviteOwnerFormComponent,
-    modal?: NgbActiveModal | any
-  ) {
-    const form = inviteFormRef.pmcOwnerForm;
-    if (form.invalid) {
-      form.markAllAsTouched();
-      return;
-    }
-
-    let payload = { email: form.value.email };
-    this.ownerService
-      .addOwnerToInvite(payload)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp: any) => {
-          this.alertService.success(resp.message);
-          modal?.close('Save click');
-        },
-      });
-  }
-
   handleEditClick(): void {
     console.log('Edit button clicked');
   }
@@ -289,6 +284,50 @@ export class OwnersComponent {
     console.log(`${action} action clicked`);
   }
 
+  handleViewPdf(leaseId: number): void {
+    if (!leaseId) {
+      this.alertService.info('No tenant found for this property.');
+      return;
+    }
+    this.ownerService
+      .getOwnerPdf(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const pdfUrl = resp?.content?.pdf_url;
+
+          if (pdfUrl) {
+            window.open(pdfUrl, '_blank');
+          } else {
+            this.alertService.error('PDF URL not found.');
+          }
+        },
+        error: () => {
+          this.alertService.error('Failed to open PDF preview.');
+        },
+      });
+  }
+  handleDownloadPdf(leaseId: number): void {
+    if (!leaseId) {
+      this.alertService.info('No tenant found for this property.');
+      return;
+    }
+    this.ownerService
+      .getOwnerPdf(leaseId, 'download')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        const pdfUrl = resp?.content?.pdf_url;
+        if (pdfUrl) {
+          const a = document.createElement('a');
+          a.href = pdfUrl;
+          a.download = `lease_${leaseId}.pdf`;
+          a.click();
+          this.alertService.success('PDF downloaded successfully!');
+        } else {
+          this.alertService.error('PDF URL not found.');
+        }
+      });
+  }
   handleFilterClick(): void {
     console.log('Filter button clicked');
   }
@@ -304,7 +343,7 @@ export class OwnersComponent {
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'property_export.csv';
+        a.download = 'owner_export.csv';
         a.click();
 
         window.URL.revokeObjectURL(url);
@@ -313,37 +352,30 @@ export class OwnersComponent {
     console.log('Export button clicked');
   }
 
-  handleExportInternalTable() {
-    console.log('Selected Owner at export:', this.selectedOwner);
-    if (this.selectedOwner?.owner_id) {
-      this.alertService.error('Owner not selected');
-      return;
-    }
+  handleInternalTableExport(): void {
+    if (!this.showDetailView) return;
 
-    const params = {
+    const payload = {
       owner_id: this.selectedOwner.owner_id,
     };
 
-    console.log('Export params:', params);
-
     this.ownerService
-      .getExcelFileOfowner(params)
+      .getExcelFileOfowner(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp) => {
-        console.log('Export response:', resp);
-
-        const url = window.URL.createObjectURL(resp);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'owner_properties_export.xlsx';
-        a.click();
-
-        window.URL.revokeObjectURL(url);
-        this.alertService.success('File downloaded successfully!');
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `assigned_properties_export.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('Internal table exported successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
+        },
       });
-
-    console.log('Export button clicked');
   }
   getOptionTypes(options: string[]) {
     this.sharedApiService
@@ -366,25 +398,26 @@ export class OwnersComponent {
   }
 
   // ------------------------- Handel show details function -------------------------
-  handleViewClick(ownerID: number): void {
-    this.router.navigate(['/dashboard/owners/detail/', ownerID]);
+  handleViewClick(owner_id: number): void {
+    this.router.navigate(['/dashboard/owners/detail/', owner_id]);
   }
 
   refreshDetailsView() {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('owner_id');
     if (id) this.loadDetailView(+id);
   }
 
-  loadDetailView(ownerID: number): void {
+  loadDetailView(owner_id: number): void {
     this.ownerService
       .getOwnerDetails({
-        owner_id: ownerID,
+        owner_id: owner_id,
         rental_status: this.ownerData['rental_status'],
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.selectedOwner = resp.content;
+          this.selectedOwner = resp.content.owner_details;
+          this.selectedOwner.table = resp?.content?.table || [];
         },
         error: (err) => console.error('Detail API Error:', err),
       });

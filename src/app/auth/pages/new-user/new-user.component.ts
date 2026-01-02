@@ -108,9 +108,9 @@ export class NewUserComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(/^[A-Za-z .-]+$/),
           Validators.minLength(2),
           Validators.maxLength(50),
+          Validators.pattern(/^[A-Za-z0-9][A-Za-z0-9 '&.,-]*[A-Za-z0-9]$/),
         ],
       ],
       contact_number: [
@@ -148,11 +148,14 @@ export class NewUserComponent implements OnInit {
   }
 
   addConfirmPasswordListener() {
-    this.signupForm.get('confirmPassword')?.valueChanges.subscribe(() => {
-      this.passwordMismatch =
-        this.signupForm.get('password')?.value !==
-        this.signupForm.get('confirmPassword')?.value;
-    });
+    this.signupForm
+      .get('confirmPassword')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.passwordMismatch =
+          this.signupForm.get('password')?.value !==
+          this.signupForm.get('confirmPassword')?.value;
+      });
   }
   roleFieldMap: Record<string, string[]> = {
     owner: [

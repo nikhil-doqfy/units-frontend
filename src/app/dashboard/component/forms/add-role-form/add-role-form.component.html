@@ -1,15 +1,23 @@
 <app-modal-form-card>
-  <form>
+  <form [formGroup]="form">
     <div class="mb-0">
       <label for="role" class="form-label"
         >{{ "ROLE_NAME" | translate }}<span>*</span></label
       >
       <input
+        id="roleName"
+        formControlName="name"
         class="form-control"
         type="text"
         name="role"
         [placeholder]="'ENTER_HERE' | translate"
       />
+      <div
+        *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+        class="text-danger"
+      >
+        Role name is required
+      </div>
     </div>
   </form>
 </app-modal-form-card>
