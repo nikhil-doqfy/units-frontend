@@ -123,7 +123,7 @@ export class StaffComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.getOptionTypes(['ROLE']);
+
     this.sharedService.initLanguage();
     this.initLanguageListener();
   }
@@ -158,12 +158,14 @@ export class StaffComponent {
     console.log(`${action} action clicked`);
   }
 
-  onUserSave(component: AddStaffFormComponent, modal: NgbActiveModal) {
-    component.submitStaffForm();
+  onUserSave(success: boolean, modal: NgbActiveModal) {
+    // component.submitStaffForm();
 
     // modal.close();
-
-    this.getStaffRoleDetails();
+    if (success) {
+      modal.close();
+      this.getStaffRoleDetails();
+    }
   }
   removeFilter() {
     this.selectedstaffRole = null;
@@ -185,6 +187,31 @@ export class StaffComponent {
       });
   }
 
+  handleInternalTableExport(): void {
+    if (!this.showDetailView) return;
+
+    const payload = {
+      staff_id: this.selectedStaff.staff_id,
+    };
+
+    this.staffService
+      .getExcelFileOfStaff(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `assigned_properties_export.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('Internal table exported successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
+        },
+      });
+  }
   handleFilterClick(): void {
     console.log('Filter button clicked');
   }
@@ -312,6 +339,9 @@ export class StaffComponent {
 
   // ------------------------- Handel show details function -------------------------
 
+  onhandleSelectClick(): void {
+    this.getOptionTypes(['ROLE']);
+  }
   handleViewClick(staff_id: number): void {
     this.router.navigate(['/dashboard/staff/detail', staff_id]);
   }

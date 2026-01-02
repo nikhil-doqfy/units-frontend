@@ -30,7 +30,7 @@ export class PmcService {
   getExcelFileOfPmc(params: any): Observable<Blob> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/export/pmc/csv${queryString}`,
+      `${this.SERVER_ADDRESS}/owner_compnay_csv${queryString}`,
       {
         responseType: 'blob',
       }

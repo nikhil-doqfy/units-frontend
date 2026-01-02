@@ -21,11 +21,6 @@
         <label>Tenant Photo <span>*</span></label>
         <small>Max 5MB, PNG</small>
       </div>
-      <!-- 
-    <div>
-      <label>Link Property <span>*</span></label>
-      <app-custom-select> </app-custom-select>
-    </div> -->
 
       <div class="mb-0">
         <label for="assignedProperty" class="form-label"
@@ -64,7 +59,7 @@
           <select class="code">
             <option>+91</option>
           </select>
-          <input type="text" />
+          <input type="text" formControlName="contact_number" />
         </div>
       </div>
 
@@ -150,40 +145,59 @@
             <th width="200">{{ "Status" | translate }}</th>
           </tr>
         </thead>
+
         <tbody>
-          @for (row of [1,2,3,4,5]; track $index) {
+          @for (row of rentalPayments; track $index) {
           <tr>
             <td>
               <select class="form-control">
-                <option value=""></option>
+                <option value="">{{ row.bank || "Select Bank" }}</option>
               </select>
             </td>
 
             <td>
-              <input type="text" class="form-control" placeholder="" />
+              <input
+                type="text"
+                class="form-control"
+                [value]="row.bank_account"
+              />
             </td>
 
             <td>
-              <input type="text" class="form-control" placeholder="" />
+              <input
+                type="text"
+                class="form-control"
+                [value]="row.cheque_number"
+              />
             </td>
 
             <td>
-              <input type="date" class="form-control" />
+              <input
+                type="date"
+                class="form-control"
+                [value]="row.cheque_date | date : 'yyyy-MM-dd'"
+              />
             </td>
 
             <td>
-              <!-- <input type="text" class="form-control" /> -->
+              {{ row.payment_type?.value || "-" }}
             </td>
 
             <td>
-              <!-- <input type="text" class="form-control" /> -->
+              {{ row.purpose || "-" }}
             </td>
 
             <td>
-              <!-- <input type="text" class="form-control" /> -->
+              {{ row.amount }}
             </td>
 
-            <td></td>
+            <td>
+              {{ row.status }}
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="8" class="text-center">No records found</td>
           </tr>
           }
         </tbody>

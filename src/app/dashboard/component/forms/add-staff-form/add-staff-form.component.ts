@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, Input } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+} from '@angular/core';
 
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
 import { CustomSelectComponent } from '../../custom-select/custom-select.component';
@@ -46,6 +53,7 @@ export class AddStaffFormComponent {
 
   @Input() staffRole: any[] = [];
   @Input() editData: any = null;
+  @Output() formSubmitted: EventEmitter<any> = new EventEmitter();
   isInvalid = this.formService.isInvalid;
 
   staffForm!: FormGroup;
@@ -62,12 +70,10 @@ export class AddStaffFormComponent {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
     });
-    this.getOptionTypes(['ROLE']);
   }
 
   ngOnInit(): void {
     console.log('AddStaffFormComponent INIT');
-    this.getAssignedProperties();
     if (this.editData) {
       this.patchEditForm();
       if (this.editData) {
@@ -97,9 +103,9 @@ export class AddStaffFormComponent {
       });
   }
 
-  getAssignedProperties() {
+  getAssignedProperties(options: string[]) {
     this.sharedApiService
-      .getOptions({ option_type: 'PROPERTY_UNIT' })
+      .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
@@ -127,9 +133,7 @@ export class AddStaffFormComponent {
   }
 
   handleFilterClick(): void {
-    this.getOptionTypes(['ROLE']);
-    this.getOptionTypes(['PROPERTY_UNIT']);
-    console.log('Filter button clicked');
+    this.getAssignedProperties(['PROPERTY_UNIT']);
   }
   onOptionSelectedUserType(option: any) {
     console.log('OPTION FROM SELECT:', option);
@@ -147,6 +151,9 @@ export class AddStaffFormComponent {
     this.selectedType = option;
   }
 
+  handleStaffRole(): void {
+    this.getOptionTypes(['ROLE']);
+  }
   submitStaffForm() {
     console.log('SUBMIT CLICKED');
     this.staffForm.markAllAsTouched();
@@ -177,6 +184,7 @@ export class AddStaffFormComponent {
         .subscribe((resp: any) => {
           if (resp.status === 200) {
             this.alertService.success(resp.message);
+            this.formSubmitted.emit(true);
             this.router.navigate(['/dashboard/staff']);
           }
         });
@@ -193,19 +201,7 @@ export class AddStaffFormComponent {
         }
       });
   }
-  // ------------------ EDIT PATCH ------------------
 
-  // editUser(data: any) {
-  //   this.staffService
-  //     .editUserStaff(data)
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((resp: any) => {
-  //       if (resp.status == 200) {
-  //         this.alertService.success(resp.message);
-  //         this.router.navigate(['/dashboard/staff']);
-  //       }
-  //     });
-  // }
   patchEditForm() {
     if (!this.editData) return;
     this.selectedStaffRole = this.editData.role;

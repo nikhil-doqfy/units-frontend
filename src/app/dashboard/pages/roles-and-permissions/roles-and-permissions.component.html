@@ -48,72 +48,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let role of roles">
-              <td>{{ role.name }}</td>
-              <td>{{ role.createdAt }}</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="view"
-                    (clicked)="handleViewClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Owner</td>
-              <td>20 Sep 2024</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="view"
-                    (clicked)="handleViewClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>PM</td>
-              <td>25 Sep 2024</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="view"
-                    (clicked)="handleViewClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>User</td>
-              <td>30 Sep 2024</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="view"
-                    (clicked)="handleViewClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Lead</td>
-              <td>05 Oct 2024</td>
+              <td>{{ role.role_name }}</td>
+              <td>{{ role.created_on }}</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn

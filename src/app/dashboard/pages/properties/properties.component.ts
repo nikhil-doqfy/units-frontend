@@ -149,7 +149,7 @@ export class PropertiesComponent {
   ngOnInit() {
     this.initLanguageListener();
     this.initPropertySearchListener();
-
+    this.getProperties();
     this.currentRole = this.themeService.getRole();
     if (this.currentRole === 'tenant' && !this.currentPropertyId) {
       this.propertyView = 'my-properties';
@@ -169,18 +169,22 @@ export class PropertiesComponent {
           },
         },
       ]);
-    } else {
-      this.getProperties();
-      this.sharedApiService.getOptionsType([
-        {
-          param: 'TENANCY_STATUS',
-          key: 'tenancy_status',
-          setter: (v) => (this.rentalStatus = v),
-        },
-      ]);
     }
   }
 
+  getTenancyStatusOptions() {
+    this.sharedApiService.getOptionsType([
+      {
+        param: 'TENANCY_STATUS',
+        key: 'tenancy_status',
+        setter: (v) => (this.rentalStatus = v),
+      },
+    ]);
+  }
+
+  onRentalTenancyClick() {
+    this.getTenancyStatusOptions();
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))

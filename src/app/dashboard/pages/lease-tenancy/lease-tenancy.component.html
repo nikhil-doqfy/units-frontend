@@ -44,6 +44,7 @@
                       value="value"
                       placeholder="Select lease status"
                       (optionSelected)="selectedleasestatus = $event"
+                      (click)="onHandleLeaseStatusClick()"
                     >
                     </app-custom-select>
                   </div>
@@ -128,12 +129,12 @@
                 /> -->
                 <app-table-action-btn
                   type="download"
-                  (click)="handleDownloadPdf(lease.id)"
+                  (click)="handleDownloadPdf(lease.lease_id)"
                 />
                 <!-- (clicked)="handleDownloadClick()" -->
                 <app-table-action-btn
                   type="preview"
-                  (click)="handleViewPdf(lease.id)"
+                  (click)="handleViewPdf(lease.lease_id)"
                 />
 
                 <!-- (clicked)="handlePreviewClick()" -->

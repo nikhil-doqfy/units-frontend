@@ -55,6 +55,7 @@ export class AddRentalaccountComponent implements OnInit {
         console.log('showDetailView updated:', value);
       }
     );
+    this.loadRentalPayments();
   }
 
   componentName = 'RentalComponent';
@@ -166,33 +167,7 @@ export class AddRentalaccountComponent implements OnInit {
     console.log('Filter button clicked');
   }
 
-  getOptionTypes(options: string[]) {
-    // this.sharedApiService
-    //   .getOptions({ option_type: options.join(',') })
-    //   .pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe({
-    //     next: (response) => {
-    //       this.staffRole = response?.content?.role;
-    //       console.log('data', this.staffRole);
-    //       if (this.editData?.staff_role) {
-    //         this.selectedStaffRole = this.staffRole.find(
-    //           (r) => r.key === this.editData.staff_role.key
-    //         );
-    //       }
-    //     },
-    //   });
-  }
-
-  // onAssignedPropertySelected(option: any) {
-  // this.selectedAssignedProperty = option;
-  // if (option?.value) {
-  //   this.staffForm.patchValue({
-  //     assigned_property: option.value,
-  //   });
-  // } else {
-  //   this.staffForm.patchValue({ assigned_property: null });
-  // }
-  // }
+  getOptionTypes(options: string[]) {}
   onEdit() {
     this.isEditMode = true;
   }
@@ -262,12 +237,13 @@ export class AddRentalaccountComponent implements OnInit {
   rentalForm = this.fb.group({
     tenantName: [''],
     email: [''],
-    contactNumber: [''],
+    contact_number: [''],
     periodFrom: [''],
     periodTo: [''],
     unitType: [''],
     rent: [''],
   });
+  rentalPayments: any[] = [];
   onLinkPropertyClick(): void {
     this.api
       .getOptions({ option_type: 'RENTAL_ACCOUNT_LEASE' })
@@ -303,17 +279,32 @@ export class AddRentalaccountComponent implements OnInit {
       });
   }
 
+  loadRentalPayments(): void {
+    const params = {
+      page: this.currentPage,
+      limit: this.rowsPerPage,
+    };
+
+    this.rentalAccountService
+      .getRentalPayments(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.rentalPayments = res?.content || [];
+          this.totalRecords = res?.total_records || 0;
+        },
+        error: (err) => console.error(err),
+      });
+  }
   private mapLeaseDetails(lease: any): void {
     this.rentalForm.patchValue({
       tenantName: lease?.tenant?.first_name ?? '',
-      email: '',
-      contactNumber: '',
+      email: lease?.tenant?.email ?? '',
+      contact_number: lease?.tenant?.contact_number ?? '',
       unitType: lease?.lease_property?.property_unit_name ?? '',
       rent: lease?.rent ?? '',
       periodFrom: this.formatDate(lease?.lease_start_date),
       periodTo: this.formatDate(lease?.lease_end_date),
     });
   }
-  //     this.periodFrom = this.formatDate(data?.lease_start_date);
-  // this.periodTo = this.formatDate(data?.lease_end_date);
 }

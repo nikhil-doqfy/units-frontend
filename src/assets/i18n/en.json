@@ -184,7 +184,7 @@
   "PRIVACY_POLICY_SUMMARY_NOTE": "The highlighted text is aimed to give a plain English summary of our Privacy Policy. Please ensure you read the main text, as the plain English summary is just a summary and doesn’t capture all of the terms",
   "POLICY_COVERAGE": "What does this policy cover",
   "LOREM_IPSUM_TEXT": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text eversince the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release  of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-
+  "LEASE": "Lease",
   "OTHER_POLICY": "Other Policy",
   "TENANT_SERVICE_TERMS": "Tenant Service Terms",
   "PROPERTY_OWNER_AGREEMENT": "Property Owner Agreement",
@@ -259,6 +259,8 @@
   "NO_OF_PARKING": "No of Parking",
   "NO_OF_BALCONY": "No of Balcony",
   "PLOT_NO": "Plot No",
+  "ADDRESS LINE 1": "Address Line 1",
+  "ADDRESS LINE 2": "Address Line 2",
   "MAKANI_NO": "Makani No",
   "MY_PROPERTY": "My Property",
   "EDIT_TEMPLATE": "Edit Template",
@@ -330,6 +332,7 @@
   "DOQFY": "DOQFY",
   "AND": "And",
   "ZEN": "ZEN",
+
   "DOCUMENT_LAYOUT": "Document Layout",
   "LOCATION": "Location",
   "UNIT": "Unit",

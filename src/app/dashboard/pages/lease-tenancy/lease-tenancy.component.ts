@@ -98,7 +98,6 @@ export class LeaseTenancyComponent {
     this.sharedService.initLanguage();
     this.initLanguageListener();
     this.getLease();
-    this.getOptionTypes(['LEASE_STATUS']);
   }
 
   initCurrentRoleListener() {
@@ -242,6 +241,9 @@ export class LeaseTenancyComponent {
           console.log('data', this.leaseStatus);
         },
       });
+  }
+  onHandleLeaseStatusClick(): void {
+    this.getOptionTypes(['LEASE_STATUS']);
   }
   handleFilterClick(): void {
     console.log('Filter button clicked');

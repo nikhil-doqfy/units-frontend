@@ -27,10 +27,19 @@ export class OwnerService {
   getExcelFileOfowner(params: any) {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/export/owner/csv?${queryString}`,
+      `${this.SERVER_ADDRESS}/company_owners_csv${queryString}`,
       {
         responseType: 'blob',
       }
     );
+  }
+  getOwnerPdf(leaseId: number, type?: 'download') {
+    let url = `${this.SERVER_ADDRESS}/lease_pdf?lease_id=${leaseId}`;
+
+    if (type === 'download') {
+      url += `&purpose=download`;
+    }
+
+    return this.http.get(url);
   }
 }

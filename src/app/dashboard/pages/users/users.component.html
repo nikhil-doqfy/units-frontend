@@ -486,7 +486,11 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-add-user-form #AddUserFormComponent [editData]="selectedUser" />
+    <app-add-user-form
+      #AddUserFormComponent
+      [editData]="selectedUser"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
   </div>
   <div class="modal-footer">
     <button
@@ -499,7 +503,7 @@
     <button
       type="button"
       class="btn btnCommon"
-      (click)="onUserSave(AddUserFormComponent, modal)"
+      (click)="AddUserFormComponent.submitUserForm()"
     >
       {{ "SUBMIT_DETAILS" | translate }}
     </button>

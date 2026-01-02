@@ -2,8 +2,10 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  EventEmitter,
   inject,
   Input,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -69,6 +71,7 @@ export class AddUserFormComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @Input() editData: any = null;
 
+  @Output() formSubmitted: EventEmitter<any> = new EventEmitter();
   // ------------------------- Build user management form  -------------------------
 
   constructor() {
@@ -113,8 +116,6 @@ export class AddUserFormComponent {
       imageBase64: ['', Validators.required],
       imageFile: [''],
     });
-
-    this.getOptionTypes(['USER_TYPES']);
   }
 
   ngOnInit() {
@@ -150,7 +151,7 @@ export class AddUserFormComponent {
 
     if (option?.value) {
       this.userForm.patchValue({
-        role: option.key, // ✅ "OWNER"
+        role: option.key,
       });
     } else {
       this.userForm.patchValue({ role: null });
@@ -195,10 +196,7 @@ export class AddUserFormComponent {
       last_name: userData.lastName,
       email: userData.email,
       contact_number: userData.contactNumber,
-      // role: {
-      //   key: this.editData.role?.key,
-      //   value: this.editData.role?.value,
-      // },
+
       role: userData.role,
       location: userData.location,
       profile_image: userData.imageBase64,
@@ -217,6 +215,7 @@ export class AddUserFormComponent {
       .subscribe((resp: any) => {
         if (resp.status === 201) {
           this.alertService.success(resp.message);
+          this.formSubmitted.emit(true);
           this.router.navigate(['/dashboard/users']);
         }
       });
@@ -257,11 +256,6 @@ export class AddUserFormComponent {
       email: this.editData.email,
       contactNumber: this.editData.contact_number,
       location: this.editData.location,
-
-      // role: {
-      //   key: this.editData.role?.key,
-      //   value: this.editData.role?.value,
-      // },
 
       role: this.editData.role.key,
       imageBase64: this.editData.profile_image || '',

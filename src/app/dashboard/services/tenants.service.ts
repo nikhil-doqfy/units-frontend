@@ -22,16 +22,14 @@ export class TenantsService {
   getExcelFileOfTenant(params: any): Observable<Blob> {
     const query = this.sharedService.getQueryString(params);
 
-    return this.http.get(`${this.SERVER_ADDRESS}/export/tenant/csv${query}`, {
+    return this.http.get(`${this.SERVER_ADDRESS}/tenant_csv${query}`, {
       responseType: 'blob',
     });
   }
 
   getTenantDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/tenant/details/${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/tenant/table${queryString}`);
   }
 
   addTenantToInvite(data: Record<'email', string>): Observable<any> {
@@ -42,11 +40,11 @@ export class TenantsService {
     return this.http.post(`${this.SERVER_ADDRESS}/tenant/details/`, data);
   }
 
-  getLeasePdf(leaseId: number, type?: 'download') {
-    let url = `${this.SERVER_ADDRESS}/get/lease/pdf?lease_id=${leaseId}`;
+  getLeasePdf(leaseId: number, purpose?: 'download') {
+    let url = `${this.SERVER_ADDRESS}/lease_pdf?lease_id=${leaseId}`;
 
-    if (type === 'download') {
-      url += `&type=download`;
+    if (purpose === 'download') {
+      url += `&purpose=download`;
     }
 
     return this.http.get(url);

@@ -132,7 +132,7 @@
   "NEW_USERS": "المستخدمون الجدد",
   "DELETED_USERS": "المستخدمون المحذوفون",
   "NEW_USER": "مستخدم جديد",
-
+  "LEASE": "إيجار",
   "USER_NAME": "اسم المستخدم",
   "PHONE": "هاتف",
   "ROLE": "دور",
@@ -207,6 +207,8 @@
   "LAST_DATE": "آخر موعد",
   "HOW_CAN_WE_HELP_YOU": "How can we help you?",
   "SEND": "يرسل",
+  "ADDRESS LINE 1": "نوان سطر 1",
+  "ADDRESS LINE 2": "سطر العنوان 2",
   "How do I add a new property to my account?": "How do I add a new property to my account?",
   "Can I manage multiple properties from one account?": "Can I manage multiple properties from one account?",
   "How do tenants pay rent through the platform?": "How do tenants pay rent through the platform?",

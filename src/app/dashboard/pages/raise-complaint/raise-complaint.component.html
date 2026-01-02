@@ -5,9 +5,14 @@
         class="form-control"
         type="text"
         name="contactMsg"
+        [(ngModel)]="message"
         placeholder="{{ 'HELP_PROMPT' | translate }}"
       ></textarea>
-      <button type="button" class="btn btnCommon btnWhite btnExtraSmall">
+      <button
+        type="button"
+        class="btn btnCommon btnWhite btnExtraSmall"
+        (click)="sendComplaint()"
+      >
         <i><app-send-icon /></i>{{ "SEND" | translate }}
       </button>
     </div>
