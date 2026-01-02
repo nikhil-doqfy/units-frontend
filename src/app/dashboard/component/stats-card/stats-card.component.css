@@ -92,11 +92,6 @@
     min-width: 18%;
   }
 
-  .statsColBdy ul li + li {
-    min-width: 28%;
-    padding-left: 2%;
-    margin-left: 2%;
-  }
   ::ng-deep .arabic .statsColBdy ul li + li {
     padding-right: 2%;
     margin-right: 2%;
@@ -104,4 +99,31 @@
   .statsColBdy ul li h6 {
     font-size: 12px;
   }
+}
+
+.badge {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 6px;
+  font-weight: 600;
+}
+
+.greenBadge {
+  background: #e6f4ea;
+  color: #1e7f4d;
+}
+
+.mutedText {
+  font-size: 11px;
+  color: #7a7a7a;
+  margin-left: 6px;
+}
+
+.propertySelect {
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fff;
 }

@@ -10,5 +10,8 @@
   >
     <i><ng-content /></i>
     <span>{{ title }}</span>
+    <span *ngIf="count !== undefined" class="countBadge">
+      {{ count }}
+    </span>
   </a>
 </div>

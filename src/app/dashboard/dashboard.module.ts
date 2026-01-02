@@ -22,6 +22,7 @@ import { RaiseComplaintComponent } from './pages/raise-complaint/raise-complaint
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 import { RentalComponent } from './pages/rental/rental.component';
 import { AddRentalaccountComponent } from './pages/add-rentalaccount/add-rentalaccount.component';
+import { ComplaintsComponent } from './pages/complaints/complaints.component';
 
 export const routes: Routes = [
   {
@@ -105,6 +106,12 @@ export const routes: Routes = [
         component: AddRentalaccountComponent,
         data: { titleKey: 'PAGE_TITLE.ADD' },
       },
+      {
+        path: 'complaints',
+        component: ComplaintsComponent,
+        data: { titleKey: 'PAGE_TITLE.COMPLAINTS' },
+      },
+
       {
         path: 'owners',
         component: OwnersComponent,

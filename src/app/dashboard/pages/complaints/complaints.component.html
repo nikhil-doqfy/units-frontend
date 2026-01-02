@@ -1,0 +1,354 @@
+<div class="dashboardStatWrap">
+  <div class="dashboardStatCard">
+    <!-- LEFT + CENTER STATS -->
+    <div class="statRow">
+      <!-- TOTAL -->
+      <div class="statItem total">
+        <h4>
+          12000
+          <span class="badge green">12% <app-arrow></app-arrow></span>
+          <small>last month</small>
+        </h4>
+        <h6>Total Complaints</h6>
+      </div>
+
+      <!-- COMPLETED -->
+      <div class="statItem">
+        <h4>412</h4>
+        <h6>Completed</h6>
+      </div>
+
+      <!-- IN PROGRESS -->
+      <div class="statItem">
+        <h4>231</h4>
+        <h6>In-Progress</h6>
+      </div>
+
+      <!-- REJECTED -->
+      <div class="statItem">
+        <h4>111</h4>
+        <h6>Rejected</h6>
+      </div>
+    </div>
+
+    <ng-container card-actions>
+      <app-custom-select
+        [options]="[
+          'All',
+          'Dubai hiils golf club',
+          'Sillicon central mall',
+          'Falcon city of wonders',
+          'Majan'
+        ]"
+        [placeholder]="selected"
+        [selectedOption]="selected"
+        (optionSelected)="onOptionSelected($event)"
+        [isFilter]="true"
+      >
+      </app-custom-select>
+    </ng-container>
+  </div>
+</div>
+
+<ng-container *ngIf="!showDetailView">
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'COMPLAINTS' | translate"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search
+              placeholder="{{ 'SEARCH_HERE' | translate }}"
+              (onValueChange)="searchTextChange($event)"
+            />
+
+            <app-table-filter-btn
+              [title]="'FILTER' | translate"
+              [hasIcon]="true"
+            >
+              <app-filter-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmmnTblBody">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Sl.No</th>
+              <th>Complaint ID</th>
+              <th>Property Name</th>
+              <th>Raised By</th>
+              <th>Raised Date</th>
+              <th width="300">Description</th>
+              <th>Photos</th>
+              <th>Status</th>
+              <th width="120">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>01</td>
+              <td>LP9021</td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-1.png"
+                  title="Novatis AG..."
+                />
+              </td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/user/user-1.png"
+                  title="Jensi"
+                />
+              </td>
+              <td>12/02/2024</td>
+              <td>
+                Faulty faucet in kitchen, dripping constantly and needs repair
+              </td>
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png',
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png'
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge title="Completed" status="green"></app-badge>
+              </td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="up-arrow" />
+                  <app-table-action-btn type="complete" />
+
+                  <app-table-action-btn type="preview" />
+                  <app-table-action-btn type="disable" />
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>02</td>
+              <td>LP8021</td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-2.png"
+                  title="Agriculture..."
+                />
+              </td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/user/user-2.png"
+                  title="Richard"
+                />
+              </td>
+              <td>01/01/2024</td>
+              <td>
+                Heating not working properly, thermostat issues, house is cold
+              </td>
+
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png',
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png'
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge title="Completed" status="green" />
+              </td>
+
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="up-arrow" />
+                  <app-table-action-btn type="complete" />
+
+                  <app-table-action-btn type="preview" />
+                  <app-table-action-btn type="disable" />
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>03</td>
+              <td>VC79021</td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-2.png"
+                  title="Honda..."
+                />
+              </td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/user/user-3.png"
+                  title="Thaomas"
+                />
+              </td>
+              <td>22/12/2023</td>
+              <td>
+                Leak in the bathroom, causing water damage to the ceiling below
+              </td>
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png',
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-1.png'
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge title="In Progress" status="orange"></app-badge>
+              </td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="up-arrow" />
+                  <app-table-action-btn type="complete" />
+
+                  <app-table-action-btn type="preview" />
+                  <app-table-action-btn type="disable" />
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>04</td>
+              <td>VC69021</td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-2.png"
+                  title="TVS"
+                />
+              </td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/user/user-4.png"
+                  title="Akshay"
+                />
+              </td>
+              <td>11/12/2023</td>
+              <td>
+                Broken window in bedroom, glass shattered, needs replacement
+              </td>
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png',
+                    '../../../../assets/property/property-img-1.png'
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+
+              <td>
+                <app-badge
+                  title="Assigned to Engineer"
+                  status="blue"
+                ></app-badge>
+              </td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="up-arrow" />
+                  <app-table-action-btn type="complete" />
+
+                  <app-table-action-btn type="preview" />
+                  <app-table-action-btn type="disable" />
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>05</td>
+              <td>VC59021</td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-2.png"
+                  title="Samsung"
+                />
+              </td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/user/user-5.png"
+                  title="Avanshi"
+                />
+              </td>
+              <td>01/12/2023</td>
+              <td>Pest control needed, ants in kitchen, spiders in basement</td>
+
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png',
+                    '../../../../assets/property/property-img-1.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png',
+                    '../../../../assets/property/property-img-2.png',
+                    '../../../../assets/property/property-img-3.png'
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge title="Rejected" status="red"></app-badge>
+              </td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="up-arrow" />
+                  <app-table-action-btn type="complete" />
+
+                  <app-table-action-btn type="preview" />
+                  <app-table-action-btn type="disable" />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+</ng-container>

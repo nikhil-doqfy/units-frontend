@@ -18,6 +18,7 @@ export class SidebarItemComponent {
   @Input() title: string | undefined;
   @Input() href: string | undefined;
   @Input() currentRoute: string = '';
+  @Input() count?: number;
 
   openSidebarValue = true;
 
