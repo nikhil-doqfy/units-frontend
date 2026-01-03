@@ -152,7 +152,7 @@ export class LeaseFormService {
       .getLease({
         lease_id: context.formId,
       })
-      .pipe(tap((resp) => this.applyStepStatus(resp.content.step_choice)));
+      .pipe(tap((resp) => this.applyStepStatus(resp.content.step_status)));
   }
 
   savePropertyDetails(payload: Record<string, any>, context: any) {
@@ -168,8 +168,8 @@ export class LeaseFormService {
   patchPropertyDetails(response: any) {
     const content: any = response.content;
     return {
-      property: content.lease_property,
-      tenant: content.lease_tenant,
+      property: content.property,
+      tenant: content.tenant,
       startDate: this.getEpochToObject(content.lease_start_date),
       endDate: this.getEpochToObject(content.lease_end_date),
       graceStartDate: this.getEpochToObject(content.lease_grace_start_date),
@@ -197,12 +197,12 @@ export class LeaseFormService {
       .getLease({
         lease_id: context.formId,
       })
-      .pipe(tap((resp) => this.applyStepStatus(resp.content.step_choice)));
+      .pipe(tap((resp) => this.applyStepStatus(resp.content.step_status)));
   }
 
   saveCommercialDetails(payload: Record<string, any>, context: any) {
     const mode = this.engine()?.getCurrentStepFormMode();
-    payload['lease_id'] = context.formId || 4;
+    payload['lease_id'] = context.formId;
     if (mode === 'EDIT') {
       return this.leaseService.editLease(payload);
     } else {
@@ -214,15 +214,15 @@ export class LeaseFormService {
     const content: any = response.content;
 
     return {
-      annualAmount: content.annual_amount,
-      actualAnnualAmount: content.actual_annual_amount,
-      bookingAmount: content.booking_amount,
-      maintenanceCharges: content.maintenance_charges,
-      rent: content.rent,
-      securityDeposite: content.security_deposit,
-      commission: content.commission_percentage,
-      noticePeriod: content.notice_period,
-      discount: content.discount,
+      annualAmount: content?.commercial_details?.annual_amount,
+      actualAnnualAmount: content?.commercial_details?.actual_annual_amount,
+      bookingAmount: content?.commercial_details?.booking_amount,
+      maintenanceCharges: content?.commercial_details?.maintenance_charges,
+      rent: content?.commercial_details?.rent,
+      securityDeposite: content?.commercial_details?.security_deposit,
+      commission: content?.commercial_details?.commission_percentage,
+      noticePeriod: content?.commercial_details?.notice_period,
+      discount: content?.commercial_details?.discount,
     };
   }
 
@@ -244,9 +244,9 @@ export class LeaseFormService {
 
   saveNegotiationDetails(payload: Record<string, any>, context: any) {
     const mode = this.engine()?.getCurrentStepFormMode();
-    payload['lease_id'] = context.formId || 4;
+    payload['lease_id'] = context.formId;
     if (mode === 'EDIT') {
-      return this.leaseService.addEjariDocuments(payload);
+      return this.leaseService.addTemplateData(payload);
     } else {
       return this.leaseService.addTemplateData(payload);
     }

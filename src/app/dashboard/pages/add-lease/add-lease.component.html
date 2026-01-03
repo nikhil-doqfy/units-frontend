@@ -415,186 +415,56 @@
   >
     <div class="commonTabs">
       <ul class="nav nav-tabs" id="documentsTab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link active"
-            id="emiratesId-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#emiratesId-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="emiratesId-tab-pane"
-            aria-selected="true"
-          >
-            {{ "EMIRATES_ID" | translate }}
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            id="passportSelf-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#passportSelf-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="passportSelf-tab-pane"
-            aria-selected="false"
-          >
-            {{ "Passport" | translate }}
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            id="passportFamily-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#passportFamily-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="passportFamily-tab-pane"
-            aria-selected="false"
-          >
-            {{ "Family Passport" | translate }}
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            id="employmentProof-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#employmentProof-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="employmentProof-tab-pane"
-            aria-selected="false"
-          >
-            {{ "Employment Proof" | translate }}
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            id="visa-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#visa-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="visa-tab-pane"
-            aria-selected="false"
-          >
-            {{ "Visa" | translate }}
-          </button>
-        </li>
+        @for (type of documetUploadTypes; track $index) {
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              [class.active]="type.typeKey === activeDocTab"
+              [id]="type.typeKey + '-tab'"
+              data-bs-toggle="tab"
+              [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
+              type="button"
+              role="tab"
+              [attr.aria-controls]="type.typeKey + '-tab-pane'"
+              [attr.aria-selected]="type.typeKey === activeDocTab"
+            >
+              {{ type.typeLabel }}
+            </button>
+          </li>
+        }
       </ul>
     </div>
     <div class="commonTabsContent">
       <div class="tab-content" id="documentsTabContent">
-        <div
-          class="tab-pane fade show active"
-          id="emiratesId-tab-pane"
-          role="tabpanel"
-          aria-labelledby="emiratesId-tab"
-          tabindex="0"
-        >
-          <app-upload-document
-            [isMultipleFiles]="true"
-            [fileTypes]="['jpg', 'jpeg', 'png']"
-            [maxSize]="20"
-            (uploadProgress)="onUpload('EMIRATES_ID', $event)"
-          />
+        @for (type of documetUploadTypes; track $index) {
+          <div
+            [ngClass]="{
+              'tab-pane': true,
+              fade: true,
+              show: type.typeKey === activeDocTab,
+              active: type.typeKey === activeDocTab
+            }"
+            [id]="type.typeKey + '-tab-pane'"
+            role="tabpanel"
+            [attr.aria-labelledby]="type.typeKey + '-tab'"
+            [tabindex]="$index"
+          >
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload(type.typeKey, $event)"
+            />
 
-          <div class="uploads-list" *ngIf="getItems('EMIRATES_ID').length">
-            <app-file-upload-item
-              *ngFor="let image of getItems('EMIRATES_ID')"
-              [item]="image"
-              (remove)="remove('EMIRATES_ID', image)"
-            ></app-file-upload-item>
+            <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
+              <app-file-upload-item
+                *ngFor="let image of getItems(type.typeKey)"
+                [item]="image"
+                (remove)="remove(type.typeKey, image)"
+              />
+            </div>
           </div>
-        </div>
-        <div
-          class="tab-pane fade"
-          id="passportSelf-tab-pane"
-          role="tabpanel"
-          aria-labelledby="passportSelf-tab"
-          tabindex="0"
-        >
-          <app-upload-document
-            [isMultipleFiles]="true"
-            [fileTypes]="['jpg', 'jpeg', 'png']"
-            [maxSize]="20"
-            (uploadProgress)="onUpload('PASSPORT_SELF', $event)"
-          />
-          <div class="uploads-list" *ngIf="getItems('PASSPORT_SELF').length">
-            <app-file-upload-item
-              *ngFor="let image of getItems('PASSPORT_SELF')"
-              [item]="image"
-              (remove)="remove('PASSPORT_SELF', image)"
-            ></app-file-upload-item>
-          </div>
-        </div>
-        <div
-          class="tab-pane fade"
-          id="passportFamily-tab-pane"
-          role="tabpanel"
-          aria-labelledby="passportFamily-tab"
-          tabindex="0"
-        >
-          <app-upload-document
-            [isMultipleFiles]="true"
-            [fileTypes]="['jpg', 'jpeg', 'png']"
-            [maxSize]="20"
-            (uploadProgress)="onUpload('PASSPORT_FAMILY', $event)"
-          />
-          <div class="uploads-list" *ngIf="getItems('PASSPORT_FAMILY').length">
-            <app-file-upload-item
-              *ngFor="let image of getItems('PASSPORT_FAMILY')"
-              [item]="image"
-              (remove)="remove('PASSPORT_FAMILY', image)"
-            ></app-file-upload-item>
-          </div>
-        </div>
-        <div
-          class="tab-pane fade"
-          id="employmentProof-tab-pane"
-          role="tabpanel"
-          aria-labelledby="employmentProof-tab"
-          tabindex="0"
-        >
-          <app-upload-document
-            [isMultipleFiles]="true"
-            [fileTypes]="['jpg', 'jpeg', 'png']"
-            [maxSize]="20"
-            (uploadProgress)="onUpload('EMPLOYMENT_PROOF', $event)"
-          />
-          <div class="uploads-list" *ngIf="getItems('EMPLOYMENT_PROOF').length">
-            <app-file-upload-item
-              *ngFor="let image of getItems('EMPLOYMENT_PROOF')"
-              [item]="image"
-              (remove)="remove('EMPLOYMENT_PROOF', image)"
-            ></app-file-upload-item>
-          </div>
-        </div>
-        <div
-          class="tab-pane fade"
-          id="visa-tab-pane"
-          role="tabpanel"
-          aria-labelledby="visa-tab"
-          tabindex="0"
-        >
-          <app-upload-document
-            [isMultipleFiles]="true"
-            [fileTypes]="['jpg', 'jpeg', 'png']"
-            [maxSize]="20"
-            (uploadProgress)="onUpload('VISA_SELF', $event)"
-          />
-          <div class="uploads-list" *ngIf="getItems('VISA_SELF').length">
-            <app-file-upload-item
-              *ngFor="let image of getItems('VISA_SELF')"
-              [item]="image"
-              (remove)="remove('VISA_SELF', image)"
-            ></app-file-upload-item>
-          </div>
-        </div>
+        }
       </div>
     </div>
   </app-step-pane>

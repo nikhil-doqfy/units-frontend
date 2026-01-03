@@ -44,23 +44,18 @@ interface OptionsParams {
   setter: (value: any) => void;
 }
 
-type UploadImageType =
-  | 'EMIRATES_ID'
-  | 'PASSPORT_SELF'
-  | 'PASSPORT_FAMILY'
-  | 'EMPLOYMENT_PROOF'
-  | 'VISA_SELF'
-  | 'VISA_FAMILY'
-  | 'BANK_STATEMENT';
+type FormKey = 'images' | 'documents';
 
-type FormKey = 'documents';
+interface UplodTypeModal {
+  typeKey: string;
+  typeLabel: string;
+  formKey: FormKey;
+}
 
 interface UploadConfig {
   form: FormGroup;
   formKey: FormKey;
 }
-
-type UploadConfigRecord = Record<UploadImageType, UploadConfig>;
 
 @Component({
   selector: 'app-add-lease',
@@ -119,6 +114,8 @@ export class AddLeaseComponent {
   variableNodes: Record<string, HTMLElement[]> = {};
   fields: any;
 
+  documetUploadTypes: UplodTypeModal[] = [];
+  activeDocTab!: string;
   uploadIdCounter = {
     documents: 1,
   };
@@ -150,6 +147,15 @@ export class AddLeaseComponent {
         key: 'property_unit',
         setter: (v) => (this.propertyList = v),
       },
+      {
+        param: 'LEASE_DOCUMENT_CHOICES',
+        key: 'lease_document_choices',
+        setter: (v) => {
+          this.documetUploadTypes = this.getProcessUploadTypes(v, 'documents');
+          console.log(this.documetUploadTypes);
+          this.activeDocTab = v?.[0]?.key;
+        },
+      },
     ]);
 
     this.engine.currentIndex
@@ -157,6 +163,15 @@ export class AddLeaseComponent {
       .subscribe((index) => {
         if (index === 3) this.getTemplateData();
       });
+  }
+
+  getProcessUploadTypes(data: any, formKey: FormKey): UplodTypeModal[] {
+    const types = data.map((item: any) => ({
+      typeKey: item.key,
+      typeLabel: item.value,
+      formKey,
+    }));
+    return types;
   }
 
   getOptionType(options: OptionsParams[]) {
@@ -314,47 +329,22 @@ export class AddLeaseComponent {
     });
   }
 
-  onUpload(type: UploadImageType, event: UploadFileModel) {
+  onUpload(type: string, event: UploadFileModel) {
     this.handleUploadEvent(type, event);
   }
 
-  getUploadConfig(type: UploadImageType): UploadConfig {
-    const uploadConfig: UploadConfigRecord = {
-      EMIRATES_ID: {
-        form: this.documentsForm,
-        formKey: 'documents',
-      },
-      PASSPORT_SELF: {
-        form: this.documentsForm,
-        formKey: 'documents',
-      },
+  getUploadConfig(type: string): UploadConfig {
+    const cfg = this.documetUploadTypes.find((modal) => modal.typeKey === type);
 
-      PASSPORT_FAMILY: {
-        form: this.documentsForm,
-        formKey: 'documents',
-      },
-      EMPLOYMENT_PROOF: {
-        form: this.documentsForm,
-        formKey: 'documents',
-      },
-      VISA_SELF: {
-        form: this.documentsForm,
-        formKey: 'documents',
-      },
-      VISA_FAMILY: {
-        form: this.documentsForm,
-        formKey: 'documents',
-      },
-      BANK_STATEMENT: {
-        form: this.documentsForm,
-        formKey: 'documents',
-      },
+    if (!cfg) throw new Error('Invalid Type');
+
+    return {
+      form: this.documentsForm,
+      formKey: cfg.formKey,
     };
-
-    return uploadConfig[type];
   }
 
-  private handleUploadEvent(type: UploadImageType, event: UploadFileModel) {
+  private handleUploadEvent(type: string, event: UploadFileModel) {
     const { form, formKey } = this.getUploadConfig(type);
     const items = [...(form.value[formKey] || [])];
 
@@ -378,7 +368,7 @@ export class AddLeaseComponent {
     form.patchValue({ [formKey]: items });
   }
 
-  remove(type: UploadImageType, item: any) {
+  remove(type: string, item: any) {
     if (item?.backendId) {
       this.removeItem(type, item?.backendId, true);
     } else {
@@ -386,7 +376,7 @@ export class AddLeaseComponent {
     }
   }
 
-  removeItem(type: UploadImageType, id: number, isBackend = false) {
+  removeItem(type: string, id: number, isBackend = false) {
     const cfg = this.getUploadConfig(type);
     const form = cfg.form;
     const key = cfg.formKey;
@@ -400,7 +390,7 @@ export class AddLeaseComponent {
     form.patchValue({ [key]: filtered });
   }
 
-  getItems(type: UploadImageType) {
+  getItems(type: string) {
     const cfg = this.getUploadConfig(type);
     const form = cfg.form;
     const key = cfg.formKey;

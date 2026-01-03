@@ -84,7 +84,7 @@ export class LeaseService {
   getTemplateData(params: Record<string, any>) {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/get/template/fields${queryString}`
+      `${this.SERVER_ADDRESS}/get_template_fields${queryString}`
     );
   }
 
@@ -97,17 +97,14 @@ export class LeaseService {
   }
 
   addTemplateData(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/save/template`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/generate/contract`, data);
   }
 
   editTemplateData(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/save/template`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/generate/contract`, data);
   }
 
   addEjariDocuments(data: Record<string, any>): Observable<any> {
-    return this.http.post(
-      `${this.SERVER_ADDRESS}/lease/ejari/documents/view/`,
-      data
-    );
+    return this.http.post(`${this.SERVER_ADDRESS}/lease_documents`, data);
   }
 }
