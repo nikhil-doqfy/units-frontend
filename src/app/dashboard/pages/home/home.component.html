@@ -402,7 +402,7 @@
                   <td>{{ c.lease_number }}</td>
                   <td>{{ c.property_unit_name }}</td>
                   <td>{{ c.tenant_name }}</td>
-                  <td>{{ c.cheque_number }}</td>
+                  <td>{{ c.cheque_number || "N/A" }}</td>
                   <td>
                     <app-badge
                       [title]="c.status"
