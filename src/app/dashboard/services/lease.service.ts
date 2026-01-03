@@ -39,6 +39,19 @@ export class LeaseService {
     return this.http.get(url);
   }
 
+  getLease(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/save/lease${queryString}`);
+  }
+
+  addLease(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/save/lease`, data);
+  }
+
+  editLease(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/save/lease`, data);
+  }
+
   addLeasePropertyDetails(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/lease/property/view/`, data);
   }
@@ -71,7 +84,7 @@ export class LeaseService {
   getTemplateData(params: Record<string, any>) {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/get/template/fields/${queryString}`
+      `${this.SERVER_ADDRESS}/get/template/fields${queryString}`
     );
   }
 
