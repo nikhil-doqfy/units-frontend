@@ -149,7 +149,7 @@ export class LeaseFormService {
 
   getLeasePropertyDetails(context: any) {
     return this.leaseService
-      .getLeasePropertyDetails({
+      .getLease({
         lease_id: context.formId,
       })
       .pipe(tap((resp) => this.applyStepStatus(resp.content.step_choice)));
@@ -159,9 +159,9 @@ export class LeaseFormService {
     const mode = this.engine()?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
       payload['lease_id'] = context.formId;
-      return this.leaseService.editLeasePropertyDetails(payload);
+      return this.leaseService.editLease(payload);
     } else {
-      return this.leaseService.addLeasePropertyDetails(payload);
+      return this.leaseService.addLease(payload);
     }
   }
 
@@ -180,8 +180,8 @@ export class LeaseFormService {
 
   mapOutPropertyDetails(value: any): Record<string, any> {
     const data: any = {
-      lease_property_id: value?.property?.key,
-      lease_tenant_id: value?.tenant?.key,
+      property_id: value?.property?.key,
+      tenant_id: value?.tenant?.key,
       lease_start_date: this.getObjectToEpoch(value.startDate),
       lease_end_date: this.getObjectToEpoch(value.endDate),
       lease_grace_start_date: this.getObjectToEpoch(value.graceStartDate),
@@ -194,7 +194,7 @@ export class LeaseFormService {
 
   getCommercialDetails(context: any) {
     return this.leaseService
-      .getLeaseCommercialDetails({
+      .getLease({
         lease_id: context.formId,
       })
       .pipe(tap((resp) => this.applyStepStatus(resp.content.step_choice)));
@@ -202,11 +202,11 @@ export class LeaseFormService {
 
   saveCommercialDetails(payload: Record<string, any>, context: any) {
     const mode = this.engine()?.getCurrentStepFormMode();
-    payload['lease_id'] = context.formId;
+    payload['lease_id'] = context.formId || 4;
     if (mode === 'EDIT') {
-      return this.leaseService.editLeaseCommercialDetails(payload);
+      return this.leaseService.editLease(payload);
     } else {
-      return this.leaseService.addLeaseCommercialDetails(payload);
+      return this.leaseService.editLease(payload);
     }
   }
 
@@ -244,7 +244,7 @@ export class LeaseFormService {
 
   saveNegotiationDetails(payload: Record<string, any>, context: any) {
     const mode = this.engine()?.getCurrentStepFormMode();
-    payload['lease_id'] = context.formId;
+    payload['lease_id'] = context.formId || 4;
     if (mode === 'EDIT') {
       return this.leaseService.addEjariDocuments(payload);
     } else {

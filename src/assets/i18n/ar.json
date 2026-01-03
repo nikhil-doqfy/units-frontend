@@ -21,7 +21,8 @@
     "RAISE_COMPLAINT": "تقديم شكوى",
     "PRIVACY_POLICY": "سياسة الخصوصية",
     "RENTAL_AMOUNT": "مبلغ الإيجار",
-    "RENTAL": "تأجير"
+    "RENTAL": "تأجير",
+    "COMPLAINTS": "الشكاوى"
   },
   "ADD_PROPERTY": "إضافة عقار",
   "NEW_LEASE": "عقد جديد",

@@ -14,7 +14,18 @@
     <ul>
       <li *ngFor="let item of stats">
         <div class="statItem">
-          <h4>{{ item.value }}</h4>
+          <h4>
+            {{ item.value }}
+
+            <span *ngIf="item.badge" class="badge" [ngClass]="item.badgeClass">
+              {{ item.badge }}
+            </span>
+
+            <!-- EXTRA TEXT -->
+            <small *ngIf="item.extra" [ngClass]="item.extraClass">
+              {{ item.extra }}
+            </small>
+          </h4>
           <h6>{{ item.label }}</h6>
         </div>
       </li>

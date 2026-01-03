@@ -141,13 +141,13 @@ export class AddLeaseComponent {
 
     this.getOptionType([
       {
-        param: 'TENANTS_LIST',
-        key: 'tenants_list',
+        param: 'TENANTS',
+        key: 'tenants',
         setter: (v) => (this.tenantList = v),
       },
       {
-        param: 'PMC_PROPERTIES',
-        key: 'pmc_properties',
+        param: 'PROPERTY_UNIT',
+        key: 'property_unit',
         setter: (v) => (this.propertyList = v),
       },
     ]);
