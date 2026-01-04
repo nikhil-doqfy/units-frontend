@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { InvitePMCButtonComponent } from '../../component/invite-pmc-btn/invite-pmc-btn.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
 import { TableActionDropdownComponent } from '../../component/table-action-dropdown/table-action-dropdown.component';
 import { NoDataComponent } from '../../../no-data/no-data.component';
@@ -15,7 +15,11 @@ import { FilterIconComponent } from '../../component/icons/filter-icon/filter-ic
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { CommonModule } from '@angular/common';
 import { TableMultiImgItemComponent } from '../../component/table-multi-img-item/table-multi-img-itemcomponent';
 import { BadgeComponent } from '../../component/badge/badge.component';
@@ -24,6 +28,7 @@ import { StatsCardComponent } from '../../component/stats-card/stats-card.compon
 import { CustomSelectComponent } from '../../../auth/component/custom-select/custom-select.component';
 import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-complaints',
@@ -62,7 +67,7 @@ export class ComplaintsComponent {
   showDetailView: boolean = false;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   componentName = 'ComplaintsComponent';
-
+  breadcrumbData: BreadCrumb[] = [];
   selected: string = 'Property: All';
   complaintStats = [
     {
@@ -86,8 +91,39 @@ export class ComplaintsComponent {
       label: 'Rejected',
     },
   ];
+  private translate = inject(TranslateService);
 
   private onComplaintsSearch$ = new Subject<string>();
+
+  constructor(private destroyRef: DestroyRef) {}
+
+  ngOnInit() {
+    this.sharedService.initLanguage();
+    this.loadBreadcrumb();
+    this.initLanguageListener();
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.sharedService.initLanguage();
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.COMPLAINTS', link: '' },
+    ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   onRefresh() {}
 
   searchTextChange(search: string): void {

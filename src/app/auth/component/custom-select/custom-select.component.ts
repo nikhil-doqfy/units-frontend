@@ -12,7 +12,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
-import { CustomSelectService } from './custom-select.service'; // 👈 Import the service
+import { CustomSelectService } from './custom-select.service';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { ArrowUpIconComponent } from '../../../shared/component/icons/arrow-up-icon/arrow-up-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

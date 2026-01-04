@@ -99,36 +99,43 @@
                 <div class="row g-3">
                   <div class="col-md-6">
                     <label class="form-label">{{
-                      "LOCATION" | translate
+                      "PROPERTY" | translate
                     }}</label>
                     <app-custom-select
-                      [options]="[
-                        'All' | translate,
-                        'Dubai hills golf club',
-                        'Silicon central mall',
-                        'Falcon city of wonders',
-                        'Majan'
-                      ]"
+                      [options]="properties"
+                      key="key"
+                      value="value"
                       [selectedOption]="selectedFilter"
-                      (optionSelected)="onOptionSelectedFilter($event)"
+                      (optionSelected)="onPropertySelected($event)"
+                      (click)="onSelectClickPropertyUnit()"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">{{ "UNIT" | translate }}</label>
+                    <label class="form-label"
+                      >{{ "UNIT" | translate }}<span>*</span></label
+                    >
                     <app-custom-select
-                      [options]="[
-                        'Sep 2025',
-                        'Aug 2025',
-                        'Sep 2025',
-                        'Oct 2025'
-                      ]"
-                      [selectedOption]="selectedFilter"
-                      (optionSelected)="onOptionSelectedFilter($event)"
+                      [options]="units"
+                      key="id"
+                      value="name"
+                      [selectedOption]="selectedUnit"
+                      (optionSelected)="onUnitSelected($event)"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
+                    <label class="form-label">
+                      {{ "YEAR" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="year"
+                      name="year"
+                      [placeholder]="'please Enter a year' | translate"
+                    />
+                  </div>
+                  <!-- <div class="col-md-6">
                     <label class="form-label">{{
                       "DATE_RANGE" | translate
                     }}</label>
@@ -167,7 +174,7 @@
                         <app-date-icon />
                       </button>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </form>
             </ng-container>
@@ -262,7 +269,10 @@
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>
-        <app-line-chart [monthlyData]="monthlyData"></app-line-chart>
+        <app-line-chart
+          *ngIf="monthlyData && monthlyData.length > 0"
+          [monthlyData]="monthlyData"
+        ></app-line-chart>
       </app-white-card>
     </div>
   </div>
@@ -399,11 +409,14 @@
               <tbody *ngIf="chequeList.length; else noData">
                 <tr *ngFor="let c of chequeList; let i = index">
                   <!-- <td>{{ i + 1 }}</td> -->
-                  <td>{{ c.lease_number }}</td>
+                  <td>{{ c.lease_number || "N/A" }}</td>
                   <td>{{ c.property_unit_name }}</td>
                   <td>{{ c.tenant_name }}</td>
-                  <td>{{ c.cheque_number }}</td>
+                  <td>{{ c.cheque_number || "N/A" }}</td>
                   <td>
+                    <ng-container
+                      *ngIf="c?.status; else noStatus"
+                    ></ng-container>
                     <app-badge
                       [title]="c.status"
                       [status]="
@@ -414,6 +427,9 @@
                           : 'yellow'
                       "
                     />
+                    <ng-template #noStatus>
+                      <span>No Status</span>
+                    </ng-template>
                   </td>
                   <td>AED {{ c.amount | number }}</td>
                 </tr>

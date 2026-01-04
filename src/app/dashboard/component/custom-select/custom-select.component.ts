@@ -104,7 +104,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
 
   selectOption(option: any) {
     this.selectedOption = option;
-    this.onChange(option); // IMPORTANT: update Angular form
+    this.onChange(option);
     this.optionSelected.emit(option);
     this.isDropdownOpen = false;
     this.onTouched();

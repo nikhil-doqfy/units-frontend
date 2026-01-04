@@ -82,14 +82,20 @@ export class HomeComponent implements OnInit {
   vacantPercent = 0;
   selectedChequesAging: string = 'All';
   selectedPropertiesOwned: string = 'Falcon city of wonders';
+  properties: any[] = [];
+  units: any[] = [];
+
+  selectedProperty: any = null;
+  selectedUnit: any = null;
 
   monthlyRevenue: any[] = [];
   totalRevenue = 0;
   mrr = 0;
   occupancyOptions: any[] = [];
-  selectedProperty: any = { key: 'ALL', value: 'All' };
-  properties: any[] = [];
-  selectedOccupancy: any = 'All';
+  selectedOccupancy: any = {
+    key: 'ALL',
+    value: 'All',
+  };
   chequeData: any = null;
   propertyData: ProgressRow[] = [];
   model: NgbDateStruct | null = null;
@@ -104,14 +110,15 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+
     this.getStats();
     this.getMonthlyRevenue();
     this.loadProperties();
-    this.loadPayments();
-    this.sharedService.initLanguage();
-    this.initLanguageListener();
-    this.getChequeVisibility();
     this.loadDueGraph();
+    this.getChequeVisibility();
+    this.loadPayments();
   }
 
   initLanguageListener() {
@@ -190,6 +197,53 @@ export class HomeComponent implements OnInit {
   //   this.loadChequeAging(option);
   // }
 
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: any) => {
+          this.properties = response?.content?.property_with_lease ?? [];
+        },
+      });
+  }
+
+  onPropertySelected(property: any) {
+    this.selectedFilter = property;
+    this.selectedUnit = null;
+    this.units = [];
+
+    if (!property?.id) this.getUnitsByProperty(property.id);
+  }
+
+  getUnitsByProperty(option: any) {
+    this.sharedApiService
+      .getOptions({
+        option_type: 'PROPERTY_UNIT_BY_LEASE',
+        parent_property_id: option?.key,
+      })
+      .subscribe({
+        next: (res) => {
+          this.units = res?.content.property_with_lease || [];
+        },
+        error: () => {
+          this.units = [];
+        },
+      });
+  }
+
+  onOptionSelectedPropertyUnit(option: any) {
+    console.log('PROPERTY UNIT FROM SELECT:', option);
+    this.selectedProperty = option?.value ?? null;
+    this.selectedProperty = option?.key;
+  }
+  onSelectClickPropertyUnit() {
+    this.getOptionTypes(['PARENT_PROPERTY_WITH_LEASE']);
+  }
+  onUnitSelected(unit: any) {
+    this.selectedUnit = unit;
+    console.log('Selected Unit:', unit);
+  }
   getAgingValue(key: string) {
     return this.chequeData?.aging_breakup?.[key] || 0;
   }
@@ -258,7 +312,7 @@ export class HomeComponent implements OnInit {
             value: 'All',
           });
 
-          this.selectedOccupancy = this.occupancyOptions[0];
+          // this.selectedOccupancy = this.occupancyOptions[0];
         },
         error: (err) => console.error(err),
       });
@@ -266,9 +320,14 @@ export class HomeComponent implements OnInit {
 
   loadDueGraph() {
     this.homeService.getDashboardGraphDue().subscribe((res) => {
-      // this.monthlyData = res.content.year;
-      // this.monthlyData = res.content.overall;
       this.monthlyData = res.content;
+
+      this.monthlyData = (res.content?.monthly_data || []).map((m: any) => ({
+        monthName: m.month_name,
+        totalAmount: m.total_amount,
+        receivedAmount: m.received_amount,
+        dueAmount: m.due_amount,
+      }));
     });
   }
 

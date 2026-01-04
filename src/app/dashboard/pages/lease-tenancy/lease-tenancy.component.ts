@@ -142,7 +142,7 @@ export class LeaseTenancyComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.leaseList = resp?.content.results || [];
+          this.leaseList = resp?.content.results ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
         },
       });
@@ -161,6 +161,9 @@ export class LeaseTenancyComponent {
     this.getLease();
   }
 
+  onRefresh() {
+    this.getLease();
+  }
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
