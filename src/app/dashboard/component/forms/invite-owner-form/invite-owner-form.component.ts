@@ -57,7 +57,6 @@ export class InviteOwnerFormComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: any) => {
-          // this.propertyList = response?.content?.property_unit ?? [];
           this.propertyList = response?.content?.property_unit ?? [];
           console.log('PROPERTY LIST:', this.propertyList);
         },
@@ -65,16 +64,12 @@ export class InviteOwnerFormComponent {
   }
   onOptionSelectedPropertyUnit(option: any) {
     console.log('PROPERTY UNIT FROM SELECT:', option);
-    this.selectedProperty = option.label;
-    if (option && option.value) {
-      this.pmcOwnerForm.patchValue({
-        property_unit_id: option?.value ?? null,
-      });
-    } else {
-      this.pmcOwnerForm.patchValue({
-        property_unit_id: option.key,
-      });
-    }
+
+    this.selectedProperty = option.label ?? option.value;
+
+    this.pmcOwnerForm.patchValue({
+      property_unit_id: Number(option.key) ?? null,
+    });
   }
 
   onInvitationTypeSelect(option: any) {
