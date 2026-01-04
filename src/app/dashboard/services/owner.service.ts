@@ -22,7 +22,7 @@ export class OwnerService {
 
   // ------------------------- addOwnerToInvite -------------------------
   addOwnerToInvite(data: Record<'email', string>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/invite/pmc/owner`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/invitation`, data);
   }
   getExcelFileOfowner(params: any) {
     const queryString = this.sharedService.getQueryString(params);

@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { ArrowUpIconComponent } from '../../../shared/component/icons/arrow-up-icon/arrow-up-icon.component';
 
-import { CustomSelectService } from './custom-select.service'; // 👈 Import the service
+import { CustomSelectService } from './custom-select.service';
 import {
   ControlValueAccessor,
   FormsModule,

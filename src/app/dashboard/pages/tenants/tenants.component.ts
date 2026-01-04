@@ -330,7 +330,11 @@ export class TenantsComponent {
       return;
     }
 
-    let payload = { email: form.value.email };
+    let payload = {
+      email: form.value.email,
+      invitation_type: form.value.invitation_type,
+      property_unit_id: form.value.property_unit_id,
+    };
     this.tenantsService
       .addTenantToInvite(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))
