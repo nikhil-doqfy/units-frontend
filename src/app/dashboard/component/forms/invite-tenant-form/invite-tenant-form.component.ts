@@ -63,15 +63,23 @@ export class InviteTenantFormComponent {
     console.log('PROPERTY UNIT FROM SELECT:', option);
     this.selectedProperty = option.label;
 
-    if (option && option.value) {
-      this.tenantForm.patchValue({
-        property_unit_id: option?.value ?? null,
-      });
-    } else {
-      this.tenantForm.patchValue({
-        property_unit_id: option.key,
-      });
-    }
+    // if (option && option.value) {
+    //   this.tenantForm.patchValue({
+    //     property_unit_id: option?.value ?? null,
+    //   });
+    // } else {
+    //   this.tenantForm.patchValue({
+    //     property_unit_id: option.key,
+    //   });
+    // }
+
+    // Set the display label
+    this.selectedProperty = option.label ?? option.value;
+
+    // Always store numeric ID for backend
+    this.tenantForm.patchValue({
+      property_unit_id: Number(option.key) ?? null,
+    });
   }
   onInvitationTypeSelect(option: any) {
     this.tenantForm.patchValue({

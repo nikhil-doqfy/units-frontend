@@ -163,6 +163,39 @@ export class OwnersComponent {
     this.getOwner();
   }
 
+  sendInvite(
+    inviteOwnerFormRef: InviteOwnerFormComponent,
+    modal?: NgbActiveModal
+  ) {
+    const form = inviteOwnerFormRef.pmcOwnerForm;
+    console.log('Form value:', form.value);
+
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    const payload = {
+      email: form.value.email,
+      invitation_type: form.value.invitation_type,
+      property_unit_id: form.value.property_unit_id,
+    };
+
+    console.log('Payload to send:', payload);
+    this.ownerService
+      .addOwnerToInvite(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          this.alertService.success(resp.message);
+          modal?.close('Invite sent');
+        },
+        error: (err) => {
+          this.alertService.error(err.error?.message || 'Invite failed');
+        },
+      });
+  }
+
   // ------------------------- Fetched owner Details -------------------------
   getOwner(): void {
     this.ownerData = {
