@@ -62,14 +62,21 @@ export class InviteOwnerFormComponent {
         },
       });
   }
+  // onOptionSelectedPropertyUnit(option: any) {
+  //   console.log('PROPERTY UNIT FROM SELECT:', option);
+
+  //   this.selectedProperty = option.label ?? option.value;
+
+  //   this.pmcOwnerForm.patchValue({
+  //     property_unit_id: Number(option.key) ?? null,
+  //   });
+  // }
+
   onOptionSelectedPropertyUnit(option: any) {
-    console.log('PROPERTY UNIT FROM SELECT:', option);
-
-    this.selectedProperty = option.label ?? option.value;
-
-    this.pmcOwnerForm.patchValue({
-      property_unit_id: Number(option.key) ?? null,
-    });
+    if (option?.key)
+      this.pmcOwnerForm.patchValue({
+        property_unit_id: Number(option.key),
+      });
   }
 
   onInvitationTypeSelect(option: any) {
@@ -79,6 +86,8 @@ export class InviteOwnerFormComponent {
   }
 
   getPayload() {
+    console.log('FINAL PAYLOAD:', this.pmcOwnerForm.value);
+
     return this.pmcOwnerForm.value;
   }
 }

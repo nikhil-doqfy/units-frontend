@@ -74,15 +74,14 @@ export class AddStaffFormComponent {
 
   ngOnInit(): void {
     console.log('AddStaffFormComponent INIT');
+
     if (this.editData) {
       this.patchEditForm();
-      if (this.editData) {
-        this.patchEditForm();
-        this.staffForm.get('password')?.clearValidators();
-        this.staffForm.get('confirmPassword')?.clearValidators();
-        this.staffForm.get('password')?.updateValueAndValidity();
-        this.staffForm.get('confirmPassword')?.updateValueAndValidity();
-      }
+      this.staffForm.get('password')?.clearValidators();
+      this.staffForm.get('confirmPassword')?.clearValidators();
+      this.staffForm.get('password')?.updateValueAndValidity();
+      this.staffForm.get('confirmPassword')?.updateValueAndValidity();
+      this.staffForm.updateValueAndValidity();
     }
   }
 
@@ -197,6 +196,7 @@ export class AddStaffFormComponent {
       .subscribe((resp: any) => {
         if (resp.status === 201) {
           this.alertService.success(resp.message);
+          this.formSubmitted.emit(true);
           this.router.navigate(['/dashboard/staff']);
         }
       });

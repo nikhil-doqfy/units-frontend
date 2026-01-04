@@ -18,8 +18,10 @@ export class HomeService {
     return this.http.get(`${this.SERVER_ADDRESS}/statistics`, { params });
   }
 
-  getMonthlyRevenue() {
-    return this.http.get<any>(`${this.SERVER_ADDRESS}/monthly_revenue`);
+  getMonthlyRevenue(params?: any) {
+    return this.http.get<any>(`${this.SERVER_ADDRESS}/monthly_revenue`, {
+      params,
+    });
   }
   getChequeVisibility() {
     return this.http.get<any>(`${this.SERVER_ADDRESS}/cheque_visibility`);
