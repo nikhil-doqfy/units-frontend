@@ -4,9 +4,6 @@
   padding: 16px;
   border: 1px solid var(--muteBorder);
   border-radius: 12px;
-  /* height: 360px; */
-  min-height: 220px; /* card minimum height */
-  max-height: 400px;
 }
 
 .md.dashWhiteCol {
@@ -73,22 +70,4 @@
   .dashWhiteHdr h4 span {
     font-size: 13px;
   }
-}
-
-.dashWhiteHdr {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.dashWhiteHdr h4 {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.dashWhiteHdr p {
-  margin: 4px 0 0 0;
 }

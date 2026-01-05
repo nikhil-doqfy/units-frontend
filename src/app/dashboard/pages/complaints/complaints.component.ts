@@ -32,6 +32,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComplaintsService } from '../../complaints.service';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { StorageService } from '../../../shared/services/storage.service';
+import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
+import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 
 @Component({
   selector: 'app-complaints',
@@ -42,8 +45,6 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     TableFilterButtonComponent,
     TranslateModule,
     TableImgItemComponent,
-    TableActionDropdownComponent,
-    NoDataComponent,
     TableSelectComponent,
     TablePaginationComponent,
     FilterIconComponent,
@@ -51,11 +52,11 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     TableMultiImgItemComponent,
     BadgeComponent,
     TableActionButtonComponent,
-    StatsCardComponent,
     CustomSelectComponent,
     ArrowComponent,
-    WhiteCardComponent,
     FilterPopupButtonComponent,
+    UploadDocumentComponent,
+    FileUploadItemComponent,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',
@@ -99,8 +100,11 @@ export class ComplaintsComponent {
   private translate = inject(TranslateService);
 
   private onComplaintsSearch$ = new Subject<string>();
-
-  constructor(private destroyRef: DestroyRef) {}
+  private USER_ROLE = 'userRole';
+  constructor(
+    private destroyRef: DestroyRef,
+    private storageService: StorageService
+  ) {}
 
   ngOnInit() {
     this.sharedService.initLanguage();
@@ -108,6 +112,12 @@ export class ComplaintsComponent {
     this.initLanguageListener();
 
     this.loadComplaints();
+
+    const storedRole = this.storageService.getUserRole();
+
+    console.log('ROLE FROM STORAGE:', storedRole);
+
+    this.role = storedRole ? (storedRole.toUpperCase() as any) : null;
   }
 
   initLanguageListener() {
@@ -142,6 +152,17 @@ export class ComplaintsComponent {
         },
       });
   }
+
+  uploadedImages: any[] = [];
+
+  onUpload(event: any) {
+    this.uploadedImages.push(event);
+  }
+
+  removeImage(image: any) {
+    this.uploadedImages = this.uploadedImages.filter((item) => item !== image);
+  }
+
   onHandleComplaintsStatusClick(): void {
     this.getOptionTypes(['COMPLAINT_STATUS']);
   }
@@ -151,10 +172,23 @@ export class ComplaintsComponent {
     this.currentPage = 1;
     this.loadComplaints();
   }
+
+  //   onStatusSelected(status: any) {
+  //   this.selectedComplaintstatus = status;
+
+  //   this.getComplaints({
+  //     status: status.key   // ✔ string
+  //   });
+  // }
+
   applyFilter() {
-    this.complaintFilter['lease_status'] = this.complaintsStatus.key;
+    const params: any = {};
+    // this.complaintFilter['lease_status'] = this.complaintsStatus.key;
+    if (this.selectedComplaintstatus?.key) {
+      params.status = this.selectedComplaintstatus.key;
+    }
     this.currentPage = 1;
-    this.loadComplaints();
+    this.loadComplaints(params);
   }
 
   complaints: any[] = [];
@@ -195,5 +229,26 @@ export class ComplaintsComponent {
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+  }
+
+  //----------------------------------compalint modal --------------------------------------------------
+  role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
+
+  showComplaintModal = false;
+
+  get isOwnerOrPmc() {
+    return this.role === 'OWNER' || this.role === 'PMC';
+  }
+
+  get isTenant() {
+    return this.role === 'TENANT';
+  }
+
+  openComplaintModal() {
+    this.showComplaintModal = true;
+  }
+
+  closeComplaintModal() {
+    this.showComplaintModal = false;
   }
 }

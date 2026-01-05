@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <ng-container card-actions>
+    <ng-container *ngIf="isOwnerOrPmc" card-actions>
       <app-custom-select
         [options]="[
           'All',
@@ -47,6 +47,70 @@
       >
       </app-custom-select>
     </ng-container>
+    <ng-container *ngIf="isTenant" card-actions>
+      <button class="btn btnCommon btnPrimary" (click)="openComplaintModal()">
+        New Complaint
+      </button>
+    </ng-container>
+
+    <!-- MODAL -->
+    <div class="modalOverlay" *ngIf="showComplaintModal">
+      <div class="modalCard">
+        <!-- Header -->
+        <div class="modalHeader">
+          <h3>New Complaint <span>#LP2672</span></h3>
+          <button class="closeBtn" (click)="closeComplaintModal()">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div class="modalBody">
+          <div class="row">
+            <div class="col">
+              <label>Complaint By</label>
+              <input type="text" placeholder="User Name" />
+            </div>
+
+            <div class="col">
+              <label>Issue on</label>
+              <select>
+                <option>--Select--</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Description / Detail</label>
+          <textarea placeholder="Write here"></textarea>
+
+          <label>Upload Images</label>
+          <!-- <div class="uploadBox"> -->
+          <!-- <p>☁️</p>
+            <strong>Drop your files here</strong>
+            <span>or click to select file · PNG (max 20MB)</span> -->
+          <!-- <div class="uploadSection"> -->
+          <app-upload-document
+            [isMultipleFiles]="true"
+            [fileTypes]="['jpg', 'jpeg', 'png']"
+            [maxSize]="20"
+            (uploadProgress)="onUpload($event)"
+          ></app-upload-document>
+
+          <div class="uploads-list" *ngIf="uploadedImages.length">
+            <app-file-upload-item
+              *ngFor="let image of uploadedImages"
+              [item]="image"
+              (remove)="removeImage(image)"
+            ></app-file-upload-item>
+          </div>
+          <!-- </div> -->
+          <!-- </div> -->
+        </div>
+
+        <!-- Footer -->
+        <div class="modalFooter">
+          <button class="btnAdd">Add Complaint</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -20,6 +20,8 @@ import { FilterIconComponent } from '../../component/icons/filter-icon/filter-ic
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { RentalAccountService } from '../../rental-account.service';
+import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
+import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
 
 @Component({
   selector: 'app-rental',
@@ -40,6 +42,8 @@ import { RentalAccountService } from '../../rental-account.service';
     ExportIconComponent,
     FilterIconComponent,
     TableFilterButtonComponent,
+    DisableIconComponent,
+    RefreshIconComponent,
   ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',

@@ -151,6 +151,11 @@ export class ApprovalComponent {
       tenant_status: this.currentStatus,
     };
 
+    if (this.currentStatus !== 'PENDING') {
+      this.approvalData['tenant_status'] = this.currentStatus;
+    } else {
+      delete this.approvalData['tenant_status'];
+    }
     this.approvalService
       .getApprovalList(this.approvalData)
       .pipe(takeUntilDestroyed(this.destroyRef))
