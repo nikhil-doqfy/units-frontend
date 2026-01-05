@@ -5,40 +5,486 @@
   [stepSchema]="steps"
   (finish)="submitLease()"
 >
+  <!-- Step Property Selection Content -->
+  <ng-container>
+    <app-step-pane
+      [title]="'PROPERTY_DETAILS' | translate"
+      [description]="
+        'Select property and unit to see property details' | translate
+      "
+    >
+      <form class="row g-4" [formGroup]="propertyDetailForm">
+        <div class="col-md-6">
+          <label class="form-label">{{ "PROPERETY" | translate }}</label>
+          <app-custom-select
+            [options]="propertyList"
+            key="key"
+            value="value"
+            formControlName="property"
+            (optionSelected)="onPropertySelect($event)"
+          ></app-custom-select>
+          @if (isInvalid(propertyDetailForm, 'property').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailForm, "property").msg }}
+          </small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">{{ "PROPERTY_UNIT" | translate }}</label>
+          <app-custom-select
+            [options]="propertyUnitList"
+            key="key"
+            value="value"
+            formControlName="unit"
+            (optionSelected)="onUnitSelect($event)"
+          ></app-custom-select>
+          @if (isInvalid(propertyDetailForm, 'unit').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailForm, "unit").msg }}
+          </small>
+          }
+        </div>
+      </form>
+    </app-step-pane>
+
+    <ng-container>
+      <app-step-pane
+        [title]="'PROPERTY_DETAILS' | translate"
+        [secondCard]="true"
+      >
+        <form class="row g-4">
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "PROPERTY_NAME" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.parent_property?.property_name"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "PROPERTY_UNIT_NAME" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="
+                selectedPropertyDetails?.property_unit?.property_unit_name
+              "
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "LAND_AREA" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.land_area"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "AREA_OF_PROPERTY" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.area_of_property"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "PLOT_NO" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.plot_no"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "UNIT_USAGE" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.parent_property?.property_type"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "LAND_DM_NO(AFFECTION PLAN)" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.land_dm_no"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "MAKANI_NO" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.makani_no"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "DEWA_NO" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.dewa_no"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "PROPERTY_TYPE" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.parent_property?.property_type"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "SUBTYPE" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.parent_property?.property_type"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "FLOOR_NO" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.floor_no"
+            />
+          </div>
+          <div class="col-12">
+            <label for="" class="form-label">{{ "Address" | translate }}</label>
+            <textarea
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.address"
+            ></textarea>
+          </div>
+        </form>
+      </app-step-pane>
+
+      <app-step-pane [title]="'OWNER' | translate" [secondCard]="true">
+        <form class="row g-4">
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "NAME" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.owner?.name"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "EMAIL_ADDRESS" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.owner?.email"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "CONTACT_NUMBER" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.owner?.contact_number"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "TRADE_LICENSE_NO" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="
+                selectedPropertyDetails?.property_unit?.trade_license_number
+              "
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "CODE" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.owner?.owner_code"
+            />
+          </div>
+        </form>
+      </app-step-pane>
+
+      <app-step-pane
+        [title]="'PROPERTY_MANAGER' | translate"
+        [secondCard]="true"
+      >
+        <form class="row g-4">
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "COMPANY_NAME" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.company?.company_name"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "CODE" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.company?.company_code"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "LICENSE_NO_&_EXPIRY" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="
+                selectedPropertyDetails?.company?.licence_number
+                  ? selectedPropertyDetails?.company?.licence_number +
+                    '/' +
+                    (selectedPropertyDetails?.company?.licence_expiry_date
+                      | date : 'yyyy-MM-dd')
+                  : ''
+              "
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "LICENSE_ISSUER" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.company?.licence_issuer"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "CONTACT_NUMBER" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="
+                selectedPropertyDetails?.company?.company_user?.contact_number
+              "
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "EMAIL_ADDRESS" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.company?.company_user?.email"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "FAX_NUMBER" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="
+                selectedPropertyDetails?.company?.company_user?.fax_number
+              "
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "POSTAL_CODE" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.company?.postal_code"
+            />
+          </div>
+          <div class="col-12">
+            <label for="" class="form-label">{{ "Address" | translate }}</label>
+            <textarea
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.company?.company_address"
+            ></textarea>
+          </div>
+        </form>
+      </app-step-pane>
+    </ng-container>
+  </ng-container>
+
+  <!-- Step Tenant Selection Content -->
+  <ng-container>
+    <app-step-pane
+      [title]="'TENANT_DETAILS' | translate"
+      [description]="'Select tenant to see tenant details' | translate"
+    >
+      <form class="row g-4" [formGroup]="tenantDetailsForm">
+        <div class="col-md-6">
+          <label class="form-label">{{ "TENANT" | translate }}</label>
+          <app-custom-select
+            [options]="tenantList"
+            key="key"
+            value="value"
+            formControlName="tenant"
+            (optionSelected)="onTenantSelect($event)"
+          ></app-custom-select>
+          @if (isInvalid(propertyDetailForm, 'tenant').status) {
+          <small class="errorMsg">
+            {{ isInvalid(propertyDetailForm, "tenant").msg }}
+          </small>
+          }
+        </div>
+      </form>
+    </app-step-pane>
+
+    <ng-container>
+      <app-step-pane [title]="'TENANT_DETAILS' | translate" [secondCard]="true">
+        <form class="row g-4">
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "NAME" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedTenantDetails?.full_name"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "EMAIL_ADDRESS" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedTenantDetails?.email"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "CONTACT_NUMBER" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedTenantDetails?.contact_number"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "CODE" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedTenantDetails?.user_code"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "NATIONALITY" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedTenantDetails?.natioanlity"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "PASSPORT_NO_&_EXPIRY" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="
+                selectedTenantDetails?.passport_number
+                  ? selectedTenantDetails?.passport_number +
+                    '/' +
+                    (selectedTenantDetails?.passport_expiry_date
+                      | date : 'yyyy-MM-dd')
+                  : ''
+              "
+            />
+          </div>
+          <div class="col-12">
+            <label for="" class="form-label">{{ "Address" | translate }}</label>
+            <textarea
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedTenantDetails?.address"
+            ></textarea>
+          </div>
+        </form>
+      </app-step-pane>
+    </ng-container>
+  </ng-container>
+
   <!-- Step Property Details Content -->
   <app-step-pane
-    [title]="'PROPERTY_DETAILS' | translate"
+    [title]="'LEASE_DETAILS' | translate"
     [description]="'FILL_ALL_FIELDS_CREATE_LEASE' | translate"
   >
-    <form class="row g-4" [formGroup]="propertyDetailsForm">
-      <div class="col-md-6">
-        <label class="form-label">{{ "PROPERETY" | translate }}</label>
-        <app-custom-select
-          [options]="propertyList"
-          key="key"
-          value="value"
-          formControlName="property"
-        ></app-custom-select>
-        @if (isInvalid(propertyDetailsForm, 'property').status) {
-        <small class="errorMsg">
-          {{ isInvalid(propertyDetailsForm, "property").msg }}
-        </small>
-        }
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">{{ "TENANT" | translate }}</label>
-        <app-custom-select
-          [options]="tenantList"
-          key="key"
-          value="value"
-          formControlName="tenant"
-        ></app-custom-select>
-        @if (isInvalid(propertyDetailsForm, 'tenant').status) {
-        <small class="errorMsg">
-          {{ isInvalid(propertyDetailsForm, "tenant").msg }}
-        </small>
-        }
-      </div>
+    <form class="row g-4" [formGroup]="leaseDetailsForm">
       <div class="col-md-6">
         <label class="form-label">{{ "START_DATE" | translate }}</label>
         <div class="datePicker">
@@ -53,9 +499,9 @@
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(propertyDetailsForm, 'startDate').status) {
+        @if (isInvalid(leaseDetailsForm, 'startDate').status) {
         <small class="errorMsg">
-          {{ isInvalid(propertyDetailsForm, "startDate").msg }}
+          {{ isInvalid(leaseDetailsForm, "startDate").msg }}
         </small>
         }
       </div>
@@ -73,9 +519,9 @@
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(propertyDetailsForm, 'endDate').status) {
+        @if (isInvalid(leaseDetailsForm, 'endDate').status) {
         <small class="errorMsg">
-          {{ isInvalid(propertyDetailsForm, "endDate").msg }}
+          {{ isInvalid(leaseDetailsForm, "endDate").msg }}
         </small>
         }
       </div>
@@ -93,9 +539,9 @@
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(propertyDetailsForm, 'graceStartDate').status) {
+        @if (isInvalid(leaseDetailsForm, 'graceStartDate').status) {
         <small class="errorMsg">
-          {{ isInvalid(propertyDetailsForm, "graceStartDate").msg }}
+          {{ isInvalid(leaseDetailsForm, "graceStartDate").msg }}
         </small>
         }
       </div>
@@ -113,35 +559,12 @@
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(propertyDetailsForm, 'graceEndDate').status) {
+        @if (isInvalid(leaseDetailsForm, 'graceEndDate').status) {
         <small class="errorMsg">
-          {{ isInvalid(propertyDetailsForm, "graceEndDate").msg }}
+          {{ isInvalid(leaseDetailsForm, "graceEndDate").msg }}
         </small>
         }
       </div>
-      <div class="col-md-12">
-        <label class="form-label">{{ "REMARKS" | translate }}</label>
-        <textarea
-          type="text"
-          class="form-control large"
-          [placeholder]="'WRITE_HERE' | translate"
-          formControlName="remark"
-        ></textarea>
-        @if (isInvalid(propertyDetailsForm, 'remark').status) {
-        <small class="errorMsg">
-          {{ isInvalid(propertyDetailsForm, "remark").msg }}
-        </small>
-        }
-      </div>
-    </form>
-  </app-step-pane>
-
-  <!-- Step Commercials Content -->
-  <app-step-pane
-    [title]="'COMMERCIALS' | translate"
-    [description]="'FILL_ALL_FIELDS_CREATE_LEASE' | translate"
-  >
-    <form class="row g-3" [formGroup]="commercialDetailsForm">
       <div class="col-md-3">
         <label class="form-label">{{ "ANNUAL_AMOUNT" | translate }}</label>
         <input
@@ -150,9 +573,9 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="annualAmount"
         />
-        @if (isInvalid(commercialDetailsForm, 'annualAmount').status) {
+        @if (isInvalid(leaseDetailsForm, 'annualAmount').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "annualAmount").msg }}
+          {{ isInvalid(leaseDetailsForm, "annualAmount").msg }}
         </small>
         }
       </div>
@@ -166,9 +589,9 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="actualAnnualAmount"
         />
-        @if (isInvalid(commercialDetailsForm, 'actualAnnualAmount').status) {
+        @if (isInvalid(leaseDetailsForm, 'actualAnnualAmount').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "actualAnnualAmount").msg }}
+          {{ isInvalid(leaseDetailsForm, "actualAnnualAmount").msg }}
         </small>
         }
       </div>
@@ -180,9 +603,9 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="bookingAmount"
         />
-        @if (isInvalid(commercialDetailsForm, 'bookingAmount').status) {
+        @if (isInvalid(leaseDetailsForm, 'bookingAmount').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "bookingAmount").msg }}
+          {{ isInvalid(leaseDetailsForm, "bookingAmount").msg }}
         </small>
         }
       </div>
@@ -194,9 +617,9 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="maintenanceCharges"
         />
-        @if (isInvalid(commercialDetailsForm, 'maintenanceCharges').status) {
+        @if (isInvalid(leaseDetailsForm, 'maintenanceCharges').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "maintenanceCharges").msg }}
+          {{ isInvalid(leaseDetailsForm, "maintenanceCharges").msg }}
         </small>
         }
       </div>
@@ -208,9 +631,9 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="rent"
         />
-        @if (isInvalid(commercialDetailsForm, 'rent').status) {
+        @if (isInvalid(leaseDetailsForm, 'rent').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "rent").msg }}
+          {{ isInvalid(leaseDetailsForm, "rent").msg }}
         </small>
         }
       </div>
@@ -222,9 +645,9 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="securityDeposite"
         />
-        @if (isInvalid(commercialDetailsForm, 'securityDeposite').status) {
+        @if (isInvalid(leaseDetailsForm, 'securityDeposite').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "securityDeposite").msg }}
+          {{ isInvalid(leaseDetailsForm, "securityDeposite").msg }}
         </small>
         }
       </div>
@@ -236,9 +659,9 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="commission"
         />
-        @if (isInvalid(commercialDetailsForm, 'commission').status) {
+        @if (isInvalid(leaseDetailsForm, 'commission').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "commission").msg }}
+          {{ isInvalid(leaseDetailsForm, "commission").msg }}
         </small>
         }
       </div>
@@ -250,9 +673,9 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="noticePeriod"
         />
-        @if (isInvalid(commercialDetailsForm, 'noticePeriod').status) {
+        @if (isInvalid(leaseDetailsForm, 'noticePeriod').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "noticePeriod").msg }}
+          {{ isInvalid(leaseDetailsForm, "noticePeriod").msg }}
         </small>
         }
       </div>
@@ -266,9 +689,23 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="discount"
         />
-        @if (isInvalid(commercialDetailsForm, 'discount').status) {
+        @if (isInvalid(leaseDetailsForm, 'discount').status) {
         <small class="errorMsg">
-          {{ isInvalid(commercialDetailsForm, "discount").msg }}
+          {{ isInvalid(leaseDetailsForm, "discount").msg }}
+        </small>
+        }
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">{{ "REMARKS" | translate }}</label>
+        <textarea
+          type="text"
+          class="form-control large"
+          [placeholder]="'WRITE_HERE' | translate"
+          formControlName="remark"
+        ></textarea>
+        @if (isInvalid(leaseDetailsForm, 'remark').status) {
+        <small class="errorMsg">
+          {{ isInvalid(leaseDetailsForm, "remark").msg }}
         </small>
         }
       </div>
@@ -416,54 +853,54 @@
     <div class="commonTabs">
       <ul class="nav nav-tabs" id="documentsTab" role="tablist">
         @for (type of documetUploadTypes; track $index) {
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              [class.active]="type.typeKey === activeDocTab"
-              [id]="type.typeKey + '-tab'"
-              data-bs-toggle="tab"
-              [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
-              type="button"
-              role="tab"
-              [attr.aria-controls]="type.typeKey + '-tab-pane'"
-              [attr.aria-selected]="type.typeKey === activeDocTab"
-            >
-              {{ type.typeLabel }}
-            </button>
-          </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            [class.active]="type.typeKey === activeDocTab"
+            [id]="type.typeKey + '-tab'"
+            data-bs-toggle="tab"
+            [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
+            type="button"
+            role="tab"
+            [attr.aria-controls]="type.typeKey + '-tab-pane'"
+            [attr.aria-selected]="type.typeKey === activeDocTab"
+          >
+            {{ type.typeLabel }}
+          </button>
+        </li>
         }
       </ul>
     </div>
     <div class="commonTabsContent">
       <div class="tab-content" id="documentsTabContent">
         @for (type of documetUploadTypes; track $index) {
-          <div
-            [ngClass]="{
-              'tab-pane': true,
-              fade: true,
-              show: type.typeKey === activeDocTab,
-              active: type.typeKey === activeDocTab
-            }"
-            [id]="type.typeKey + '-tab-pane'"
-            role="tabpanel"
-            [attr.aria-labelledby]="type.typeKey + '-tab'"
-            [tabindex]="$index"
-          >
-            <app-upload-document
-              [isMultipleFiles]="true"
-              [fileTypes]="['jpg', 'jpeg', 'png']"
-              [maxSize]="20"
-              (uploadProgress)="onUpload(type.typeKey, $event)"
-            />
+        <div
+          [ngClass]="{
+            'tab-pane': true,
+            fade: true,
+            show: type.typeKey === activeDocTab,
+            active: type.typeKey === activeDocTab
+          }"
+          [id]="type.typeKey + '-tab-pane'"
+          role="tabpanel"
+          [attr.aria-labelledby]="type.typeKey + '-tab'"
+          [tabindex]="$index"
+        >
+          <app-upload-document
+            [isMultipleFiles]="true"
+            [fileTypes]="['jpg', 'jpeg', 'png']"
+            [maxSize]="20"
+            (uploadProgress)="onUpload(type.typeKey, $event)"
+          />
 
-            <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
-              <app-file-upload-item
-                *ngFor="let image of getItems(type.typeKey)"
-                [item]="image"
-                (remove)="remove(type.typeKey, image)"
-              />
-            </div>
+          <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
+            <app-file-upload-item
+              *ngFor="let image of getItems(type.typeKey)"
+              [item]="image"
+              (remove)="remove(type.typeKey, image)"
+            />
           </div>
+        </div>
         }
       </div>
     </div>

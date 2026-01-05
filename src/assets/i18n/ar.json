@@ -112,6 +112,7 @@
   "ADDRESS_LINE_1": "سطر العنوان الأول",
   "ADDRESS_LINE_2": "سطر العنوان الثاني",
   "CONTACT_NUMBER": "رقم جهة الاتصال",
+  "FAX_NUMBER": "رقم الفاكس",
   "PROPERTY_ASSIGED": "الملكية_مُجمَّعة",
   "RENTAL_AGREEMENT": "اتفاقية الإيجار",
   "PROPERTY_CODE": "رمز الملكية",
@@ -227,6 +228,7 @@
   "CONTACT": "اتصال",
   "PASSWORD": "كلمة المرور",
   "EDIT": "يحرر",
+  "NATIONALITY": "جنسية",
   "COUNTRY": "دولة",
   "USER_TYPE": "نوع المستخدم",
   "TIME_ZONE": "المنطقة الزمنية",
@@ -247,10 +249,13 @@
   "ALL_STAFF": "جميع الموظفين",
   "ROLES_FOUND": "تم العثور على الأدوار",
   "PROPERTY_DETAILS": "فاصيل العقار",
+  "TENANT_DETAILS": "تفاصيل المستأجر",
   "BASIC_DETAILS": "التفاصيل الأساسية",
   "FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY": "إملأ جميع الحقول لإضافة عقارك",
   "ENTER_HERE": "أدخل هنا",
   "PROPERTY_TYPE": "نوع العقار",
+  "SUBTYPE": "النوع الفرعي",
+  "UNIT_USAGE": "استخدام الوحدة",
   "LAND_AREA": "مساحة الأرض",
   "SQ-FT": "قدم مربع",
   "EXPORT": "يصدّر",
@@ -275,6 +280,7 @@
   "NO_OF_BEDROOMS": "عدد غرف النوم",
   "AREA_OF_PROPERTY": "مساحة العقار",
   "NO_OF_FLOORS": "عدد الطوابق",
+  "FLOOR_NO": "رقم الطابق",
   "NO_OF_PARKING": "عدد مواقف السيارات",
   "NO_OF_BALCONY": "عدد الشرفات",
   "PLOT_NO": "رقم القطعة",
@@ -345,5 +351,11 @@
   "LAST_6_MONTHS": "آخر 6 أشهر",
   "DATE_REQUESTED": "التاريخ المطلوب",
 
-  "NON_DISCLOSURE_AGREEMENT": "تم إبرام اتفاقية عدم الإفصاح والسرية هذه  ودخولها حيز النفاذ في 2024-10-16."
+  "NON_DISCLOSURE_AGREEMENT": "تم إبرام اتفاقية عدم الإفصاح والسرية هذه  ودخولها حيز النفاذ في 2024-10-16.",
+
+  "TRADE_LICENSE_NO": "رقم الرخصة التجارية",
+  "PROPERTY_MANAGER": "مدير الممتلكات",
+  "LICENSE_NO_&_EXPIRY": "رقم الترخيص وتاريخ انتهاء الصلاحية",
+  "LICENSE_ISSUER": "مصدر الترخيص",
+  "PASSPORT_NO_&_EXPIRY": "رقم جواز السفر وتاريخ انتهاء صلاحيته"
 }

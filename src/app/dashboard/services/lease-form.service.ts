@@ -19,15 +19,17 @@ export class LeaseFormService {
   private getObjectToEpoch = this.sharedService.getObjectToEpoch;
   private getEpochToObject = this.sharedService.getEpochToObject;
 
-  leasePropertyDetailsForm!: FormGroup;
-  leaseCommercialDetailsForm!: FormGroup;
+  propertyDetailsForm!: FormGroup;
+  tenantDetailsForm!: FormGroup;
+  leaseDetailsForm!: FormGroup;
   leaseDocumentLayoutForm!: FormGroup;
   leaseNegotiationForm!: FormGroup;
   leaseDocumentsForm!: FormGroup;
 
   constructor() {
-    this.initLeasePropertyDetailsForm();
-    this.initLeaseCommercialDetailsForm();
+    this.initPropertyDetailForm();
+    this.initTenantDetailsForm();
+    this.initLeaseDetailsForm();
     this.initLeaseDocumentLayoutForm();
     this.initLeaseNegotiationForm();
     this.initLeaseDocumentsForm();
@@ -37,20 +39,25 @@ export class LeaseFormService {
     this.engine.set(engine);
   }
 
-  initLeasePropertyDetailsForm() {
-    this.leasePropertyDetailsForm = this.formBuilder.group({
+  initPropertyDetailForm() {
+    this.propertyDetailsForm = this.formBuilder.group({
       property: ['', [Validators.required]],
+      unit: ['', [Validators.required]],
+    });
+  }
+
+  initTenantDetailsForm() {
+    this.tenantDetailsForm = this.formBuilder.group({
       tenant: ['', [Validators.required]],
+    });
+  }
+
+  initLeaseDetailsForm() {
+    this.leaseDetailsForm = this.formBuilder.group({
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
       graceStartDate: ['', [Validators.required]],
       graceEndDate: ['', [Validators.required]],
-      remark: [''],
-    });
-  }
-
-  initLeaseCommercialDetailsForm() {
-    this.leaseCommercialDetailsForm = this.formBuilder.group({
       annualAmount: ['', [Validators.required]],
       actualAnnualAmount: ['', [Validators.required]],
       bookingAmount: ['', [Validators.required]],
@@ -60,6 +67,7 @@ export class LeaseFormService {
       commission: ['', [Validators.required]],
       noticePeriod: ['', [Validators.required]],
       discount: [''],
+      remark: [''],
     });
   }
 
@@ -86,23 +94,25 @@ export class LeaseFormService {
   buildLeaseSteps(): StepSchema[] {
     const steps: StepSchema[] = [
       {
-        id: 'LEASE_DETAILS',
+        id: 'PROPERTY_DETAILS',
         title: 'Property Details',
-        formGroup: this.leasePropertyDetailsForm,
+        formGroup: this.propertyDetailsForm,
+        load: (context) => this.getLeasePropertyDetails(context),
+      },
+      {
+        id: 'TENANT_DETAILS',
+        title: 'Tenant Details',
+        formGroup: this.tenantDetailsForm,
+        load: (context) => this.getLeasePropertyDetails(context),
+      },
+      {
+        id: 'LEASE_DETAILS',
+        title: 'Lease Details',
+        formGroup: this.leaseDetailsForm,
         load: (context) => this.getLeasePropertyDetails(context),
         save: (payload, context) => this.savePropertyDetails(payload, context),
         mapIn: (response) => this.patchPropertyDetails(response),
         mapOut: (value) => this.mapOutPropertyDetails(value),
-      },
-      {
-        id: 'LEASE_COMMERCIALS',
-        title: 'Commercial Details',
-        formGroup: this.leaseCommercialDetailsForm,
-        load: (context) => this.getCommercialDetails(context),
-        save: (payload, context) =>
-          this.saveCommercialDetails(payload, context),
-        mapIn: (response) => this.patchCommercialDetails(response),
-        mapOut: (value) => this.mapOutCommercialDetails(value),
       },
       {
         id: 'DOCUMENTS_LAYOUT',
@@ -175,45 +185,6 @@ export class LeaseFormService {
       graceStartDate: this.getEpochToObject(content.lease_grace_start_date),
       graceEndDate: this.getEpochToObject(content.lease_grace_end_date),
       remark: content.lease_remarks,
-    };
-  }
-
-  mapOutPropertyDetails(value: any): Record<string, any> {
-    const data: any = {
-      property_id: value?.property?.key,
-      tenant_id: value?.tenant?.key,
-      lease_start_date: this.getObjectToEpoch(value.startDate),
-      lease_end_date: this.getObjectToEpoch(value.endDate),
-      lease_grace_start_date: this.getObjectToEpoch(value.graceStartDate),
-      lease_grace_end_date: this.getObjectToEpoch(value.graceEndDate),
-      lease_remarks: value?.remark,
-    };
-
-    return data;
-  }
-
-  getCommercialDetails(context: any) {
-    return this.leaseService
-      .getLease({
-        lease_id: context.formId,
-      })
-      .pipe(tap((resp) => this.applyStepStatus(resp.content.step_status)));
-  }
-
-  saveCommercialDetails(payload: Record<string, any>, context: any) {
-    const mode = this.engine()?.getCurrentStepFormMode();
-    payload['lease_id'] = context.formId;
-    if (mode === 'EDIT') {
-      return this.leaseService.editLease(payload);
-    } else {
-      return this.leaseService.editLease(payload);
-    }
-  }
-
-  patchCommercialDetails(response: any) {
-    const content: any = response.content;
-
-    return {
       annualAmount: content?.commercial_details?.annual_amount,
       actualAnnualAmount: content?.commercial_details?.actual_annual_amount,
       bookingAmount: content?.commercial_details?.booking_amount,
@@ -226,8 +197,15 @@ export class LeaseFormService {
     };
   }
 
-  mapOutCommercialDetails(value: any): Record<string, any> {
+  mapOutPropertyDetails(value: any): Record<string, any> {
     const data: any = {
+      property_id: value?.property?.key,
+      tenant_id: value?.tenant?.key,
+      lease_start_date: this.getObjectToEpoch(value.startDate),
+      lease_end_date: this.getObjectToEpoch(value.endDate),
+      lease_grace_start_date: this.getObjectToEpoch(value.graceStartDate),
+      lease_grace_end_date: this.getObjectToEpoch(value.graceEndDate),
+      lease_remarks: value?.remark,
       annual_amount: value.annualAmount,
       rent: value.rent,
       actual_annual_amount: value.actualAnnualAmount,

@@ -16,7 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
 import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
@@ -33,16 +33,13 @@ import { StepEngine } from '../../model/step-engine/step-engine';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { FormService } from '../../../shared/services/form.service';
 import { LeaseService } from '../../services/lease.service';
-import { firstValueFrom } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { UploadFileModel } from '../../../shared/model/shared.model';
+import {
+  OptionsParams,
+  UploadFileModel,
+} from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
-
-interface OptionsParams {
-  param: string;
-  key: string;
-  setter: (value: any) => void;
-}
+import { PropertyService } from '../../services/property.service';
 
 type FormKey = 'images' | 'documents';
 
@@ -83,6 +80,7 @@ export class AddLeaseComponent {
   private sharedService = inject(SharedService);
   private sharedAPIService = inject(SharedApiService);
   private leaseFormService = inject(LeaseFormService);
+  private propertyService = inject(PropertyService);
   private leaseService = inject(LeaseService);
   private formService = inject(FormService);
   private sanitizer = inject(DomSanitizer);
@@ -93,13 +91,17 @@ export class AddLeaseComponent {
     { label: 'Add Lease', link: '' },
   ];
 
-  propertyDetailsForm = this.leaseFormService.leasePropertyDetailsForm;
-  commercialDetailsForm = this.leaseFormService.leaseCommercialDetailsForm;
+  propertyDetailForm = this.leaseFormService.propertyDetailsForm;
+  tenantDetailsForm = this.leaseFormService.tenantDetailsForm;
+  leaseDetailsForm = this.leaseFormService.leaseDetailsForm;
   documentLayoutForm = this.leaseFormService.leaseDocumentLayoutForm;
   negotiationForm = this.leaseFormService.leaseNegotiationForm;
   documentsForm = this.leaseFormService.leaseDocumentsForm;
 
   propertyList: any[] = [];
+  propertyUnitList: any[] = [];
+  selectedPropertyDetails: any = null;
+  selectedTenantDetails: any = null;
   tenantList: any[] = [];
   templateList: any[] = [];
   templateFields: any[] = [];
@@ -136,16 +138,16 @@ export class AddLeaseComponent {
       this.engine.loadStep(0);
     }
 
-    this.getOptionType([
+    this.getOptionsTypes([
       {
-        param: 'TENANTS',
-        key: 'tenants',
-        setter: (v) => (this.tenantList = v),
+        param: 'PARENT_PROPERTY',
+        key: 'property',
+        setter: (v) => (this.propertyList = v),
       },
       {
-        param: 'PROPERTY_UNIT',
-        key: 'property_unit',
-        setter: (v) => (this.propertyList = v),
+        param: 'TENANT_BY_COMPANY',
+        key: 'tenant',
+        setter: (v) => (this.tenantList = v),
       },
       {
         param: 'LEASE_DOCUMENT_CHOICES',
@@ -165,6 +167,45 @@ export class AddLeaseComponent {
       });
   }
 
+  getOptionsTypes(option: OptionsParams[]) {
+    this.sharedAPIService.getOptionsType(option);
+  }
+
+  onPropertySelect(property: any) {
+    if (!property) return;
+
+    this.getOptionsTypes([
+      {
+        param: 'PROPERTY_UNIT_BY_PROPERTY',
+        params: { property_id: property.key },
+        key: 'property_unit',
+        setter: (v) => (this.propertyUnitList = v),
+      },
+    ]);
+  }
+
+  onUnitSelect(unit: any) {
+    if (!unit) return;
+
+    this.propertyService
+      .getPropertyDetailsForLease({ property_unit_id: unit.key })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        this.selectedPropertyDetails = resp.content;
+      });
+  }
+
+  onTenantSelect(tenant: any) {
+    if (!tenant) return;
+
+    this.propertyService
+      .getPropertyDetailsForLease({ tenant_id: tenant.key })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        this.selectedTenantDetails = resp.content;
+      });
+  }
+
   getProcessUploadTypes(data: any, formKey: FormKey): UplodTypeModal[] {
     const types = data.map((item: any) => ({
       typeKey: item.key,
@@ -172,21 +213,6 @@ export class AddLeaseComponent {
       formKey,
     }));
     return types;
-  }
-
-  getOptionType(options: OptionsParams[]) {
-    const type = options.map((o) => o.param).join(',');
-
-    this.sharedAPIService
-      .getOptions({ option_type: type })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (res) => {
-          const content = res?.content || {};
-
-          options.forEach((o) => o.setter(content[o.key] || []));
-        },
-      });
   }
 
   get documentLayout() {
@@ -198,7 +224,7 @@ export class AddLeaseComponent {
     if (!value) return;
 
     if (value === 'predefinedTemplate') {
-      this.getOptionType([
+      this.getOptionsTypes([
         {
           param: 'PREDEFINED_TEMPLATES',
           key: 'predefined_templates',
