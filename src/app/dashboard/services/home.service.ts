@@ -23,8 +23,10 @@ export class HomeService {
       params,
     });
   }
-  getChequeVisibility() {
-    return this.http.get<any>(`${this.SERVER_ADDRESS}/cheque_visibility`);
+  getChequeVisibility(params?: any) {
+    return this.http.get<any>(`${this.SERVER_ADDRESS}/cheque_visibility`, {
+      params,
+    });
   }
   getChequeAging(params?: any): Observable<any> {
     return this.http.get<any>(`${this.SERVER_ADDRESS}/cheque_aging`, {

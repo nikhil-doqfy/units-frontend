@@ -67,13 +67,51 @@
               placeholder="{{ 'SEARCH_HERE' | translate }}"
               (onValueChange)="searchTextChange($event)"
             />
+            <app-filter-popup-btn>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
 
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{
+                        "COMPLAINT_STATUS" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="complaintsStatus"
+                        key="key"
+                        value="value"
+                        placeholder="Select complaints status"
+                        (optionSelected)="selectedComplaintstatus = $event"
+                        (click)="onHandleComplaintsStatusClick()"
+                      >
+                      </app-custom-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
           </div>
         </div>
       </div>

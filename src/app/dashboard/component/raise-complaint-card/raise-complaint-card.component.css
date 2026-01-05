@@ -1,98 +1,108 @@
 .raiseCmplntTtl p {
-    font-size: 14px;
-    color: var(--greyLightText);
-    font-weight: 400;
-    line-height: 18px;
-    margin: 0;
+  font-size: 14px;
+  color: var(--greyLightText);
+  font-weight: 400;
+  line-height: 18px;
+  margin: 0;
 }
 
 .raiseCmplntInfo {
-    text-align: center;
-    margin-top: 32px;
+  text-align: center;
+  margin-top: 32px;
 }
 
 .raiseCmplntInfo h2 {
-    font-size: 28px;
-    color: var(--greyDarkText1);
-    font-weight: 700;
-    line-height: 36px;
-    margin: 0;
+  font-size: 28px;
+  color: var(--greyDarkText1);
+  font-weight: 700;
+  line-height: 36px;
+  margin: 0;
 }
 
 .raiseCmplntInfo ul {
-    margin-top: 16px;
+  margin-top: 16px;
 }
 
 .raiseCmplntInfo ul {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.raiseCmplntInfo ul li+li {
-    padding-left: 16px;
-    margin-left: 16px;
-    border-left: 1px solid var(--greyDarkBorder);
+.raiseCmplntInfo ul li + li {
+  padding-left: 16px;
+  margin-left: 16px;
+  border-left: 1px solid var(--greyDarkBorder);
 }
 
 .raiseCmplntInfo ul li a {
-    font-size: 14px;
-    color: var(--greyLightText);
-    font-weight: 500;
-    line-height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.3s ease 0s;
+  font-size: 14px;
+  color: var(--greyLightText);
+  font-weight: 500;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease 0s;
 }
 
 .raiseCmplntInfo ul li a:hover {
-    color: var(--blackText);
-    text-decoration: underline;
+  color: var(--blackText);
+  text-decoration: underline;
 }
 
 .raiseCmplntFrm {
-    max-width: 700px;
-    margin: 16px auto 0 auto;
+  max-width: 700px;
+  margin: 16px auto 0 auto;
 }
 
 .raiseCmplntBody {
-    max-width: 600px;
-    margin: 40px auto 0 auto;
+  max-width: 600px;
+  margin: 40px auto 0 auto;
 }
 
 .raiseCmplntBody h3 {
-    font-size: 16px;
-    color: var(--blackText);
-    font-weight: 500;
-    line-height: 20px;
-    text-align: center;
-    margin-bottom: 24px;
+  font-size: 16px;
+  color: var(--blackText);
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  margin-bottom: 24px;
 }
 
 @media (max-width: 991px) {
-    .raiseCmplntInfo h2 {
-        font-size: 22px;
-        line-height: 34px;
-    }
+  .raiseCmplntInfo h2 {
+    font-size: 22px;
+    line-height: 34px;
+  }
 }
 
 @media (max-width: 767px) {
-    .raiseCmplntInfo h2 {
-        font-size: 20px;
-        line-height: 32px;
-    }
+  .raiseCmplntInfo h2 {
+    font-size: 20px;
+    line-height: 32px;
+  }
 
-    .raiseCmplntInfo ul {
-        flex-direction: column;
-        gap: 8px;
-        margin-top: 8px;
-    }
+  .raiseCmplntInfo ul {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
 
-    .raiseCmplntInfo ul li+li {
-        padding-left: 0;
-        margin-left: 0;
-        border-left: 0;
-    }
+  .raiseCmplntInfo ul li + li {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: 0;
+  }
+}
+
+.raiseCmplntTtl {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.raiseCmplntTtl p {
+  margin: 0;
 }

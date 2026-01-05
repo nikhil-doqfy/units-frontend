@@ -29,6 +29,9 @@ import { CustomSelectComponent } from '../../../auth/component/custom-select/cus
 import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ComplaintsService } from '../../complaints.service';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-complaints',
@@ -52,6 +55,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     CustomSelectComponent,
     ArrowComponent,
     WhiteCardComponent,
+    FilterPopupButtonComponent,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',
@@ -59,6 +63,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class ComplaintsComponent {
   private sharedService = inject(SharedService);
   private alertService = inject(AlertService);
+  private complaintService = inject(ComplaintsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   totalRecords: number = 0;
@@ -101,6 +106,8 @@ export class ComplaintsComponent {
     this.sharedService.initLanguage();
     this.loadBreadcrumb();
     this.initLanguageListener();
+
+    this.loadComplaints();
   }
 
   initLanguageListener() {
@@ -119,6 +126,52 @@ export class ComplaintsComponent {
     ]);
   }
 
+  complaintsStatus: any = [];
+
+  selectedComplaintstatus: any = null;
+  complaintFilter: Record<string, any> = {};
+
+  private sharedApiService = inject(SharedApiService);
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.complaintStats = response?.content?.lease_status;
+        },
+      });
+  }
+  onHandleComplaintsStatusClick(): void {
+    this.getOptionTypes(['COMPLAINT_STATUS']);
+  }
+  removeFilter() {
+    this.selectedComplaintstatus = null;
+    delete this.complaintFilter['lease_status'];
+    this.currentPage = 1;
+    this.loadComplaints();
+  }
+  applyFilter() {
+    this.complaintFilter['lease_status'] = this.complaintsStatus.key;
+    this.currentPage = 1;
+    this.loadComplaints();
+  }
+
+  complaints: any[] = [];
+  searchTerm: string = '';
+  loadComplaints(search?: string) {
+    const params: any = {};
+    if (search) {
+      params.search = search;
+    }
+    this.complaintService.getComplanints(params).subscribe({
+      next: (res) => {
+        this.complaints = res.content?.complaints || [];
+      },
+      error: (err) => console.error('Error fetching complaints:', err),
+    });
+  }
+
   setBreadCrumb(breadCrumb: BreadCrumb[]) {
     this.sharedService
       .getBreadcrumbs(breadCrumb)
@@ -128,6 +181,8 @@ export class ComplaintsComponent {
 
   searchTextChange(search: string): void {
     this.onComplaintsSearch$.next(search);
+    this.searchTerm = search; // update current search text
+    this.loadComplaints(this.searchTerm);
   }
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;

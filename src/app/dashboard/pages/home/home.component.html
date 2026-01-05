@@ -358,25 +358,30 @@
                               <label>
                                 <input
                                   type="radio"
-                                  name="filterMonth"
+                                  name="filterPeriod"
                                   value="month"
+                                  [checked]="selectedPeriodType === 'month'"
+                                  (change)="selectPeriod('month')"
                                 />
                                 <span>{{ "MONTH" | translate }}</span>
                               </label>
                               <label>
                                 <input
                                   type="radio"
-                                  name="filterMonth"
-                                  value="last6Months"
-                                  checked
+                                  name="filterPeriod"
+                                  value="last6"
+                                  [checked]="selectedPeriodType === 'last6'"
+                                  (change)="selectPeriod('last6')"
                                 />
                                 <span>{{ "LAST_6_MONTHS" | translate }}</span>
                               </label>
                               <label>
                                 <input
                                   type="radio"
-                                  name="filterMonth"
+                                  name="filterPeriod"
                                   value="year"
+                                  [checked]="selectedPeriodType === 'year'"
+                                  (change)="selectPeriod('year')"
                                 />
                                 <span>{{ "YEARS" | translate }}</span>
                               </label>
@@ -400,7 +405,11 @@
                     </form>
                   </ng-container>
                   <ng-container action>
-                    <button type="button" class="btn btnCommon">
+                    <button
+                      type="button"
+                      class="btn btnCommon"
+                      (click)="handleApplyFilter()"
+                    >
                       {{ "APPLY" | translate }}
                     </button>
                   </ng-container>
@@ -508,33 +517,24 @@
                       "PROPERTY" | translate
                     }}</label>
                     <app-custom-select
-                      [options]="[
-                        'All',
-                        'Dubai hills golf club',
-                        'Silicon central mall',
-                        'Falcon city of wonders',
-                        'Majan'
-                      ]"
+                      [options]="properties"
                       [selectedOption]="selectedFilter"
-                      (optionSelected)="onOptionSelectedFilter($event)"
+                      (optionSelected)="onPropertySelected($event)"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">{{ "UNIT" | translate }}</label>
                     <app-custom-select
-                      [options]="[
-                        'Sep 2025',
-                        'Aug 2025',
-                        'Sep 2025',
-                        'Oct 2025'
-                      ]"
-                      [selectedOption]="selectedFilter"
-                      (optionSelected)="onOptionSelectedFilter($event)"
+                      [options]="units"
+                      key="key"
+                      value="value"
+                      [selectedOption]="selectedUnit"
+                      (optionSelected)="onUnitSelected($event)"
                     >
                     </app-custom-select>
                   </div>
-                  <div class="col-md-12">
+                  <!-- <div class="col-md-12">
                     <div class="cmmnFltrRadioOuter">
                       <div class="cmmnFltrRadio">
                         <label>
@@ -560,7 +560,7 @@
                         </label>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="col-md-6">
                     <label class="form-label"> {{ "YEARS" | translate }}</label>
 
@@ -576,7 +576,11 @@
               </form>
             </ng-container>
             <ng-container action>
-              <button type="button" class="btn btnCommon">
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="handleFilterClick('payment')"
+              >
                 {{ "APPLY" | translate }}
               </button>
             </ng-container>
