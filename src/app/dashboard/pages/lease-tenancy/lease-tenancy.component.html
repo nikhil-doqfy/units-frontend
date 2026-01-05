@@ -18,6 +18,7 @@
         <app-table-title
           [title]="'LEASE/TENANCY' | translate"
           [subtitle]="'(' + totalRecords + ')'"
+          (onRefresh)="onRefresh()"
         ></app-table-title>
       </div>
       <div class="col-md-auto">

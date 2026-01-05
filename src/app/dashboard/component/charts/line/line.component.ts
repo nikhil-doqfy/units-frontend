@@ -103,37 +103,10 @@ export class LineChartComponent implements OnChanges {
     },
   };
 
-  //   ngOnChanges() {
-  //     if (!this.monthlyData) return;
-
-  //     const months = this.monthlyData.monthly_data.map((m: any) => m.month_str);
-  //     const totalAmount = this.monthlyData.monthly_data.map(
-  //       (m: any) => m.total_amount
-  //     );
-  //     const receivedAmount = this.monthlyData.monthly_data.map(
-  //       (m: any) => m.received_amount
-  //     );
-  //     const dueAmount = this.monthlyData.monthly_data.map(
-  //       (m: any) => m.due_amount
-  //     );
-
-  //     this.chartOptions = {
-  //       ...this.chartOptions,
-  //       series: [
-  //         { name: 'Total Amount', data: totalAmount },
-  //         { name: 'Received Amount', data: receivedAmount },
-  //         { name: 'Due Amount', data: dueAmount },
-  //       ],
-  //       xaxis: {
-  //         categories: months,
-  //       },
-  //     };
-  //   }
-  // }
-
   ngOnChanges() {
-    if (this.monthlyData) {
-    }
+    // if (!Array.isArray(this.monthlyData) || this.monthlyData.length === 0) {
+    //   return;
+    // }
 
     const months = this.monthlyData.map((m) => m.monthName);
 

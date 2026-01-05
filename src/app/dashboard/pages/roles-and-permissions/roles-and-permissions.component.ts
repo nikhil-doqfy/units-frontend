@@ -85,6 +85,9 @@ export class RolesAndPermissionsComponent {
     this.fetchRoles();
   }
 
+  onRefresh() {
+    this.fetchRoles();
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))

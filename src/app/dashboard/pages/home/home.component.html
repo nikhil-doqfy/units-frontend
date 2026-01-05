@@ -99,36 +99,43 @@
                 <div class="row g-3">
                   <div class="col-md-6">
                     <label class="form-label">{{
-                      "LOCATION" | translate
+                      "PROPERTY" | translate
                     }}</label>
                     <app-custom-select
-                      [options]="[
-                        'All' | translate,
-                        'Dubai hills golf club',
-                        'Silicon central mall',
-                        'Falcon city of wonders',
-                        'Majan'
-                      ]"
+                      [options]="properties"
+                      key="key"
+                      value="value"
                       [selectedOption]="selectedFilter"
-                      (optionSelected)="onOptionSelectedFilter($event)"
+                      (optionSelected)="onPropertySelected($event)"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">{{ "UNIT" | translate }}</label>
+                    <label class="form-label"
+                      >{{ "UNIT" | translate }}<span>*</span></label
+                    >
                     <app-custom-select
-                      [options]="[
-                        'Sep 2025',
-                        'Aug 2025',
-                        'Sep 2025',
-                        'Oct 2025'
-                      ]"
-                      [selectedOption]="selectedFilter"
-                      (optionSelected)="onOptionSelectedFilter($event)"
+                      [options]="units"
+                      key="key"
+                      value="value"
+                      [selectedOption]="selectedUnit"
+                      (optionSelected)="onUnitSelected($event)"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
+                    <label class="form-label">
+                      {{ "YEARS" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="year"
+                      name="year"
+                      [(ngModel)]="selectedYear"
+                      [placeholder]="'please Enter a year' | translate"
+                    />
+                  </div>
+                  <!-- <div class="col-md-6">
                     <label class="form-label">{{
                       "DATE_RANGE" | translate
                     }}</label>
@@ -167,12 +174,16 @@
                         <app-date-icon />
                       </button>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </form>
             </ng-container>
             <ng-container action>
-              <button type="button" class="btn btnCommon">
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="handleFilterClick('revenue')"
+              >
                 {{ "APPLY" | translate }}
               </button>
             </ng-container>
@@ -223,46 +234,57 @@
                 <div class="row g-3">
                   <div class="col-md-6">
                     <label class="form-label">{{
-                      "LOCATION" | translate
+                      "PROPERTY" | translate
                     }}</label>
                     <app-custom-select
-                      [options]="[
-                        'All',
-                        'Dubai hills golf club',
-                        'Silicon central mall',
-                        'Falcon city of wonders',
-                        'Majan'
-                      ]"
+                      [options]="properties"
                       [selectedOption]="selectedFilter"
-                      (optionSelected)="onOptionSelectedFilter($event)"
+                      (optionSelected)="onPropertySelected($event)"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">{{ "UNIT" | translate }}</label>
+                    <label class="form-label"
+                      >{{ "UNIT" | translate }}<span>*</span></label
+                    >
                     <app-custom-select
-                      [options]="[
-                        'Sep 2025',
-                        'Aug 2025',
-                        'Sep 2025',
-                        'Oct 2025'
-                      ]"
-                      [selectedOption]="selectedFilter"
-                      (optionSelected)="onOptionSelectedFilter($event)"
+                      [options]="units"
+                      key="key"
+                      value="value"
+                      [selectedOption]="selectedUnit"
+                      (optionSelected)="onUnitSelected($event)"
                     >
                     </app-custom-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"> {{ "YEARS" | translate }}</label>
+
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Enter year"
+                      [(ngModel)]="selectedYear"
+                      name="year"
+                    />
                   </div>
                 </div>
               </form>
             </ng-container>
             <ng-container action>
-              <button type="button" class="btn btnCommon">
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="handleFilterClick('dues')"
+              >
                 {{ "APPLY" | translate }}
               </button>
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>
-        <app-line-chart [monthlyData]="monthlyData"></app-line-chart>
+        <app-line-chart
+          *ngIf="monthlyData && monthlyData.length > 0"
+          [monthlyData]="monthlyData"
+        ></app-line-chart>
       </app-white-card>
     </div>
   </div>
@@ -308,34 +330,25 @@
                       <div class="row g-3">
                         <div class="col-md-6">
                           <label class="form-label">{{
-                            "LOCATION" | translate
+                            "PROPERTY" | translate
                           }}</label>
                           <app-custom-select
-                            [options]="[
-                              'All',
-                              'Dubai hills golf club',
-                              'Silicon central mall',
-                              'Falcon city of wonders',
-                              'Majan'
-                            ]"
+                            [options]="properties"
                             [selectedOption]="selectedFilter"
-                            (optionSelected)="onOptionSelectedFilter($event)"
+                            (optionSelected)="onPropertySelected($event)"
                           >
                           </app-custom-select>
                         </div>
                         <div class="col-md-6">
-                          <label class="form-label">{{
-                            "UNIT" | translate
-                          }}</label>
+                          <label class="form-label"
+                            >{{ "UNIT" | translate }}<span>*</span></label
+                          >
                           <app-custom-select
-                            [options]="[
-                              'Sep 2025',
-                              'Aug 2025',
-                              'Sep 2025',
-                              'Oct 2025'
-                            ]"
-                            [selectedOption]="selectedFilter"
-                            (optionSelected)="onOptionSelectedFilter($event)"
+                            [options]="units"
+                            key="key"
+                            value="value"
+                            [selectedOption]="selectedUnit"
+                            (optionSelected)="onUnitSelected($event)"
                           >
                           </app-custom-select>
                         </div>
@@ -370,6 +383,19 @@
                             </div>
                           </div>
                         </div>
+                        <div class="col-md-6">
+                          <label class="form-label">
+                            {{ "YEARS" | translate }}</label
+                          >
+
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter year"
+                            [(ngModel)]="selectedYear"
+                            name="year"
+                          />
+                        </div>
                       </div>
                     </form>
                   </ng-container>
@@ -399,11 +425,14 @@
               <tbody *ngIf="chequeList.length; else noData">
                 <tr *ngFor="let c of chequeList; let i = index">
                   <!-- <td>{{ i + 1 }}</td> -->
-                  <td>{{ c.lease_number }}</td>
+                  <td>{{ c.lease_number || "N/A" }}</td>
                   <td>{{ c.property_unit_name }}</td>
                   <td>{{ c.tenant_name }}</td>
                   <td>{{ c.cheque_number || "N/A" }}</td>
                   <td>
+                    <ng-container
+                      *ngIf="c?.status; else noStatus"
+                    ></ng-container>
                     <app-badge
                       [title]="c.status"
                       [status]="
@@ -414,6 +443,9 @@
                           : 'yellow'
                       "
                     />
+                    <ng-template #noStatus>
+                      <span>No Status</span>
+                    </ng-template>
                   </td>
                   <td>AED {{ c.amount | number }}</td>
                 </tr>
@@ -473,7 +505,7 @@
                 <div class="row g-3">
                   <div class="col-md-6">
                     <label class="form-label">{{
-                      "LOCATION" | translate
+                      "PROPERTY" | translate
                     }}</label>
                     <app-custom-select
                       [options]="[
@@ -520,7 +552,7 @@
                             value="last6Months"
                             checked
                           />
-                          <span>{{ "LAST_6_MONTH" | translate }}</span>
+                          <span>{{ "LAST_6_MONTHS" | translate }}</span>
                         </label>
                         <label>
                           <input type="radio" name="filterMonth" value="year" />
@@ -528,6 +560,17 @@
                         </label>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"> {{ "YEARS" | translate }}</label>
+
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Enter year"
+                      [(ngModel)]="selectedYear"
+                      name="year"
+                    />
                   </div>
                 </div>
               </form>

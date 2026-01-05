@@ -82,14 +82,20 @@ export class HomeComponent implements OnInit {
   vacantPercent = 0;
   selectedChequesAging: string = 'All';
   selectedPropertiesOwned: string = 'Falcon city of wonders';
+  properties: any[] = [];
+  units: any[] = [];
+
+  selectedProperty: any = null;
+  selectedUnit: any = null;
 
   monthlyRevenue: any[] = [];
   totalRevenue = 0;
   mrr = 0;
   occupancyOptions: any[] = [];
-  selectedProperty: any = { key: 'ALL', value: 'All' };
-  properties: any[] = [];
-  selectedOccupancy: any = 'All';
+  selectedOccupancy: any = {
+    key: 'ALL',
+    value: 'All',
+  };
   chequeData: any = null;
   propertyData: ProgressRow[] = [];
   model: NgbDateStruct | null = null;
@@ -104,14 +110,15 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+
     this.getStats();
     this.getMonthlyRevenue();
     this.loadProperties();
-    this.loadPayments();
-    this.sharedService.initLanguage();
-    this.initLanguageListener();
-    this.getChequeVisibility();
     this.loadDueGraph();
+    this.getChequeVisibility();
+    this.loadPayments();
   }
 
   initLanguageListener() {
@@ -139,6 +146,7 @@ export class HomeComponent implements OnInit {
   }
 
   monthlyData: any[] = [];
+  unitsWithLease: any[] = [];
 
   loadPayments() {
     this.homeService.getOtherTypePayments().subscribe((res) => {
@@ -190,6 +198,52 @@ export class HomeComponent implements OnInit {
   //   this.loadChequeAging(option);
   // }
 
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: any) => {
+          this.properties = response?.content?.property_with_lease ?? [];
+        },
+      });
+  }
+
+  onPropertySelected(property: any) {
+    this.selectedProperty = property;
+    this.selectedFilter = property;
+    this.selectedUnit = null;
+    this.units = [];
+
+    if (property?.key) this.getUnitsByProperty(property);
+  }
+
+  getUnitsByProperty(option: any) {
+    this.sharedApiService
+      .getOptions({
+        option_type: 'PROPERTY_UNIT_BY_LEASE',
+        parent_property_id: option?.key,
+      })
+      .subscribe({
+        next: (res) => {
+          this.units = res?.content?.property_unit_with_lease || [];
+        },
+        error: () => {
+          this.units = [];
+        },
+      });
+  }
+
+  onOptionSelectedPropertyUnit(option: any) {
+    console.log('PROPERTY UNIT FROM SELECT:', option);
+    this.selectedProperty = option?.value ?? null;
+    this.selectedProperty = option?.key;
+  }
+
+  onUnitSelected(unit: any) {
+    this.selectedUnit = unit;
+    console.log('Selected Unit:', unit);
+  }
   getAgingValue(key: string) {
     return this.chequeData?.aging_breakup?.[key] || 0;
   }
@@ -214,20 +268,24 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  getMonthlyRevenue() {
+  selectedYear: number | null = null;
+  getMonthlyRevenue(params?: any) {
     this.homeService
-      .getMonthlyRevenue()
+      .getMonthlyRevenue(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
-          const data = res?.content;
-          this.totalRevenue = res?.total_revenue ?? 0;
-          this.mrr = res?.MRR ?? 0;
+          const content = res?.content;
 
-          this.monthlyRevenue = data?.monthly_revenue.map((item: any) => ({
-            name: item.month_str,
-            value: item.amount,
-          }));
+          this.totalRevenue = content?.total_revenue ?? 0;
+          this.mrr = content?.MRR ?? 0;
+
+          this.monthlyRevenue = (content?.monthly_revenue || []).map(
+            (item: any) => ({
+              name: item.month_str,
+              value: item.amount,
+            })
+          );
         },
         error: (err) => console.error(err),
       });
@@ -257,18 +315,21 @@ export class HomeComponent implements OnInit {
             key: 'ALL',
             value: 'All',
           });
-
-          this.selectedOccupancy = this.occupancyOptions[0];
         },
         error: (err) => console.error(err),
       });
   }
 
-  loadDueGraph() {
-    this.homeService.getDashboardGraphDue().subscribe((res) => {
-      // this.monthlyData = res.content.year;
-      // this.monthlyData = res.content.overall;
+  loadDueGraph(params?: any) {
+    this.homeService.getDashboardGraphDue(params).subscribe((res) => {
       this.monthlyData = res.content;
+
+      this.monthlyData = (res.content?.monthly_data || []).map((m: any) => ({
+        monthName: m.month_name,
+        totalAmount: m.total_amount,
+        receivedAmount: m.received_amount,
+        dueAmount: m.due_amount,
+      }));
     });
   }
 
@@ -292,7 +353,6 @@ export class HomeComponent implements OnInit {
 
   onOptionSelectedChequesAging(option: string) {
     this.selectedChequesAging = option;
-    //  this.selectedProperty = option;
     this.loadChequeAging(option);
   }
 
@@ -300,7 +360,21 @@ export class HomeComponent implements OnInit {
     this.selectedPropertiesOwned = option;
   }
 
-  handleFilterClick(): void {
-    console.log('Filter button clicked');
+  handleFilterClick(chartType: 'revenue' | 'dues'): void {
+    const params: any = {};
+
+    if (this.selectedUnit?.key) {
+      params.property_unit_id = this.selectedUnit.key;
+    }
+
+    if (this.selectedYear) {
+      params.year = this.selectedYear;
+    }
+
+    if (chartType === 'revenue') {
+      this.getMonthlyRevenue(Object.keys(params).length ? params : undefined);
+    } else if (chartType === 'dues') {
+      this.loadDueGraph(Object.keys(params).length ? params : undefined);
+    }
   }
 }

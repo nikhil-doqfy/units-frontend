@@ -125,6 +125,20 @@
         >
           <app-approval-icon></app-approval-icon>
         </app-sidebar-item>
+        <app-sidebar-item
+          title="{{ 'PAGE_TITLE.RENTAL_AMOUNT' | translate }}"
+          href="/dashboard/rental"
+        >
+          <app-rental-icon></app-rental-icon>
+        </app-sidebar-item>
+
+        <app-sidebar-item
+          title="{{ 'PAGE_TITLE.COMPLAINTS' | translate }}"
+          href="/dashboard/complaints"
+          [count]="243"
+        >
+          <app-raise-complaint-icon></app-raise-complaint-icon>
+        </app-sidebar-item>
       </div>
     </div>
 
