@@ -38,7 +38,11 @@
         >
           <i><app-back-icon /></i> Back
         </button>
+        <div class="actionRow">
+          <ng-content select="[header-actions]"></ng-content>
+        </div>
       </div>
+      <ng-content select="[rental-btn]"></ng-content>
       <ng-template #noActionButtons>
         <button
           type="button"

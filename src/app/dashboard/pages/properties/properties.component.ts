@@ -146,6 +146,10 @@ export class PropertiesComponent {
     this.loadBreadcrumb();
   }
 
+  changeLanguage(lang: string) {
+    this.sharedService.setLanguage(lang);
+  }
+
   ngOnInit() {
     this.initLanguageListener();
     this.initPropertySearchListener();
