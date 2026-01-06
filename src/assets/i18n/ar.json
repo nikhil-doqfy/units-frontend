@@ -88,7 +88,7 @@
   "AMOUNT": "كمية",
   "AED 1,20,573": " درهم إماراتي1,20,573 ",
   "ACTIVE": "نشيط",
-
+  "CREATE_COMPLAINT": "إنشاء الشكاوى",
   "UPCOMING RENEWALS": "التجديدات القادمة",
   "NEGOTIATIONS": "المفاوضات",
   "THE ABOVE MENTIONED ARE BOUNCED AGING CHEQUES": "الشيكات المذكورة أعلاه هي  شيكات مرتجعة قديمة",
@@ -236,6 +236,7 @@
   "TIME_ZONE": "المنطقة الزمنية",
   "STATE": "ولايةe",
   "CITY": "مدينة",
+  "COMPLAINT_STATUS": "حالة الشكوى",
   "LOCALITY": "المنطقة",
   "SAVE_CHANGES": "حفظ التغييرات",
   "OTHER_DETAILS": "تفاصيل أخرى",

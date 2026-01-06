@@ -29,6 +29,12 @@ import { CustomSelectComponent } from '../../../auth/component/custom-select/cus
 import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ComplaintsService } from '../../complaints.service';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { StorageService } from '../../../shared/services/storage.service';
+import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
+import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 
 @Component({
   selector: 'app-complaints',
@@ -39,8 +45,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TableFilterButtonComponent,
     TranslateModule,
     TableImgItemComponent,
-    TableActionDropdownComponent,
-    NoDataComponent,
     TableSelectComponent,
     TablePaginationComponent,
     FilterIconComponent,
@@ -48,10 +52,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TableMultiImgItemComponent,
     BadgeComponent,
     TableActionButtonComponent,
-    StatsCardComponent,
     CustomSelectComponent,
     ArrowComponent,
-    WhiteCardComponent,
+    FilterPopupButtonComponent,
+    UploadDocumentComponent,
+    FileUploadItemComponent,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',
@@ -59,6 +64,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class ComplaintsComponent {
   private sharedService = inject(SharedService);
   private alertService = inject(AlertService);
+  private complaintService = inject(ComplaintsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   totalRecords: number = 0;
@@ -94,13 +100,24 @@ export class ComplaintsComponent {
   private translate = inject(TranslateService);
 
   private onComplaintsSearch$ = new Subject<string>();
-
-  constructor(private destroyRef: DestroyRef) {}
+  private USER_ROLE = 'userRole';
+  constructor(
+    private destroyRef: DestroyRef,
+    private storageService: StorageService
+  ) {}
 
   ngOnInit() {
     this.sharedService.initLanguage();
     this.loadBreadcrumb();
     this.initLanguageListener();
+
+    this.loadComplaints();
+
+    const storedRole = this.storageService.getUserRole();
+
+    console.log('ROLE FROM STORAGE:', storedRole);
+
+    this.role = storedRole ? (storedRole.toUpperCase() as any) : null;
   }
 
   initLanguageListener() {
@@ -119,6 +136,76 @@ export class ComplaintsComponent {
     ]);
   }
 
+  complaintsStatus: any = [];
+
+  selectedComplaintstatus: any = null;
+  complaintFilter: Record<string, any> = {};
+
+  private sharedApiService = inject(SharedApiService);
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.complaintStats = response?.content?.lease_status;
+        },
+      });
+  }
+
+  uploadedImages: any[] = [];
+
+  onUpload(event: any) {
+    this.uploadedImages.push(event);
+  }
+
+  removeImage(image: any) {
+    this.uploadedImages = this.uploadedImages.filter((item) => item !== image);
+  }
+
+  onHandleComplaintsStatusClick(): void {
+    this.getOptionTypes(['COMPLAINT_STATUS']);
+  }
+  removeFilter() {
+    this.selectedComplaintstatus = null;
+    delete this.complaintFilter['lease_status'];
+    this.currentPage = 1;
+    this.loadComplaints();
+  }
+
+  //   onStatusSelected(status: any) {
+  //   this.selectedComplaintstatus = status;
+
+  //   this.getComplaints({
+  //     status: status.key   // ✔ string
+  //   });
+  // }
+
+  applyFilter() {
+    const params: any = {};
+    // this.complaintFilter['lease_status'] = this.complaintsStatus.key;
+    if (this.selectedComplaintstatus?.key) {
+      params.status = this.selectedComplaintstatus.key;
+    }
+    this.currentPage = 1;
+    this.loadComplaints(params);
+  }
+
+  complaints: any[] = [];
+  searchTerm: string = '';
+  loadComplaints(search?: string) {
+    const params: any = {};
+    if (search) {
+      params.search = search;
+    }
+    this.complaintService.getComplanints(params).subscribe({
+      next: (res) => {
+        this.complaints = res.content?.complaints || [];
+      },
+      error: (err) => console.error('Error fetching complaints:', err),
+    });
+  }
+
   setBreadCrumb(breadCrumb: BreadCrumb[]) {
     this.sharedService
       .getBreadcrumbs(breadCrumb)
@@ -128,6 +215,8 @@ export class ComplaintsComponent {
 
   searchTextChange(search: string): void {
     this.onComplaintsSearch$.next(search);
+    this.searchTerm = search; // update current search text
+    this.loadComplaints(this.searchTerm);
   }
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
@@ -140,5 +229,26 @@ export class ComplaintsComponent {
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+  }
+
+  //----------------------------------compalint modal --------------------------------------------------
+  role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
+
+  showComplaintModal = false;
+
+  get isOwnerOrPmc() {
+    return this.role === 'OWNER' || this.role === 'PMC';
+  }
+
+  get isTenant() {
+    return this.role === 'TENANT';
+  }
+
+  openComplaintModal() {
+    this.showComplaintModal = true;
+  }
+
+  closeComplaintModal() {
+    this.showComplaintModal = false;
   }
 }

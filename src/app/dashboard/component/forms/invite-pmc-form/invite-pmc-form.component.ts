@@ -3,9 +3,9 @@ import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormService } from '../../../../shared/services/form.service';
+import { CustomSelectComponent } from '../../../component/custom-select/custom-select.component';
 
-import { CustomSelectComponent } from '../../../../dashboard/component/custom-select/custom-select.component';
+// import { CustomSelectComponent } from '../../../../dashboard/component/custom-select/custom-select.component';
 // import { CustomSelectComponent } from '../../../../auth/component/custom-select/custom-select.component';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -40,7 +40,6 @@ export class InvitePMCFormComponent {
 
   getOptionTypes(options: string[]) {
     if (this.propertyUnitLoaded) {
-      return;
     }
 
     this.sharedApiService

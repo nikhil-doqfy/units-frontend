@@ -73,10 +73,12 @@ export class InviteOwnerFormComponent {
   // }
 
   onOptionSelectedPropertyUnit(option: any) {
+    console.log('Selected option:', option);
     if (option?.key)
       this.pmcOwnerForm.patchValue({
         property_unit_id: Number(option.key),
       });
+    console.log('Form after patch:', this.pmcOwnerForm.value);
   }
 
   onInvitationTypeSelect(option: any) {

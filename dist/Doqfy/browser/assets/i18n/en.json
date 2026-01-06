@@ -340,7 +340,8 @@
   "DOQFY": "DOQFY",
   "AND": "And",
   "ZEN": "ZEN",
-
+  "COMPLAINT_STATUS": "complaint status",
+  "CREATE_COMPLAINT": "Complaints",
   "DOCUMENT_LAYOUT": "Document Layout",
   "LOCATION": "Location",
   "UNIT": "Unit",

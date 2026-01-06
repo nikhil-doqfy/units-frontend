@@ -148,8 +148,8 @@ export class HomeComponent implements OnInit {
   monthlyData: any[] = [];
   unitsWithLease: any[] = [];
 
-  loadPayments() {
-    this.homeService.getOtherTypePayments().subscribe((res) => {
+  loadPayments(params?: any) {
+    this.homeService.getOtherTypePayments(params).subscribe((res) => {
       this.monthlyData = res.content.monthly_data;
     });
   }
@@ -360,7 +360,7 @@ export class HomeComponent implements OnInit {
     this.selectedPropertiesOwned = option;
   }
 
-  handleFilterClick(chartType: 'revenue' | 'dues'): void {
+  handleFilterClick(chartType: 'revenue' | 'dues' | 'payment'): void {
     const params: any = {};
 
     if (this.selectedUnit?.key) {
@@ -375,6 +375,96 @@ export class HomeComponent implements OnInit {
       this.getMonthlyRevenue(Object.keys(params).length ? params : undefined);
     } else if (chartType === 'dues') {
       this.loadDueGraph(Object.keys(params).length ? params : undefined);
+    } else if (chartType == 'payment') {
+      this.loadPayments(Object.keys(params).length ? params : undefined);
     }
+  }
+
+  //------------------------------------filter cheques visibility ---------------------------------------------
+  selectedPeriodType: 'month' | 'last6' | 'year' = 'month';
+  // selectedMonthly: string = 'Oct 2025';
+  // selectedYear: number | null = null;
+
+  selectPeriod(type: 'month' | 'last6' | 'year') {
+    this.selectedPeriodType = type;
+  }
+
+  getChequeDateRange() {
+    let fromDate!: number;
+    let toDate!: number;
+
+    const now = new Date();
+
+    // 1️⃣ Oct 2025 (Month)
+    if (this.selectedPeriodType === 'month') {
+      const [monthStr, yearStr] = this.selectedMonthly.split(' ');
+      const year = Number(yearStr);
+
+      const monthMap: any = {
+        Jan: 0,
+        Feb: 1,
+        Mar: 2,
+        Apr: 3,
+        May: 4,
+        Jun: 5,
+        Jul: 6,
+        Aug: 7,
+        Sep: 8,
+        Oct: 9,
+        Nov: 10,
+        Dec: 11,
+      };
+
+      const monthIndex = monthMap[monthStr];
+
+      fromDate = new Date(year, monthIndex, 1, 0, 0, 0).getTime();
+      toDate = new Date(year, monthIndex + 1, 0, 23, 59, 59).getTime();
+    }
+
+    // 2️⃣ Last 6 Months
+    else if (this.selectedPeriodType === 'last6') {
+      toDate = now.getTime();
+      fromDate = new Date(
+        now.getFullYear(),
+        now.getMonth() - 5,
+        1,
+        0,
+        0,
+        0
+      ).getTime();
+    }
+
+    // 3️⃣ Year
+    else if (this.selectedPeriodType === 'year' && this.selectedYear) {
+      fromDate = new Date(this.selectedYear, 0, 1, 0, 0, 0).getTime();
+      toDate = new Date(this.selectedYear, 11, 31, 23, 59, 59).getTime();
+    }
+
+    return { fromDate, toDate };
+  }
+
+  handleApplyFilter() {
+    const { fromDate, toDate } = this.getChequeDateRange();
+
+    const params: any = {
+      from_date: fromDate,
+      to_date: toDate,
+    };
+
+    if (this.selectedUnit?.key) {
+      params.property_unit_id = this.selectedUnit.key;
+    }
+
+    this.homeService
+      .getChequeVisibility(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.chequeList = res?.content?.cheques ?? [];
+        },
+        error: () => {
+          this.chequeList = [];
+        },
+      });
   }
 }

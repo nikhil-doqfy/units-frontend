@@ -95,8 +95,12 @@ export class MyProfileComponent {
   };
 
   ngOnInit() {
-    this.sharedService.initLanguage();
+    // this.sharedService.initLanguage();
     this.getUserProfileData();
+  }
+
+  changeLanguage(lang: string) {
+    this.sharedService.setLanguage(lang);
   }
 
   showPasswordPopup = false;

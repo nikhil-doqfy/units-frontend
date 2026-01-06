@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, forkJoin, map, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { BreadCrumb } from './shared/model/shared.model';
+import { StorageService } from './shared/services/storage.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,6 +14,8 @@ export class SharedService {
   private openSidebarValueKey = 'openSidebarValue';
   private openRightSidebarValueKey = 'openRightSidebarValue';
   private showDetailSource = new BehaviorSubject<boolean>(false);
+
+  private storageService = inject(StorageService);
 
   private openSidebarValueSource = new BehaviorSubject<boolean>(false); // Default to closed
   openSidebarValue$ = this.openSidebarValueSource.asObservable();
@@ -62,12 +65,12 @@ export class SharedService {
 
   currentLanguage: string = 'en';
 
-  initLanguage() {
-    const lang = localStorage.getItem('language') || 'en';
-    const direction = lang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.dir = direction;
-    this.currentLanguage = lang;
-  }
+  // initLanguage() {
+  //   const lang = localStorage.getItem('language') || 'en';
+  //   const direction = lang === 'ar' ? 'rtl' : 'ltr';
+  //   document.documentElement.dir = direction;
+  //   this.currentLanguage = lang;
+  // }
 
   // Toggle the sidebar open/close
   toggleSidebar() {
@@ -176,5 +179,25 @@ export class SharedService {
 
   hideDetails() {
     this.showDetailSource.next(false);
+  }
+
+  private currentLang = new BehaviorSubject<string>('en');
+  lang$ = this.currentLang.asObservable();
+
+  initLanguage() {
+    const lang = this.storageService.getLanguage() || 'en';
+    this.translate.setDefaultLang('en');
+    this.translate.use(lang);
+    this.currentLang.next(lang);
+  }
+
+  setLanguage(lang: string) {
+    this.storageService.setLanguage(lang);
+    this.translate.use(lang);
+    this.currentLang.next(lang);
+  }
+
+  getCurrentLanguage(): string {
+    return this.currentLang.value;
   }
 }

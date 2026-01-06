@@ -195,3 +195,15 @@
 .dropItem.danger {
   color: #e53935;
 }
+
+.cmmnTblViewBtns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+}

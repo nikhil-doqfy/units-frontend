@@ -23,6 +23,64 @@
       >
       </app-custom-select>
     </app-payments-info-card>
+
+    <div rental class="other-charges-box mt-3">
+      <h6 class="section-title">OTHER CHARGES</h6>
+
+      <div class="charges-grid">
+        <div class="charge-item">
+          <label>Admin Fee <span>VAT &#64;5%</span></label>
+          <small>32.71 + 1.64</small>
+          <strong>34.35</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
+          <small>175.65 + 1.64</small>
+          <strong>175.65</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Gas Charges <span>VAT &#64;5%</span></label>
+          <small>1,000.00 + 50.00</small>
+          <strong>1,050.00</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Commission - Dubai <span>VAT &#64;5%</span></label>
+          <small>1,200.00 + 60.00</small>
+          <strong>1,260.00</strong>
+        </div>
+
+        <div class="charge-item">
+          <label>Security Deposit <span>VAT &#64;nill</span></label>
+          <small>2,400.00 + 0.00</small>
+          <strong>2,400.00</strong>
+        </div>
+      </div>
+
+      <div class="payment-info">
+        <div>
+          <label>Status</label>
+          <span class="paid">Paid</span>
+        </div>
+
+        <div>
+          <label>Payment Type</label>
+          <strong>Cheque</strong>
+        </div>
+
+        <div>
+          <label>Cheque Number</label>
+          <strong>6738398268291</strong>
+        </div>
+
+        <div>
+          <label>Total Amount</label>
+          <strong>11,260.00</strong>
+        </div>
+      </div>
+    </div>
   </app-white-card>
 </div>
 
@@ -56,7 +114,7 @@
       </div>
     </div>
   </div>
-  <div class="cmmnTblBody">
+  <!-- <div class="cmmnTblBody">
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead>
@@ -70,7 +128,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- @for (pmc of paymentandinvoice; track $index) { -->
+          @for (pmc of paymentandinvoice; track $index) {
           <tr>
             <td>LP9021</td>
             <td>LP9021</td>
@@ -166,17 +224,270 @@
               </div>
             </td>
           </tr>
-          <!-- }@empty {
+          }@empty {
           <tr>
             <td colspan="20" align="center">
               <app-no-data></app-no-data>
             </td>
           </tr>
-          } -->
+          }
+        </tbody>
+      </table>
+    </div>
+  </div> -->
+  <div class="cmmnTblBody">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>
+              <button type="button">Bank Name</button>
+            </th>
+            <th>
+              <button type="button">Bank Account</button>
+            </th>
+            <th>Cheque Number</th>
+            <th>Cheque Date</th>
+            <th>Payment Type</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- @for(property of pmcList[0]?.properties_assigned; track $index){
+            <tr>
+              <td>{{ property?.property_code || "N/A" }}</td>
+              <td>
+                <app-table-img-item
+                  [img]="
+                    property?.property_images?.[0]?.data ||
+                    '../../assets/property/property-img-default.svg'
+                  "
+                  size="md"
+                  [title]="property?.property_name"
+                />
+              </td>
+              <td>
+                @if(property?.tennat && property?.tennat?.name){
+                <app-table-img-item
+                  [img]="
+                    property?.tennat?.profile_image ||
+                    '../../assets/userDefaultProImg.png'
+                  "
+                  [title]="property?.tennat?.name"
+                />
+                }@else {N/A}
+              </td>
+              <td>{{ property.tenancy_status }}</td>
+              <td>{{ property.dimension }}</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn
+                    type="download"
+                    (clicked)="handleDownloadDocumentClick()"
+                  />
+                  <app-table-action-btn
+                    type="preview"
+                    (clicked)="handlePreviewDocumentClick()"
+                  />
+                </div>
+              </td>
+            </tr>
+            } -->
+        </tbody>
+
+        <tbody>
+          <tr>
+            <td>CHQ-AX104</td>
+            <td>EIB</td>
+            <td>20394857</td>
+            <td>928374</td>
+            <td>10/10/2024</td>
+            <td>Cheque</td>
+            <td>Rent</td>
+
+            <td>
+              <div class="status-track">
+                <div class="status-step done">
+                  <span class="dot"></span>
+                  <span class="text">Disburse</span>
+                </div>
+
+                <span class="status-line done"></span>
+
+                <div class="status-step done">
+                  <span class="dot"></span>
+                  <span class="text">Credited</span>
+                </div>
+              </div>
+            </td>
+
+            <td>9,000</td>
+            <td align="center">
+              <div class="cmmnTblActnBtnDiv">
+                <app-table-action-btn type="download" />
+                <!-- (clicked)="handleDownloadClick()" -->
+                <app-table-action-btn type="preview" />
+
+                <!-- (clicked)="handlePreviewClick()" -->
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>CHQ-AX105</td>
+            <td>EIB</td>
+            <td>89475639</td>
+            <td>857493</td>
+            <td>11/01/2024</td>
+            <td>Cheque</td>
+            <td>Rent</td>
+
+            <td>
+              <div class="status-track">
+                <div class="status-step done">
+                  <span class="dot"></span>
+                  <span class="text">Disburse</span>
+                </div>
+
+                <span class="status-line done"></span>
+
+                <div class="status-step done">
+                  <span class="dot"></span>
+                  <span class="text">Credited</span>
+                </div>
+              </div>
+            </td>
+
+            <td>9,000</td>
+            <td align="center">
+              <div class="cmmnTblActnBtnDiv">
+                <app-table-action-btn type="download" />
+                <!-- (clicked)="handleDownloadClick()" -->
+                <app-table-action-btn type="preview" />
+
+                <!-- (clicked)="handlePreviewClick()" -->
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>--</td>
+            <td>EIB</td>
+            <td>39576849</td>
+            <td>746382</td>
+            <td>11/15/2024</td>
+            <td>Cheque</td>
+            <td>Rent</td>
+            <td>
+              <div class="status-track">
+                <div class="status-step done">
+                  <span class="dot"></span>
+                  <span class="text">Disburse</span>
+                </div>
+
+                <span class="status-line done"></span>
+
+                <div class="status-step danger">
+                  <span class="dot"></span>
+                  <span class="text">InProgress</span>
+                </div>
+              </div>
+            </td>
+
+            <td>9,000</td>
+            <td align="center">
+              <div class="cmmnTblActnBtnDiv">
+                <app-table-action-btn type="download" />
+                <!-- (clicked)="handleDownloadClick()" -->
+                <app-table-action-btn type="preview" />
+
+                <!-- (clicked)="handlePreviewClick()" -->
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>--</td>
+            <td>EIB</td>
+            <td>94837659</td>
+            <td>635271</td>
+            <td>12/01/2024</td>
+            <td>Cheque</td>
+            <td>Other Charges</td>
+
+            <td>
+              <div class="status-track">
+                <div class="status-step done">
+                  <span class="dot"></span>
+                  <span class="text">Disburse</span>
+                </div>
+
+                <span class="status-line done"></span>
+
+                <div class="status-step danger">
+                  <span class="dot"></span>
+                  <span class="text">Bounce</span>
+                  <a class="replace-link">Replace Cheque</a>
+                </div>
+              </div>
+            </td>
+
+            <td>9,000</td>
+            <td align="center">
+              <div class="cmmnTblActnBtnDiv">
+                <app-table-action-btn type="download" />
+                <!-- (clicked)="handleDownloadClick()" -->
+                <app-table-action-btn type="preview" />
+
+                <!-- (clicked)="handlePreviewClick()" -->
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>CHQ-AX109</td>
+            <td>EIB</td>
+            <td>69304857</td>
+            <td>524160</td>
+            <td>12/15/2024</td>
+            <td>Cheque</td>
+            <td>Rent</td>
+            <td>
+              <div class="status-track">
+                <div class="status-step done">
+                  <span class="dot"></span>
+                  <span class="text">Disburse</span>
+                </div>
+
+                <span class="status-line done"></span>
+
+                <div class="status-step done">
+                  <span class="dot"></span>
+                  <span class="text">Credited</span>
+                </div>
+              </div>
+            </td>
+
+            <td>9,000</td>
+            <td align="center">
+              <div class="cmmnTblActnBtnDiv">
+                <app-table-action-btn type="download" />
+                <!-- (clicked)="handleDownloadClick()" -->
+                <app-table-action-btn type="preview" />
+
+                <!-- (clicked)="handlePreviewClick()" -->
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
+
   <div class="cmmnTblFtr">
     <app-table-select />
     <app-table-pagination />
