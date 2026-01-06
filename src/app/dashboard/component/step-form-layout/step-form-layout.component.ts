@@ -157,7 +157,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
     const step = this.engine.getSteps()[index];
     if (!step) return;
     const status = this.engine.getStepStatus(step.id);
-    if (status === 'LOCKED' || status === 'READY') return;
+    // if (status === 'LOCKED' || status === 'READY') return;
 
     let mode = this.engine.getStepFormMode(step.id);
 
