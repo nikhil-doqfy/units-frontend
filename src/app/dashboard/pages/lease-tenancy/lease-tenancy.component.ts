@@ -142,7 +142,7 @@ export class LeaseTenancyComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.leaseList = resp?.content.results ?? [];
+          this.leaseList = resp?.content ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
         },
       });
