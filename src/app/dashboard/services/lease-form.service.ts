@@ -208,8 +208,8 @@ export class LeaseFormService {
 
   mapOutPropertyDetails(value: any): Record<string, any> {
     const data: any = {
-      property_id: value?.property?.key,
-      tenant_id: value?.tenant?.key,
+      property_id: this.propertyDetailsForm.value.unit?.key,
+      tenant_id: this.tenantDetailsForm.value.tenant?.key,
       lease_start_date: this.getObjectToEpoch(value.startDate),
       lease_end_date: this.getObjectToEpoch(value.endDate),
       lease_grace_start_date: this.getObjectToEpoch(value.graceStartDate),
