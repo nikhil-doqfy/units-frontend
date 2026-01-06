@@ -479,7 +479,7 @@
     </ng-container>
   </ng-container>
 
-  <!-- Step Property Details Content -->
+  <!-- Step Lease Details Content -->
   <app-step-pane
     [title]="'LEASE_DETAILS' | translate"
     [description]="'FILL_ALL_FIELDS_CREATE_LEASE' | translate"
@@ -713,7 +713,7 @@
   </app-step-pane>
 
   <!-- Step Document Layout Content -->
-  <app-step-pane
+  <!-- <app-step-pane
     [title]="'DOCUMENT_LAYOUT' | translate"
     [description]="'SELECT' | translate"
   >
@@ -804,10 +804,10 @@
       </div>
     </form>
     }
-  </app-step-pane>
+  </app-step-pane> -->
 
   <!-- Step Negotiation Content -->
-  <app-step-pane
+  <!-- <app-step-pane
     [title]="'NEGOTIATIONS' | translate"
     [description]="'FILL_IN_THE_BELOW_TEMPLATE' | translate"
   >
@@ -843,7 +843,13 @@
         </form>
       </div>
     </div>
-  </app-step-pane>
+  </app-step-pane> -->
+
+  <!-- Step Payment Details Content -->
+   <app-step-pane [title]="'PAYMENT_DETAILS' | translate" [description]="'Fill info of payments' | translate"></app-step-pane>
+
+  <!-- Step Terms and Conditions Content -->
+  <app-step-pane [title]="'TERMS_&_CONDITIONS' | translate" [description]="'You can also add your conditions' | translate"></app-step-pane>
 
   <!-- Step Upload Ejari Content -->
   <app-step-pane

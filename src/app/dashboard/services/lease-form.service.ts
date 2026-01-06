@@ -22,16 +22,17 @@ export class LeaseFormService {
   propertyDetailsForm!: FormGroup;
   tenantDetailsForm!: FormGroup;
   leaseDetailsForm!: FormGroup;
-  leaseDocumentLayoutForm!: FormGroup;
-  leaseNegotiationForm!: FormGroup;
+  paymentDetailsForm!: FormGroup;
+  // leaseDocumentLayoutForm!: FormGroup;
+  // leaseNegotiationForm!: FormGroup;
   leaseDocumentsForm!: FormGroup;
 
   constructor() {
     this.initPropertyDetailForm();
     this.initTenantDetailsForm();
     this.initLeaseDetailsForm();
-    this.initLeaseDocumentLayoutForm();
-    this.initLeaseNegotiationForm();
+    // this.initLeaseDocumentLayoutForm();
+    // this.initLeaseNegotiationForm();
     this.initLeaseDocumentsForm();
   }
 
@@ -71,19 +72,19 @@ export class LeaseFormService {
     });
   }
 
-  initLeaseDocumentLayoutForm() {
-    this.leaseDocumentLayoutForm = this.formBuilder.group({
-      documentLayout: ['createLayoutByAI', [Validators.required]],
-      template: ['', [Validators.required]],
-    });
-  }
+  // initLeaseDocumentLayoutForm() {
+  //   this.leaseDocumentLayoutForm = this.formBuilder.group({
+  //     documentLayout: ['createLayoutByAI', [Validators.required]],
+  //     template: ['', [Validators.required]],
+  //   });
+  // }
 
-  initLeaseNegotiationForm() {
-    this.leaseNegotiationForm = this.formBuilder.group({
-      templateValues: ['', [Validators.required]],
-      dynamicVariables: this.formBuilder.group({}),
-    });
-  }
+  // initLeaseNegotiationForm() {
+  //   this.leaseNegotiationForm = this.formBuilder.group({
+  //     templateValues: ['', [Validators.required]],
+  //     dynamicVariables: this.formBuilder.group({}),
+  //   });
+  // }
 
   initLeaseDocumentsForm() {
     this.leaseDocumentsForm = this.formBuilder.group({
@@ -97,13 +98,11 @@ export class LeaseFormService {
         id: 'PROPERTY_DETAILS',
         title: 'Property Details',
         formGroup: this.propertyDetailsForm,
-        load: (context) => this.getLeasePropertyDetails(context),
       },
       {
         id: 'TENANT_DETAILS',
         title: 'Tenant Details',
         formGroup: this.tenantDetailsForm,
-        load: (context) => this.getLeasePropertyDetails(context),
       },
       {
         id: 'LEASE_DETAILS',
@@ -114,18 +113,28 @@ export class LeaseFormService {
         mapIn: (response) => this.patchPropertyDetails(response),
         mapOut: (value) => this.mapOutPropertyDetails(value),
       },
+      // {
+      //   id: 'DOCUMENTS_LAYOUT',
+      //   title: 'Document Layout',
+      //   formGroup: this.leaseDocumentLayoutForm,
+      // },
+      // {
+      //   id: 'NEGOTIATION',
+      //   title: 'Negotiation',
+      //   formGroup: this.leaseNegotiationForm,
+      //   save: (payload, context) =>
+      //     this.saveNegotiationDetails(payload, context),
+      //   mapOut: (value) => this.mapOutNegotiationDetails(value),
+      // },
       {
-        id: 'DOCUMENTS_LAYOUT',
-        title: 'Document Layout',
-        formGroup: this.leaseDocumentLayoutForm,
+        id: 'PAYMENT_DETAIL',
+        title: 'Payment Detail',
+        formGroup: this.paymentDetailsForm,
       },
       {
-        id: 'NEGOTIATION',
-        title: 'Negotiation',
-        formGroup: this.leaseNegotiationForm,
-        save: (payload, context) =>
-          this.saveNegotiationDetails(payload, context),
-        mapOut: (value) => this.mapOutNegotiationDetails(value),
+        id: 'TERMS_&_CONDITIONS',
+        title: 'Terms & Conditions',
+        formGroup: this.paymentDetailsForm,
       },
       {
         id: 'UPLOAD_EJARI',
@@ -220,32 +229,32 @@ export class LeaseFormService {
     return data;
   }
 
-  saveNegotiationDetails(payload: Record<string, any>, context: any) {
-    const mode = this.engine()?.getCurrentStepFormMode();
-    payload['lease_id'] = context.formId;
-    if (mode === 'EDIT') {
-      return this.leaseService.addTemplateData(payload);
-    } else {
-      return this.leaseService.addTemplateData(payload);
-    }
-  }
+  // saveNegotiationDetails(payload: Record<string, any>, context: any) {
+  //   const mode = this.engine()?.getCurrentStepFormMode();
+  //   payload['lease_id'] = context.formId;
+  //   if (mode === 'EDIT') {
+  //     return this.leaseService.addTemplateData(payload);
+  //   } else {
+  //     return this.leaseService.addTemplateData(payload);
+  //   }
+  // }
 
-  mapOutNegotiationDetails(value: any): Record<string, any> {
-    let data: any = {};
+  // mapOutNegotiationDetails(value: any): Record<string, any> {
+  //   let data: any = {};
 
-    const docLayoutFormValue = this.leaseDocumentLayoutForm.value;
-    const selectedDocLayout = docLayoutFormValue.documentLayout;
+  //   const docLayoutFormValue = this.leaseDocumentLayoutForm.value;
+  //   const selectedDocLayout = docLayoutFormValue.documentLayout;
 
-    if (selectedDocLayout === 'predefinedTemplate') {
-      data = {
-        ...data,
-        values: value.templateValues,
-        template_id: docLayoutFormValue.template,
-      };
-    }
+  //   if (selectedDocLayout === 'predefinedTemplate') {
+  //     data = {
+  //       ...data,
+  //       values: value.templateValues,
+  //       template_id: docLayoutFormValue.template,
+  //     };
+  //   }
 
-    return data;
-  }
+  //   return data;
+  // }
 
   saveDocumentsDetails(payload: Record<string, any>, context: any) {
     const mode = this.engine()?.getCurrentStepFormMode();

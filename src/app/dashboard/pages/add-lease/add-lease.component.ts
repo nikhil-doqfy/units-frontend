@@ -94,8 +94,8 @@ export class AddLeaseComponent {
   propertyDetailForm = this.leaseFormService.propertyDetailsForm;
   tenantDetailsForm = this.leaseFormService.tenantDetailsForm;
   leaseDetailsForm = this.leaseFormService.leaseDetailsForm;
-  documentLayoutForm = this.leaseFormService.leaseDocumentLayoutForm;
-  negotiationForm = this.leaseFormService.leaseNegotiationForm;
+  // documentLayoutForm = this.leaseFormService.leaseDocumentLayoutForm;
+  // negotiationForm = this.leaseFormService.leaseNegotiationForm;
   documentsForm = this.leaseFormService.leaseDocumentsForm;
 
   propertyList: any[] = [];
@@ -160,11 +160,11 @@ export class AddLeaseComponent {
       },
     ]);
 
-    this.engine.currentIndex
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((index) => {
-        if (index === 3) this.getTemplateData();
-      });
+    // this.engine.currentIndex
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe((index) => {
+    //     if (index === 3) this.getTemplateData();
+    //   });
   }
 
   getOptionsTypes(option: OptionsParams[]) {
@@ -215,9 +215,9 @@ export class AddLeaseComponent {
     return types;
   }
 
-  get documentLayout() {
-    return this.documentLayoutForm.get('documentLayout')?.value;
-  }
+  // get documentLayout() {
+  //   return this.documentLayoutForm.get('documentLayout')?.value;
+  // }
 
   onLayoutChange(event: any) {
     const value = event?.target?.value;
@@ -234,126 +234,126 @@ export class AddLeaseComponent {
     }
   }
 
-  getTemplateData() {
-    const templateId = this.documentLayoutForm.get('template')?.value;
-    if (!templateId) return;
+  // getTemplateData() {
+  //   const templateId = this.documentLayoutForm.get('template')?.value;
+  //   if (!templateId) return;
 
-    this.leaseService
-      .getTemplateData({ template_id: templateId })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp: any) => {
-        const content = resp.content;
+  //   this.leaseService
+  //     .getTemplateData({ template_id: templateId })
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((resp: any) => {
+  //       const content = resp.content;
 
-        if (content.template_path) {
-          this.buildDynamicForm(content.fields); // build form from metadata
-          this.subscribeToVariableChanges();
-          this.handleTemplateUrl(content.template_path); // fetch HTML
-        }
-      });
-  }
+  //       if (content.template_path) {
+  //         this.buildDynamicForm(content.fields); // build form from metadata
+  //         this.subscribeToVariableChanges();
+  //         this.handleTemplateUrl(content.template_path); // fetch HTML
+  //       }
+  //     });
+  // }
 
-  extractHtmlBody(html: string): string {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    return doc.body.innerHTML;
-  }
+  // extractHtmlBody(html: string): string {
+  //   const parser = new DOMParser();
+  //   const doc = parser.parseFromString(html, 'text/html');
+  //   return doc.body.innerHTML;
+  // }
 
-  injectVariableSpans(html: string) {
-    return html.replace(/\$\{([^}]+)\}/g, (_match, key) => {
-      return `<span data-var="${key}" class="doc-var"></span>`;
-    });
-  }
+  // injectVariableSpans(html: string) {
+  //   return html.replace(/\$\{([^}]+)\}/g, (_match, key) => {
+  //     return `<span data-var="${key}" class="doc-var"></span>`;
+  //   });
+  // }
 
-  handleTemplateUrl(url: string) {
-    this.leaseService
-      .getTemplateContent(url)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp) => {
-        const cleanHtml = this.extractHtmlBody(resp);
+  // handleTemplateUrl(url: string) {
+  //   this.leaseService
+  //     .getTemplateContent(url)
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((resp) => {
+  //       const cleanHtml = this.extractHtmlBody(resp);
 
-        // Inject span for each back-end-defined variable
-        const processed = this.injectVariableSpans(cleanHtml);
+  //       // Inject span for each back-end-defined variable
+  //       const processed = this.injectVariableSpans(cleanHtml);
 
-        this.processedTemplate =
-          this.sanitizer.bypassSecurityTrustHtml(processed);
+  //       this.processedTemplate =
+  //         this.sanitizer.bypassSecurityTrustHtml(processed);
 
-        // Wait for HTML to render
-        setTimeout(() => this.onDocRendered(), 0);
-      });
-  }
+  //       // Wait for HTML to render
+  //       setTimeout(() => this.onDocRendered(), 0);
+  //     });
+  // }
 
-  buildDynamicForm(fields: any[]) {
-    this.fields = fields;
+  // buildDynamicForm(fields: any[]) {
+  //   this.fields = fields;
 
-    const dynamicGroup = this.leaseFormService.leaseNegotiationForm.get(
-      'dynamicVariables'
-    ) as FormGroup;
+  //   const dynamicGroup = this.leaseFormService.leaseNegotiationForm.get(
+  //     'dynamicVariables'
+  //   ) as FormGroup;
 
-    fields.forEach((field) => {
-      dynamicGroup.addControl(
-        field.id_attribute,
-        new FormControl('', this.buildValidators(field))
-      );
-    });
-  }
+  //   fields.forEach((field) => {
+  //     dynamicGroup.addControl(
+  //       field.id_attribute,
+  //       new FormControl('', this.buildValidators(field))
+  //     );
+  //   });
+  // }
 
-  buildValidators(field: any) {
-    const validators = [];
+  // buildValidators(field: any) {
+  //   const validators = [];
 
-    if (field.required) validators.push(Validators.required);
-    if (field.min_length)
-      validators.push(Validators.minLength(field.min_length));
-    if (field.max_length)
-      validators.push(Validators.maxLength(field.max_length));
-    if (field.pattern) validators.push(Validators.pattern(field.pattern));
+  //   if (field.required) validators.push(Validators.required);
+  //   if (field.min_length)
+  //     validators.push(Validators.minLength(field.min_length));
+  //   if (field.max_length)
+  //     validators.push(Validators.maxLength(field.max_length));
+  //   if (field.pattern) validators.push(Validators.pattern(field.pattern));
 
-    return validators;
-  }
+  //   return validators;
+  // }
 
-  subscribeToVariableChanges() {
-    const dynamicGroup = this.negotiationForm.get(
-      'dynamicVariables'
-    ) as FormGroup;
+  // subscribeToVariableChanges() {
+  //   const dynamicGroup = this.negotiationForm.get(
+  //     'dynamicVariables'
+  //   ) as FormGroup;
 
-    // On form value change then make changes to UI by subscribing
-    dynamicGroup.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((values) => {
-        Object.entries(values).forEach(([key, value]) => {
-          const nodes = this.variableNodes[key] || [];
-          nodes.forEach((node) => {
-            node.textContent = String(value) ?? '';
-            if (String(value).trim().length > 0) {
-              node.setAttribute('data-filled', 'true');
-            } else {
-              node.removeAttribute('data-filled');
-            }
-            this.negotiationForm
-              .get('templateValues')
-              ?.patchValue(dynamicGroup.value);
-          });
-        });
-      });
-  }
+  //   // On form value change then make changes to UI by subscribing
+  //   dynamicGroup.valueChanges
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((values) => {
+  //       Object.entries(values).forEach(([key, value]) => {
+  //         const nodes = this.variableNodes[key] || [];
+  //         nodes.forEach((node) => {
+  //           node.textContent = String(value) ?? '';
+  //           if (String(value).trim().length > 0) {
+  //             node.setAttribute('data-filled', 'true');
+  //           } else {
+  //             node.removeAttribute('data-filled');
+  //           }
+  //           this.negotiationForm
+  //             .get('templateValues')
+  //             ?.patchValue(dynamicGroup.value);
+  //         });
+  //       });
+  //     });
+  // }
 
-  onDocRendered() {
-    const container = this.docContainer.nativeElement;
-    console.log(container);
-    const nodes = container.querySelectorAll('[data-var]');
+  // onDocRendered() {
+  //   const container = this.docContainer.nativeElement;
+  //   console.log(container);
+  //   const nodes = container.querySelectorAll('[data-var]');
 
-    this.variableNodes = {}; // reset before repopulating
+  //   this.variableNodes = {}; // reset before repopulating
 
-    nodes.forEach((node: HTMLElement) => {
-      const key = node.getAttribute('data-var');
-      if (!key) return;
+  //   nodes.forEach((node: HTMLElement) => {
+  //     const key = node.getAttribute('data-var');
+  //     if (!key) return;
 
-      if (!this.variableNodes[key]) {
-        this.variableNodes[key] = [];
-      }
+  //     if (!this.variableNodes[key]) {
+  //       this.variableNodes[key] = [];
+  //     }
 
-      this.variableNodes[key].push(node);
-    });
-  }
+  //     this.variableNodes[key].push(node);
+  //   });
+  // }
 
   onUpload(type: string, event: UploadFileModel) {
     this.handleUploadEvent(type, event);
