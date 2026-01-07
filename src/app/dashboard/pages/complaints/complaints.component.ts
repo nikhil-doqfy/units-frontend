@@ -186,6 +186,7 @@ export class ComplaintsComponent {
     this.getOptionTypes(['COMPLAINT_STATUS']);
   }
   removeFilter() {
+    this.selectedComplaintstatus = null;
     this.currentPage = 1;
     this.loadComplaints();
   }
@@ -220,6 +221,7 @@ export class ComplaintsComponent {
       params.status = this.selectedComplaintstatus.key;
     }
 
+    console.log('API PARAMS:', params);
     this.complaintService.getComplanints(params).subscribe({
       next: (res) => {
         this.complaints = res.content?.complaints || [];
