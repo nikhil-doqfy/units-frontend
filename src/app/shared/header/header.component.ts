@@ -213,6 +213,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.translate.instant(titleKey);
   }
 
+  goToDocumentation() {
+    this.router.navigate(['/dashboard/documentations']);
+  }
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
