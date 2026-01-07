@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  ViewChild,
+  viewChild,
+} from '@angular/core';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -10,7 +16,7 @@ import { TableActionDropdownComponent } from '../../component/table-action-dropd
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
-import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -25,7 +31,7 @@ import { TableMultiImgItemComponent } from '../../component/table-multi-img-item
 import { BadgeComponent } from '../../component/badge/badge.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { StatsCardComponent } from '../../component/stats-card/stats-card.component';
-import { CustomSelectComponent } from '../../../auth/component/custom-select/custom-select.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -62,15 +68,25 @@ import { FileUploadItemComponent } from '../../component/file-upload-item/file-u
   styleUrl: './complaints.component.css',
 })
 export class ComplaintsComponent {
+  @ViewChild('searchComp') searchComp!: any;
   private sharedService = inject(SharedService);
   private alertService = inject(AlertService);
   private complaintService = inject(ComplaintsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
+
+  private onComplaintsSearch$ = new Subject<string>();
+  private USER_ROLE = 'userRole';
   totalRecords: number = 0;
   rowsPerPage: number = 10;
   currentPage: number = 1;
   showDetailView: boolean = false;
+
+  complaintsStatus: any = [];
+
+  selectedComplaintstatus: any = null;
+  complaintFilter: Record<string, any> = {};
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   componentName = 'ComplaintsComponent';
   breadcrumbData: BreadCrumb[] = [];
@@ -97,16 +113,19 @@ export class ComplaintsComponent {
       label: 'Rejected',
     },
   ];
-  private translate = inject(TranslateService);
 
-  private onComplaintsSearch$ = new Subject<string>();
-  private USER_ROLE = 'userRole';
   constructor(
     private destroyRef: DestroyRef,
     private storageService: StorageService
   ) {}
 
   ngOnInit() {
+    this.onComplaintsSearch$
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe(() => {
+        this.loadComplaints();
+        this.searchComp.onClear();
+      });
     this.sharedService.initLanguage();
     this.loadBreadcrumb();
     this.initLanguageListener();
@@ -136,11 +155,6 @@ export class ComplaintsComponent {
     ]);
   }
 
-  complaintsStatus: any = [];
-
-  selectedComplaintstatus: any = null;
-  complaintFilter: Record<string, any> = {};
-
   private sharedApiService = inject(SharedApiService);
   getOptionTypes(options: string[]) {
     this.sharedApiService
@@ -148,9 +162,14 @@ export class ComplaintsComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.complaintStats = response?.content?.lease_status;
+          this.complaintsStatus = response?.content?.complaint_status;
         },
       });
+  }
+
+  searchTextChange(search: string): void {
+    this.searchTerm = search;
+    this.onComplaintsSearch$.next(search);
   }
 
   uploadedImages: any[] = [];
@@ -167,8 +186,6 @@ export class ComplaintsComponent {
     this.getOptionTypes(['COMPLAINT_STATUS']);
   }
   removeFilter() {
-    this.selectedComplaintstatus = null;
-    delete this.complaintFilter['lease_status'];
     this.currentPage = 1;
     this.loadComplaints();
   }
@@ -182,25 +199,31 @@ export class ComplaintsComponent {
   // }
 
   applyFilter() {
-    const params: any = {};
-    // this.complaintFilter['lease_status'] = this.complaintsStatus.key;
-    if (this.selectedComplaintstatus?.key) {
-      params.status = this.selectedComplaintstatus.key;
-    }
     this.currentPage = 1;
-    this.loadComplaints(params);
+    this.loadComplaints();
   }
 
   complaints: any[] = [];
   searchTerm: string = '';
-  loadComplaints(search?: string) {
-    const params: any = {};
-    if (search) {
-      params.search = search;
+
+  loadComplaints() {
+    const params: any = {
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
+
+    if (this.searchTerm) {
+      params.search = this.searchTerm;
     }
+
+    if (this.selectedComplaintstatus?.key) {
+      params.status = this.selectedComplaintstatus.key;
+    }
+
     this.complaintService.getComplanints(params).subscribe({
       next: (res) => {
         this.complaints = res.content?.complaints || [];
+        this.totalRecords = res?.pagination?.total_records ?? 0;
       },
       error: (err) => console.error('Error fetching complaints:', err),
     });
@@ -211,17 +234,20 @@ export class ComplaintsComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-  onRefresh() {}
-
-  searchTextChange(search: string): void {
-    this.onComplaintsSearch$.next(search);
-    this.searchTerm = search; // update current search text
-    this.loadComplaints(this.searchTerm);
+  onRefresh() {
+    this.loadComplaints();
   }
+
+  // searchTextChange(search: string): void {
+  //   this.onComplaintsSearch$.next(search);
+  //   this.searchTerm = search;
+  //   this.loadComplaints(this.searchTerm);
+  // }
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
+    this.loadComplaints();
   }
   onOptionSelected(option: string) {
     this.selected = option;
@@ -229,6 +255,7 @@ export class ComplaintsComponent {
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+    this.loadComplaints();
   }
 
   //----------------------------------compalint modal --------------------------------------------------
