@@ -203,14 +203,14 @@
             @for(item of complaints;track $index){
             <tr>
               <td>{{ $index + 1 }}</td>
-              <td>{{ item.complaint_id }}</td>
+              <td>{{ item.complaint_id || "N/A" }}</td>
               <td>
                 <app-table-img-item
                   [img]="
                     item?.raised_by_image ??
                     '../../../../assets/userDefaultProImg.png'
                   "
-                  [title]="item.property_unit_name"
+                  [title]="item.property_unit_name || 'N/A'"
                 />
               </td>
               <td>
@@ -219,12 +219,12 @@
                     item?.raised_by_image ??
                     '../../../../assets/userDefaultProImg.png'
                   "
-                  [title]="item.raised_by_name"
+                  [title]="item.raised_by_name || 'N/A'"
                 />
               </td>
               <td>{{ item.raised_date | date : "dd/mm/yyyy" : "-" }}</td>
               <td>
-                {{ item.description }}
+                {{ item.description || "N/A" }}
               </td>
               <td>
                 <app-table-multi-img-item
