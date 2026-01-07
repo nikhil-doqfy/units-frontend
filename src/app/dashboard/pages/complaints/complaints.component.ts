@@ -75,6 +75,7 @@ export class ComplaintsComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
+  private sharedApiService = inject(SharedApiService);
 
   private onComplaintsSearch$ = new Subject<string>();
   private USER_ROLE = 'userRole';
@@ -84,13 +85,17 @@ export class ComplaintsComponent {
   showDetailView: boolean = false;
 
   complaintsStatus: any = [];
-
+  uploadedImages: any[] = [];
+  complaints: any[] = [];
+  searchTerm: string = '';
   selectedComplaintstatus: any = null;
   complaintFilter: Record<string, any> = {};
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   componentName = 'ComplaintsComponent';
   breadcrumbData: BreadCrumb[] = [];
   selected: string = 'Property: All';
+  role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
+  showComplaintModal = false;
   complaintStats = [
     {
       value: '12000',
@@ -129,13 +134,8 @@ export class ComplaintsComponent {
     this.sharedService.initLanguage();
     this.loadBreadcrumb();
     this.initLanguageListener();
-
     this.loadComplaints();
-
     const storedRole = this.storageService.getUserRole();
-
-    console.log('ROLE FROM STORAGE:', storedRole);
-
     this.role = storedRole ? (storedRole.toUpperCase() as any) : null;
   }
 
@@ -155,7 +155,6 @@ export class ComplaintsComponent {
     ]);
   }
 
-  private sharedApiService = inject(SharedApiService);
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
@@ -166,46 +165,6 @@ export class ComplaintsComponent {
         },
       });
   }
-
-  searchTextChange(search: string): void {
-    this.searchTerm = search;
-    this.onComplaintsSearch$.next(search);
-  }
-
-  uploadedImages: any[] = [];
-
-  onUpload(event: any) {
-    this.uploadedImages.push(event);
-  }
-
-  removeImage(image: any) {
-    this.uploadedImages = this.uploadedImages.filter((item) => item !== image);
-  }
-
-  onHandleComplaintsStatusClick(): void {
-    this.getOptionTypes(['COMPLAINT_STATUS']);
-  }
-  removeFilter() {
-    this.selectedComplaintstatus = null;
-    this.currentPage = 1;
-    this.loadComplaints();
-  }
-
-  //   onStatusSelected(status: any) {
-  //   this.selectedComplaintstatus = status;
-
-  //   this.getComplaints({
-  //     status: status.key   // ✔ string
-  //   });
-  // }
-
-  applyFilter() {
-    this.currentPage = 1;
-    this.loadComplaints();
-  }
-
-  complaints: any[] = [];
-  searchTerm: string = '';
 
   loadComplaints() {
     const params: any = {
@@ -221,7 +180,6 @@ export class ComplaintsComponent {
       params.status = this.selectedComplaintstatus.key;
     }
 
-    console.log('API PARAMS:', params);
     this.complaintService.getComplanints(params).subscribe({
       next: (res) => {
         this.complaints = res.content?.complaints || [];
@@ -229,6 +187,32 @@ export class ComplaintsComponent {
       },
       error: (err) => console.error('Error fetching complaints:', err),
     });
+  }
+  searchTextChange(search: string): void {
+    this.searchTerm = search;
+    this.onComplaintsSearch$.next(search);
+  }
+
+  onUpload(event: any) {
+    this.uploadedImages.push(event);
+  }
+
+  removeImage(image: any) {
+    this.uploadedImages = this.uploadedImages.filter((item) => item !== image);
+  }
+
+  onHandleComplaintsStatusClick(): void {
+    this.getOptionTypes(['COMPLAINT_STATUS']);
+  }
+  applyFilter() {
+    this.currentPage = 1;
+    this.loadComplaints();
+  }
+
+  removeFilter() {
+    this.selectedComplaintstatus = null;
+    this.currentPage = 1;
+    this.loadComplaints();
   }
 
   setBreadCrumb(breadCrumb: BreadCrumb[]) {
@@ -240,11 +224,6 @@ export class ComplaintsComponent {
     this.loadComplaints();
   }
 
-  // searchTextChange(search: string): void {
-  //   this.onComplaintsSearch$.next(search);
-  //   this.searchTerm = search;
-  //   this.loadComplaints(this.searchTerm);
-  // }
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
@@ -261,9 +240,6 @@ export class ComplaintsComponent {
   }
 
   //----------------------------------compalint modal --------------------------------------------------
-  role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
-
-  showComplaintModal = false;
 
   get isOwnerOrPmc() {
     return this.role === 'OWNER' || this.role === 'PMC';
