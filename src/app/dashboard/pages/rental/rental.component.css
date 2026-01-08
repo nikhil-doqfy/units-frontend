@@ -531,3 +531,23 @@ Replace Cheque Link .replace-link {
 .dropItem.danger {
   color: #e53935;
 }
+
+.btnCommonsx {
+  font-size: 14px; /* text size */
+  font-weight: 500; /* medium font */
+  color: #0066ff; /* blue text color */
+  background-color: #fff; /* white background */
+  border: 1px solid #0066ff; /* blue border */
+  border-radius: 6px; /* rounded corners */
+  padding: 6px 16px; /* top/bottom 6px, left/right 16px */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btnMinWidth {
+  min-width: 140px; /* same as image button width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* spacing if you add icons inside */
+}

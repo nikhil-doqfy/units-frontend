@@ -123,7 +123,7 @@
 
             <button
               type="button"
-              class="btn btnCommon btnMinWidth d-none d-xl-flex"
+              class="btn btnCommonsx btnMinWidth d-none d-xl-flex"
               (click)="toAddRenatlAcc()"
             >
               {{ "Add New Account" | translate }}
@@ -157,12 +157,12 @@
 
           <div>
             <label>Period From</label>
-            <span>{{ l.from }}</span>
+            <span>{{ l.period_from | date : "dd-mm-yyyy" }}</span>
           </div>
 
           <div>
             <label>Period To</label>
-            <span>{{ l.to }}</span>
+            <span>{{ l.period_to | date : "dd-mm-yyyy" }}</span>
           </div>
 
           <div>
@@ -172,22 +172,22 @@
 
           <div>
             <label>Year Rent</label>
-            <span>{{ l.year_rent }}</span>
+            <span>{{ l.year_rent || "N/A" }}</span>
           </div>
 
           <div>
             <label>Other Charges</label>
-            <span>{{ l.other_charges }}</span>
+            <span>{{ l.other_charges || "N/A" }}</span>
           </div>
 
           <div>
             <label>Vat</label>
-            <span>{{ l.vat }}</span>
+            <span>{{ l.vat || "N/A" }}</span>
           </div>
 
           <div>
             <label>Total Rent</label>
-            <strong>{{ l.total_rent }}</strong>
+            <strong>{{ l.total_rent || "N/A" }}</strong>
           </div>
         </div>
       </div>

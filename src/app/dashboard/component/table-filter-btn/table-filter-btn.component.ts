@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
+import { ScannericonComponent } from '../../../icon/scannericon/scannericon.component';
 
 @Component({
   selector: 'app-table-filter-btn',
@@ -15,6 +17,13 @@ export class TableFilterButtonComponent {
 
   @Output() clicked = new EventEmitter<void>();
 
+  // get leftTitle(): string {
+  //   return this.title?.split('|')[0]?.trim() ?? '';
+  // }
+
+  // get rightTitle(): string {
+  //   return this.title?.split('|')[1]?.trim() ?? '';
+  // }
   onClick(): void {
     this.clicked.emit();
   }

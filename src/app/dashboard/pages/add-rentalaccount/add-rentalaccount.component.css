@@ -362,3 +362,52 @@ input[type="checkbox"] {
     max-width: 160px;
   }
 }
+
+.btnCommonsx {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0066ff;
+  background-color: #fff;
+  border: 1px solid #0066ff;
+  border-radius: 6px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btnMinWidth {
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cmmnTblBody table.charges-table thead tr th {
+  background-color: var(--muteBorder1);
+}
+
+.btnCommons {
+  background-color: var(--whiteBg);
+  box-shadow: 0 0 6px 0 #00000026;
+  border-radius: 10px;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: #1e88ff;
+}
+
+.checkbox .label-text {
+  white-space: nowrap;
+}

@@ -64,22 +64,48 @@
       </div>
 
       <div>
-        <label>Period From <span>*</span></label>
-        <input type="date" />
-      </div>
-
-      <div>
-        <label>Period To <span>*</span></label>
+        <label class="form-label"
+          >{{ "Period From" | translate }}<span>*</span></label
+        >
         <div class="datePicker">
           <input
             class="form-control"
             placeholder="YYYY-MM-DD"
+            ngbDatepicker
+            #startDate="ngbDatepicker"
             formControlName="startDate"
           />
-          <button type="button">
+          <button type="button" (click)="startDate.toggle()">
             <app-date-icon />
           </button>
         </div>
+        @if (isInvalid(rentalForm, 'startDate').status) {
+        <small class="errorMsg">
+          {{ isInvalid(rentalForm, "startDate").msg }}
+        </small>
+        }
+      </div>
+      <div>
+        <label class="form-label"
+          >{{ "Period To" | translate }}<span>*</span></label
+        >
+        <div class="datePicker">
+          <input
+            class="form-control"
+            placeholder="YYYY-MM-DD"
+            ngbDatepicker
+            #endDate="ngbDatepicker"
+            formControlName="endDate"
+          />
+          <button type="button" (click)="endDate.toggle()">
+            <app-date-icon />
+          </button>
+        </div>
+        @if (isInvalid(rentalForm, 'endDate').status) {
+        <small class="errorMsg">
+          {{ isInvalid(rentalForm, "endDate").msg }}
+        </small>
+        }
       </div>
 
       <div>
@@ -115,13 +141,29 @@
         ></app-table-title>
       </div>
       <div class="col-md-auto">
-        <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-table-filter-btn
+        <div class="d-flex btnCommons align-items-center">
+          <!-- <app-table-filter-btn
             [title]="'Add Cheque | Scan Cheque' | translate"
             [hasIcon]="true"
+            (clicked)="openScanChargesModal(addChargesContent)"
           >
             <app-plus-icon />
-          </app-table-filter-btn>
+
+            <app-scannericon />
+          </app-table-filter-btn> -->
+          <button
+            type="button"
+            class="btn"
+            (click)="openScanChargesModal(addChargesContent)"
+          >
+            <app-plus-icon></app-plus-icon>
+            {{ "Add Cheque" | translate }}
+          </button>
+          <span>|</span>
+          <button type="button" class="btn">
+            <app-scannericon></app-scannericon>
+            {{ "Scan Cheque" | translate }}
+          </button>
         </div>
       </div>
     </div>
@@ -237,10 +279,12 @@
       </div>
       <div class="col-md-auto">
         <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-table-filter-btn
-            [title]="'Add Charges' | translate"
-            (clicked)="openAddChargesModal(addChargesContent)"
-          ></app-table-filter-btn>
+          <button
+            class="btnCommonsx"
+            (click)="openAddChargesModal(addChargesContent)"
+          >
+            {{ "ADD_CHARGES" | translate }}
+          </button>
           <button class="btn total-btn">
             Total : {{ totalAmount | number : "1.0-0" }}
           </button>
@@ -282,8 +326,12 @@
 
       <ng-template #addChargesContent let-modal>
         <div class="modal-header">
-          <h6 class="modal-title" id="modal-title">Add charges</h6>
-
+          <h6 class="modal-title" id="modal-title" *ngIf="!showReason">
+            Add charges
+          </h6>
+          <h6 class="modal-title" id="modal-title" *ngIf="showReason">
+            Add Cheques
+          </h6>
           <button
             type="button"
             class="btn-close"
@@ -293,10 +341,10 @@
         </div>
 
         <div class="modal-body">
-          <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="d-flex align-items-center gap-2 mb-3" *ngIf="!showReason">
             <span>Cheque</span>
-
-            <div class="form-check form-switch">
+            <app-toggleicon></app-toggleicon>
+            <!-- <div class="form-check form-switch">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -304,7 +352,7 @@
                 id="cashSwitch"
                 (change)="onPaymentToggle($event)"
               />
-            </div>
+            </div> -->
 
             <span>Cash</span>
           </div>
@@ -339,9 +387,27 @@
               />
 
               <button class="btn btn-outline">
-                <i class="bi bi-upc-scan"></i>
+                <app-scannericon></app-scannericon>
                 Scan
               </button>
+            </div>
+            <div class="mt-3" *ngIf="showReason">
+              <div class="mt-3">
+                <label class="form-label d-block mb-2">Reason for adding</label>
+                <div class="d-flex align-items-center gap-3">
+                  <span>Rent</span>
+                  <!-- <div class="form-check form-switch mb-0">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="reasonSwitch"
+                      [(ngModel)]="isOtherCharges"
+                    />
+                  </div> -->
+                  <app-toggleicon></app-toggleicon>
+                  <span>Other Charges</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
