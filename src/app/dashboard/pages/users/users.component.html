@@ -46,7 +46,7 @@
                 aria-selected="false"
                 (click)="getDeletedUser()"
               >
-                {{ "DELETED_USERS" | translate }}
+                {{ "INACTIVE_USER" | translate }}
               </button>
             </li>
           </ul>
@@ -195,10 +195,10 @@
                       type="edit"
                       (clicked)="openEditUserModal(user.id, addUserContent)"
                     />
-                    <app-table-action-btn
+                    <!-- <app-table-action-btn
                       type="delete"
                       (clicked)="onDeleteClick(user.id, $index)"
-                    />
+                    /> -->
                   </div>
                 </td>
               </tr>

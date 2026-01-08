@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  ViewChild,
+  viewChild,
+} from '@angular/core';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -10,7 +16,7 @@ import { TableActionDropdownComponent } from '../../component/table-action-dropd
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
-import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -25,7 +31,7 @@ import { TableMultiImgItemComponent } from '../../component/table-multi-img-item
 import { BadgeComponent } from '../../component/badge/badge.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { StatsCardComponent } from '../../component/stats-card/stats-card.component';
-import { CustomSelectComponent } from '../../../auth/component/custom-select/custom-select.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -62,19 +68,34 @@ import { FileUploadItemComponent } from '../../component/file-upload-item/file-u
   styleUrl: './complaints.component.css',
 })
 export class ComplaintsComponent {
+  @ViewChild('searchComp') searchComp!: any;
   private sharedService = inject(SharedService);
   private alertService = inject(AlertService);
   private complaintService = inject(ComplaintsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
+  private sharedApiService = inject(SharedApiService);
+
+  private onComplaintsSearch$ = new Subject<string>();
+  private USER_ROLE = 'userRole';
   totalRecords: number = 0;
   rowsPerPage: number = 10;
   currentPage: number = 1;
   showDetailView: boolean = false;
+
+  complaintsStatus: any = [];
+  uploadedImages: any[] = [];
+  complaints: any[] = [];
+  searchTerm: string = '';
+  selectedComplaintstatus: any = null;
+  complaintFilter: Record<string, any> = {};
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   componentName = 'ComplaintsComponent';
   breadcrumbData: BreadCrumb[] = [];
   selected: string = 'Property: All';
+  role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
+  showComplaintModal = false;
   complaintStats = [
     {
       value: '12000',
@@ -97,26 +118,24 @@ export class ComplaintsComponent {
       label: 'Rejected',
     },
   ];
-  private translate = inject(TranslateService);
 
-  private onComplaintsSearch$ = new Subject<string>();
-  private USER_ROLE = 'userRole';
   constructor(
     private destroyRef: DestroyRef,
     private storageService: StorageService
   ) {}
 
   ngOnInit() {
+    this.onComplaintsSearch$
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe(() => {
+        this.loadComplaints();
+        this.searchComp.onClear();
+      });
     this.sharedService.initLanguage();
     this.loadBreadcrumb();
     this.initLanguageListener();
-
     this.loadComplaints();
-
     const storedRole = this.storageService.getUserRole();
-
-    console.log('ROLE FROM STORAGE:', storedRole);
-
     this.role = storedRole ? (storedRole.toUpperCase() as any) : null;
   }
 
@@ -136,24 +155,43 @@ export class ComplaintsComponent {
     ]);
   }
 
-  complaintsStatus: any = [];
-
-  selectedComplaintstatus: any = null;
-  complaintFilter: Record<string, any> = {};
-
-  private sharedApiService = inject(SharedApiService);
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.complaintStats = response?.content?.lease_status;
+          this.complaintsStatus = response?.content?.complaint_status;
         },
       });
   }
 
-  uploadedImages: any[] = [];
+  loadComplaints() {
+    const params: any = {
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
+
+    if (this.searchTerm) {
+      params.search = this.searchTerm;
+    }
+
+    if (this.selectedComplaintstatus?.key) {
+      params.status = this.selectedComplaintstatus.key;
+    }
+
+    this.complaintService.getComplanints(params).subscribe({
+      next: (res) => {
+        this.complaints = res.content?.complaints || [];
+        this.totalRecords = res?.pagination?.total_records ?? 0;
+      },
+      error: (err) => console.error('Error fetching complaints:', err),
+    });
+  }
+  searchTextChange(search: string): void {
+    this.searchTerm = search;
+    this.onComplaintsSearch$.next(search);
+  }
 
   onUpload(event: any) {
     this.uploadedImages.push(event);
@@ -166,44 +204,15 @@ export class ComplaintsComponent {
   onHandleComplaintsStatusClick(): void {
     this.getOptionTypes(['COMPLAINT_STATUS']);
   }
-  removeFilter() {
-    this.selectedComplaintstatus = null;
-    delete this.complaintFilter['lease_status'];
+  applyFilter() {
     this.currentPage = 1;
     this.loadComplaints();
   }
 
-  //   onStatusSelected(status: any) {
-  //   this.selectedComplaintstatus = status;
-
-  //   this.getComplaints({
-  //     status: status.key   // ✔ string
-  //   });
-  // }
-
-  applyFilter() {
-    const params: any = {};
-    // this.complaintFilter['lease_status'] = this.complaintsStatus.key;
-    if (this.selectedComplaintstatus?.key) {
-      params.status = this.selectedComplaintstatus.key;
-    }
+  removeFilter() {
+    this.selectedComplaintstatus = null;
     this.currentPage = 1;
-    this.loadComplaints(params);
-  }
-
-  complaints: any[] = [];
-  searchTerm: string = '';
-  loadComplaints(search?: string) {
-    const params: any = {};
-    if (search) {
-      params.search = search;
-    }
-    this.complaintService.getComplanints(params).subscribe({
-      next: (res) => {
-        this.complaints = res.content?.complaints || [];
-      },
-      error: (err) => console.error('Error fetching complaints:', err),
-    });
+    this.loadComplaints();
   }
 
   setBreadCrumb(breadCrumb: BreadCrumb[]) {
@@ -211,17 +220,15 @@ export class ComplaintsComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-  onRefresh() {}
-
-  searchTextChange(search: string): void {
-    this.onComplaintsSearch$.next(search);
-    this.searchTerm = search; // update current search text
-    this.loadComplaints(this.searchTerm);
+  onRefresh() {
+    this.loadComplaints();
   }
+
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
+    this.loadComplaints();
   }
   onOptionSelected(option: string) {
     this.selected = option;
@@ -229,12 +236,10 @@ export class ComplaintsComponent {
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+    this.loadComplaints();
   }
 
   //----------------------------------compalint modal --------------------------------------------------
-  role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
-
-  showComplaintModal = false;
 
   get isOwnerOrPmc() {
     return this.role === 'OWNER' || this.role === 'PMC';

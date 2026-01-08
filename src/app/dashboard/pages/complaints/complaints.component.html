@@ -129,6 +129,7 @@
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search
               placeholder="{{ 'SEARCH_HERE' | translate }}"
+              #searchComp
               (onValueChange)="searchTextChange($event)"
             />
             <app-filter-popup-btn>
@@ -199,180 +200,42 @@
           </thead>
 
           <tbody>
+            @for(item of complaints;track $index){
             <tr>
-              <td>01</td>
-              <td>LP9021</td>
+              <td>{{ $index + 1 }}</td>
+              <td>{{ item.complaint_id || "N/A" }}</td>
               <td>
                 <app-table-img-item
-                  img="../../../../assets/property/property-list-1.png"
-                  title="Novatis AG..."
+                  [img]="
+                    item?.raised_by_image ??
+                    '../../../../assets/userDefaultProImg.png'
+                  "
+                  [title]="item.property_unit_name || 'N/A'"
                 />
               </td>
               <td>
                 <app-table-img-item
-                  img="../../../../assets/user/user-1.png"
-                  title="Jensi"
+                  [img]="
+                    item?.raised_by_image ??
+                    '../../../../assets/userDefaultProImg.png'
+                  "
+                  [title]="item.raised_by_name || 'N/A'"
                 />
               </td>
-              <td>12/02/2024</td>
+              <td>{{ item.raised_date | date : "dd/mm/yyyy" : "-" }}</td>
               <td>
-                Faulty faucet in kitchen, dripping constantly and needs repair
+                {{ item.description || "N/A" }}
               </td>
               <td>
                 <app-table-multi-img-item
-                  [images]="[
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png',
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png'
-                  ]"
+                  [images]="[item.property_image || 'N/A']"
                   size="md"
                 ></app-table-multi-img-item>
               </td>
-              <td>
-                <app-badge title="Completed" status="green"></app-badge>
-              </td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn type="up-arrow" />
-                  <app-table-action-btn type="complete" />
-
-                  <app-table-action-btn type="preview" />
-                  <app-table-action-btn type="disable" />
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>02</td>
-              <td>LP8021</td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-list-2.png"
-                  title="Agriculture..."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/user/user-2.png"
-                  title="Richard"
-                />
-              </td>
-              <td>01/01/2024</td>
-              <td>
-                Heating not working properly, thermostat issues, house is cold
-              </td>
-
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png',
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png'
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge title="Completed" status="green" />
-              </td>
-
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn type="up-arrow" />
-                  <app-table-action-btn type="complete" />
-
-                  <app-table-action-btn type="preview" />
-                  <app-table-action-btn type="disable" />
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>03</td>
-              <td>VC79021</td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-list-2.png"
-                  title="Honda..."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/user/user-3.png"
-                  title="Thaomas"
-                />
-              </td>
-              <td>22/12/2023</td>
-              <td>
-                Leak in the bathroom, causing water damage to the ceiling below
-              </td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png',
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-1.png'
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge title="In Progress" status="orange"></app-badge>
-              </td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn type="up-arrow" />
-                  <app-table-action-btn type="complete" />
-
-                  <app-table-action-btn type="preview" />
-                  <app-table-action-btn type="disable" />
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>04</td>
-              <td>VC69021</td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-list-2.png"
-                  title="TVS"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/user/user-4.png"
-                  title="Akshay"
-                />
-              </td>
-              <td>11/12/2023</td>
-              <td>
-                Broken window in bedroom, glass shattered, needs replacement
-              </td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png',
-                    '../../../../assets/property/property-img-1.png'
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-
               <td>
                 <app-badge
-                  title="Assigned to Engineer"
-                  status="blue"
+                  [title]="item?.status.value"
+                  status="green"
                 ></app-badge>
               </td>
               <td align="center">
@@ -386,52 +249,11 @@
               </td>
             </tr>
 
+            }@empty{
             <tr>
-              <td>05</td>
-              <td>VC59021</td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-list-2.png"
-                  title="Samsung"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/user/user-5.png"
-                  title="Avanshi"
-                />
-              </td>
-              <td>01/12/2023</td>
-              <td>Pest control needed, ants in kitchen, spiders in basement</td>
-
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png',
-                    '../../../../assets/property/property-img-1.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png',
-                    '../../../../assets/property/property-img-2.png',
-                    '../../../../assets/property/property-img-3.png'
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge title="Rejected" status="red"></app-badge>
-              </td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn type="up-arrow" />
-                  <app-table-action-btn type="complete" />
-
-                  <app-table-action-btn type="preview" />
-                  <app-table-action-btn type="disable" />
-                </div>
-              </td>
+              <td colspan="20" align="center">No data found</td>
             </tr>
+            }
           </tbody>
         </table>
       </div>
