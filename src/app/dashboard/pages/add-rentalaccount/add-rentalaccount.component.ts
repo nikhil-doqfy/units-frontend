@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { SharedService } from '../../../shared.service';
@@ -18,6 +18,9 @@ import { DateIconComponent } from '../../component/icons/date-icon/date-icon.com
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RentalAccountService } from '../../rental-account.service';
+import { ScannericonComponent } from '../../../icon/scannericon/scannericon.component';
+import { FormService } from '../../../shared/services/form.service';
+import { ToggleiconComponent } from '../../../icon/toggleicon/toggleicon.component';
 
 @Component({
   selector: 'app-add-rentalaccount',
@@ -34,7 +37,10 @@ import { RentalAccountService } from '../../rental-account.service';
     UploadIconComponent,
     CustomSelectComponent,
     DateIconComponent,
-    ReactiveFormsModule, // ✅ MUST
+    ReactiveFormsModule,
+    ScannericonComponent,
+    NgbDatepickerModule,
+    ToggleiconComponent,
   ],
   templateUrl: './add-rentalaccount.component.html',
   styleUrl: './add-rentalaccount.component.css',
@@ -43,7 +49,7 @@ export class AddRentalaccountComponent implements OnInit {
   private sharedService = inject(SharedService);
 
   constructor(private modalService: NgbModal, private router: Router) {}
-
+  showReason: boolean = false;
   isEditMode = false;
   showDetailView = false;
   isCash = false;
@@ -160,8 +166,10 @@ export class AddRentalaccountComponent implements OnInit {
       checked: false,
     },
   ];
-  private sharedApiService = inject(SharedApiService);
+  private formService = inject(FormService);
 
+  private sharedApiService = inject(SharedApiService);
+  isInvalid = this.formService.isInvalid;
   handleFilterClick(): void {
     this.getOptionTypes(['RENTAL_ACCOUNT_LEASE']);
     console.log('Filter button clicked');
@@ -179,6 +187,7 @@ export class AddRentalaccountComponent implements OnInit {
   }
 
   openAddChargesModal(content: any) {
+    this.showReason = false;
     this.modalService.open(content, {
       centered: true,
       size: 'lg',
@@ -186,6 +195,15 @@ export class AddRentalaccountComponent implements OnInit {
     });
   }
 
+  openScanChargesModal(content: any) {
+    this.showReason = true;
+    this.modalService.open(content, {
+      centered: true,
+      size: 'lg',
+      backdrop: 'static',
+    });
+  }
+  isOtherCharges = false;
   addCharge(modal: any) {
     this.isEditMode = true;
     console.log('Charge Added');
@@ -302,7 +320,7 @@ export class AddRentalaccountComponent implements OnInit {
       email: lease?.tenant?.email ?? '',
       contact_number: lease?.tenant?.contact_number ?? '',
       unitType: lease?.lease_property?.property_unit_name ?? '',
-      rent: lease?.rent ?? '',
+      rent: lease?.rent ?? '-',
       periodFrom: this.formatDate(lease?.lease_start_date),
       periodTo: this.formatDate(lease?.lease_end_date),
     });
