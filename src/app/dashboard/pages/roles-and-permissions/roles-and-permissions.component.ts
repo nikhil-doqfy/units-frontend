@@ -59,6 +59,7 @@ export class RolesAndPermissionsComponent {
   breadcrumbData: BreadCrumb[] = [];
   currentLanguage = 'en';
   showDetailView: boolean = false;
+  isEditMode: boolean = false;
   closeResult: WritableSignal<string> = signal('');
 
   roles: any[] = [];
@@ -153,7 +154,11 @@ export class RolesAndPermissionsComponent {
       });
   }
 
-  openAddRoleModal(addRoleContent: TemplateRef<any>) {
+  openAddRoleModal(
+    addRoleContent: TemplateRef<any>,
+    editMode: boolean = false
+  ) {
+    this.isEditMode = editMode;
     this.modalService
       .open(addRoleContent, {
         ariaLabelledBy: 'modal-title',

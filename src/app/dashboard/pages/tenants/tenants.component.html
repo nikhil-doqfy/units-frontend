@@ -272,21 +272,28 @@
     <app-white-card title="Photos & Documents">
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
+          @for (type of tenantDocumentType; track type.key;) {
           <li class="nav-item" role="presentation">
             <button
               class="nav-link active"
-              id="tenantDocument-tab"
+              [class.active]="type.key === activeDocTypeKey"
+              [id]="type.key + '-tab'"
               data-bs-toggle="tab"
-              data-bs-target="#tenantDocument-tab-pane"
+              [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
               type="button"
               role="tab"
-              aria-controls="tenantDocument-tab-pane"
-              aria-selected="true"
+              [attr.aria-controls]="type.key + '-tab-pane'"
+              [attr.aria-selected]="type.key === activeDocTypeKey"
+              (click)="onDocTabClick(type)"
             >
-              Tenant Document
+              <!-- id="tenantDocument-tab" data-bs-target="#tenantDocument-tab-pane"
+              aria-controls="tenantDocument-tab-pane" aria-selected="true" -->
+              <!-- Tenant Document -->
+              {{ type.value }}
             </button>
           </li>
-          <li class="nav-item" role="presentation">
+          }
+          <!-- <li class="nav-item" role="presentation">
             <button
               class="nav-link"
               id="ejariDocuments-tab"
@@ -299,20 +306,45 @@
             >
               Ejari Documents
             </button>
-          </li>
+          </li> -->
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="myTabContent">
-          <div
+          @for(type of tenantDocumentType; track type.key; let i = $index){
+          <!-- <div
             class="tab-pane fade show active"
             id="tenantDocument-tab-pane"
             role="tabpanel"
             aria-labelledby="tenantDocument-tab"
             tabindex="0"
+          > -->
+
+          <div
+            [ngClass]="{
+              'tab-pane': true,
+              fade: true,
+              show: type.key === activeDocTypeKey,
+              active: type.key === activeDocTypeKey
+            }"
+            [id]="type.key + '-tab-pane'"
+            role="tabpanel"
+            [attr.aria-labelledby]="type.key + '-tab'"
+            [tabindex]="i"
           >
             <div class="row g-2">
+              @for(docsGroup of tennatDocuments[activeDocTypeKey]; track
+              docsGroup.id){
               <div class="col-auto">
+                <app-document-type-item [title]="docsGroup.file_name" />
+              </div>
+              }@empty {
+              <div class="col-auto m-auto">Documents not available!</div>
+              }
+            </div>
+          </div>
+          }
+          <!-- <div class="col-auto">
                 <app-document-type-item title="Contract.pdf" size="1.2 MB" />
               </div>
               <div class="col-auto">
@@ -347,7 +379,7 @@
                 <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </app-white-card>

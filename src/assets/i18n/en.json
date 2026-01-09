@@ -296,6 +296,7 @@
   "INVITE_OWNER": "Invite Owner",
   "ASSIGN_PROPERTY": "Assign Property",
   "INVITE_PMC": "Invite PMC",
+  "AMOUNT": "Amount",
   "UPLOAD_PROPERTY_IMAGES": "Upload images of the property",
   "PROPERTY_PMC": "Property PMC",
   "PROPERTY_IMAGES": "Property Images",
@@ -360,5 +361,6 @@
   "PROPERTY_MANAGER": "Property Manager",
   "LICENSE_NO_&_EXPIRY": "License No & Expiry",
   "LICENSE_ISSUER": "License Issuer",
-  "PASSPORT_NO_&_EXPIRY": "Passport No & Expiry"
+  "PASSPORT_NO_&_EXPIRY": "Passport No & Expiry",
+  "EDIT_ROLE": "Edit Role"
 }

@@ -5,7 +5,7 @@
         <div class="col-md">
           <app-table-title
             [title]="'ALL_STAFF' | translate"
-            subtitle="(240)"
+            [subtitle]="'(' + totalRecords + ')'"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
@@ -101,7 +101,6 @@
           </thead>
           <tbody>
             @for (staff of staffRoles; track $index) {
-            <!-- When data exists -->
             <tr>
               <td>
                 <app-table-img-item
@@ -261,7 +260,7 @@
         <div class="col-md">
           <app-table-title
             title="Properties Assigned"
-            subtitle="(5)"
+            [subtitle]="'(' + totalRecords + ')'"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
@@ -350,12 +349,26 @@
             </tr>
             } @empty {
             <tr>
-              <td colspan="6" align="center">No Properties Assigned</td>
+              <td colspan="6" align="center"><app-no-data></app-no-data></td>
             </tr>
             }
           </tbody>
         </table>
       </div>
     </div>
-  </div></ng-container
->
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div></div
+></ng-container>

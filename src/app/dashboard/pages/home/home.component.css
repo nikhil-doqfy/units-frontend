@@ -1,0 +1,11 @@
+.cmmnTblBody {
+  min-height: 250px;
+  overflow-y: auto;
+  max-height: 250px;
+  position: relative;
+}
+
+.cmmnTblBody table.header-stickey thead tr th {
+  position: sticky;
+  top: 0;
+}

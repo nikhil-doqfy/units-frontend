@@ -51,6 +51,7 @@ import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-tenants',
@@ -89,12 +90,15 @@ export class TenantsComponent {
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
-
+  private sharedApiService = inject(SharedApiService);
+  tennatDocuments: Record<string, any[]> = {};
   componentName: string = 'TenantsComponent';
   breadcrumbData: BreadCrumb[] = [];
   currentRole: UserRole = 'owner';
   closeResult: WritableSignal<string> = signal('');
   showDetailView: boolean = false;
+  totalPages: number = 1;
+  activeDocTypeKey!: string;
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -176,17 +180,35 @@ export class TenantsComponent {
           this.tenantsList = resp?.content ?? [];
           console.log(' TENANT OBJECT:', this.tenantsList[0]);
           this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
         error: (err) => {},
       });
   }
 
+  onDocTabClick(type: any) {
+    this.activeDocTypeKey = type.key;
+  }
   onRefresh() {
     this.getTenants();
   }
 
   searchTextChange(search: string): void {
     this.onTenantsSearch$.next(search);
+  }
+  tenantDocumentType: any[] = [];
+  getOptionTypes() {
+    if (this.showDetailView) {
+      this.sharedApiService.getOptionsType([
+        {
+          param: 'PROPERTY_DOCUMENT_CHOICE',
+          key: 'Property_Document',
+          setter: (v) => {
+            (this.tenantDocumentType = v), this.getTenants();
+          },
+        },
+      ]);
+    }
   }
 
   initTenantSearchListener() {

@@ -533,21 +533,21 @@ Replace Cheque Link .replace-link {
 }
 
 .btnCommonsx {
-  font-size: 14px; /* text size */
-  font-weight: 500; /* medium font */
-  color: #0066ff; /* blue text color */
-  background-color: #fff; /* white background */
-  border: 1px solid #0066ff; /* blue border */
-  border-radius: 6px; /* rounded corners */
-  padding: 6px 16px; /* top/bottom 6px, left/right 16px */
+  font-size: 14px;
+  font-weight: 500;
+  color: #0066ff;
+  background-color: #fff;
+  border: 1px solid #0066ff;
+  border-radius: 6px;
+  padding: 6px 16px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .btnMinWidth {
-  min-width: 140px; /* same as image button width */
+  min-width: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px; /* spacing if you add icons inside */
+  gap: 8px;
 }
