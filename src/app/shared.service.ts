@@ -28,6 +28,11 @@ export class SharedService {
   http: any;
 
   constructor() {
+    // page load pe current language set karo
+    const lang = this.getCurrentLanguage();
+    this.translate.setDefaultLang('en');
+    this.translate.use(lang);
+    this.setDirection(lang);
     this.initializeSidebarState(); // Initialize the sidebar state properly
   }
 
@@ -63,7 +68,7 @@ export class SharedService {
     }
   }
 
-  currentLanguage: string = 'en';
+  // currentLanguage: string = 'en';
 
   // initLanguage() {
   //   const lang = localStorage.getItem('language') || 'en';
@@ -181,7 +186,32 @@ export class SharedService {
     this.showDetailSource.next(false);
   }
 
-  private currentLang = new BehaviorSubject<string>('en');
+  //--------------------------language trasnlate----------------------------------------------
+
+  // private currentLang = new BehaviorSubject<string>('en');
+  // lang$ = this.currentLang.asObservable();
+
+  // initLanguage() {
+  //   const lang = this.storageService.getLanguage() || 'en';
+  //   this.translate.setDefaultLang('en');
+  //   this.translate.use(lang);
+  //   this.currentLang.next(lang);
+  // }
+
+  // setLanguage(lang: string) {
+  //   this.storageService.setLanguage(lang);
+  //   this.translate.use(lang);
+  //   this.currentLang.next(lang);
+  // }
+
+  // getCurrentLanguage(): string {
+  //   return this.currentLang.value;
+  // }
+
+  private currentLang = new BehaviorSubject<string>(
+    this.storageService.getLanguage() || 'en'
+  );
+
   lang$ = this.currentLang.asObservable();
 
   initLanguage() {
@@ -189,15 +219,22 @@ export class SharedService {
     this.translate.setDefaultLang('en');
     this.translate.use(lang);
     this.currentLang.next(lang);
+    this.setDirection(lang);
   }
-
   setLanguage(lang: string) {
     this.storageService.setLanguage(lang);
     this.translate.use(lang);
     this.currentLang.next(lang);
+
+    this.setDirection(lang);
   }
 
   getCurrentLanguage(): string {
     return this.currentLang.value;
+  }
+
+  private setDirection(lang: string) {
+    const dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.setAttribute('dir', dir);
   }
 }

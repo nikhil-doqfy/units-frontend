@@ -133,6 +133,12 @@ export class TenantsComponent {
     this.initCurrentRoleListener();
     this.sharedService.initLanguage();
     this.initLanguageListener();
+    this.sharedService.lang$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((lang) => {
+        this.currentLanguage = lang;
+        this.loadBreadcrumb();
+      });
   }
 
   initCurrentRoleListener() {
@@ -147,7 +153,6 @@ export class TenantsComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }

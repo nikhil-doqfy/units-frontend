@@ -27,7 +27,7 @@
             [placeholder]="'SEARCH_HERE' | translate"
             (onValueChange)="searchTextChange($event)"
           />
-          <app-filter-popup-btn>
+          <app-filter-popup-btn #filterPopup>
             <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
@@ -59,7 +59,7 @@
               <button
                 type="button"
                 class="btn btnCommon"
-                (click)="removeFilter()"
+                (click)="removeFilter(); filterPopup.closePopup()"
               >
                 {{ "REMOVE_ALL" | translate }}
               </button>

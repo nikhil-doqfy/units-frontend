@@ -111,7 +111,6 @@ export class UsersComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }
@@ -167,6 +166,13 @@ export class UsersComponent {
 
   handleEditClick(): void {
     console.log('Edit button clicked');
+  }
+
+  removeFilter() {
+    this.selectedUser = null;
+    delete this.userData['USER_ROLE'];
+    this.currentPage = 1;
+    this.getUser();
   }
 
   handleDeleteClick(): void {

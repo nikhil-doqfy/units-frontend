@@ -109,6 +109,8 @@ export class ApprovalComponent {
   ngOnInit() {
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
+    this.initLanguageListener();
+
     this.refreshDetailsView();
     this.initLanguageListener();
   }
@@ -117,7 +119,6 @@ export class ApprovalComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }

@@ -40,7 +40,7 @@ export class InviteOwnerFormComponent {
   constructor() {
     this.pmcOwnerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      invitation_type: ['OWNER_TO_PMC', Validators.required],
+      invitation_type: ['PMC_TO_OWNER', Validators.required],
       property_unit_id: [null, Validators.required],
     });
   }
@@ -62,15 +62,6 @@ export class InviteOwnerFormComponent {
         },
       });
   }
-  // onOptionSelectedPropertyUnit(option: any) {
-  //   console.log('PROPERTY UNIT FROM SELECT:', option);
-
-  //   this.selectedProperty = option.label ?? option.value;
-
-  //   this.pmcOwnerForm.patchValue({
-  //     property_unit_id: Number(option.key) ?? null,
-  //   });
-  // }
 
   onOptionSelectedPropertyUnit(option: any) {
     console.log('Selected option:', option);

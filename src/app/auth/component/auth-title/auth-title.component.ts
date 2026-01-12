@@ -6,10 +6,10 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './auth-title.component.html',
-  styleUrl: './auth-title.component.css'
+  styleUrl: './auth-title.component.css',
 })
 export class AuthTitleComponent {
   @Input() title: string | undefined;
   @Input() description: string | undefined;
-  @Input() customClass = ''; // ✅ Optional custom class input
+  @Input() customClass = '';
 }

@@ -80,8 +80,9 @@ export class RolesAndPermissionsComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.initLanguageListener();
     this.sharedService.initLanguage();
+
+    this.initLanguageListener();
 
     this.fetchRoles();
   }
@@ -93,7 +94,6 @@ export class RolesAndPermissionsComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }

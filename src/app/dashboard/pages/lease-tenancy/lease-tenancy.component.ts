@@ -98,6 +98,12 @@ export class LeaseTenancyComponent {
     this.sharedService.initLanguage();
     this.initLanguageListener();
     this.getLease();
+    this.sharedService.lang$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((lang) => {
+        this.currentLanguage = lang;
+        this.loadBreadcrumb();
+      });
   }
 
   initCurrentRoleListener() {
@@ -112,7 +118,6 @@ export class LeaseTenancyComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }
@@ -234,6 +239,7 @@ export class LeaseTenancyComponent {
     this.currentPage = 1;
     this.getLease();
   }
+
   getOptionTypes(options: string[]) {
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })

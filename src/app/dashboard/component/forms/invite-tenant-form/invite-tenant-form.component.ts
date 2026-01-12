@@ -61,9 +61,6 @@ export class InviteTenantFormComponent {
   }
   onOptionSelectedPropertyUnit(option: any) {
     console.log('PROPERTY UNIT FROM SELECT:', option);
-    this.selectedProperty = option.label;
-
-    this.selectedProperty = option.label ?? option.value;
 
     this.tenantForm.patchValue({
       property_unit_id: Number(option.key) ?? null,

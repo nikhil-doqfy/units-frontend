@@ -54,7 +54,7 @@
       </div>
       <div class="col-md-auto">
         <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-filter-popup-btn>
+          <app-filter-popup-btn #filterPopup>
             <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
@@ -83,6 +83,13 @@
             </ng-container>
 
             <ng-container action>
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="removeFilter(); filterPopup.closePopup()"
+              >
+                {{ "REMOVE_ALL" | translate }}
+              </button>
               <button
                 type="button"
                 class="btn btnCommon"
