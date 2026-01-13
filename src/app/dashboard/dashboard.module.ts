@@ -23,7 +23,7 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { RentalComponent } from './pages/rental/rental.component';
 import { AddRentalaccountComponent } from './pages/add-rentalaccount/add-rentalaccount.component';
 import { ComplaintsComponent } from './pages/complaints/complaints.component';
-
+import { authGuard } from '../auth.guard';
 export const routes: Routes = [
   {
     path: '',
@@ -40,6 +40,7 @@ export const routes: Routes = [
         path: 'home',
         component: HomeComponent,
         data: { titleKey: 'PAGE_TITLE.DASHBOARD' },
+        canActivate: [authGuard],
       },
       {
         path: 'properties',

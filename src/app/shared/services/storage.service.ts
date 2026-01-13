@@ -24,7 +24,7 @@ export class StorageService {
   }
 
   updateUserName(firstName: string, lastName: string): void {
-    const user = this.getUserProfile(); // existing user get
+    const user = this.getUserProfile();
     if (user) {
       user.first_name = firstName;
       user.last_name = lastName;

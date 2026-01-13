@@ -54,7 +54,6 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     TenantStatsIconComponent,
     FilterPopupButtonComponent,
     NgbDatepickerModule,
-    DateIconComponent,
     CustomSelectComponent,
     TableTitleComponent,
     BadgeComponent,
@@ -130,10 +129,8 @@ export class HomeComponent implements OnInit {
   }
 
   computHeight() {
-    console.log('templateVar:-->', this.chequesAgingGraph);
     let height =
       this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
-    console.log('height:--', height);
     if (height) return `${height - 8 - 18 - 56 - 2}px`;
     else return 0;
   }

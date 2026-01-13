@@ -29,6 +29,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../shared.service';
 import { CustomSelectComponent } from '../../dashboard/component/custom-select/custom-select.component';
 import { SharedApiService } from '../../shared/services/shared-api.service';
+import { BreadCrumb } from '../../shared/model/shared.model';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
@@ -94,8 +95,13 @@ export class MyProfileComponent {
     locality: '',
   };
 
+  breadcrumbData = [
+    { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
+  ];
   ngOnInit() {
+    this.loadBreadcrumb();
     this.sharedService.initLanguage();
+    this.initLanguageListener();
     this.getUserProfileData();
   }
 
@@ -103,6 +109,28 @@ export class MyProfileComponent {
     this.sharedService.setLanguage(lang);
   }
 
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      {
+        label: 'PAGE_TITLE.DASHBOARD',
+        link: '/dashboard/home',
+      },
+    ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   showPasswordPopup = false;
   togglePopup() {
     this.isOpen = !this.isOpen;
