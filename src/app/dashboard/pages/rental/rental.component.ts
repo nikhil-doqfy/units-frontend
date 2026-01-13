@@ -212,6 +212,10 @@ export class RentalComponent {
 
   ngOnInit() {
     this.loadBreadcrumb();
+
+    this.sharedService.initLanguage();
+
+    this.initLanguageListener();
     this.initCurrentRoleListener();
     this.sharedService.initLanguage();
     this.initLanguageListener();
@@ -230,7 +234,6 @@ export class RentalComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }

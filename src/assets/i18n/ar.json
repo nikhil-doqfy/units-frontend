@@ -336,7 +336,6 @@
   "SELECT": "يختار",
   "TEMPLATE": "نموذج",
   "OR": "أو",
-
   "CLICK_SELECT": "انقر لتحديد الملف",
   "UPLOAD": "رفع",
   "NEGOTIATION": "Negotiation",
@@ -362,5 +361,6 @@
   "PROPERTY_MANAGER": "مدير الممتلكات",
   "LICENSE_NO_&_EXPIRY": "رقم الترخيص وتاريخ انتهاء الصلاحية",
   "LICENSE_ISSUER": "مصدر الترخيص",
-  "PASSPORT_NO_&_EXPIRY": "رقم جواز السفر وتاريخ انتهاء صلاحيته"
+  "PASSPORT_NO_&_EXPIRY": "رقم جواز السفر وتاريخ انتهاء صلاحيته",
+  "EDIT_ROLE": "تحرير الدور"
 }

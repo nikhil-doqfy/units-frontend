@@ -54,7 +54,7 @@
       </div>
       <div class="col-md-auto">
         <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-filter-popup-btn>
+          <app-filter-popup-btn #filterPopup>
             <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
@@ -83,6 +83,13 @@
             </ng-container>
 
             <ng-container action>
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="removeFilter(); filterPopup.closePopup()"
+              >
+                {{ "REMOVE_ALL" | translate }}
+              </button>
               <button
                 type="button"
                 class="btn btnCommon"
@@ -193,7 +200,7 @@
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="edit"
-                      (clicked)="openEditUserModal(user.id, addUserContent)"
+                      (clicked)="openAddUserModal(addUserContent, true)"
                     />
                     <!-- <app-table-action-btn
                       type="delete"
@@ -316,10 +323,10 @@
                       type="edit"
                       (clicked)="openEditUserModal(user.id, addUserContent)"
                     />
-                    <app-table-action-btn
+                    <!-- <app-table-action-btn
                       type="delete"
                       (clicked)="onDeleteClick(user.id, $index)"
-                    />
+                    /> -->
                   </div>
                 </td>
               </tr>
@@ -432,18 +439,18 @@
                     />
                   </div>
                 </td>
-                <td align="center">
+                <!-- <td align="center">
                   <div class="cmmnTblActnBtnDiv">
-                    <!-- <app-table-action-btn
+                    <app-table-action-btn
                       type="edit"
                       (clicked)="handleEditClick()"
-                    /> -->
+                    />
                     <app-table-action-btn
                       type="delete"
                       (clicked)="onDeleteClick(user.id, $index)"
                     />
                   </div>
-                </td>
+                </td> -->
               </tr>
               }@empty {
               <tr>
@@ -476,7 +483,9 @@
 <ng-template #addUserContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
-      {{ "ADD_NEW_USER" | translate }}
+      {{
+        isEditMode ? ("EDIT_ROLE" | translate) : ("ADD_NEW_USER" | translate)
+      }}
     </h4>
     <button
       type="button"

@@ -36,11 +36,12 @@ export class InvitePMCFormComponent {
     property_unit_id: [null, Validators.required],
   });
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getOptionTypes(['PROPERTY_UNIT']);
+  }
 
   getOptionTypes(options: string[]) {
-    if (this.propertyUnitLoaded) {
-    }
+    // if (this.propertyUnitLoaded) {
 
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
@@ -48,18 +49,13 @@ export class InvitePMCFormComponent {
       .subscribe({
         next: (response: any) => {
           this.propertyList = response?.content?.property_unit ?? [];
-          this.propertyUnitLoaded = true;
           console.log('PROPERTY LIST:', this.propertyList);
         },
       });
   }
-  onSelectClickPropertyUnit() {
-    this.getOptionTypes(['PROPERTY_UNIT']);
-  }
 
   onOptionSelectedPropertyUnit(option: any) {
     console.log('PROPERTY UNIT FROM SELECT:', option);
-    this.selectedProperty = option?.value ?? null;
     this.invitePmcForm.patchValue({
       property_unit_id: option?.key ?? null,
     });

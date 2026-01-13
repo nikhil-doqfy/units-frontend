@@ -131,19 +131,21 @@ export class ComplaintsComponent {
         this.loadComplaints();
         this.searchComp.onClear();
       });
-    this.sharedService.initLanguage();
     this.loadBreadcrumb();
+
+    this.sharedService.initLanguage();
     this.initLanguageListener();
-    this.loadComplaints();
     const storedRole = this.storageService.getUserRole();
     this.role = storedRole ? (storedRole.toUpperCase() as any) : null;
   }
 
+  changeLanguage(lang: string) {
+    this.sharedService.setLanguage(lang);
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }

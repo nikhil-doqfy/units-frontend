@@ -95,7 +95,7 @@ export class MyProfileComponent {
   };
 
   ngOnInit() {
-    // this.sharedService.initLanguage();
+    this.sharedService.initLanguage();
     this.getUserProfileData();
   }
 

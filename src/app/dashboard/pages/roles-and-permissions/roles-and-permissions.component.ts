@@ -59,6 +59,7 @@ export class RolesAndPermissionsComponent {
   breadcrumbData: BreadCrumb[] = [];
   currentLanguage = 'en';
   showDetailView: boolean = false;
+  isEditMode: boolean = false;
   closeResult: WritableSignal<string> = signal('');
 
   roles: any[] = [];
@@ -79,8 +80,9 @@ export class RolesAndPermissionsComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
-    this.initLanguageListener();
     this.sharedService.initLanguage();
+
+    this.initLanguageListener();
 
     this.fetchRoles();
   }
@@ -92,7 +94,6 @@ export class RolesAndPermissionsComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }
@@ -153,7 +154,11 @@ export class RolesAndPermissionsComponent {
       });
   }
 
-  openAddRoleModal(addRoleContent: TemplateRef<any>) {
+  openAddRoleModal(
+    addRoleContent: TemplateRef<any>,
+    editMode: boolean = false
+  ) {
+    this.isEditMode = editMode;
     this.modalService
       .open(addRoleContent, {
         ariaLabelledBy: 'modal-title',

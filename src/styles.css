@@ -2167,3 +2167,7 @@ span.doc-var:not([data-filled])::after {
   margin-top: 6px;
   display: block;
 }
+
+.proegress-bar-graph .dashWhiteCol {
+  height: 100%;
+}

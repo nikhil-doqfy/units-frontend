@@ -17,7 +17,7 @@ export class StaffService {
   getExcelFileOfStaff(params: any): Observable<Blob> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}//user/staff_csv${queryString}`,
+      `${this.SERVER_ADDRESS}/user/staff_csv${queryString}`,
       {
         responseType: 'blob',
       }

@@ -116,8 +116,8 @@ export class PMCComponent {
   }
 
   ngOnInit() {
-    this.sharedService.initLanguage();
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
     this.initLanguageListener();
   }
 
@@ -125,7 +125,6 @@ export class PMCComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }

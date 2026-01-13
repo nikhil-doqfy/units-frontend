@@ -36,7 +36,6 @@ export class DashboardComponent {
   constructor(private translate: TranslateService) {
     this.currentLang = this.translate.currentLang || 'en';
 
-    // Listen for language change
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((event: any) => {

@@ -136,21 +136,18 @@ export class PropertiesComponent {
   constructor(private router: Router, private themeService: ThemeService) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-    this.sharedService.initLanguage();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.currentPropertyId = +id;
       this.propertiesFilter['property_id'] = +id;
       this.showDetailView = true;
     }
-    this.loadBreadcrumb();
-  }
-
-  changeLanguage(lang: string) {
-    this.sharedService.setLanguage(lang);
   }
 
   ngOnInit() {
+    this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+
     this.initLanguageListener();
     this.initPropertySearchListener();
     this.getProperties();
@@ -160,6 +157,10 @@ export class PropertiesComponent {
       this.propertiesFilter['MY_PROPERTY'] = true;
     }
     this.getOptionTypes();
+  }
+
+  changeLanguage(lang: string) {
+    this.sharedService.setLanguage(lang);
   }
 
   getOptionTypes() {
@@ -193,7 +194,6 @@ export class PropertiesComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }

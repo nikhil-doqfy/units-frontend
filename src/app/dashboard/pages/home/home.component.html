@@ -80,7 +80,7 @@
 
 <div class="mt-3">
   <div class="row g-3">
-    <div class="col-lg-5">
+    <div class="col-lg-5 proegress-bar-graph">
       <app-white-card title="{{ 'MOST_REVENUE_PROPERTIES' | translate }}">
         <app-progress-bar-table [rows]="propertyData"></app-progress-bar-table>
       </app-white-card>
@@ -292,10 +292,11 @@
 
 <div class="mt-3">
   <div class="row g-3">
-    <div class="col-lg-5">
+    <div class="col-lg-5 proegress-bar-graph">
       <app-white-card
         title="{{ 'CHEQUES AGING' | translate }}"
         [showActions]="true"
+        #chequesAgingGraph
       >
         <ng-container card-actions>
           <app-custom-select
@@ -419,8 +420,13 @@
           </div>
         </div>
         <div class="cmmnTblBody">
-          <div class="table-responsive">
-            <table class="table table-bordered">
+          <div
+            class="table-responsive"
+            [style]="{
+              'max-height': computHeight()
+            }"
+          >
+            <table class="header-stickey table-bordered">
               <thead>
                 <tr>
                   <th>{{ "SI.No" | translate }}</th>

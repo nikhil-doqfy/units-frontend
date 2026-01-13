@@ -4,6 +4,8 @@ import {
   OnInit,
   ChangeDetectorRef,
   DestroyRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -69,6 +71,8 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  @ViewChild('chequesAgingGraph', { read: ElementRef })
+  chequesAgingGraph!: ElementRef;
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private homeService = inject(HomeService);
@@ -121,11 +125,22 @@ export class HomeComponent implements OnInit {
     this.loadPayments();
   }
 
+  changeLanguage(lang: string) {
+    this.sharedService.setLanguage(lang);
+  }
+
+  computHeight() {
+    console.log('templateVar:-->', this.chequesAgingGraph);
+    let height =
+      this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
+    console.log('height:--', height);
+    if (height) return `${height - 8 - 18 - 56 - 2}px`;
+    else return 0;
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }

@@ -74,7 +74,7 @@ export class UsersComponent {
   private sharedApiService = inject(SharedApiService);
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
-
+  isEditMode: boolean = false;
   componentName: string = 'UsersComponent';
   breadcrumbData: BreadCrumb[] = [];
   activeTab: 'all' | 'deleted' | 'new' = 'all';
@@ -111,7 +111,6 @@ export class UsersComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }
@@ -133,7 +132,11 @@ export class UsersComponent {
     this.getUser();
   }
 
-  openAddUserModal(addUserContent: TemplateRef<any>) {
+  openAddUserModal(
+    addUserContent: TemplateRef<any>,
+    editMode: boolean = false
+  ) {
+    this.isEditMode = editMode;
     this.modalService
       .open(addUserContent, {
         ariaLabelledBy: 'modal-title',
@@ -163,6 +166,13 @@ export class UsersComponent {
 
   handleEditClick(): void {
     console.log('Edit button clicked');
+  }
+
+  removeFilter() {
+    this.selectedUser = null;
+    delete this.userData['USER_ROLE'];
+    this.currentPage = 1;
+    this.getUser();
   }
 
   handleDeleteClick(): void {

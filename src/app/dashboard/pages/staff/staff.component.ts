@@ -47,6 +47,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 @Component({
   selector: 'app-staff',
   standalone: true,
@@ -72,6 +73,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     TranslateModule,
     FilterPopupButtonComponent,
     CustomSelectComponent,
+    NoDataComponent,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',
@@ -132,7 +134,6 @@ export class StaffComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }
@@ -300,7 +301,9 @@ export class StaffComponent {
       .subscribe({
         next: (resp: any) => {
           this.staffRoles = resp?.content ?? [];
+
           this.totalRecords = resp?.pagination?.total_records ?? 0;
+          console.log('Total Records:', this.totalRecords);
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
       });
@@ -311,6 +314,7 @@ export class StaffComponent {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
+
     this.getStaffRoleDetails();
   }
 

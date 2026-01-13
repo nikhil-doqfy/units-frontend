@@ -132,16 +132,22 @@ export class OwnersComponent {
   }
 
   ngOnInit(): void {
-    this.sharedService.initLanguage();
     this.loadBreadcrumb();
+
+    this.sharedService.initLanguage();
     this.initLanguageListener();
+    this.sharedService.lang$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((lang) => {
+        this.currentLanguage = lang;
+        this.loadBreadcrumb();
+      });
   }
 
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.sharedService.initLanguage();
         this.loadBreadcrumb();
       });
   }
