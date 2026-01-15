@@ -426,7 +426,7 @@ export class AddLeaseComponent {
 
   submitLease(): void {
     console.log('Final Step Completed — Submitting Lease...');
-    // Call API or navigate
+
     this.router.navigate(['dashboard/lease-tenancy']);
   }
 }

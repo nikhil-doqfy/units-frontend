@@ -1,32 +1,27 @@
 <div class="dashboardStatWrap">
   <div class="dashboardStatCard">
-    <!-- LEFT + CENTER STATS -->
     <div class="statRow">
-      <!-- TOTAL -->
       <div class="statItem total">
         <h4>
-          12000
-          <span class="badge green">12% <app-arrow></app-arrow></span>
+          {{ summary.total_complaints }}
+          <span class="badge green"> 12% <app-arrow></app-arrow> </span>
           <small>last month</small>
         </h4>
         <h6>Total Complaints</h6>
       </div>
 
-      <!-- COMPLETED -->
       <div class="statItem">
-        <h4>412</h4>
+        <h4>{{ summary.total_completed }}</h4>
         <h6>Completed</h6>
       </div>
 
-      <!-- IN PROGRESS -->
       <div class="statItem">
-        <h4>231</h4>
+        <h4>{{ summary.total_in_progress }}</h4>
         <h6>In-Progress</h6>
       </div>
 
-      <!-- REJECTED -->
       <div class="statItem">
-        <h4>111</h4>
+        <h4>{{ summary.total_rejected }}</h4>
         <h6>Rejected</h6>
       </div>
     </div>
@@ -276,3 +271,36 @@
     </div>
   </div>
 </ng-container>
+
+<!-------------------------------------------------  Assign Engineer modal From ----------------------------------------------->
+<!-- <ng-template #addRoleContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "ASSIGN_ENGINEER" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-add-assign-engineer-form [form]="assignEnginnerForm" />
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button type="button" class="btn btnCommon">
+       (click)="createRole()" 
+      (click)="modal.close('Save click')" 
+
+      {{ "ASSIGN_ENGINEER" | translate }}
+    </button>
+  </div>
+</ng-template> -->

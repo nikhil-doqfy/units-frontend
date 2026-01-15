@@ -181,35 +181,6 @@ export class RentalComponent {
     340000, 410000, 230000,
   ];
 
-  // ngOnInit() {
-  //   this.loadBreadcrumb();
-
-  //   this.translate.onLangChange
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe(() => this.loadBreadcrumb());
-
-  //   this.themeService.currentRole$
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((role) => {
-  //       this.currentRole = role;
-  //     });
-  // }
-
-  // async loadBreadcrumb() {
-  //   this.breadcrumbData = await this.sharedService.getBreadcrumbs([
-  //     { key: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-  //     { key: 'PAGE_TITLE.RENTAL', link: '' },
-  //   ]);
-
-  //   this.sharedService.initLanguage();
-
-  //   this.themeService.currentRole$
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((role) => {
-  //       this.currentRole = role;
-  //     });
-  // }
-
   ngOnInit() {
     this.loadBreadcrumb();
 

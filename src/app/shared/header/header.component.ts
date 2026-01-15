@@ -202,13 +202,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private getRouteTitle(route: any): string {
-    while (route.firstChild) {
-      route = route.firstChild;
+    let currentRoute = route;
+
+    while (currentRoute?.firstChild) {
+      currentRoute = currentRoute.firstChild;
     }
 
-    const titleKey = route.snapshot.data['titleKey'];
+    const titleKey = currentRoute?.snapshot?.data?.['titleKey'];
 
-    if (!titleKey) return '';
+    if (!titleKey) {
+      return '';
+    }
 
     return this.translate.instant(titleKey);
   }

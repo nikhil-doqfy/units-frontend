@@ -16,7 +16,7 @@ export class DashBodyComponent implements OnInit, OnDestroy {
   currentRoute: string = '';
   openSidebarValue = true;
   openRightSidebarValue = false;
-  hasRightSidebar = false; // New flag to track right sidebar
+  hasRightSidebar = false;
   currentLanguage = 'en';
 
   private subscriptions = new Subscription();

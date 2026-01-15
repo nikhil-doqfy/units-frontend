@@ -6,10 +6,10 @@ import { EditIconComponent } from '../icons/edit-icon/edit-icon.component';
   standalone: true,
   imports: [EditIconComponent],
   templateUrl: './user-upload.component.html',
-  styleUrl: './user-upload.component.css'
+  styleUrl: './user-upload.component.css',
 })
 export class UserUploadComponent {
-  @Input() userImage: string = '../../../../assets/userDefaultProImg.png'; // Default image
+  @Input() userImage: string = '../../../../assets/userDefaultProImg.png';
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   triggerFileInput() {

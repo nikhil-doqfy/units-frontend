@@ -23,9 +23,6 @@ export class UploadDocumentComponent {
     return this.fileTypes.map((ft) => '.' + ft).join(', ');
   }
 
-  /* --------------------------------------------------
-     ERROR EMITTER
-  -------------------------------------------------- */
   private emitError(file: File, message: string) {
     this.uploadProgress.emit({
       tempId: Date.now() + Math.random(),
@@ -36,9 +33,6 @@ export class UploadDocumentComponent {
     });
   }
 
-  /* --------------------------------------------------
-     VALIDATION
-  -------------------------------------------------- */
   private validateFiles(files: FileList | null): File[] {
     if (!files) return [];
 
@@ -100,9 +94,6 @@ export class UploadDocumentComponent {
     return valid;
   }
 
-  /* --------------------------------------------------
-     BASE64 + PROGRESS
-  -------------------------------------------------- */
   private convertToBase64(
     file: File,
     tempId: number
@@ -111,7 +102,6 @@ export class UploadDocumentComponent {
       let progress = 0;
       const reader = new FileReader();
 
-      // Emit function
       const emit = (
         p: number,
         status: 'processing' | 'done' | 'error',
@@ -166,7 +156,6 @@ export class UploadDocumentComponent {
     for (const file of files) {
       const tempId = Date.now() + Math.random();
 
-      // Start event
       this.uploadProgress.emit({
         tempId,
         file,
@@ -174,10 +163,8 @@ export class UploadDocumentComponent {
         status: 'pending',
       });
 
-      // Convert
       const result = await this.convertToBase64(file, tempId);
 
-      // Final emit
       this.uploadProgress.emit(result);
     }
   }

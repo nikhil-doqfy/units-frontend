@@ -362,5 +362,6 @@
   "LICENSE_NO_&_EXPIRY": "License No & Expiry",
   "LICENSE_ISSUER": "License Issuer",
   "PASSPORT_NO_&_EXPIRY": "Passport No & Expiry",
-  "EDIT_ROLE": "Edit Role"
+  "EDIT_ROLE": "Edit Role",
+  "ASSIGN_ENGINEER": "Assign Engineer"
 }

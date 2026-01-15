@@ -4,7 +4,6 @@ export interface StatsItem {
   label: string;
   value: string | number;
 
-  // OPTIONAL (for badges / extra info)
   badge?: string;
   badgeClass?: string;
 

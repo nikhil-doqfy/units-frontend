@@ -41,6 +41,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-complaints',
@@ -76,7 +77,6 @@ export class ComplaintsComponent {
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private sharedApiService = inject(SharedApiService);
-
   private onComplaintsSearch$ = new Subject<string>();
   private USER_ROLE = 'userRole';
   totalRecords: number = 0;
@@ -119,6 +119,13 @@ export class ComplaintsComponent {
     },
   ];
 
+  summary = {
+    total_complaints: 0,
+    total_completed: 0,
+    total_in_progress: 0,
+    total_rejected: 0,
+  };
+  assignEnginnerForm!: FormGroup;
   constructor(
     private destroyRef: DestroyRef,
     private storageService: StorageService
@@ -137,6 +144,7 @@ export class ComplaintsComponent {
     this.initLanguageListener();
     const storedRole = this.storageService.getUserRole();
     this.role = storedRole ? (storedRole.toUpperCase() as any) : null;
+    this.loadComplaints();
   }
 
   changeLanguage(lang: string) {
@@ -186,7 +194,11 @@ export class ComplaintsComponent {
       next: (res) => {
         this.complaints = res.content?.complaints || [];
         this.totalRecords = res?.pagination?.total_records ?? 0;
+        if (res?.content?.summary) {
+          this.summary = res.content.summary;
+        }
       },
+
       error: (err) => console.error('Error fetching complaints:', err),
     });
   }

@@ -66,6 +66,10 @@ export class RolesAndPermissionsComponent {
   tableLoading = false;
   currentPage = 1;
   pageSize = 10;
+  roleForm: FormGroup;
+  isLoading = false;
+  successMessage = '';
+  errorMessage = '';
   constructor(
     private router: Router,
     private roleService: RoleAndPermissionsService,
@@ -110,11 +114,6 @@ export class RolesAndPermissionsComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-
-  roleForm: FormGroup;
-  isLoading = false;
-  successMessage = '';
-  errorMessage = '';
 
   createRole() {
     if (this.roleForm.invalid) return;

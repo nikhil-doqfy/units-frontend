@@ -28,12 +28,11 @@ export class SharedService {
   http: any;
 
   constructor() {
-    // page load pe current language set karo
     const lang = this.getCurrentLanguage();
     this.translate.setDefaultLang('en');
     this.translate.use(lang);
     this.setDirection(lang);
-    this.initializeSidebarState(); // Initialize the sidebar state properly
+    this.initializeSidebarState();
   }
 
   getBreadcrumbs(crumbs: BreadCrumb[]) {
@@ -51,31 +50,20 @@ export class SharedService {
     ).pipe(tap((translatedList) => this.breadcrumb$.next(translatedList)));
   }
 
-  // Detect if the user is on a mobile device
   private isMobile(): boolean {
-    return window.innerWidth <= 991; // Adjust breakpoint as needed
+    return window.innerWidth <= 991;
   }
 
-  // Initialize the sidebar state based on device type
   private initializeSidebarState(): void {
     if (this.isMobile()) {
-      localStorage.setItem(this.openSidebarValueKey, JSON.stringify(false)); // Always closed on mobile
+      localStorage.setItem(this.openSidebarValueKey, JSON.stringify(false));
       this.openSidebarValueSource.next(false);
     } else {
       const storedState = localStorage.getItem(this.openSidebarValueKey);
-      const sidebarState = storedState ? JSON.parse(storedState) : true; // Default true on desktop
+      const sidebarState = storedState ? JSON.parse(storedState) : true;
       this.openSidebarValueSource.next(sidebarState);
     }
   }
-
-  // currentLanguage: string = 'en';
-
-  // initLanguage() {
-  //   const lang = localStorage.getItem('language') || 'en';
-  //   const direction = lang === 'ar' ? 'rtl' : 'ltr';
-  //   document.documentElement.dir = direction;
-  //   this.currentLanguage = lang;
-  // }
 
   // Toggle the sidebar open/close
   toggleSidebar() {
@@ -187,26 +175,6 @@ export class SharedService {
   }
 
   //--------------------------language trasnlate----------------------------------------------
-
-  // private currentLang = new BehaviorSubject<string>('en');
-  // lang$ = this.currentLang.asObservable();
-
-  // initLanguage() {
-  //   const lang = this.storageService.getLanguage() || 'en';
-  //   this.translate.setDefaultLang('en');
-  //   this.translate.use(lang);
-  //   this.currentLang.next(lang);
-  // }
-
-  // setLanguage(lang: string) {
-  //   this.storageService.setLanguage(lang);
-  //   this.translate.use(lang);
-  //   this.currentLang.next(lang);
-  // }
-
-  // getCurrentLanguage(): string {
-  //   return this.currentLang.value;
-  // }
 
   private currentLang = new BehaviorSubject<string>(
     this.storageService.getLanguage() || 'en'

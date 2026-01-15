@@ -47,13 +47,43 @@ import { ToggleiconComponent } from '../../../icon/toggleicon/toggleicon.compone
 })
 export class AddRentalaccountComponent implements OnInit {
   private sharedService = inject(SharedService);
-
+  private formService = inject(FormService);
+  private api = inject(SharedApiService);
+  private rentalAccountService = inject(RentalAccountService);
+  private sharedApiService = inject(SharedApiService);
+  isInvalid = this.formService.isInvalid;
   constructor(private modalService: NgbModal, private router: Router) {}
   showReason: boolean = false;
   isEditMode = false;
   showDetailView = false;
   isCash = false;
+
+  assignedPropertyList: any[] = [];
+  selectedAssignedProperty: any = null;
+
+  private fb = inject(FormBuilder);
+  rentalForm = this.fb.group({
+    tenantName: [''],
+    email: [''],
+    contact_number: [''],
+    periodFrom: [''],
+    periodTo: [''],
+    unitType: [''],
+    rent: [''],
+  });
+  rentalPayments: any[] = [];
   private showDetailSubscription!: Subscription;
+  componentName = 'RentalComponent';
+  totalRecords = 0;
+  rowsPerPageOptions = [10, 25, 50, 100];
+  rowsPerPage = 10;
+  currentPage = 1;
+  isOtherCharges = false;
+  tenant: any;
+  leaseList: any;
+  leaseStatus: any;
+  selectedleasestatus: any;
+  private destroyRef = inject(DestroyRef);
   ngOnInit(): void {
     this.showDetailSubscription = this.sharedService.showDetail$.subscribe(
       (value: boolean) => {
@@ -63,18 +93,6 @@ export class AddRentalaccountComponent implements OnInit {
     );
     this.loadRentalPayments();
   }
-
-  componentName = 'RentalComponent';
-  totalRecords = 0;
-  rowsPerPageOptions = [10, 25, 50, 100];
-  rowsPerPage = 10;
-  currentPage = 1;
-
-  tenant: any;
-  leaseList: any;
-  leaseStatus: any;
-  selectedleasestatus: any;
-  private destroyRef = inject(DestroyRef);
 
   charges = [
     {
@@ -166,10 +184,7 @@ export class AddRentalaccountComponent implements OnInit {
       checked: false,
     },
   ];
-  private formService = inject(FormService);
 
-  private sharedApiService = inject(SharedApiService);
-  isInvalid = this.formService.isInvalid;
   handleFilterClick(): void {
     this.getOptionTypes(['RENTAL_ACCOUNT_LEASE']);
     console.log('Filter button clicked');
@@ -203,7 +218,7 @@ export class AddRentalaccountComponent implements OnInit {
       backdrop: 'static',
     });
   }
-  isOtherCharges = false;
+
   addCharge(modal: any) {
     this.isEditMode = true;
     console.log('Charge Added');
@@ -246,22 +261,7 @@ export class AddRentalaccountComponent implements OnInit {
   }
 
   //------------------------------------------------------------rental add ---------------------------------------------------------------------------
-  private api = inject(SharedApiService);
-  private rentalAccountService = inject(RentalAccountService);
-  assignedPropertyList: any[] = [];
-  selectedAssignedProperty: any = null;
 
-  private fb = inject(FormBuilder);
-  rentalForm = this.fb.group({
-    tenantName: [''],
-    email: [''],
-    contact_number: [''],
-    periodFrom: [''],
-    periodTo: [''],
-    unitType: [''],
-    rent: [''],
-  });
-  rentalPayments: any[] = [];
   onLinkPropertyClick(): void {
     this.api
       .getOptions({ option_type: 'RENTAL_ACCOUNT_LEASE' })

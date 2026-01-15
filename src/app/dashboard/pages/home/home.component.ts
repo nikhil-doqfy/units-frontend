@@ -87,7 +87,8 @@ export class HomeComponent implements OnInit {
   selectedPropertiesOwned: string = 'Falcon city of wonders';
   properties: any[] = [];
   units: any[] = [];
-
+  selectedPeriodType: 'month' | 'last6' | 'year' = 'month';
+  chequeList: any[] = [];
   selectedProperty: any = null;
   selectedUnit: any = null;
 
@@ -103,6 +104,9 @@ export class HomeComponent implements OnInit {
   propertyData: ProgressRow[] = [];
   model: NgbDateStruct | null = null;
   currentLanguage = 'en';
+  monthlyData: any[] = [];
+  unitsWithLease: any[] = [];
+  selectedYear: number | null = null;
   breadcrumbData = [
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
@@ -157,9 +161,6 @@ export class HomeComponent implements OnInit {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  monthlyData: any[] = [];
-  unitsWithLease: any[] = [];
-
   loadPayments(params?: any) {
     this.homeService.getOtherTypePayments(params).subscribe((res) => {
       this.monthlyData = res.content.monthly_data;
@@ -204,11 +205,6 @@ export class HomeComponent implements OnInit {
         error: (err) => console.error(err),
       });
   }
-
-  // onPropertySelected(option: any) {
-  //   this.selectedProperty = option;
-  //   this.loadChequeAging(option);
-  // }
 
   getOptionTypes(options: string[]) {
     this.sharedApiService
@@ -280,7 +276,6 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  selectedYear: number | null = null;
   getMonthlyRevenue(params?: any) {
     this.homeService
       .getMonthlyRevenue(params)
@@ -302,8 +297,6 @@ export class HomeComponent implements OnInit {
         error: (err) => console.error(err),
       });
   }
-
-  chequeList: any[] = [];
 
   getChequeVisibility() {
     this.homeService
@@ -393,9 +386,6 @@ export class HomeComponent implements OnInit {
   }
 
   //------------------------------------filter cheques visibility ---------------------------------------------
-  selectedPeriodType: 'month' | 'last6' | 'year' = 'month';
-  // selectedMonthly: string = 'Oct 2025';
-  // selectedYear: number | null = null;
 
   selectPeriod(type: 'month' | 'last6' | 'year') {
     this.selectedPeriodType = type;
@@ -407,7 +397,6 @@ export class HomeComponent implements OnInit {
 
     const now = new Date();
 
-    // 1️⃣ Oct 2025 (Month)
     if (this.selectedPeriodType === 'month') {
       const [monthStr, yearStr] = this.selectedMonthly.split(' ');
       const year = Number(yearStr);
@@ -431,10 +420,7 @@ export class HomeComponent implements OnInit {
 
       fromDate = new Date(year, monthIndex, 1, 0, 0, 0).getTime();
       toDate = new Date(year, monthIndex + 1, 0, 23, 59, 59).getTime();
-    }
-
-    // 2️⃣ Last 6 Months
-    else if (this.selectedPeriodType === 'last6') {
+    } else if (this.selectedPeriodType === 'last6') {
       toDate = now.getTime();
       fromDate = new Date(
         now.getFullYear(),
@@ -444,10 +430,7 @@ export class HomeComponent implements OnInit {
         0,
         0
       ).getTime();
-    }
-
-    // 3️⃣ Year
-    else if (this.selectedPeriodType === 'year' && this.selectedYear) {
+    } else if (this.selectedPeriodType === 'year' && this.selectedYear) {
       fromDate = new Date(this.selectedYear, 0, 1, 0, 0, 0).getTime();
       toDate = new Date(this.selectedYear, 11, 31, 23, 59, 59).getTime();
     }
