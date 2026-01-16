@@ -18,11 +18,11 @@ export interface AIChatOption {
 }
 
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
-import { CheckIconComponent } from '../icons/check-icon/check-icon.component';
-import { CheckFillIconComponent } from '../icons/check-fill-icon/check-fill-icon.component';
-import { ChatProIconComponent } from '../icons/chat-pro-icon/chat-pro-icon.component';
-import { DepthIconComponent } from '../icons/depth-icon/depth-icon.component';
-import { SpeedIconComponent } from '../icons/speed-icon/speed-icon.component';
+// import { CheckIconComponent } from '../icons/check-icon/check-icon.component';
+// import { CheckFillIconComponent } from '../icons/check-fill-icon/check-fill-icon.component';
+// import { ChatProIconComponent } from '../icons/chat-pro-icon/chat-pro-icon.component';
+// import { DepthIconComponent } from '../icons/depth-icon/depth-icon.component';
+// import { SpeedIconComponent } from '../icons/speed-icon/speed-icon.component';
 
 @Component({
   selector: 'app-ai-chat-select',
@@ -30,11 +30,11 @@ import { SpeedIconComponent } from '../icons/speed-icon/speed-icon.component';
   imports: [
     CommonModule,
     ArrowDownIconComponent,
-    CheckIconComponent,
-    CheckFillIconComponent,
-    ChatProIconComponent,
-    DepthIconComponent,
-    SpeedIconComponent,
+    // CheckIconComponent,
+    // CheckFillIconComponent,
+    // ChatProIconComponent,
+    // DepthIconComponent,
+    // SpeedIconComponent,
   ],
   templateUrl: './ai-chat-select.component.html',
   styleUrls: ['./ai-chat-select.component.css'],
