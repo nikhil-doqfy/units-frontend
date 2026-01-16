@@ -1,4 +1,47 @@
 <ng-container *ngIf="!showDetailView">
+  <div class="mb-3">
+    <app-white-card>
+      <div class="commonTabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="properties-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#properties-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="properties-tab-pane"
+              aria-selected="true"
+              routerLink="/dashboard/properties"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              Properties
+            </button>
+          </li>
+
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="property-leads-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#property-leads-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="property-leads-tab-pane"
+              aria-selected="false"
+              routerLink="/property-leads"
+              routerLinkActive="active"
+            >
+              Property Leads
+            </button>
+            <span class="count-badge">125</span>
+          </li>
+        </ul>
+      </div>
+    </app-white-card>
+  </div>
   <div
     *ngIf="currentRole === 'owner' || currentRole === 'property-manager'"
     class="mb-3 d-xl-none"

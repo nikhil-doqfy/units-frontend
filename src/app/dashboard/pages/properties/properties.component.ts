@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
@@ -36,6 +36,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
   selector: 'app-properties',
   standalone: true,
   imports: [
+    RouterModule,
     CommonModule,
     FormsModule,
     PlusIconComponent,
@@ -60,6 +61,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
     DashTitleComponent,
     TranslateModule,
     NoDataComponent,
+    RouterLink,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',
