@@ -3,7 +3,7 @@
     <app-white-card>
       <div class="row align-items-center justify-content-between g-3">
         <div class="col">
-          <app-card-title title="Roles" />
+          <app-card-title [title]="'ROLES' | translate" />
         </div>
         <div class="col-auto">
           <button
@@ -11,7 +11,7 @@
             class="btn btnCommon"
             (click)="openAddRoleModal(addRoleContent)"
           >
-            <i><app-plus-icon /></i>{{ "New Role" | translate }}
+            <i><app-plus-icon /></i>{{ "NEW_ROLE" | translate }}
           </button>
         </div>
       </div>
@@ -22,7 +22,11 @@
     <div class="cmmnTblHdr">
       <div class="row align-items-center">
         <div class="col-md">
-          <app-table-title title="6" subtitle="Roles Found"></app-table-title>
+          <app-table-title
+            title="6"
+            [subtitle]="'ROLES_FOUND' | translate"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3"></div>
@@ -34,89 +38,27 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>{{ "Role" | translate }}</th>
+              <th>{{ "ROLE" | translate }}</th>
               <th>
                 <button type="button">
-                  {{ "created_on" | translate }} <i><app-sorting-icon /></i>
+                  {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Admin</td>
-              <td>15 Sep 2024</td>
+            <tr *ngFor="let role of roles">
+              <td>{{ role.role_name }}</td>
+              <td>{{ role.created_on }}</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
                     type="edit"
-                    (clicked)="handleEditClick()"
+                    (click)="openAddRoleModal(addRoleContent, true)"
                   />
-                  <app-table-action-btn
-                    type="view"
-                    (clicked)="handleViewClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Owner</td>
-              <td>20 Sep 2024</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="view"
-                    (clicked)="handleViewClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>PM</td>
-              <td>25 Sep 2024</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="view"
-                    (clicked)="handleViewClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>User</td>
-              <td>30 Sep 2024</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="view"
-                    (clicked)="handleViewClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Lead</td>
-              <td>05 Oct 2024</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
+                  <!-- (clicked)="handleEditClick()" -->
+
                   <app-table-action-btn
                     type="view"
                     (clicked)="handleViewClick()"
@@ -159,7 +101,7 @@
     <div class="cmmnTblHdr">
       <div class="row align-items-center">
         <div class="col-md">
-          <app-table-title title="6" subtitle="Roles Found"></app-table-title>
+          <app-table-title title="Roles Found" subtitle="6"></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3"></div>
@@ -180,6 +122,7 @@
             </tr>
           </thead>
           <tbody>
+            <!-- @for (property of RoleAndPermission; track $index){ -->
             <tr>
               <td>Properties</td>
               <td>
@@ -439,6 +382,13 @@
                 </div>
               </td>
             </tr>
+            <!-- }@empty {
+            <tr>
+              <td colspan="20" align="center">
+                <app-no-data />
+              </td>
+            </tr>
+            } -->
           </tbody>
         </table>
       </div>
@@ -452,7 +402,11 @@
 
 <ng-template #addRoleContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Add New Role</h4>
+    <h4 class="modal-title" id="modal-title">
+      {{
+        isEditMode ? ("EDIT_ROLE" | translate) : ("ADD_NEW_ROLE" | translate)
+      }}
+    </h4>
     <button
       type="button"
       class="btn-close"
@@ -461,7 +415,7 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-add-role-form />
+    <app-add-role-form [form]="roleForm" />
   </div>
   <div class="modal-footer">
     <button
@@ -469,14 +423,12 @@
       class="btn btnCommon btnTransparent"
       (click)="modal.dismiss('Save click')"
     >
-      Cancel
+      {{ "CANCEL" | translate }}
     </button>
-    <button
-      type="button"
-      class="btn btnCommon"
-      (click)="modal.close('Save click')"
-    >
-      Create Role
+    <button type="button" class="btn btnCommon" (click)="createRole()">
+      <!-- (click)="modal.close('Save click')" -->
+
+      {{ "CREATE_ROLE" | translate }}
     </button>
   </div>
 </ng-template>

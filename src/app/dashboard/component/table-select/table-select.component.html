@@ -1,5 +1,5 @@
 <div class="cmmnTblSlct">
-  <span>Showing</span>
+  <span>{{ "SHOWING" | translate }}</span>
   <select [(ngModel)]="rowsPerPage" (ngModelChange)="onSelect($event)">
     @for (row of rowsPerPageOptions; track $index) {
     <option [value]="row">{{ row }}</option>

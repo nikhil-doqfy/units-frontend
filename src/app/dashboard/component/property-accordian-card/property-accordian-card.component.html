@@ -1,23 +1,34 @@
 <div class="accordion prprtyAcrdn" id="propertyExample">
-    <div class="accordion-item" *ngFor="let item of accordianData; let i = index">
-        <h2 class="accordion-header">
-            <button class="accordion-button" [ngClass]="{'collapsed': !isAccordionOpen(i)}" type="button"
-                [attr.data-bs-target]="'#collapse' + i" [attr.aria-expanded]="isAccordionOpen(i)"
-                [attr.aria-controls]="'collapse' + i" data-bs-toggle="collapse" (click)="toggleAccordion(i)">
-                {{ item.title }}
-            </button>
-        </h2>
+  <div class="accordion-item" *ngFor="let item of accordianData; let i = index">
+    <h2 class="accordion-header">
+      <button
+        class="accordion-button"
+        [ngClass]="{ collapsed: !isAccordionOpen(i) }"
+        type="button"
+        [attr.data-bs-target]="'#collapse' + i"
+        [attr.aria-expanded]="isAccordionOpen(i)"
+        [attr.aria-controls]="'collapse' + i"
+        data-bs-toggle="collapse"
+        (click)="toggleAccordion(i)"
+      >
+        {{ item.title }}
+      </button>
+    </h2>
 
-        <div class="accordion-collapse collapse" [class.show]="isAccordionOpen(i)" [attr.id]="'collapse' + i"
-            data-bs-parent="#propertyExample">
-            <div class="accordion-body">
-                <ul>
-                    <li *ngFor="let content of item.items">
-                        <span>{{ content.label }}</span>
-                        <p>{{ content.value }}</p>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div
+      class="accordion-collapse collapse"
+      [class.show]="isAccordionOpen(i)"
+      [attr.id]="'collapse' + i"
+      data-bs-parent="#propertyExample"
+    >
+      <div class="accordion-body">
+        <ul>
+          <li *ngFor="let content of item.items">
+            <span>{{ content.label }}</span>
+            <p>{{ content.value }}</p>
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
 </div>

@@ -23,12 +23,33 @@
     </i>
   </div>
   <ul *ngIf="isDropdownOpen" class="customSelectDropdown">
+    <li *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
+      <input
+        type="text"
+        [placeholder]="allowAddOption ? 'Search or Add...' : 'Add option...'"
+        [(ngModel)]="filterText"
+        (ngModelChange)="onInputChange($event)"
+        (click)="$event.stopPropagation()"
+        (keydown.enter)="$event.preventDefault(); $event.stopPropagation()"
+      />
+
+      <button
+        *ngIf="allowAddOption"
+        class="addBtn"
+        (click)="addOption(); $event.stopPropagation()"
+      >
+        Add
+      </button>
+    </li>
+    @for(option of displayOptions; track option[key]){
     <li
-      *ngFor="let option of options"
       (click)="selectOption(option); $event.stopPropagation()"
       [class.active]="option[key] === selectedOption?.[key]"
     >
       {{ option[value] }}
     </li>
+    }@empty {
+    <li>No Data Found</li>
+    }
   </ul>
 </div>

@@ -20,6 +20,11 @@
     justify-content: center;
 }
 
+.upldDocIcon.dragging {
+    border-color: var(--activeText);
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
 .upldDocText {
     pointer-events: none;
     text-align: center;

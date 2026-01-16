@@ -5,30 +5,41 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OwnerService {
   private http = inject(HttpClient);
   private sharedService = inject(SharedService);
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
 
-  constructor() { }
-
-
+  constructor() {}
 
   // ------------------------- getOwnerDetails -------------------------
   getOwnerDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/owner/details/list/view${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/company/owners${queryString}`);
   }
 
-
-
-  
   // ------------------------- addOwnerToInvite -------------------------
   addOwnerToInvite(data: Record<'email', string>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/invite/pmc/owner`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/invitation`, data);
+  }
+  getExcelFileOfowner(params: any) {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/company_owners_csv${queryString}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+  getOwnerPdf(leaseId: number, type?: 'download') {
+    let url = `${this.SERVER_ADDRESS}/lease_pdf?lease_id=${leaseId}`;
+
+    if (type === 'download') {
+      url += `&purpose=download`;
+    }
+
+    return this.http.get(url);
   }
 }

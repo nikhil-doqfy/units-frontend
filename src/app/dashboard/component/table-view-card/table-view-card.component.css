@@ -1,152 +1,209 @@
 .cmmnTblViewCol {
-    background-color: var(--whiteBg);
-    border-radius: 8px;
-    overflow: hidden;
+  background-color: var(--whiteBg);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .cmmnTblViewHdr {
-    background-color: var(--lightDarkBg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 16px;
+  background-color: var(--lightDarkBg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
 }
 
 .cmmnTblViewTtl {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .cmmnTblViewTtl i {
-    background-color: var(--greenBg);
-    font-size: 16px;
-    color: var(--whiteText);
-    font-weight: 400;
-    font-style: normal;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 40px;
+  background-color: var(--greenBg);
+  font-size: 16px;
+  color: var(--whiteText);
+  font-weight: 400;
+  font-style: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
 }
 
 .cmmnTblViewTtl i img {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--muteBorder1);
-    border-radius: 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--muteBorder1);
+  border-radius: 40px;
 }
 
 .cmmnTblViewTtl h4 {
-    font-size: 16px;
-    color: var(--whiteText);
-    font-weight: 600;
-    line-height: 100%;
-    margin: 0;
+  font-size: 16px;
+  color: var(--whiteText);
+  font-weight: 600;
+  line-height: 100%;
+  margin: 0;
 }
 
 .cmmnTblViewTtl ul li {
-    font-size: 12px;
-    color: var(--whiteText);
-    font-weight: 400;
-    line-height: 100%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
+  font-size: 12px;
+  color: var(--whiteText);
+  font-weight: 400;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .cmmnTblViewTtl ul li span {
-    font-size: 13px;
-    font-weight: 500;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .cmmnTblViewBtns {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .cmmnTblViewEditBtn {
-    background-color: transparent;
-    color: var(--whiteText);
-    padding: 0;
-    border: 0;
-    border-radius: 0;
+  background-color: transparent;
+  color: var(--whiteText);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
 }
 
 .cmmnTblViewComboBtns {
-    background-color: var(--whiteBg);
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 10px;
+  background-color: var(--whiteBg);
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .cmmnTblViewComboBtns .btnWhite {
-    background-color: transparent;
-    height: 18px;
-    padding: 0;
-    box-shadow: none;
+  background-color: transparent;
+  height: 18px;
+  padding: 0;
+  box-shadow: none;
 }
 
-.cmmnTblViewComboBtns>div {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.cmmnTblViewComboBtns > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .cmmnTblViewBdy {
-    padding: 16px;
+  padding: 16px;
 }
 
 .cmmnTblViewBdy ul {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
 }
 
 .cmmnTblViewBdy ul li {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .cmmnTblViewBdy ul li span {
-    display: block;
-    font-size: 12px;
-    color: var(--greyText);
-    font-weight: 400;
-    line-height: 16px;
+  display: block;
+  font-size: 12px;
+  color: var(--greyText);
+  font-weight: 400;
+  line-height: 16px;
 }
 
 .cmmnTblViewBdy ul li p {
-    font-size: 13px;
-    color: var(--greyDarkText1);
-    font-weight: 500;
-    line-height: 16px;
-    margin: 0;
+  font-size: 13px;
+  color: var(--greyDarkText1);
+  font-weight: 500;
+  line-height: 16px;
+  margin: 0;
 }
 
 .cmmnTblViewBdy ul li p a {
-    color: var(--activeText);
-    text-decoration: underline;
+  color: var(--activeText);
+  text-decoration: underline;
 }
 
-
 @media (max-width: 767px) {
-    .cmmnTblViewHdr {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .cmmnTblViewHdr {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .cmmnTblViewBdy ul {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
+  .cmmnTblViewBdy ul {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+.threeDotWrap {
+  position: relative;
+  margin-left: 8px;
+}
+
+.threeDotBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #5f7d83;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.threeDotDropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 200px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  padding: 6px 0;
+}
+
+.dropItem {
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropItem:hover {
+  background: #f5f7f9;
+}
+
+.dropItem.danger {
+  color: #e53935;
+}
+
+.cmmnTblViewBtns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
 }

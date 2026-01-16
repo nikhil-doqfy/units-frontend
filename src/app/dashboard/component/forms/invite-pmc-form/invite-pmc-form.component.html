@@ -1,8 +1,29 @@
 <app-modal-form-card>
-    <form>
-        <div class="mb-0">
-            <label for="email" class="form-label">Email address<span>*</span></label>
-            <input class="form-control" type="email" name="email" placeholder="Enter email address here" />
-        </div>
-    </form>
+  <form [formGroup]="invitePmcForm">
+    <div class="mb-0">
+      <div class="col-md-6">
+        <label class="form-label"> {{ "PROPERTY_NAME" | translate }} * </label>
+
+        <app-custom-select
+          [options]="propertyList"
+          placeholder="Select Property"
+          key="key"
+          value="value"
+          [selectedOption]="selectedProperty"
+          (optionSelected)="onOptionSelectedPropertyUnit($event)"
+        ></app-custom-select>
+        <!-- (click)="onSelectClickPropertyUnit()" -->
+      </div>
+      <label for="email" class="form-label"
+        >{{ "EMAIL_ADDRESS" | translate }}<span>*</span></label
+      >
+      <input
+        class="form-control"
+        type="email"
+        name="email"
+        formControlName="email"
+        [placeholder]="'ENTER_EMAIL_ADDRESS_HERE' | translate"
+      />
+    </div>
+  </form>
 </app-modal-form-card>

@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { AuthTitleComponent } from '../../component/auth-title/auth-title.component';
 import { AuthFormComponent } from '../../component/auth-form/auth-form.component';
 import { CommonModule } from '@angular/common';
@@ -12,6 +18,8 @@ import { EditIconComponent } from '../../../dashboard/component/icons/edit-icon/
 import { DeleteIconComponent } from '../../../dashboard/component/icons/delete-icon/delete-icon.component';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../../shared/services/alert.service';
+import { FileService } from '../../../shared/services/file.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-upload-document',
   standalone: true,
@@ -30,6 +38,8 @@ import { AlertService } from '../../../shared/services/alert.service';
 })
 export class UploadDocumentComponent {
   private alert = inject(AlertService);
+  private fileService = inject(FileService);
+  private destroyRef = inject(DestroyRef);
   @ViewChild('emiratesIdInput') emiratesIdInput!: ElementRef<HTMLInputElement>;
   @ViewChild('uaeVisaInput') uaeVisaInput!: ElementRef<HTMLInputElement>;
   @ViewChild('dldCertInput') dldCertInput!: ElementRef<HTMLInputElement>;
@@ -38,6 +48,8 @@ export class UploadDocumentComponent {
   uploadedFiles: any = { emiratesId: null, uaeVisa: null, dldCert: null };
   uploadedList: any[] = [];
   showUploadedSection = false;
+  formatFileSize = this.fileService.formatFileSize;
+  private cardElement: HTMLElement | null = null;
 
   constructor(private router: Router, private authService: AuthService) {
     if (
@@ -48,6 +60,23 @@ export class UploadDocumentComponent {
       return;
     }
   }
+
+  ngAfterViewInit() {
+    const card = document.querySelector('.authFrmCol') as HTMLElement;
+
+    if (card) {
+      card.style.width = '50%';
+      card.style.maxWidth = 'fit-content';
+      this.cardElement = card;
+    }
+  }
+  ngOnDestroy() {
+    if (this.cardElement) {
+      this.cardElement.style.width = '';
+      this.cardElement.style.maxWidth = '100%';
+    }
+  }
+
   triggerFile(type: string) {
     if (type === 'emiratesId') this.emiratesIdInput.nativeElement.click();
     if (type === 'uaeVisa') this.uaeVisaInput.nativeElement.click();
@@ -62,36 +91,10 @@ export class UploadDocumentComponent {
     this.router.navigate(['/auth/validation']);
   }
 
-  formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 KB';
-
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-
-    const value = bytes / Math.pow(1024, i);
-
-    return `${value.toFixed(2)} ${sizes[i]}`;
-  }
-
-  fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const result = reader.result as string;
-        resolve(result.split(',')[1]); // return pure base64 without prefix
-      };
-
-      reader.onerror = (error) => reject(error);
-
-      reader.readAsDataURL(file);
-    });
-  }
-
   getUserType(): string {
     const userTypes: any = {
       owner: 'OWNER',
-      'property-manager': 'PROPERTY_MANAGER',
+      'property-manager': 'COMPANY_USER',
       tenant: 'TENANT',
     };
 
@@ -117,27 +120,19 @@ export class UploadDocumentComponent {
 
     this.uploadedFiles[type] = file;
 
-    const base64 = await this.fileToBase64(file);
+    const base64: string = await this.fileService.getFileToBase64(file);
 
     const fileInfo = {
       type,
       name: file.name,
       size: this.formatFileSize(file.size),
       file,
-      base64,
+      base64: base64,
     };
 
     const index = this.uploadedList.findIndex((f) => f.type === type);
     if (index !== -1) this.uploadedList[index] = fileInfo;
     else this.uploadedList.push(fileInfo);
-
-    console.log('Uploaded Files List: ', this.uploadedList);
-    setTimeout(() => {
-      this.uploadedSection.nativeElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }, 100);
   }
 
   editFile(file: any) {
@@ -153,8 +148,20 @@ export class UploadDocumentComponent {
   isUploaded(type: string): boolean {
     return !!this.uploadedFiles[type];
   }
+  validateRequiredDocs(): boolean {
+    const requiredDocs = ['emiratesId', 'uaeVisa', 'dldCert'];
+    return requiredDocs.every((doc) =>
+      this.uploadedList.some((file) => file.type === doc)
+    );
+  }
 
   onLogin() {
+    if (!this.validateRequiredDocs()) {
+      this.alert.info(
+        'Please upload all required documents before proceeding.'
+      );
+      return;
+    }
     const isBase64AvailabeForAll = this.uploadedList.every((f) => f.base64);
     if (!isBase64AvailabeForAll) {
       this.alert.info(
@@ -173,12 +180,14 @@ export class UploadDocumentComponent {
     const selctedUsertype = this.getUserType();
 
     const paylod: Record<string, any> = {
+      first_name: data['first_name'],
+      last_name: data['last_name'],
       email: data['email'],
       password: data['password'],
       confirm_password: data['confirmPassword'],
-      mobile_number: data['Contact_Number'],
-      user_type: selctedUsertype,
-      emirate_id: data['emirate_id'],
+      contact_number: data['contact_number'],
+      user_role: selctedUsertype,
+      emirate_id: data['emirateId'],
       uae_residence_visa: data['residenceVisa'],
       trade_license_number: data['tradeLicense'],
       emirates_id_doc: getDocumentBase64('emiratesId'),
@@ -186,28 +195,20 @@ export class UploadDocumentComponent {
       dld_certificate_doc: getDocumentBase64('dldCert'),
     };
 
-    if (selctedUsertype === 'PROPERTY_MANAGER') {
+    if (selctedUsertype === 'COMPANY_USER') {
       paylod['company_name'] = data['company_name'];
-      paylod['company_emirate_id'] = data['company_emirate_id'];
-      paylod['first_name'] = data['company_name'];
-      paylod['last_name'] = data['company_name'];
-    } else if (selctedUsertype === 'TENANT') {
-      paylod['first_name'] = data['first_name'];
-      paylod['last_name'] = data['last_name'];
-      paylod['emirate_id'] = data['emirate_id'];
-      paylod['manage_through'] = data['manageThrough'];
     } else if (selctedUsertype === 'OWNER') {
-      paylod['first_name'] = data['first_name'];
-      paylod['last_name'] = data['last_name'];
-      paylod['emirate_id'] = data['emirateId'];
       paylod['manage_through'] = data['manageThrough'];
     }
 
-    this.authService.signUp(paylod).subscribe({
-      next: (resp: any) => {
-        this.alert.success(resp?.message || 'Signup successful');
-        this.router.navigate(['/auth/login']);
-      },
-    });
+    this.authService
+      .signUp(paylod)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alert.success(resp?.message || 'Signup successful');
+          this.router.navigate(['/auth/login']);
+        },
+      });
   }
 }

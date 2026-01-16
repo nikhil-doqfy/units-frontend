@@ -14,8 +14,9 @@
                 role="tab"
                 aria-controls="allUsers-tab-pane"
                 aria-selected="true"
+                (click)="getActiveUser()"
               >
-                {{ "All_user" | translate }}
+                {{ "ALL_USER" | translate }}
               </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -28,8 +29,9 @@
                 role="tab"
                 aria-controls="newUsers-tab-pane"
                 aria-selected="false"
+                (click)="getNewUser()"
               >
-                {{ "New_Users" | translate }}
+                {{ "NEW_USERS" | translate }}
               </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -42,12 +44,61 @@
                 role="tab"
                 aria-controls="deletedUsers-tab-pane"
                 aria-selected="false"
-                (click)="fetchDeletedUser()"
+                (click)="getDeletedUser()"
               >
-                {{ "Deleted_Users" | translate }}
+                {{ "INACTIVE_USER" | translate }}
               </button>
             </li>
           </ul>
+        </div>
+      </div>
+      <div class="col-md-auto">
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+          <app-filter-popup-btn #filterPopup>
+            <app-table-filter-btn
+              [title]="'FILTER' | translate"
+              [hasIcon]="true"
+            >
+              <app-filter-icon />
+            </app-table-filter-btn>
+
+            <ng-container form>
+              <form>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">{{
+                      "USER_TYPE" | translate
+                    }}</label>
+                    <app-custom-select
+                      [options]="userTypeList"
+                      placeholder="Select User Type"
+                      [selectedOption]="selectedUserType"
+                      (optionSelected)="onOptionSelectedUserType($event)"
+                      (click)="handleFilterClick()"
+                    >
+                    </app-custom-select>
+                  </div>
+                </div>
+              </form>
+            </ng-container>
+
+            <ng-container action>
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="removeFilter(); filterPopup.closePopup()"
+              >
+                {{ "REMOVE_ALL" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="applyFilter()"
+              >
+                {{ "APPLY" | translate }}
+              </button>
+            </ng-container>
+          </app-filter-popup-btn>
         </div>
       </div>
       <div class="col-md-auto">
@@ -56,7 +107,7 @@
           class="btn btnCommon"
           (click)="openAddUserModal(addUserContent)"
         >
-          <i><app-plus-icon /></i>{{ "New_User" | translate }}
+          <i><app-plus-icon /></i>{{ "NEW_USER" | translate }}
         </button>
       </div>
     </div>
@@ -74,7 +125,10 @@
       <div class="cmmnTblHdr">
         <div class="row align-items-center">
           <div class="col-md">
-            <app-table-title title="6" subtitle="users Found"></app-table-title>
+            <app-table-title
+              [title]="totalRecords.toString()"
+              [subtitle]="'USERS_FOUND' | translate"
+            ></app-table-title>
           </div>
           <div class="col-md-auto">
             <div class="d-flex align-items-center gap-2 gap-md-3"></div>
@@ -88,23 +142,23 @@
               <tr>
                 <th>
                   <button type="button">
-                    {{ "User_Name" | translate }} <i><app-sorting-icon /></i>
+                    {{ "USER_NAME" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
-                <th>{{ "Phone" | translate }}</th>
-                <th>{{ "Role" | translate }}</th>
-                <th>{{ "Email" | translate }}</th>
+                <th>{{ "PHONE" | translate }}</th>
+                <th>{{ "ROLE" | translate }}</th>
+                <th>{{ "EMAIL" | translate }}</th>
                 <th>
                   <button type="button">
-                    {{ "Created_On" | translate }} <i><app-sorting-icon /></i>
+                    {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
                 <th>
                   <button type="button">
-                    {{ "Last_Login" | translate }} <i><app-sorting-icon /></i>
+                    {{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
-                <th>{{ "Status" | translate }}</th>
+                <th>{{ "STATUS" | translate }}</th>
                 <th width="200"></th>
               </tr>
             </thead>
@@ -114,24 +168,31 @@
                 <td>
                   <app-table-img-item
                     [img]="
-                      user.profile_image || '../../../../assets/user/user-1.png'
+                      user.profile_image
+                        ? user.profile_image
+                        : '../../../../assets/userDefaultProImg.png'
                     "
-                    [title]="user.email"
+                    [title]="user.first_name + ' ' + user.last_name"
                   >
                   </app-table-img-item>
                 </td>
-                <td>+91-{{ user.phone_number || "XXXXXXX" }}</td>
-                <td>{{ user.role }}</td>
+                <td>{{ user.contact_number || "XXXXXXX" }}</td>
+                <td>{{ user.role.value }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.created_at | date : "dd MMM yyyy" }}</td>
-                <td>{{ user.last_login || "-" }}</td>
+                <td>{{ user.created_on | date : "dd MMM yyyy" }}</td>
+                <td>
+                  {{
+                    (user.last_login | date : "dd MMM yyyy, hh:mm a") || "N/A"
+                  }}
+                </td>
                 <td>
                   <div class="form-check form-switch">
                     <input
                       class="form-check-input"
                       type="checkbox"
                       role="switch"
-                      [checked]="user.is_deleted"
+                      (change)="toggleUserStatus(user.id)"
+                      [checked]="user.is_active"
                     />
                   </div>
                 </td>
@@ -139,18 +200,18 @@
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="edit"
-                      (clicked)="handleEditClick()"
+                      (clicked)="openAddUserModal(addUserContent, true)"
                     />
-                    <app-table-action-btn
+                    <!-- <app-table-action-btn
                       type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
+                      (clicked)="onDeleteClick(user.id, $index)"
+                    /> -->
                   </div>
                 </td>
               </tr>
               } @empty {
               <tr>
-                <td colspan="6" align="center">No Data to Show</td>
+                <td colspan="7" align="center">No Data to Show</td>
               </tr>
               }
             </tbody>
@@ -158,8 +219,19 @@
         </div>
       </div>
       <div class="cmmnTblFtr">
-        <app-table-select />
-        <app-table-pagination />
+        <app-table-select
+          [componentName]="componentName"
+          [rowsPerPage]="rowsPerPage"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          (rowsPerPageChange)="onPageSizeChange($event)"
+        />
+        <app-table-pagination
+          [componentName]="componentName"
+          [currentPage]="currentPage"
+          [totalRecords]="totalRecords"
+          [rowsPerPage]="rowsPerPage"
+          (pageChange)="onPageChange($event)"
+        />
       </div>
     </div>
   </div>
@@ -174,7 +246,10 @@
       <div class="cmmnTblHdr">
         <div class="row align-items-center">
           <div class="col-md">
-            <app-table-title title="6" subtitle="users Found"></app-table-title>
+            <app-table-title
+              [title]="totalRecords.toString()"
+              subtitle="users Found"
+            ></app-table-title>
           </div>
           <div class="col-md-auto">
             <div class="d-flex align-items-center gap-2 gap-md-3"></div>
@@ -209,26 +284,36 @@
               </tr>
             </thead>
             <tbody>
+              @for (user of users; track $index) {
               <tr>
                 <td>
                   <app-table-img-item
-                    img="../../../../assets/user/user-1.png"
-                    title="Jensi"
-                  />
+                    [img]="
+                      user.profile_image
+                        ? user.profile_image
+                        : '../../../../assets/userDefaultProImg.png'
+                    "
+                    [title]="user.first_name + ' ' + user.last_name"
+                  >
+                  </app-table-img-item>
                 </td>
-                <td>+91 98765 XXX10</td>
-                <td>Admin</td>
-                <td>budget&#64;company.com</td>
-                <td>15 Sep 2024</td>
-                <td>2 min ago</td>
+                <td>{{ user.phone_number || "XXXXXXX" }}</td>
+                <td>{{ user.role.value }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.created_on | date : "dd MMM yyyy" }}</td>
+                <td>
+                  {{
+                    (user.last_login | date : "dd MMM yyyy, hh:mm a") || "N/A"
+                  }}
+                </td>
                 <td>
                   <div class="form-check form-switch">
                     <input
                       class="form-check-input"
                       type="checkbox"
                       role="switch"
-                      id="switchCheckDefault"
-                      checked
+                      (change)="toggleUserStatus(user.id)"
+                      [checked]="user.is_active"
                     />
                   </div>
                 </td>
@@ -236,166 +321,38 @@
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="edit"
-                      (clicked)="handleEditClick()"
+                      (clicked)="openEditUserModal(user.id, addUserContent)"
                     />
-                    <app-table-action-btn
+                    <!-- <app-table-action-btn
                       type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
+                      (clicked)="onDeleteClick(user.id, $index)"
+                    /> -->
                   </div>
                 </td>
               </tr>
+              }@empty {
               <tr>
-                <td>
-                  <app-table-img-item
-                    img="../../../../assets/user/user-2.png"
-                    title="Richard"
-                  />
-                </td>
-                <td>+91 87654 XXX09</td>
-                <td>User</td>
-                <td>team&#64;company.com</td>
-                <td>20 Sep 2024</td>
-                <td>Yesterday</td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="switchCheckDefault"
-                      checked
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
-                  </div>
-                </td>
+                <td colspan="7" align="center">No Data to Show</td>
               </tr>
-              <tr>
-                <td>
-                  <app-table-img-item
-                    img="../../../../assets/user/user-3.png"
-                    title="Thaomas"
-                  />
-                </td>
-                <td>+91 76543 XXX98</td>
-                <td>Lead</td>
-                <td>client&#64;company.com</td>
-                <td>25 Sep 2024</td>
-                <td>5 days ago</td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="switchCheckDefault"
-                      checked
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <app-table-img-item
-                    img="../../../../assets/user/user-4.png"
-                    title="Akshay"
-                  />
-                </td>
-                <td>+91 65432 XXX87</td>
-                <td>Lead</td>
-                <td>research&#64;company.com</td>
-                <td>30 Sep 2024</td>
-                <td>Today</td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="switchCheckDefault"
-                      checked
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <app-table-img-item
-                    img="../../../../assets/user/user-5.png"
-                    title="Avanshi"
-                  />
-                </td>
-                <td>+91 54321 XXX76</td>
-                <td>User</td>
-                <td>marketing&#64;company.com</td>
-                <td>05 Oct 2024</td>
-                <td>Online</td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="switchCheckDefault"
-                      checked
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
-                  </div>
-                </td>
-              </tr>
+              }
             </tbody>
           </table>
         </div>
       </div>
       <div class="cmmnTblFtr">
-        <app-table-select />
-        <app-table-pagination />
+        <app-table-select
+          [componentName]="componentName"
+          [rowsPerPage]="rowsPerPage"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          (rowsPerPageChange)="onPageSizeChange($event)"
+        />
+        <app-table-pagination
+          [componentName]="componentName"
+          [currentPage]="currentPage"
+          [totalRecords]="totalRecords"
+          [rowsPerPage]="rowsPerPage"
+          (pageChange)="onPageChange($event)"
+        />
       </div>
     </div>
   </div>
@@ -410,7 +367,10 @@
       <div class="cmmnTblHdr">
         <div class="row align-items-center">
           <div class="col-md">
-            <app-table-title title="6" subtitle="users Found"></app-table-title>
+            <app-table-title
+              [title]="totalRecords.toString()"
+              subtitle="users Found"
+            ></app-table-title>
           </div>
           <div class="col-md-auto">
             <div class="d-flex align-items-center gap-2 gap-md-3"></div>
@@ -445,30 +405,41 @@
               </tr>
             </thead>
             <tbody>
+              @for (user of users; track $index) {
               <tr>
                 <td>
                   <app-table-img-item
-                    img="../../../../assets/user/user-1.png"
-                    title="Jensi"
-                  />
+                    [img]="
+                      user.profile_image
+                        ? user.profile_image
+                        : '../../../../assets/userDefaultProImg.png'
+                    "
+                    [title]="user.first_name + ' ' + user.last_name"
+                  >
+                  </app-table-img-item>
                 </td>
-                <td>+91 98765 XXX10</td>
-                <td>Admin</td>
-                <td>budget&#64;company.com</td>
-                <td>15 Sep 2024</td>
-                <td>2 min ago</td>
+                <td>{{ user.phone_number || "XXXXXXX" }}</td>
+                <td>{{ user.role.value }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.created_on | date : "dd MMM yyyy" }}</td>
+                <td>
+                  {{
+                    (user.last_login | date : "dd MMM yyyy, hh:mm a") || "N/A"
+                  }}
+                </td>
                 <td>
                   <div class="form-check form-switch">
                     <input
                       class="form-check-input"
                       type="checkbox"
                       role="switch"
-                      id="switchCheckDefault"
-                      checked
+                      (change)="toggleUserStatus(user.id)"
+                      [checked]="user.is_active"
+                      disabled
                     />
                   </div>
                 </td>
-                <td align="center">
+                <!-- <td align="center">
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="edit"
@@ -476,162 +447,34 @@
                     />
                     <app-table-action-btn
                       type="delete"
-                      (clicked)="handleDeleteClick()"
+                      (clicked)="onDeleteClick(user.id, $index)"
                     />
                   </div>
-                </td>
+                </td> -->
               </tr>
+              }@empty {
               <tr>
-                <td>
-                  <app-table-img-item
-                    img="../../../../assets/user/user-2.png"
-                    title="Richard"
-                  />
-                </td>
-                <td>+91 87654 XXX09</td>
-                <td>User</td>
-                <td>team&#64;company.com</td>
-                <td>20 Sep 2024</td>
-                <td>Yesterday</td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="switchCheckDefault"
-                      checked
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
-                  </div>
-                </td>
+                <td colspan="7" align="center">No Data to Show</td>
               </tr>
-              <tr>
-                <td>
-                  <app-table-img-item
-                    img="../../../../assets/user/user-3.png"
-                    title="Thaomas"
-                  />
-                </td>
-                <td>+91 76543 XXX98</td>
-                <td>Lead</td>
-                <td>client&#64;company.com</td>
-                <td>25 Sep 2024</td>
-                <td>5 days ago</td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="switchCheckDefault"
-                      checked
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <app-table-img-item
-                    img="../../../../assets/user/user-4.png"
-                    title="Akshay"
-                  />
-                </td>
-                <td>+91 65432 XXX87</td>
-                <td>Lead</td>
-                <td>research&#64;company.com</td>
-                <td>30 Sep 2024</td>
-                <td>Today</td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="switchCheckDefault"
-                      checked
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <app-table-img-item
-                    img="../../../../assets/user/user-5.png"
-                    title="Avanshi"
-                  />
-                </td>
-                <td>+91 54321 XXX76</td>
-                <td>User</td>
-                <td>marketing&#64;company.com</td>
-                <td>05 Oct 2024</td>
-                <td>Online</td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="switchCheckDefault"
-                      checked
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="handleDeleteClick()"
-                    />
-                  </div>
-                </td>
-              </tr>
+              }
             </tbody>
           </table>
         </div>
       </div>
       <div class="cmmnTblFtr">
-        <app-table-select />
-        <app-table-pagination />
+        <app-table-select
+          [componentName]="componentName"
+          [rowsPerPage]="rowsPerPage"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          (rowsPerPageChange)="onPageSizeChange($event)"
+        />
+        <app-table-pagination
+          [componentName]="componentName"
+          [currentPage]="currentPage"
+          [totalRecords]="totalRecords"
+          [rowsPerPage]="rowsPerPage"
+          (pageChange)="onPageChange($event)"
+        />
       </div>
     </div>
   </div>
@@ -639,7 +482,11 @@
 
 <ng-template #addUserContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Add New User</h4>
+    <h4 class="modal-title" id="modal-title">
+      {{
+        isEditMode ? ("EDIT_ROLE" | translate) : ("ADD_NEW_USER" | translate)
+      }}
+    </h4>
     <button
       type="button"
       class="btn-close"
@@ -648,7 +495,11 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-add-user-form />
+    <app-add-user-form
+      #AddUserFormComponent
+      [editData]="selectedUser"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
   </div>
   <div class="modal-footer">
     <button
@@ -656,14 +507,14 @@
       class="btn btnCommon btnTransparent"
       (click)="modal.dismiss('Save click')"
     >
-      Cancel
+      {{ "CANCEL" | translate }}
     </button>
     <button
       type="button"
       class="btn btnCommon"
-      (click)="modal.close('Save click')"
+      (click)="AddUserFormComponent.submitUserForm()"
     >
-      Submit Details
+      {{ "SUBMIT_DETAILS" | translate }}
     </button>
   </div>
 </ng-template>

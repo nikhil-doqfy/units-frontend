@@ -1,0 +1,95 @@
+.other-charges-box {
+  background: #f7f9fb;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #eef1f5;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.charges-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.charge-item label {
+  font-size: 12px;
+  color: #475569;
+}
+
+.charge-item label span {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.charge-item small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin: 4px 0;
+}
+
+.charge-item strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.payment-info {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.payment-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (max-width: 1024px) {
+  .payment-info {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .payment-info {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.paid {
+  color: #16a34a;
+}
+
+@media (max-width: 1024px) {
+  .charges-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .payment-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .charges-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .payment-info {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

@@ -1,0 +1,43 @@
+<div class="rent-card">
+  <div class="card-top">
+    <h4>{{ data.title }}</h4>
+
+    <div class="lease-info">
+      <span>Lease No: {{ data.leaseNo }}</span>
+      <span
+        class="status"
+        [class.active]="data.status === 'Active'"
+        [class.inactive]="data.status === 'Inactive'"
+      >
+        {{ data.status }}
+      </span>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="cell">
+      <label>Tenant No</label><span>{{ data.tenantNo }}</span>
+    </div>
+    <div class="cell">
+      <label>Period From</label><span>{{ data.from }}</span>
+    </div>
+    <div class="cell">
+      <label>Period To</label><span>{{ data.to }}</span>
+    </div>
+    <div class="cell">
+      <label>Unit Type</label><span>{{ data.unit }}</span>
+    </div>
+    <div class="cell">
+      <label>Year Rent</label><span>{{ data.yearRent }}</span>
+    </div>
+    <div class="cell">
+      <label>Other Charges</label><span>{{ data.other }}</span>
+    </div>
+    <div class="cell">
+      <label>Vat</label><span>{{ data.vat }}</span>
+    </div>
+    <div class="cell total">
+      <label>Total Rent</label><strong>{{ data.total }}</strong>
+    </div>
+  </div>
+</div>

@@ -3,27 +3,71 @@
     <div class="cmmnTblHdr">
       <div class="row g-3 align-items-center">
         <div class="col-md">
-          <app-table-title title="All Staff" subtitle="(240)"></app-table-title>
+          <app-table-title
+            [title]="'ALL_STAFF' | translate"
+            [subtitle]="'(' + totalRecords + ')'"
+          ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="Search here..." />
+            <app-table-search
+              placeholder="Search here..."
+              (onValueChange)="searchTextChange($event)"
+            />
+            <app-filter-popup-btn #filterPopup>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{
+                        "STAFF_ROLE" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="staffRole"
+                        key="key"
+                        value="value"
+                        placeholder="Select staff role"
+                        (optionSelected)="selectedstaffRole = $event"
+                        (click)="onhandleSelectClick()"
+                      >
+                      </app-custom-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter(); filterPopup.closePopup()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
             <app-table-filter-btn
-              title="Filter"
-              [hasIcon]="true"
-              (clicked)="handleFilterClick()"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
-            <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
               <app-export-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
-              title="Add Staff"
+              [title]="'ADD_STAFF' | translate"
               [hasIcon]="true"
               (clicked)="openAddStaffModal(addStaffContent)"
             >
@@ -40,7 +84,7 @@
             <tr>
               <th>
                 <button type="button">
-                  {{ "Staff Name" | translate }} <i><app-sorting-icon /></i>
+                  {{ "STAFF_NAME" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
               <th>{{ "CODE" | translate }}</th>
@@ -50,27 +94,26 @@
                   {{ "PROPERTIES" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
-              <th>{{ "Tenancy Ratio" | translate }}</th>
-              <th>{{ "Staff Role" | translate }}</th>
+              <th>{{ "TENANCY_RATIO" | translate }}</th>
+              <th>{{ "STAFF_ROLE" | translate }}</th>
               <th width="200"></th>
             </tr>
           </thead>
           <tbody>
             @for (staff of staffRoles; track $index) {
-            <!-- When data exists -->
             <tr>
               <td>
                 <app-table-img-item
                   img="../../../../assets/user/user-1.png"
                   [title]="staff.staff_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick(staff.id)"
+                  (clicked)="handleViewClick(staff.staff_id)"
                 >
                 </app-table-img-item>
               </td>
 
               <td>{{ staff.staff_id }}</td>
-              <td>{{ staff.phone_number | maskPhone }}</td>
+              <td>{{ staff.contact_number | maskPhone }}</td>
 
               <td>
                 <app-table-multi-img-item
@@ -87,8 +130,10 @@
                 </app-table-multi-img-item>
               </td>
 
-              <td>{{ staff.tanancy_ration || "_" }}</td>
-              <td>{{ staff.staff_role?.name }}</td>
+              <td>{{ staff.tenancy_ratio || "_" }}</td>
+              <td>
+                {{ staff.roles?.length ? staff.roles.join(", ") : "_" }}
+              </td>
 
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
@@ -142,7 +187,7 @@
 
 <ng-template #addStaffContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Add Staff</h4>
+    <h4 class="modal-title" id="modal-title">{{ "ADD_STAFF" | translate }}</h4>
     <button
       type="button"
       class="btn-close"
@@ -151,7 +196,11 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-add-staff-form />
+    <app-add-staff-form
+      #AddStaffFormComponent
+      [editData]="selectedStaff"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
   </div>
   <div class="modal-footer">
     <button
@@ -159,14 +208,15 @@
       class="btn btnCommon btnTransparent"
       (click)="modal.dismiss('Save click')"
     >
-      Cancel
+      {{ "CANCEL" | translate }}
     </button>
     <button
-      type="button"
+      type="submit"
       class="btn btnCommon"
-      (click)="modal.close('Save click')"
+      (click)="AddStaffFormComponent.submitStaffForm()"
     >
-      Submit Details
+      <!-- (click)="modal.close('Save click')" -->
+      {{ "SUBMIT_DETAILS" | translate }}
     </button>
   </div>
 </ng-template>
@@ -176,15 +226,20 @@
     [title]="selectedStaff.staff_name"
     [imgSrc]="'../../../assets/user/user-2.png'"
     [items]="[
-      { label: 'Email', value: selectedStaff.user_email },
-      { label: 'Phone Number', value: selectedStaff.phone_number },
-      { label: 'Emirates ID', value: selectedStaff.emirates_id },
+      { label: 'Email', value: selectedStaff.email },
+      { label: 'Phone Number', value: selectedStaff.contact_number },
+      { label: 'Emirates ID', value: selectedStaff.emirate_id },
       { label: 'City', value: selectedStaff.city },
       { label: 'Locality', value: selectedStaff.locality },
       { label: 'Postal Code', value: selectedStaff.postal_code },
-      { label: 'Address Line 1', value: selectedStaff.address_line_1 },
-      { label: 'Address Line 2', value: selectedStaff.address_line_2 },
-      { label: 'Staff Role', value: selectedStaff.staff_role?.name },
+      { label: 'Address Line 1', value: selectedStaff.address },
+      { label: 'Address Line 2', value: selectedStaff.additional_address },
+      {
+        label: 'Staff Role',
+        value: selectedStaff.roles?.length
+          ? selectedStaff.roles.join(', ')
+          : 'N/A'
+      },
       {
         label: 'Assigned Property',
         value:
@@ -205,23 +260,23 @@
         <div class="col-md">
           <app-table-title
             title="Properties Assigned"
-            subtitle="(5)"
+            [subtitle]="'(' + totalRecords + ')'"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="Search here..." />
+            <app-table-search placeholder="SEARCH_HERE" />
             <app-table-filter-btn
-              title="Filter"
+              [title]="'FILTER' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
               <app-filter-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
-              (clicked)="handleExportClick()"
+              (clicked)="handleInternalTableExport()"
             >
               <app-export-icon />
             </app-table-filter-btn>
@@ -250,19 +305,35 @@
               <th width="200">Document</th>
             </tr>
           </thead>
+
           <tbody>
+            @for (property of assignedProperties; track $index) {
             <tr>
-              <td>LP9021</td>
+              <td>{{ property.property_code || "_" }}</td>
+
               <td>
                 <app-table-img-item
-                  img="../../assets/property/property-list-1.png"
+                  [img]="
+                    property.property_image?.data ||
+                    'assets/property/property-list-1.png'
+                  "
                   size="md"
-                  title="Novatis AG..."
+                  [title]="property.property_name"
                 />
               </td>
-              <td>N/A</td>
-              <td>Staff 1</td>
-              <td>Ali Musfiq Rahman</td>
+
+              <td>
+                {{ property.tenant_name || "N/A" }}
+              </td>
+
+              <td>
+                {{ selectedStaff?.staff_name || "_" }}
+              </td>
+
+              <td>
+                {{ property.owner_name || "N/A" }}
+              </td>
+
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
@@ -276,129 +347,28 @@
                 </div>
               </td>
             </tr>
+            } @empty {
             <tr>
-              <td>LP8021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Agriculture...."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-2.png"
-                  title="Richard"
-                />
-              </td>
-              <td>Staff 2</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
+              <td colspan="6" align="center"><app-no-data></app-no-data></td>
             </tr>
-            <tr>
-              <td>VC79021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Honda..."
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-3.png"
-                  title="Thaomas"
-                />
-              </td>
-              <td>Staff 3</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC69021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="TVS"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-4.png"
-                  title="Akshay"
-                />
-              </td>
-              <td>Staff 4</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>VC59021</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-list-2.png"
-                  size="md"
-                  title="Samsung"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/user/user-5.png"
-                  title="Avanshi"
-                />
-              </td>
-              <td>Staff 5</td>
-              <td>Ali Musfiq Rahman</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
+            }
           </tbody>
         </table>
       </div>
     </div>
-  </div>
-</ng-container>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div></div
+></ng-container>

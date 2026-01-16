@@ -1,70 +1,73 @@
 .dashWhiteCol {
-    background-color: var(--whiteBg);
-    position: relative;
-    padding: 16px;
-    border: 1px solid var(--muteBorder);
-    border-radius: 12px;
+  background-color: var(--whiteBg);
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--muteBorder);
+  border-radius: 12px;
 }
 
 .md.dashWhiteCol {
-    padding: 16px 24px;
+  padding: 16px 24px;
 }
 
+.dashWhiteBody > * {
+  margin-top: 0;
+}
 .lg.dashWhiteCol {
-    padding: 24px;
+  padding: 24px;
 }
 
 .dashWhiteHdr {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .dashWhiteHdr h4 {
-    font-size: 16px;
-    color: var(--greyDarkText1);
-    font-weight: 600;
-    line-height: 24px;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  font-size: 16px;
+  color: var(--greyDarkText1);
+  font-weight: 600;
+  line-height: 24px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .md .dashWhiteHdr h4 {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .dashWhiteHdr h4 span {
-    font-size: 14px;
-    color: var(--lightDarkText);
-    font-weight: 400;
+  font-size: 14px;
+  color: var(--lightDarkText);
+  font-weight: 400;
 }
 
 .dashWhiteHdr p {
-    font-size: 14px;
-    color: var(--greyDarkText1);
-    font-weight: 400;
-    line-height: 20px;
-    margin: 8px 0 0 0;
+  font-size: 14px;
+  color: var(--greyDarkText1);
+  font-weight: 400;
+  line-height: 20px;
+  margin: 8px 0 0 0;
 }
 
 .dashWhiteActn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 @media (max-width: 767px) {
-    .dashWhiteHdr h4 {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-    }
+  .dashWhiteHdr h4 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
 
-    .dashWhiteHdr h4 span {
-        font-size: 13px;
-    }
+  .dashWhiteHdr h4 span {
+    font-size: 13px;
+  }
 }

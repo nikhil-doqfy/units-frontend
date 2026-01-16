@@ -1,51 +1,110 @@
 <app-modal-form-card>
-    <form>
-        <div class="row g-3">
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="staffName" class="form-label">Staff Name<span>*</span></label>
-                    <input class="form-control" type="text" name="staffName" placeholder="Enter name here" />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-0">
-                    <label for="email" class="form-label">Email Address<span>*</span></label>
-                    <input class="form-control" type="email" name="email" placeholder="Enter email here" />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-0">
-                    <label for="contact" class="form-label">Contact Number<span>*</span></label>
-                    <input class="form-control" type="number" name="contact" placeholder="Enter contact here" />
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="staffRole" class="form-label">Staff Role<span>*</span></label>
-                    <app-custom-select [options]="['Admin', 'Owner', 'PM', 'User', 'Lead']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="mb-0">
-                    <label for="assignedProperty" class="form-label">Assigned Property<span>*</span></label>
-                    <app-custom-select
-                        [options]="['Falcom city', 'Novatis AG...', 'Agriculture', 'Honda', 'TVS', 'Samsung']"
-                        (optionSelected)="onOptionSelected($event)"></app-custom-select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-0">
-                    <label for="password" class="form-label">Password<span>*</span></label>
-                    <input class="form-control" type="text" name="password" placeholder="Enter here" />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-0">
-                    <label for="confirmPassword" class="form-label">Confirm Password<span>*</span></label>
-                    <input class="form-control" type="text" name="confirmPassword" placeholder="Enter here" />
-                </div>
-            </div>
+  <form [formGroup]="staffForm">
+    <div class="row g-3">
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="staffName" class="form-label"
+            >{{ "STAFF_NAME" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="staffName"
+            formControlName="staffName"
+            [placeholder]="'ENTER_NAME_HERE' | translate"
+          />
         </div>
-    </form>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="email" class="form-label"
+            >{{ "EMAIL_ADDRESS" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="email"
+            name="email"
+            formControlName="email"
+            [placeholder]="'ENTER_EMAIL_HERE' | translate"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="contact" class="form-label"
+            >{{ "CONTACT_NUMBER" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="number"
+            name="contact"
+            formControlName="contactNumber"
+            [placeholder]="'ENTER_CONTACT_HERE' | translate"
+          />
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="staffRole" class="form-label"
+            >{{ "STAFF_ROLE" | translate }}<span>*</span></label
+          >
+          <app-custom-select
+            [options]="staffRole"
+            key="key"
+            value="value"
+            formControlName="role"
+            placeholder="Select User Type"
+            [selectedOption]="selectedStffRole"
+            (optionSelected)="onOptionSelectedUserType($event)"
+            (click)="handleStaffRole()"
+          ></app-custom-select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="assignedProperty" class="form-label"
+            >{{ "ASSIGNED_PROPERTY" | translate }}<span>*</span></label
+          >
+          <app-custom-select
+            [options]="assignedPropertyList"
+            key="key"
+            value="value"
+            placeholder="Select Property"
+            [selectedOption]="selectedAssignedProperty"
+            (optionSelected)="onAssignedPropertySelected($event)"
+            (click)="handleFilterClick()"
+          >
+          </app-custom-select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="password" class="form-label"
+            >{{ "PASSWORD" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="password"
+            formControlName="password"
+            [placeholder]="'ENTER_HERE' | translate"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-0">
+          <label for="confirmPassword" class="form-label"
+            >{{ "CONFIRM_PASSWORD" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="confirmPassword"
+            formControlName="confirmPassword"
+            [placeholder]="'ENTER_HERE' | translate"
+          />
+        </div>
+      </div>
+    </div>
+  </form>
 </app-modal-form-card>

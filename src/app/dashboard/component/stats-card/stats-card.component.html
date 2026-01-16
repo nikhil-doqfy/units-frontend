@@ -10,12 +10,22 @@
       <ng-content select="[action]"></ng-content>
     </div>
   </div>
-
   <div class="statsColBdy">
     <ul>
       <li *ngFor="let item of stats">
-        <div>
-          <h4>{{ item.value }}</h4>
+        <div class="statItem">
+          <h4>
+            {{ item.value }}
+
+            <span *ngIf="item.badge" class="badge" [ngClass]="item.badgeClass">
+              {{ item.badge }}
+            </span>
+
+            <!-- EXTRA TEXT -->
+            <small *ngIf="item.extra" [ngClass]="item.extraClass">
+              {{ item.extra }}
+            </small>
+          </h4>
           <h6>{{ item.label }}</h6>
         </div>
       </li>

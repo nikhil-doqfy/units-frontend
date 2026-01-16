@@ -1,0 +1,41 @@
+<app-table-filter-btn
+  [title]="'INVITE_OWNER' | translate"
+  [hasIcon]="true"
+  (clicked)="openInviteOwnerModal(inviteOwnerContent)"
+>
+  <app-invite-icon />
+</app-table-filter-btn>
+
+<ng-template #inviteOwnerContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "INVITE_OWNER" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-invite-owner-form #inviteFormRef />
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="sendInvite(inviteFormRef, modal)"
+    >
+      <i><app-send-icon /></i>{{ "SEND_INVITATION" | translate }}
+    </button>
+  </div>
+</ng-template>

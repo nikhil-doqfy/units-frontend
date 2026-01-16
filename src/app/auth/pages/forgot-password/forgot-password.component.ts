@@ -1,4 +1,10 @@
-import { Component, inject, TemplateRef } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
@@ -20,6 +26,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CrossIconComponent } from '../../../dashboard/component/icons/cross-icon/cross-icon.component';
+import { FormService } from '../../../shared/services/form.service';
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
@@ -33,17 +42,21 @@ import {
     TimerTextComponent,
     FormsModule,
     ReactiveFormsModule,
+    CrossIconComponent,
   ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
 })
 export class ForgotPasswordComponent {
+  @ViewChild('otpVerifyContent') otpVerifyContent!: TemplateRef<any>;
+  private formService = inject(FormService);
   forgetForm!: FormGroup;
   showPassword = false;
   currentRole: UserRole = 'owner';
   otp = '';
   email = '';
   private modalService = inject(NgbModal);
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private fb: FormBuilder,
@@ -53,11 +66,13 @@ export class ForgotPasswordComponent {
     private storageService: StorageService,
     private alertService: AlertService
   ) {
-    this.themeService.currentRole$.subscribe((role) => {
-      this.currentRole = role;
-    });
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
   }
-
+  isInvalid = this.formService.isInvalid;
   closeResult = '';
   otpSent = false;
   otpTimer = 0;
@@ -79,7 +94,7 @@ export class ForgotPasswordComponent {
   goToResetPassword(): void {
     this.modalService.dismissAll();
     this.router.navigate(['auth/reset-password'], {
-      state: { email: this.email, otp: this.otp },
+      state: { email: this.forgetForm.get('email')?.value, otp: this.otp },
     });
   }
 
@@ -95,21 +110,26 @@ export class ForgotPasswordComponent {
     }
 
     // let payload = { email: this.email };
-    let payload = { email: this.forgetForm.value.email };
-    this.authService.sendOtp(payload).subscribe({
-      next: (resp: any) => {
-        console.log('OTP response:--->', resp);
-        this.alertService.success(resp?.message || 'OTP sent successfully');
-        this.otpSent = true;
-        this.emailLocked = true;
-        this.otpTimer = 60;
-        this.startOtpTimer();
-      },
-      error: (err) => {
-        console.log('OTP error:--->', err);
-        this.alertService.error(err?.error?.message || 'Failed to send OTP');
-      },
-    });
+    let payload = {
+      email: this.forgetForm.value.email,
+      purpose: 'reset_password',
+    };
+    this.authService
+      .sendOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp?.message || 'OTP sent successfully');
+          this.otpSent = true;
+          this.emailLocked = true;
+
+          this.openOtpVerifyModal(this.otpVerifyContent);
+        },
+        error: (err) => {
+          console.log('OTP error:--->', err);
+          this.alertService.error(err?.error?.message || 'Failed to send OTP');
+        },
+      });
   }
 
   openOtpVerifyModal(otpVerifyContent: TemplateRef<any>) {
@@ -119,7 +139,8 @@ export class ForgotPasswordComponent {
       backdrop: 'static',
       keyboard: false,
     });
-
+    this.otpTimer = 60;
+    this.startOtpTimer();
     modalRef.result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
@@ -175,17 +196,20 @@ export class ForgotPasswordComponent {
   signInWithOtp(): void {
     let payload = {
       email: this.forgetForm.value.email,
-      otp: this.otp,
+      otp: Number(this.otp),
     };
-    this.authService.verifyOtp(payload).subscribe({
-      next: (resp: any) => {
-        console.log('OTP verify response: ', resp);
-        this.alertService.success('Login successful');
-      },
-      error: (err) => {
-        console.log('OTP verify error: ', err);
-        this.alertService.error(err?.error?.message || 'Invalid OTP');
-      },
-    });
+    this.authService
+      .verifyOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.goToResetPassword();
+          this.alertService.success('Login successful');
+        },
+        error: (err) => {
+          console.log('OTP verify error: ', err);
+          this.alertService.error(err?.error?.message || 'Invalid OTP');
+        },
+      });
   }
 }

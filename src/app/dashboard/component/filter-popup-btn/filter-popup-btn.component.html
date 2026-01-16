@@ -1,6 +1,6 @@
 <div class="fltrPopupWrap" [class.show]="isOpen">
   <app-table-filter-btn
-    title="Filter"
+    [title]="'FILTER' | translate"
     [hasIcon]="true"
     (clicked)="handleFilterOpenClick()"
   >

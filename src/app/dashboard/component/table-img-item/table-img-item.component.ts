@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './table-img-item.component.css'
 })
 export class TableImgItemComponent {
-  @Input() imgSrc: string = '';   // <-- yahan add karo
+  @Input() imgSrc: string = '';
 
   @Input() img!: string;
   @Input() size: 'sm' | 'md' | 'lg' = 'sm';

@@ -1,0 +1,41 @@
+<div class="upload-item">
+  <div class="icon">
+    <i>
+      <img
+        src="../../../../assets/pdfIcon.png"
+        *ngIf="getFileExtension(item.file?.name) === 'pdf'"
+      />
+      <img
+        src="../../../../assets/pngIcon.png"
+        *ngIf="
+          ['png', 'jpg', 'jpeg'].includes(getFileExtension(item.file?.name))
+        "
+      />
+    </i>
+  </div>
+
+  <div class="info">
+    <div class="name">{{ item.file?.name }}</div>
+    <div class="subInfo">
+      <small class="size">
+        {{ formatFileSize(item.file?.size) || "" }}
+      </small>
+
+      <ng-container [ngSwitch]="item.status">
+        <div *ngSwitchCase="'processing'">
+          <progress [value]="item.progress" max="100"></progress>
+        </div>
+
+        <div *ngSwitchCase="'done'" class="success">Upload complete</div>
+
+        <div *ngSwitchCase="'error'" class="error">
+          {{ item.errorMessage }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <button type="button" (click)="onRemove()" class="icon-btn">
+    <app-delete-icon />
+  </button>
+</div>

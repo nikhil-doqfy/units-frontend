@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 import {
@@ -48,6 +48,11 @@ export class DonutChartComponent {
 
   ngOnInit() {
     this.updateChart();
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['vacancy'] || changes['occupied']) {
+      this.updateChart();
+    }
   }
 
   changeMode(mode: 'vacancy' | 'occupied' | 'both') {

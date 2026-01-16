@@ -32,127 +32,133 @@
                 aria-labelledby="headingBlue"
                 data-bs-parent="#blueAccordion"
               >
-                <div class="accordion-body">
-                  <p class="mb-0">
-                    You can upload your document here (Aadhar, PAN, etc.).
-                  </p>
+                <div class="accordion-body p-0">
+                  <div
+                    class="upload-boxes d-flex gap-3 flex-wrap mt-3 justify-content-center start-0"
+                  >
+                    <div
+                      class="upload-box card p-3"
+                      (click)="triggerFile('emiratesId')"
+                    >
+                      <app-cloud-icon></app-cloud-icon>
+                      <input
+                        type="file"
+                        hidden
+                        #emiratesIdInput
+                        (change)="onFileSelect($event, 'emiratesId')"
+                        accept=".pdf,.png"
+                      />
+                      <img
+                        *ngIf="isUploaded('emiratesId')"
+                        src=" ../../../../../../assets/favicon/verify-icon.png  "
+                        alt="Uploaded"
+                        class="check-icon"
+                      />
+                      <p class="mb-0">Emirates ID</p>
+
+                      <i
+                        *ngIf="uploadedFiles.emiratesId"
+                        class="fa fa-check-circle text-success mt-2"
+                      ></i>
+                    </div>
+
+                    <div
+                      class="upload-box card p-3 text-center"
+                      (click)="triggerFile('uaeVisa')"
+                    >
+                      <app-cloud-icon></app-cloud-icon>
+
+                      <input
+                        type="file"
+                        hidden
+                        #uaeVisaInput
+                        (change)="onFileSelect($event, 'uaeVisa')"
+                        accept=".pdf,.png"
+                      />
+                      <img
+                        *ngIf="isUploaded('uaeVisa')"
+                        src=" ../../../../../../assets/favicon/verify-icon.png  "
+                        alt="Uploaded"
+                        class="check-icon"
+                      />
+                      <p class="mb-0">UAE Residence Visa</p>
+                      <i
+                        *ngIf="uploadedFiles.uaeVisa"
+                        class="fa fa-check-circle text-success mt-2"
+                      ></i>
+                    </div>
+
+                    <div
+                      class="upload-box card p-3 text-center"
+                      (click)="triggerFile('dldCert')"
+                    >
+                      <app-cloud-icon></app-cloud-icon>
+
+                      <input
+                        type="file"
+                        hidden
+                        #dldCertInput
+                        (change)="onFileSelect($event, 'dldCert')"
+                        accept=".pdf,.png"
+                      />
+                      <img
+                        *ngIf="isUploaded('dldCert')"
+                        src=" ../../../../../../assets/favicon/verify-icon.png  "
+                        alt="Uploaded"
+                        class="check-icon"
+                      />
+                      <p class="mb-0">DLD Certificate</p>
+                      <i
+                        *ngIf="uploadedFiles.dldCert"
+                        class="fa fa-check-circle text-success mt-2"
+                      ></i>
+                    </div>
+                  </div>
+                  <h6 #uploadedSection class="mt-2" *ngIf="uploadedList.length">Documents Uploaded</h6>
+
+                  <div
+                    *ngIf="uploadedList.length > 0 && showUploadedSection"
+                    class="uploaded-section"
+                  >
+                    <div
+                      class="uploaded-file d-flex gap-5 align-items-center justify-content-between"
+                      *ngFor="let file of uploadedList"
+                    >
+                      <div
+                        class="file-info d-flex align-items-center gap-3 p-1"
+                      >
+                        <i>
+                          <img
+                            src="../../../../assets/pdfFileIcon.svg"
+                            alt="pdf"
+                          />
+                        </i>
+                        <div>
+                          <p class="m-0">
+                            {{ file.name }}
+                          </p>
+                          <small>{{ file.size }}</small>
+                        </div>
+                      </div>
+                      <div class="file-actions">
+                        <button
+                          type="button"
+                          (click)="editFile(file)"
+                          class="icon-btn"
+                        >
+                          <app-verify-icon-edit></app-verify-icon-edit>
+                        </button>
+                        <button
+                          type="button"
+                          (click)="deleteFile(file)"
+                          class="icon-btn"
+                        >
+                          <app-delete-icon></app-delete-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="upload-boxes d-flex gap-3 flex-wrap mt-3 justify-content-start start-0"
-          >
-            <div
-              class="upload-box card p-3"
-              (click)="triggerFile('emiratesId')"
-            >
-              <app-cloud-icon></app-cloud-icon>
-              <input
-                type="file"
-                hidden
-                #emiratesIdInput
-                (change)="onFileSelect($event, 'emiratesId')"
-                accept=".pdf,.png"
-              />
-              <img
-                *ngIf="isUploaded('emiratesId')"
-                src=" ../../../../../../assets/favicon/verify-icon.png  "
-                alt="Uploaded"
-                class="check-icon"
-              />
-              <p class="mb-0">Emirates ID</p>
-
-              <i
-                *ngIf="uploadedFiles.emiratesId"
-                class="fa fa-check-circle text-success mt-2"
-              ></i>
-            </div>
-
-            <div
-              class="upload-box card p-3 text-center"
-              (click)="triggerFile('uaeVisa')"
-            >
-              <app-cloud-icon></app-cloud-icon>
-
-              <input
-                type="file"
-                hidden
-                #uaeVisaInput
-                (change)="onFileSelect($event, 'uaeVisa')"
-                accept=".pdf,.png"
-              />
-              <img
-                *ngIf="isUploaded('uaeVisa')"
-                src=" ../../../../../../assets/favicon/verify-icon.png  "
-                alt="Uploaded"
-                class="check-icon"
-              />
-              <p class="mb-0">UAE Residence Visa</p>
-              <i
-                *ngIf="uploadedFiles.uaeVisa"
-                class="fa fa-check-circle text-success mt-2"
-              ></i>
-            </div>
-
-            <div
-              class="upload-box card p-3 text-center"
-              (click)="triggerFile('dldCert')"
-            >
-              <app-cloud-icon></app-cloud-icon>
-
-              <input
-                type="file"
-                hidden
-                #dldCertInput
-                (change)="onFileSelect($event, 'dldCert')"
-                accept=".pdf,.png"
-              />
-              <img
-                *ngIf="isUploaded('dldCert')"
-                src=" ../../../../../../assets/favicon/verify-icon.png  "
-                alt="Uploaded"
-                class="check-icon"
-              />
-              <p class="mb-0">DLD Certificate</p>
-              <i
-                *ngIf="uploadedFiles.dldCert"
-                class="fa fa-check-circle text-success mt-2"
-              ></i>
-            </div>
-          </div>
-          <h6 #uploadedSection class="mt-2">Documents Uploaded</h6>
-
-          <div
-            *ngIf="uploadedList.length > 0 && showUploadedSection"
-            class="uploaded-section"
-          >
-            <div class="uploaded-file" *ngFor="let file of uploadedList">
-              <div class="file-info">
-                <i
-                  [ngClass]="
-                    file.name.endsWith('.pdf')
-                      ? 'fa fa-file-pdf text-danger'
-                      : 'fa fa-file-image text-success'
-                  "
-                ></i>
-                <div>
-                  <p>{{ file.name }}</p>
-                  <small>{{ file.size }}</small>
-                </div>
-              </div>
-              <div class="file-actions">
-                <button type="button" (click)="editFile(file)" class="icon-btn">
-                  <app-verify-icon-edit></app-verify-icon-edit>
-                </button>
-                <button
-                  type="button"
-                  (click)="deleteFile(file)"
-                  class="icon-btn"
-                >
-                  <app-delete-icon></app-delete-icon>
-                </button>
               </div>
             </div>
           </div>
@@ -165,7 +171,9 @@
         Back
       </button>
 
-      <button type="submit" class="btn btnCommon btn-wide" (click)="onLogin()">Login</button>
+      <button type="submit" class="btn btnCommon btn-wide" (click)="onLogin()">
+        Login
+      </button>
     </div>
   </app-auth-form>
 </div>

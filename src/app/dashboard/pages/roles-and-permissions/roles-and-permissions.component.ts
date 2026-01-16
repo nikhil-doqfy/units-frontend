@@ -1,12 +1,13 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -20,7 +21,13 @@ import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plu
 import { BackIconComponent } from '../../component/icons/back-icon/back-icon.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { AddRoleFormComponent } from '../../component/forms/add-role-form/add-role-form.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BreadCrumb } from '../../../shared/model/shared.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RoleAndPermissionsService } from '../../../services/role-and-permissions.service';
 
 @Component({
   selector: 'app-roles-and-permissions',
@@ -43,18 +50,115 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './roles-and-permissions.component.css',
 })
 export class RolesAndPermissionsComponent {
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Roles & Permissions', link: '' },
-  ];
-
-  showDetailView: boolean = false;
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
   private modalService = inject(NgbModal);
+
+  breadcrumbData: BreadCrumb[] = [];
+  currentLanguage = 'en';
+  showDetailView: boolean = false;
+  isEditMode: boolean = false;
   closeResult: WritableSignal<string> = signal('');
 
-  constructor(private router: Router) {}
+  roles: any[] = [];
+  tableLoading = false;
+  currentPage = 1;
+  pageSize = 10;
+  constructor(
+    private router: Router,
+    private roleService: RoleAndPermissionsService,
+    private fb: FormBuilder
+  ) {
+    this.roleForm = this.fb.group({
+      name: ['', Validators.required],
+    });
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
-  openAddRoleModal(addRoleContent: TemplateRef<any>) {
+  ngOnInit(): void {
+    this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+
+    this.initLanguageListener();
+
+    this.fetchRoles();
+  }
+
+  onRefresh() {
+    this.fetchRoles();
+  }
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.ROLES_PERMISSIONS', link: '' },
+    ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
+
+  roleForm: FormGroup;
+  isLoading = false;
+  successMessage = '';
+  errorMessage = '';
+
+  createRole() {
+    if (this.roleForm.invalid) return;
+
+    this.isLoading = true;
+    this.roleService.createRole(this.roleForm.value).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.successMessage = 'Role created successfully!';
+        this.modalService.dismissAll();
+
+        this.fetchRoles();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err?.error?.message || 'Failed to create role.';
+      },
+    });
+  }
+
+  fetchRoles(): void {
+    this.tableLoading = true;
+
+    this.roleService
+      .getRoles({
+        page: this.currentPage,
+        limit: this.pageSize,
+      })
+      .subscribe({
+        next: (res) => {
+          this.roles = res?.content || [];
+          this.tableLoading = false;
+        },
+        error: () => {
+          this.tableLoading = false;
+        },
+      });
+  }
+
+  openAddRoleModal(
+    addRoleContent: TemplateRef<any>,
+    editMode: boolean = false
+  ) {
+    this.isEditMode = editMode;
     this.modalService
       .open(addRoleContent, {
         ariaLabelledBy: 'modal-title',

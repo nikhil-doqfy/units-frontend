@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from './shared.service';
 
 @Component({
   selector: 'app-root',
@@ -20,4 +19,5 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class AppComponent {
   title = 'Doqfy';
+  private sharedService = inject(SharedService);
 }

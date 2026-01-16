@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   OnInit,
   TemplateRef,
@@ -33,6 +34,8 @@ import { TimerTextComponent } from '../../component/timer-text/timer-text.compon
 import { VerifyIconEditComponent } from '../../../icon/verify-icon-edit/verify-icon-edit.component';
 import { HeadphoneIconComponent } from '../../../icon/headphone-icon/headphone-icon.component';
 import { FormService } from '../../../shared/services/form.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CrossIconComponent } from '../../../dashboard/component/icons/cross-icon/cross-icon.component';
 @Component({
   selector: 'app-new-user',
   standalone: true,
@@ -51,8 +54,7 @@ import { FormService } from '../../../shared/services/form.service';
     ReactiveFormsModule,
     ContactNumberComponent,
     TimerTextComponent,
-    VerifyIconEditComponent,
-    HeadphoneIconComponent,
+    CrossIconComponent,
   ],
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css',
@@ -60,6 +62,7 @@ import { FormService } from '../../../shared/services/form.service';
 export class NewUserComponent implements OnInit {
   private formService = inject(FormService);
   private modalService = inject(NgbModal);
+  private destroyRef = inject(DestroyRef);
   isInvalid = this.formService.isInvalid;
   signupForm!: FormGroup;
   otp = '';
@@ -91,35 +94,81 @@ export class NewUserComponent implements OnInit {
   timerInterval: any;
   showResend = false;
 
+  nameValidators = [
+    Validators.required,
+    Validators.pattern(/^[A-Za-z ]+$/),
+    Validators.minLength(2),
+    Validators.maxLength(30),
+  ];
   ngOnInit() {
     this.signupForm = this.fb.group({
-      first_name: [''],
-      last_name: [''],
-      company_name: [''],
-      emirate_id: [''],
-      company_emirate_id: [''],
-      Contact_Number: [''],
+      first_name: ['', this.nameValidators],
+      last_name: ['', this.nameValidators],
+      company_name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          Validators.pattern(/^[A-Za-z0-9][A-Za-z0-9 '&.,-]*[A-Za-z0-9]$/),
+        ],
+      ],
+      contact_number: [
+        '',
+        [
+          Validators.pattern(/^\d+$/),
+          Validators.minLength(6),
+          Validators.maxLength(15),
+        ],
+      ],
       email: ['', [Validators.email]],
-      password: [''],
-      confirmPassword: [''],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).+$/
+          ),
+        ],
+      ],
+      confirmPassword: ['', Validators.required],
+      role: [this.selectedRole],
     });
+    this.signupForm
+      .get('role')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.selectedRole = value;
+        this.onRoleChange();
+      });
+    this.addConfirmPasswordListener();
 
     this.onUserTypeChange(this.currentRole);
   }
 
+  addConfirmPasswordListener() {
+    this.signupForm
+      .get('confirmPassword')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.passwordMismatch =
+          this.signupForm.get('password')?.value !==
+          this.signupForm.get('confirmPassword')?.value;
+      });
+  }
   roleFieldMap: Record<string, string[]> = {
     owner: [
       'first_name',
       'last_name',
-      'Contact_Number',
+      'contact_number',
       'email',
       'password',
       'confirmPassword',
     ],
     'property-manager': [
       'company_name',
-      'company_emirate_id',
-      'Contact_Number',
+      'contact_number',
       'email',
       'password',
       'confirmPassword',
@@ -127,8 +176,7 @@ export class NewUserComponent implements OnInit {
     tenant: [
       'first_name',
       'last_name',
-      'emirate_id',
-      'Contact_Number',
+      'contact_number',
       'email',
       'password',
       'confirmPassword',
@@ -253,21 +301,24 @@ export class NewUserComponent implements OnInit {
 
     const payload = { email: this.signupForm.value.email, purpose: 'signup' };
 
-    this.auth.sendOtp(payload).subscribe({
-      next: (resp: any) => {
-        if (!this.isOtpVerificationModalOpen) {
-          this.openOtpVerifyModal();
-        }
-        this.alert.success(resp?.message);
-        this.otpSent = true;
-        this.emailLocked = true;
-        this.otpTimer = 60;
-        this.startOtpTimer();
-      },
-      error: (err) => {
-        console.log('OTP error:--->', err);
-      },
-    });
+    this.auth
+      .sendOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          if (!this.isOtpVerificationModalOpen) {
+            this.openOtpVerifyModal();
+          }
+          this.alert.success(resp?.message);
+          this.otpSent = true;
+          this.emailLocked = true;
+          this.otpTimer = 60;
+          this.startOtpTimer();
+        },
+        error: (err) => {
+          console.log('OTP error:--->', err);
+        },
+      });
   }
 
   resendOtp(): void {
@@ -282,18 +333,21 @@ export class NewUserComponent implements OnInit {
     };
     let data = { ...this.signupForm.value, userType: this.currentRole };
     this.auth.signupData = data;
-    this.auth.verifyOtp(payload).subscribe({
-      next: (resp: any) => {
-        this.alert.success(resp.message);
-        console.log('OTP verified successfully');
-        this.router.navigate(['/auth/validation']);
-        this.modalService.dismissAll();
-      },
-      error: (err) => {
-        console.log('OTP verify error: ', err);
-        this.alert.error(err?.error?.message || 'Invalid OTP');
-      },
-    });
+    this.auth
+      .verifyOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alert.success(resp.message);
+          console.log('OTP verified successfully');
+          this.router.navigate(['/auth/validation']);
+          this.modalService.dismissAll();
+        },
+        error: (err) => {
+          console.log('OTP verify error: ', err);
+          this.alert.error(err?.error?.message || 'Invalid OTP');
+        },
+      });
   }
 
   goToLogin(): void {

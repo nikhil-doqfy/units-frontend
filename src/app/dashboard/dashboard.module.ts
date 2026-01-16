@@ -20,8 +20,10 @@ import { PaymentsAndInvoiceComponent } from './pages/payments-and-invoice/paymen
 import { PayMyDuesComponent } from './pages/pay-my-dues/pay-my-dues.component';
 import { RaiseComplaintComponent } from './pages/raise-complaint/raise-complaint.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { RentalComponent } from './pages/rental/rental.component';
+import { AddRentalaccountComponent } from './pages/add-rentalaccount/add-rentalaccount.component';
+import { ComplaintsComponent } from './pages/complaints/complaints.component';
 
-import { TranslateModule } from '@ngx-translate/core';
 export const routes: Routes = [
   {
     path: '',
@@ -50,12 +52,32 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.ADD_PROPERTY' },
       },
       {
+        path: 'edit-property/:id',
+        component: AddPropertyComponent,
+        data: { titleKey: 'PAGE_TITLE.EDIT_PROPERTY' },
+      },
+      {
+        path: 'property/details/:id',
+        component: PropertiesComponent,
+        data: { titleKey: 'PAGE_TITLE.PROPERTIES' },
+      },
+      {
         path: 'pmc',
         component: PMCComponent,
         data: { titleKey: 'PAGE_TITLE.PMC' },
       },
       {
+        path: 'pmc/detail/:id',
+        component: PMCComponent,
+        data: { titleKey: 'PAGE_TITLE.PMC' },
+      },
+      {
         path: 'tenants',
+        component: TenantsComponent,
+        data: { titleKey: 'PAGE_TITLE.TENANTS' },
+      },
+      {
+        path: 'tenants/detail/:id',
         component: TenantsComponent,
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
       },
@@ -70,12 +92,33 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.ADD_LEASE' },
       },
       {
+        path: 'edit-lease/:id',
+        component: AddLeaseComponent,
+        data: { titleKey: 'PAGE_TITLE.EDIT_LEASE' },
+      },
+      {
+        path: 'rental',
+        component: RentalComponent,
+        data: { titleKey: 'PAGE_TITLE.RENTAL_AMOUNT' },
+      },
+      {
+        path: 'add-rentalaccount',
+        component: AddRentalaccountComponent,
+        data: { titleKey: 'PAGE_TITLE.ADD' },
+      },
+      {
+        path: 'complaints',
+        component: ComplaintsComponent,
+        data: { titleKey: 'PAGE_TITLE.COMPLAINTS' },
+      },
+
+      {
         path: 'owners',
         component: OwnersComponent,
         data: { titleKey: 'PAGE_TITLE.OWNERS' },
       },
       {
-        path: 'owners/detail/:id',
+        path: 'owners/detail/:owner_id',
         component: OwnersComponent,
         data: { titleKey: 'PAGE_TITLE.OWNERS' },
       },
@@ -85,13 +128,19 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.APPROVAL' },
       },
       {
+        path: 'approval/detail/:tenant_id',
+        component: ApprovalComponent,
+        data: { titleKey: 'PAGE_TITLE.APPROVAL' },
+      },
+      {
         path: 'staff',
         component: StaffComponent,
         data: { titleKey: 'PAGE_TITLE.STAFF' },
       },
       {
-        path: 'staff/detail/:id',
+        path: 'staff/detail/:staff_id',
         component: StaffComponent,
+        data: { titleKey: 'PAGE_TITLE.STAFF' },
       },
       {
         path: 'users',

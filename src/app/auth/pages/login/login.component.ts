@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
@@ -24,6 +24,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormService } from '../../../shared/services/form.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -46,8 +48,10 @@ import {
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
+  private formService = inject(FormService);
+  private destroyRef = inject(DestroyRef);
   loginForm!: FormGroup;
-
+  isOpen = false;
   isLoading = false;
   currentRole: UserRole = 'owner';
   selectedRole: UserRole = 'owner';
@@ -64,11 +68,12 @@ export class LoginComponent implements OnInit {
   otpTimer = 60;
   timerDisplay = '1:00';
   timerInterval: any;
+
+  isInvalid = this.formService.isInvalid;
   otpForm!: FormGroup;
   constructor(
     private router: Router,
     private fb: FormBuilder,
-
     private themeService: ThemeService,
     private authService: AuthService,
     private storageService: StorageService,
@@ -77,26 +82,46 @@ export class LoginComponent implements OnInit {
     this.themeService.setRole(this.selectedRole);
   }
 
+  ngOnInit(): void {
+    this.currentRole = this.selectedRole;
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      role: [this.selectedRole],
+    });
+    this.loginForm
+      .get('role')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.selectedRole = value;
+        this.onRoleChange();
+      });
+    this.otpForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      otp: [''],
+      role: [this.selectedRole],
+    });
+    this.otpForm
+      .get('role')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.selectedRole = value;
+        this.onRoleChange();
+      });
+  }
+
+  handleFilterCloseClick(): void {
+    this.isOpen = false;
+  }
   onRoleChange(): void {
     this.currentRole = this.selectedRole;
     this.themeService.setRole(this.selectedRole);
   }
 
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-    });
-    this.otpForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      otp: [''],
-    });
-  }
-
   getUserType(): string {
     const userTypes: any = {
       owner: 'OWNER',
-      'property-manager': 'PROPERTY_MANAGER',
+      'property-manager': 'COMPANY_USER',
       tenant: 'TENANT',
     };
 
@@ -115,23 +140,26 @@ export class LoginComponent implements OnInit {
     let payload = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password,
-      user_type: this.getUserType(),
+      user_role: this.getUserType(),
     };
 
     this.login(payload);
   }
 
   login(payload: any): void {
-    this.authService.login(payload).subscribe({
-      next: (resp: any) => {
-        this.alertService.success(resp.message);
-        this.goToDashboard();
-      },
-      error: (err) => {
-        console.log(err);
-        this.alertService.error(err?.error?.message || 'Login failed');
-      },
-    });
+    this.authService
+      .login(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp.message);
+          this.goToDashboard();
+        },
+        error: (err) => {
+          console.log(err);
+          this.alertService.error(err?.error?.message || 'Login failed');
+        },
+      });
   }
 
   onOtpChange(evt: any) {
@@ -179,29 +207,29 @@ export class LoginComponent implements OnInit {
   }
 
   sendOtp(): void {
-    console.log('seda', this.email);
     if (this.otpForm.invalid) {
       this.alertService.error('Please enter a valid email');
       return;
     }
 
-    const payload = { email: this.otpForm.value.email };
+    const payload = { email: this.otpForm.value.email, purpose: 'login' };
 
-    this.authService.sendOtp(payload).subscribe({
-      next: (resp: any) => {
-        console.log('monali', this.email);
-        console.log('OTP response:--->', resp);
-        this.alertService.success(resp?.message || 'OTP sent successfully');
-        this.otpSent = true;
-        this.emailLocked = true;
-        this.otpTimer = 60;
-        this.startOtpTimer();
-      },
-      error: (err) => {
-        console.log('OTP error:--->', err);
-        this.alertService.error(err?.error?.message || 'Failed to send OTP');
-      },
-    });
+    this.authService
+      .sendOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp?.message || 'OTP sent successfully');
+          this.otpSent = true;
+          this.emailLocked = true;
+          this.otpTimer = 60;
+          this.startOtpTimer();
+        },
+        error: (err) => {
+          console.log('OTP error:--->', err);
+          this.alertService.error(err?.error?.message || 'Failed to send OTP');
+        },
+      });
   }
 
   signInWithOtp(): void {
@@ -215,7 +243,7 @@ export class LoginComponent implements OnInit {
     };
 
     if (this.isOTPVerified) {
-      payload['user_type'] = this.getUserType();
+      payload['user_role'] = this.getUserType();
       this.login(payload);
     } else {
       this.verifyOtp(payload);
@@ -223,17 +251,20 @@ export class LoginComponent implements OnInit {
   }
 
   verifyOtp(payload: any): void {
-    this.authService.verifyOtp(payload).subscribe({
-      next: (resp: any) => {
-        this.alertService.success(resp.message);
-        this.isOTPVerified = true;
-        clearInterval(this.timerInterval);
-      },
-      error: (err) => {
-        console.log('OTP verify error: ', err.err);
-        this.alertService.error(err?.error?.message || 'Invalid OTP');
-      },
-    });
+    this.authService
+      .verifyOtp(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp.message);
+          this.isOTPVerified = true;
+          clearInterval(this.timerInterval);
+        },
+        error: (err) => {
+          console.log('OTP verify error: ', err.err);
+          this.alertService.error(err?.error?.message || 'Invalid OTP');
+        },
+      });
   }
 
   changeEmail(): void {

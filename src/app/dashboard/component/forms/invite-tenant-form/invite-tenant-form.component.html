@@ -1,13 +1,28 @@
 <app-modal-form-card>
   <form [formGroup]="tenantForm">
     <div class="mb-0">
-      <label for="email" class="form-label">Email address<span>*</span></label>
+      <div class="col-md-6">
+        <label class="form-label"> {{ "PROPERTY_NAME" | translate }} * </label>
+
+        <app-custom-select
+          [options]="propertyList"
+          placeholder="Select Property"
+          key="key"
+          value="value"
+          [selectedOption]="selectedProperty"
+          (optionSelected)="onOptionSelectedPropertyUnit($event)"
+        ></app-custom-select>
+      </div>
+
+      <label for="email" class="form-label"
+        >{{ "EMAIL_ADDRESS" | translate }}<span>*</span></label
+      >
       <input
         class="form-control"
         type="email"
         name="email"
         formControlName="email"
-        placeholder="Enter email address here"
+        [placeholder]="'ENTER_EMAIL_ADDRESS_HERE' | translate"
       />
       @if (isInvalid(tenantForm, 'email').status) {
       <small class="errorMsg"> {{ isInvalid(tenantForm, "email").msg }}</small>

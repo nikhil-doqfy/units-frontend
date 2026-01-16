@@ -23,6 +23,7 @@ import {
   NgbNavModule,
   ModalDismissReasons,
   NgbModal,
+  NgbOffcanvas,
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashTitleComponent } from '../component/dash-title/dash-title.component';
@@ -74,6 +75,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAddPropertyActive = false;
   isAddLeaseActive = false;
   currentLanguage = 'en';
+
   userProfile = this.storage.getUserProfile();
 
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
@@ -81,10 +83,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   @ViewChild('searchContainer') searchContainer!: ElementRef;
-
+  private offcanvasService = inject(NgbOffcanvas);
   private modalService = inject(NgbModal);
   closeResult = '';
-
+  currentbreadcrumb: { label: string; link?: string }[] = [];
   constructor(
     private renderer: Renderer2,
     private sharedService: SharedService,
@@ -97,26 +99,87 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
-    this.translate.onLangChange.subscribe((event: any) => {
-      this.currentLanguage = event.lang;
-      this.pageTitle = this.getRouteTitle(this.router.routerState.root);
-    });
-    translate.use('en');
+
+    const savedLang = this.storage.getLanguage() || 'en';
+
+    this.currentLang = savedLang;
+    this.translate.use(savedLang);
+    this.updateDirection();
+    this.subscriptions.add(
+      this.translate.onLangChange.subscribe((event: any) => {
+        this.currentLanguage = event.lang;
+        this.pageTitle = this.getRouteTitle(this.router.routerState.root);
+      })
+    );
+
+    translate.use(storage.getLanguage());
     this.updateDirection();
   }
 
-  setLanguage(lang: string) {
+  ngOnInit() {
+    this.subscriptions.add(
+      this.sharedService.breadcrumb$.subscribe((res) => {
+        this.breadcrumbData = res;
+      })
+    );
+
+    this.pageTitle = this.getRouteTitle(this.router.routerState.root);
+
+    this.updateActiveButtons(this.router.url);
+
+    this.subscriptions.add(
+      this.sharedService.openSidebarValue$.subscribe((value) => {
+        this.openSidebarValue = value;
+      })
+    );
+
+    this.subscriptions.add(
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe(() => {
+          const currentRoute = this.router.routerState.root;
+          this.pageTitle = this.getRouteTitle(currentRoute);
+        })
+    );
+
+    this.subscriptions.add(
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe((event: any) => {
+          const url = event.urlAfterRedirects;
+
+          this.isAddPropertyActive = url.includes('/dashboard/add-property');
+          this.isAddLeaseActive = url.includes('/dashboard/add-lease');
+          this.isProfileActive = url.includes('/user/my-profile');
+
+          this.pageTitle = this.getRouteTitle(this.router.routerState.root);
+        })
+    );
+
+    this.isProfileActive = this.router.url.includes('/user/my-profile');
+
+    this.subscriptions.add(
+      this.themeService.currentRole$.subscribe((role) => {
+        this.currentRole = role;
+      })
+    );
+  }
+
+  async setLanguage(lang: string) {
     this.currentLang = lang;
     this.translate.use(lang);
-    localStorage.setItem('language', lang);
+    this.storage.setLanguage(lang);
     this.updateDirection();
+
+    await this.sharedService.getBreadcrumbs(
+      this.sharedService.currentbreadcrumb
+    );
   }
 
   private updateDirection() {
     document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
   }
 
-  // Helper to get the flag path
   get flagIcon(): string {
     return this.currentLang === 'ar'
       ? 'assets/language/united-arab-emirates.png'
@@ -129,49 +192,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isProfileActive = url.includes('/user/my-profile');
   }
 
-  ngOnInit() {
-    // ✅ Handle refresh case
-    this.pageTitle = this.getRouteTitle(this.router.routerState.root);
+  get profileImageUrl(): string {
+    const p = this.userProfile;
+    if (!p?.profile_image) {
+      return 'assets/userDefaultProImg.png';
+    }
 
-    this.updateActiveButtons(this.router.url);
-
-    this.subscriptions.add(
-      this.sharedService.openSidebarValue$.subscribe((value) => {
-        this.openSidebarValue = value;
-      })
-    );
-
-    // ✅ Update title on route change
-    this.subscriptions.add(
-      this.router.events
-        .pipe(filter((event) => event instanceof NavigationEnd))
-        .subscribe(() => {
-          const currentRoute = this.router.routerState.root;
-          this.pageTitle = this.getRouteTitle(currentRoute);
-        })
-    );
-
-    // ✅ Highlight profile menu when needed
-    this.subscriptions.add(
-      this.router.events
-        .pipe(filter((event) => event instanceof NavigationEnd))
-        .subscribe((event: any) => {
-          const url = event.urlAfterRedirects;
-
-          this.isAddPropertyActive = url.includes('/dashboard/add-property');
-          this.isAddLeaseActive = url.includes('/dashboard/add-lease');
-          this.isProfileActive = url.includes('/user/my-profile');
-
-          // Update page title
-          this.pageTitle = this.getRouteTitle(this.router.routerState.root);
-        })
-    );
-
-    this.isProfileActive = this.router.url.includes('/user/my-profile');
-
-    this.themeService.currentRole$.subscribe((role) => {
-      this.currentRole = role;
-    });
+    return p.profile_image;
   }
 
   private getRouteTitle(route: any): string {
@@ -186,6 +213,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.translate.instant(titleKey);
   }
 
+  goToDocumentation() {
+    this.router.navigate(['/dashboard/documentations']);
+  }
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
@@ -224,19 +254,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout().subscribe({
-      next: (resp: any) => {
-        this.modalService.dismissAll();
-        this.router.navigate(['/auth/login']);
-        console.log('monali');
-        this.alertService.success(resp.message);
-      },
-      error: (error: any) => {
-        this.modalService.dismissAll();
-        this.router.navigate(['/auth/login']);
-        localStorage.clear();
-      },
-    });
+    this.subscriptions.add(
+      this.authService.logout({}).subscribe({
+        next: (resp: any) => {
+          this.modalService.dismissAll();
+          this.router.navigate(['/auth/login']);
+
+          this.alertService.success(resp.message);
+        },
+        error: (error: any) => {
+          this.modalService.dismissAll();
+          this.router.navigate(['/auth/login']);
+          localStorage.clear();
+        },
+      })
+    );
   }
 
   private getDismissReason(reason: any): string {
@@ -248,5 +280,91 @@ export class HeaderComponent implements OnInit, OnDestroy {
       default:
         return `with: ${reason}`;
     }
+  }
+
+  //----------------------------------notification----------------------------------------------------
+  unreadCount: number = 0;
+  deletedNotifications: any[] = [];
+  readNotifications: any[] = [];
+  unreadNotifications: any[] = [];
+  readCount: number = 0;
+  unDeletedNotifications: any[] = [];
+
+  allCount: number = 0;
+
+  notifications: any = [];
+
+  getNotifications() {
+    this.sharedService.getNotifications({}).subscribe((resp: any) => {
+      this.notifications = resp.content.notifications_data;
+      this.unDeletedNotifications = this.notifications.filter(
+        (n: any) => !n.is_deleted
+      );
+      this.readNotifications = this.notifications.filter(
+        (n: any) => n.is_read && !n.is_deleted
+      );
+      this.unreadNotifications = this.notifications.filter(
+        (n: any) => !n.is_read && !n.is_deleted
+      );
+      this.deletedNotifications = this.notifications.filter(
+        (n: any) => n.is_deleted
+      );
+      this.allCount = resp.content.notification_count;
+      this.readCount = resp.content.read_notifications;
+      this.unreadCount = resp.content.unread_notifications;
+    });
+  }
+
+  openNotificaion(content: TemplateRef<any>) {
+    this.offcanvasService.open(content, {
+      position: 'end',
+      scroll: false,
+      panelClass: 'notificationOffcanvas',
+    });
+  }
+  clearAllClearedNotifications() {
+    this.sharedService
+      .deleteNotification({ clear_all: true })
+      .subscribe((resp: any) => {
+        if (resp.status === 200) {
+          this.alertService.success(resp.message);
+          this.getNotifications();
+        } else {
+          this.alertService.error(resp.message);
+        }
+      });
+  }
+  markNotiFicationAsRead(id: number) {
+    this.sharedService
+      .readNotification({ notification_id: id })
+      .subscribe((resp: any) => {
+        if (resp.status === 200) {
+          this.alertService.success(resp.message);
+          this.getNotifications();
+        }
+      });
+  }
+  clearSingleNotifications(id: number) {
+    this.sharedService
+      .deleteNotification({ clear_notification_id: id })
+      .subscribe((resp: any) => {
+        if (resp.status === 200) {
+          this.alertService.success(resp.message);
+          this.getNotifications();
+        } else {
+          this.alertService.error(resp.message);
+        }
+      });
+  }
+
+  deleteNotification(id: number) {
+    this.sharedService
+      .deleteNotification({ notification_id: id })
+      .subscribe((resp: any) => {
+        if (resp.status === 200) {
+          this.alertService.success(resp.message);
+          this.getNotifications();
+        }
+      });
   }
 }

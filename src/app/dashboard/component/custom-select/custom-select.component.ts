@@ -7,6 +7,10 @@ import {
   OnDestroy,
   OnInit,
   forwardRef,
+  inject,
+  DestroyRef,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -14,13 +18,24 @@ import { Subscription } from 'rxjs';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { ArrowUpIconComponent } from '../../../shared/component/icons/arrow-up-icon/arrow-up-icon.component';
 
-import { CustomSelectService } from './custom-select.service'; // 👈 Import the service
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CustomSelectService } from './custom-select.service';
+import {
+  ControlValueAccessor,
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-custom-select',
   standalone: true,
-  imports: [CommonModule, ArrowDownIconComponent, ArrowUpIconComponent],
+  imports: [
+    CommonModule,
+    ArrowDownIconComponent,
+    ArrowUpIconComponent,
+    FormsModule,
+  ],
   templateUrl: './custom-select.component.html',
   styleUrls: ['./custom-select.component.css'],
   providers: [
@@ -31,9 +46,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
 })
-export class CustomSelectComponent
-  implements OnInit, OnDestroy, ControlValueAccessor
-{
+export class CustomSelectComponent implements OnInit, ControlValueAccessor {
+  private destroyRef = inject(DestroyRef);
+  private alertService = inject(AlertService);
+
   @Input() isFilter: boolean = false;
   @Input() isPlain: boolean = false;
   @Input() isSmall: boolean = false;
@@ -43,12 +59,15 @@ export class CustomSelectComponent
   @Input() key: string = 'key';
   @Input() value: string = 'value';
   @Input() selectedOption: any | null = null;
+  @Input() showFilterInput: boolean = false;
+  @Input() allowAddOption: boolean = false;
 
   @Output() optionSelected = new EventEmitter<string>();
+  @Output() onOptionAdded = new EventEmitter<any>();
 
   isDropdownOpen = false;
-
-  private subscription!: Subscription;
+  filterText: string = '';
+  displayOptions: any[] = [];
 
   // CVA callbacks
   private onChange = (_: any) => {};
@@ -57,14 +76,20 @@ export class CustomSelectComponent
 
   constructor(private dropdownService: CustomSelectService) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options'] && changes['options'].currentValue) {
+      this.displayOptions = [...changes['options'].currentValue];
+    }
+  }
+
   ngOnInit() {
-    this.subscription = this.dropdownService.openDropdown$.subscribe(
-      (openComponent) => {
+    this.dropdownService.openDropdown$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((openComponent) => {
         if (openComponent !== this) {
-          this.isDropdownOpen = false; // Close if another component is opened
+          this.isDropdownOpen = false;
         }
-      }
-    );
+      });
   }
 
   toggleDropdown() {
@@ -79,7 +104,7 @@ export class CustomSelectComponent
 
   selectOption(option: any) {
     this.selectedOption = option;
-    this.onChange(option); // IMPORTANT: update Angular form
+    this.onChange(option);
     this.optionSelected.emit(option);
     this.isDropdownOpen = false;
     this.onTouched();
@@ -89,7 +114,6 @@ export class CustomSelectComponent
   closeDropdown(event: Event) {
     if (!(event.target as HTMLElement).closest('.customSelect')) {
       this.isDropdownOpen = false;
-      this.onTouched();
     }
   }
 
@@ -113,9 +137,47 @@ export class CustomSelectComponent
     this.isDisabled = isDisabled;
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+  onInputChange(value: string) {
+    this.filterText = value;
+
+    if (!value.trim()) {
+      this.displayOptions = [...this.options];
+      return;
     }
+
+    if (this.showFilterInput || this.allowAddOption) {
+      const search = value.toLowerCase();
+      this.displayOptions = this.options.filter((opt: any) =>
+        String(opt[this.value]).toLowerCase().includes(search)
+      );
+    }
+  }
+
+  addOption() {
+    const text = this.filterText?.trim();
+    if (!text) return;
+
+    const exists = this.options.some(
+      (opt: any) => String(opt[this.value]).toLowerCase() === text.toLowerCase()
+    );
+
+    if (exists) {
+      this.alertService.error('Option already exists');
+      return;
+    }
+
+    const newOption = {
+      [this.key]: text,
+      [this.value]: text,
+      isNew: true,
+    };
+
+    this.options = [...this.options, newOption];
+    this.displayOptions = [...this.options];
+    this.selectedOption = newOption;
+
+    this.onChange(newOption);
+    this.onOptionAdded.emit(this.options);
+    this.filterText = '';
   }
 }

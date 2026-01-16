@@ -8,10 +8,10 @@ import { CopyrightIconComponent } from '../icons/copyright-icon/copyright-icon.c
   standalone: true,
   imports: [CopyrightIconComponent],
   templateUrl: './auth-footer.component.html',
-  styleUrl: './auth-footer.component.css'
+  styleUrl: './auth-footer.component.css',
 })
 export class AuthFooterComponent {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
   goToLogin(): void {
     this.router.navigate(['auth/login']);
   }

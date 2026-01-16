@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -36,7 +36,7 @@ export type ChartOptions = {
 export class StackedColumnChartComponent {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-
+  @Input() monthlyData: any[] = [];
   constructor() {
     this.chartOptions = {
       series: [
@@ -139,4 +139,51 @@ export class StackedColumnChartComponent {
       },
     };
   }
+
+  // ngOnChanges() {
+  //   if (!this.monthlyData.length);
+
+  //   this.chartOptions = {
+  //     series: [
+  //       {
+  //         name: 'Credit Card',
+  //         data: this.monthlyData.map((d) => d.credit_card),
+  //       },
+  //       { name: 'Debit Card', data: this.monthlyData.map((d) => d.debit_card) },
+  //       {
+  //         name: 'Net Banking',
+  //         data: this.monthlyData.map((d) => d.net_banking),
+  //       },
+  //     ],
+  //     chart: {
+  //       type: 'bar',
+  //       height: 240,
+  //       stacked: true,
+  //       toolbar: { show: false },
+  //     },
+  //     colors: ['#2C7AFF', '#FF7105', '#00BEDB'],
+  //     xaxis: {
+  //       categories: this.monthlyData.map(
+  //         (d) =>
+  //           [
+  //             'Jan',
+  //             'Feb',
+  //             'Mar',
+  //             'Apr',
+  //             'May',
+  //             'Jun',
+  //             'Jul',
+  //             'Aug',
+  //             'Sep',
+  //             'Oct',
+  //             'Nov',
+  //             'Dec',
+  //           ][d.month - 1]
+  //       ),
+  //     },
+  //     dataLabels: { enabled: false },
+  //     fill: { opacity: 1 },
+  //     legend: { position: 'top' },
+  //   };
+  // }
 }

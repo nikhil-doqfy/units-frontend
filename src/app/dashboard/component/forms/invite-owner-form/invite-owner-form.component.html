@@ -1,18 +1,35 @@
 <app-modal-form-card>
-    <form [formGroup]="pmcOwnerForm">
-        <div class="mb-0">
-            <label for="email" class="form-label">
-                Email address<span>*</span>
-            </label>
+  <form [formGroup]="pmcOwnerForm">
+    <div class="mb-0">
+      <div class="col-md-6">
+        <label class="form-label"> {{ "PROPERTY_NAME" | translate }} * </label>
 
-            <input class="form-control" type="email" name="email" formControlName="email"
-                placeholder="Enter email address here" />
+        <app-custom-select
+          [options]="propertyList"
+          placeholder="Select Property"
+          key="key"
+          value="value"
+          [selectedOption]="selectedProperty"
+          (optionSelected)="onOptionSelectedPropertyUnit($event)"
+        ></app-custom-select>
+      </div>
+      <label for="email" class="form-label">
+        {{ "EMAIL_ADDRESS" | translate }}<span>*</span>
+      </label>
 
-            @if (isInvalid(pmcOwnerForm, 'email').status) {
-            <small class="errorMsg">
-                {{ isInvalid(pmcOwnerForm, "email").msg }}
-            </small>
-            }
-        </div>
-    </form>
+      <input
+        class="form-control"
+        type="email"
+        name="email"
+        formControlName="email"
+        [placeholder]="'ENTER_EMAIL_ADDRESS_HERE' | translate"
+      />
+
+      @if (isInvalid(pmcOwnerForm, 'email').status) {
+      <small class="errorMsg">
+        {{ isInvalid(pmcOwnerForm, "email").msg }}
+      </small>
+      }
+    </div>
+  </form>
 </app-modal-form-card>

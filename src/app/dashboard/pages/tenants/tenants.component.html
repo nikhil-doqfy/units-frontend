@@ -4,7 +4,7 @@
       <div class="row g-3 align-items-center">
         <div class="col-md">
           <app-table-title
-            title="All Tenants"
+            [title]="'ALL_TENANTS' | translate"
             [subtitle]="'(' + totalRecords + ')'"
             (onRefresh)="onRefresh()"
           ></app-table-title>
@@ -12,18 +12,19 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search
-              placeholder="Search here..."
-              (onValueChange)="onTenantsSearch$.next($event)"
+              [placeholder]="'SEARCH_HERE' | translate"
+              (onValueChange)="searchTextChange($event)"
             />
-            <app-table-filter-btn
-              title="Filter"
+
+            <!-- <app-table-filter-btn
+              [title]="'FILTER' | translate"
               [hasIcon]="true"
-              (clicked)="handleFilterClick()"
             >
               <app-filter-icon />
-            </app-table-filter-btn>
+            </app-table-filter-btn> -->
+
             <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
@@ -31,7 +32,7 @@
             </app-table-filter-btn>
             <app-table-filter-btn
               *ngIf="currentRole === 'owner'"
-              title="Add Tenant"
+              [title]="'ADD_TENANT' | translate"
               [hasIcon]="true"
               (clicked)="openAddTenantModal(addTenantContent)"
             >
@@ -39,7 +40,7 @@
             </app-table-filter-btn>
             <app-table-filter-btn
               *ngIf="currentRole === 'property-manager'"
-              title="Invite Tenant"
+              [title]="'INVITE_TENANT' | translate"
               [hasIcon]="true"
               (clicked)="openInviteTenantModal(inviteTenantContent)"
             >
@@ -67,7 +68,9 @@
                   <i><app-sorting-icon /></i>
                 </button>
               </th>
-              <th>{{ "RENTAL_AGREEMENT" | translate }}</th>
+              <th>{{ "EJARI_CERTIFICATE" | translate }}</th>
+
+              <!-- <th>{{ "RENTAL_AGREEMENT" | translate }}</th> -->
               <th width="200"></th>
             </tr>
           </thead>
@@ -76,38 +79,53 @@
             <tr>
               <td>
                 <app-table-img-item
-                  img="../../../../assets/userDefaultProImg.png"
-                  [title]="tenant?.full_name"
+                  [img]="
+                    tenant?.tenant_profile_image ||
+                    '../../../../assets/userDefaultProImg.png'
+                  "
+                  [title]="tenant?.tenant_name"
                   [clickable]="true"
-                  (clicked)="handleViewClick()"
+                  (clicked)="handleViewClick(tenant.tenant_id)"
                 />
               </td>
-              <td>{{ tenant?.tenant_number }}</td>
-              <td>{{ tenant.mobile_number | maskPhone }}</td>
+
+              <td>{{ tenant?.user_code || "N/A" }}</td>
+              <td>{{ tenant.contact_number | maskPhone }}</td>
 
               <td>
                 <app-table-img-item
-                  img="../../../../assets/property/property-list-1.png"
+                  img="../../../../assets/property/property-img-default.svg"
                   size="md"
-                  [title]="tenant.property_assigned"
+                  [title]="tenant.property_assigned ?? 'N/A'"
                 />
               </td>
               <td>
                 <app-document-type-item
                   title="Lease_001.pdf"
                   subtitle="1.2 MB"
+                  (clicked)="handleViewPdf(tenant.lease_id)"
                 />
+                <ng-template #waitingDoc>
+                  <span class="waiting-text">Waiting for document</span>
+                </ng-template>
               </td>
+              <!-- <td>
+                <app-document-type-item
+                  title="Lease_001.pdf"
+                  subtitle="1.2 MB"
+                  (clicked)="handleViewPdf(tenant.lease_id)"
+                />
+              </td> -->
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
+                  <!-- <app-table-action-btn
                     type="edit"
                     (clicked)="handleEditClick()"
                   />
                   <app-table-action-btn
                     type="delete"
                     (clicked)="handleDeleteClick()"
-                  />
+                  /> -->
                   <app-table-action-dropdown
                     [dropdownItems]="documentActions"
                     (actionClicked)="handleDropdownAction($event)"
@@ -145,7 +163,9 @@
   <!-- -------------------- ADD Tenant Form -------------------- -->
   <ng-template #addTenantContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Add Tenant</h4>
+      <h4 class="modal-title" id="modal-title">
+        {{ "ADD_TENANT" | translate }}
+      </h4>
       <button
         type="button"
         class="btn-close"
@@ -154,7 +174,7 @@
       ></button>
     </div>
     <div class="modal-body">
-      <app-add-tenant-form />
+      <app-add-tenant-form #addTenantFormComponent />
     </div>
     <div class="modal-footer">
       <button
@@ -162,14 +182,14 @@
         class="btn btnCommon btnTransparent"
         (click)="modal.dismiss('Save click')"
       >
-        Cancel
+        {{ "CANCEL" | translate }}
       </button>
       <button
         type="button"
         class="btn btnCommon"
-        (click)="modal.close('Save click')"
+        (click)="onTenantSave(addTenantFormComponent, modal)"
       >
-        Submit Details
+        {{ "SUBMIT_DETAILS" | translate }}
       </button>
     </div>
   </ng-template>
@@ -177,7 +197,9 @@
   <!-- -------------------- Invite Tenant Form -------------------- -->
   <ng-template #inviteTenantContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Invite Tenant</h4>
+      <h4 class="modal-title" id="modal-title">
+        {{ "INVITE_TENANT" | translate }}
+      </h4>
       <button
         type="button"
         class="btn-close"
@@ -194,32 +216,47 @@
         class="btn btnCommon btnTransparent"
         (click)="modal.dismiss('Save click')"
       >
-        Cancel
+        {{ "CANCEL" | translate }}
       </button>
       <button
         type="button"
         class="btn btnCommon"
         (click)="sendInvite(inviteFormRef, modal)"
       >
-        <i><app-send-icon /></i>Send Invitation
+        <i><app-send-icon /></i>{{ "SEND_INVITATION" | translate }}
       </button>
     </div>
   </ng-template>
 </ng-container>
 
-<ng-container *ngIf="showDetailView">
+<ng-container *ngIf="showDetailView && selectedTenant">
   <app-table-view-card
-    [title]="'Richard'"
-    [imgSrc]="'../../../assets/user/user-2.png'"
+    [title]="selectedTenant?.first_name + ' ' + selectedTenant?.last_name"
+    [imgSrc]="selectedTenant?.profile_image || ''"
     [items]="[
-      { label: 'Email', value: 'Richard@gmail.com' },
-      { label: 'Phone Number', value: '+97-7007836367' },
-      { label: 'Emirates ID', value: 'Afc25' },
-      { label: 'City', value: 'Bengaluru' },
-      { label: 'Locality', value: '' },
-      { label: 'Postal Code', value: '5621009' },
-      { label: 'Address Line 1', value: 'Koramangala' },
-      { label: 'Address Line 2', value: 'Bellandur' },
+      { label: 'Email', value: selectedTenant?.email },
+      {
+        label: 'Phone Number',
+        value: selectedTenant?.contact_number
+      },
+      {
+        label: 'Emirates ID',
+        value: selectedTenant?.emirate_id
+      },
+      { label: 'City', value: selectedTenant?.city },
+      { label: 'Locality', value: selectedTenant?.location },
+      {
+        label: 'Postal Code',
+        value: selectedTenant?.postal_code
+      },
+      {
+        label: 'Address Line 1',
+        value: selectedTenant?.address
+      },
+      {
+        label: 'Address Line 2',
+        value: selectedTenant?.address
+      },
       {
         label: 'Linked Property',
         value: 'Prestige Builders',
@@ -235,21 +272,28 @@
     <app-white-card title="Photos & Documents">
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
+          @for (type of tenantDocumentType; track type.key;) {
           <li class="nav-item" role="presentation">
             <button
               class="nav-link active"
-              id="tenantDocument-tab"
+              [class.active]="type.key === activeDocTypeKey"
+              [id]="type.key + '-tab'"
               data-bs-toggle="tab"
-              data-bs-target="#tenantDocument-tab-pane"
+              [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
               type="button"
               role="tab"
-              aria-controls="tenantDocument-tab-pane"
-              aria-selected="true"
+              [attr.aria-controls]="type.key + '-tab-pane'"
+              [attr.aria-selected]="type.key === activeDocTypeKey"
+              (click)="onDocTabClick(type)"
             >
-              Tenant Document
+              <!-- id="tenantDocument-tab" data-bs-target="#tenantDocument-tab-pane"
+              aria-controls="tenantDocument-tab-pane" aria-selected="true" -->
+              <!-- Tenant Document -->
+              {{ type.value }}
             </button>
           </li>
-          <li class="nav-item" role="presentation">
+          }
+          <!-- <li class="nav-item" role="presentation">
             <button
               class="nav-link"
               id="ejariDocuments-tab"
@@ -262,20 +306,45 @@
             >
               Ejari Documents
             </button>
-          </li>
+          </li> -->
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="myTabContent">
-          <div
+          @for(type of tenantDocumentType; track type.key; let i = $index){
+          <!-- <div
             class="tab-pane fade show active"
             id="tenantDocument-tab-pane"
             role="tabpanel"
             aria-labelledby="tenantDocument-tab"
             tabindex="0"
+          > -->
+
+          <div
+            [ngClass]="{
+              'tab-pane': true,
+              fade: true,
+              show: type.key === activeDocTypeKey,
+              active: type.key === activeDocTypeKey
+            }"
+            [id]="type.key + '-tab-pane'"
+            role="tabpanel"
+            [attr.aria-labelledby]="type.key + '-tab'"
+            [tabindex]="i"
           >
             <div class="row g-2">
+              @for(docsGroup of tennatDocuments[activeDocTypeKey]; track
+              docsGroup.id){
               <div class="col-auto">
+                <app-document-type-item [title]="docsGroup.file_name" />
+              </div>
+              }@empty {
+              <div class="col-auto m-auto">Documents not available!</div>
+              }
+            </div>
+          </div>
+          }
+          <!-- <div class="col-auto">
                 <app-document-type-item title="Contract.pdf" size="1.2 MB" />
               </div>
               <div class="col-auto">
@@ -310,7 +379,7 @@
                 <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </app-white-card>

@@ -3,9 +3,7 @@
 <app-auth-form>
   <form class="mb-4" [formGroup]="signupForm">
     <div class="grid-2">
-      <ng-container
-        *ngIf="selectedRole === 'owner' || selectedRole === 'tenant'"
-      >
+      <ng-container>
         <div class="mb-2">
           <label for="companyName" class="form-label">Frist Name</label>
           <input
@@ -37,39 +35,26 @@
         </div>
       </ng-container>
       <ng-container *ngIf="selectedRole === 'property-manager'">
-        <div class="mb-2">
+        <div class="mb-2 col-span-2">
           <label for="companyName" class="form-label">Company Name</label>
-          <input class="form-control" type="text" placeholder="Enter here"  formControlName="company_name" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter here"
+            formControlName="company_name"
+          />
           @if (isInvalid(signupForm, 'company_name').status) {
           <small class="errorMsg">
-            {{ isInvalid(signupForm, "company_name").msg }}
-          </small>
-          }
-        </div>
-
-        <div class="mb-2">
-          <label for="emiratesId" class="form-label">Company Emirates ID</label>
-          <input class="form-control" type="text" placeholder="Enter here" formControlName="company_emirate_id" />
-          @if (isInvalid(signupForm, 'company_emirate_id').status) {
-          <small class="errorMsg">
-            {{ isInvalid(signupForm, "company_emirate_id").msg }}
+            {{
+              isInvalid(signupForm, "company_name", {
+                pattern:
+                  "Use 2-50 characters. Letters, numbers, and common symbols are allowed."
+              }).msg
+            }}
           </small>
           }
         </div>
       </ng-container>
-
-      <ng-container *ngIf="selectedRole === 'tenant'">
-        <div class="mb-2 col-span-2">
-          <label for="emiratesId" class="form-label">Emirates ID</label>
-          <input class="form-control" type="text" placeholder="Enter here" formControlName="emirate_id" />
-          @if (isInvalid(signupForm, 'emirate_id').status) {
-          <small class="errorMsg">
-            {{ isInvalid(signupForm, "emirate_id").msg }}
-          </small>
-          }
-        </div>
-      </ng-container>
-
       <div class="mb-2">
         <label for="email" class="form-label justify-content-between"
           >Email Address</label
@@ -90,18 +75,19 @@
       </div>
 
       <div class="mb-2">
-        <label for="contact_Number" class="form-label">Contact Number</label>
+        <label for="contact_number" class="form-label">Contact Number</label>
         <div class="iconInput">
           <i><app-contact-number></app-contact-number></i>
           <input
             class="form-control"
             type="tel"
-            formControlName="Contact_Number"
+            formControlName="contact_number"
             placeholder="Enter your number"
           />
-          @if (isInvalid(signupForm, 'Contact_Number').status) {
+          <!-- VALIDATION MESSAGES -->
+          @if (isInvalid(signupForm, 'contact_number').status) {
           <small class="errorMsg">
-            {{ isInvalid(signupForm, "Contact_Number").msg }}
+            {{ isInvalid(signupForm, "contact_number").msg }}
           </small>
           }
         </div>
@@ -140,6 +126,38 @@
         </i>
       </div>
     </div>
+
+    <div class="loginRoleSelection mb-4">
+      <div class="loginRoleOptions">
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="owner"
+            (change)="onRoleChange()"
+          />
+          <span>Owner</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="property-manager"
+            (change)="onRoleChange()"
+          />
+          <span>Property Manager</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            formControlName="role"
+            value="tenant"
+            (change)="onRoleChange()"
+          />
+          <span>Tenant</span>
+        </label>
+      </div>
+    </div>
     <div class="frmBtns">
       <button
         type="submit"
@@ -151,41 +169,6 @@
     </div>
   </form>
 </app-auth-form>
-
-<div class="loginRoleSelection mb-4">
-  <div class="loginRoleOptions">
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="owner"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Owner</span>
-    </label>
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="property-manager"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Property Manager</span>
-    </label>
-    <label>
-      <input
-        type="radio"
-        name="role"
-        value="tenant"
-        [(ngModel)]="selectedRole"
-        (change)="onRoleChange()"
-      />
-      <span>Tenant</span>
-    </label>
-  </div>
-</div>
 
 <app-new-user-link type="login" />
 
@@ -206,16 +189,25 @@
           <div class="d-flex align-items-center otpVerifyMdlInfo">
             <p class="mb-2">
               We've sent code to
-              <span class="text-primary">{{signupForm.get('email')?.value}}</span>
+              <span class="text-primary">{{
+                signupForm.get("email")?.value
+              }}</span>
             </p>
-            <button
+            <!-- <button
               type="button"
               (click)="modal.dismiss('Cross click')"
               class="btn p-0 border-0 bg-transparent position-absolute top-1 end-0 mt-0 m-4"
             >
               <app-verify-icon-edit></app-verify-icon-edit>
-            </button>
+            </button> -->
           </div>
+          <button
+            type="button"
+            class="close-btn"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <app-cross-icon />
+          </button>
         </h4>
       </div>
     </div>
@@ -260,7 +252,7 @@
             class="frmBtnss d-flex align-items-center justify-content-between mt-3"
           >
             <div>
-              <app-headphone-icon></app-headphone-icon>
+              <!-- <app-headphone-icon></app-headphone-icon> -->
             </div>
 
             <div class="d-flex">

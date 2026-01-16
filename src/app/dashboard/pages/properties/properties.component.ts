@@ -1,7 +1,12 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterModule,
+} from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
@@ -26,11 +31,43 @@ import { DocumentTypeItemComponent } from '../../component/document-type-item/do
 import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
 import { CardTitleComponent } from '../../../shared/component/card-title/card-title.component';
 import { DashTitleComponent } from '../../../shared/component/dash-title/dash-title.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PropertyService } from '../../services/property.service';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { debounceTime, Subject } from 'rxjs';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SharedService } from '../../../shared.service';
+import { AlertService } from '../../../shared/services/alert.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
+
+type PropertyImages = Record<'imgSrc', string>;
+
+interface SectionItems {
+  label: string;
+  value: string;
+}
+
+interface Section {
+  title: string;
+  items: SectionItems[];
+}
+
+interface PropertyDetails {
+  name: string;
+  location: string;
+  status: string;
+  rent: string;
+  bhk: string;
+  sqft: string;
+  propertyImages: PropertyImages[];
+  sections: Section[];
+}
 
 @Component({
   selector: 'app-properties',
@@ -62,70 +99,143 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
     TranslateModule,
     NoDataComponent,
     RouterLink,
+    FilterPopupButtonComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',
 })
 export class PropertiesComponent {
   private propertyService = inject(PropertyService);
+  private sharedApiService = inject(SharedApiService);
+  private alertService = inject(AlertService);
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
 
   componentName: string = 'PropertiesComponent';
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Properties', link: '' },
-  ];
-
+  breadcrumbData: BreadCrumb[] = [];
   currentRole: UserRole = 'owner';
   propertyView: 'my-properties' | 'all-properties' = 'all-properties';
   selected: string = 'Falcom city';
-
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
-
   showDetailView: boolean = false;
-
+  rentalStatus: any = [];
   propertiesList: any[] = [];
+  propertyDetails: Record<string, any> = {};
+  selectedrentalstatus: any = null;
   propertiesFilter: Record<string, any> = {};
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
-  onPropertySearch$ = new Subject<string>();
-  private destroy$ = new Subject<void>();
+  currentLanguage = 'en';
+  currentPropertyId!: number;
+  propertyDocumentType: any[] = [];
+  propertyDocuments: Record<string, any[]> = {};
+  activeDocTypeKey!: string;
+
+  private onPropertySearch$ = new Subject<string>();
 
   constructor(private router: Router, private themeService: ThemeService) {
-    this.onPropertySearch$
-      .pipe(debounceTime(1500), takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value?.trim()) this.propertiesFilter['search'] = value.trim();
-        else delete this.propertiesFilter['search'];
-
-        this.getProperties();
-      });
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.currentPropertyId = +id;
+      this.propertiesFilter['property_id'] = +id;
+      this.showDetailView = true;
+    }
   }
 
   ngOnInit() {
-    this.themeService.currentRole$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((role) => {
-        this.currentRole = role;
+    this.loadBreadcrumb();
+    this.sharedService.initLanguage();
 
-        if (this.currentRole === 'tenant') {
-          this.propertyView = 'my-properties';
-        } else {
-          this.propertyView = 'all-properties';
-          this.getProperties();
-        }
+    this.initLanguageListener();
+    this.initPropertySearchListener();
+    this.getProperties();
+    this.currentRole = this.themeService.getRole();
+    if (this.currentRole === 'tenant' && !this.currentPropertyId) {
+      this.propertyView = 'my-properties';
+      this.propertiesFilter['MY_PROPERTY'] = true;
+    }
+    this.getOptionTypes();
+  }
+
+  changeLanguage(lang: string) {
+    this.sharedService.setLanguage(lang);
+  }
+
+  getOptionTypes() {
+    if (this.showDetailView || this.propertyView === 'my-properties') {
+      this.sharedApiService.getOptionsType([
+        {
+          param: 'PROPERTY_DOCUMENT_CHOICE',
+          key: 'Property_Document',
+          setter: (v) => {
+            (this.propertyDocumentType = v), this.getProperties();
+          },
+        },
+      ]);
+    }
+  }
+
+  getTenancyStatusOptions() {
+    this.sharedApiService.getOptionsType([
+      {
+        param: 'TENANCY_STATUS',
+        key: 'tenancy_status',
+        setter: (v) => (this.rentalStatus = v),
+      },
+    ]);
+  }
+
+  onRentalTenancyClick() {
+    this.getTenancyStatusOptions();
+  }
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
       });
+  }
+
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '' },
+      ]);
+    }
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   onPropertyViewChange() {
     if (this.propertyView === 'all-properties') {
-      this.getProperties();
+      delete this.propertiesFilter['property_id'];
+      delete this.propertiesFilter['MY_PROPERTY'];
     } else if (this.propertyView === 'my-properties') {
+      delete this.propertiesFilter['property_id'];
+      this.propertiesFilter['MY_PROPERTY'] = true;
     }
+    this.getOptionTypes();
+    this.getProperties();
   }
 
   private getProperties() {
@@ -137,17 +247,39 @@ export class PropertiesComponent {
 
     this.propertyService
       .getProperties(this.propertiesFilter)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: any) => {
-          this.propertiesList = response?.content ?? [];
-          this.totalRecords = response?.pagination?.total_records ?? 0;
+          if (this.propertyView === 'my-properties' || this.showDetailView) {
+            this.propertyDetails = response?.content ?? {};
+            this.handlePropertyDetails();
+          } else {
+            this.propertiesList = response?.content ?? [];
+            this.totalRecords = response?.pagination?.total_records ?? 0;
+          }
         },
       });
   }
 
   onRefresh() {
     this.getProperties();
+  }
+
+  initPropertySearchListener() {
+    this.onPropertySearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        if (value?.trim()) this.propertiesFilter['search'] = value.trim();
+        else delete this.propertiesFilter['search'];
+
+        this.currentPage = 1;
+        this.getProperties();
+      });
+  }
+
+  searchTextChange(search: string): void {
+    console.log('SEARCH VALUE 👉', search);
+    this.onPropertySearch$.next(search);
   }
 
   onPageSizeChange(event: PageSizeChange): void {
@@ -163,73 +295,248 @@ export class PropertiesComponent {
     this.getProperties();
   }
 
-  property = {
-    name: 'Premium Villa',
-    location: 'Bengaluru, Koramangala',
-    status: 'Available',
-    rent: '₹ 45,000 / month',
-    bhk: '2 BHK',
-    sqft: '1200 Sqft',
+  getAgreementExpirationStatusColor(status: string): string {
+    if (!status) return '';
+
+    let colorMapimg: any = {
+      Expired: 'red',
+      'About to Expire': 'orange',
+      Ongoing: 'green',
+    };
+
+    return colorMapimg[status];
+  }
+
+  removeFilter() {
+    this.selectedrentalstatus = null;
+    delete this.propertiesFilter['tenancy_status'];
+
+    this.currentPage = 1;
+    this.getProperties();
+  }
+
+  property: PropertyDetails = {
+    name: '--',
+    location: '--',
+    status: '--',
+    rent: '--',
+    bhk: '--',
+    sqft: '--',
     propertyImages: [
       {
-        imgSrc: 'assets/property/property-img-1.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
       {
-        imgSrc: 'assets/property/property-img-2.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
       {
-        imgSrc: 'assets/property/property-img-3.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
       {
-        imgSrc: 'assets/property/property-img-4.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
       {
-        imgSrc: 'assets/property/property-img-5.png',
+        imgSrc: 'assets/property/property-img-default.svg',
       },
     ],
     sections: [
       {
         title: 'Property details',
         items: [
-          { label: 'Phone Number', value: '+91-7007836367' },
-          { label: 'Property Code', value: 'owner@villa.com' },
-          { label: 'City', value: 'Bengaluru' },
+          { label: 'Phone Number', value: '--' },
+          { label: 'Property Code', value: '--' },
+          { label: 'City', value: '--' },
           { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '5621009' },
-          { label: 'Address Line 1', value: 'Koramangala' },
-          { label: 'Address Line 2 ', value: 'Bellandur' },
+          { label: 'Postal Code', value: '--' },
+          { label: 'Address Line 1', value: '--' },
+          { label: 'Address Line 2 ', value: '--' },
         ],
       },
       {
         title: 'Property Costing',
-        items: [{ label: 'Rent Cost', value: 'AED31,224' }],
+        items: [{ label: 'Rent Cost', value: '--' }],
       },
       {
         title: 'Tenant details',
         items: [
-          { label: 'Name', value: 'Richard' },
-          { label: 'Email', value: 'Richard@gmail.com' },
-          { label: 'Phone Number', value: '+97-7007836367' },
-          { label: 'Emirates ID', value: 'Afc25' },
-          { label: 'City', value: 'Bengaluru' },
+          { label: 'Name', value: '--' },
+          { label: 'Email', value: '--' },
+          { label: 'Phone Number', value: '--' },
+          { label: 'Emirates ID', value: '--' },
+          { label: 'City', value: '--' },
           { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '5621009' },
-          { label: 'Address Line 1', value: 'Koramangala' },
-          { label: 'Address Line 2', value: 'Bellandur' },
+          { label: 'Postal Code', value: '--' },
+          { label: 'Address Line 1', value: '--' },
+          { label: 'Address Line 2', value: '--' },
         ],
       },
       {
         title: 'Owner details',
         items: [
-          { label: 'Name', value: 'Ali Musfiq Rahman' },
-          { label: 'Emirates ID', value: '784198657395715' },
-          { label: 'Residence Visa', value: '20120247736538' },
-          { label: 'Trade License', value: '247334' },
-          { label: 'Owner Code', value: '5621009' },
+          { label: 'Name', value: '--' },
+          { label: 'Emirates ID', value: '--' },
+          { label: 'Residence Visa', value: '--' },
+          { label: 'Trade License', value: '--' },
+          { label: 'Owner Code', value: '--' },
         ],
       },
     ],
   };
+
+  getBasicDetailsOfProperty(data: Record<string, any>) {
+    return {
+      name: `${data?.['property_unit']?.['property_unit_name']}, ${data?.['parent_property']?.['property_name']}`,
+      location: `${data?.['parent_property']?.['state']?.['value']}, ${data?.['parent_property']?.['city']?.['value']}`,
+      status: data?.['property_unit']?.['status'] || 'N/A',
+      rent: data?.['property_unit']?.['commercial_details']?.['rent'] ?? 'N/A',
+      bhk: data?.['property_unit']?.['dimension'] || 'N/A',
+      sqft: data?.['property_unit']?.['area_of_property'] ?? 'N/A',
+    };
+  }
+
+  getPropertyImages(data: Record<string, any>): PropertyImages[] {
+    const images = data?.['images'].map((img: any) => ({ imgSrc: img.url }));
+
+    return images.length
+      ? images
+      : Array.from({ length: 5 }).map((_, i) => ({
+          imgSrc: 'assets/property/property-img-default.svg',
+        }));
+  }
+
+  getOtherDetailsOfProperty(data: Record<string, any>): Section[] {
+    return [
+      {
+        title: 'Property details',
+        items: [
+          {
+            label: 'Phone Number',
+            value: data?.['owner']?.['contact_number'] || 'N/A',
+          },
+          {
+            label: 'Property Code',
+            value: data?.['property_unit']?.['property_code'] || 'N/A',
+          },
+          {
+            label: 'City',
+            value: data?.['parent_property']?.['city']?.['value'] || 'N/A',
+          },
+          {
+            label: 'Locality',
+            value: data?.['parent_property']?.['locality'] || 'N/A',
+          },
+          {
+            label: 'Postal Code',
+            value: data?.['parent_property']?.['postal_code'] || 'N/A',
+          },
+          {
+            label: 'Address Line 1',
+            value: data?.['property_unit']?.['address'] || 'N/A',
+          },
+          {
+            label: 'Address Line 2 ',
+            value: data?.['parent_property']?.['additional_address'] || 'N/A',
+          },
+        ],
+      },
+      {
+        title: 'Property Costing',
+        items: [
+          {
+            label: 'Rent Cost',
+            value:
+              data?.['property_unit']?.['commercial_details']?.['rent'] ??
+              'N/A',
+          },
+        ],
+      },
+      {
+        title: 'Tenant details',
+        items: [
+          {
+            label: 'Name',
+            value: `${data?.['tenant']?.['first_name']} ${data?.['tenant']?.['last_name']}`,
+          },
+          { label: 'Email', value: data?.['tenant']?.['email'] || 'N/A' },
+          {
+            label: 'Phone Number',
+            value: data?.['tenant']?.['contact_number'] || 'N/A',
+          },
+          {
+            label: 'Emirates ID',
+            value: data?.['tenant']?.['emirate_id'] || 'N/A',
+          },
+          {
+            label: 'City',
+            value: data?.['tenant']?.['city']?.['value'] || 'N/A',
+          },
+          { label: 'Locality', value: data?.['tenant']?.['locality'] || 'N/A' },
+          {
+            label: 'Postal Code',
+            value: data?.['tenant']?.['postal_code'] || 'N/A',
+          },
+          {
+            label: 'Address Line 1',
+            value: data?.['tenant']?.['address'] || 'N/A',
+          },
+          {
+            label: 'Address Line 2',
+            value: data?.['tenant']?.['additional_address'] || 'N/A',
+          },
+        ],
+      },
+      {
+        title: 'Owner details',
+        items: [
+          {
+            label: 'Name',
+            value: `${data?.['owner']?.['first_name']} ${data?.['owner']?.['last_name']}`,
+          },
+          {
+            label: 'Emirates ID',
+            value: data?.['postal_code']?.['emirate_id'] || 'N/A',
+          },
+          {
+            label: 'Residence Visa',
+            value: data?.['postal_code']?.['uae_residence_visa'] || 'N/A',
+          },
+          {
+            label: 'Trade License',
+            value: data?.['postal_code']?.['trade_license'] || 'N/A',
+          },
+          {
+            label: 'Owner Code',
+            value: data?.['postal_code']?.['owner_code'] || 'N/A',
+          },
+        ],
+      },
+    ];
+  }
+
+  handlePropertyDetails() {
+    let basicDetails = this.getBasicDetailsOfProperty(this.propertyDetails);
+    let propertyImages = this.getPropertyImages(this.propertyDetails);
+    let sections = this.getOtherDetailsOfProperty(this.propertyDetails);
+    this.property = { ...basicDetails, propertyImages, sections };
+
+    this.propertyDocumentType.forEach(
+      (type: any) => (this.propertyDocuments[type.key] = [])
+    );
+
+    this.activeDocTypeKey = this.propertyDocumentType[0]?.key;
+
+    this.propertyDetails?.['documents'].map((doc: any) => {
+      if (this.propertyDocuments[doc.type]) {
+        this.propertyDocuments[doc.type].push(doc);
+      } else {
+        // this.propertyDocuments[doc.type] = [doc];
+      }
+    });
+  }
+
+  onDocTabClick(type: any) {
+    this.activeDocTypeKey = type.key;
+  }
 
   onOptionSelected(option: string) {
     this.selected = option;
@@ -243,32 +550,49 @@ export class PropertiesComponent {
     console.log(`${action} action clicked`);
   }
 
-  handleFilterClick(): void {
-    console.log('Filter button clicked');
+  applyFilter() {
+    this.propertiesFilter['tenancy_status'] = this.selectedrentalstatus.key;
+    this.currentPage = 1;
+    this.getProperties();
   }
 
   handleExportClick(): void {
-    console.log('Export button clicked');
+    this.propertyService
+      .getExcelFileOfProperty({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp) => {
+        const url = window.URL.createObjectURL(resp);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'property_export.csv';
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+        this.alertService.success('File downloaded successfully!');
+      });
   }
 
-  handleEditClick(): void {
-    console.log('Edit button clicked');
+  handleEditClick(propertyId: number): void {
+    if (!propertyId) {
+      throw new Error('Property ID not found!');
+    }
+    this.router.navigate(['/dashboard/edit-property', propertyId]);
   }
 
   handleDeleteClick(): void {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(): void {
-    this.showDetailView = true;
-  }
-
   handleBackClick(): void {
     this.showDetailView = false;
+    this.router.navigate(['/dashboard/properties']);
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  handleViewClick(propertyId: number): void {
+    if (!propertyId) {
+      throw new Error('Property ID not found!');
+    }
+    this.router.navigate(['/dashboard/property/details/', propertyId]);
   }
 }

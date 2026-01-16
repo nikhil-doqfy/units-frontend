@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { PaymentsInfoCardComponent } from '../../component/payments-info-card/payments-info-card.component';
@@ -13,7 +13,9 @@ import { ExportIconComponent } from '../../component/icons/export-icon/export-ic
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-payments-and-invoice',
@@ -32,11 +34,15 @@ import { TranslateModule } from '@ngx-translate/core';
     TableActionButtonComponent,
     TablePaginationComponent,
     CustomSelectComponent,
+    NoDataComponent,
   ],
   templateUrl: './payments-and-invoice.component.html',
   styleUrl: './payments-and-invoice.component.css',
 })
 export class PaymentsAndInvoiceComponent {
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
   selected: string = 'Property Name: All';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
@@ -48,9 +54,15 @@ export class PaymentsAndInvoiceComponent {
   maintenanceCharges = 'AED12';
   dueTime = '5 Days';
   lastDate = '29/09/2025';
+  currentLanguage = 'en';
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
 
-  constructor(private router: Router) {}
-
+  ngOnInit() {
+    this.sharedService.initLanguage();
+  }
   onOptionSelected(option: string) {
     this.selected = option;
   }

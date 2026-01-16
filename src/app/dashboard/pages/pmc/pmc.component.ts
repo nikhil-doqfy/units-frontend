@@ -1,14 +1,19 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
@@ -29,7 +34,18 @@ import { FilterIconComponent } from '../../component/icons/filter-icon/filter-ic
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
+import { debounceTime, Subject } from 'rxjs';
+import { PmcService } from '../../services/pmc.service';
+import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-pmc',
@@ -45,7 +61,6 @@ import { TranslateModule } from '@ngx-translate/core';
     TableActionButtonComponent,
     TableActionDropdownComponent,
     TablePaginationComponent,
-    SendIconComponent,
     AssignPropertyFormComponent,
     TableViewCardComponent,
     WhiteCardComponent,
@@ -54,34 +69,181 @@ import { TranslateModule } from '@ngx-translate/core';
     SortingIconComponent,
     TableImgItemComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './pmc.component.html',
   styleUrl: './pmc.component.css',
 })
 export class PMCComponent {
-  breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'PMC', link: '' },
-  ];
+  private pmcService = inject(PmcService);
+  private sharedService = inject(SharedService);
+  private alertService = inject(AlertService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
+  breadcrumbData: BreadCrumb[] = [];
+  private translate = inject(TranslateService);
   private modalService = inject(NgbModal);
+  componentName = 'PMCComponent';
   closeResult: WritableSignal<string> = signal('');
-
+  pmcList: any[] = [];
   showDetailView: boolean = false;
-
+  currentLanguage = 'en';
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
 
-  constructor(private router: Router) {}
+  pmcFilter: Record<string, any> = {};
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  private onPMCSearch$ = new Subject<string>();
+  assignedProperties: any[] = [];
+  constructor(private destroyRef: DestroyRef) {
+    this.initPMCSearchListener();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.showDetailView = true;
+      this.loadDetailView(+id);
+      // this.pmcFilter['company_id'] = +id;
+      this.getPMC();
+    } else {
+      this.showDetailView = false;
+      this.getPMC();
+    }
+  }
+
+  ngOnInit() {
+    this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.PMC', link: '' },
+    ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
+
+  getPMC() {
+    this.pmcFilter = {
+      ...this.pmcFilter,
+
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
+    this.pmcService
+      .getPMC(this.pmcFilter)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        this.pmcList = resp?.content ?? [];
+        this.totalRecords = resp?.pagination?.total_records ?? 0;
+      });
+  }
+
+  onRefresh() {
+    this.getPMC();
+  }
+
+  initPMCSearchListener() {
+    this.onPMCSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText: string) => {
+        if (searchText?.trim()) this.pmcFilter['search'] = searchText.trim();
+        else delete this.pmcFilter['search'];
+
+        this.currentPage = 1;
+        this.getPMC();
+      });
+  }
+
+  searchTextChange(search: string): void {
+    this.onPMCSearch$.next(search);
+  }
+
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getPMC();
+  }
+
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getPMC();
+  }
 
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
 
   handleExportClick(): void {
-    console.log('Export button clicked');
+    this.pmcService
+      .getExcelFileOfPmc({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          console.log('response:--->', resp);
+
+          const url = window.URL.createObjectURL(resp);
+
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'pmc_export.csv';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+
+          this.alertService.success('File downloaded successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Download failed');
+        },
+      });
+  }
+
+  handleInternalTableExport(): void {
+    if (!this.showDetailView) return;
+
+    const payload = {
+      company_id: this.route.snapshot.paramMap.get('id'),
+    };
+
+    this.pmcService
+      .getExcelFileOfPmc(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `assigned_properties_export.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('Internal table exported successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
+        },
+      });
   }
 
   openAssignPropertyModal(assignPropertyContent: TemplateRef<any>) {
@@ -112,6 +274,33 @@ export class PMCComponent {
     }
   }
 
+  assignProperty(
+    modal: NgbActiveModal,
+    component: AssignPropertyFormComponent
+  ) {
+    const form = component.assignedPrpertyForm;
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    let values = form.value;
+
+    let data: any = {
+      property_id: values.myProperty.key,
+      pmc_id: values.pmc.key,
+    };
+
+    this.pmcService
+      .editPMC(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        this.alertService.success(resp.message);
+        modal.close('Save click');
+        this.getPMC();
+      });
+  }
+
   handleEditClick(): void {
     console.log('Edit button clicked');
   }
@@ -120,12 +309,16 @@ export class PMCComponent {
     console.log('Delete button clicked');
   }
 
-  handleViewClick(): void {
-    this.showDetailView = true;
+  handleViewClick(companyId: number): void {
+    if (!companyId && companyId !== 0) {
+      console.warn('Invalid companyId:', companyId);
+      return;
+    }
+    this.router.navigate(['/dashboard/pmc/detail/', companyId]);
   }
 
   handleBackClick(): void {
-    this.showDetailView = false;
+    this.router.navigate(['/dashboard/pmc']);
   }
 
   handleDownloadDocumentClick(): void {
@@ -134,5 +327,21 @@ export class PMCComponent {
 
   handlePreviewDocumentClick(): void {
     console.log('Preview Document button clicked');
+  }
+  loadDetailView(company_id: number): void {
+    this.pmcService
+      .getPMC({
+        company_id: company_id,
+        limit: this.rowsPerPage,
+        page: this.currentPage,
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.assignedProperties = resp?.content?.properties || [];
+          this.totalRecords = resp?.pagination?.total_records || 0;
+        },
+        error: (err) => console.error('Detail API Error:', err),
+      });
   }
 }

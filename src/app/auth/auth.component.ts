@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule } from '@angular/router';
@@ -9,6 +9,7 @@ import { AuthHeaderComponent } from './component/auth-header/auth-header.compone
 import { AuthFormCardComponent } from './component/auth-form-card/auth-form-card.component';
 import { AuthPattIconComponent } from './component/icons/auth-patt-icon/auth-patt-icon.component';
 import { AuthFooterComponent } from './component/auth-footer/auth-footer.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-auth',
@@ -26,28 +27,39 @@ import { AuthFooterComponent } from './component/auth-footer/auth-footer.compone
   styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   @Input() login: boolean | undefined;
   @Input() newUser: boolean | undefined;
   @Input() pageType: string | undefined;
 
   currentRole: UserRole = 'owner';
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private themeService: ThemeService) { }
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private themeService: ThemeService
+  ) {}
 
   ngOnInit(): void {
-    this.themeService.currentRole$.subscribe(role => {
-      this.currentRole = role;
-    });
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
 
     this.updatePageType();
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe(() => {
         this.updatePageType();
       });
   }
 
   private updatePageType(): void {
-    this.pageType = this.activatedRoute.snapshot.firstChild?.routeConfig?.path || '';
+    this.pageType =
+      this.activatedRoute.snapshot.firstChild?.routeConfig?.path || '';
   }
 }

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
 import { BadgeComponent } from '../../component/badge/badge.component';
@@ -10,7 +10,12 @@ import { TableFilterButtonComponent } from '../../../dashboard/component/table-f
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BreadCrumb } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-documentations',
@@ -26,20 +31,55 @@ import { TranslateModule } from '@ngx-translate/core';
     TableActionButtonComponent,
     TablePaginationComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './documentations.component.html',
   styleUrl: './documentations.component.css',
 })
 export class DocumentationsComponent {
+  private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
+  private sharedService = inject(SharedService);
+  private destroyRef = inject(DestroyRef);
+
+  currentLanguage = 'en';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Documentations', link: '' },
   ];
 
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.ROLES_PERMISSIONS', link: '' },
+    ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   selected: string = 'Falcom city';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
+  ngOnInit() {
+    this.loadBreadcrumb();
+    this.sharedService.initLanguage();
 
+    this.initLanguageListener();
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
   onOptionSelected(option: string) {
     this.selected = option;
   }
