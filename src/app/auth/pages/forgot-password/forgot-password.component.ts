@@ -58,6 +58,14 @@ export class ForgotPasswordComponent {
   private modalService = inject(NgbModal);
   private destroyRef = inject(DestroyRef);
 
+  isInvalid = this.formService.isInvalid;
+  closeResult = '';
+  otpSent = false;
+  otpTimer = 0;
+  emailLocked = false;
+  timerDisplay = '1:00';
+  timerInterval: any;
+  showResend = false;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -72,14 +80,12 @@ export class ForgotPasswordComponent {
         this.currentRole = role;
       });
   }
-  isInvalid = this.formService.isInvalid;
-  closeResult = '';
-  otpSent = false;
-  otpTimer = 0;
-  emailLocked = false;
-  timerDisplay = '1:00';
-  timerInterval: any;
-  showResend = false;
+
+  ngOnInit(): void {
+    this.forgetForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+  }
 
   onOtpChange(evt: any) {
     console.log(evt);
@@ -90,17 +96,10 @@ export class ForgotPasswordComponent {
     this.modalService.dismissAll();
     this.router.navigate(['auth/login']);
   }
-
   goToResetPassword(): void {
     this.modalService.dismissAll();
     this.router.navigate(['auth/reset-password'], {
       state: { email: this.forgetForm.get('email')?.value, otp: this.otp },
-    });
-  }
-
-  ngOnInit(): void {
-    this.forgetForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
     });
   }
   sendOtp(): void {
@@ -109,7 +108,6 @@ export class ForgotPasswordComponent {
       return;
     }
 
-    // let payload = { email: this.email };
     let payload = {
       email: this.forgetForm.value.email,
       purpose: 'reset_password',
@@ -151,7 +149,6 @@ export class ForgotPasswordComponent {
       }
     );
 
-    // Start OTP timer when modal opens
     this.startOtpTimer();
   }
 
@@ -189,7 +186,6 @@ export class ForgotPasswordComponent {
   }
 
   resendOtp(): void {
-    // You can call API here to resend OTP
     this.startOtpTimer();
   }
 

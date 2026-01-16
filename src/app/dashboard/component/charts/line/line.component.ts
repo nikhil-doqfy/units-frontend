@@ -104,16 +104,11 @@ export class LineChartComponent implements OnChanges {
   };
 
   ngOnChanges() {
-    //   if (Array.isArray(this.monthlyData)) {
-    //   }
     const data = this.monthlyData;
 
     if (data.length === 0) {
     }
 
-    //     if (monthlyData.length === 0) {
-    //   return;
-    // }
     const months = this.monthlyData.map((m) => m.monthName);
 
     const totalAmount = this.monthlyData.map((m) => m.totalAmount);

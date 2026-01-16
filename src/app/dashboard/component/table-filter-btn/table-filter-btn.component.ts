@@ -17,13 +17,6 @@ export class TableFilterButtonComponent {
 
   @Output() clicked = new EventEmitter<void>();
 
-  // get leftTitle(): string {
-  //   return this.title?.split('|')[0]?.trim() ?? '';
-  // }
-
-  // get rightTitle(): string {
-  //   return this.title?.split('|')[1]?.trim() ?? '';
-  // }
   onClick(): void {
     this.clicked.emit();
   }

@@ -24,12 +24,11 @@ export class StorageService {
   }
 
   updateUserName(firstName: string, lastName: string): void {
-    const user = this.getUserProfile(); // existing user get
+    const user = this.getUserProfile();
     if (user) {
       user.first_name = firstName;
       user.last_name = lastName;
 
-      // save updated user back
       localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     }
   }
@@ -67,14 +66,4 @@ export class StorageService {
   getLanguage(): string {
     return localStorage.getItem(this.LANGUAGE) ?? 'en';
   }
-
-  // getUser(): any {
-  //   const v = localStorage.getItem(USER_KEY);
-  //   return v ? JSON.parse(v) : null;
-  // }
-
-  // clear(): void {
-  //   localStorage.removeItem(TOKEN_KEY);
-  //   localStorage.removeItem(USER_KEY);
-  // }
 }

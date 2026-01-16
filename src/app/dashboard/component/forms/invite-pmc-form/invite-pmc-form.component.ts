@@ -41,8 +41,6 @@ export class InvitePMCFormComponent {
   }
 
   getOptionTypes(options: string[]) {
-    // if (this.propertyUnitLoaded) {
-
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))

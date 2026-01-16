@@ -278,7 +278,6 @@ export class PropertiesComponent {
   }
 
   searchTextChange(search: string): void {
-    console.log('SEARCH VALUE 👉', search);
     this.onPropertySearch$.next(search);
   }
 

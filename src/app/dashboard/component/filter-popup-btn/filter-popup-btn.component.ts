@@ -43,7 +43,7 @@ export class FilterPopupButtonComponent {
 
   closePopup(): void {
     this.isOpen = false;
-    this.popupClosed.emit(); // 🔥 reusable close
+    this.popupClosed.emit();
   }
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event) {

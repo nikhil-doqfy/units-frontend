@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './document-type-item.component.css',
 })
 export class DocumentTypeItemComponent {
-  [x: string]: any;
+  // [x: string]: any;
   @Input() title!: string;
   @Input() subtitle!: string;
   @Input() size!: string;
@@ -17,7 +17,6 @@ export class DocumentTypeItemComponent {
   @Output() clicked = new EventEmitter<void>();
 
   onClick(): void {
-    console.log('✅ Document clicked');
     this.clicked.emit();
   }
   get fileExtension(): string {

@@ -2,8 +2,8 @@
   <app-dash-form>
     <form>
       <app-white-card
-        title="{{ 'ACCOUNT_DETAILS' | translate }}"
-        description="{{ 'HYLA' | translate }}"
+        [title]="'ACCOUNT_DETAILS' | translate"
+        [description]="'HYLA' | translate"
         [showActions]="true"
       >
         <div class="myPrflFrm" [class.editMode]="editUserMode">
@@ -170,10 +170,7 @@
 </div>
 <app-dash-form>
   <form>
-    <app-white-card
-      title="{{ 'OTHER_DETAILS' | translate }}"
-      [showActions]="true"
-    >
+    <app-white-card [title]="'OTHER_DETAILS' | translate" [showActions]="true">
       <div class="myPrflFrm othrDtlFrm" [class.editMode]="editOtherDetailsMode">
         <div class="myPrflFrmGrpLst">
           <div class="myPrflFrmGrp" [class.changed]="changedFields.country">
@@ -290,18 +287,6 @@
               (input)="onFieldChange('locality')"
               [disabled]="!editOtherDetailsMode"
             />
-            <!-- <ng-template #editLocalityTpl>
-              <app-custom-select
-                [options]="localityList"
-                key="key"
-                value="value"
-                placeholder="Select Locality"
-                [selectedOption]="selectedLocality"
-                (optionSelected)="onLocalitySelected($event)"
-                (click)="handleLocalityClick()"
-              >
-              </app-custom-select>
-            </ng-template> -->
           </div>
 
           <div class="myPrflFrmGrp" [class.changed]="changedFields.postalCode">
