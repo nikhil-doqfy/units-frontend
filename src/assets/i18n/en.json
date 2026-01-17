@@ -317,7 +317,11 @@
   "LEASE_DETAILS": "Lease Details",
   "FILL_ALL_FIELDS_CREATE_LEASE": "Fill all the fields to add create your lease",
   "PROPERTY": "Property",
+  "NEW_LEAD": "New Lead",
+  "ALL": "All",
+  "WHATSAPP": "WhatsApp",
   "TENANT": "Tenant",
+  "CALL": "Call",
   "START_DATE": "Start Date",
   "END_DATE": "End Date",
   "GRACE_START_DATE": "Grace Start Date",
@@ -363,5 +367,12 @@
   "LICENSE_ISSUER": "License Issuer",
   "PASSPORT_NO_&_EXPIRY": "Passport No & Expiry",
   "EDIT_ROLE": "Edit Role",
-  "ASSIGN_ENGINEER": "Assign Engineer"
+  "ASSIGN_ENGINEER": "Assign Engineer",
+  "ALL_LEADS": "All leads",
+  "CALL_LISTS": "Call Lists",
+  "CREATE_LEAD": "Create Lead",
+  "ADD_LEAD": "Add Lead",
+  "UPLOAD_FILE": "Upload",
+  "UPDATE_LEAD": "Update Lead",
+  "EDIT_LEAD": "Edit Lead"
 }

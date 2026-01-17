@@ -1,0 +1,15 @@
+.platform-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .platform-logo {
+    width: 20px;
+    height: 20px;
+  }
+
+  .platform-text {
+    font-weight: 500;
+    font-size: 14px;
+  }
+}

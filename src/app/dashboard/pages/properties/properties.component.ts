@@ -45,6 +45,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { PropertyLeadsComponent } from '../../component/property-leads.component';
 
 type PropertyImages = Record<'imgSrc', string>;
 
@@ -100,6 +101,7 @@ interface PropertyDetails {
     NoDataComponent,
     RouterLink,
     FilterPopupButtonComponent,
+    PropertyLeadsComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',
@@ -112,7 +114,7 @@ export class PropertiesComponent {
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
-
+  activeTab: string = 'properties';
   componentName: string = 'PropertiesComponent';
   breadcrumbData: BreadCrumb[] = [];
   currentRole: UserRole = 'owner';

@@ -24,6 +24,7 @@ import { RentalComponent } from './pages/rental/rental.component';
 import { AddRentalaccountComponent } from './pages/add-rentalaccount/add-rentalaccount.component';
 import { ComplaintsComponent } from './pages/complaints/complaints.component';
 import { authGuard } from '../auth.guard';
+import { PropertyLeadsComponent } from './component/property-leads.component';
 export const routes: Routes = [
   {
     path: '',
@@ -46,6 +47,11 @@ export const routes: Routes = [
         path: 'properties',
         component: PropertiesComponent,
         data: { titleKey: 'PAGE_TITLE.PROPERTIES' },
+      },
+      {
+        path: 'property-leads',
+        component: PropertyLeadsComponent,
+        data: { titleKey: 'PAGE_TITLE.PROPERTY_LEADS' },
       },
       {
         path: 'add-property',

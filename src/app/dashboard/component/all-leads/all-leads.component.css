@@ -1,0 +1,46 @@
+.activityHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerLeft i {
+  font-size: 18px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scheduleBtn {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.activityBody {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.closeCircle {
+  width: 19px;
+  height: 19px;
+  border: 1px solid black;
+  border-radius: 50%;
+  /* background-color: white; light gray circle */
+  opacity: 1;
+  padding: 0;
+  background-size: 12px;
+  background-position: center;
+}

@@ -11,6 +11,7 @@ import { UploadFileModel } from '../../../shared/model/shared.model';
   styleUrl: './upload-document.component.css',
 })
 export class UploadDocumentComponent {
+  @Input() title = 'Drop your files here';
   @Input() isMultipleFiles = false;
   @Input() fileTypes: string[] = ['jpg', 'jpeg', 'png'];
   @Input() maxSize = 20;

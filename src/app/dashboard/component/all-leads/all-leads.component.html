@@ -1,0 +1,397 @@
+<ng-container *ngIf="!showDetailView">
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'ALL_LEADS' | translate"
+            subtitle="(240)"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+          <!-- [subtitle]="'(' + totalRecords + ')'" -->
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search
+              placeholder="{{ 'SEARCH_HERE' | translate }}"
+              (onValueChange)="searchTextChange($event)"
+            />
+            <app-filter-popup-btn #filterPopup>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+            </app-filter-popup-btn>
+
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cmmnTblBody">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Lead ID</th>
+              <th>Creation Date</th>
+              <th>Property Name</th>
+              <th>Unit</th>
+              <th>Rent (AED)</th>
+              <th>Tenant Name</th>
+              <th>Contact Number</th>
+              <th>Eamil</th>
+              <th>Status</th>
+              <th>Platform</th>
+              <th>Type of lead</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LP9021</td>
+              <td>1/2/2025 10:00</td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-1.png"
+                  title="Novatis AG"
+                />
+              </td>
+              <td>Evergreen (B) 204</td>
+              <td>1,800.00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/user/user-1.png"
+                    title="Jensi"
+                  />
+                </div>
+              </td>
+              <td>+91-70******23</td>
+              <td>jensi&#64;***kmail.com</td>
+              <td>
+                <app-badge title="Interested" status="green"> </app-badge>
+              </td>
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'company', companyName: 'OPTIEX' }"
+                ></app-platfrom-badge>
+                <app-platfrom-badge
+                  [platform]="{ type: 'referral' }"
+                ></app-platfrom-badge>
+              </td>
+              <td>Email</td>
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn
+                    type="edit"
+                    (clicked)="openEditLeadModal(editLeadContent)"
+                  ></app-table-action-btn>
+                  <app-table-action-btn
+                    type="file"
+                    (clicked)="openActivityHistroyModal(activityHistroyContent)"
+                  ></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>LP8021</td>
+              <td>3/7/2025 16:00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/property/property-list-2.png"
+                    title="Sliechi Tower"
+                  />
+                </div>
+              </td>
+              <td>Harmony (C) 302</td>
+              <td>1,450.00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/user/user-2.png"
+                    title="Richard"
+                  />
+                </div>
+              </td>
+              <td>+91-99******76</td>
+              <td>richard&#64;***kmail.com</td>
+              <td>
+                <app-badge title="Not Interested" status="red"> </app-badge>
+              </td>
+              <td></td>
+              <td>Whatsapp</td>
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="edit"></app-table-action-btn>
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>VC79021</td>
+              <td>4/12/2025 09:00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/property/property-list-2.png"
+                    title="Jainhalilla"
+                  />
+                </div>
+              </td>
+              <td>Sunrise (D) 101</td>
+              <td>1,350.00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/user/user-3.png"
+                    title="Thaomas"
+                  />
+                </div>
+              </td>
+              <td>+91-89******12</td>
+              <td>thomas&#64;***kmail.com</td>
+              <td>
+                <app-badge title="Lease/Tenancy" status="black"> </app-badge>
+              </td>
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'direct' }"
+                ></app-platfrom-badge>
+              </td>
+              <td>Call</td>
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="edit"></app-table-action-btn>
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>VC69021</td>
+              <td>5/17/2025 11:00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/property/property-list-2.png"
+                    title="Property C"
+                  />
+                </div>
+              </td>
+              <td>Majestic (E) 505</td>
+              <td>1,600.00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/user/user-4.png"
+                    title="Akshay"
+                  />
+                </div>
+              </td>
+              <td>+91-90******45</td>
+              <td>thomas&#64;***kmail.com</td>
+              <td>
+                <app-badge title="Lease/Tenancy" status="black"> </app-badge>
+              </td>
+              <td></td>
+              <td>Call</td>
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="edit"></app-table-action-btn>
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>VC59021</td>
+              <td>6/22/2025 13:00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/property/property-list-2.png"
+                    title="Rithi Tower B"
+                  />
+                </div>
+              </td>
+              <td>Pinnacle (F) 606</td>
+              <td>2,000.00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/user/user-5.png"
+                    title=" Avanshi"
+                  />
+                </div>
+              </td>
+              <td>+91-78******90</td>
+              <td>akshay&#64;***kmail.com</td>
+              <td>
+                <app-badge title="Interested" status="green"> </app-badge>
+              </td>
+              <td></td>
+              <td>Email</td>
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="edit"></app-table-action-btn>
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+</ng-container>
+
+<!----Edit lead form -->
+
+<ng-template #editLeadContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "EDIT_LEAD" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-edit-leads-form
+      #EditLeadFormComponent
+      [editData]="selectedLead"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="EditLeadFormComponent.submitForm()"
+    >
+      {{ "UPDATE_LEAD" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-----Activity Histroy From-->
+<!-- 
+<ng-template #activityHistroyContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "EDIT_LEAD" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-activity-history-form
+      #ActivityHistroyFormComponent
+      [editData]="selectedLead"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="ActivityHistroyFormComponent.submitForm()"
+    >
+      {{ "UPDATE_LEAD" | translate }}
+    </button>
+  </div>
+</ng-template> -->
+
+<ng-template #activityHistroyContent let-modal>
+  <div class="modal-header activityHeader">
+    <div class="headerLeft">
+      <app-activity-histroy-icons></app-activity-histroy-icons>
+      <h4 class="modal-title">Activity History</h4>
+    </div>
+
+    <div class="datePicker">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="YYYY-MM-DD"
+        ngbDatepicker
+        #dp="ngbDatepicker"
+        readonly
+      />
+
+      <button type="button" class="dateIconBtn" (click)="dp.toggle()">
+        <app-date-icon></app-date-icon>
+        Schedule Meeting
+      </button>
+    </div>
+    <div class="headerRight">
+      <!-- <button class="scheduleBtn"></button> -->
+
+      <button
+        type="button"
+        class="btn-close closeCircle"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+  </div>
+
+  <div class="modal-body activityBody">
+    <app-activity-history-form
+      [editData]="selectedLead"
+    ></app-activity-history-form>
+  </div>
+</ng-template>

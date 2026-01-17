@@ -1,0 +1,207 @@
+<form class="addLeadForm">
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <button
+        class="nav-link"
+        [class.active]="activeTab === 'manual'"
+        (click)="setTab('manual')"
+        type="button"
+      >
+        <!-- (click)="activeTab = 'manual'" -->
+
+        Manual
+      </button>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link"
+        [class.active]="activeTab === 'bulk'"
+        (click)="setTab('bulk')"
+        type="button"
+      >
+        <!-- (click)="activeTab = 'bulk'" -->
+
+        Bulk Import
+      </button>
+    </li>
+  </ul>
+
+  <div *ngIf="activeTab === 'manual'">
+    <!-- Manual form content -->
+
+    <div class="row g-3">
+      <!-- Link Property -->
+      <div class="col-md-6">
+        <label class="form-label required">Link Property</label>
+        <!-- <select class="form-select" formControlName="property">
+          <option value="">--Select--</option>
+        </select> -->
+
+        <app-custom-select></app-custom-select>
+      </div>
+
+      <!-- Tenant Name -->
+      <div class="col-md-6">
+        <label class="form-label required">Tenant Name</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="enter name here"
+          formControlName="tenantName"
+        />
+      </div>
+
+      <!-- Email -->
+      <div class="col-md-6">
+        <label class="form-label required">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          placeholder="enter email here"
+          formControlName="email"
+        />
+      </div>
+
+      <!-- Contact -->
+      <div class="col-md-6">
+        <label class="form-label required">Contact</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="enter number here"
+          formControlName="contact"
+        />
+      </div>
+
+      <!-- Amount -->
+      <div class="col-md-6">
+        <label class="form-label required"> Rental / Lease Amount (AED) </label>
+        <input
+          type="number"
+          class="form-control"
+          placeholder="enter amount here"
+          formControlName="amount"
+        />
+      </div>
+
+      <!-- Status -->
+      <div class="col-md-6">
+        <label class="form-label required">Status</label>
+        <!-- <select class="form-select" formControlName="status">
+          <option value="">--Select--</option>
+        </select> -->
+        <app-custom-select></app-custom-select>
+      </div>
+
+      <!-- Source of Lead -->
+      <div class="col-12">
+        <label class="form-label required">Source of Lead</label>
+        <div class="d-flex gap-4">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              value="direct"
+              formControlName="source"
+            />
+            <label class="form-check-label">Direct</label>
+          </div>
+
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              value="referral"
+              formControlName="source"
+            />
+            <label class="form-check-label">Referral</label>
+          </div>
+
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              value="platform"
+              formControlName="source"
+            />
+            <label class="form-check-label">Platform</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Referral Name -->
+      <div class="col-md-6">
+        <label class="form-label required">Referral Tenant ID/ Name</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="enter here"
+          formControlName="referralName"
+        />
+      </div>
+
+      <!-- Referral Contact -->
+      <div class="col-md-6">
+        <label class="form-label required">Referral Contact</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="enter number here"
+          formControlName="referralContact"
+        />
+      </div>
+
+      <!-- Checkbox -->
+      <div class="col-12">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            formControlName="sendAppLink"
+          />
+          <label class="form-check-label small">
+            A mobile app download link is sent to the tenant at the time of lead
+            creation to facilitate a smooth onboarding experience.
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="activeTab === 'bulk'" class="bulkImportWrapper">
+    <!-- Info Box -->
+    <div class="infoBox mb-3">
+      <ul class="mb-0">
+        <li>
+          Download the sample CSV, add your data, save the file, upload it here,
+          and click Import to store the contacts.
+        </li>
+        <li>
+          Ensure the Name and Email fields are correctly filled in the CSV to
+          avoid errors.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Download CSV -->
+    <div class="text-center mb-4">
+      <button class="downloadbtn btn-transparent" (click)="sampleCsvDownload()">
+        <img src="../../assets/XlsIcon.svg" alt="download" />
+        Download Sample CSV
+      </button>
+    </div>
+    <app-upload-document
+      title="Drop your files here"
+      [isMultipleFiles]="false"
+      [fileTypes]="['pdf']"
+      [maxSize]="20"
+      (uploadProgress)="onBulkUpload($event)"
+    ></app-upload-document>
+
+    <!-- Uploaded file preview -->
+    <div class="uploadedFile mt-3" *ngIf="uploadedFile">
+      <span>{{ uploadedFile.file.name }}</span>
+      <span class="successText">Uploaded</span>
+    </div>
+  </div>
+</form>

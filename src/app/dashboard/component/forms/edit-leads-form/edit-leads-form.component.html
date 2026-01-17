@@ -1,0 +1,83 @@
+<form class="leadForm">
+  <div class="row g-4">
+    <!-- Link Property -->
+    <div class="col-md-6 col-12">
+      <label class="form-label required">Link Property</label>
+      <app-custom-select
+        formControlName="property"
+        value="Silchi Tower"
+      ></app-custom-select>
+    </div>
+
+    <!-- Tenant Name -->
+    <div class="col-md-6 col-12">
+      <label class="form-label required">Tenant Name</label>
+      <input class="form-control" value="Jensi" formControlName="tenantName" />
+    </div>
+
+    <!-- Email -->
+    <div class="col-md-6 col-12">
+      <label class="form-label required">Email</label>
+      <input
+        class="form-control"
+        value="Jensi@gmail.com"
+        formControlName="email"
+      />
+    </div>
+
+    <!-- Contact -->
+    <div class="col-md-6 col-12">
+      <label class="form-label required">Contact</label>
+      <input
+        class="form-control"
+        value="+41-9383822829"
+        formControlName="contact"
+      />
+    </div>
+
+    <!-- Amount -->
+    <div class="col-md-6 col-12">
+      <label class="form-label required"> Rental / Lease Amount (AED) </label>
+      <input class="form-control" value="1,200.00" formControlName="amount" />
+    </div>
+
+    <!-- Status -->
+    <div class="col-md-6 col-12">
+      <label class="form-label required">Status</label>
+      <app-custom-select formControlName="status"></app-custom-select>
+    </div>
+
+    <!-- Comment -->
+    <div class="col-12">
+      <label class="form-label required">Comment</label>
+      <input class="form-control" value="Nill" formControlName="comment" />
+    </div>
+
+    <!-- Source -->
+    <div class="col-12">
+      <label class="form-label required">Source of Lead</label>
+
+      <div class="sourceWrap">
+        <label class="radioItem">
+          <input type="radio" value="email" formControlName="source" />
+          <span></span> Email
+        </label>
+
+        <label class="radioItem">
+          <input type="radio" value="call" formControlName="source" />
+          <span></span> Call
+        </label>
+
+        <label class="radioItem">
+          <input type="radio" value="whatsapp" formControlName="source" />
+          <span></span> Whatsapp
+        </label>
+      </div>
+    </div>
+
+    <!-- App link -->
+    <div class="col-12">
+      <a class="sendLink">Send App Link</a>
+    </div>
+  </div>
+</form>
