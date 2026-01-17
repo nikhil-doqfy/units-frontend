@@ -3,7 +3,7 @@
   <div class="table-header">
     <div class="left">
       <input type="checkbox" />
-      <span class="filter">All ▾</span>
+      <span class="filter">All <app-sorting-icon></app-sorting-icon></span>
     </div>
 
     <div class="right">
@@ -27,28 +27,37 @@
         <div class="icon user" *ngIf="!lead.isEmail">
           <i class="bi bi-person-fill"></i>
         </div>
-      </div>
 
-      <!-- Name + Message -->
-      <div class="col name">
-        <div class="title">{{ lead.name }}</div>
+        <!-- Name + Message -->
+        <div class="col name">
+          <div class="name-row">
+            <div class="title">{{ lead.name }}</div>
 
-        <div class="subtitle">
-          <span class="badge" *ngIf="lead.status" [ngClass]="lead.statusClass">
-            {{ lead.status }}
-          </span>
-          {{ lead.message }}
+            <div class="subtitle">
+              <span
+                class="badge"
+                *ngIf="lead.status"
+                [ngClass]="lead.statusClass"
+              >
+                {{ lead.status }}
+              </span>
+              {{ lead.message }}
+              <i class="bi bi-paperclip attach-icon" *ngIf="lead.isEmail"></i>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Owner -->
-      <div class="col owner">
-        <span class="owner-chip"> ✈ {{ lead.owner }} </span>
-      </div>
+        <!-- Owner -->
+        <div class="col owner">
+          <span class="owner-chip">
+            <i class="bi bi-send"></i> {{ lead.owner }}
+          </span>
+        </div>
 
-      <!-- Date -->
-      <div class="col date">
-        {{ lead.date }}
+        <!-- Date -->
+        <div class="col date">
+          {{ lead.date }}
+        </div>
       </div>
     </div>
   </div>

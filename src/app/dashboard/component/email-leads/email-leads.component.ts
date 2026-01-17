@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { SortingIconComponent } from '../icons/sorting-icon/sorting-icon.component';
 
 @Component({
   selector: 'app-email-leads',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SortingIconComponent],
   templateUrl: './email-leads.component.html',
   styleUrl: './email-leads.component.css',
 })
@@ -81,7 +82,7 @@ export class EmailLeadsComponent {
       message: 'Vayavya Labs Pvt <> Doqfy | E-Stamping | E-Signature ...',
       owner: 'Vinayak | 1000 Acc',
       date: 'Aug 28',
-      isEmail: false,
+      isEmail: true,
     },
     {
       name: 'Amarsinh Parmar',

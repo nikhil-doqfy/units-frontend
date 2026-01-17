@@ -316,45 +316,6 @@
   </div>
 </ng-template>
 
-<!-----Activity Histroy From-->
-<!-- 
-<ng-template #activityHistroyContent let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">
-      {{ "EDIT_LEAD" | translate }}
-    </h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
-  </div>
-  <div class="modal-body">
-    <app-activity-history-form
-      #ActivityHistroyFormComponent
-      [editData]="selectedLead"
-      (formSubmitted)="onUserSave($event, modal)"
-    />
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btnCommon btnTransparent"
-      (click)="modal.dismiss('Save click')"
-    >
-      {{ "CANCEL" | translate }}
-    </button>
-    <button
-      type="button"
-      class="btn btnCommon"
-      (click)="ActivityHistroyFormComponent.submitForm()"
-    >
-      {{ "UPDATE_LEAD" | translate }}
-    </button>
-  </div>
-</ng-template> -->
-
 <ng-template #activityHistroyContent let-modal>
   <div class="modal-header activityHeader">
     <div class="headerLeft">
@@ -362,30 +323,22 @@
       <h4 class="modal-title">Activity History</h4>
     </div>
 
-    <div class="datePicker">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="YYYY-MM-DD"
-        ngbDatepicker
-        #dp="ngbDatepicker"
-        readonly
-      />
-
-      <button type="button" class="dateIconBtn" (click)="dp.toggle()">
-        <app-date-icon></app-date-icon>
-        Schedule Meeting
-      </button>
-    </div>
-    <div class="headerRight">
+    <div class="headerRight justify-content-between">
       <!-- <button class="scheduleBtn"></button> -->
-
-      <button
-        type="button"
-        class="btn-close closeCircle"
-        aria-label="Close"
-        (click)="modal.dismiss()"
-      ></button>
+      <div class="justify-content-between">
+        <button type="button" class="scheduleBtn">
+          <app-date-icon></app-date-icon>
+          Schedule Meeting
+        </button>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="btn-close closeCircle"
+          aria-label="Close"
+          (click)="modal.dismiss()"
+        ></button>
+      </div>
     </div>
   </div>
 

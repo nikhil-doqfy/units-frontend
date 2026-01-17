@@ -23,10 +23,10 @@
             formControlName="property"
             (optionSelected)="onPropertySelect($event)"
           ></app-custom-select>
-          @if (isInvalid(propertyDetailForm, 'property').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailForm, "property").msg }}
-          </small>
+          @if (isInvalid(propertyDetailForm, "property").status) {
+            <small class="errorMsg">
+              {{ isInvalid(propertyDetailForm, "property").msg }}
+            </small>
           }
         </div>
 
@@ -39,10 +39,10 @@
             formControlName="unit"
             (optionSelected)="onUnitSelect($event)"
           ></app-custom-select>
-          @if (isInvalid(propertyDetailForm, 'unit').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailForm, "unit").msg }}
-          </small>
+          @if (isInvalid(propertyDetailForm, "unit").status) {
+            <small class="errorMsg">
+              {{ isInvalid(propertyDetailForm, "unit").msg }}
+            </small>
           }
         </div>
       </form>
@@ -290,7 +290,7 @@
                   ? selectedPropertyDetails?.company?.licence_number +
                     '/' +
                     (selectedPropertyDetails?.company?.licence_expiry_date
-                      | date : 'yyyy-MM-dd')
+                      | date: 'yyyy-MM-dd')
                   : ''
               "
             />
@@ -384,10 +384,10 @@
             formControlName="tenant"
             (optionSelected)="onTenantSelect($event)"
           ></app-custom-select>
-          @if (isInvalid(propertyDetailForm, 'tenant').status) {
-          <small class="errorMsg">
-            {{ isInvalid(propertyDetailForm, "tenant").msg }}
-          </small>
+          @if (isInvalid(propertyDetailForm, "tenant").status) {
+            <small class="errorMsg">
+              {{ isInvalid(propertyDetailForm, "tenant").msg }}
+            </small>
           }
         </div>
       </form>
@@ -460,7 +460,7 @@
                   ? selectedTenantDetails?.passport_number +
                     '/' +
                     (selectedTenantDetails?.passport_expiry_date
-                      | date : 'yyyy-MM-dd')
+                      | date: 'yyyy-MM-dd')
                   : ''
               "
             />
@@ -499,10 +499,10 @@
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(leaseDetailsForm, 'startDate').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "startDate").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "startDate").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "startDate").msg }}
+          </small>
         }
       </div>
       <div class="col-md-6">
@@ -519,10 +519,10 @@
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(leaseDetailsForm, 'endDate').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "endDate").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "endDate").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "endDate").msg }}
+          </small>
         }
       </div>
       <div class="col-md-6">
@@ -539,10 +539,10 @@
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(leaseDetailsForm, 'graceStartDate').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "graceStartDate").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "graceStartDate").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "graceStartDate").msg }}
+          </small>
         }
       </div>
       <div class="col-md-6">
@@ -559,10 +559,10 @@
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(leaseDetailsForm, 'graceEndDate').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "graceEndDate").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "graceEndDate").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "graceEndDate").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -573,10 +573,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="annualAmount"
         />
-        @if (isInvalid(leaseDetailsForm, 'annualAmount').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "annualAmount").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "annualAmount").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "annualAmount").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -589,10 +589,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="actualAnnualAmount"
         />
-        @if (isInvalid(leaseDetailsForm, 'actualAnnualAmount').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "actualAnnualAmount").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "actualAnnualAmount").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "actualAnnualAmount").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -603,10 +603,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="bookingAmount"
         />
-        @if (isInvalid(leaseDetailsForm, 'bookingAmount').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "bookingAmount").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "bookingAmount").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "bookingAmount").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -617,10 +617,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="maintenanceCharges"
         />
-        @if (isInvalid(leaseDetailsForm, 'maintenanceCharges').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "maintenanceCharges").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "maintenanceCharges").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "maintenanceCharges").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -631,10 +631,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="rent"
         />
-        @if (isInvalid(leaseDetailsForm, 'rent').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "rent").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "rent").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "rent").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -645,10 +645,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="securityDeposite"
         />
-        @if (isInvalid(leaseDetailsForm, 'securityDeposite').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "securityDeposite").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "securityDeposite").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "securityDeposite").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -659,10 +659,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="commission"
         />
-        @if (isInvalid(leaseDetailsForm, 'commission').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "commission").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "commission").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "commission").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -673,10 +673,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="noticePeriod"
         />
-        @if (isInvalid(leaseDetailsForm, 'noticePeriod').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "noticePeriod").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "noticePeriod").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "noticePeriod").msg }}
+          </small>
         }
       </div>
       <div class="col-md-3">
@@ -689,10 +689,10 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="discount"
         />
-        @if (isInvalid(leaseDetailsForm, 'discount').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "discount").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "discount").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "discount").msg }}
+          </small>
         }
       </div>
       <div class="col-md-12">
@@ -703,10 +703,10 @@
           [placeholder]="'WRITE_HERE' | translate"
           formControlName="remark"
         ></textarea>
-        @if (isInvalid(leaseDetailsForm, 'remark').status) {
-        <small class="errorMsg">
-          {{ isInvalid(leaseDetailsForm, "remark").msg }}
-        </small>
+        @if (isInvalid(leaseDetailsForm, "remark").status) {
+          <small class="errorMsg">
+            {{ isInvalid(leaseDetailsForm, "remark").msg }}
+          </small>
         }
       </div>
     </form>
@@ -846,10 +846,16 @@
   </app-step-pane> -->
 
   <!-- Step Payment Details Content -->
-   <app-step-pane [title]="'PAYMENT_DETAILS' | translate" [description]="'Fill info of payments' | translate"></app-step-pane>
+  <app-step-pane
+    [title]="'PAYMENT_DETAILS' | translate"
+    [description]="'Fill info of payments' | translate"
+  ></app-step-pane>
 
   <!-- Step Terms and Conditions Content -->
-  <app-step-pane [title]="'TERMS_&_CONDITIONS' | translate" [description]="'You can also add your conditions' | translate"></app-step-pane>
+  <app-step-pane
+    [title]="'TERMS_&_CONDITIONS' | translate"
+    [description]="'You can also add your conditions' | translate"
+  ></app-step-pane>
 
   <!-- Step Upload Ejari Content -->
   <app-step-pane
@@ -859,54 +865,54 @@
     <div class="commonTabs">
       <ul class="nav nav-tabs" id="documentsTab" role="tablist">
         @for (type of documetUploadTypes; track $index) {
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            [class.active]="type.typeKey === activeDocTab"
-            [id]="type.typeKey + '-tab'"
-            data-bs-toggle="tab"
-            [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
-            type="button"
-            role="tab"
-            [attr.aria-controls]="type.typeKey + '-tab-pane'"
-            [attr.aria-selected]="type.typeKey === activeDocTab"
-          >
-            {{ type.typeLabel }}
-          </button>
-        </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              [class.active]="type.typeKey === activeDocTab"
+              [id]="type.typeKey + '-tab'"
+              data-bs-toggle="tab"
+              [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
+              type="button"
+              role="tab"
+              [attr.aria-controls]="type.typeKey + '-tab-pane'"
+              [attr.aria-selected]="type.typeKey === activeDocTab"
+            >
+              {{ type.typeLabel }}
+            </button>
+          </li>
         }
       </ul>
     </div>
     <div class="commonTabsContent">
       <div class="tab-content" id="documentsTabContent">
         @for (type of documetUploadTypes; track $index) {
-        <div
-          [ngClass]="{
-            'tab-pane': true,
-            fade: true,
-            show: type.typeKey === activeDocTab,
-            active: type.typeKey === activeDocTab
-          }"
-          [id]="type.typeKey + '-tab-pane'"
-          role="tabpanel"
-          [attr.aria-labelledby]="type.typeKey + '-tab'"
-          [tabindex]="$index"
-        >
-          <app-upload-document
-            [isMultipleFiles]="true"
-            [fileTypes]="['jpg', 'jpeg', 'png']"
-            [maxSize]="20"
-            (uploadProgress)="onUpload(type.typeKey, $event)"
-          />
-
-          <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
-            <app-file-upload-item
-              *ngFor="let image of getItems(type.typeKey)"
-              [item]="image"
-              (remove)="remove(type.typeKey, image)"
+          <div
+            [ngClass]="{
+              'tab-pane': true,
+              fade: true,
+              show: type.typeKey === activeDocTab,
+              active: type.typeKey === activeDocTab,
+            }"
+            [id]="type.typeKey + '-tab-pane'"
+            role="tabpanel"
+            [attr.aria-labelledby]="type.typeKey + '-tab'"
+            [tabindex]="$index"
+          >
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload(type.typeKey, $event)"
             />
+
+            <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
+              <app-file-upload-item
+                *ngFor="let image of getItems(type.typeKey)"
+                [item]="image"
+                (remove)="remove(type.typeKey, image)"
+              />
+            </div>
           </div>
-        </div>
         }
       </div>
     </div>

@@ -25,6 +25,7 @@ import { PlatfromBadgeComponent } from '../platfrom-badge/platfrom-badge.compone
 import {
   ModalDismissReasons,
   NgbActiveModal,
+  NgbDatepicker,
   NgbDatepickerModule,
   NgbModal,
 } from '@ng-bootstrap/ng-bootstrap';
@@ -92,7 +93,7 @@ export class AllLeadsComponent {
 
   openEditLeadModal(
     editLeadContent: TemplateRef<any>,
-    editMode: boolean = false
+    editMode: boolean = false,
   ) {
     this.isEditMode = editMode;
     this.modalService
@@ -107,13 +108,13 @@ export class AllLeadsComponent {
         },
         (reason) => {
           this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
+        },
       );
   }
 
   openActivityHistroyModal(
     activityHistroyContent: TemplateRef<any>,
-    editMode: boolean = false
+    editMode: boolean = false,
   ) {
     this.isEditMode = editMode;
     this.modalService
@@ -128,7 +129,7 @@ export class AllLeadsComponent {
         },
         (reason) => {
           this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
+        },
       );
   }
   private getDismissReason(reason: any): string {
