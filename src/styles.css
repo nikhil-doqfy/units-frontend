@@ -1739,7 +1739,7 @@ linearGradient .authBgPatt stop:last-child {
 }
 
 .modal .btn-close {
-  position: absolute;
+  /* position: absolute; */
   font-size: 12px;
   right: 20px;
   top: 22px;
@@ -2170,4 +2170,22 @@ span.doc-var:not([data-filled])::after {
 
 .proegress-bar-graph .dashWhiteCol {
   height: 100%;
+}
+
+.modal.activity-history-modal .modal-dialog {
+  max-width: 789px;
+}
+.mdlCommon.activity-history-modal .modal-content {
+  width: 789px;
+
+  height: auto;
+  max-height: 353px;
+  border-radius: 12px;
+  padding: 5px;
+  gap: 0px;
+}
+
+.activityHistoryModal .modal-body {
+  padding-top: 0;
+  overflow-y: auto;
 }

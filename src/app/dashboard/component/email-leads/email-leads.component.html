@@ -33,7 +33,7 @@
           <div class="name-row">
             <div class="title">{{ lead.name }}</div>
 
-            <div class="subtitle">
+            <div class="col subtitle">
               <span
                 class="badge"
                 *ngIf="lead.status"
@@ -41,7 +41,23 @@
               >
                 {{ lead.status }}
               </span>
-              {{ lead.message }}
+              <span class="intent" *ngIf="lead.intent">{{ lead.intent }}</span>
+              <!-- <span
+                class="message"
+                [ngStyle]="{
+                  color: lead.message ? '#6b7280' : '#1f2937',
+                }"
+                >{{ lead.message || lead.company }}</span
+              > -->
+              <span class="company-text" *ngIf="lead.company">
+                {{ lead.company }}
+              </span>
+
+              <!-- Message -->
+              <span class="message-text" *ngIf="lead.message">
+                {{ lead.message }}
+              </span>
+
               <i class="bi bi-paperclip attach-icon" *ngIf="lead.isEmail"></i>
             </div>
           </div>

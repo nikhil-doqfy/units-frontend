@@ -1,0 +1,12 @@
+<div class="call-summary" *ngIf="summary || audioUrl">
+  <button (click)="togglePlay(audioRef)" class="play-btn">
+    <ng-container *ngIf="!isPlaying; else pauseIcon"> ▶ </ng-container>
+    <ng-template #pauseIcon> ⏸ </ng-template>
+  </button>
+
+  <audio #audioRef [src]="audioUrl"></audio>
+
+  <div class="summary-text">
+    {{ summary || "No summary available" }}
+  </div>
+</div>

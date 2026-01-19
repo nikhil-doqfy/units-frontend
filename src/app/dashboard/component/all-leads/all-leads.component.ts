@@ -33,6 +33,7 @@ import { EditLeadsFormComponent } from '../forms/edit-leads-form/edit-leads-form
 import { ActivityHistoryFormComponent } from '../forms/activity-history-form/activity-history-form.component';
 import { ActivityHistroyIconsComponent } from '../../../icons/activity-histroy-icons/activity-histroy-icons.component';
 import { DateIconComponent } from '../icons/date-icon/date-icon.component';
+import { CalenderIconComponent } from '../../../icons/calender-icon/calender-icon.component';
 
 @Component({
   selector: 'app-all-leads',
@@ -58,6 +59,7 @@ import { DateIconComponent } from '../icons/date-icon/date-icon.component';
     ActivityHistroyIconsComponent,
     DateIconComponent,
     NgbDatepickerModule,
+    CalenderIconComponent,
   ],
   templateUrl: './all-leads.component.html',
   styleUrl: './all-leads.component.css',
@@ -120,7 +122,7 @@ export class AllLeadsComponent {
     this.modalService
       .open(activityHistroyContent, {
         ariaLabelledBy: 'modal-title',
-        windowClass: 'mdlCommon',
+        windowClass: 'mdlCommon activity-history-modal',
         centered: true,
       })
       .result.then(

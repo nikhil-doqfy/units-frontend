@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './whatsapp-leads.component.html',
-  styleUrl: './whatsapp-leads.component.css'
+  styleUrl: './whatsapp-leads.component.css',
 })
-export class WhatsappLeadsComponent {
-
-}
+export class WhatsappLeadsComponent {}

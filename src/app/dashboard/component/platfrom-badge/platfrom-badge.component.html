@@ -1,9 +1,26 @@
-<div class="platform-badge">
-  <img
-    *ngIf="logo"
-    [src]="logo"
-    alt="{{ displayText }} logo"
-    class="platform-logo"
-  />
-  <span class="platform-text">{{ displayText }}</span>
+<div class="platform-wrapper">
+  <div class="platform-badge">
+    <!-- Image asel tar -->
+    <img *ngIf="logo" [src]="logo" [alt]="label" class="platform-logo" />
+
+    <!-- Image nasel tar -->
+    <span *ngIf="!logo" class="platform-text">
+      {{ label }}
+    </span>
+  </div>
+  <div class="platform-hover-card">
+    <div class="card-header">
+      <img src="assets/user/user-2.png" class="avatar" alt="user" />
+      <div>
+        <div class="name">Tenant / User Name</div>
+        <div class="id">ID: 252272</div>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <app-call-icons-new></app-call-icons-new>
+      <span class="number">+41-373937202</span>
+      <app-double-copy-icon></app-double-copy-icon>
+    </div>
+  </div>
 </div>

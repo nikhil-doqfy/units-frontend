@@ -42,6 +42,10 @@ import { StorageService } from '../../../shared/services/storage.service';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 import { FormGroup } from '@angular/forms';
+import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
+import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
+import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
+import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 
 @Component({
   selector: 'app-complaints',
@@ -64,6 +68,12 @@ import { FormGroup } from '@angular/forms';
     FilterPopupButtonComponent,
     UploadDocumentComponent,
     FileUploadItemComponent,
+    TableViewCardComponent,
+    WhiteCardComponent,
+    DisableIconComponent,
+    RefreshIconComponent,
+    ExportIconComponent,
+    SortingIconComponent,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',
@@ -83,7 +93,7 @@ export class ComplaintsComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   showDetailView: boolean = false;
-
+  showMenu = false;
   complaintsStatus: any = [];
   uploadedImages: any[] = [];
   complaints: any[] = [];
@@ -128,7 +138,7 @@ export class ComplaintsComponent {
   assignEnginnerForm!: FormGroup;
   constructor(
     private destroyRef: DestroyRef,
-    private storageService: StorageService
+    private storageService: StorageService,
   ) {}
 
   ngOnInit() {
@@ -202,11 +212,27 @@ export class ComplaintsComponent {
       error: (err) => console.error('Error fetching complaints:', err),
     });
   }
+  handleViewClick(item: any): void {
+    console.log('CLICKED 👉', item);
+    console.log('showDetailView 👉', this.showDetailView);
+
+    this.selectedProperty = item;
+    this.showDetailView = true;
+  }
+  handleBackClick(): void {
+    this.showDetailView = false;
+    this.selectedProperty = null;
+  }
   searchTextChange(search: string): void {
     this.searchTerm = search;
     this.onComplaintsSearch$.next(search);
   }
-
+  photos: string[] = [
+    '../assets/complaint/complaint-3.png',
+    '../assets/complaint/complaint-6.svg',
+    'assets/complaint/complaint-7.svg',
+    'assets/complaint/complaint-8.svg',
+  ];
   onUpload(event: any) {
     this.uploadedImages.push(event);
   }
@@ -214,7 +240,12 @@ export class ComplaintsComponent {
   removeImage(image: any) {
     this.uploadedImages = this.uploadedImages.filter((item) => item !== image);
   }
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
 
+  handleExportClick(): void {}
+  handleInternalTableExport(): void {}
   onHandleComplaintsStatusClick(): void {
     this.getOptionTypes(['COMPLAINT_STATUS']);
   }
@@ -270,4 +301,5 @@ export class ComplaintsComponent {
   closeComplaintModal() {
     this.showComplaintModal = false;
   }
+  selectedProperty: any = null;
 }

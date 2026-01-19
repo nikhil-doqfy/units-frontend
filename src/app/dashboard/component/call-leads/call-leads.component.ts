@@ -15,6 +15,7 @@ import { Subject } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { PlatfromBadgeComponent } from '../platfrom-badge/platfrom-badge.component';
+import { CallVoiceSummaryComponent } from '../call-voice-summary/call-voice-summary.component';
 
 @Component({
   selector: 'app-call-leads',
@@ -34,6 +35,7 @@ import { PlatfromBadgeComponent } from '../platfrom-badge/platfrom-badge.compone
     TranslateModule,
     CommonModule,
     PlatfromBadgeComponent,
+    CallVoiceSummaryComponent,
   ],
   templateUrl: './call-leads.component.html',
   styleUrl: './call-leads.component.css',
@@ -48,6 +50,7 @@ export class CallLeadsComponent {
   showDetailView: boolean = false;
 
   componentName = 'allLeadsComponent';
+  call: any;
   onRefresh() {}
   searchTextChange(search: string): void {
     this.onLeadsSearch$.next(search);

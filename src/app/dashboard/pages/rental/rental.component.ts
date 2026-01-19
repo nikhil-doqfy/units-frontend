@@ -52,11 +52,12 @@ export class RentalComponent {
   private sharedService = inject(SharedService);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
+  private rentalAccountService = inject(RentalAccountService);
 
   constructor(
     private router: Router,
     private destroyRef: DestroyRef,
-    private themeService: ThemeService
+    private themeService: ThemeService,
   ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -221,7 +222,6 @@ export class RentalComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-  private rentalAccountService = inject(RentalAccountService);
 
   leases: any[] = [];
 

@@ -82,10 +82,8 @@
               </td>
               <td>
                 <app-platfrom-badge
-                  [platform]="{ type: 'company', companyName: 'OPTIEX' }"
-                ></app-platfrom-badge>
-                <app-platfrom-badge
-                  [platform]="{ type: 'referral' }"
+                  [platform]="{ type: 'propertyFinder' }"
+                  logo="assets/platfrom/platfrom-1.png"
                 ></app-platfrom-badge>
               </td>
               <td>Email</td>
@@ -130,7 +128,12 @@
               <td>
                 <app-badge title="Not Interested" status="red"> </app-badge>
               </td>
-              <td></td>
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'bayut' }"
+                  logo="assets/platfrom/platfrom-2.png"
+                ></app-platfrom-badge>
+              </td>
               <td>Whatsapp</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
@@ -208,7 +211,11 @@
               <td>
                 <app-badge title="Lease/Tenancy" status="black"> </app-badge>
               </td>
-              <td></td>
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'referral' }"
+                ></app-platfrom-badge>
+              </td>
               <td>Call</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
@@ -245,7 +252,13 @@
               <td>
                 <app-badge title="Interested" status="green"> </app-badge>
               </td>
-              <td></td>
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'bayut' }"
+                  logo="assets/platfrom/platfrom-2.png"
+                ></app-platfrom-badge>
+              </td>
+
               <td>Email</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
@@ -327,7 +340,7 @@
       <!-- <button class="scheduleBtn"></button> -->
       <div class="justify-content-between">
         <button type="button" class="scheduleBtn">
-          <app-date-icon></app-date-icon>
+          <app-calender-icon></app-calender-icon>
           Schedule Meeting
         </button>
       </div>

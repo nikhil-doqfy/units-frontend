@@ -1,38 +1,36 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { CallIconsNewComponent } from '../../../icons/call-icons-new/call-icons-new.component';
+import { DoubleCopyIconComponent } from '../../../icons/double-copy-icon/double-copy-icon.component';
 
 export type PlatformType = 'direct' | 'referral' | 'company';
 export type CompanyName = 'OPTIEX' | 'DOQFY';
 @Component({
   selector: 'app-platfrom-badge',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CallIconsNewComponent, DoubleCopyIconComponent],
   templateUrl: './platfrom-badge.component.html',
   styleUrl: './platfrom-badge.component.css',
 })
 export class PlatfromBadgeComponent {
-  @Input() platform!: { type: PlatformType; companyName?: CompanyName };
+  // 👈 optional image input
+  @Input() logo?: string;
 
-  get displayText(): string {
-    if (this.platform.type === 'direct') return 'Direct';
-    if (this.platform.type === 'referral') return 'Referral';
-    if (this.platform.type === 'company' && this.platform.companyName)
-      return this.platform.companyName;
-    return 'Unknown';
-  }
+  // 👈 platform type (for label)
+  @Input() platform!: {
+    type: 'propertyFinder' | 'bayut' | 'direct' | 'referral';
+  };
 
-  get logo(): string {
+  get label(): string {
     switch (this.platform.type) {
+      case 'propertyFinder':
+        return 'Property Finder';
+      case 'bayut':
+        return 'Bayut';
       case 'direct':
-        return ''; // No logo for direct
+        return 'Direct';
       case 'referral':
-        return 'assets/icons/referral.svg'; // Example referral icon
-      case 'company':
-        if (this.platform.companyName === 'OPTIEX')
-          return 'assets/icons/optiex.svg';
-        if (this.platform.companyName === 'DOQFY')
-          return 'assets/icons/doqfy.svg';
-        return '';
+        return 'Referral';
       default:
         return '';
     }
