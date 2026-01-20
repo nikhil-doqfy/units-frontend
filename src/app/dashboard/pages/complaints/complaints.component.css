@@ -209,8 +209,7 @@ textarea {
   flex-direction: column;
   gap: 8px;
 }
-
-* Three dot */ .threeDotWrap {
+.threeDotWrap {
   position: relative;
 }
 

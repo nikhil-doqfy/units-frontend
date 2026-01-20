@@ -9,20 +9,18 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './call-voice-summary.component.css',
 })
 export class CallVoiceSummaryComponent {
-  @Input() audioUrl: string = ''; // default empty
-  @Input() summary: string = ''; // default empty
-
-  isPlaying: boolean = false;
-
-  togglePlay(audio: HTMLAudioElement) {
-    if (!audio) return;
-    if (audio.paused) {
-      audio.play();
-      this.isPlaying = true;
-      audio.onended = () => (this.isPlaying = false);
-    } else {
-      audio.pause();
-      this.isPlaying = false;
-    }
-  }
+  // @Input() audioUrl: string = ''; // default empty
+  // @Input() summary: string = ''; // default empty
+  // isPlaying: boolean = false;
+  // togglePlay(audio: HTMLAudioElement) {
+  //   if (!audio) return;
+  //   if (audio.paused) {
+  //     audio.play();
+  //     this.isPlaying = true;
+  //     audio.onended = () => (this.isPlaying = false);
+  //   } else {
+  //     audio.pause();
+  //     this.isPlaying = false;
+  //   }
+  // }
 }

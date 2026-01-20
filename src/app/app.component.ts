@@ -4,6 +4,7 @@ import { NgxSpinnerComponent } from 'ngx-spinner';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from './shared.service';
+import { InvoiceTemplateComponent } from './shared/invoice-template/invoice-template.component';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { SharedService } from './shared.service';
     NgxSpinnerComponent,
     HttpClientModule,
     TranslateModule,
+    InvoiceTemplateComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

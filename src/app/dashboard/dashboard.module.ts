@@ -25,6 +25,7 @@ import { AddRentalaccountComponent } from './pages/add-rentalaccount/add-rentala
 import { ComplaintsComponent } from './pages/complaints/complaints.component';
 import { authGuard } from '../auth.guard';
 import { PropertyLeadsComponent } from './component/property-leads.component';
+import { InvoiceTemplateComponent } from '../shared/invoice-template/invoice-template.component';
 export const routes: Routes = [
   {
     path: '',
@@ -112,6 +113,11 @@ export const routes: Routes = [
         path: 'add-rentalaccount',
         component: AddRentalaccountComponent,
         data: { titleKey: 'PAGE_TITLE.ADD' },
+      },
+      {
+        path: 'invoice-template',
+        component: InvoiceTemplateComponent,
+        data: { titlkey: 'PAGE_TITLE.INVOICE_TEMPLATE' },
       },
       {
         path: 'complaints',

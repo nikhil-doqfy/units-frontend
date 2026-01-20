@@ -267,7 +267,9 @@ export class RentalComponent {
   onMonthChange(month: string) {
     this.selectedMonth = month;
   }
-
+  handlePreviewClick() {
+    this.router.navigate(['/dashboard/invoice-template']);
+  }
   onOptionSelected(option: string) {
     this.selected = option;
   }

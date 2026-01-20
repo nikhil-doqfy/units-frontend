@@ -37,7 +37,7 @@
             'Agriculture',
             'Honda',
             'TVS',
-            'Samsung'
+            'Samsung',
           ]"
           [placeholder]="selected"
           [selectedOption]="selected"
@@ -80,7 +80,7 @@
                 'Agriculture',
                 'Honda',
                 'TVS',
-                'Samsung'
+                'Samsung',
               ]"
               [placeholder]="selected"
               [selectedOption]="selected"
@@ -96,7 +96,7 @@
                 'Agriculture',
                 'Honda',
                 'TVS',
-                'Samsung'
+                'Samsung',
               ]"
               [placeholder]="selected"
               [selectedOption]="selected"
@@ -112,7 +112,7 @@
                 'Agriculture',
                 'Honda',
                 'TVS',
-                'Samsung'
+                'Samsung',
               ]"
               [placeholder]="selected"
               [selectedOption]="selected"
@@ -157,12 +157,12 @@
 
           <div>
             <label>Period From</label>
-            <span>{{ l.period_from | date : "dd/MM/yyyy" }}</span>
+            <span>{{ l.period_from | date: "dd/MM/yyyy" }}</span>
           </div>
 
           <div>
             <label>Period To</label>
-            <span>{{ l.period_to | date : "dd/MM/yyyy" }}</span>
+            <span>{{ l.period_to | date: "dd/MM/yyyy" }}</span>
           </div>
 
           <div>
@@ -224,7 +224,7 @@
       { label: 'Year Rent', value: '67,000' },
       { label: 'Other Charges', value: '13,000' },
       { label: 'VAT', value: '--' },
-      { label: 'Total Rent', value: '1,00,000' }
+      { label: 'Total Rent', value: '1,00,000' },
     ]"
     [showEdit]="true"
     (edit)="handleEditClick()"
@@ -429,9 +429,10 @@
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
                   <!-- (clicked)="handleDownloadClick()" -->
-                  <app-table-action-btn type="preview" />
-
-                  <!-- (clicked)="handlePreviewClick()" -->
+                  <app-table-action-btn
+                    type="preview"
+                    (clicked)="handlePreviewClick()"
+                  />
                 </div>
               </td>
             </tr>
