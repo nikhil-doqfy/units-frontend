@@ -69,7 +69,6 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   filterText: string = '';
   displayOptions: any[] = [];
 
-  // CVA callbacks
   private onChange = (_: any) => {};
   private onTouched = () => {};
   isDisabled = false;
@@ -116,10 +115,6 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
       this.isDropdownOpen = false;
     }
   }
-
-  // -----------------------------
-  // CONTROL VALUE ACCESSOR METHODS
-  // -----------------------------
 
   writeValue(value: any): void {
     this.selectedOption = value;

@@ -58,7 +58,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
   @Output() finish = new EventEmitter<void>();
 
   stepGroups: StepGroup[] = [];
-  filteredSteps: StepPaneComponent[] = []; // For left side list only
+  filteredSteps: StepPaneComponent[] = [];
 
   currentStep: number = 0;
   private subs = new Subscription();
@@ -78,7 +78,6 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
     this.filteredSteps = this.stepGroups.map((g) => g.main);
 
-    // subscribe to engine state
     if (this.engine) {
       this.subs.add(
         this.engine.currentIndex.subscribe((i) => (this.currentStep = i))
@@ -110,15 +109,15 @@ export class StepFormLayoutComponent implements AfterContentInit {
         const currentStep = this.engine.getCurrentStep();
 
         if (result.local) {
-          if (currentStep) this.engine.setStepFormMode(currentStep.id, 'EDIT'); // set edit mode for local
+          if (currentStep) this.engine.setStepFormMode(currentStep.id, 'EDIT');
         }
 
         if (result?.content?.id) {
-          this.engine.setFormId(result?.content?.id); // set form id for next form or edit
+          this.engine.setFormId(result?.content?.id);
         }
 
         if (result?.status === 201) {
-          if (currentStep) this.engine.setStepFormMode(currentStep.id, 'EDIT'); // set edit mode afte post
+          if (currentStep) this.engine.setStepFormMode(currentStep.id, 'EDIT');
         }
         this.showAlert(result.message);
 

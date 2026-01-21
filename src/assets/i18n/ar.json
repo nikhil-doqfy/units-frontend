@@ -362,5 +362,6 @@
   "LICENSE_NO_&_EXPIRY": "رقم الترخيص وتاريخ انتهاء الصلاحية",
   "LICENSE_ISSUER": "مصدر الترخيص",
   "PASSPORT_NO_&_EXPIRY": "رقم جواز السفر وتاريخ انتهاء صلاحيته",
-  "EDIT_ROLE": "تحرير الدور"
+  "EDIT_ROLE": "تحرير الدور",
+  "ASSIGN_ENGINEER": "تعيين مهندس"
 }

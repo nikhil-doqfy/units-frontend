@@ -34,5 +34,4 @@ export class LanguageService {
     const dir = lang === 'ar' || lang === 'he' ? 'rtl' : 'ltr';
     document.documentElement.setAttribute('dir', dir);
   }
-  // constructor() { }
 }

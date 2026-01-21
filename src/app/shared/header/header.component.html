@@ -218,7 +218,6 @@
                     <li [ngbNavItem]="4">
                       <button ngbNavLink>Cleared</button>
                       <ng-template ngbNavContent>
-                        <!-- Show this only if there are no deleted notifications -->
                         <div
                           class="hdrNotiEmptyCol"
                           *ngIf="deletedNotifications.length === 0"

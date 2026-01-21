@@ -16,8 +16,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet, // Ensure RouterOutlet is imported
-    RouterModule, // Import RouterModule to use its directives
+    RouterOutlet,
+    RouterModule,
     AuthHeaderComponent,
     AuthFormCardComponent,
     AuthPattIconComponent,

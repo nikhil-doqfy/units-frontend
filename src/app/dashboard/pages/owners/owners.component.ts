@@ -173,7 +173,6 @@ export class OwnersComponent {
     inviteOwnerFormRef: InviteOwnerFormComponent,
     modal?: NgbActiveModal | any
   ) {
-    console.log('🔥 sendInvite FUNCTION CALLED');
     const form = inviteOwnerFormRef.pmcOwnerForm;
 
     if (form.invalid) {

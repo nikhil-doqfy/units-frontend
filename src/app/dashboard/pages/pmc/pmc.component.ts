@@ -107,7 +107,6 @@ export class PMCComponent {
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
-      // this.pmcFilter['company_id'] = +id;
       this.getPMC();
     } else {
       this.showDetailView = false;

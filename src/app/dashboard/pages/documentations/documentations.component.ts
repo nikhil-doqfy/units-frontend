@@ -41,7 +41,7 @@ export class DocumentationsComponent {
   private translate = inject(TranslateService);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
-
+  selected: string = 'Falcom city';
   currentLanguage = 'en';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
@@ -60,7 +60,6 @@ export class DocumentationsComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-  selected: string = 'Falcom city';
 
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];

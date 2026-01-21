@@ -8,23 +8,23 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dash-outer.component.html',
-  styleUrls: ['./dash-outer.component.css'] // ✅ Fixed: Use "styleUrls" instead of "styleUrl"
+  styleUrls: ['./dash-outer.component.css'],
 })
 export class DashOuterComponent implements OnInit, OnDestroy {
   openSidebarValue = true;
-  private subscriptions: Subscription = new Subscription(); // ✅ Track subscriptions
+  private subscriptions: Subscription = new Subscription();
 
-  constructor(private sharedService: SharedService) { }
+  constructor(private sharedService: SharedService) {}
 
   ngOnInit() {
     this.subscriptions.add(
-      this.sharedService.openSidebarValue$.subscribe(value => {
+      this.sharedService.openSidebarValue$.subscribe((value) => {
         this.openSidebarValue = value;
       })
     );
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe(); // ✅ Unsubscribe to avoid memory leaks
+    this.subscriptions.unsubscribe();
   }
 }

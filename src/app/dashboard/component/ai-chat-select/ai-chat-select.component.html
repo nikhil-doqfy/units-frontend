@@ -1,59 +1,88 @@
-<div class="aiChatSelect" [ngClass]="{'show': isDropdownOpen}" (click)="toggleDropdown()">
-    <div class="aiChatSelectInput">
-        <em><ng-content></ng-content></em>
-        <span *ngIf="!selectedOption" class="aiChatSelectPlaceholder" [innerHTML]="placeholder">{{ placeholder}}</span>
-        <span *ngIf="selectedOption">{{ selectedOption }}</span>
-        <i>
-            <app-arrow-down-icon></app-arrow-down-icon>
-        </i>
-    </div>
-    <ul *ngIf="isDropdownOpen" class="aiChatSelectDropdown">
-        <li *ngFor="let option of options" (click)="selectOption(option.value)"
-            [class.active]="option.value === selectedOption">
-            <div class="aiChatSelectTtl">
-                <span>
-                    <i class="default">
-                        <app-check-icon></app-check-icon>
-                    </i>
-                    <i class="active">
-                        <app-check-fill-icon></app-check-fill-icon>
-                    </i>
-                    <b>{{ option.label }}</b>
-                </span>
-                <!-- Conditionally show ChatPro icon -->
-                <em *ngIf="option.hasChatPro">
-                    <app-chat-pro-icon></app-chat-pro-icon>
-                </em>
+<div
+  class="aiChatSelect"
+  [ngClass]="{ show: isDropdownOpen }"
+  (click)="toggleDropdown()"
+>
+  <div class="aiChatSelectInput">
+    <em><ng-content></ng-content></em>
+    <span
+      *ngIf="!selectedOption"
+      class="aiChatSelectPlaceholder"
+      [innerHTML]="placeholder"
+      >{{ placeholder }}</span
+    >
+    <span *ngIf="selectedOption">{{ selectedOption }}</span>
+    <i>
+      <app-arrow-down-icon></app-arrow-down-icon>
+    </i>
+  </div>
+  <ul *ngIf="isDropdownOpen" class="aiChatSelectDropdown">
+    <li
+      *ngFor="let option of options"
+      (click)="selectOption(option.value)"
+      [class.active]="option.value === selectedOption"
+    >
+      <div class="aiChatSelectTtl">
+        <span>
+          <i class="default">
+            <!-- <app-check-icon></app-check-icon> -->
+          </i>
+          <i class="active">
+            <!-- <app-check-fill-icon></app-check-fill-icon> -->
+          </i>
+          <b>{{ option.label }}</b>
+        </span>
+        <!-- Conditionally show ChatPro icon -->
+        <em *ngIf="option.hasChatPro">
+          <!-- <app-chat-pro-icon></app-chat-pro-icon> -->
+        </em>
+      </div>
+      <div class="aiChatSelectInfo">
+        <div class="aiChatSelectInfoItem">
+          <div class="aiChatSelectInfoTtl">
+            <span>
+              <!-- <i><app-depth-icon></app-depth-icon></i> Depth -->
+            </span>
+            <span>{{ option.depth }}/5</span>
+          </div>
+          <div class="aiChatSelectInfoPrgrss">
+            <div
+              class="progress"
+              role="progressbar"
+              aria-label="Depth"
+              aria-valuemin="0"
+              aria-valuemax="5"
+            >
+              <div
+                class="progress-bar"
+                [style.width]="(option.depth / 5) * 100 + '%'"
+              ></div>
             </div>
-            <div class="aiChatSelectInfo">
-                <div class="aiChatSelectInfoItem">
-                    <div class="aiChatSelectInfoTtl">
-                        <span>
-                            <i><app-depth-icon></app-depth-icon></i> Depth
-                        </span>
-                        <span>{{ option.depth }}/5</span>
-                    </div>
-                    <div class="aiChatSelectInfoPrgrss">
-                        <div class="progress" role="progressbar" aria-label="Depth" aria-valuemin="0" aria-valuemax="5">
-                            <div class="progress-bar" [style.width]="(option.depth / 5 * 100) + '%'"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="aiChatSelectInfoItem">
-                    <div class="aiChatSelectInfoTtl">
-                        <span>
-                            <i><app-speed-icon></app-speed-icon></i> Speed
-                        </span>
-                        <span>{{ option.speed }}/5</span>
-                    </div>
-                    <div class="aiChatSelectInfoPrgrss">
-                        <div class="progress" role="progressbar" aria-label="Speed" aria-valuemin="0" aria-valuemax="5">
-                            <div class="progress-bar" [style.width]="(option.speed / 5 * 100) + '%'"></div>
-                        </div>
-                    </div>
-                </div>
+          </div>
+        </div>
+        <div class="aiChatSelectInfoItem">
+          <div class="aiChatSelectInfoTtl">
+            <span>
+              <!-- <i><app-speed-icon></app-speed-icon></i> Speed -->
+            </span>
+            <span>{{ option.speed }}/5</span>
+          </div>
+          <div class="aiChatSelectInfoPrgrss">
+            <div
+              class="progress"
+              role="progressbar"
+              aria-label="Speed"
+              aria-valuemin="0"
+              aria-valuemax="5"
+            >
+              <div
+                class="progress-bar"
+                [style.width]="(option.speed / 5) * 100 + '%'"
+              ></div>
             </div>
-        </li>
-
-    </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
 </div>
