@@ -1,115 +1,109 @@
-<div class="dashboardStatWrap">
-  <div class="dashboardStatCard">
-    <div class="statRow">
-      <div class="statItem total">
-        <h4>
-          {{ summary.total_complaints }}
-          <span class="badge green"> 12% <app-arrow></app-arrow> </span>
-          <small>last month</small>
-        </h4>
-        <h6>Total Complaints</h6>
-      </div>
-
-      <div class="statItem">
-        <h4>{{ summary.total_completed }}</h4>
-        <h6>Completed</h6>
-      </div>
-
-      <div class="statItem">
-        <h4>{{ summary.total_in_progress }}</h4>
-        <h6>In-Progress</h6>
-      </div>
-
-      <div class="statItem">
-        <h4>{{ summary.total_rejected }}</h4>
-        <h6>Rejected</h6>
-      </div>
-    </div>
-
-    <ng-container *ngIf="isOwnerOrPmc" card-actions>
-      <app-custom-select
-        [options]="[
-          'All',
-          'Dubai hiils golf club',
-          'Sillicon central mall',
-          'Falcon city of wonders',
-          'Majan'
-        ]"
-        [placeholder]="selected"
-        [selectedOption]="selected"
-        (optionSelected)="onOptionSelected($event)"
-        [isFilter]="true"
-      >
-      </app-custom-select>
-    </ng-container>
-    <ng-container *ngIf="isTenant" card-actions>
-      <button class="btn btnCommon btnPrimary" (click)="openComplaintModal()">
-        New Complaint
-      </button>
-    </ng-container>
-
-    <!-- MODAL -->
-    <div class="modalOverlay" *ngIf="showComplaintModal">
-      <div class="modalCard">
-        <!-- Header -->
-        <div class="modalHeader">
-          <h3>New Complaint <span>#LP2672</span></h3>
-          <button class="closeBtn" (click)="closeComplaintModal()">✕</button>
+<ng-container *ngIf="!showDetailView">
+  <div class="dashboardStatWrap">
+    <div class="dashboardStatCard">
+      <div class="statRow">
+        <div class="statItem total">
+          <h4>
+            {{ summary.total_complaints }}
+            <span class="badge green"> 12% <app-arrow></app-arrow> </span>
+            <small>last month</small>
+          </h4>
+          <h6>Total Complaints</h6>
         </div>
 
-        <!-- Body -->
-        <div class="modalBody">
-          <div class="row">
-            <div class="col">
-              <label>Complaint By</label>
-              <input type="text" placeholder="User Name" />
+        <div class="statItem">
+          <h4>{{ summary.total_completed }}</h4>
+          <h6>Completed</h6>
+        </div>
+
+        <div class="statItem">
+          <h4>{{ summary.total_in_progress }}</h4>
+          <h6>In-Progress</h6>
+        </div>
+
+        <div class="statItem">
+          <h4>{{ summary.total_rejected }}</h4>
+          <h6>Rejected</h6>
+        </div>
+      </div>
+
+      <ng-container *ngIf="isOwnerOrPmc" card-actions>
+        <app-custom-select
+          [options]="[
+            'All',
+            'Dubai hiils golf club',
+            'Sillicon central mall',
+            'Falcon city of wonders',
+            'Majan',
+          ]"
+          [placeholder]="selected"
+          [selectedOption]="selected"
+          (optionSelected)="onOptionSelected($event)"
+          [isFilter]="true"
+        >
+        </app-custom-select>
+      </ng-container>
+      <ng-container *ngIf="isTenant" card-actions>
+        <button class="btn btnCommon btnPrimary" (click)="openComplaintModal()">
+          New Complaint
+        </button>
+      </ng-container>
+
+      <!-- MODAL -->
+      <div class="modalOverlay" *ngIf="showComplaintModal">
+        <div class="modalCard">
+          <!-- Header -->
+          <div class="modalHeader">
+            <h3>New Complaint <span>#LP2672</span></h3>
+            <button class="closeBtn" (click)="closeComplaintModal()">✕</button>
+          </div>
+
+          <!-- Body -->
+          <div class="modalBody">
+            <div class="row">
+              <div class="col">
+                <label>Complaint By</label>
+                <input type="text" placeholder="User Name" />
+              </div>
+
+              <div class="col">
+                <label>Issue on</label>
+                <select>
+                  <option>--Select--</option>
+                </select>
+              </div>
             </div>
 
-            <div class="col">
-              <label>Issue on</label>
-              <select>
-                <option>--Select--</option>
-              </select>
+            <label>Description / Detail</label>
+            <textarea placeholder="Write here"></textarea>
+
+            <label>Upload Images</label>
+
+            <app-upload-document
+              [isMultipleFiles]="true"
+              [fileTypes]="['jpg', 'jpeg', 'png']"
+              [maxSize]="20"
+              (uploadProgress)="onUpload($event)"
+            ></app-upload-document>
+
+            <div class="uploads-list" *ngIf="uploadedImages.length">
+              <app-file-upload-item
+                *ngFor="let image of uploadedImages"
+                [item]="image"
+                (remove)="removeImage(image)"
+              ></app-file-upload-item>
             </div>
           </div>
 
-          <label>Description / Detail</label>
-          <textarea placeholder="Write here"></textarea>
-
-          <label>Upload Images</label>
-          <!-- <div class="uploadBox"> -->
-          <!-- <p>☁️</p>
-            <strong>Drop your files here</strong>
-            <span>or click to select file · PNG (max 20MB)</span> -->
-          <!-- <div class="uploadSection"> -->
-          <app-upload-document
-            [isMultipleFiles]="true"
-            [fileTypes]="['jpg', 'jpeg', 'png']"
-            [maxSize]="20"
-            (uploadProgress)="onUpload($event)"
-          ></app-upload-document>
-
-          <div class="uploads-list" *ngIf="uploadedImages.length">
-            <app-file-upload-item
-              *ngFor="let image of uploadedImages"
-              [item]="image"
-              (remove)="removeImage(image)"
-            ></app-file-upload-item>
+          <!-- Footer -->
+          <div class="modalFooter">
+            <button class="btnAdd">Add Complaint</button>
           </div>
-          <!-- </div> -->
-          <!-- </div> -->
-        </div>
-
-        <!-- Footer -->
-        <div class="modalFooter">
-          <button class="btnAdd">Add Complaint</button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<ng-container *ngIf="!showDetailView">
   <div class="cmmnTblOuter">
     <div class="cmmnTblHdr">
       <div class="row g-3 align-items-center">
@@ -195,59 +189,60 @@
           </thead>
 
           <tbody>
-            @for(item of complaints;track $index){
-            <tr>
-              <td>{{ $index + 1 }}</td>
-              <td>{{ item.complaint_id || "N/A" }}</td>
-              <td>
-                <app-table-img-item
-                  [img]="
-                    item?.raised_by_image ??
-                    '../../../../assets/userDefaultProImg.png'
-                  "
-                  [title]="item.property_unit_name || 'N/A'"
-                />
-              </td>
-              <td>
-                <app-table-img-item
-                  [img]="
-                    item?.raised_by_image ??
-                    '../../../../assets/userDefaultProImg.png'
-                  "
-                  [title]="item.raised_by_name || 'N/A'"
-                />
-              </td>
-              <td>{{ item.raised_date | date : "dd/mm/yyyy" : "-" }}</td>
-              <td>
-                {{ item.description || "N/A" }}
-              </td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="[item.property_image || 'N/A']"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge
-                  [title]="item?.status.value"
-                  status="green"
-                ></app-badge>
-              </td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn type="up-arrow" />
-                  <app-table-action-btn type="complete" />
+            @for (item of complaints; track $index) {
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ item.complaint_id || "N/A" }}</td>
+                <td>
+                  <app-table-img-item
+                    [img]="
+                      item?.raised_by_image ??
+                      '../../../../assets/userDefaultProImg.png'
+                    "
+                    [title]="item.property_unit_name || 'N/A'"
+                    [clickable]="true"
+                    (clicked)="handleViewClick(item)"
+                  />
+                </td>
+                <td>
+                  <app-table-img-item
+                    [img]="
+                      item?.raised_by_image ??
+                      '../../../../assets/userDefaultProImg.png'
+                    "
+                    [title]="item.raised_by_name || 'N/A'"
+                  />
+                </td>
+                <td>{{ item.raised_date | date: "dd/mm/yyyy" : "-" }}</td>
+                <td>
+                  {{ item.description || "N/A" }}
+                </td>
+                <td>
+                  <app-table-multi-img-item
+                    [images]="[item.property_image || 'N/A']"
+                    size="md"
+                  ></app-table-multi-img-item>
+                </td>
+                <td>
+                  <app-badge
+                    [title]="item?.status.value"
+                    status="green"
+                  ></app-badge>
+                </td>
+                <td align="center">
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-btn type="up-arrow" />
+                    <app-table-action-btn type="complete" />
 
-                  <app-table-action-btn type="preview" />
-                  <app-table-action-btn type="disable" />
-                </div>
-              </td>
-            </tr>
-
-            }@empty{
-            <tr>
-              <td colspan="20" align="center">No data found</td>
-            </tr>
+                    <app-table-action-btn type="preview" />
+                    <app-table-action-btn type="disable" />
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="20" align="center">No data found</td>
+              </tr>
             }
           </tbody>
         </table>
@@ -271,36 +266,315 @@
     </div>
   </div>
 </ng-container>
+<ng-container *ngIf="showDetailView">
+  <app-table-view-card
+    title=" Abhram | Khaleeja Building | 302 "
+    [imgSrc]="'assets/user/user-2.png'"
+    [items]="[
+      { label: 'Complaint ID', value: '#LP92201' },
+      { label: 'Raised Date', value: '12/02/2024' },
+      { label: 'Issue Closed On', value: '15/02/2024' },
+      { label: 'Locality', value: '--' },
+      { label: 'Status', value: 'Completed' },
+    ]"
+    (back)="handleBackClick()"
+  >
+    <div rental class="other-charges-box mt-3">
+      <p class="complaint-title">Description</p>
+      <p class="complaint-description">
+        Faulty faucet in Kitchen, dripping constantly and needs repair
+      </p>
+    </div>
+  </app-table-view-card>
 
-<!-------------------------------------------------  Assign Engineer modal From ----------------------------------------------->
-<!-- <ng-template #addRoleContent let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">
-      {{ "ASSIGN_ENGINEER" | translate }}
-    </h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
-  </div>
-  <div class="modal-body">
-    <app-add-assign-engineer-form [form]="assignEnginnerForm" />
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btnCommon btnTransparent"
-      (click)="modal.dismiss('Save click')"
-    >
-      {{ "CANCEL" | translate }}
-    </button>
-    <button type="button" class="btn btnCommon">
-       (click)="createRole()" 
-      (click)="modal.close('Save click')" 
+  <div class="mt-3">
+    <app-white-card title="Timeline">
+      <div class="timeline-duration">Duration: 3d, 6hr:30sec</div>
+      <div class="timeline-wrapper">
+        <!-- Duration badge -->
 
-      {{ "ASSIGN_ENGINEER" | translate }}
-    </button>
+        <!-- Line -->
+        <div class="timeline-line">
+          <!-- Step -->
+          <div class="timeline-step completed">
+            <span class="dot"></span>
+            <div class="content">
+              <h6>Issue raised</h6>
+              <p>13/02/2024 | 09:32pm</p>
+              <small>Abhram</small>
+            </div>
+          </div>
+
+          <div class="timeline-step completed">
+            <span class="dot"></span>
+            <div class="content">
+              <h6>Assigned Engineer</h6>
+              <p>13/02/2024 | 09:32pm</p>
+              <small>Mohammed Ibrahim</small>
+            </div>
+          </div>
+
+          <div class="timeline-step completed">
+            <span class="dot"></span>
+            <div class="content">
+              <h6>In Progress</h6>
+              <p>13/02/2024 | 09:32pm</p>
+            </div>
+          </div>
+
+          <div class="timeline-step completed">
+            <span class="dot"></span>
+            <div class="content">
+              <h6>Completed</h6>
+              <p>12/02/2024 | 09:32pm</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
   </div>
-</ng-template> -->
+
+  <div class="mt-3">
+    <app-white-card title="Photos">
+      <div class="photos-row">
+        <div class="photo-thumb" *ngFor="let img of photos">
+          <img [src]="img" alt="photo" />
+        </div>
+
+        <a class="view-all" href="javascript:void(0)">View all</a>
+      </div>
+    </app-white-card>
+  </div>
+  <div class="mt-3">
+    <app-white-card title="Activity Histroy">
+      <div class="activityWrapper">
+        <div class="year">2025</div>
+
+        <div class="weekLabel">This week</div>
+
+        <!-- Item 1 -->
+        <div class="activityItem">
+          <div class="icon orange">H</div>
+
+          <div class="content">
+            <div class="title"><strong>Hajji</strong> added notes</div>
+
+            <div class="noteCard">Note Name comes here</div>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="activityItem">
+          <div class="icon orange">H</div>
+          <div class="content simple">
+            <strong>Hajji</strong> added attributes
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="activityItem">
+          <div class="icon blue">P</div>
+          <div class="content simple">
+            <strong>Prnjitha</strong> account was created by
+            <strong>Hajji</strong>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+  <div class="cmmnTblOuter mt-3">
+    <div class="cmmnTblHdr">
+      <div class="row align-items-center">
+        <div class="col-md">
+          <app-table-title
+            title="Previous Complaints"
+            subtitle="(5)"
+          ></app-table-title>
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search placeholder="Search here..." />
+            <app-table-filter-btn
+              title="Filter"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
+              <app-filter-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              title="Export"
+              [hasIcon]="true"
+              (clicked)="handleInternalTableExport()"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cmmnTblBody">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>SI No</th>
+              <th>Complaint ID</th>
+              <th>Raised Date</th>
+              <th>Description</th>
+              <th>Photos</th>
+              <th>
+                Status<i><app-sorting-icon></app-sorting-icon></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>01</td>
+              <td>LP9021</td>
+              <td>12/02/2024</td>
+              <td>
+                Faulty faucet in kitchen, dripping constantly and needs repair
+              </td>
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    'assets/complaint/complaint-1.png',
+                    'assets/complaint/complaint-2.png',
+                    'assets/complaint/complaint-3.png',
+                    'assets/complaint/complaint-4.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge [title]="'Completed'" status="green"></app-badge>
+              </td>
+            </tr>
+
+            <tr>
+              <td>02</td>
+              <td>LP8021</td>
+              <td>01/01/2024</td>
+              <td>
+                Heating not working properly, thermostat issues, house is cold
+              </td>
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    'assets/complaint/complaint-3.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-4.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge [title]="'Completed'" status="green"></app-badge>
+              </td>
+            </tr>
+            <tr>
+              <td>03</td>
+              <td>VC79021</td>
+              <td>22/12/2023</td>
+              <td>
+                Leak in the bathroom, causing water damage to the ceiling below
+              </td>
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    'assets/complaint/complaint-1.png',
+                    'assets/complaint/complaint-2.png',
+                    'assets/complaint/complaint-3.png',
+                    'assets/complaint/complaint-4.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge [title]="'In Progress'" status="orange"></app-badge>
+              </td>
+            </tr>
+
+            <tr>
+              <td>04</td>
+              <td>VC69021</td>
+              <td>11/12/2023</td>
+              <td>
+                Broken window in bedroom, glass shattered, needs replacement
+              </td>
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    'assets/complaint/complaint-1.png',
+                    'assets/complaint/complaint-2.png',
+                    'assets/complaint/complaint-3.png',
+                    'assets/complaint/complaint-4.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge
+                  [title]="'Assigned to Engineer'"
+                  status="blue"
+                ></app-badge>
+              </td>
+            </tr>
+            <tr>
+              <td>05</td>
+              <td>VC59021</td>
+              <td>01/12/2023</td>
+              <td>Pest control needed, ants in kitchen, spiders in basement</td>
+              <td>
+                <app-table-multi-img-item
+                  [images]="[
+                    'assets/complaint/complaint-1.png',
+                    'assets/complaint/complaint-2.png',
+                    'assets/complaint/complaint-3.png',
+                    'assets/complaint/complaint-4.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-4.png',
+                    'assets/complaint/complaint-5.png',
+                    'assets/complaint/complaint-5.png',
+                  ]"
+                  size="md"
+                ></app-table-multi-img-item>
+              </td>
+              <td>
+                <app-badge [title]="'Rejected'" status="red"></app-badge>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+</ng-container>

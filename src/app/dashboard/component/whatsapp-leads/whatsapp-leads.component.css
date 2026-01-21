@@ -1,0 +1,321 @@
+* {
+  box-sizing: border-box;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+.page {
+  max-height: 100vh;
+}
+
+.header {
+  padding: 16px 32px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #25d366;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Download Card */
+.download-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.download-left {
+  display: flex;
+  gap: 16px;
+}
+
+.icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #e9f7ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.download-card h4 {
+  margin: 0;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+.download-card p {
+  margin: 4px 0 0;
+  font-size: 13px;
+}
+
+.download-btn {
+  background: #25d366;
+  border: 1px solid #000;
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: #000;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Login Card */
+.login-card {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  padding: 32px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.login-left {
+  max-width: 420px;
+}
+
+.login-left h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.steps {
+  padding-left: 20px;
+  margin: 16px 0;
+}
+
+.steps li {
+  margin-bottom: 12px;
+  color: #111b21;
+}
+
+.stay-logged {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+  font-size: 15px;
+  padding-top: 17px;
+}
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.phone-link {
+  color: #008069;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.phone-link:hover {
+  text-decoration: underline;
+}
+
+.login-right img {
+  width: 220px;
+  height: 220px;
+}
+
+/* WhatsApp-style steps */
+.wa-steps {
+  list-style: none;
+  padding-left: 0;
+  margin: 20px 0;
+  position: relative;
+}
+
+.wa-steps li {
+  position: relative;
+  padding-left: 48px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: #111b21;
+}
+
+/* Circle number */
+.wa-steps li::before {
+  content: counter(step);
+  counter-increment: step;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: #fff;
+}
+
+.wa-steps li::after {
+  content: "";
+  position: absolute;
+  left: 14px; /* circle center */
+  top: 28px; /* circle bottom */
+  width: 1px;
+  height: calc(100% + 10px);
+  background: #000;
+}
+
+.wa-steps li:last-child::after {
+  display: none;
+}
+
+.wa-steps {
+  counter-reset: step;
+}
+
+.login-card {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  padding: 32px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.login-left {
+  max-width: 420px;
+}
+
+.login-left h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.wa-steps {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  counter-reset: step;
+}
+
+.wa-steps li {
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: #111b21;
+}
+
+.wa-steps li::before {
+  content: counter(step);
+  counter-increment: step;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+
+.wa-steps li:last-child::after {
+  display: none;
+}
+
+.stay-logged input[type="checkbox"] {
+  accent-color: #25d366;
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+}
+
+.login-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.login-right img {
+  width: 220px;
+  height: 220px;
+}
+
+.phone-link {
+  color: #008069;
+  text-decoration: underline;
+  font-weight: 500;
+  text-align: center;
+}
+
+.wa-icon {
+  margin-left: 7px;
+}
+.setting-icon {
+  display: inline-block;
+  width: 25px;
+  border: 1px solid #9a9898;
+  border-radius: 7px;
+  height: 24px;
+  text-align: center;
+  margin-left: 7px;
+  background-color: #f1f2f4;
+}
+
+.menu-icon {
+  display: inline-block;
+  width: 20px;
+  border: 1px solid #9a9898;
+  border-radius: 7px;
+  height: 24px;
+  margin-left: 4px;
+  background-color: #f1f2f4;
+}
+
+.stay-logged input {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #25d366;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+.stay-logged input:checked {
+  background: #25d366;
+}
+
+.stay-logged input:checked::after {
+  content: "✓";
+  color: #fff;
+  font-size: 12px;
+  position: absolute;
+  left: 2px;
+  top: -1px;
+}

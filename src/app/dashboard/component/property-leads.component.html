@@ -1,0 +1,151 @@
+<div class="mb-3">
+  <app-white-card>
+    <div class="row align-items-center justify-content-between g-3">
+      <div class="col-md">
+        <div class="commonBoxTabs">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="allUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#allUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="allUsers-tab-pane"
+                aria-selected="true"
+                [class.active]="activeLeadTab === 'all'"
+                (click)="activeLeadTab = 'all'"
+              >
+                {{ "ALL" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="newUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#newUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="newUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeLeadTab === 'email'"
+                (click)="activeLeadTab = 'email'"
+              >
+                <app-email-icon class="me-1"></app-email-icon>
+                {{ "EMAIL" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="deletedUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#deletedUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="deletedUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeLeadTab === 'whatsapp'"
+                (click)="activeLeadTab = 'whatsapp'"
+              >
+                <app-whatsapp-icon class="me-1"></app-whatsapp-icon>
+
+                {{ "WHATSAPP" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="deletedUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#deletedUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="deletedUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeLeadTab === 'call'"
+                (click)="activeLeadTab = 'call'"
+              >
+                <app-call-icons-new class="me-1"></app-call-icons-new>
+
+                {{ "CALL" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-auto">
+        <button
+          type="button"
+          class="btn btnCommon"
+          (click)="openAddLeadModal(addLeadContent)"
+        >
+          <i><app-plus-icon /></i>{{ "NEW_LEAD" | translate }}
+        </button>
+      </div>
+    </div>
+  </app-white-card>
+</div>
+<!-- Dynamic content below tabs -->
+<div class="mt-3">
+  <ng-container [ngSwitch]="activeLeadTab">
+    <app-white-card>
+      <app-all-leads *ngSwitchCase="'all'"></app-all-leads>
+      <app-email-leads *ngSwitchCase="'email'"></app-email-leads>
+
+      <app-whatsapp-leads *ngSwitchCase="'whatsapp'"></app-whatsapp-leads>
+
+      <app-call-leads *ngSwitchCase="'call'"></app-call-leads>
+    </app-white-card>
+  </ng-container>
+</div>
+<!---Add lead modal-->
+<ng-template #addLeadContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "ADD_LEAD" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-add-new-leads
+      #AddLeadFormComponent
+      [editData]="selectedLead"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      *ngIf="AddLeadFormComponent.activeTab === 'manual'"
+      type="button"
+      class="btn btnCommon"
+      (click)="AddLeadFormComponent.submitForm()"
+    >
+      {{ "CREATE_LEAD" | translate }}
+    </button>
+
+    <button
+      *ngIf="AddLeadFormComponent.activeTab === 'bulk'"
+      type="button"
+      class="btn btnCommon"
+      (click)="AddLeadFormComponent.uploadBulkFile()"
+    >
+      {{ "UPLOAD_FILE" | translate }}
+    </button>
+  </div>
+</ng-template>

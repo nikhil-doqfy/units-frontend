@@ -1,0 +1,239 @@
+<ng-container *ngIf="!showDetailView">
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'CALL_LISTS' | translate"
+            subtitle="(240)"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+          <!-- [subtitle]="'(' + totalRecords + ')'" -->
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search
+              placeholder="{{ 'SEARCH_HERE' | translate }}"
+              (onValueChange)="searchTextChange($event)"
+            />
+
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cmmnTblBody">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Caller ID</th>
+              <th>Date</th>
+              <th>Property Name</th>
+              <th>Unit</th>
+              <th>Rent (AED)</th>
+              <th>Call Voice Note Summary</th>
+              <th>Caller Name</th>
+              <th>Platform</th>
+
+              <th>Contact Number</th>
+
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LP9021</td>
+              <td>1/2/2025 10:00</td>
+              <td>
+                <app-table-img-item
+                  img="../../../../assets/property/property-list-1.png"
+                  title="Novatis AG"
+                />
+              </td>
+              <td>Evergreen (B) 204</td>
+              <td>1,800.00</td>
+              <td></td>
+              <td>jensi</td>
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'propertyFinder' }"
+                  logo="assets/platfrom/platfrom-1.png"
+                ></app-platfrom-badge>
+              </td>
+              <td>+91-70******23</td>
+
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>LP8021</td>
+              <td>3/7/2025 16:00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/property/property-list-2.png"
+                    title="Sliechi Tower"
+                  />
+                </div>
+              </td>
+              <td>Harmony (C) 302</td>
+              <td>1,450.00</td>
+              <td>
+                <app-call-voice-summary
+                  audioUrl="
+                  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+                "
+                  summary="'This is a test call summary.'"
+                >
+                </app-call-voice-summary>
+              </td>
+
+              <td>Richard</td>
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'bayut' }"
+                  logo="assets/platfrom/platfrom-2.png"
+                ></app-platfrom-badge>
+              </td>
+              <td>+91-99******76</td>
+
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>VC79021</td>
+              <td>4/12/2025 09:00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/property/property-list-2.png"
+                    title="Jainhalilla"
+                  />
+                </div>
+              </td>
+              <td>Sunrise (D) 101</td>
+              <td>1,350.00</td>
+              <td>
+                <!-- <audio
+                  src="../assets/song/sample.mp3"
+                  controls
+                  preload="metadata"
+                ></audio> -->
+              </td>
+
+              <td>Thaomas</td>
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'direct' }"
+                ></app-platfrom-badge>
+              </td>
+              <td>+91-89******12</td>
+
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>VC69021</td>
+              <td>5/17/2025 11:00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/property/property-list-2.png"
+                    title="Property C"
+                  />
+                </div>
+              </td>
+              <td>Majestic (E) 505</td>
+              <td>1,600.00</td>
+              <td></td>
+              <td>Akshay</td>
+
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'referral' }"
+                ></app-platfrom-badge>
+              </td>
+              <td>+91-90******45</td>
+
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>VC59021</td>
+              <td>6/22/2025 13:00</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-table-img-item
+                    img="../../../../assets/property/property-list-2.png"
+                    title="Rithi Tower B"
+                  />
+                </div>
+              </td>
+              <td>Pinnacle (F) 606</td>
+              <td>2,000.00</td>
+              <td></td>
+              <td>Avanshi</td>
+
+              <td>
+                <app-platfrom-badge
+                  [platform]="{ type: 'bayut' }"
+                  logo="assets/platfrom/platfrom-2.png"
+                ></app-platfrom-badge>
+              </td>
+              <td>+91-78******90</td>
+
+              <td>
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="file"></app-table-action-btn>
+                  <app-table-action-btn type="sendLink"></app-table-action-btn>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+</ng-container>

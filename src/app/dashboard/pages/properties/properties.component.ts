@@ -1,7 +1,12 @@
 import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterModule,
+} from '@angular/router';
 import { ThemeService, UserRole } from '../../../theme.service';
 
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
@@ -40,6 +45,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { PropertyLeadsComponent } from '../../component/property-leads.component';
 
 type PropertyImages = Record<'imgSrc', string>;
 
@@ -68,6 +74,7 @@ interface PropertyDetails {
   selector: 'app-properties',
   standalone: true,
   imports: [
+    RouterModule,
     CommonModule,
     FormsModule,
     PlusIconComponent,
@@ -92,7 +99,9 @@ interface PropertyDetails {
     DashTitleComponent,
     TranslateModule,
     NoDataComponent,
+    RouterLink,
     FilterPopupButtonComponent,
+    PropertyLeadsComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',
@@ -105,7 +114,7 @@ export class PropertiesComponent {
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
-
+  activeTab: string = 'properties';
   componentName: string = 'PropertiesComponent';
   breadcrumbData: BreadCrumb[] = [];
   currentRole: UserRole = 'owner';

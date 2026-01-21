@@ -1,0 +1,80 @@
+<div class="leads-wrapper">
+  <!-- Header -->
+  <div class="table-header">
+    <div class="left">
+      <input type="checkbox" />
+      <span class="filter">All <app-sorting-icon></app-sorting-icon></span>
+    </div>
+
+    <div class="right">
+      <span>1 - 39 of 39 Thread</span>
+    </div>
+  </div>
+
+  <!-- Rows -->
+  <div class="leads-table">
+    <div class="lead-row" *ngFor="let lead of leads">
+      <!-- Checkbox -->
+      <div class="col checkbox">
+        <input type="checkbox" />
+      </div>
+
+      <!-- Icon -->
+      <div class="col avatar">
+        <div class="icon email" *ngIf="lead.isEmail">
+          <i class="bi bi-envelope-fill"></i>
+        </div>
+        <div class="icon user" *ngIf="!lead.isEmail">
+          <i class="bi bi-person-fill"></i>
+        </div>
+
+        <!-- Name + Message -->
+        <div class="col name">
+          <div class="name-row">
+            <div class="title">{{ lead.name }}</div>
+
+            <div class="col subtitle">
+              <span
+                class="badge"
+                *ngIf="lead.status"
+                [ngClass]="lead.statusClass"
+              >
+                {{ lead.status }}
+              </span>
+              <span class="intent" *ngIf="lead.intent">{{ lead.intent }}</span>
+              <!-- <span
+                class="message"
+                [ngStyle]="{
+                  color: lead.message ? '#6b7280' : '#1f2937',
+                }"
+                >{{ lead.message || lead.company }}</span
+              > -->
+              <span class="company-text" *ngIf="lead.company">
+                {{ lead.company }}
+              </span>
+
+              <!-- Message -->
+              <span class="message-text" *ngIf="lead.message">
+                {{ lead.message }}
+              </span>
+
+              <i class="bi bi-paperclip attach-icon" *ngIf="lead.isEmail"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Owner -->
+        <div class="col owner">
+          <span class="owner-chip">
+            <i class="bi bi-send"></i> {{ lead.owner }}
+          </span>
+        </div>
+
+        <!-- Date -->
+        <div class="col date">
+          {{ lead.date }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

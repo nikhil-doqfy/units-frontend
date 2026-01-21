@@ -1,0 +1,19 @@
+.call-voice-note-summary {
+  max-width: 300px;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.voice-player {
+  width: 100%;
+  max-width: 280px;
+}
+
+.summary-text {
+  display: inline-block;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

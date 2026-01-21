@@ -1,0 +1,75 @@
+<div class="page">
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <span class="wa-icon"><app-wahstapp-icon1></app-wahstapp-icon1></span>
+      <span><app-whatsapp-text></app-whatsapp-text> </span>
+    </div>
+  </header>
+
+  <!-- Main Card -->
+  <div class="container">
+    <!-- Download Banner -->
+    <div class="download-card">
+      <div class="download-left">
+        <div class="icon-box"><app-call-on-desktop> </app-call-on-desktop></div>
+        <div>
+          <p>Download WhatsApp for Windows</p>
+          <p>
+            Make calls, share your screen and get a faster experience when you
+            download the Windows app.
+          </p>
+        </div>
+      </div>
+      <button class="download-btn">
+        Download <app-whatsapp-download-icons></app-whatsapp-download-icons>
+      </button>
+    </div>
+
+    <div class="login-card">
+      <div class="login-left">
+        <h2>Steps to log in</h2>
+        <ol class="wa-steps">
+          <li>
+            Open <strong>WhatsApp</strong>
+            <span class="wa-icon"
+              ><app-whatsapp-icon2></app-whatsapp-icon2
+            ></span>
+            on your phone
+          </li>
+          <li>
+            On Android tap <strong>Menu</strong>
+            <span class="menu-icon"
+              ><app-three-dots-icons></app-three-dots-icons
+            ></span>
+            · On iPhone tap <strong>Settings</strong
+            ><span class="setting-icon"
+              ><app-setting-icon></app-setting-icon
+            ></span>
+          </li>
+          <li>
+            Tap <strong>Linked devices</strong>, then
+            <strong>Link device</strong>
+          </li>
+          <li>Scan the QR code to confirm</li>
+        </ol>
+
+        <label class="stay-logged">
+          <input type="checkbox" checked />
+          Stay logged in on this browser
+          <span class="checkmark"><app-unicode-icon></app-unicode-icon></span>
+        </label>
+      </div>
+
+      <div class="login-right">
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6zJp3nKufVsFVrDaB4I-e_cyidtqKMIGeCA&s"
+          alt="QR Code"
+        />
+        <a href="#" class="phone-link"
+          >Log in with phone number <app-angle-icon></app-angle-icon
+        ></a>
+      </div>
+    </div>
+  </div>
+</div>

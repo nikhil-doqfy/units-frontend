@@ -12,6 +12,8 @@ import { ApproveIconComponent } from '../../../icon/approve-icon/approve-icon.co
 import { ArrowUpRightComponent } from '../../../icon/arrow-up-right/arrow-up-right.component';
 import { RejectIconComponent } from '../icons/reject-icon/reject-icon.component';
 import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
+import { FileIconComponent } from '../../../icons/file-icon/file-icon.component';
+import { SendAppLinkIconComponent } from '../../../icons/send-app-link-icon/send-app-link-icon.component';
 
 @Component({
   selector: 'app-table-action-btn',
@@ -28,6 +30,8 @@ import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.co
     ArrowUpRightComponent,
     RejectIconComponent,
     DisableIconComponent,
+    FileIconComponent,
+    SendAppLinkIconComponent,
   ],
   templateUrl: './table-action-btn.component.html',
   styleUrls: ['./table-action-btn.component.css'],
@@ -43,6 +47,8 @@ export class TableActionButtonComponent {
     | 'complete'
     | 'disable'
     | 'renew'
+    | 'file'
+    | 'sendLink'
     | 'reject'
     | 'rejectOrange'
     | 'approve';
@@ -74,6 +80,10 @@ export class TableActionButtonComponent {
         return '';
       case 'approve':
         return '';
+      case 'file':
+        return 'File';
+      case 'sendLink':
+        return 'Send App Link';
       default:
         return '';
     }

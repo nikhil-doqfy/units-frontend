@@ -1,0 +1,70 @@
+.activityWrapper {
+  padding: 8px;
+  height: auto;
+  max-height: 253px;
+}
+
+.weekLabel {
+  display: inline-block;
+  background: #e5e6ec;
+  color: #908ea5;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.activityItem {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon.orange {
+  background: #f97316;
+}
+
+.icon.blue {
+  background: #2563eb;
+}
+
+.content {
+  flex: 1;
+}
+
+.content .title {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.noteCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  max-width: 372px;
+  height: 85px;
+  font-weight: 100;
+}
+a .simple {
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .noteCard {
+    max-width: 100%;
+  }
+}
