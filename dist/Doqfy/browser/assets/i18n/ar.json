@@ -153,6 +153,10 @@
   "AGREEMENT_NAME": "اسم الاتفاقية",
   "DOCUMENTS": "وثائق",
   "STAUES": "تماثيل",
+  "WHATSAPP": "واتساب",
+  "CALL": "يتصل",
+  "NEW_LEAD": "الرصاص الجديد",
+  "ALL": "الجميع",
   "RECENT_PAYMENTS/INVOICE": "المدفوعات / الفاتورة الأخيرة",
   "TRANSACTION_ID": "معرف المعاملة",
   "INVOICE_ID": "معرف الفاتورة",
@@ -336,7 +340,6 @@
   "SELECT": "يختار",
   "TEMPLATE": "نموذج",
   "OR": "أو",
-
   "CLICK_SELECT": "انقر لتحديد الملف",
   "UPLOAD": "رفع",
   "NEGOTIATION": "Negotiation",
@@ -362,5 +365,14 @@
   "PROPERTY_MANAGER": "مدير الممتلكات",
   "LICENSE_NO_&_EXPIRY": "رقم الترخيص وتاريخ انتهاء الصلاحية",
   "LICENSE_ISSUER": "مصدر الترخيص",
-  "PASSPORT_NO_&_EXPIRY": "رقم جواز السفر وتاريخ انتهاء صلاحيته"
+  "PASSPORT_NO_&_EXPIRY": "رقم جواز السفر وتاريخ انتهاء صلاحيته",
+  "EDIT_ROLE": "تحرير الدور",
+  "ASSIGN_ENGINEER": "تعيين مهندس",
+  "ALL_LEADS": "جميع الخيوط",
+  "CALL_LISTS": "قوائم المكالمات",
+  "CREATE_LEAD": "إنشاء الرصاص",
+  "ADD_LEAD": "أضف الرصاص",
+  "UPLOAD_FILE": "رفع",
+  "UPDATE_LEAD": "تحديث الرصاص",
+  "EDIT_LEAD": "تحرير الرصاص"
 }

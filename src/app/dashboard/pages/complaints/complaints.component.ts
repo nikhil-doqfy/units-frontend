@@ -1,10 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  ViewChild,
-  viewChild,
-} from '@angular/core';
+import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -138,7 +132,7 @@ export class ComplaintsComponent {
   assignEnginnerForm!: FormGroup;
   constructor(
     private destroyRef: DestroyRef,
-    private storageService: StorageService,
+    private storageService: StorageService
   ) {}
 
   ngOnInit() {
