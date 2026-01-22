@@ -455,85 +455,82 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="showDetailView">
-    <app-white-card>
-      <app-property-view-card
-        [propertyImages]="property.propertyImages"
-        [name]="property.name"
-        [location]="property.location"
-        [status]="property.status"
-        [price]="property.rent"
-        [bhk]="property.bhk"
-        [sqft]="property.sqft"
-        [sections]="property.sections"
-        [showBack]="true"
-        (back)="handleBackClick()"
-      >
-      </app-property-view-card>
-    </app-white-card>
-    <div class="mt-3">
-      <app-white-card title="All Documents">
-        <div class="commonTabs">
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            @for (type of propertyDocumentType; track type.key) {
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link"
-                  [class.active]="type.key === activeDocTypeKey"
-                  [id]="type.key + '-tab'"
-                  data-bs-toggle="tab"
-                  [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
-                  type="button"
-                  role="tab"
-                  [attr.aria-controls]="type.key + '-tab-pane'"
-                  [attr.aria-selected]="type.key === activeDocTypeKey"
-                  (click)="onDocTabClick(type)"
-                >
-                  {{ type.value }}
-                </button>
-              </li>
-            }
-          </ul>
-        </div>
-        <div class="commonTabsContent">
-          <div class="tab-content" id="myTabContent">
-            @for (
-              type of propertyDocumentType;
-              track type.key;
-              let i = $index
-            ) {
-              <div
-                [ngClass]="{
-                  'tab-pane': true,
-                  fade: true,
-                  show: type.key === activeDocTypeKey,
-                  active: type.key === activeDocTypeKey,
-                }"
-                [id]="type.key + '-tab-pane'"
-                role="tabpanel"
-                [attr.aria-labelledby]="type.key + '-tab'"
-                [tabindex]="i"
-              >
-                <div class="row g-2">
-                  @for (
-                    docsGroup of propertyDocuments[activeDocTypeKey];
-                    track docsGroup.id
-                  ) {
-                    <div class="col-auto">
-                      <app-document-type-item [title]="docsGroup.file_name" />
-                    </div>
-                  } @empty {
-                    <div class="col-auto m-auto">Documents not available!</div>
-                  }
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-      </app-white-card>
-    </div>
-  </ng-container>
   <ng-container *ngIf="activeTab === 'leads'">
     <app-property-leads></app-property-leads>
   </ng-container>
+</ng-container>
+
+<ng-container *ngIf="showDetailView">
+  <app-white-card>
+    <app-property-view-card
+      [propertyImages]="property.propertyImages"
+      [name]="property.name"
+      [location]="property.location"
+      [status]="property.status"
+      [price]="property.rent"
+      [bhk]="property.bhk"
+      [sqft]="property.sqft"
+      [sections]="property.sections"
+      [showBack]="true"
+      (back)="handleBackClick()"
+    >
+    </app-property-view-card>
+  </app-white-card>
+  <div class="mt-3">
+    <app-white-card title="All Documents">
+      <div class="commonTabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          @for (type of propertyDocumentType; track type.key) {
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                [class.active]="type.key === activeDocTypeKey"
+                [id]="type.key + '-tab'"
+                data-bs-toggle="tab"
+                [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
+                type="button"
+                role="tab"
+                [attr.aria-controls]="type.key + '-tab-pane'"
+                [attr.aria-selected]="type.key === activeDocTypeKey"
+                (click)="onDocTabClick(type)"
+              >
+                {{ type.value }}
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="commonTabsContent">
+        <div class="tab-content" id="myTabContent">
+          @for (type of propertyDocumentType; track type.key; let i = $index) {
+            <div
+              [ngClass]="{
+                'tab-pane': true,
+                fade: true,
+                show: type.key === activeDocTypeKey,
+                active: type.key === activeDocTypeKey,
+              }"
+              [id]="type.key + '-tab-pane'"
+              role="tabpanel"
+              [attr.aria-labelledby]="type.key + '-tab'"
+              [tabindex]="i"
+            >
+              <div class="row g-2">
+                @for (
+                  docsGroup of propertyDocuments[activeDocTypeKey];
+                  track docsGroup.id
+                ) {
+                  <div class="col-auto">
+                    <app-document-type-item [title]="docsGroup.file_name" />
+                  </div>
+                } @empty {
+                  <div class="col-auto m-auto">Documents not available!</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </app-white-card>
+  </div>
 </ng-container>
