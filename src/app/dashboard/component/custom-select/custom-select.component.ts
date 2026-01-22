@@ -26,6 +26,7 @@ import {
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AlertService } from '../../../shared/services/alert.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-custom-select',
@@ -35,6 +36,7 @@ import { AlertService } from '../../../shared/services/alert.service';
     ArrowDownIconComponent,
     ArrowUpIconComponent,
     FormsModule,
+    TranslateModule,
   ],
   templateUrl: './custom-select.component.html',
   styleUrls: ['./custom-select.component.css'],
@@ -55,7 +57,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   @Input() isSmall: boolean = false;
   @Input() isGrey: boolean = false;
   @Input() options: Record<string, any>[] | any = [];
-  @Input() placeholder: string = '--Select--';
+  @Input() placeholder: string = 'SELECT_OPTION';
   @Input() key: string = 'key';
   @Input() value: string = 'value';
   @Input() selectedOption: any | null = null;
@@ -143,7 +145,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
     if (this.showFilterInput || this.allowAddOption) {
       const search = value.toLowerCase();
       this.displayOptions = this.options.filter((opt: any) =>
-        String(opt[this.value]).toLowerCase().includes(search)
+        String(opt[this.value]).toLowerCase().includes(search),
       );
     }
   }
@@ -153,7 +155,8 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
     if (!text) return;
 
     const exists = this.options.some(
-      (opt: any) => String(opt[this.value]).toLowerCase() === text.toLowerCase()
+      (opt: any) =>
+        String(opt[this.value]).toLowerCase() === text.toLowerCase(),
     );
 
     if (exists) {

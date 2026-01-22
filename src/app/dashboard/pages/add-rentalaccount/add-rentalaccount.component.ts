@@ -52,7 +52,10 @@ export class AddRentalaccountComponent implements OnInit {
   private rentalAccountService = inject(RentalAccountService);
   private sharedApiService = inject(SharedApiService);
   isInvalid = this.formService.isInvalid;
-  constructor(private modalService: NgbModal, private router: Router) {}
+  constructor(
+    private modalService: NgbModal,
+    private router: Router,
+  ) {}
   showReason: boolean = false;
   isEditMode = false;
   showDetailView = false;
@@ -89,7 +92,7 @@ export class AddRentalaccountComponent implements OnInit {
       (value: boolean) => {
         this.showDetailView = value;
         console.log('showDetailView updated:', value);
-      }
+      },
     );
     this.loadRentalPayments();
   }

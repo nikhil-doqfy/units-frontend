@@ -271,11 +271,11 @@
     title=" Abhram | Khaleeja Building | 302 "
     [imgSrc]="'assets/user/user-2.png'"
     [items]="[
-      { label: '', value: '#LP92201' },
-      { label: 'Raised Date', value: '12/02/2024' },
-      { label: 'Issue Closed On', value: '15/02/2024' },
-      { label: 'Locality', value: '--' },
-      { label: 'Status', value: 'Completed' },
+      { label: getLabel('COMPLAINT_ID'), value: '#LP92201' },
+      { label: getLabel('RAISED_DATE'), value: '12/02/2024' },
+      { label: getLabel('ISSUE_CLOSED_ON'), value: '15/02/2024' },
+      { label: getLabel('LOCALITY'), value: '--' },
+      { label: getLabel('STATUS'), value: 'Completed' },
     ]"
     (back)="handleBackClick()"
   >
@@ -289,7 +289,9 @@
 
   <div class="mt-3">
     <app-white-card title="Timeline">
-      <div class="timeline-duration">Duration: 3d, 6hr:30sec</div>
+      <div class="timeline-duration">
+        {{ "DURATION" | translate }}: 3d, 6hr:30sec
+      </div>
       <div class="timeline-wrapper">
         <!-- Duration badge -->
 
@@ -299,7 +301,7 @@
           <div class="timeline-step completed">
             <span class="dot"></span>
             <div class="content">
-              <h6>Issue raised</h6>
+              <h6>{{ "ISSUE_RAISED" | translate }}</h6>
               <p>13/02/2024 | 09:32pm</p>
               <small>Abhram</small>
             </div>
@@ -308,7 +310,7 @@
           <div class="timeline-step completed">
             <span class="dot"></span>
             <div class="content">
-              <h6>Assigned Engineer</h6>
+              <h6>{{ "ASSIGNED_ENGINEER" | translate }}</h6>
               <p>13/02/2024 | 09:32pm</p>
               <small>Mohammed Ibrahim</small>
             </div>
@@ -317,7 +319,7 @@
           <div class="timeline-step completed">
             <span class="dot"></span>
             <div class="content">
-              <h6>In Progress</h6>
+              <h6>{{ "IN_PROGRESS" | translate }}</h6>
               <p>13/02/2024 | 09:32pm</p>
             </div>
           </div>
@@ -325,7 +327,7 @@
           <div class="timeline-step completed">
             <span class="dot"></span>
             <div class="content">
-              <h6>Completed</h6>
+              <h6>{{ "COMPLETED" | translate }}</h6>
               <p>12/02/2024 | 09:32pm</p>
             </div>
           </div>
@@ -335,18 +337,20 @@
   </div>
 
   <div class="mt-3">
-    <app-white-card title="Photos">
+    <app-white-card [title]="'PHOTOS' | translate">
       <div class="photos-row">
         <div class="photo-thumb" *ngFor="let img of photos">
           <img [src]="img" alt="photo" />
         </div>
 
-        <a class="view-all" href="javascript:void(0)">View all</a>
+        <a class="view-all" href="javascript:void(0)">{{
+          "VIEW_ALL" | translate
+        }}</a>
       </div>
     </app-white-card>
   </div>
   <div class="mt-3">
-    <app-white-card title="Activity Histroy">
+    <app-white-card [title]="'ACTIVITY_HISTORY' | translate">
       <div class="activityWrapper">
         <div class="year">2025</div>
 
@@ -417,13 +421,16 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>SI No</th>
-              <th>Complaint ID</th>
-              <th>Raised Date</th>
-              <th>Description</th>
-              <th>Photos</th>
+              <th>{{ "SI_NO" | translate }}</th>
+              <th>{{ "COMPLAINT_ID" | translate }}</th>
+              <th>{{ "RAISED_DATE" | translate }}</th>
               <th>
-                Status<i><app-sorting-icon></app-sorting-icon></i>
+                {{ "DESCRIPTION" | translate }}
+              </th>
+              <th>{{ "PHOTOS" | translate }}</th>
+              <th>
+                {{ "STATUS" | translate
+                }}<i><app-sorting-icon></app-sorting-icon></i>
               </th>
             </tr>
           </thead>

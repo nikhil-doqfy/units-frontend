@@ -142,7 +142,10 @@ export class PropertiesComponent {
 
   private onPropertySearch$ = new Subject<string>();
 
-  constructor(private router: Router, private themeService: ThemeService) {
+  constructor(
+    private router: Router,
+    private themeService: ThemeService,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
     const id = this.route.snapshot.paramMap.get('id');
@@ -179,7 +182,7 @@ export class PropertiesComponent {
           param: 'PROPERTY_DOCUMENT_CHOICE',
           key: 'Property_Document',
           setter: (v) => {
-            (this.propertyDocumentType = v), this.getProperties();
+            ((this.propertyDocumentType = v), this.getProperties());
           },
         },
       ]);
@@ -408,43 +411,43 @@ export class PropertiesComponent {
   getOtherDetailsOfProperty(data: Record<string, any>): Section[] {
     return [
       {
-        title: 'Property details',
+        title: 'PROPERTY_DETAILS',
         items: [
           {
-            label: 'Phone Number',
+            label: 'PHONE_NUMBER',
             value: data?.['owner']?.['contact_number'] || 'N/A',
           },
           {
-            label: 'Property Code',
+            label: 'PROPERTY_CODE',
             value: data?.['property_unit']?.['property_code'] || 'N/A',
           },
           {
-            label: 'City',
+            label: 'CITY',
             value: data?.['parent_property']?.['city']?.['value'] || 'N/A',
           },
           {
-            label: 'Locality',
+            label: 'LOCALITY',
             value: data?.['parent_property']?.['locality'] || 'N/A',
           },
           {
-            label: 'Postal Code',
+            label: 'POSTAL_CODE',
             value: data?.['parent_property']?.['postal_code'] || 'N/A',
           },
           {
-            label: 'Address Line 1',
+            label: 'ADDRESS_LINE_1',
             value: data?.['property_unit']?.['address'] || 'N/A',
           },
           {
-            label: 'Address Line 2 ',
+            label: 'ADDRESS_LINE_2',
             value: data?.['parent_property']?.['additional_address'] || 'N/A',
           },
         ],
       },
       {
-        title: 'Property Costing',
+        title: 'PROPERTY_COSTING',
         items: [
           {
-            label: 'Rent Cost',
+            label: 'RENT_COST',
             value:
               data?.['property_unit']?.['commercial_details']?.['rent'] ??
               'N/A',
@@ -452,61 +455,61 @@ export class PropertiesComponent {
         ],
       },
       {
-        title: 'Tenant details',
+        title: 'TENANT_DETAILS',
         items: [
           {
-            label: 'Name',
+            label: 'NAME',
             value: `${data?.['tenant']?.['first_name']} ${data?.['tenant']?.['last_name']}`,
           },
-          { label: 'Email', value: data?.['tenant']?.['email'] || 'N/A' },
+          { label: 'EMAIL', value: data?.['tenant']?.['email'] || 'N/A' },
           {
-            label: 'Phone Number',
+            label: 'PHONE_NUMBER',
             value: data?.['tenant']?.['contact_number'] || 'N/A',
           },
           {
-            label: 'Emirates ID',
+            label: 'EMIRATES_ID',
             value: data?.['tenant']?.['emirate_id'] || 'N/A',
           },
           {
-            label: 'City',
+            label: 'CITY',
             value: data?.['tenant']?.['city']?.['value'] || 'N/A',
           },
-          { label: 'Locality', value: data?.['tenant']?.['locality'] || 'N/A' },
+          { label: 'LOCALITY', value: data?.['tenant']?.['locality'] || 'N/A' },
           {
-            label: 'Postal Code',
+            label: 'POSTAL_CODE',
             value: data?.['tenant']?.['postal_code'] || 'N/A',
           },
           {
-            label: 'Address Line 1',
+            label: 'ADDRESS_LINE_1',
             value: data?.['tenant']?.['address'] || 'N/A',
           },
           {
-            label: 'Address Line 2',
+            label: 'ADDRESS_LINE_2',
             value: data?.['tenant']?.['additional_address'] || 'N/A',
           },
         ],
       },
       {
-        title: 'Owner details',
+        title: 'OWNER_DETAILS',
         items: [
           {
-            label: 'Name',
+            label: 'NAME',
             value: `${data?.['owner']?.['first_name']} ${data?.['owner']?.['last_name']}`,
           },
           {
-            label: 'Emirates ID',
+            label: 'EMIRATES_ID',
             value: data?.['postal_code']?.['emirate_id'] || 'N/A',
           },
           {
-            label: 'Residence Visa',
+            label: 'RESIDENCE_VISA',
             value: data?.['postal_code']?.['uae_residence_visa'] || 'N/A',
           },
           {
-            label: 'Trade License',
+            label: 'TRADE_LICENSE',
             value: data?.['postal_code']?.['trade_license'] || 'N/A',
           },
           {
-            label: 'Owner Code',
+            label: 'OWNER_CODE',
             value: data?.['postal_code']?.['owner_code'] || 'N/A',
           },
         ],
@@ -521,7 +524,7 @@ export class PropertiesComponent {
     this.property = { ...basicDetails, propertyImages, sections };
 
     this.propertyDocumentType.forEach(
-      (type: any) => (this.propertyDocuments[type.key] = [])
+      (type: any) => (this.propertyDocuments[type.key] = []),
     );
 
     this.activeDocTypeKey = this.propertyDocumentType[0]?.key;

@@ -3,11 +3,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CustomSelectComponent } from '../../custom-select/custom-select.component';
 import { UploadFileModel } from '../../../../shared/model/shared.model';
 import { UploadDocumentComponent } from '../../upload-document/upload-document.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-new-leads',
   standalone: true,
-  imports: [CommonModule, CustomSelectComponent, UploadDocumentComponent],
+  imports: [
+    CommonModule,
+    CustomSelectComponent,
+    UploadDocumentComponent,
+    TranslateModule,
+  ],
   templateUrl: './add-new-leads.component.html',
   styleUrl: './add-new-leads.component.css',
 })

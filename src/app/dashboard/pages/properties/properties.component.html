@@ -139,7 +139,7 @@
                             [options]="rentalStatus"
                             key="key"
                             value="value"
-                            placeholder="Select tenancy status"
+                            [placeholder]="'SELECT_TENANCY_STATUS' | translate"
                             (optionSelected)="selectedrentalstatus = $event"
                             (click)="onRentalTenancyClick()"
                           >
@@ -195,7 +195,10 @@
           >
           </app-property-view-card>
           <div class="mt-4">
-            <app-card-title [title]="'ALL_DOCUMENTS' | translate" />
+            <app-card-title
+              [title]="'ALL_DOCUMENTS' | translate"
+            ></app-card-title>
+
             <div class="commonTabs mt-2">
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 @for (type of propertyDocumentType; track type.key) {

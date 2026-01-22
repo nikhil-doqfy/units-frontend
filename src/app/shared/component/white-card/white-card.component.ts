@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-white-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './white-card.component.html',
-  styleUrl: './white-card.component.css'
+  styleUrl: './white-card.component.css',
 })
 export class WhiteCardComponent {
   @Input() size: 'sm' | 'md' | 'lg' = 'sm';

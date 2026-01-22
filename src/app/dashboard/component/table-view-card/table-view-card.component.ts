@@ -13,11 +13,17 @@ import { CommonModule } from '@angular/common';
 import { BackIconComponent } from '../icons/back-icon/back-icon.component';
 import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
 import { TableActionButtonComponent } from '../table-action-btn/table-action-btn.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-table-view-card',
   standalone: true,
-  imports: [CommonModule, BackIconComponent, EditIconComponent],
+  imports: [
+    CommonModule,
+    BackIconComponent,
+    EditIconComponent,
+    TranslateModule,
+  ],
   templateUrl: './table-view-card.component.html',
   styleUrls: ['./table-view-card.component.css'],
 })

@@ -71,7 +71,7 @@
                     }}</label>
                     <app-custom-select
                       [options]="userTypeList"
-                      placeholder="Select User Type"
+                      [placeholder]="'SELECT_USER_TYPE' | translate"
                       [selectedOption]="selectedUserType"
                       (optionSelected)="onOptionSelectedUserType($event)"
                       (click)="handleFilterClick()"
@@ -164,55 +164,55 @@
             </thead>
             <tbody>
               @for (user of users; track $index) {
-              <tr>
-                <td>
-                  <app-table-img-item
-                    [img]="
-                      user.profile_image
-                        ? user.profile_image
-                        : '../../../../assets/userDefaultProImg.png'
-                    "
-                    [title]="user.first_name + ' ' + user.last_name"
-                  >
-                  </app-table-img-item>
-                </td>
-                <td>{{ user.contact_number || "XXXXXXX" }}</td>
-                <td>{{ user.role.value }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.created_on | date : "dd MMM yyyy" }}</td>
-                <td>
-                  {{
-                    (user.last_login | date : "dd MMM yyyy, hh:mm a") || "N/A"
-                  }}
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      (change)="toggleUserStatus(user.id)"
-                      [checked]="user.is_active"
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="openAddUserModal(addUserContent, true)"
-                    />
-                    <!-- <app-table-action-btn
+                <tr>
+                  <td>
+                    <app-table-img-item
+                      [img]="
+                        user.profile_image
+                          ? user.profile_image
+                          : '../../../../assets/userDefaultProImg.png'
+                      "
+                      [title]="user.first_name + ' ' + user.last_name"
+                    >
+                    </app-table-img-item>
+                  </td>
+                  <td>{{ user.contact_number || "XXXXXXX" }}</td>
+                  <td>{{ user.role.value }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.created_on | date: "dd MMM yyyy" }}</td>
+                  <td>
+                    {{
+                      (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A"
+                    }}
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        (change)="toggleUserStatus(user.id)"
+                        [checked]="user.is_active"
+                      />
+                    </div>
+                  </td>
+                  <td align="center">
+                    <div class="cmmnTblActnBtnDiv">
+                      <app-table-action-btn
+                        type="edit"
+                        (clicked)="openAddUserModal(addUserContent, true)"
+                      />
+                      <!-- <app-table-action-btn
                       type="delete"
                       (clicked)="onDeleteClick(user.id, $index)"
                     /> -->
-                  </div>
-                </td>
-              </tr>
+                    </div>
+                  </td>
+                </tr>
               } @empty {
-              <tr>
-                <td colspan="7" align="center">No Data to Show</td>
-              </tr>
+                <tr>
+                  <td colspan="7" align="center">No Data to Show</td>
+                </tr>
               }
             </tbody>
           </table>
@@ -248,7 +248,7 @@
           <div class="col-md">
             <app-table-title
               [title]="totalRecords.toString()"
-              subtitle="users Found"
+              [subtitle]="'USERS_FOUND' | translate"
             ></app-table-title>
           </div>
           <div class="col-md-auto">
@@ -263,77 +263,77 @@
               <tr>
                 <th>
                   <button type="button">
-                    User Name <i><app-sorting-icon /></i>
+                    {{ "USER_NAME" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
-                <th>Phone</th>
-                <th>Role</th>
-                <th>Email</th>
+                <th>{{ "PHONE" | translate }}</th>
+                <th>{{ "ROLE" | translate }}</th>
+                <th>{{ "EMAIL" | translate }}</th>
                 <th>
                   <button type="button">
-                    Created On <i><app-sorting-icon /></i>
+                    {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
                 <th>
                   <button type="button">
-                    Last Login <i><app-sorting-icon /></i>
+                    {{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
-                <th>Status</th>
+                <th>{{ "STATUS" | translate }}</th>
                 <th width="200"></th>
               </tr>
             </thead>
             <tbody>
               @for (user of users; track $index) {
-              <tr>
-                <td>
-                  <app-table-img-item
-                    [img]="
-                      user.profile_image
-                        ? user.profile_image
-                        : '../../../../assets/userDefaultProImg.png'
-                    "
-                    [title]="user.first_name + ' ' + user.last_name"
-                  >
-                  </app-table-img-item>
-                </td>
-                <td>{{ user.phone_number || "XXXXXXX" }}</td>
-                <td>{{ user.role.value }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.created_on | date : "dd MMM yyyy" }}</td>
-                <td>
-                  {{
-                    (user.last_login | date : "dd MMM yyyy, hh:mm a") || "N/A"
-                  }}
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      (change)="toggleUserStatus(user.id)"
-                      [checked]="user.is_active"
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="openEditUserModal(user.id, addUserContent)"
-                    />
-                    <!-- <app-table-action-btn
+                <tr>
+                  <td>
+                    <app-table-img-item
+                      [img]="
+                        user.profile_image
+                          ? user.profile_image
+                          : '../../../../assets/userDefaultProImg.png'
+                      "
+                      [title]="user.first_name + ' ' + user.last_name"
+                    >
+                    </app-table-img-item>
+                  </td>
+                  <td>{{ user.phone_number || "XXXXXXX" }}</td>
+                  <td>{{ user.role.value }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.created_on | date: "dd MMM yyyy" }}</td>
+                  <td>
+                    {{
+                      (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A"
+                    }}
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        (change)="toggleUserStatus(user.id)"
+                        [checked]="user.is_active"
+                      />
+                    </div>
+                  </td>
+                  <td align="center">
+                    <div class="cmmnTblActnBtnDiv">
+                      <app-table-action-btn
+                        type="edit"
+                        (clicked)="openEditUserModal(user.id, addUserContent)"
+                      />
+                      <!-- <app-table-action-btn
                       type="delete"
                       (clicked)="onDeleteClick(user.id, $index)"
                     /> -->
-                  </div>
-                </td>
-              </tr>
-              }@empty {
-              <tr>
-                <td colspan="7" align="center">No Data to Show</td>
-              </tr>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="7" align="center">No Data to Show</td>
+                </tr>
               }
             </tbody>
           </table>
@@ -369,7 +369,7 @@
           <div class="col-md">
             <app-table-title
               [title]="totalRecords.toString()"
-              subtitle="users Found"
+              [subtitle]="'USERS_FOUND' | translate"
             ></app-table-title>
           </div>
           <div class="col-md-auto">
@@ -384,62 +384,62 @@
               <tr>
                 <th>
                   <button type="button">
-                    User Name <i><app-sorting-icon /></i>
+                    {{ "USER_NAME" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
-                <th>Phone</th>
-                <th>Role</th>
-                <th>Email</th>
+                <th>{{ "PHONE" | translate }}</th>
+                <th>{{ "ROLE" | translate }}</th>
+                <th>{{ "EMAIL" | translate }}</th>
                 <th>
                   <button type="button">
-                    Created On <i><app-sorting-icon /></i>
+                    {{ "CREATED_ON" | translate }}<i><app-sorting-icon /></i>
                   </button>
                 </th>
                 <th>
                   <button type="button">
-                    Last Login <i><app-sorting-icon /></i>
+                    {{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i>
                   </button>
                 </th>
-                <th>Status</th>
+                <th>{{ "STATUS" | translate }}</th>
                 <th width="200"></th>
               </tr>
             </thead>
             <tbody>
               @for (user of users; track $index) {
-              <tr>
-                <td>
-                  <app-table-img-item
-                    [img]="
-                      user.profile_image
-                        ? user.profile_image
-                        : '../../../../assets/userDefaultProImg.png'
-                    "
-                    [title]="user.first_name + ' ' + user.last_name"
-                  >
-                  </app-table-img-item>
-                </td>
-                <td>{{ user.phone_number || "XXXXXXX" }}</td>
-                <td>{{ user.role.value }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.created_on | date : "dd MMM yyyy" }}</td>
-                <td>
-                  {{
-                    (user.last_login | date : "dd MMM yyyy, hh:mm a") || "N/A"
-                  }}
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      (change)="toggleUserStatus(user.id)"
-                      [checked]="user.is_active"
-                      disabled
-                    />
-                  </div>
-                </td>
-                <!-- <td align="center">
+                <tr>
+                  <td>
+                    <app-table-img-item
+                      [img]="
+                        user.profile_image
+                          ? user.profile_image
+                          : '../../../../assets/userDefaultProImg.png'
+                      "
+                      [title]="user.first_name + ' ' + user.last_name"
+                    >
+                    </app-table-img-item>
+                  </td>
+                  <td>{{ user.phone_number || "XXXXXXX" }}</td>
+                  <td>{{ user.role.value }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.created_on | date: "dd MMM yyyy" }}</td>
+                  <td>
+                    {{
+                      (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A"
+                    }}
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        (change)="toggleUserStatus(user.id)"
+                        [checked]="user.is_active"
+                        disabled
+                      />
+                    </div>
+                  </td>
+                  <!-- <td align="center">
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="edit"
@@ -451,11 +451,11 @@
                     />
                   </div>
                 </td> -->
-              </tr>
-              }@empty {
-              <tr>
-                <td colspan="7" align="center">No Data to Show</td>
-              </tr>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="7" align="center">No Data to Show</td>
+                </tr>
               }
             </tbody>
           </table>

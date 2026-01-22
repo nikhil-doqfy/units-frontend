@@ -11,7 +11,7 @@
     <span
       *ngIf="!selectedOption"
       class="customSelectPlaceholder"
-      [innerHTML]="placeholder"
+      [innerHTML]="placeholder | translate"
       >{{ placeholder }}</span
     >
     <span *ngIf="selectedOption">{{ selectedOption[value] }}</span>
@@ -41,15 +41,15 @@
         Add
       </button>
     </li>
-    @for(option of displayOptions; track option[key]){
-    <li
-      (click)="selectOption(option); $event.stopPropagation()"
-      [class.active]="option[key] === selectedOption?.[key]"
-    >
-      {{ option[value] }}
-    </li>
-    }@empty {
-    <li>No Data Found</li>
+    @for (option of displayOptions; track option[key]) {
+      <li
+        (click)="selectOption(option); $event.stopPropagation()"
+        [class.active]="option[key] === selectedOption?.[key]"
+      >
+        {{ option[value] }}
+      </li>
+    } @empty {
+      <li>No Data Found</li>
     }
   </ul>
 </div>

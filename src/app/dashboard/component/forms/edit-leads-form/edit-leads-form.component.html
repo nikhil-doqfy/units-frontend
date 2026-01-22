@@ -2,7 +2,9 @@
   <div class="row g-4">
     <!-- Link Property -->
     <div class="col-md-6 col-12">
-      <label class="form-label required">Link Property</label>
+      <label class="form-label required">{{
+        "LINK_PROPERTY" | translate
+      }}</label>
       <app-custom-select
         formControlName="property"
         value="Silchi Tower"
@@ -11,13 +13,13 @@
 
     <!-- Tenant Name -->
     <div class="col-md-6 col-12">
-      <label class="form-label required">Tenant Name</label>
+      <label class="form-label required">{{ "TENANT_NAME" | translate }}</label>
       <input class="form-control" value="Jensi" formControlName="tenantName" />
     </div>
 
     <!-- Email -->
     <div class="col-md-6 col-12">
-      <label class="form-label required">Email</label>
+      <label class="form-label required">{{ "EMAIL" | translate }}</label>
       <input
         class="form-control"
         value="Jensi@gmail.com"
@@ -27,7 +29,7 @@
 
     <!-- Contact -->
     <div class="col-md-6 col-12">
-      <label class="form-label required">Contact</label>
+      <label class="form-label required">{{ "CONTACT" | translate }}</label>
       <input
         class="form-control"
         value="+41-9383822829"
@@ -37,47 +39,49 @@
 
     <!-- Amount -->
     <div class="col-md-6 col-12">
-      <label class="form-label required"> Rental / Lease Amount (AED) </label>
+      <label class="form-label required">{{
+        "LEASE_AMOUNT_AED" | translate
+      }}</label>
       <input class="form-control" value="1,200.00" formControlName="amount" />
     </div>
 
     <!-- Status -->
     <div class="col-md-6 col-12">
-      <label class="form-label required">Status</label>
+      <label class="form-label required">{{ "STATUS" | translate }}</label>
       <app-custom-select formControlName="status"></app-custom-select>
     </div>
 
     <!-- Comment -->
     <div class="col-12">
-      <label class="form-label required">Comment</label>
+      <label class="form-label required">{{ "COMMENT" | translate }}</label>
       <input class="form-control" value="Nill" formControlName="comment" />
     </div>
 
     <!-- Source -->
     <div class="col-12">
-      <label class="form-label required">Source of Lead</label>
+      <label class="form-label required">{{ "LEAD_SOURCE" | translate }}</label>
 
       <div class="sourceWrap">
         <label class="radioItem">
           <input type="radio" value="email" formControlName="source" />
-          <span></span> Email
+          <span></span>{{ "EMAIL" | translate }}
         </label>
 
         <label class="radioItem">
           <input type="radio" value="call" formControlName="source" />
-          <span></span> Call
+          <span></span> {{ "CALL" | translate }}
         </label>
 
         <label class="radioItem">
           <input type="radio" value="whatsapp" formControlName="source" />
-          <span></span> Whatsapp
+          <span></span> {{ "WHATSAPP" | translate }}
         </label>
       </div>
     </div>
 
     <!-- App link -->
     <div class="col-12">
-      <a class="sendLink">Send App Link</a>
+      <a class="sendLink">{{ "SEND_APP_LINK" | translate }}</a>
     </div>
   </div>
 </form>

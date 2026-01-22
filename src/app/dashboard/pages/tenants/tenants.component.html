@@ -76,49 +76,49 @@
           </thead>
           <tbody>
             @for (tenant of tenantsList; track $index) {
-            <tr>
-              <td>
-                <app-table-img-item
-                  [img]="
-                    tenant?.tenant_profile_image ||
-                    '../../../../assets/userDefaultProImg.png'
-                  "
-                  [title]="tenant?.tenant_name"
-                  [clickable]="true"
-                  (clicked)="handleViewClick(tenant.tenant_id)"
-                />
-              </td>
+              <tr>
+                <td>
+                  <app-table-img-item
+                    [img]="
+                      tenant?.tenant_profile_image ||
+                      '../../../../assets/userDefaultProImg.png'
+                    "
+                    [title]="tenant?.tenant_name"
+                    [clickable]="true"
+                    (clicked)="handleViewClick(tenant.tenant_id)"
+                  />
+                </td>
 
-              <td>{{ tenant?.user_code || "N/A" }}</td>
-              <td>{{ tenant.contact_number | maskPhone }}</td>
+                <td>{{ tenant?.user_code || "N/A" }}</td>
+                <td>{{ tenant.contact_number | maskPhone }}</td>
 
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/property/property-img-default.svg"
-                  size="md"
-                  [title]="tenant.property_assigned ?? 'N/A'"
-                />
-              </td>
-              <td>
-                <app-document-type-item
-                  title="Lease_001.pdf"
-                  subtitle="1.2 MB"
-                  (clicked)="handleViewPdf(tenant.lease_id)"
-                />
-                <ng-template #waitingDoc>
-                  <span class="waiting-text">Waiting for document</span>
-                </ng-template>
-              </td>
-              <!-- <td>
+                <td>
+                  <app-table-img-item
+                    img="../../../../assets/property/property-img-default.svg"
+                    size="md"
+                    [title]="tenant.property_assigned ?? 'N/A'"
+                  />
+                </td>
+                <td>
+                  <app-document-type-item
+                    title="Lease_001.pdf"
+                    subtitle="1.2 MB"
+                    (clicked)="handleViewPdf(tenant.lease_id)"
+                  />
+                  <ng-template #waitingDoc>
+                    <span class="waiting-text">Waiting for document</span>
+                  </ng-template>
+                </td>
+                <!-- <td>
                 <app-document-type-item
                   title="Lease_001.pdf"
                   subtitle="1.2 MB"
                   (clicked)="handleViewPdf(tenant.lease_id)"
                 />
               </td> -->
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <!-- <app-table-action-btn
+                <td align="center">
+                  <div class="cmmnTblActnBtnDiv">
+                    <!-- <app-table-action-btn
                     type="edit"
                     (clicked)="handleEditClick()"
                   />
@@ -126,18 +126,18 @@
                     type="delete"
                     (clicked)="handleDeleteClick()"
                   /> -->
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            }@empty {
-            <tr>
-              <td colspan="6" align="center"><app-no-data></app-no-data></td>
-            </tr>
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" align="center"><app-no-data></app-no-data></td>
+              </tr>
             }
           </tbody>
         </table>
@@ -234,34 +234,34 @@
     [title]="selectedTenant?.first_name + ' ' + selectedTenant?.last_name"
     [imgSrc]="selectedTenant?.profile_image || ''"
     [items]="[
-      { label: 'Email', value: selectedTenant?.email },
+      { label: getLabel('EMAIL'), value: selectedTenant?.email },
       {
-        label: 'Phone Number',
-        value: selectedTenant?.contact_number
+        label: getLabel('PHONE_NUMBER'),
+        value: selectedTenant?.contact_number,
       },
       {
-        label: 'Emirates ID',
-        value: selectedTenant?.emirate_id
+        label: getLabel('EMIRATES_ID'),
+        value: selectedTenant?.emirate_id,
       },
-      { label: 'City', value: selectedTenant?.city },
-      { label: 'Locality', value: selectedTenant?.location },
+      { label: getLabel('CITY'), value: selectedTenant?.city },
+      { label: getLabel('LOCALITY'), value: selectedTenant?.location },
       {
-        label: 'Postal Code',
-        value: selectedTenant?.postal_code
-      },
-      {
-        label: 'Address Line 1',
-        value: selectedTenant?.address
+        label: getLabel('POSTAL_CODE'),
+        value: selectedTenant?.postal_code,
       },
       {
-        label: 'Address Line 2',
-        value: selectedTenant?.address
+        label: getLabel('ADDRESS_LINE_1'),
+        value: selectedTenant?.address,
       },
       {
-        label: 'Linked Property',
+        label: getLabel('ADDRESS_LINE_2'),
+        value: selectedTenant?.address,
+      },
+      {
+        label: getLabel('LINKED_PROPERTY'),
         value: 'Prestige Builders',
-        link: '/dashboard/tenants'
-      }
+        link: '/dashboard/tenants',
+      },
     ]"
     [showEdit]="true"
     (edit)="handleEditClick()"
@@ -272,26 +272,26 @@
     <app-white-card title="Photos & Documents">
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
-          @for (type of tenantDocumentType; track type.key;) {
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              [class.active]="type.key === activeDocTypeKey"
-              [id]="type.key + '-tab'"
-              data-bs-toggle="tab"
-              [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
-              type="button"
-              role="tab"
-              [attr.aria-controls]="type.key + '-tab-pane'"
-              [attr.aria-selected]="type.key === activeDocTypeKey"
-              (click)="onDocTabClick(type)"
-            >
-              <!-- id="tenantDocument-tab" data-bs-target="#tenantDocument-tab-pane"
+          @for (type of tenantDocumentType; track type.key) {
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                [class.active]="type.key === activeDocTypeKey"
+                [id]="type.key + '-tab'"
+                data-bs-toggle="tab"
+                [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
+                type="button"
+                role="tab"
+                [attr.aria-controls]="type.key + '-tab-pane'"
+                [attr.aria-selected]="type.key === activeDocTypeKey"
+                (click)="onDocTabClick(type)"
+              >
+                <!-- id="tenantDocument-tab" data-bs-target="#tenantDocument-tab-pane"
               aria-controls="tenantDocument-tab-pane" aria-selected="true" -->
-              <!-- Tenant Document -->
-              {{ type.value }}
-            </button>
-          </li>
+                <!-- Tenant Document -->
+                {{ type.value }}
+              </button>
+            </li>
           }
           <!-- <li class="nav-item" role="presentation">
             <button
@@ -311,8 +311,8 @@
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="myTabContent">
-          @for(type of tenantDocumentType; track type.key; let i = $index){
-          <!-- <div
+          @for (type of tenantDocumentType; track type.key; let i = $index) {
+            <!-- <div
             class="tab-pane fade show active"
             id="tenantDocument-tab-pane"
             role="tabpanel"
@@ -320,29 +320,31 @@
             tabindex="0"
           > -->
 
-          <div
-            [ngClass]="{
-              'tab-pane': true,
-              fade: true,
-              show: type.key === activeDocTypeKey,
-              active: type.key === activeDocTypeKey
-            }"
-            [id]="type.key + '-tab-pane'"
-            role="tabpanel"
-            [attr.aria-labelledby]="type.key + '-tab'"
-            [tabindex]="i"
-          >
-            <div class="row g-2">
-              @for(docsGroup of tennatDocuments[activeDocTypeKey]; track
-              docsGroup.id){
-              <div class="col-auto">
-                <app-document-type-item [title]="docsGroup.file_name" />
+            <div
+              [ngClass]="{
+                'tab-pane': true,
+                fade: true,
+                show: type.key === activeDocTypeKey,
+                active: type.key === activeDocTypeKey,
+              }"
+              [id]="type.key + '-tab-pane'"
+              role="tabpanel"
+              [attr.aria-labelledby]="type.key + '-tab'"
+              [tabindex]="i"
+            >
+              <div class="row g-2">
+                @for (
+                  docsGroup of tennatDocuments[activeDocTypeKey];
+                  track docsGroup.id
+                ) {
+                  <div class="col-auto">
+                    <app-document-type-item [title]="docsGroup.file_name" />
+                  </div>
+                } @empty {
+                  <div class="col-auto m-auto">Documents not available!</div>
+                }
               </div>
-              }@empty {
-              <div class="col-auto m-auto">Documents not available!</div>
-              }
             </div>
-          </div>
           }
           <!-- <div class="col-auto">
                 <app-document-type-item title="Contract.pdf" size="1.2 MB" />

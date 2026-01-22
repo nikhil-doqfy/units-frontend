@@ -152,6 +152,9 @@ export class ComplaintsComponent {
     this.loadComplaints();
   }
 
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   changeLanguage(lang: string) {
     this.sharedService.setLanguage(lang);
   }
@@ -208,9 +211,6 @@ export class ComplaintsComponent {
     });
   }
   handleViewClick(item: any): void {
-    console.log('CLICKED 👉', item);
-    console.log('showDetailView 👉', this.showDetailView);
-
     this.selectedProperty = item;
     this.showDetailView = true;
   }

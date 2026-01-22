@@ -194,6 +194,9 @@ export class RentalComponent {
     this.getLeases();
   }
 
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   initCurrentRoleListener() {
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))

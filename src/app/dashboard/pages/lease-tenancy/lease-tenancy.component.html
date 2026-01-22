@@ -46,7 +46,7 @@
                       [options]="leaseStatus"
                       key="key"
                       value="value"
-                      placeholder="Select lease status"
+                      [placeholder]="'SELECT_LEASE_STATUS' | translate"
                       (optionSelected)="selectedleasestatus = $event"
                       (click)="onHandleLeaseStatusClick()"
                     >
@@ -102,53 +102,53 @@
           </tr>
         </thead>
         <tbody>
-          @for (lease of leaseList; track $index){
-          <tr>
-            <td>{{ lease.property_code ?? "N/A" }}</td>
-            <td>
-              <app-table-img-item
-                [img]="
-                  lease?.tenant?.profile_image ??
-                  '../../../../assets/userDefaultProImg.png'
-                "
-                [title]="lease?.tenant_name ?? 'N/A'"
-              />
-            </td>
-            <td>{{ lease?.tenant_contact_number ?? "N/A" }}</td>
-            <td>
-              {{ lease?.agreement_start_date | date : "dd/MM/yyyy" }}
-              {{ lease?.agreement_end_date | date : "dd/MM/yyyy" }}
-            </td>
-            <td>
-              <app-badge
-                [title]="lease?.lease_status | titlecase"
-                status="green"
-              />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <!-- <app-table-action-btn
+          @for (lease of leaseList; track $index) {
+            <tr>
+              <td>{{ lease.property_code ?? "N/A" }}</td>
+              <td>
+                <app-table-img-item
+                  [img]="
+                    lease?.tenant?.profile_image ??
+                    '../../../../assets/userDefaultProImg.png'
+                  "
+                  [title]="lease?.tenant_name ?? 'N/A'"
+                />
+              </td>
+              <td>{{ lease?.tenant_contact_number ?? "N/A" }}</td>
+              <td>
+                {{ lease?.agreement_start_date | date: "dd/MM/yyyy" }}
+                {{ lease?.agreement_end_date | date: "dd/MM/yyyy" }}
+              </td>
+              <td>
+                <app-badge
+                  [title]="lease?.lease_status | titlecase"
+                  status="green"
+                />
+              </td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <!-- <app-table-action-btn
                   type="edit"
                   (clicked)="handleEditClick(lease.lease_id)"
                 /> -->
-                <app-table-action-btn
-                  type="download"
-                  (click)="handleDownloadPdf(lease.lease_id)"
-                />
-                <!-- (clicked)="handleDownloadClick()" -->
-                <app-table-action-btn
-                  type="preview"
-                  (click)="handleViewPdf(lease.lease_id)"
-                />
+                  <app-table-action-btn
+                    type="download"
+                    (click)="handleDownloadPdf(lease.lease_id)"
+                  />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn
+                    type="preview"
+                    (click)="handleViewPdf(lease.lease_id)"
+                  />
 
-                <!-- (clicked)="handlePreviewClick()" -->
-              </div>
-            </td>
-          </tr>
-          }@empty {
-          <tr>
-            <td colspan="20" align="center"><app-no-data></app-no-data></td>
-          </tr>
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="20" align="center"><app-no-data></app-no-data></td>
+            </tr>
           }
         </tbody>
       </table>
