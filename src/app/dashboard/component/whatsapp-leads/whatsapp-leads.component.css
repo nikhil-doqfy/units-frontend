@@ -319,3 +319,123 @@
   left: 2px;
   top: -1px;
 }
+/* 
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 16px;
+  }
+
+  .login-card {
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .login-right img {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 16px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  .download-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .download-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .login-card {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .login-left,
+  .login-right {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .login-right {
+    margin-top: 20px;
+  }
+
+  .login-right img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .wa-steps li {
+    font-size: 14px;
+  }
+
+  .options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+
+  .download-card {
+    padding: 16px;
+  }
+
+  .icon-box {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .download-card h4,
+  .download-card p {
+    font-size: 12px;
+  }
+
+  .login-left h2 {
+    font-size: 20px;
+  }
+
+  .wa-steps li {
+    padding-left: 36px;
+    font-size: 13px;
+  }
+
+  .wa-steps li::before {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .login-right img {
+    width: 160px;
+    height: 160px;
+  }
+
+  .stay-logged {
+    font-size: 14px;
+  }
+}
+
+.login-right img {
+  width: 266px;
+  height: 220px;
+} */

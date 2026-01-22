@@ -6,24 +6,24 @@
           <h4>
             {{ summary.total_complaints }}
             <span class="badge green"> 12% <app-arrow></app-arrow> </span>
-            <small>last month</small>
+            <small>{{ "LAST_MONTH" | translate }}</small>
           </h4>
-          <h6>Total Complaints</h6>
+          <h6>{{ "TOTAL_COMPLAINTS" | translate }}</h6>
         </div>
 
         <div class="statItem">
           <h4>{{ summary.total_completed }}</h4>
-          <h6>Completed</h6>
+          <h6>{{ "COMPLETED" | translate }}</h6>
         </div>
 
         <div class="statItem">
           <h4>{{ summary.total_in_progress }}</h4>
-          <h6>In-Progress</h6>
+          <h6>{{ "IN-PROGRESS" | translate }}</h6>
         </div>
 
         <div class="statItem">
           <h4>{{ summary.total_rejected }}</h4>
-          <h6>Rejected</h6>
+          <h6>{{ "REJECTED" | translate }}</h6>
         </div>
       </div>
 
@@ -176,15 +176,15 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Sl.No</th>
-              <th>Complaint ID</th>
-              <th>Property Name</th>
-              <th>Raised By</th>
-              <th>Raised Date</th>
-              <th width="300">Description</th>
-              <th>Photos</th>
-              <th>Status</th>
-              <th width="120">Actions</th>
+              <th>{{ "SI_NO" | translate }}</th>
+              <th>{{ "COMPLAINT_ID" | translate }}</th>
+              <th>{{ "PROPERTY_NAME" | translate }}</th>
+              <th>{{ "RAISED_BY" | translate }}</th>
+              <th>{{ "RAISED_DATE" | translate }}</th>
+              <th width="300">{{ "DESCRIPTION" | translate }}</th>
+              <th>{{ "PHOTOS" | translate }}</th>
+              <th>{{ "STATUS" | translate }}</th>
+              <th width="120">{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
 
@@ -271,7 +271,7 @@
     title=" Abhram | Khaleeja Building | 302 "
     [imgSrc]="'assets/user/user-2.png'"
     [items]="[
-      { label: 'Complaint ID', value: '#LP92201' },
+      { label: '', value: '#LP92201' },
       { label: 'Raised Date', value: '12/02/2024' },
       { label: 'Issue Closed On', value: '15/02/2024' },
       { label: 'Locality', value: '--' },
@@ -280,7 +280,7 @@
     (back)="handleBackClick()"
   >
     <div rental class="other-charges-box mt-3">
-      <p class="complaint-title">Description</p>
+      <p class="complaint-title">{{ "DESCRIPTION" | translate }}</p>
       <p class="complaint-description">
         Faulty faucet in Kitchen, dripping constantly and needs repair
       </p>
@@ -387,7 +387,7 @@
       <div class="row align-items-center">
         <div class="col-md">
           <app-table-title
-            title="Previous Complaints"
+            [title]="'PREVIOUS_COMPLAINTS' | translate"
             subtitle="(5)"
           ></app-table-title>
         </div>
@@ -395,14 +395,14 @@
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="Search here..." />
             <app-table-filter-btn
-              title="Filter"
+              [title]="'FILTER' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
               <app-filter-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
               (clicked)="handleInternalTableExport()"
             >

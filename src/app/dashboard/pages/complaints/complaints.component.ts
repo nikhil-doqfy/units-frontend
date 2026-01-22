@@ -68,6 +68,7 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
     RefreshIconComponent,
     ExportIconComponent,
     SortingIconComponent,
+    TranslateModule,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',
@@ -132,7 +133,7 @@ export class ComplaintsComponent {
   assignEnginnerForm!: FormGroup;
   constructor(
     private destroyRef: DestroyRef,
-    private storageService: StorageService
+    private storageService: StorageService,
   ) {}
 
   ngOnInit() {
