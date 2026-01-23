@@ -79,15 +79,15 @@
             placeholder="YYYY-MM-DD"
             ngbDatepicker
             #startDate="ngbDatepicker"
-            formControlName="startDate"
+            formControlName="periodFrom"
           />
           <button type="button" (click)="startDate.toggle()">
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(rentalForm, "startDate").status) {
+        @if (isInvalid(rentalForm, "periodFrom").status) {
           <small class="errorMsg">
-            {{ isInvalid(rentalForm, "startDate").msg }}
+            {{ isInvalid(rentalForm, "periodFrom").msg }}
           </small>
         }
       </div>
@@ -101,15 +101,15 @@
             placeholder="YYYY-MM-DD"
             ngbDatepicker
             #endDate="ngbDatepicker"
-            formControlName="endDate"
+            formControlName="periodTo"
           />
           <button type="button" (click)="endDate.toggle()">
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(rentalForm, "endDate").status) {
+        @if (isInvalid(rentalForm, "periodTo").status) {
           <small class="errorMsg">
-            {{ isInvalid(rentalForm, "endDate").msg }}
+            {{ isInvalid(rentalForm, "periodTo").msg }}
           </small>
         }
       </div>

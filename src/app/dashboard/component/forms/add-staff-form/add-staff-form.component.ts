@@ -73,8 +73,6 @@ export class AddStaffFormComponent {
   }
 
   ngOnInit(): void {
-    console.log('AddStaffFormComponent INIT');
-
     if (this.editData) {
       this.patchEditForm();
       this.staffForm.get('password')?.clearValidators();
@@ -92,10 +90,9 @@ export class AddStaffFormComponent {
       .subscribe({
         next: (response) => {
           this.staffRole = response?.content?.role;
-          console.log('data', this.staffRole);
           if (this.editData?.staff_role) {
             this.selectedStaffRole = this.staffRole.find(
-              (r) => r.key === this.editData.staff_role.key
+              (r) => r.key === this.editData.staff_role.key,
             );
           }
         },
@@ -112,7 +109,7 @@ export class AddStaffFormComponent {
 
           if (this.editData?.assigned_property) {
             this.selectedAssignedProperty = this.assignedPropertyList.find(
-              (p) => p.key === this.editData.assigned_property.key
+              (p) => p.key === this.editData.assigned_property.key,
             );
           }
         },
@@ -135,7 +132,6 @@ export class AddStaffFormComponent {
     this.getAssignedProperties(['PROPERTY_UNIT']);
   }
   onOptionSelectedUserType(option: any) {
-    console.log('OPTION FROM SELECT:', option);
     this.selectedStffRole = option;
 
     if (option?.value) {
@@ -154,11 +150,7 @@ export class AddStaffFormComponent {
     this.getOptionTypes(['ROLE']);
   }
   submitStaffForm() {
-    console.log('SUBMIT CLICKED');
     this.staffForm.markAllAsTouched();
-    console.log('FORM VALUE:', this.staffForm.value);
-    console.log('FORM VALID:', this.staffForm.valid);
-    console.log('FORM ERRORS:', this.staffForm.errors);
     if (!this.staffForm.valid) return;
 
     const form = this.staffForm.value;

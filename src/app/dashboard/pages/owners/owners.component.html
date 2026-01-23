@@ -57,41 +57,41 @@
           </thead>
           <tbody>
             @for (owner of owners; track $index) {
-            <tr>
-              <td>
-                <app-table-img-item
-                  [img]="
-                    owner?.profile_image
-                      ? owner?.profile_image
-                      : '../../../../assets/userDefaultProImg.png'
-                  "
-                  [clickable]="true"
-                  (clicked)="handleViewClick(owner.owner_id)"
-                  [title]="owner.first_name + '' + ' ' + owner.last_name"
-                />
-              </td>
-              <td>{{ owner.owner_number || "N/A" }}</td>
-              <td>{{ owner.contact_number | maskPhone }}</td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="owner.propertyImages || 'N/A'"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>{{ owner.email }}</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  ></app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td>
+                  <app-table-img-item
+                    [img]="
+                      owner?.profile_image
+                        ? owner?.profile_image
+                        : '../../../../assets/userDefaultProImg.png'
+                    "
+                    [clickable]="true"
+                    (clicked)="handleViewClick(owner.owner_id)"
+                    [title]="owner.first_name + '' + ' ' + owner.last_name"
+                  />
+                </td>
+                <td>{{ owner.owner_number || "N/A" }}</td>
+                <td>{{ owner.contact_number | maskPhone }}</td>
+                <td>
+                  <app-table-multi-img-item
+                    [images]="owner.propertyImages || 'N/A'"
+                    size="md"
+                  ></app-table-multi-img-item>
+                </td>
+                <td>{{ owner.email }}</td>
+                <td align="center">
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    ></app-table-action-dropdown>
+                  </div>
+                </td>
+              </tr>
             } @empty {
-            <tr>
-              <td colspan="20" align="center"><app-no-data></app-no-data></td>
-            </tr>
+              <tr>
+                <td colspan="20" align="center"><app-no-data></app-no-data></td>
+              </tr>
             }
           </tbody>
         </table>
@@ -120,15 +120,24 @@
     [title]="selectedOwner.full_name"
     [imgSrc]="selectedOwner?.profile_image || ''"
     [headerItems]="[
-      { label: 'Contact', value: '+91-' + selectedOwner?.contact_number },
-      { label: 'Email', value: selectedOwner.email }
+      {
+        label: getLabel('CONTACT'),
+        value: '+91-' + selectedOwner?.contact_number,
+      },
+      { label: getLabel('EMAIL'), value: selectedOwner.email },
     ]"
     [items]="[
-      { label: 'Emirates ID', value: selectedOwner.emirate_id },
-      { label: 'Residence Visa', value: selectedOwner.uae_residence_visa },
-      { label: 'Trade License', value: selectedOwner.trade_license_number },
-      { label: 'Owner Code', value: selectedOwner.owner_code },
-      { label: 'Role', value: selectedOwner.role }
+      { label: getLabel('EMIRATES_ID'), value: selectedOwner.emirate_id },
+      {
+        label: getLabel('RESIDENSE_VISA'),
+        value: selectedOwner.uae_residence_visa,
+      },
+      {
+        label: getLabel('TRADE_LICENSE'),
+        value: selectedOwner.trade_license_number,
+      },
+      { label: getLabel('OWNER_CODE'), value: selectedOwner.owner_code },
+      { label: getLabel('ROLE'), value: selectedOwner.role },
     ]"
     (back)="handleBackClick()"
   ></app-table-view-card>
@@ -138,7 +147,7 @@
       <div class="row g-3 align-items-center">
         <div class="col-md">
           <app-table-title
-            title="Owner Properties"
+            [title]="'OWNER_PROPERTIES' | translate"
             [subtitle]="'(' + (selectedOwner?.properties?.length || 0) + ')'"
             (onRefresh)="refreshDetailsView()"
           ></app-table-title>
@@ -173,7 +182,7 @@
                         [options]="rentalStatus"
                         key="key"
                         value="value"
-                        placeholder="Select rental status"
+                        [placeholder]="'SELECT_RENTAL_STATUS' | translate"
                         (optionSelected)="selectedrentalstatus = $event"
                       >
                       </app-custom-select>
@@ -200,7 +209,7 @@
             </app-filter-popup-btn>
 
             <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
               (clicked)="handleInternalTableExport()"
             >
@@ -215,50 +224,50 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Code</th>
+              <th>{{ "CODE" | translate }}</th>
               <th>
                 <button type="button">
-                  Property Name <i><app-sorting-icon /></i>
+                  {{ "PROPERTY_NAME" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
               <th>
                 <button type="button">
-                  Tenant Name <i><app-sorting-icon /></i>
+                  {{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i>
                 </button>
               </th>
-              <th>Tenancy Status</th>
-              <th>Agreement</th>
+              <th>{{ "TENANCY_STATUS" | translate }}</th>
+              <th>{{ "AGREMENT" | translate }}</th>
               <th width="200"></th>
             </tr>
           </thead>
           <tbody>
-            @for(property of selectedOwner?.table; track $index){
-            <tr>
-              <td>{{ property?.property_code || "N/A" }}</td>
-              <td>
-                <app-table-img-item
-                  img="../../assets/property/property-img-default.svg"
-                  size="md"
-                  [title]="property?.property_name"
-                />
-              </td>
-              <td>{{ property?.tenant_name || "N/A" }}</td>
-              <td>{{ property?.tenancy_status || "N/A" }}</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadPdf(property?.lease_id)"
+            @for (property of selectedOwner?.table; track $index) {
+              <tr>
+                <td>{{ property?.property_code || "N/A" }}</td>
+                <td>
+                  <app-table-img-item
+                    img="../../assets/property/property-img-default.svg"
+                    size="md"
+                    [title]="property?.property_name"
                   />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handleViewPdf(property?.lease_id)"
-                  />
-                </div>
-              </td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <!-- <app-table-action-btn
+                </td>
+                <td>{{ property?.tenant_name || "N/A" }}</td>
+                <td>{{ property?.tenancy_status || "N/A" }}</td>
+                <td align="center">
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-btn
+                      type="download"
+                      (clicked)="handleDownloadPdf(property?.lease_id)"
+                    />
+                    <app-table-action-btn
+                      type="preview"
+                      (clicked)="handleViewPdf(property?.lease_id)"
+                    />
+                  </div>
+                </td>
+                <td align="center">
+                  <div class="cmmnTblActnBtnDiv">
+                    <!-- <app-table-action-btn
                     type="edit"
                     (clicked)="handleEditClick()"
                   />
@@ -266,18 +275,18 @@
                     type="delete"
                     (clicked)="handleDeleteClick()"
                   /> -->
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            }@empty {
-            <tr>
-              <td colspan="20" align="center"><app-no-data></app-no-data></td>
-            </tr>
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="20" align="center"><app-no-data></app-no-data></td>
+              </tr>
             }
           </tbody>
         </table>

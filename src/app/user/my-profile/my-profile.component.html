@@ -119,6 +119,7 @@
               <input
                 type="text"
                 name="role"
+                autocomplete="off"
                 [(ngModel)]="profile.role"
                 [disabled]="!editUserMode"
                 (input)="onFieldChange('role')"
@@ -131,6 +132,7 @@
                 name="password"
                 [(ngModel)]="profile.password"
                 [disabled]="!editUserMode"
+                autocomplete="current-password"
                 (input)="onFieldChange('password')"
               />
 

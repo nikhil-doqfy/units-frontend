@@ -13,7 +13,7 @@
     "APPROVAL": "Approvals",
     "STAFF": "Staff",
     "USERS": "Users",
-    "COMPLAINTS": "complaints",
+    "COMPLAINTS": "Complaints",
     "ADD": "Add",
     "ROLES_PERMISSIONS": "Roles & Permissions",
     "DOCUMENTATIONS": "Documentations",
@@ -454,7 +454,7 @@
   "PERIOD_TO": "Period To",
   "UNIT_TYPE": "Unit Type",
   "YEAR_RENT": "Year Rent",
-  "OTHER_CHARGES": "Other Charges",
+  "OTHER_CHARGES": "OTHER CHARGES",
   "VAT": "Vat",
   "TOTAL_RENT": "Total Rent",
   "RENEW_ACCOUNT": "Renew Account",
@@ -486,5 +486,12 @@
   "PROPERTIES_ASSIGNED": "Properties Assigned",
   "LINKED_PROPERTY": "Linked Property",
   "SELECT_LEASE_STATUS": "Select lease status",
-  "SELECT_USER_TYPE": "Select User Type"
+  "SELECT_USER_TYPE": "Select User Type",
+  "RESIDENSE_VISA": "Residence Visa",
+  "OWNER_PROPERTIES": "Owner Properties",
+  "SELECT_RENTAL_STATUS": "Select rental status",
+  "AGREMENT": "Agrement",
+  "SELECT_STAFF_ROLE": "Select staff role",
+  "ASIGNED_STAFF": "Assigned staff",
+  "NEW_COMPLAINT": "New Complaint"
 }

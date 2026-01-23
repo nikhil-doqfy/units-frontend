@@ -202,8 +202,6 @@ export class PMCComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
-          console.log('response:--->', resp);
-
           const url = window.URL.createObjectURL(resp);
 
           const a = document.createElement('a');

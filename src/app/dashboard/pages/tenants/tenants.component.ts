@@ -188,7 +188,6 @@ export class TenantsComponent {
       .subscribe({
         next: (resp: any) => {
           this.tenantsList = resp?.content ?? [];
-          console.log(' TENANT OBJECT:', this.tenantsList[0]);
           this.totalRecords = resp?.pagination?.total_records ?? 0;
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },

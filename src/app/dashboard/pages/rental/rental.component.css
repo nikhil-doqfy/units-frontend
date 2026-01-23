@@ -7,7 +7,9 @@
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
   cursor: pointer;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .rent-card:hover {
@@ -172,7 +174,9 @@
   padding: 16px;
   margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .lease-card:hover {

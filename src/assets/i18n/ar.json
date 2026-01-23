@@ -488,5 +488,12 @@
   "LINKED_PROPERTY": "الملكية المرتبطة",
   "LEASE_STATUS": "حالة الإيجار",
   "SELECT_LEASE_STATUS": "اختر حالة الإيجار",
-  "SELECT_USER_TYPE": "حدد نوع المستخدم"
+  "SELECT_USER_TYPE": "حدد نوع المستخدم",
+  "RESIDENSE_VISA": "تأشيرة الإقامة",
+  "OWNER_PROPERTIES": "خصائص المالك",
+  "SELECT_RENTAL_STATUS": "تحديد حالة الإيجار",
+  "AGREMENT": "اتفاقية",
+  "SELECT_STAFF_ROLE": "حدد دور الموظفين",
+  "ASIGNED_STAFF": "الموظفين المعينين",
+  "NEW_COMPLAINT": "شكوى جديدة"
 }

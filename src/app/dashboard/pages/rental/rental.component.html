@@ -35,23 +35,21 @@
         <div class="metric-label">{{ "CHEQUES_DEPOSITED" | translate }}</div>
       </div>
 
-      <div>
-        <app-custom-select
-          [options]="[
-            'Falcom city',
-            'Novatis AG...',
-            'Agriculture',
-            'Honda',
-            'TVS',
-            'Samsung',
-          ]"
-          [placeholder]="selected"
-          [selectedOption]="selected"
-          (optionSelected)="onOptionSelected($event)"
-          [isFilter]="true"
-        >
-        </app-custom-select>
-      </div>
+      <app-custom-select
+        [options]="[
+          'Falcom city',
+          'Novatis AG...',
+          'Agriculture',
+          'Honda',
+          'TVS',
+          'Samsung',
+        ]"
+        [placeholder]="selected"
+        [selectedOption]="selected"
+        (optionSelected)="onOptionSelected($event)"
+        [isFilter]="true"
+      >
+      </app-custom-select>
     </div>
   </div>
 
@@ -129,7 +127,7 @@
 
             <button
               type="button"
-              class="btn btnCommonsx btnMinWidth d-none d-xl-flex"
+              class="btn btnCommonsx btnMinWidth responsive-btn"
               (click)="toAddRenatlAcc()"
             >
               {{ "ADD_ACCOUNT" | translate }}

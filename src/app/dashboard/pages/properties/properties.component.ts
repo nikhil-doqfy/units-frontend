@@ -399,8 +399,11 @@ export class PropertiesComponent {
   }
 
   getPropertyImages(data: Record<string, any>): PropertyImages[] {
-    const images = data?.['images'].map((img: any) => ({ imgSrc: img.url }));
-
+    const imagesArray = data?.['images'] ?? [];
+    // const images = data?.['images'].map((img: any) => ({ imgSrc: img.url }));
+    const images = Array.isArray(imagesArray)
+      ? imagesArray.map((img: any) => ({ imgSrc: img.url }))
+      : [];
     return images.length
       ? images
       : Array.from({ length: 5 }).map((_, i) => ({
@@ -528,8 +531,11 @@ export class PropertiesComponent {
     );
 
     this.activeDocTypeKey = this.propertyDocumentType[0]?.key;
-
-    this.propertyDetails?.['documents'].map((doc: any) => {
+    const documents = Array.isArray(this.propertyDetails?.['documents'])
+      ? this.propertyDetails['documents']
+      : [];
+    // this.propertyDetails?.['documents'].map((doc: any) => {
+    documents.forEach((doc: any) => {
       if (this.propertyDocuments[doc.type]) {
         this.propertyDocuments[doc.type].push(doc);
       } else {

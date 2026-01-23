@@ -47,21 +47,16 @@ export class InviteTenantFormComponent {
     this.getOptionTypes(['PROPERTY_UNIT']);
   }
   getOptionTypes(options: string[]) {
-    console.log('Option types sending:', options);
-
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: any) => {
           this.propertyList = response?.content?.property_unit ?? [];
-          console.log('PROPERTY LIST:', this.propertyList);
         },
       });
   }
   onOptionSelectedPropertyUnit(option: any) {
-    console.log('PROPERTY UNIT FROM SELECT:', option);
-
     this.tenantForm.patchValue({
       property_unit_id: Number(option.key) ?? null,
     });

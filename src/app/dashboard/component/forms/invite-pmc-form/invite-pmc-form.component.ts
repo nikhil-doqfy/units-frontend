@@ -47,13 +47,11 @@ export class InvitePMCFormComponent {
       .subscribe({
         next: (response: any) => {
           this.propertyList = response?.content?.property_unit ?? [];
-          console.log('PROPERTY LIST:', this.propertyList);
         },
       });
   }
 
   onOptionSelectedPropertyUnit(option: any) {
-    console.log('PROPERTY UNIT FROM SELECT:', option);
     this.invitePmcForm.patchValue({
       property_unit_id: option?.key ?? null,
     });

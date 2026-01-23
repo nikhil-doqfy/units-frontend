@@ -91,7 +91,6 @@ export class AddRentalaccountComponent implements OnInit {
     this.showDetailSubscription = this.sharedService.showDetail$.subscribe(
       (value: boolean) => {
         this.showDetailView = value;
-        console.log('showDetailView updated:', value);
       },
     );
     this.loadRentalPayments();

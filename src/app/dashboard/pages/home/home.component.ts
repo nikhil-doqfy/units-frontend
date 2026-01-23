@@ -6,6 +6,7 @@ import {
   DestroyRef,
   ViewChild,
   ElementRef,
+  AfterViewInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -40,7 +41,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -271,7 +271,7 @@ export class HomeComponent implements OnInit {
             id: rank,
             name,
             value: occupancy_rate,
-          })
+          }),
         );
       });
   }
@@ -291,7 +291,7 @@ export class HomeComponent implements OnInit {
             (item: any) => ({
               name: item.month_str,
               value: item.amount,
-            })
+            }),
           );
         },
         error: (err) => console.error(err),
@@ -428,7 +428,7 @@ export class HomeComponent implements OnInit {
         1,
         0,
         0,
-        0
+        0,
       ).getTime();
     } else if (this.selectedPeriodType === 'year' && this.selectedYear) {
       fromDate = new Date(this.selectedYear, 0, 1, 0, 0, 0).getTime();

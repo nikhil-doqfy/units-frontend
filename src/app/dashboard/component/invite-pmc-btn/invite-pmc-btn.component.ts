@@ -59,7 +59,7 @@ export class InvitePMCButtonComponent {
         },
         (reason) => {
           this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
+        },
       );
   }
 
@@ -77,8 +77,6 @@ export class InvitePMCButtonComponent {
   invitePmc(modal: NgbActiveModal, component: InvitePMCFormComponent) {
     const form = component.invitePmcForm;
     const payload = component.getPayload();
-    console.log('FORM VALUE:', form.value);
-    console.log('PAYLOAD:', payload);
     if (
       !payload.email ||
       !payload.invitation_type ||

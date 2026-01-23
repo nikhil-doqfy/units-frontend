@@ -103,30 +103,72 @@ export class LineChartComponent implements OnChanges {
     },
   };
 
+  // ngOnChanges() {
+  //   const data = this.monthlyData;
+
+  //   if (data.length === 0) {
+  //   }
+
+  //   const months = this.monthlyData.map((m) => m.monthName);
+
+  //   const totalAmount = this.monthlyData.map((m) => m.totalAmount);
+
+  //   const receivedAmount = this.monthlyData.map((m) => m.receivedAmount);
+
+  //   const dueAmount = this.monthlyData.map((m) => m.dueAmount);
+
+  //   this.chartOptions = {
+  //     ...this.chartOptions,
+  //     series: [
+  //       { name: 'Total Amount', data: totalAmount },
+  //       { name: 'Received Amount', data: receivedAmount },
+  //       { name: 'Due Amount', data: dueAmount },
+  //     ],
+  //     xaxis: {
+  //       categories: [...months],
+  //     },
+  //   };
+  // }
+
   ngOnChanges() {
-    const data = this.monthlyData;
+    const data = this.monthlyData || [];
 
-    if (data.length === 0) {
-    }
-
-    const months = this.monthlyData.map((m) => m.monthName);
-
-    const totalAmount = this.monthlyData.map((m) => m.totalAmount);
-
-    const receivedAmount = this.monthlyData.map((m) => m.receivedAmount);
-
-    const dueAmount = this.monthlyData.map((m) => m.dueAmount);
+    const months = data.map((m) => m.monthName ?? 'N/A');
+    const totalAmount = data.map((m) => m.totalAmount ?? 0);
+    const receivedAmount = data.map((m) => m.receivedAmount ?? 0);
+    const dueAmount = data.map((m) => m.dueAmount ?? 0);
 
     this.chartOptions = {
-      ...this.chartOptions,
+      chart: {
+        type: 'line',
+        height: 220,
+        toolbar: { show: false },
+        zoom: { enabled: false },
+        animations: { enabled: false },
+      },
+      stroke: { width: 3, curve: 'smooth' },
+      markers: { size: 4, hover: { size: 6 } },
+      dataLabels: { enabled: false },
+      colors: ['#1988FD', '#00B7AD', '#4B9C5E'],
       series: [
         { name: 'Total Amount', data: totalAmount },
         { name: 'Received Amount', data: receivedAmount },
         { name: 'Due Amount', data: dueAmount },
       ],
-      xaxis: {
-        categories: [...months],
+      xaxis: { categories: months },
+      yaxis: { min: 0, max: 100, tickAmount: 4 },
+      legend: {
+        position: 'top',
+        horizontalAlign: 'center',
+        formatter: function (seriesName: string, opts: any) {
+          const data = opts.w.globals.series[opts.seriesIndex];
+          const total = data.reduce((a: number, b: number) => a + b, 0);
+          const percent = Math.round((total / 600) * 100);
+          return `${seriesName}   ${percent}%`;
+        },
+        labels: { colors: '#344046' },
       },
+      grid: { strokeDashArray: 0 },
     };
   }
 }

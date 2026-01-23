@@ -319,25 +319,60 @@
   left: 2px;
   top: -1px;
 }
-/* 
 
+/* Default – Desktop (side by side) */
+.login-card {
+  display: flex;
+  gap: 32px;
+}
+
+.login-left {
+  order: 1;
+}
+
+.login-right {
+  order: 2;
+}
+
+/* ---------- Responsive / Mobile / Tablet ---------- */
 @media (max-width: 1024px) {
-  .container {
-    padding: 16px;
+  .login-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
   }
 
-  .login-card {
-    gap: 24px;
-    padding: 24px;
+  /* QR code FIRST */
+  .login-right {
+    order: 1;
+    margin-bottom: 24px;
+  }
+
+  /* Steps BELOW QR */
+  .login-left {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
   }
 
   .login-right img {
-    width: 180px;
-    height: 180px;
+    width: 220px;
+    height: 220px;
   }
 }
 
+.header {
+  padding: 16px 32px;
+}
 
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+}
+
+/* Tablet */
 @media (max-width: 768px) {
   .header {
     padding: 12px 16px;
@@ -346,96 +381,63 @@
   .logo {
     font-size: 16px;
   }
+}
 
+/* Mobile */
+@media (max-width: 480px) {
+  .logo {
+    font-size: 15px;
+  }
+}
+.download-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Tablet & below */
+@media (max-width: 768px) {
   .download-card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+  }
+
+  .download-left {
+    width: 100%;
   }
 
   .download-btn {
     width: 100%;
     justify-content: center;
   }
-
-  .login-card {
-    flex-direction: column;
-    padding: 20px;
-  }
-
-  .login-left,
-  .login-right {
-    max-width: 100%;
-    width: 100%;
-  }
-
-  .login-right {
-    margin-top: 20px;
-  }
-
-  .login-right img {
-    width: 200px;
-    height: 200px;
-  }
-
-  .wa-steps li {
-    font-size: 14px;
-  }
-
-  .options {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
 }
 
+/* Small mobile */
+@media (max-width: 480px) {
+  .icon-box {
+    width: 40px;
+    height: 40px;
+  }
+
+  .download-card p {
+    font-size: 12px;
+  }
+}
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+}
 
 @media (max-width: 480px) {
   .container {
     padding: 12px;
   }
-
-  .download-card {
-    padding: 16px;
-  }
-
-  .icon-box {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-  }
-
-  .download-card h4,
-  .download-card p {
-    font-size: 12px;
-  }
-
-  .login-left h2 {
-    font-size: 20px;
-  }
-
-  .wa-steps li {
-    padding-left: 36px;
-    font-size: 13px;
-  }
-
-  .wa-steps li::before {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-  }
-
-  .login-right img {
-    width: 160px;
-    height: 160px;
-  }
-
-  .stay-logged {
-    font-size: 14px;
-  }
 }
-
-.login-right img {
-  width: 266px;
-  height: 220px;
-} */
