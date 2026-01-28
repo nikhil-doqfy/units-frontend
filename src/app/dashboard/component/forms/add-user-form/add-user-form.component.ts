@@ -98,7 +98,7 @@ export class AddUserFormComponent {
         [
           Validators.required,
           Validators.pattern(
-            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$'
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$',
           ),
         ],
       ],
@@ -108,7 +108,7 @@ export class AddUserFormComponent {
         [
           Validators.required,
           Validators.pattern(
-            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$'
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$',
           ),
         ],
       ],
@@ -143,10 +143,8 @@ export class AddUserFormComponent {
 
   handleFilterClick(): void {
     this.getOptionTypes(['USER_ROLE']);
-    console.log('Filter button clicked');
   }
   onOptionSelectedUserType(option: any) {
-    console.log('OPTION FROM SELECT:', option);
     this.selectedUserType = option;
 
     if (option?.value) {
@@ -205,20 +203,19 @@ export class AddUserFormComponent {
     };
 
     if (this.editData && this.editData.id) {
-      console.log('Editing user with data:', data);
       data['user_id'] = this.editData.id;
       this.editUser(data);
-    } else console.log('Adding new user with data:', data);
-    this.userService
-      .addNewUser(data)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp: any) => {
-        if (resp.status === 201) {
-          this.alertService.success(resp.message);
-          this.formSubmitted.emit(true);
-          this.router.navigate(['/dashboard/users']);
-        }
-      });
+    } else
+      this.userService
+        .addNewUser(data)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((resp: any) => {
+          if (resp.status === 201) {
+            this.alertService.success(resp.message);
+            this.formSubmitted.emit(true);
+            this.router.navigate(['/dashboard/users']);
+          }
+        });
   }
 
   onOptionSelected(option: string) {

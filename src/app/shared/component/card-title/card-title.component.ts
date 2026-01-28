@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-card-title',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './card-title.component.html',
-  styleUrl: './card-title.component.css'
+  styleUrl: './card-title.component.css',
 })
 export class CardTitleComponent {
   @Input() title: string | undefined;

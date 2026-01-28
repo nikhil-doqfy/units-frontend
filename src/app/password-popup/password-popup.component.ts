@@ -61,7 +61,7 @@ export class PasswordPopupComponent {
         newPassword: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
       },
-      { validators: this.passwordsMatchValidator }
+      { validators: this.passwordsMatchValidator },
     );
   }
 
@@ -82,9 +82,6 @@ export class PasswordPopupComponent {
   }
 
   applyChange() {
-    console.log('Form values:', this.changePasswordForm.value);
-    console.log('Form valid?', this.changePasswordForm.valid);
-
     if (this.changePasswordForm.invalid) {
       this.changePasswordForm.markAllAsTouched();
       return;
@@ -97,14 +94,11 @@ export class PasswordPopupComponent {
         this.changePasswordForm.get('confirmPassword')?.value,
     };
 
-    console.log('Payload sending:', payload);
-
     this.authService
       .changePassword(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
-          console.log('Password changed successfully', res);
           alert('Password changed successfully!');
 
           this.submitPassword.emit({

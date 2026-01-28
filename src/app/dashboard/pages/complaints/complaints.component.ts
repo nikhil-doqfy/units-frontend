@@ -68,6 +68,7 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
     RefreshIconComponent,
     ExportIconComponent,
     SortingIconComponent,
+    TranslateModule,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',
@@ -132,7 +133,7 @@ export class ComplaintsComponent {
   assignEnginnerForm!: FormGroup;
   constructor(
     private destroyRef: DestroyRef,
-    private storageService: StorageService
+    private storageService: StorageService,
   ) {}
 
   ngOnInit() {
@@ -151,6 +152,9 @@ export class ComplaintsComponent {
     this.loadComplaints();
   }
 
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   changeLanguage(lang: string) {
     this.sharedService.setLanguage(lang);
   }
@@ -207,9 +211,6 @@ export class ComplaintsComponent {
     });
   }
   handleViewClick(item: any): void {
-    console.log('CLICKED 👉', item);
-    console.log('showDetailView 👉', this.showDetailView);
-
     this.selectedProperty = item;
     this.showDetailView = true;
   }

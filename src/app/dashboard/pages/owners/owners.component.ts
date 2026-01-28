@@ -144,6 +144,9 @@ export class OwnersComponent {
       });
   }
 
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -171,7 +174,7 @@ export class OwnersComponent {
 
   sendInvite(
     inviteOwnerFormRef: InviteOwnerFormComponent,
-    modal?: NgbActiveModal | any
+    modal?: NgbActiveModal | any,
   ) {
     const form = inviteOwnerFormRef.pmcOwnerForm;
 
@@ -216,7 +219,7 @@ export class OwnersComponent {
           this.owners = (resp?.content ?? []).map((o: any) => {
             const images =
               o.properties?.flatMap((p: any) =>
-                p?.image?.data ? [p.image.data] : []
+                p?.image?.data ? [p.image.data] : [],
               ) || [];
 
             return {
@@ -282,7 +285,7 @@ export class OwnersComponent {
         },
         (reason) => {
           this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
+        },
       );
   }
 
@@ -421,7 +424,6 @@ export class OwnersComponent {
       .subscribe({
         next: (response) => {
           this.rentalStatus = response?.content?.rental_status;
-          console.log('data', this.rentalStatus);
         },
       });
   }

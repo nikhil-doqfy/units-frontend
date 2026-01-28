@@ -160,7 +160,9 @@ export class PMCComponent {
   onRefresh() {
     this.getPMC();
   }
-
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   initPMCSearchListener() {
     this.onPMCSearch$
       .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
@@ -200,8 +202,6 @@ export class PMCComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
-          console.log('response:--->', resp);
-
           const url = window.URL.createObjectURL(resp);
 
           const a = document.createElement('a');
@@ -258,7 +258,7 @@ export class PMCComponent {
         },
         (reason) => {
           this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
+        },
       );
   }
 
@@ -275,7 +275,7 @@ export class PMCComponent {
 
   assignProperty(
     modal: NgbActiveModal,
-    component: AssignPropertyFormComponent
+    component: AssignPropertyFormComponent,
   ) {
     const form = component.assignedPrpertyForm;
     if (form.invalid) {

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { SortingIconComponent } from '../icons/sorting-icon/sorting-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-email-leads',
   standalone: true,
-  imports: [CommonModule, SortingIconComponent],
+  imports: [CommonModule, SortingIconComponent, TranslateModule],
   templateUrl: './email-leads.component.html',
   styleUrl: './email-leads.component.css',
 })

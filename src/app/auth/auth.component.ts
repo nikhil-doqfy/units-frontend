@@ -37,7 +37,7 @@ export class AuthComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private themeService: ThemeService
+    private themeService: ThemeService,
   ) {}
 
   ngOnInit(): void {
@@ -47,11 +47,11 @@ export class AuthComponent implements OnInit {
         this.currentRole = role;
       });
 
-    this.updatePageType();
+    // this.updatePageType();
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         this.updatePageType();

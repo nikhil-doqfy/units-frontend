@@ -20,12 +20,11 @@ export class StaffService {
       `${this.SERVER_ADDRESS}/user/staff_csv${queryString}`,
       {
         responseType: 'blob',
-      }
+      },
     );
   }
 
   addNewStaff(data: Record<string, any>): Observable<any> {
-    console.log('Adding new user with data:', data);
     return this.http.post(`${this.SERVER_ADDRESS}/user/staff_view`, data);
   }
   editUserStaff(data: Record<string, any>): Observable<any> {
@@ -35,7 +34,7 @@ export class StaffService {
   accessStaffRoleDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/user/staff_view${queryString}`
+      `${this.SERVER_ADDRESS}/user/staff_view${queryString}`,
     );
   }
 }

@@ -10,7 +10,7 @@
       >
         <!-- (click)="activeTab = 'manual'" -->
 
-        Manual
+        {{ "MANUAL" | translate }}
       </button>
     </li>
     <li class="nav-item">
@@ -21,8 +21,7 @@
         type="button"
       >
         <!-- (click)="activeTab = 'bulk'" -->
-
-        Bulk Import
+        {{ "BULK_IMPORT" | translate }}
       </button>
     </li>
   </ul>
@@ -33,7 +32,9 @@
     <div class="row g-3">
       <!-- Link Property -->
       <div class="col-md-6">
-        <label class="form-label required">Link Property</label>
+        <label class="form-label required">{{
+          "LINK_PROPERTY" | translate
+        }}</label>
         <!-- <select class="form-select" formControlName="property">
           <option value="">--Select--</option>
         </select> -->
@@ -43,51 +44,55 @@
 
       <!-- Tenant Name -->
       <div class="col-md-6">
-        <label class="form-label required">Tenant Name</label>
+        <label class="form-label required">{{
+          "TENANT_NAME" | translate
+        }}</label>
         <input
           type="text"
           class="form-control"
-          placeholder="enter name here"
+          [placeholder]="'ENTER_NAME_HERE' | translate"
           formControlName="tenantName"
         />
       </div>
 
       <!-- Email -->
       <div class="col-md-6">
-        <label class="form-label required">Email</label>
+        <label class="form-label required">{{ "EMAIL" | translate }}</label>
         <input
           type="email"
           class="form-control"
-          placeholder="enter email here"
+          [placeholder]="'ENTER_EMAIL_HERE' | translate"
           formControlName="email"
         />
       </div>
 
       <!-- Contact -->
       <div class="col-md-6">
-        <label class="form-label required">Contact</label>
+        <label class="form-label required">{{ "CONTACT" | translate }}</label>
         <input
           type="text"
           class="form-control"
-          placeholder="enter number here"
+          [placeholder]="'ENTER_NAME_HERE' | translate"
           formControlName="contact"
         />
       </div>
 
       <!-- Amount -->
       <div class="col-md-6">
-        <label class="form-label required"> Rental / Lease Amount (AED) </label>
+        <label class="form-label required">
+          {{ "LEASE_AMOUNT_AED" | translate }}
+        </label>
         <input
           type="number"
           class="form-control"
-          placeholder="enter amount here"
+          [placeholder]="'ENTER_AMOUNT' | translate"
           formControlName="amount"
         />
       </div>
 
       <!-- Status -->
       <div class="col-md-6">
-        <label class="form-label required">Status</label>
+        <label class="form-label required">{{ "STATUS" | translate }}</label>
         <!-- <select class="form-select" formControlName="status">
           <option value="">--Select--</option>
         </select> -->
@@ -96,7 +101,9 @@
 
       <!-- Source of Lead -->
       <div class="col-12">
-        <label class="form-label required">Source of Lead</label>
+        <label class="form-label required">{{
+          "LEAD_SOURCE" | translate
+        }}</label>
         <div class="d-flex gap-4">
           <div class="form-check">
             <input
@@ -105,7 +112,7 @@
               value="direct"
               formControlName="source"
             />
-            <label class="form-check-label">Direct</label>
+            <label class="form-check-label">{{ "DIRECT" | translate }}</label>
           </div>
 
           <div class="form-check">
@@ -115,7 +122,7 @@
               value="referral"
               formControlName="source"
             />
-            <label class="form-check-label">Referral</label>
+            <label class="form-check-label">{{ "REFERRAL" | translate }}</label>
           </div>
 
           <div class="form-check">
@@ -125,29 +132,33 @@
               value="platform"
               formControlName="source"
             />
-            <label class="form-check-label">Platform</label>
+            <label class="form-check-label">{{ "PLATFROM" | translate }}</label>
           </div>
         </div>
       </div>
 
       <!-- Referral Name -->
       <div class="col-md-6">
-        <label class="form-label required">Referral Tenant ID/ Name</label>
+        <label class="form-label required">{{
+          "REF_TENANT_ID_NAME" | translate
+        }}</label>
         <input
           type="text"
           class="form-control"
-          placeholder="enter here"
+          [placeholder]="'ENTER_HERE' | translate"
           formControlName="referralName"
         />
       </div>
 
       <!-- Referral Contact -->
       <div class="col-md-6">
-        <label class="form-label required">Referral Contact</label>
+        <label class="form-label required">{{
+          "REFERRAL_CONTACT" | translate
+        }}</label>
         <input
           type="text"
           class="form-control"
-          placeholder="enter number here"
+          [placeholder]="'ENTER_NUMBER_HERE' | translate"
           formControlName="referralContact"
         />
       </div>
@@ -161,8 +172,7 @@
             formControlName="sendAppLink"
           />
           <label class="form-check-label small">
-            A mobile app download link is sent to the tenant at the time of lead
-            creation to facilitate a smooth onboarding experience.
+            {{ "APP_LINK_SENT_ON_LEAD_CREATE" | translate }}
           </label>
         </div>
       </div>
@@ -173,12 +183,10 @@
     <div class="infoBox mb-3">
       <ul class="mb-0">
         <li>
-          Download the sample CSV, add your data, save the file, upload it here,
-          and click Import to store the contacts.
+          {{ "IMPORT_CONTACTS_VIA_CSV" | translate }}
         </li>
         <li>
-          Ensure the Name and Email fields are correctly filled in the CSV to
-          avoid errors.
+          {{ "VERIFY_NAME_EMAIL_FIELDS" | translate }}
         </li>
       </ul>
     </div>
@@ -187,11 +195,11 @@
     <div class="text-center mb-4">
       <button class="downloadbtn btn-transparent" (click)="sampleCsvDownload()">
         <img src="../../assets/XlsIcon.svg" alt="download" />
-        Download Sample CSV
+        {{ "DOWNLOAD_SAMPLE_CSV" | translate }}
       </button>
     </div>
     <app-upload-document
-      title="Drop your files here"
+      [title]="'DROP_FILES_HERE' | translate"
       [isMultipleFiles]="false"
       [fileTypes]="['pdf']"
       [maxSize]="20"
@@ -201,7 +209,7 @@
     <!-- Uploaded file preview -->
     <div class="uploadedFile mt-3" *ngIf="uploadedFile">
       <span>{{ uploadedFile.file.name }}</span>
-      <span class="successText">Uploaded</span>
+      <span class="successText">{{ "UPLOADED" | translate }}</span>
     </div>
   </div>
 </form>

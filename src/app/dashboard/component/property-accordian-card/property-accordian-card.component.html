@@ -11,7 +11,7 @@
         data-bs-toggle="collapse"
         (click)="toggleAccordion(i)"
       >
-        {{ item.title }}
+        {{ item.title | translate }}
       </button>
     </h2>
 
@@ -24,7 +24,7 @@
       <div class="accordion-body">
         <ul>
           <li *ngFor="let content of item.items">
-            <span>{{ content.label }}</span>
+            <span>{{ content.label | translate }}</span>
             <p>{{ content.value }}</p>
           </li>
         </ul>

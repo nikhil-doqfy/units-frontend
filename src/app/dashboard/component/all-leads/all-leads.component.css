@@ -39,13 +39,43 @@
 }
 
 .closeCircle {
+  all: unset; /* 🔥 removes ALL default styles */
+  box-sizing: border-box;
+
   width: 19px;
   height: 19px;
-  border: 1px solid black;
+  border: 1px solid #000;
   border-radius: 50%;
-  /* background-color: white; light gray circle */
-  opacity: 1;
-  padding: 0;
-  background-size: 12px;
-  background-position: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.scheduleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  white-space: nowrap; /* 🔥 KEY FIX */
+  flex-wrap: nowrap; /* 🔥 KEY FIX */
+
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+
+  font-size: 14px;
+  line-height: 1;
+}
+.scheduleBtn app-calender-icon {
+  flex-shrink: 0;
+}
+@media (max-width: 576px) {
+  .scheduleBtn {
+    width: auto; /* full width cancel */
+    max-width: 100%;
+  }
 }

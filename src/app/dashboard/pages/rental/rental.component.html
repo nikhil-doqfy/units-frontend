@@ -7,45 +7,49 @@
         <div class="metric-value">
           AED 1,20,573
           <span class="percentage text-success">
-            12% <app-arrow></app-arrow> last month
+            12% <app-arrow></app-arrow> {{ "LAST_MONTH" | translate }}
           </span>
         </div>
-        <div class="metric-label">Total Amount Received</div>
+        <div class="metric-label">
+          {{ "AMOUNT_RECEIVED" | translate }}
+        </div>
       </div>
 
       <div class="metric">
         <div class="metric-value">
           AED 2,20,789
-          <span class="badge text-success">5678 Cheques</span>
+          <span class="badge text-success"
+            >5678 {{ "CHEQUES" | translate }}</span
+          >
         </div>
-        <div class="metric-label">Cheques Approved</div>
+        <div class="metric-label">{{ "CHEQUES_APPROVED" | translate }}</div>
       </div>
 
       <div class="metric">
         <div class="metric-value">
           AED 20,573
-          <span class="badge text-warning">1124 Cheques</span>
+          <span class="badge text-warning"
+            >1124 {{ "CHEQUES" | translate }}</span
+          >
         </div>
-        <div class="metric-label">Cheques Deposited</div>
+        <div class="metric-label">{{ "CHEQUES_DEPOSITED" | translate }}</div>
       </div>
 
-      <div>
-        <app-custom-select
-          [options]="[
-            'Falcom city',
-            'Novatis AG...',
-            'Agriculture',
-            'Honda',
-            'TVS',
-            'Samsung',
-          ]"
-          [placeholder]="selected"
-          [selectedOption]="selected"
-          (optionSelected)="onOptionSelected($event)"
-          [isFilter]="true"
-        >
-        </app-custom-select>
-      </div>
+      <app-custom-select
+        [options]="[
+          'Falcom city',
+          'Novatis AG...',
+          'Agriculture',
+          'Honda',
+          'TVS',
+          'Samsung',
+        ]"
+        [placeholder]="selected"
+        [selectedOption]="selected"
+        (optionSelected)="onOptionSelected($event)"
+        [isFilter]="true"
+      >
+      </app-custom-select>
     </div>
   </div>
 
@@ -58,7 +62,7 @@
       <div class="row g-3 align-items-center">
         <div class="col-md">
           <app-table-title
-            [title]="'Rent Amounts' | translate"
+            [title]="'RENT_AMOUNTS' | translate"
             [subtitle]="'(' + totalRecords + ')'"
             (onRefresh)="onRefresh()"
           >
@@ -123,10 +127,10 @@
 
             <button
               type="button"
-              class="btn btnCommonsx btnMinWidth d-none d-xl-flex"
+              class="btn btnCommonsx btnMinWidth responsive-btn"
               (click)="toAddRenatlAcc()"
             >
-              {{ "Add New Account" | translate }}
+              {{ "ADD_ACCOUNT" | translate }}
             </button>
           </div>
         </div>
@@ -142,7 +146,9 @@
         <div class="lease-header">
           <h4>{{ l.title }}</h4>
           <div class="right">
-            <span class="lease-no">Lease No: {{ l.leaseNo }}</span>
+            <span class="lease-no"
+              >{{ "LEASE_NO" | translate }}: {{ l.leaseNo }}</span
+            >
             <span class="status" [ngClass]="l.status.toLowerCase()">
               {{ l.status }}
             </span>
@@ -151,42 +157,42 @@
 
         <div class="lease-grid">
           <div>
-            <label>Tenant No</label>
+            <label>{{ "TENANT_NO" | translate }}</label>
             <span>{{ l.tenantNo }}</span>
           </div>
 
           <div>
-            <label>Period From</label>
+            <label>{{ "PERIOD_FROM" | translate }}</label>
             <span>{{ l.period_from | date: "dd/MM/yyyy" }}</span>
           </div>
 
           <div>
-            <label>Period To</label>
+            <label>{{ "PERIOD_TO" | translate }}</label>
             <span>{{ l.period_to | date: "dd/MM/yyyy" }}</span>
           </div>
 
           <div>
-            <label>Unit Type</label>
+            <label>{{ "UNIT_TYPE" | translate }}</label>
             <span>{{ l.unitType }}</span>
           </div>
 
           <div>
-            <label>Year Rent</label>
+            <label>{{ "YEAR_RENT" | translate }}</label>
             <span>{{ l.year_rent || "N/A" }}</span>
           </div>
 
           <div>
-            <label>Other Charges</label>
+            <label>{{ "OTHER_CHARGES" | translate }}</label>
             <span>{{ l.other_charges || "N/A" }}</span>
           </div>
 
           <div>
-            <label>Vat</label>
+            <label>{{ "VAT" | translate }}</label>
             <span>{{ l.vat || "N/A" }}</span>
           </div>
 
           <div>
-            <label>Total Rent</label>
+            <label>{{ "TOTAL_RENT" | translate }}</label>
             <strong>{{ l.total_rent || "N/A" }}</strong>
           </div>
         </div>
@@ -217,14 +223,14 @@
     [title]="this.leases[0].title"
     [imgSrc]="''"
     [items]="[
-      { label: 'Tenant No', value: '98909897' },
-      { label: 'Period From', value: '28/02/24' },
-      { label: 'Period To', value: '28/02/25' },
-      { label: 'Unit Type', value: 'Residential' },
-      { label: 'Year Rent', value: '67,000' },
-      { label: 'Other Charges', value: '13,000' },
-      { label: 'VAT', value: '--' },
-      { label: 'Total Rent', value: '1,00,000' },
+      { label: getLabel('TENANT_NO'), value: '98909897' },
+      { label: getLabel('PERIOD_FROM'), value: '28/02/24' },
+      { label: getLabel('PERIOD_TO'), value: '28/02/25' },
+      { label: getLabel('UNIT_TYPE'), value: 'Residential' },
+      { label: getLabel('YEAR_RENT'), value: '67,000' },
+      { label: getLabel('OTHER_CHARGES'), value: '13,000' },
+      { label: getLabel('VAT'), value: '--' },
+      { label: getLabel('TOTAL_RENT'), value: '1,00,000' },
     ]"
     [showEdit]="true"
     (edit)="handleEditClick()"
@@ -235,18 +241,19 @@
 
       <div class="threeDotDropdown" *ngIf="showMenu">
         <button class="dropItem">
-          <app-refresh-icon></app-refresh-icon> Renew Account
+          <app-refresh-icon></app-refresh-icon>{{ "RENEW_ACCOUNT" | translate }}
         </button>
         <!-- (click)="onRenew()" -->
         <button class="dropItem danger">
           <!-- (click)="onTerminate()" -->
-          <app-disable-icon></app-disable-icon> Terminate Account
+          <app-disable-icon></app-disable-icon>
+          {{ "TERMINATE_ACCOUNT" | translate }}
         </button>
       </div>
     </div>
 
     <div rental class="other-charges-box mt-3">
-      <h6 class="section-title">OTHER CHARGES</h6>
+      <h6 class="section-title">{{ "OTHER_CHARGES" | translate }}</h6>
 
       <div class="charges-grid">
         <div class="charge-item">
@@ -282,22 +289,22 @@
 
       <div class="payment-info">
         <div>
-          <label>Status</label>
+          <label>{{ "STATUS" | translate }}</label>
           <span class="paid">Paid</span>
         </div>
 
         <div>
-          <label>Payment Type</label>
+          <label>{{ "PAYMENT_TYPE" | translate }}</label>
           <strong>Cheque</strong>
         </div>
 
         <div>
-          <label>Cheque Number</label>
+          <label>{{ "CHEQUE_NUMBER" | translate }}</label>
           <strong>6738398268291</strong>
         </div>
 
         <div>
-          <label>Total Amount</label>
+          <label>{{ "TOTAL_AMOUNT" | translate }}</label>
           <strong>11,260.00</strong>
         </div>
       </div>
@@ -309,7 +316,7 @@
       <div class="row align-items-center">
         <div class="col-md">
           <app-table-title
-            title="Rent Trnsactions"
+            [title]="'RENT_TRANSACTIONS' | translate"
             subtitle="(5)"
           ></app-table-title>
         </div>
@@ -317,14 +324,14 @@
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="Search here..." />
             <app-table-filter-btn
-              title="Filter"
+              [title]="'FILTER' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
               <app-filter-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
-              title="Export"
+              [title]="'EXPORT' | translate"
               [hasIcon]="true"
               (clicked)="handleExportClick()"
             >
@@ -339,20 +346,20 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Transaction ID</th>
+              <th>{{ "TRANSACTION_ID" | translate }}</th>
               <th>
-                <button type="button">Bank Name</button>
+                <button type="button">{{ "BANK_NAME" | translate }}</button>
               </th>
               <th>
-                <button type="button">Bank Account</button>
+                <button type="button">{{ "BANK_ACCOUNT" | translate }}</button>
               </th>
-              <th>Cheque Number</th>
-              <th>Cheque Date</th>
-              <th>Payment Type</th>
-              <th>Purpose</th>
-              <th>Status</th>
-              <th>Amount</th>
-              <th>Actions</th>
+              <th>{{ "CHEQUE_NUMBER" | translate }}</th>
+              <th>{{ "CHEQUE_DATE" | translate }}</th>
+              <th>{{ "PAYMENT_TYPE" | translate }}</th>
+              <th>{{ "PURPOSE" | translate }}</th>
+              <th>{{ "STATUS" | translate }}</th>
+              <th>{{ "AMOUNT" | translate }}</th>
+              <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
           <tbody>

@@ -85,7 +85,7 @@ export class LeaseTenancyComponent {
   constructor(
     private router: Router,
     private themeService: ThemeService,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
   ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -247,7 +247,6 @@ export class LeaseTenancyComponent {
       .subscribe({
         next: (response) => {
           this.leaseStatus = response?.content?.lease_status;
-          console.log('data', this.leaseStatus);
         },
       });
   }
@@ -264,8 +263,6 @@ export class LeaseTenancyComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
-          console.log('response:--->', resp);
-
           const url = window.URL.createObjectURL(resp);
 
           const a = document.createElement('a');
@@ -279,7 +276,7 @@ export class LeaseTenancyComponent {
         },
         error: (err) => {
           this.alertService.error(
-            err?.error?.message || 'Failed to download lease file'
+            err?.error?.message || 'Failed to download lease file',
           );
         },
       });

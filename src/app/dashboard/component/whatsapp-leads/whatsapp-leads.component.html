@@ -14,60 +14,61 @@
       <div class="download-left">
         <div class="icon-box"><app-call-on-desktop> </app-call-on-desktop></div>
         <div>
-          <p>Download WhatsApp for Windows</p>
+          <p>{{ "WHATSAPP_FOR_WINDOWS" | translate }}</p>
           <p>
-            Make calls, share your screen and get a faster experience when you
-            download the Windows app.
+            {{ "CALL_SHARE_FAST" | translate }}
           </p>
         </div>
       </div>
       <button class="download-btn">
-        Download <app-whatsapp-download-icons></app-whatsapp-download-icons>
+        {{ "DOWNLOAD" | translate }}
+        <app-whatsapp-download-icons></app-whatsapp-download-icons>
       </button>
     </div>
 
     <div class="login-card">
       <div class="login-left">
-        <h2>Steps to log in</h2>
+        <h2>{{ "STEPS_TO_LOGIN" | translate }}</h2>
         <ol class="wa-steps">
           <li>
-            Open <strong>WhatsApp</strong>
+            {{ "OPEN" | translate }}
+            <strong>{{ "WHATSAPP" | translate }}</strong>
             <span class="wa-icon"
               ><app-whatsapp-icon2></app-whatsapp-icon2
             ></span>
-            on your phone
+            {{ "ON_PHONE" | translate }}
           </li>
           <li>
-            On Android tap <strong>Menu</strong>
+            {{ "ON_ANDROID_TAP" | translate }}
+            <strong>{{ "MENU" | translate }}</strong>
             <span class="menu-icon"
               ><app-three-dots-icons></app-three-dots-icons
             ></span>
-            · On iPhone tap <strong>Settings</strong
+            · {{ "ON_IPHONE_TAP" | translate }}<strong>Settings</strong
             ><span class="setting-icon"
               ><app-setting-icon></app-setting-icon
             ></span>
           </li>
           <li>
-            Tap <strong>Linked devices</strong>, then
-            <strong>Link device</strong>
+            {{ "TAP" | translate }}
+            <strong>{{ "LINKED_DEVICES" | translate }}</strong
+            >, {{ "THEN" | translate }}
+            <strong>{{ "LINK_DEVICE" | translate }}</strong>
           </li>
-          <li>Scan the QR code to confirm</li>
+          <li>{{ "SCAN_QR_CONFIRM" | translate }}</li>
         </ol>
 
         <label class="stay-logged">
           <input type="checkbox" checked />
-          Stay logged in on this browser
+          {{ "STAY_LOGGED_IN" | translate }}
           <span class="checkmark"><app-unicode-icon></app-unicode-icon></span>
         </label>
       </div>
 
       <div class="login-right">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6zJp3nKufVsFVrDaB4I-e_cyidtqKMIGeCA&s"
-          alt="QR Code"
-        />
+        <img src="assets/Sample-QR-code.svg" alt="QR Code" />
         <a href="#" class="phone-link"
-          >Log in with phone number <app-angle-icon></app-angle-icon
+          >{{ "PHONE_LOGIN" | translate }}<app-angle-icon></app-angle-icon
         ></a>
       </div>
     </div>

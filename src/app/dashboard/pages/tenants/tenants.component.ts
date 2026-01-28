@@ -113,7 +113,10 @@ export class TenantsComponent {
   private onTenantsSearch$ = new Subject<string>();
   currentLanguage = 'en';
 
-  constructor(private router: Router, private themeService: ThemeService) {
+  constructor(
+    private router: Router,
+    private themeService: ThemeService,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
     this.initTenantSearchListener();
@@ -140,7 +143,9 @@ export class TenantsComponent {
         this.loadBreadcrumb();
       });
   }
-
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   initCurrentRoleListener() {
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -183,7 +188,6 @@ export class TenantsComponent {
       .subscribe({
         next: (resp: any) => {
           this.tenantsList = resp?.content ?? [];
-          console.log(' TENANT OBJECT:', this.tenantsList[0]);
           this.totalRecords = resp?.pagination?.total_records ?? 0;
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
@@ -209,7 +213,7 @@ export class TenantsComponent {
           param: 'PROPERTY_DOCUMENT_CHOICE',
           key: 'Property_Document',
           setter: (v) => {
-            (this.tenantDocumentType = v), this.getTenants();
+            ((this.tenantDocumentType = v), this.getTenants());
           },
         },
       ]);
@@ -293,7 +297,7 @@ export class TenantsComponent {
         },
         error: (err) => {
           this.alertService.error(
-            err?.error?.message || 'Failed to download tenant file'
+            err?.error?.message || 'Failed to download tenant file',
           );
         },
       });
@@ -315,7 +319,7 @@ export class TenantsComponent {
       },
       (reason) => {
         this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-      }
+      },
     );
   }
 
@@ -332,7 +336,7 @@ export class TenantsComponent {
       },
       (reason) => {
         this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-      }
+      },
     );
   }
 
@@ -349,7 +353,7 @@ export class TenantsComponent {
 
   sendInvite(
     inviteFormRef: InviteTenantFormComponent,
-    modal?: NgbActiveModal | any
+    modal?: NgbActiveModal | any,
   ) {
     const form = inviteFormRef.tenantForm;
     if (form.invalid) {

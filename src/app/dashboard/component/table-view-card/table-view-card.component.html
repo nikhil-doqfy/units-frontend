@@ -36,7 +36,7 @@
           class="btn btnCommon btnWhite"
           (click)="onBackClick()"
         >
-          <i><app-back-icon /></i> Back
+          <i><app-back-icon /></i>{{ "BACK" | translate }}
         </button>
         <div class="actionRow">
           <ng-content select="[header-actions]"></ng-content>
@@ -49,7 +49,7 @@
           class="btn btnCommon btnWhite"
           (click)="onBackClick()"
         >
-          <i><app-back-icon /></i> Back
+          <i><app-back-icon /></i> {{ "BACK" | translate }}
         </button>
       </ng-template>
     </div>

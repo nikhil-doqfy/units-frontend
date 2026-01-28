@@ -5,8 +5,8 @@
         [stats]="[
           {
             label: ('MONTHLY_COMMISSION' | translate),
-            value: ('AED 1,20,573' | translate)
-          }
+            value: ('AED 1,20,573' | translate),
+          },
         ]"
       >
         <ng-container icon>
@@ -33,16 +33,16 @@
             [stats]="[
               {
                 label: ('TOTAL' | translate),
-                value: stats?.properties?.total ?? 'N/A'
+                value: stats?.properties?.total ?? 'N/A',
               },
               {
                 label: ('RENTED' | translate),
-                value: stats?.properties?.rented ?? 'N/A'
+                value: stats?.properties?.rented ?? 'N/A',
               },
               {
                 label: ('VACANT' | translate),
-                value: stats?.properties?.vacant ?? 'N/A'
-              }
+                value: stats?.properties?.vacant ?? 'N/A',
+              },
             ]"
           >
             <ng-container icon>
@@ -56,16 +56,16 @@
             [stats]="[
               {
                 label: ('ACTIVE' | translate),
-                value: stats?.tenants?.active ?? 'N/A'
+                value: stats?.tenants?.active ?? 'N/A',
               },
               {
                 label: ('UPCOMING RENEWALS' | translate),
-                value: stats?.tenants?.upcoming_renewals ?? 'N/A'
+                value: stats?.tenants?.upcoming_renewals ?? 'N/A',
               },
               {
                 label: ('NEGOTIATIONS' | translate),
-                value: stats?.tenants?.negotiations ?? 'N/A'
-              }
+                value: stats?.tenants?.negotiations ?? 'N/A',
+              },
             ]"
           >
             <ng-container icon>
@@ -423,7 +423,7 @@
           <div
             class="table-responsive"
             [style]="{
-              'max-height': computHeight()
+              'max-height': computHeight(),
             }"
           >
             <table class="header-stickey table-bordered">
@@ -454,8 +454,8 @@
                         c.status === 'Payment Successful'
                           ? 'light-green'
                           : c.status === 'Payment Bounced'
-                          ? 'red'
-                          : 'yellow'
+                            ? 'red'
+                            : 'yellow'
                       "
                     />
                     <ng-template #noStatus>
@@ -494,7 +494,7 @@
               'Dubai hiils golf club',
               'Sillicon central mall',
               'Falcon city of wonders',
-              'Majan'
+              'Majan',
             ]"
             [placeholder]="selectedPropertiesOwned"
             [selectedOption]="selectedPropertiesOwned"

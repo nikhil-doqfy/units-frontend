@@ -88,34 +88,38 @@
               </thead>
 
               <tbody>
-                @for (approval of tenantList; track $index){
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      [img]="
-                        approval?.profile_image
-                          ? approval?.profile_image
-                          : '../../../../assets/userDefaultProImg.png'
-                      "
-                      [clickable]="true"
-                      (clicked)="handleViewClick(approval.tenant_id)"
-                      [title]="approval.name"
-                    />
-                  </td>
-                  <td>
-                    {{ approval.emirates_id ? approval.emirates_id : "N/A" }}
-                  </td>
-                  <td>
-                    {{ approval?.date_request ? approval.date_request : "N/A" }}
-                  </td>
-                  <td>
-                    {{
-                      approval.contact_number ? approval.contact_number : "N/A"
-                    }}
-                  </td>
-                  <td>{{ approval.email }}</td>
+                @for (approval of tenantList; track $index) {
+                  <tr>
+                    <td>
+                      <app-table-img-item
+                        [img]="
+                          approval?.profile_image
+                            ? approval?.profile_image
+                            : '../../../../assets/userDefaultProImg.png'
+                        "
+                        [clickable]="true"
+                        (clicked)="handleViewClick(approval.tenant_id)"
+                        [title]="approval.name"
+                      />
+                    </td>
+                    <td>
+                      {{ approval.emirates_id ? approval.emirates_id : "N/A" }}
+                    </td>
+                    <td>
+                      {{
+                        approval?.date_request ? approval.date_request : "N/A"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        approval.contact_number
+                          ? approval.contact_number
+                          : "N/A"
+                      }}
+                    </td>
+                    <td>{{ approval.email }}</td>
 
-                  <!-- <td align="center">
+                    <!-- <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
                         type="reject"
@@ -127,13 +131,13 @@
                       />
                     </div>
                   </td> -->
-                </tr>
-                }@empty {
-                <tr>
-                  <td colspan="20" align="center">
-                    <app-no-data></app-no-data>
-                  </td>
-                </tr>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="20" align="center">
+                      <app-no-data></app-no-data>
+                    </td>
+                  </tr>
                 }
               </tbody>
             </table>
@@ -172,44 +176,48 @@
                 <tr>
                   <th>
                     <button type="button">
-                      Tenant Name <i><app-sorting-icon /></i>
+                      {{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i>
                     </button>
                   </th>
-                  <th>Emirates ID</th>
-                  <th>Date Requested</th>
-                  <th>Contact Number</th>
-                  <th>Email Address</th>
+                  <th>{{ "EMIRATES_ID" | translate }}</th>
+                  <th>{{ "DATE_REQUESTED" | translate }}</th>
+                  <th>{{ "CONTACT_NUMBER" | translate }}</th>
+                  <th>{{ "EMAIL_ADDRESS" | translate }}</th>
                   <!-- <th width="200"></th> -->
                 </tr>
               </thead>
-              @for (approval of tenantList; track $index){
-              <tbody>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      [img]="
-                        approval?.profile_image
-                          ? approval?.profile_image
-                          : '../../../../assets/userDefaultProImg.png'
-                      "
-                      [clickable]="true"
-                      [title]="approval.name"
-                    />
-                    <!-- (clicked)="handleViewClick()" -->
-                  </td>
-                  <td>
-                    {{ approval?.emirates_id ? approval.emirates_id : "N/A" }}
-                  </td>
-                  <td>
-                    {{ approval?.date_request ? approval.date_request : "N/A" }}
-                  </td>
-                  <td>
-                    {{
-                      approval.contact_number ? approval.contact_number : "N/A"
-                    }}
-                  </td>
-                  <td>{{ approval.email }}</td>
-                  <!-- 
+              @for (approval of tenantList; track $index) {
+                <tbody>
+                  <tr>
+                    <td>
+                      <app-table-img-item
+                        [img]="
+                          approval?.profile_image
+                            ? approval?.profile_image
+                            : '../../../../assets/userDefaultProImg.png'
+                        "
+                        [clickable]="true"
+                        [title]="approval.name"
+                      />
+                      <!-- (clicked)="handleViewClick()" -->
+                    </td>
+                    <td>
+                      {{ approval?.emirates_id ? approval.emirates_id : "N/A" }}
+                    </td>
+                    <td>
+                      {{
+                        approval?.date_request ? approval.date_request : "N/A"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        approval.contact_number
+                          ? approval.contact_number
+                          : "N/A"
+                      }}
+                    </td>
+                    <td>{{ approval.email }}</td>
+                    <!-- 
                   <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
@@ -222,15 +230,14 @@
                       />
                     </div>
                   </td> -->
+                  </tr>
+                </tbody>
+              } @empty {
+                <tr>
+                  <td colspan="20" align="center">
+                    <app-no-data></app-no-data>
+                  </td>
                 </tr>
-              </tbody>
-
-              }@empty {
-              <tr>
-                <td colspan="20" align="center">
-                  <app-no-data></app-no-data>
-                </td>
-              </tr>
               }
             </table>
           </div>
@@ -267,43 +274,48 @@
                 <tr>
                   <th>
                     <button type="button">
-                      Tenant Name <i><app-sorting-icon /></i>
+                      {{ "TENANT_NAME" | translate }}
+                      <i><app-sorting-icon /></i>
                     </button>
                   </th>
-                  <th>Emirates ID</th>
-                  <th>Date Requested</th>
-                  <th>Contact Number</th>
-                  <th>Email Address</th>
+                  <th>{{ "EMIRATES_ID" | translate }}</th>
+                  <th>{{ "DATE_REQUESTED" | translate }}</th>
+                  <th>{{ "CONTACT_NUMBER" | translate }}</th>
+                  <th>{{ "EMAIL_ADDRESS" | translate }}</th>
                   <!-- <th width="200"></th> -->
                 </tr>
               </thead>
-              @for (approval of tenantList; track $index){
-              <tbody>
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      [img]="
-                        approval?.profile_image
-                          ? approval?.profile_image
-                          : '../../../../assets/userDefaultProImg.png'
-                      "
-                      [clickable]="true"
-                      [title]="approval.name"
-                    />
-                  </td>
-                  <td>
-                    {{ approval?.emirates_id ? approval.emirates_id : "N/A" }}
-                  </td>
-                  <td>
-                    {{ approval?.date_request ? approval.date_request : "N/A" }}
-                  </td>
-                  <td>
-                    {{
-                      approval.contact_number ? approval.contact_number : "N/A"
-                    }}
-                  </td>
-                  <td>{{ approval.email }}</td>
-                  <!-- 
+              @for (approval of tenantList; track $index) {
+                <tbody>
+                  <tr>
+                    <td>
+                      <app-table-img-item
+                        [img]="
+                          approval?.profile_image
+                            ? approval?.profile_image
+                            : '../../../../assets/userDefaultProImg.png'
+                        "
+                        [clickable]="true"
+                        [title]="approval.name"
+                      />
+                    </td>
+                    <td>
+                      {{ approval?.emirates_id ? approval.emirates_id : "N/A" }}
+                    </td>
+                    <td>
+                      {{
+                        approval?.date_request ? approval.date_request : "N/A"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        approval.contact_number
+                          ? approval.contact_number
+                          : "N/A"
+                      }}
+                    </td>
+                    <td>{{ approval.email }}</td>
+                    <!-- 
                   <td align="center">
                     <div class="cmmnTblActnBtnDiv">
                       <app-table-action-btn
@@ -317,15 +329,14 @@
                       />
                     </div>
                   </td> -->
+                  </tr>
+                </tbody>
+              } @empty {
+                <tr>
+                  <td colspan="20" align="center">
+                    <app-no-data></app-no-data>
+                  </td>
                 </tr>
-              </tbody>
-
-              }@empty {
-              <tr>
-                <td colspan="20" align="center">
-                  <app-no-data></app-no-data>
-                </td>
-              </tr>
               }
             </table>
           </div>
@@ -356,7 +367,7 @@
     [imgSrc]="selectedTenant?.profile_image"
     [headerItems]="[
       { label: 'Contact', value: selectedTenant?.contact_number },
-      { label: 'Email', value: selectedTenant?.email }
+      { label: 'Email', value: selectedTenant?.email },
     ]"
     [items]="[
       { label: 'Emirates ID:', value: selectedTenant?.emirate_id },
@@ -365,7 +376,7 @@
       { label: 'Passport Self', value: selectedTenant?.passport_self || '--' },
       {
         label: 'Passport For Family Member (If any)',
-        value: selectedTenant?.passport_family_member || '--'
+        value: selectedTenant?.passport_family_member || '--',
       },
       { label: 'Passport Expiry', value: selectedTenant?.passport_expiry },
       { label: 'Employment Proof', value: selectedTenant?.employment_proof },
@@ -373,8 +384,8 @@
       { label: 'Visa Self', value: selectedTenant?.visa_self || '--' },
       {
         label: 'Visa For Family Member (If any)',
-        value: selectedTenant?.visa_family_member || '--'
-      }
+        value: selectedTenant?.visa_family_member || '--',
+      },
     ]"
     (back)="handleBackClick()"
   >

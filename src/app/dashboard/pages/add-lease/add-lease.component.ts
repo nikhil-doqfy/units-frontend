@@ -124,7 +124,10 @@ export class AddLeaseComponent {
 
   @ViewChild('docContainer', { static: false }) docContainer!: ElementRef;
 
-  constructor(private router: Router, private destroyRef: DestroyRef) {
+  constructor(
+    private router: Router,
+    private destroyRef: DestroyRef,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
@@ -154,7 +157,6 @@ export class AddLeaseComponent {
         key: 'lease_document_choices',
         setter: (v) => {
           this.documetUploadTypes = this.getProcessUploadTypes(v, 'documents');
-          console.log(this.documetUploadTypes);
           this.activeDocTab = v?.[0]?.key;
         },
       },

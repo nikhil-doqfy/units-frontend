@@ -98,6 +98,8 @@ export class PropertyViewCardComponent {
 
     if (!mainEl || !thumbEl) return;
 
+    if (mainEl.swiper || thumbEl.swiper) return;
+
     Object.assign(thumbEl, {
       navigation: true,
       breakpoints: {

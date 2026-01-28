@@ -1,11 +1,17 @@
 <div class="page-header">
-  <h3>{{ isEditMode ? "Edit" : "Add New Rental Account" }}</h3>
+  <h3>
+    {{ isEditMode ? ("EDIT" | translate) : ("ADD_RENTAL_ACCOUNT" | translate) }}
+  </h3>
   <div class="actions">
     <button
       class="btn-primary btnCommon"
       (click)="isEditMode ? onSaveChanges() : onEdit()"
     >
-      {{ isEditMode ? "Save Changes" : "Update Account" }}
+      {{
+        isEditMode
+          ? ("SAVE_CHANGES" | translate)
+          : ("UPDATE_ACCOUNT" | translate)
+      }}
     </button>
     <span class="close" (click)="onClose()">×</span>
   </div>
@@ -18,7 +24,7 @@
         <div class="circle">
           <i><app-upload-icon /></i>
         </div>
-        <label>Tenant Photo <span>*</span></label>
+        <label>{{ "TENANT_PHOTO" | translate }} <span>*</span></label>
         <small>Max 5MB, PNG</small>
       </div>
 
@@ -30,7 +36,7 @@
           [options]="assignedPropertyList"
           key="key"
           value="value"
-          placeholder="Select Property"
+          [placeholder]="'SELECT_PROPERTY' | translate"
           [selectedOption]="selectedAssignedProperty"
           (optionSelected)="onAssignedPropertySelected($event)"
           (click)="onLinkPropertyClick()"
@@ -40,21 +46,21 @@
       </div>
 
       <div>
-        <label>Tenant Name <span>*</span></label>
+        <label>T{{ "TENANT_NAME" | translate }} <span>*</span></label>
         <app-custom-select> </app-custom-select>
       </div>
 
       <div>
-        <label>Email Address <span>*</span></label>
+        <label>{{ "EMAIL_ADDRESS" | translate }} <span>*</span></label>
         <input
           type="email"
-          placeholder="Enter email here"
+          [placeholder]="'ENTER_EMAIL_HERE' | translate"
           formControlName="email"
         />
       </div>
 
       <div>
-        <label>Contact Number <span>*</span></label>
+        <label>{{ "CONTACT_NUMBER" | translate }} <span>*</span></label>
         <div class="phone">
           <select class="code">
             <option>+91</option>
@@ -65,7 +71,7 @@
 
       <div>
         <label class="form-label"
-          >{{ "Period From" | translate }}<span>*</span></label
+          >{{ "PERIOD_FROM" | translate }}<span>*</span></label
         >
         <div class="datePicker">
           <input
@@ -73,21 +79,21 @@
             placeholder="YYYY-MM-DD"
             ngbDatepicker
             #startDate="ngbDatepicker"
-            formControlName="startDate"
+            formControlName="periodFrom"
           />
           <button type="button" (click)="startDate.toggle()">
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(rentalForm, 'startDate').status) {
-        <small class="errorMsg">
-          {{ isInvalid(rentalForm, "startDate").msg }}
-        </small>
+        @if (isInvalid(rentalForm, "periodFrom").status) {
+          <small class="errorMsg">
+            {{ isInvalid(rentalForm, "periodFrom").msg }}
+          </small>
         }
       </div>
       <div>
         <label class="form-label"
-          >{{ "Period To" | translate }}<span>*</span></label
+          >{{ "PERIOD_TO" | translate }}<span>*</span></label
         >
         <div class="datePicker">
           <input
@@ -95,29 +101,29 @@
             placeholder="YYYY-MM-DD"
             ngbDatepicker
             #endDate="ngbDatepicker"
-            formControlName="endDate"
+            formControlName="periodTo"
           />
           <button type="button" (click)="endDate.toggle()">
             <app-date-icon />
           </button>
         </div>
-        @if (isInvalid(rentalForm, 'endDate').status) {
-        <small class="errorMsg">
-          {{ isInvalid(rentalForm, "endDate").msg }}
-        </small>
+        @if (isInvalid(rentalForm, "periodTo").status) {
+          <small class="errorMsg">
+            {{ isInvalid(rentalForm, "periodTo").msg }}
+          </small>
         }
       </div>
 
       <div>
-        <label>Unit Type <span>*</span></label>
+        <label>{{ "UNIT_TYPE" | translate }} <span>*</span></label>
         <app-custom-select> </app-custom-select>
       </div>
 
       <div>
-        <label>Rent <span>*</span></label>
+        <label>{{ "RENT" | translate }} <span>*</span></label>
         <input
           type="text"
-          placeholder="Enter Amount here"
+          [placeholder]="'ENTER_AMOUNT' | translate"
           formControlName="rent"
         />
       </div>
@@ -136,7 +142,7 @@
     <div class="row g-3 align-items-center">
       <div class="col-md">
         <app-table-title
-          [title]="'Banks & Cheques' | translate"
+          [title]="'BANKS_AND_CHEQUES' | translate"
           [subtitle]="'(' + totalRecords + ')'"
         ></app-table-title>
       </div>
@@ -148,12 +154,12 @@
             (click)="openScanChargesModal(addChargesContent)"
           >
             <app-plus-icon></app-plus-icon>
-            {{ "Add Cheque" | translate }}
+            {{ "ADD_CHEQUE" | translate }}
           </button>
           <span>|</span>
           <button type="button" class="btn">
             <app-scannericon></app-scannericon>
-            {{ "Scan Cheque" | translate }}
+            {{ "SCAN_CHEQUE" | translate }}
           </button>
         </div>
       </div>
@@ -164,74 +170,74 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>{{ "Bank Name" | translate }}</th>
+            <th>{{ "BANK_NAME" | translate }}</th>
             <th>
               <button type="button">
-                {{ "Bank Accouunt" | translate }}
+                {{ "BANK_ACCOUNT" | translate }}
               </button>
             </th>
-            <th>{{ "Cheque  number" | translate }}</th>
-            <th>{{ "Cheque Date" | translate }}</th>
-            <th>{{ "Payment Type" | translate }}</th>
-            <th width="200">{{ "Purpose" | translate }}</th>
-            <th width="200">{{ "Amount" | translate }}</th>
-            <th width="200">{{ "Status" | translate }}</th>
+            <th>{{ "CHEQUE_NUMBER" | translate }}</th>
+            <th>{{ "CHEQUE_DATE" | translate }}</th>
+            <th>{{ "PAYMENT_TYPE" | translate }}</th>
+            <th width="200">{{ "PURPOSE" | translate }}</th>
+            <th width="200">{{ "AMOUNT" | translate }}</th>
+            <th width="200">{{ "STATUS" | translate }}</th>
           </tr>
         </thead>
 
         <tbody>
           @for (row of rentalPayments; track $index) {
-          <tr>
-            <td>
-              <select class="form-control">
-                <option value="">{{ row.bank || "Select Bank" }}</option>
-              </select>
-            </td>
+            <tr>
+              <td>
+                <select class="form-control">
+                  <option value="">{{ row.bank || "Select Bank" }}</option>
+                </select>
+              </td>
 
-            <td>
-              <input
-                type="text"
-                class="form-control"
-                [value]="row.bank_account"
-              />
-            </td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="row.bank_account"
+                />
+              </td>
 
-            <td>
-              <input
-                type="text"
-                class="form-control"
-                [value]="row.cheque_number"
-              />
-            </td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="row.cheque_number"
+                />
+              </td>
 
-            <td>
-              <input
-                type="date"
-                class="form-control"
-                [value]="row.cheque_date | date : 'yyyy-MM-dd'"
-              />
-            </td>
+              <td>
+                <input
+                  type="date"
+                  class="form-control"
+                  [value]="row.cheque_date | date: 'yyyy-MM-dd'"
+                />
+              </td>
 
-            <td>
-              {{ row.payment_type?.value || "-" }}
-            </td>
+              <td>
+                {{ row.payment_type?.value || "-" }}
+              </td>
 
-            <td>
-              {{ row.purpose || "-" }}
-            </td>
+              <td>
+                {{ row.purpose || "-" }}
+              </td>
 
-            <td>
-              {{ row.amount }}
-            </td>
+              <td>
+                {{ row.amount }}
+              </td>
 
-            <td>
-              {{ row.status }}
-            </td>
-          </tr>
+              <td>
+                {{ row.status }}
+              </td>
+            </tr>
           } @empty {
-          <tr>
-            <td colspan="8" class="text-center">No records found</td>
-          </tr>
+            <tr>
+              <td colspan="8" class="text-center">No records found</td>
+            </tr>
           }
         </tbody>
       </table>
@@ -265,7 +271,7 @@
     <div class="row g-3 align-items-center">
       <div class="col-md">
         <app-table-title
-          [title]="'Other Charges' | translate"
+          [title]="'OTHER_CHARGES' | translate"
         ></app-table-title>
       </div>
       <div class="col-md-auto">
@@ -277,7 +283,7 @@
             {{ "ADD_CHARGES" | translate }}
           </button>
           <button class="btn total-btn">
-            Total : {{ totalAmount | number : "1.0-0" }}
+            {{ "TOTAL" | translate }} : {{ totalAmount | number: "1.0-0" }}
           </button>
         </div>
       </div>
@@ -288,13 +294,13 @@
       <table class="charges-table">
         <thead>
           <tr>
-            <th>{{ "Description" | translate }}</th>
+            <th>{{ "DESCRIPTION" | translate }}</th>
             <th>
-              {{ "Amount" | translate }}
+              {{ "AMOUNT" | translate }}
             </th>
-            <th>{{ "Tax Code" | translate }}</th>
+            <th>{{ "TAX_CODE" | translate }}</th>
             <th>{{ "VAT" | translate }}</th>
-            <th>{{ "Total Amount" | translate }}</th>
+            <th>{{ "TOTAL_AMOUNT" | translate }}</th>
           </tr>
         </thead>
 
@@ -307,10 +313,10 @@
                 {{ c.label }}
               </label>
             </td>
-            <td>{{ c.amount | number : "1.2-2" }}</td>
+            <td>{{ c.amount | number: "1.2-2" }}</td>
             <td>{{ c.tax }}</td>
-            <td>{{ c.vat | number : "1.2-2" }}</td>
-            <td>{{ c.total | number : "1.2-2" }}</td>
+            <td>{{ c.vat | number: "1.2-2" }}</td>
+            <td>{{ c.total | number: "1.2-2" }}</td>
           </tr>
         </tbody>
       </table>

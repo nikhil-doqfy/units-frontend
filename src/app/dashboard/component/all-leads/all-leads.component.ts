@@ -34,6 +34,7 @@ import { ActivityHistoryFormComponent } from '../forms/activity-history-form/act
 import { ActivityHistroyIconsComponent } from '../../../icons/activity-histroy-icons/activity-histroy-icons.component';
 import { DateIconComponent } from '../icons/date-icon/date-icon.component';
 import { CalenderIconComponent } from '../../../icons/calender-icon/calender-icon.component';
+import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 
 @Component({
   selector: 'app-all-leads',
@@ -60,6 +61,7 @@ import { CalenderIconComponent } from '../../../icons/calender-icon/calender-ico
     DateIconComponent,
     NgbDatepickerModule,
     CalenderIconComponent,
+    CircularCrossBtnIconComponent,
   ],
   templateUrl: './all-leads.component.html',
   styleUrl: './all-leads.component.css',

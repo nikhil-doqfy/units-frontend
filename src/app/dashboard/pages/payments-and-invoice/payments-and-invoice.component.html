@@ -14,7 +14,7 @@
           'Property Name: Agriculture',
           'Property Name: Honda',
           'Property Name: TVS',
-          'Property Name: Samsung'
+          'Property Name: Samsung',
         ]"
         [placeholder]="selected"
         [selectedOption]="selected"
@@ -25,7 +25,7 @@
     </app-payments-info-card>
 
     <div rental class="other-charges-box mt-3">
-      <h6 class="section-title">OTHER CHARGES</h6>
+      <h6 class="section-title">{{ "OTHER_CHARGES" | translate }}</h6>
 
       <div class="charges-grid">
         <div class="charge-item">
@@ -61,22 +61,22 @@
 
       <div class="payment-info">
         <div>
-          <label>Status</label>
+          <label>{{ "STATUS" | translate }}</label>
           <span class="paid">Paid</span>
         </div>
 
         <div>
-          <label>Payment Type</label>
+          <label>{{ "PAYMENT_TYPE" | translate }}</label>
           <strong>Cheque</strong>
         </div>
 
         <div>
-          <label>Cheque Number</label>
+          <label>{{ "CHEQUE_NUMBER" | translate }}</label>
           <strong>6738398268291</strong>
         </div>
 
         <div>
-          <label>Total Amount</label>
+          <label>{{ "TOTAL_AMOUNT" | translate }}</label>
           <strong>11,260.00</strong>
         </div>
       </div>
@@ -120,20 +120,20 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>Transaction ID</th>
+            <th>{{ "TRANSACTION_ID" | translate }}</th>
             <th>
-              <button type="button">Bank Name</button>
+              <button type="button">{{ "BANK_NAME" | translate }}</button>
             </th>
             <th>
-              <button type="button">Bank Account</button>
+              <button type="button">{{ "BANK_ACCOUNT" | translate }}</button>
             </th>
-            <th>Cheque Number</th>
-            <th>Cheque Date</th>
-            <th>Payment Type</th>
-            <th>Purpose</th>
-            <th>Status</th>
-            <th>Amount</th>
-            <th>Actions</th>
+            <th>{{ "CHEQUE_NUMBER" | translate }}</th>
+            <th>{{ "CHEQUE_DATE" | translate }}</th>
+            <th>{{ "PAYMENT_TYPE" | translate }}</th>
+            <th>{{ "PURPOSE" | translate }}</th>
+            <th>{{ "STATUS" | translate }}</th>
+            <th>{{ "AMOUNT" | translate }}</th>
+            <th>{{ "ACTIONSC" | translate }}</th>
           </tr>
         </thead>
         <tbody>

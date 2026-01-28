@@ -134,7 +134,7 @@ export class UsersComponent {
 
   openAddUserModal(
     addUserContent: TemplateRef<any>,
-    editMode: boolean = false
+    editMode: boolean = false,
   ) {
     this.isEditMode = editMode;
     this.modalService
@@ -149,7 +149,7 @@ export class UsersComponent {
         },
         (reason) => {
           this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
+        },
       );
   }
 
@@ -301,7 +301,6 @@ export class UsersComponent {
   // ------------------------- Access user type  -------------------------
 
   getOptionTypes(options: string[]) {
-    console.log('Option types sending:', options);
     this.sharedApiService
       .getOptions({ option_type: options.join(',') })
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -314,11 +313,9 @@ export class UsersComponent {
 
   handleFilterClick(): void {
     this.getOptionTypes(['USER_ROLE']);
-    console.log('Filter button clicked');
   }
 
   onOptionSelectedUserType(option: any) {
-    console.log('OPTION FROM SELECT:', option);
     this.selectedUserType = option;
 
     if (option && option.value) {

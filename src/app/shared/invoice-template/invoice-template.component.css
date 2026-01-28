@@ -50,28 +50,6 @@ body {
   text-align: right;
 }
 
-.invoice-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-.invoice-table th {
-  background: #1e3a8a;
-  color: #fff;
-  padding: 8px;
-}
-
-.invoice-table td {
-  padding: 8px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: center;
-}
-
-.invoice-table td:first-child {
-  text-align: left;
-}
-
 .brand img {
   width: 225px;
   height: 78px;
@@ -149,7 +127,7 @@ body {
 
 .signature .role {
   font-size: 11px;
-  color: #6b7280;
+  color: #0a0a0b;
 }
 
 /* NOTE */
@@ -194,7 +172,7 @@ body {
   padding: 10px 12px;
   font-weight: 500;
   text-align: center;
-  border-right: 2px solid #ffffff40; /* white divider */
+  border-right: 2px solid #ffffff40;
 }
 
 /* LEFT ROUND */
@@ -227,11 +205,13 @@ body {
 .invoice-info {
   display: flex;
   gap: 32px;
-  background: #f7f9fb;
+  background: #f5f7f8;
   padding: 20px;
   border-radius: 8px;
   font-size: 13px;
   color: #374151;
+  margin-top: 38px;
+  margin-bottom: 38px;
 }
 
 /* LEFT & MIDDLE */
@@ -271,4 +251,84 @@ body {
 
 .info-card strong {
   color: #111827;
+}
+.payment p {
+  color: #536c76;
+}
+
+:host ::ng-deep app-call-icons-new svg,
+:host ::ng-deep app-call-icons-new svg * {
+  color: #1b448d !important;
+}
+:host ::ng-deep app-email-icon svg * {
+  color: #1b448d;
+}
+
+.totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 24px;
+}
+
+.words {
+  max-width: 55%;
+}
+
+.words p {
+  margin: 4px 0;
+  line-height: 1.6;
+}
+
+.summary {
+  min-width: 260px;
+  text-align: right;
+}
+
+.summary p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.summary .grand {
+  display: inline-block;
+  background: #1e3a8a;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.brand img {
+  width: 230px;
+  height: auto;
+}
+
+/* RIGHT SIDE */
+.invoice-title {
+  text-align: right;
+}
+
+.invoice-title h2 {
+  margin: 0;
+  font-size: 28px; /* bigger like first image */
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #1e3a8a;
+}
+
+.invoice-title p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #6b7280; /* lighter TRN */
+  font-weight: 500;
 }

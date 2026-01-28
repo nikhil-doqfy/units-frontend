@@ -12,7 +12,7 @@
               [class.active]="activeTab === 'properties'"
               (click)="activeTab = 'properties'; showDetailView = false"
             >
-              Properties
+              {{ "PROPERTIES" | translate }}
             </button>
           </li>
 
@@ -22,7 +22,7 @@
               [class.active]="activeTab === 'leads'"
               (click)="activeTab = 'leads'; showDetailView = false"
             >
-              Property Leads
+              {{ "PROPERTY_LEADS" | translate }}
             </button>
             <span class="count-badge" *ngIf="activeTab === 'leads'">125</span>
           </li>
@@ -139,7 +139,7 @@
                             [options]="rentalStatus"
                             key="key"
                             value="value"
-                            placeholder="Select tenancy status"
+                            [placeholder]="'SELECT_TENANCY_STATUS' | translate"
                             (optionSelected)="selectedrentalstatus = $event"
                             (click)="onRentalTenancyClick()"
                           >
@@ -195,56 +195,68 @@
           >
           </app-property-view-card>
           <div class="mt-4">
-            <app-card-title [title]="'ALL_DOCUMENTS' | translate" />
+            <app-card-title
+              [title]="'ALL_DOCUMENTS' | translate"
+            ></app-card-title>
+
             <div class="commonTabs mt-2">
               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                @for (type of propertyDocumentType; track type.key;) {
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    [class.active]="type.key === activeDocTypeKey"
-                    [id]="type.key + '-tab'"
-                    data-bs-toggle="tab"
-                    [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
-                    type="button"
-                    role="tab"
-                    [attr.aria-controls]="type.key + '-tab-pane'"
-                    [attr.aria-selected]="type.key === activeDocTypeKey"
-                    (click)="onDocTabClick(type)"
-                  >
-                    {{ type.value }}
-                  </button>
-                </li>
+                @for (type of propertyDocumentType; track type.key) {
+                  <li class="nav-item" role="presentation">
+                    <button
+                      class="nav-link"
+                      [class.active]="type.key === activeDocTypeKey"
+                      [id]="type.key + '-tab'"
+                      data-bs-toggle="tab"
+                      [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
+                      type="button"
+                      role="tab"
+                      [attr.aria-controls]="type.key + '-tab-pane'"
+                      [attr.aria-selected]="type.key === activeDocTypeKey"
+                      (click)="onDocTabClick(type)"
+                    >
+                      {{ type.value }}
+                    </button>
+                  </li>
                 }
               </ul>
             </div>
             <div class="commonTabsContent">
               <div class="tab-content" id="myTabContent">
-                @for(type of propertyDocumentType; track type.key; let i =
-                $index){
-                <div
-                  [ngClass]="{
-                    'tab-pane': true,
-                    fade: true,
-                    show: type.key === activeDocTypeKey,
-                    active: type.key === activeDocTypeKey
-                  }"
-                  [id]="type.key + '-tab-pane'"
-                  role="tabpanel"
-                  [attr.aria-labelledby]="type.key + '-tab'"
-                  [tabindex]="i"
-                >
-                  <div class="row g-2">
-                    @for(docsGroup of propertyDocuments[activeDocTypeKey]; track
-                    docsGroup.id){
-                    <div class="col-auto">
-                      <app-document-type-item [title]="docsGroup.file_name" />
+                @for (
+                  type of propertyDocumentType;
+                  track type.key;
+                  let i = $index
+                ) {
+                  <div
+                    [ngClass]="{
+                      'tab-pane': true,
+                      fade: true,
+                      show: type.key === activeDocTypeKey,
+                      active: type.key === activeDocTypeKey,
+                    }"
+                    [id]="type.key + '-tab-pane'"
+                    role="tabpanel"
+                    [attr.aria-labelledby]="type.key + '-tab'"
+                    [tabindex]="i"
+                  >
+                    <div class="row g-2">
+                      @for (
+                        docsGroup of propertyDocuments[activeDocTypeKey];
+                        track docsGroup.id
+                      ) {
+                        <div class="col-auto">
+                          <app-document-type-item
+                            [title]="docsGroup.file_name"
+                          />
+                        </div>
+                      } @empty {
+                        <div class="col-auto m-auto">
+                          Documents not available!
+                        </div>
+                      }
                     </div>
-                    }@empty {
-                    <div class="col-auto m-auto">Documents not available!</div>
-                    }
                   </div>
-                </div>
                 }
               </div>
             </div>
@@ -315,104 +327,114 @@
             </thead>
             <tbody>
               @for (property of propertiesList; track $index) {
-              <tr>
-                <td *ngIf="currentRole === 'property-manager'">
-                  {{ property.property_unit_id }}
-                </td>
-                <td>
-                  <app-table-img-item
-                    [img]="
-                      property?.property_image ??
-                      '../../../../assets/property/property-img-default.svg'
-                    "
-                    size="md"
-                    [title]="property.property_unit_name"
-                    [clickable]="true"
-                    (clicked)="handleViewClick(property.property_unit_id)"
-                  />
-                </td>
-                <td>{{ property.property_name }}</td>
-                <td
-                  *ngIf="
-                    currentRole === 'owner' ||
-                    currentRole === 'property-manager'
-                  "
-                >
-                  @if (property?.tenant_name) {
-                  <app-table-img-item
-                    [img]="
-                      property?.tenant_profile_image ??
-                      '../../../../assets/userDefaultProImg.png'
-                    "
-                    [title]="property?.tenant_name || 'N/A'"
-                  />
-                  }@else {N/A}
-                </td>
-                <td *ngIf="currentRole === 'owner'">
-                  <app-badge
-                    [title]="property.agreement_expiration || 'N/A'"
-                    [status]="
-                      getAgreementExpirationStatusColor(
-                        property.agreement_expiration
-                      )
-                    "
-                  />
-                </td>
-                <td
-                  *ngIf="
-                    currentRole === 'tenant' ||
-                    currentRole === 'property-manager'
-                  "
-                >
-                  {{ property?.owner_name || "N/A" }}
-                </td>
-                <td
-                  *ngIf="
-                    currentRole === 'property-manager' ||
-                    currentRole === 'tenant'
-                  "
-                >
-                  <app-badge
-                    [title]="property.tenancy_status"
-                    [status]="
-                      property.tenancy_status === 'Available' ? 'red' : 'green'
-                    "
-                  />
-                </td>
-                <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                  {{ property.dimension || "N/A" }}
-                </td>
-                <td *ngIf="currentRole === 'owner' || currentRole === 'tenant'">
-                  {{ property?.company_name || "N/A" }}
-                </td>
-                <td
-                  *ngIf="
-                    currentRole === 'owner' ||
-                    currentRole === 'property-manager'
-                  "
-                  align="center"
-                >
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="edit"
-                      (clicked)="handleEditClick(property.property_unit_id)"
+                <tr>
+                  <td *ngIf="currentRole === 'property-manager'">
+                    {{ property.property_unit_id }}
+                  </td>
+                  <td>
+                    <app-table-img-item
+                      [img]="
+                        property?.property_image ??
+                        '../../../../assets/property/property-img-default.svg'
+                      "
+                      size="md"
+                      [title]="property.property_unit_name"
+                      [clickable]="true"
+                      (clicked)="handleViewClick(property.property_unit_id)"
                     />
-                    <!-- <app-table-action-btn
+                  </td>
+                  <td>{{ property.property_name }}</td>
+                  <td
+                    *ngIf="
+                      currentRole === 'owner' ||
+                      currentRole === 'property-manager'
+                    "
+                  >
+                    @if (property?.tenant_name) {
+                      <app-table-img-item
+                        [img]="
+                          property?.tenant_profile_image ??
+                          '../../../../assets/userDefaultProImg.png'
+                        "
+                        [title]="property?.tenant_name || 'N/A'"
+                      />
+                    } @else {
+                      N/A
+                    }
+                  </td>
+                  <td *ngIf="currentRole === 'owner'">
+                    <app-badge
+                      [title]="property.agreement_expiration || 'N/A'"
+                      [status]="
+                        getAgreementExpirationStatusColor(
+                          property.agreement_expiration
+                        )
+                      "
+                    />
+                  </td>
+                  <td
+                    *ngIf="
+                      currentRole === 'tenant' ||
+                      currentRole === 'property-manager'
+                    "
+                  >
+                    {{ property?.owner_name || "N/A" }}
+                  </td>
+                  <td
+                    *ngIf="
+                      currentRole === 'property-manager' ||
+                      currentRole === 'tenant'
+                    "
+                  >
+                    <app-badge
+                      [title]="property.tenancy_status"
+                      [status]="
+                        property.tenancy_status === 'Available'
+                          ? 'red'
+                          : 'green'
+                      "
+                    />
+                  </td>
+                  <td
+                    *ngIf="currentRole === 'owner' || currentRole === 'tenant'"
+                  >
+                    {{ property.dimension || "N/A" }}
+                  </td>
+                  <td
+                    *ngIf="currentRole === 'owner' || currentRole === 'tenant'"
+                  >
+                    {{ property?.company_name || "N/A" }}
+                  </td>
+                  <td
+                    *ngIf="
+                      currentRole === 'owner' ||
+                      currentRole === 'property-manager'
+                    "
+                    align="center"
+                  >
+                    <div class="cmmnTblActnBtnDiv">
+                      <app-table-action-btn
+                        type="edit"
+                        (clicked)="handleEditClick(property.property_unit_id)"
+                      />
+                      <!-- <app-table-action-btn
                     type="delete"
                     (clicked)="handleDeleteClick()"
                   /> -->
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </td>
-              </tr>
-              }@empty {
-              <tr>
-                <td colspan="20" align="center"><app-no-data></app-no-data></td>
-              </tr>
+                      <app-table-action-dropdown
+                        [dropdownItems]="documentActions"
+                        (actionClicked)="handleDropdownAction($event)"
+                      >
+                      </app-table-action-dropdown>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="20" align="center">
+                    <app-no-data></app-no-data>
+                  </td>
+                </tr>
               }
             </tbody>
           </table>
@@ -458,55 +480,57 @@
     </app-property-view-card>
   </app-white-card>
   <div class="mt-3">
-    <app-white-card title="All Documents">
+    <app-white-card [title]="'ALL_DOCUMENTS' | translate">
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
-          @for (type of propertyDocumentType; track type.key;) {
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              [class.active]="type.key === activeDocTypeKey"
-              [id]="type.key + '-tab'"
-              data-bs-toggle="tab"
-              [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
-              type="button"
-              role="tab"
-              [attr.aria-controls]="type.key + '-tab-pane'"
-              [attr.aria-selected]="type.key === activeDocTypeKey"
-              (click)="onDocTabClick(type)"
-            >
-              {{ type.value }}
-            </button>
-          </li>
+          @for (type of propertyDocumentType; track type.key) {
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                [class.active]="type.key === activeDocTypeKey"
+                [id]="type.key + '-tab'"
+                data-bs-toggle="tab"
+                [attr.data-bs-target]="'#' + type.key + '-tab-pane'"
+                type="button"
+                role="tab"
+                [attr.aria-controls]="type.key + '-tab-pane'"
+                [attr.aria-selected]="type.key === activeDocTypeKey"
+                (click)="onDocTabClick(type)"
+              >
+                {{ type.value }}
+              </button>
+            </li>
           }
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="myTabContent">
-          @for(type of propertyDocumentType; track type.key; let i = $index){
-          <div
-            [ngClass]="{
-              'tab-pane': true,
-              fade: true,
-              show: type.key === activeDocTypeKey,
-              active: type.key === activeDocTypeKey
-            }"
-            [id]="type.key + '-tab-pane'"
-            role="tabpanel"
-            [attr.aria-labelledby]="type.key + '-tab'"
-            [tabindex]="i"
-          >
-            <div class="row g-2">
-              @for(docsGroup of propertyDocuments[activeDocTypeKey]; track
-              docsGroup.id){
-              <div class="col-auto">
-                <app-document-type-item [title]="docsGroup.file_name" />
+          @for (type of propertyDocumentType; track type.key; let i = $index) {
+            <div
+              [ngClass]="{
+                'tab-pane': true,
+                fade: true,
+                show: type.key === activeDocTypeKey,
+                active: type.key === activeDocTypeKey,
+              }"
+              [id]="type.key + '-tab-pane'"
+              role="tabpanel"
+              [attr.aria-labelledby]="type.key + '-tab'"
+              [tabindex]="i"
+            >
+              <div class="row g-2">
+                @for (
+                  docsGroup of propertyDocuments[activeDocTypeKey];
+                  track docsGroup.id
+                ) {
+                  <div class="col-auto">
+                    <app-document-type-item [title]="docsGroup.file_name" />
+                  </div>
+                } @empty {
+                  <div class="col-auto m-auto">Documents not available!</div>
+                }
               </div>
-              }@empty {
-              <div class="col-auto m-auto">Documents not available!</div>
-              }
             </div>
-          </div>
           }
         </div>
       </div>

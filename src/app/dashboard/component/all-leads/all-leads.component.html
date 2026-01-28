@@ -41,18 +41,18 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Lead ID</th>
-              <th>Creation Date</th>
-              <th>Property Name</th>
-              <th>Unit</th>
-              <th>Rent (AED)</th>
-              <th>Tenant Name</th>
-              <th>Contact Number</th>
-              <th>Eamil</th>
-              <th>Status</th>
-              <th>Platform</th>
-              <th>Type of lead</th>
-              <th>Actions</th>
+              <th>{{ "LEAD_ID" | translate }}</th>
+              <th>{{ "CREATION_DATE" | translate }}</th>
+              <th>{{ "PROPERTY_NAME" | translate }}</th>
+              <th>{{ "UNIT" | translate }}</th>
+              <th>{{ "RENT(AED)" | translate }}</th>
+              <th>{{ "TENANT_NAME" | translate }}</th>
+              <th>{{ "CONTACT_NUMBER" | translate }}</th>
+              <th>{{ "EMAIL" | translate }}</th>
+              <th>{{ "STATUS" | translate }}</th>
+              <th>{{ "PLATFROM" | translate }}</th>
+              <th>{{ "TYPE_OF_LEAD" | translate }}</th>
+              <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
           <tbody>
@@ -333,7 +333,7 @@
   <div class="modal-header activityHeader">
     <div class="headerLeft">
       <app-activity-histroy-icons></app-activity-histroy-icons>
-      <h4 class="modal-title">Activity History</h4>
+      <h4 class="modal-title">{{ "ACTIVITY_HISTORY" | translate }}</h4>
     </div>
 
     <div class="headerRight justify-content-between">
@@ -341,16 +341,18 @@
       <div class="justify-content-between">
         <button type="button" class="scheduleBtn">
           <app-calender-icon></app-calender-icon>
-          Schedule Meeting
+          {{ "SCHEDULE_MEETING" | translate }}
         </button>
       </div>
       <div>
         <button
           type="button"
-          class="btn-close closeCircle"
+          class="closeCircle"
           aria-label="Close"
           (click)="modal.dismiss()"
-        ></button>
+        >
+          <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
+        </button>
       </div>
     </div>
   </div>

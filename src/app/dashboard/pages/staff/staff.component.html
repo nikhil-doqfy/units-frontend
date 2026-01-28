@@ -33,7 +33,7 @@
                         [options]="staffRole"
                         key="key"
                         value="value"
-                        placeholder="Select staff role"
+                        [placeholder]="'SELECT_STAFF_ROLE' | translate"
                         (optionSelected)="selectedstaffRole = $event"
                         (click)="onhandleSelectClick()"
                       >
@@ -101,66 +101,66 @@
           </thead>
           <tbody>
             @for (staff of staffRoles; track $index) {
-            <tr>
-              <td>
-                <app-table-img-item
-                  img="../../../../assets/user/user-1.png"
-                  [title]="staff.staff_name"
-                  [clickable]="true"
-                  (clicked)="handleViewClick(staff.staff_id)"
-                >
-                </app-table-img-item>
-              </td>
-
-              <td>{{ staff.staff_id }}</td>
-              <td>{{ staff.contact_number | maskPhone }}</td>
-
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    'assets/property/property-list-1.png',
-                    'assets/property/property-list-2.png',
-                    'assets/property/property-list-2.png',
-                    'assets/property/property-list-2.png',
-                    'assets/property/property-list-2.png',
-                    'assets/property/property-list-3.png'
-                  ]"
-                  size="md"
-                >
-                </app-table-multi-img-item>
-              </td>
-
-              <td>{{ staff.tenancy_ratio || "_" }}</td>
-              <td>
-                {{ staff.roles?.length ? staff.roles.join(", ") : "_" }}
-              </td>
-
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
+              <tr>
+                <td>
+                  <app-table-img-item
+                    img="../../../../assets/user/user-1.png"
+                    [title]="staff.staff_name"
+                    [clickable]="true"
+                    (clicked)="handleViewClick(staff.staff_id)"
                   >
-                  </app-table-action-btn>
+                  </app-table-img-item>
+                </td>
 
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  >
-                  </app-table-action-btn>
+                <td>{{ staff.staff_id }}</td>
+                <td>{{ staff.contact_number | maskPhone }}</td>
 
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
+                <td>
+                  <app-table-multi-img-item
+                    [images]="[
+                      'assets/property/property-list-1.png',
+                      'assets/property/property-list-2.png',
+                      'assets/property/property-list-2.png',
+                      'assets/property/property-list-2.png',
+                      'assets/property/property-list-2.png',
+                      'assets/property/property-list-3.png',
+                    ]"
+                    size="md"
                   >
-                  </app-table-action-dropdown>
-                </div>
-              </td>
-            </tr>
-            }@empty {
-            <tr>
-              <td colspan="7" align="center">No Data to Show</td>
-            </tr>
+                  </app-table-multi-img-item>
+                </td>
+
+                <td>{{ staff.tenancy_ratio || "_" }}</td>
+                <td>
+                  {{ staff.roles?.length ? staff.roles.join(", ") : "_" }}
+                </td>
+
+                <td align="center">
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-btn
+                      type="edit"
+                      (clicked)="handleEditClick()"
+                    >
+                    </app-table-action-btn>
+
+                    <app-table-action-btn
+                      type="delete"
+                      (clicked)="handleDeleteClick()"
+                    >
+                    </app-table-action-btn>
+
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" align="center">No Data to Show</td>
+              </tr>
             }
           </tbody>
         </table>
@@ -225,28 +225,31 @@
     [title]="selectedStaff.staff_name"
     [imgSrc]="'../../../assets/user/user-2.png'"
     [items]="[
-      { label: 'Email', value: selectedStaff.email },
-      { label: 'Phone Number', value: selectedStaff.contact_number },
-      { label: 'Emirates ID', value: selectedStaff.emirate_id },
-      { label: 'City', value: selectedStaff.city },
-      { label: 'Locality', value: selectedStaff.locality },
-      { label: 'Postal Code', value: selectedStaff.postal_code },
-      { label: 'Address Line 1', value: selectedStaff.address },
-      { label: 'Address Line 2', value: selectedStaff.additional_address },
+      { label: getLabel('EMAIL'), value: selectedStaff.email },
+      { label: getLabel('PHONE_NUMBER'), value: selectedStaff.contact_number },
+      { label: getLabel('EMIRATES_ID'), value: selectedStaff.emirate_id },
+      { label: getLabel('CITY'), value: selectedStaff.city },
+      { label: getLabel('LOCALITY'), value: selectedStaff.locality },
+      { label: getLabel('POSTAL_CODE'), value: selectedStaff.postal_code },
+      { label: getLabel('ADDRESS_LINE_1'), value: selectedStaff.address },
       {
-        label: 'Staff Role',
-        value: selectedStaff.roles?.length
-          ? selectedStaff.roles.join(', ')
-          : 'N/A'
+        label: getLabel('ADDRESS_LINE_2'),
+        value: selectedStaff.additional_address,
       },
       {
-        label: 'Assigned Property',
+        label: getLabel('STAFF_ROLE'),
+        value: selectedStaff.roles?.length
+          ? selectedStaff.roles.join(', ')
+          : 'N/A',
+      },
+      {
+        label: getLabel('ASSIGNED_PROPERTY'),
         value:
           selectedStaff.assigned_properties?.length > 0
             ? selectedStaff.assigned_properties[0].name
             : 'None',
-        link: '/dashboard/staff'
-      }
+        link: '/dashboard/staff',
+      },
     ]"
     [showEdit]="true"
     (edit)="handleEditClick()"
@@ -258,7 +261,7 @@
       <div class="row align-items-center">
         <div class="col-md">
           <app-table-title
-            title="Properties Assigned"
+            [title]="'PROPERTIES_ASSIGNED' | translate"
             [subtitle]="'(' + totalRecords + ')'"
           ></app-table-title>
         </div>
@@ -288,68 +291,68 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Code</th>
+              <th>{{ "CODE" | translate }}</th>
               <th>
                 <button type="button">
-                  Property Name <i><app-sorting-icon /></i>
+                  {{ "PROPERTY_NAME" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
               <th>
                 <button type="button">
-                  Tenant Name <i><app-sorting-icon /></i>
+                  {{ "TENANT_NAME" | translate }} <i><app-sorting-icon /></i>
                 </button>
               </th>
-              <th>Assigned Staff</th>
-              <th>Owner Name</th>
-              <th width="200">Document</th>
+              <th>{{ "ASIGNED_STAFF" | translate }}</th>
+              <th>{{ "OWNER_NAME" | translate }}</th>
+              <th width="200">{{ "DOCUMENT" | translate }}</th>
             </tr>
           </thead>
 
           <tbody>
             @for (property of assignedProperties; track $index) {
-            <tr>
-              <td>{{ property.property_code || "_" }}</td>
+              <tr>
+                <td>{{ property.property_code || "_" }}</td>
 
-              <td>
-                <app-table-img-item
-                  [img]="
-                    property.property_image?.data ||
-                    'assets/property/property-list-1.png'
-                  "
-                  size="md"
-                  [title]="property.property_name"
-                />
-              </td>
-
-              <td>
-                {{ property.tenant_name || "N/A" }}
-              </td>
-
-              <td>
-                {{ selectedStaff?.staff_name || "_" }}
-              </td>
-
-              <td>
-                {{ property.owner_name || "N/A" }}
-              </td>
-
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
+                <td>
+                  <app-table-img-item
+                    [img]="
+                      property.property_image?.data ||
+                      'assets/property/property-list-1.png'
+                    "
+                    size="md"
+                    [title]="property.property_name"
                   />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
+                </td>
+
+                <td>
+                  {{ property.tenant_name || "N/A" }}
+                </td>
+
+                <td>
+                  {{ selectedStaff?.staff_name || "_" }}
+                </td>
+
+                <td>
+                  {{ property.owner_name || "N/A" }}
+                </td>
+
+                <td align="center">
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-btn
+                      type="download"
+                      (clicked)="handleDownloadDocumentClick()"
+                    />
+                    <app-table-action-btn
+                      type="preview"
+                      (clicked)="handlePreviewDocumentClick()"
+                    />
+                  </div>
+                </td>
+              </tr>
             } @empty {
-            <tr>
-              <td colspan="6" align="center"><app-no-data></app-no-data></td>
-            </tr>
+              <tr>
+                <td colspan="6" align="center"><app-no-data></app-no-data></td>
+              </tr>
             }
           </tbody>
         </table>

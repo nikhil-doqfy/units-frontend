@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   DestroyRef,
   ElementRef,
@@ -57,6 +58,7 @@ export class MyProfileComponent {
   private sharedService = inject(SharedService);
   private sharedApiService = inject(SharedApiService);
 
+  constructor(private cd: ChangeDetectorRef) {}
   @ViewChild('fileInput') fileInput!: ElementRef;
   stateList: any[] = [];
   selectedState: any = null;
@@ -103,6 +105,7 @@ export class MyProfileComponent {
     this.sharedService.initLanguage();
     this.initLanguageListener();
     this.getUserProfileData();
+    this.cd.detectChanges();
   }
 
   changeLanguage(lang: string) {
@@ -258,7 +261,6 @@ export class MyProfileComponent {
   }
 
   saveOtherDetails() {
-    console.log(' otherDetails: ', this.otherDetails);
     const payload: Record<string, any> = {
       time_zone: this.otherDetails.timeZone,
       city: this.otherDetails.cityId,
@@ -299,11 +301,10 @@ export class MyProfileComponent {
   }
 
   enableOtherDetailsEdit() {
-    console.log('Edit mode enabled');
     this.editOtherDetailsMode = true;
 
     this.selectedCountry = this.countryList.find(
-      (c) => c.value === this.otherDetails.country
+      (c) => c.value === this.otherDetails.country,
     );
   }
 
@@ -366,7 +367,6 @@ export class MyProfileComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          console.log('STATE API RESPONSE:', response);
           this.stateList = response?.content?.state || [];
         },
         error: (err) => {
@@ -385,7 +385,6 @@ export class MyProfileComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          console.log('COUNTRY API RESPONSE:', response.content.COUNTRY);
           this.countryList = response.content.country;
         },
       });

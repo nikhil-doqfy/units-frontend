@@ -130,6 +130,9 @@ export class StaffComponent {
     this.initLanguageListener();
   }
 
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -183,7 +186,6 @@ export class StaffComponent {
       .subscribe({
         next: (response) => {
           this.staffRole = response?.content?.role;
-          console.log('data', this.staffRole);
         },
       });
   }
@@ -229,8 +231,6 @@ export class StaffComponent {
       window.URL.revokeObjectURL(url);
       this.alertService.success('File downloaded successfully!');
     });
-
-    console.log('Export button clicked');
   }
 
   applyFilter() {
@@ -252,7 +252,7 @@ export class StaffComponent {
         },
         (reason) => {
           this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
+        },
       );
   }
 
@@ -303,7 +303,6 @@ export class StaffComponent {
           this.staffRoles = resp?.content ?? [];
 
           this.totalRecords = resp?.pagination?.total_records ?? 0;
-          console.log('Total Records:', this.totalRecords);
           this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
         },
       });

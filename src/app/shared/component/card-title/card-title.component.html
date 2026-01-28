@@ -1,4 +1,12 @@
-<div class="dashFrmTtl" [class.dashFrmLrgTtl]="size === 'lg'" [class.dashFrmCntrTtl]="center">
-    <h4>{{ title }} <i><ng-content></ng-content></i></h4>
-    <p *ngIf="description">{{ description }} <i><ng-content></ng-content></i></p>
+<div
+  class="dashFrmTtl"
+  [class.dashFrmLrgTtl]="size === 'lg'"
+  [class.dashFrmCntrTtl]="center"
+>
+  <h4>
+    {{ title }} <i><ng-content></ng-content></i>
+  </h4>
+  <p *ngIf="description">
+    {{ description }} <i><ng-content></ng-content></i>
+  </p>
 </div>
