@@ -87,7 +87,7 @@ export class StaffComponent {
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   private sharedApiService = inject(SharedApiService);
-
+  isEditMode: boolean = false;
   componentName: string = 'StaffComponent';
   breadcrumbData: BreadCrumb[] = [];
   selectedStaff: any = null;
@@ -359,6 +359,36 @@ export class StaffComponent {
           this.assignedProperties = resp?.content?.assigned_properties ?? [];
         },
         error: (err) => console.error('Detail API Error:', err),
+      });
+  }
+  openEditStaffModal(modalRef: TemplateRef<any>, staffId: number) {
+    this.isEditMode = true;
+
+    this.staffService
+      .accessStaffRoleDetails({ staff_id: staffId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.selectedStaff = resp?.content?.data?.[0] ?? resp?.content;
+
+          this.modalService
+            .open(modalRef, {
+              ariaLabelledBy: 'modal-title',
+              windowClass: 'mdlCommon',
+              centered: true,
+            })
+            .result.then(
+              (result) => this.closeResult.set(`Closed with: ${result}`),
+              (reason) =>
+                this.closeResult.set(
+                  `Dismissed ${this.getDismissReason(reason)}`,
+                ),
+            );
+        },
+        error: (err) => {
+          this.alertService.error('Unable to fetch staff details');
+          console.error(err);
+        },
       });
   }
 }
