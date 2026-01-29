@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   DestroyRef,
@@ -48,7 +49,7 @@ import { BreadCrumb } from '../../shared/model/shared.model';
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css',
 })
-export class MyProfileComponent {
+export class MyProfileComponent implements AfterViewInit {
   private translate = inject(TranslateService);
   private userService = inject(UserService);
   private storageService = inject(StorageService);
@@ -74,6 +75,7 @@ export class MyProfileComponent {
   cityList: any[] = [];
   selectedCity: any = null;
   selectedLocality: any;
+
   profile = {
     firstName: '',
     lastName: '',
@@ -96,17 +98,34 @@ export class MyProfileComponent {
     postalCode: '',
     locality: '',
   };
-
+  // breadcrumbData: BreadCrumb[] = [];
   breadcrumbData = [
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
   ngOnInit() {
-    this.loadBreadcrumb();
+    // this.loadBre adcrumb();
     this.sharedService.initLanguage();
     this.initLanguageListener();
     this.getUserProfileData();
-    this.cd.detectChanges();
+    Promise.resolve().then(() => {
+      this.breadcrumbData = [
+        { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
+      ];
+    });
+
+    this.loadBreadcrumb();
   }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.cd.detectChanges();
+    });
+  }
+  // ngAfterViewInit(): void {
+  //   Promise.resolve().then(() => {
+  //     this.cd.detectChanges();
+  //   });
+  // }
 
   changeLanguage(lang: string) {
     this.sharedService.setLanguage(lang);
@@ -389,4 +408,5 @@ export class MyProfileComponent {
         },
       });
   }
+  //-------------------------error-----------------------------------------------
 }

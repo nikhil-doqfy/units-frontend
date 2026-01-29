@@ -69,7 +69,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('chequesAgingGraph', { read: ElementRef })
   chequesAgingGraph!: ElementRef;
   private route = inject(ActivatedRoute);
@@ -132,12 +132,12 @@ export class HomeComponent implements OnInit {
     this.sharedService.setLanguage(lang);
   }
 
-  computHeight() {
-    let height =
-      this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
-    if (height) return `${height - 8 - 18 - 56 - 2}px`;
-    else return 0;
-  }
+  // computHeight() {
+  //   let height =
+  //     this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
+  //   if (height) return `${height - 8 - 18 - 56 - 2}px`;
+  //   else return 0;
+  // }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -461,5 +461,22 @@ export class HomeComponent implements OnInit {
           this.chequeList = [];
         },
       });
+  }
+
+  //---------------------------------------error-------------------------------------------------
+  tableMaxHeight: string = 'auto';
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.updateTableHeight();
+    });
+  }
+
+  updateTableHeight() {
+    const height =
+      this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
+
+    this.tableMaxHeight = height ? `${height - 4}px` : 'auto';
+
+    this.cd.detectChanges();
   }
 }

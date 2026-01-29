@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule } from '@angular/router';
@@ -14,6 +21,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-auth',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterOutlet,
@@ -33,7 +41,7 @@ export class AuthComponent implements OnInit {
   @Input() pageType: string | undefined;
 
   currentRole: UserRole = 'owner';
-
+  currentRole$ = this.themeService.currentRole$;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -47,19 +55,14 @@ export class AuthComponent implements OnInit {
         this.currentRole = role;
       });
 
-    // this.updatePageType();
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
-        this.updatePageType();
+        this.pageType =
+          this.activatedRoute.snapshot.firstChild?.routeConfig?.path || '';
       });
-  }
-
-  private updatePageType(): void {
-    this.pageType =
-      this.activatedRoute.snapshot.firstChild?.routeConfig?.path || '';
   }
 }

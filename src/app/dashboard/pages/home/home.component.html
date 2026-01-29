@@ -420,12 +420,10 @@
           </div>
         </div>
         <div class="cmmnTblBody">
-          <div
-            class="table-responsive"
-            [style]="{
+          <div class="table-responsive" [style.max-height]="tableMaxHeight">
+            <!-- [style]="{
               'max-height': computHeight(),
-            }"
-          >
+            }" -->
             <table class="header-stickey table-bordered">
               <thead>
                 <tr>
