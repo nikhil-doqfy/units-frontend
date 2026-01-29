@@ -139,8 +139,11 @@
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="edit"
-                      (clicked)="handleEditClick()"
+                      (clicked)="
+                        openEditStaffModal(addStaffContent, staff.staff_id)
+                      "
                     >
+                      <!-- (clicked)="handleEditClick()" -->
                     </app-table-action-btn>
 
                     <app-table-action-btn
@@ -186,7 +189,9 @@
 
 <ng-template #addStaffContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">{{ "ADD_STAFF" | translate }}</h4>
+    <h4 class="modal-title" id="modal-title">
+      {{ isEditMode ? ("EDIT_STAFF" | translate) : ("ADD_STAFF" | translate) }}
+    </h4>
     <button
       type="button"
       class="btn-close"

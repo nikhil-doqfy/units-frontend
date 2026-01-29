@@ -331,21 +331,37 @@ export class UsersComponent {
     this.currentPage = 1;
     this.getUser();
   }
+  //-------------------------------------edit user modal-------------------------------------------------------
 
-  openEditUserModal(userId: number, modalRef: any) {
+  openEditUserModal(userId: number, modalRef: TemplateRef<any>) {
+    console.log('USER OBJECT:', userId);
+    this.isEditMode = true;
+
     this.userService.accessUserManagement({ user_id: userId }).subscribe({
       next: (resp: any) => {
-        this.selectedUser = resp?.content?.data[0];
+        this.selectedUser = resp?.content[0];
 
-        this.modalService.open(modalRef, {
-          ariaLabelledBy: 'modal-title',
-          windowClass: 'mdlCommon',
-          centered: true,
-        });
+        this.modalService
+          .open(modalRef, {
+            ariaLabelledBy: 'modal-title',
+            windowClass: 'mdlCommon',
+            centered: true,
+          })
+          .result.then(
+            (result) => this.closeResult.set(`Closed with: ${result}`),
+            (reason) =>
+              this.closeResult.set(
+                `Dismissed ${this.getDismissReason(reason)}`,
+              ),
+          );
       },
-      error: () => {
+      error: (err) => {
         this.alertService.error('Unable to fetch user details');
+        console.error(err);
       },
     });
+  }
+  testClick(user: any) {
+    console.log('USER OBJECT:', user);
   }
 }
