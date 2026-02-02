@@ -126,6 +126,11 @@ export const routes: Routes = [
       },
 
       {
+        path: 'complaints/detail/:ticket_id',
+        component: ComplaintsComponent,
+        data: { titleKey: 'PAGE_TITLE.COMPLAINTS' },
+      },
+      {
         path: 'owners',
         component: OwnersComponent,
         data: { titleKey: 'PAGE_TITLE.OWNERS' },

@@ -40,6 +40,7 @@ import { TableViewCardComponent } from '../../component/table-view-card/table-vi
 import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
 import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
+import { TicketAgingComponent } from '../../../ticket-aging/ticket-aging.component';
 
 @Component({
   selector: 'app-complaints',
@@ -69,6 +70,7 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
     ExportIconComponent,
     SortingIconComponent,
     TranslateModule,
+    TicketAgingComponent,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',
@@ -140,7 +142,7 @@ export class ComplaintsComponent {
     this.onComplaintsSearch$
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe(() => {
-        this.loadComplaints();
+        this.getTickets();
         this.searchComp.onClear();
       });
     this.loadBreadcrumb();
@@ -149,7 +151,15 @@ export class ComplaintsComponent {
     this.initLanguageListener();
     const storedRole = this.storageService.getUserRole();
     this.role = storedRole ? (storedRole.toUpperCase() as any) : null;
-    this.loadComplaints();
+    // this.getTickets();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.showDetailView = true;
+      this.loadDetailView(+id);
+    } else {
+      this.showDetailView = false;
+      this.getTickets();
+    }
   }
 
   getLabel(key: string): string {
@@ -184,7 +194,7 @@ export class ComplaintsComponent {
       });
   }
 
-  loadComplaints() {
+  getTickets() {
     const params: any = {
       limit: this.rowsPerPage,
       page: this.currentPage,
@@ -198,7 +208,7 @@ export class ComplaintsComponent {
       params.status = this.selectedComplaintstatus.key;
     }
 
-    this.complaintService.getComplanints(params).subscribe({
+    this.complaintService.getTickets(params).subscribe({
       next: (res) => {
         this.complaints = res.content?.complaints || [];
         this.totalRecords = res?.pagination?.total_records ?? 0;
@@ -210,9 +220,13 @@ export class ComplaintsComponent {
       error: (err) => console.error('Error fetching complaints:', err),
     });
   }
-  handleViewClick(item: any): void {
-    this.selectedProperty = item;
-    this.showDetailView = true;
+  // handleViewClick(item: any): void {
+  //   this.selectedProperty = item;
+  //   this.showDetailView = true;
+  // }
+  handleViewClick(ticketID: number): void {
+    // this.showDetailView = true;
+    this.router.navigate(['/dashboard/ticket/detail/', ticketID]);
   }
   handleBackClick(): void {
     this.showDetailView = false;
@@ -246,13 +260,13 @@ export class ComplaintsComponent {
   }
   applyFilter() {
     this.currentPage = 1;
-    this.loadComplaints();
+    this.getTickets();
   }
 
   removeFilter() {
     this.selectedComplaintstatus = null;
     this.currentPage = 1;
-    this.loadComplaints();
+    this.getTickets();
   }
 
   setBreadCrumb(breadCrumb: BreadCrumb[]) {
@@ -261,14 +275,14 @@ export class ComplaintsComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
   onRefresh() {
-    this.loadComplaints();
+    this.getTickets();
   }
 
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
-    this.loadComplaints();
+    this.getTickets();
   }
   onOptionSelected(option: string) {
     this.selected = option;
@@ -276,7 +290,7 @@ export class ComplaintsComponent {
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
-    this.loadComplaints();
+    this.getTickets();
   }
 
   //----------------------------------compalint modal --------------------------------------------------
@@ -297,4 +311,17 @@ export class ComplaintsComponent {
     this.showComplaintModal = false;
   }
   selectedProperty: any = null;
+
+  //--------------------------------------------complaint details--------------------------------------------------------------------
+  loadDetailView(ticketID: number): void {
+    this.complaintService
+      .getTicketsDetails({ ticket_id: ticketID })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          // this.selectedcomplaint = resp.content;
+        },
+        error: (err) => console.error('Detail API Error:', err),
+      });
+  }
 }
