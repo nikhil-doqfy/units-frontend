@@ -1347,6 +1347,8 @@ linearGradient .authBgPatt stop:last-child {
 }
 
 .cmmnTblBody table {
+  /* min-width: 100%; */
+  /* table-layout: fixed; */
   border: 0;
   border-radius: 0;
   margin-bottom: 0;
@@ -2188,4 +2190,8 @@ span.doc-var:not([data-filled])::after {
 .activityHistoryModal .modal-body {
   padding-top: 0;
   overflow-y: auto;
+}
+
+.cmmnTblBody table {
+  min-width: 100%;
 }

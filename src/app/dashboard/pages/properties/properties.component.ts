@@ -46,6 +46,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { PropertyLeadsComponent } from '../../component/property-leads.component';
+import { AllPropertiesComponent } from '../../component/all-properties/all-properties.component';
 
 type PropertyImages = Record<'imgSrc', string>;
 
@@ -102,6 +103,7 @@ interface PropertyDetails {
     RouterLink,
     FilterPopupButtonComponent,
     PropertyLeadsComponent,
+    AllPropertiesComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',

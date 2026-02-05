@@ -3,8 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbDatepickerModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { SharedService } from '../../../shared.service';
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
@@ -21,6 +25,7 @@ import { RentalAccountService } from '../../rental-account.service';
 import { ScannericonComponent } from '../../../icon/scannericon/scannericon.component';
 import { FormService } from '../../../shared/services/form.service';
 import { ToggleiconComponent } from '../../../icon/toggleicon/toggleicon.component';
+import { ThemeService, UserRole } from '../../../theme.service';
 
 @Component({
   selector: 'app-add-rentalaccount',
@@ -55,6 +60,7 @@ export class AddRentalaccountComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private router: Router,
+    private themeService: ThemeService,
   ) {}
   showReason: boolean = false;
   isEditMode = false;
@@ -87,13 +93,53 @@ export class AddRentalaccountComponent implements OnInit {
   leaseStatus: any;
   selectedleasestatus: any;
   private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+  currentRole: UserRole = 'owner';
+
+  breadcrumbData = [
+    { label: 'Dashboard', link: '/dashboard/home' },
+    { label: 'Rental', link: '' },
+  ];
   ngOnInit(): void {
     this.showDetailSubscription = this.sharedService.showDetail$.subscribe(
       (value: boolean) => {
         this.showDetailView = value;
       },
     );
+    this.loadBreadcrumb();
+
+    this.sharedService.initLanguage();
+
+    this.initLanguageListener();
+    this.initCurrentRoleListener();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
     this.loadRentalPayments();
+  }
+  initCurrentRoleListener() {
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+  }
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.RENTAL', link: '' },
+    ]);
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   charges = [

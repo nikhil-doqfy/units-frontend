@@ -6,7 +6,7 @@
 
         <app-custom-select
           [options]="propertyList"
-          placeholder="Select Property"
+          [placeholder]="'SELECT_PROPERTY' | translate"
           key="key"
           value="value"
           [selectedOption]="selectedProperty"
@@ -25,10 +25,10 @@
         [placeholder]="'ENTER_EMAIL_ADDRESS_HERE' | translate"
       />
 
-      @if (isInvalid(pmcOwnerForm, 'email').status) {
-      <small class="errorMsg">
-        {{ isInvalid(pmcOwnerForm, "email").msg }}
-      </small>
+      @if (isInvalid(pmcOwnerForm, "email").status) {
+        <small class="errorMsg">
+          {{ isInvalid(pmcOwnerForm, "email").msg }}
+        </small>
       }
     </div>
   </form>

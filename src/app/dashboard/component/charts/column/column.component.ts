@@ -84,19 +84,39 @@ export class ColumnChartComponent implements OnChanges {
       },
     };
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] && this.data?.length) {
-      this.chartOptions.series = [
-        {
-          name: 'My-series',
-          data: this.data.map((d) => d.value),
-        },
-      ];
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['data'] && this.data?.length) {
+  //     this.chartOptions.series = [
+  //       {
+  //         name: 'My-series',
+  //         data: this.data.map((d) => d.value),
+  //       },
+  //     ];
 
-      this.chartOptions.xaxis = {
-        ...this.chartOptions.xaxis,
-        categories: this.data.map((d) => d.name),
-      };
+  //     this.chartOptions.xaxis = {
+  //       ...this.chartOptions.xaxis,
+  //       categories: this.data.map((d) => d.name),
+  //     };
+  //   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data?.length && this.chart) {
+      const values = this.data.map((d) => d.value);
+      const categories = this.data.map((d) => d.name);
+
+      this.chart.updateOptions(
+        {
+          series: [
+            {
+              name: 'My-series',
+              data: values,
+            },
+          ],
+          xaxis: {
+            categories: categories,
+          },
+        },
+        true,
+      );
     }
   }
 }

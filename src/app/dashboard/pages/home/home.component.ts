@@ -41,6 +41,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -65,6 +66,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     DonutChartComponent,
     LineChartComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -94,6 +96,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   monthlyRevenue: any[] = [];
   totalRevenue = 0;
+  totalAmount = 0;
   mrr = 0;
   occupancyOptions: any[] = [];
   selectedOccupancy: any = {
@@ -116,6 +119,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log('monthlyRevenue:', this.monthlyRevenue);
+
+    this.totalRevenue = this.monthlyRevenue.reduce(
+      (sum, item) => sum + (item.total_revenue || 0),
+      0,
+    );
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
     this.initLanguageListener();
@@ -328,13 +337,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   loadDueGraph(params?: any) {
     this.homeService.getDashboardGraphDue(params).subscribe((res) => {
       this.monthlyData = res.content;
-
+      console.log('API Response:', res);
+      this.totalAmount = res.content?.overall?.total_amount ?? 0;
       this.monthlyData = (res.content?.monthly_data || []).map((m: any) => ({
-        monthName: m.month_name,
+        monthName: m.month_str,
         totalAmount: m.total_amount,
         receivedAmount: m.received_amount,
         dueAmount: m.due_amount,
       }));
+      console.log('Mapped monthlyData:', this.monthlyData);
     });
   }
 

@@ -6,7 +6,7 @@
 
         <app-custom-select
           [options]="propertyList"
-          placeholder="Select Property"
+          [placeholder]="'SELECT_PROPERTY' | translate"
           key="key"
           value="value"
           [selectedOption]="selectedProperty"
@@ -24,8 +24,10 @@
         formControlName="email"
         [placeholder]="'ENTER_EMAIL_ADDRESS_HERE' | translate"
       />
-      @if (isInvalid(tenantForm, 'email').status) {
-      <small class="errorMsg"> {{ isInvalid(tenantForm, "email").msg }}</small>
+      @if (isInvalid(tenantForm, "email").status) {
+        <small class="errorMsg">
+          {{ isInvalid(tenantForm, "email").msg }}</small
+        >
       }
     </div>
   </form>

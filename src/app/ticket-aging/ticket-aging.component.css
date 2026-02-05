@@ -3,13 +3,11 @@
 }
 
 .cell {
-  padding: 10px;
   text-align: center;
 }
 
 .badge {
   display: inline-block;
-  padding: 6px 10px;
   border-radius: 4px;
   font-size: 13px;
   font-weight: 500;

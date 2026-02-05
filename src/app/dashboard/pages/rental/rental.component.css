@@ -555,3 +555,32 @@ Replace Cheque Link .replace-link {
   justify-content: center;
   gap: 8px;
 }
+.analytics-header {
+  display: flex;
+  justify-content: space-between; /* left + right */
+  align-items: center;
+}
+.analytics-info {
+  font-size: 14px;
+  color: #6b7280; /* grey */
+  white-space: nowrap;
+  padding: 14px 10px;
+  gap: 8px;
+}
+@media (max-width: 768px) {
+  .analytics-header {
+    flex-direction: column; /* stack */
+    align-items: flex-start; /* tabs left */
+  }
+
+  .analytics-info {
+    width: 100%;
+    padding: 6px 0 0;
+    text-align: center; /* center text */
+    white-space: normal; /* wrap text */
+  }
+
+  .nav-tabs {
+    width: 100%;
+  }
+}

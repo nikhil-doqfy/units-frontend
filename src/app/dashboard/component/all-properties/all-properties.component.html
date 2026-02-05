@@ -1,0 +1,87 @@
+<div class="mb-3">
+  <app-white-card>
+    <div class="row align-items-center justify-content-between g-3">
+      <div class="col-md">
+        <div class="commonBoxTabs">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="allUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#allUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="allUsers-tab-pane"
+                aria-selected="true"
+                [class.active]="activeLeadTab === 'all'"
+                (click)="activeLeadTab = 'all'"
+              >
+                {{ "ALL" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="newUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#newUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="newUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeLeadTab === 'email'"
+                (click)="activeLeadTab = 'email'"
+              >
+                {{ "EMAIL" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="deletedUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#deletedUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="deletedUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeLeadTab === 'whatsapp'"
+                (click)="activeLeadTab = 'whatsapp'"
+              >
+                {{ "WHATSAPP" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="deletedUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#deletedUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="deletedUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeLeadTab === 'call'"
+                (click)="activeLeadTab = 'call'"
+              >
+                {{ "CALL" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </app-white-card>
+</div>
+<!-- Dynamic content below tabs -->
+<div class="mt-3">
+  <ng-container [ngSwitch]="activeLeadTab">
+    <app-white-card>
+      <!-- <app-all-properties *ngSwitchCase="'all'"></app-all-properties> -->
+      <app-units *ngSwitchCase="'Units'"></app-units>
+
+      <app-tenancyledger *ngSwitchCase="'Tenancy Ledger'"></app-tenancyledger>
+    </app-white-card>
+  </ng-container>
+</div>

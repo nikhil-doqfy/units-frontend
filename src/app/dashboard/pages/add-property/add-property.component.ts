@@ -11,9 +11,10 @@ import { PropertyFormService } from '../../services/property-form.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import {
+  BreadCrumb,
   OptionsParams,
   UploadFileModel,
 } from '../../../shared/model/shared.model';
@@ -60,10 +61,12 @@ export class AddPropertyComponent {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+
   breadcrumbData = [
-    { label: 'Dashboard', link: '/dashboard/home' },
-    { label: 'Properties', link: '/dashboard/properties' },
-    { label: 'Add Property', link: '' },
+    { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+    { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
+    { label: 'ADD_PROPERTY', link: '' },
   ];
 
   currentRole: UserRole = 'owner';
@@ -93,7 +96,10 @@ export class AddPropertyComponent {
     documents: 1,
   };
 
-  constructor(private router: Router, private themeService: ThemeService) {
+  constructor(
+    private router: Router,
+    private themeService: ThemeService,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
@@ -169,7 +175,7 @@ export class AddPropertyComponent {
           this.imageUploadTypes = this.getProcessUploadTypes(v, 'images');
           this.activeImageTab = v[0]?.key;
         },
-      }
+      },
     );
 
     this.getOptionsTypes(options);
@@ -184,6 +190,34 @@ export class AddPropertyComponent {
     return types;
   }
 
+  initCurrentRoleListener() {
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+
+  loadBreadcrumb() {
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'ADD_PROPERTY', link: '' },
+    ]);
+  }
+
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   getOptionsTypes(option: OptionsParams[]) {
     this.sharedAPIService.getOptionsType(option);
   }

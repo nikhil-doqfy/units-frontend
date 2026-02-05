@@ -22,6 +22,7 @@ import { BreadCrumb } from '../../../shared/model/shared.model';
 import { RentalAccountService } from '../../rental-account.service';
 import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
 import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
+import { PropertyAnalyticsComponent } from '../../component/property-analytics/property-analytics.component';
 
 @Component({
   selector: 'app-rental',
@@ -44,6 +45,7 @@ import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh
     TableFilterButtonComponent,
     DisableIconComponent,
     RefreshIconComponent,
+    PropertyAnalyticsComponent,
   ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',
@@ -76,7 +78,7 @@ export class RentalComponent {
   selected: string = 'property:All';
   selectedLease: any = null;
   showMenu = false;
-
+  activeTab: string = 'properties';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Rental', link: '' },

@@ -220,14 +220,14 @@ export class ComplaintsComponent {
       error: (err) => console.error('Error fetching complaints:', err),
     });
   }
-  // handleViewClick(item: any): void {
-  //   this.selectedProperty = item;
-  //   this.showDetailView = true;
-  // }
-  handleViewClick(ticketID: number): void {
-    // this.showDetailView = true;
-    this.router.navigate(['/dashboard/ticket/detail/', ticketID]);
+  handleViewClick(item: any): void {
+    this.selectedProperty = item;
+    this.showDetailView = true;
   }
+  // handleViewClick(ticketID: number): void {
+  //   // this.showDetailView = true;
+  //   this.router.navigate(['/dashboard/ticket/detail/', ticketID]);
+  // }
   handleBackClick(): void {
     this.showDetailView = false;
     this.selectedProperty = null;

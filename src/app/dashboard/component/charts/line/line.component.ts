@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import {
   NgApexchartsModule,
   ApexAxisChartSeries,
@@ -10,6 +10,7 @@ import {
   ApexYAxis,
   ApexLegend,
   ApexGrid,
+  ChartComponent,
 } from 'ng-apexcharts';
 
 export type ChartOptions = {
@@ -33,6 +34,8 @@ export type ChartOptions = {
   styleUrls: ['./line.component.css'],
 })
 export class LineChartComponent implements OnChanges {
+  @ViewChild('chart') chart!: ChartComponent;
+
   @Input() monthlyData: {
     monthName: string;
     totalAmount: number;
@@ -103,37 +106,12 @@ export class LineChartComponent implements OnChanges {
     },
   };
 
-  // ngOnChanges() {
-  //   const data = this.monthlyData;
-
-  //   if (data.length === 0) {
-  //   }
-
-  //   const months = this.monthlyData.map((m) => m.monthName);
-
-  //   const totalAmount = this.monthlyData.map((m) => m.totalAmount);
-
-  //   const receivedAmount = this.monthlyData.map((m) => m.receivedAmount);
-
-  //   const dueAmount = this.monthlyData.map((m) => m.dueAmount);
-
-  //   this.chartOptions = {
-  //     ...this.chartOptions,
-  //     series: [
-  //       { name: 'Total Amount', data: totalAmount },
-  //       { name: 'Received Amount', data: receivedAmount },
-  //       { name: 'Due Amount', data: dueAmount },
-  //     ],
-  //     xaxis: {
-  //       categories: [...months],
-  //     },
-  //   };
-  // }
-
   ngOnChanges() {
     const data = this.monthlyData || [];
+    console.log('monthlyData from parent:', this.monthlyData);
 
     const months = data.map((m) => m.monthName ?? 'N/A');
+    console.log('mapped months:', months);
     const totalAmount = data.map((m) => m.totalAmount ?? 0);
     const receivedAmount = data.map((m) => m.receivedAmount ?? 0);
     const dueAmount = data.map((m) => m.dueAmount ?? 0);

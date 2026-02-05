@@ -11,6 +11,7 @@
       </i>
       <div>
         <h4>{{ title }}</h4>
+
         <ul *ngIf="headerItems.length > 0">
           <li *ngFor="let h of headerItems">
             {{ h.label }}: <span>{{ h.value || "--" }}</span>
@@ -55,6 +56,7 @@
     </div>
   </div>
   <div class="cmmnTblViewBdy">
+    <ng-content select="[body-summary]"></ng-content>
     <ul>
       <li *ngFor="let item of items">
         <span>{{ item.label }}</span>

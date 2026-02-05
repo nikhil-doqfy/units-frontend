@@ -29,10 +29,10 @@
         <p>JPG, GIF or PNG. Max size of 800K</p>
 
         <!-- image error -->
-        @if (isInvalid(userForm, 'imageBase64').status) {
-        <small class="errorMsg">
-          {{ isInvalid(userForm, "imageBase64").msg }}
-        </small>
+        @if (isInvalid(userForm, "imageBase64").status) {
+          <small class="errorMsg">
+            {{ isInvalid(userForm, "imageBase64").msg }}
+          </small>
         }
       </div>
     </div>
@@ -52,10 +52,10 @@
             formControlName="firstName"
           />
 
-          @if (isInvalid(userForm, 'firstName').status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "firstName").msg }}
-          </small>
+          @if (isInvalid(userForm, "firstName").status) {
+            <small class="errorMsg">
+              {{ isInvalid(userForm, "firstName").msg }}
+            </small>
           }
         </div>
       </div>
@@ -74,10 +74,10 @@
             formControlName="lastName"
           />
 
-          @if (isInvalid(userForm, 'lastName').status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "lastName").msg }}
-          </small>
+          @if (isInvalid(userForm, "lastName").status) {
+            <small class="errorMsg">
+              {{ isInvalid(userForm, "lastName").msg }}
+            </small>
           }
         </div>
       </div>
@@ -99,10 +99,10 @@
             />
           </div>
 
-          @if (isInvalid(userForm, 'email').status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "email").msg }}
-          </small>
+          @if (isInvalid(userForm, "email").status) {
+            <small class="errorMsg">
+              {{ isInvalid(userForm, "email").msg }}
+            </small>
           }
         </div>
       </div>
@@ -121,10 +121,10 @@
             formControlName="contactNumber"
           />
 
-          @if (isInvalid(userForm, 'contactNumber').status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "contactNumber").msg }}
-          </small>
+          @if (isInvalid(userForm, "contactNumber").status) {
+            <small class="errorMsg">
+              {{ isInvalid(userForm, "contactNumber").msg }}
+            </small>
           }
         </div>
       </div>
@@ -139,16 +139,16 @@
             [options]="userTypeList"
             key="key"
             value="value"
-            placeholder="Select User Type"
+            [placeholder]="'SELECT_USER_TYPE' | translate"
             [selectedOption]="selectedUserType"
             (optionSelected)="onOptionSelectedUserType($event)"
             (click)="handleFilterClick()"
           ></app-custom-select>
 
-          @if (isInvalid(userForm, 'role').status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "role").msg }}
-          </small>
+          @if (isInvalid(userForm, "role").status) {
+            <small class="errorMsg">
+              {{ isInvalid(userForm, "role").msg }}
+            </small>
           }
         </div>
       </div>
@@ -167,10 +167,10 @@
             formControlName="location"
           />
 
-          @if (isInvalid(userForm, 'location').status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "location").msg }}
-          </small>
+          @if (isInvalid(userForm, "location").status) {
+            <small class="errorMsg">
+              {{ isInvalid(userForm, "location").msg }}
+            </small>
           }
         </div>
       </div>
@@ -200,10 +200,10 @@
             </i>
           </div>
 
-          @if (isInvalid(userForm, 'password').status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "password").msg }}
-          </small>
+          @if (isInvalid(userForm, "password").status) {
+            <small class="errorMsg">
+              {{ isInvalid(userForm, "password").msg }}
+            </small>
           }
         </div>
       </div>
@@ -233,10 +233,10 @@
             </i>
           </div>
 
-          @if (isInvalid(userForm, 'confirmPassword').status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "confirmPassword").msg }}
-          </small>
+          @if (isInvalid(userForm, "confirmPassword").status) {
+            <small class="errorMsg">
+              {{ isInvalid(userForm, "confirmPassword").msg }}
+            </small>
           }
         </div>
       </div>
