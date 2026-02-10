@@ -71,3 +71,7 @@
     font-size: 13px;
   }
 }
+.page {
+  width: 100%;
+  overflow-x: hidden;
+}

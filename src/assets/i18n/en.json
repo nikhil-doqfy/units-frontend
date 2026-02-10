@@ -453,7 +453,7 @@
   "PERIOD_TO": "Period To",
   "UNIT_TYPE": "Unit Type",
   "YEAR_RENT": "Year Rent",
-  "OTHER_CHARGES": "OTHER CHARGES",
+  "OTHER_CHARGES": "Other Charges",
   "VAT": "Vat",
   "TOTAL_RENT": "Total Rent",
   "RENEW_ACCOUNT": "Renew Account",
@@ -528,5 +528,6 @@
   "UNITS_DETAILS": "Units Details",
   "UNITS_NAME": "Units Name",
   "PARKING": "Parking",
-  "REVENUE_GENERATED": "Revenue Generated"
+  "REVENUE_GENERATED": "Revenue Generated",
+  "EDIT_USER": "Edit User"
 }

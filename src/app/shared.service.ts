@@ -44,9 +44,9 @@ export class SharedService {
           map((translated) => ({
             label: translated,
             link: crumb.link,
-          }))
-        )
-      )
+          })),
+        ),
+      ),
     ).pipe(tap((translatedList) => this.breadcrumb$.next(translatedList)));
   }
 
@@ -85,7 +85,7 @@ export class SharedService {
     const newRightValue = !currentRightValue;
     localStorage.setItem(
       this.openRightSidebarValueKey,
-      JSON.stringify(newRightValue)
+      JSON.stringify(newRightValue),
     );
     this.openRightSidebarValueSource.next(newRightValue);
   }
@@ -95,7 +95,7 @@ export class SharedService {
     const defaultState = this.getSidebarDefaultState(route);
     localStorage.setItem(
       this.openRightSidebarValueKey,
-      JSON.stringify(defaultState)
+      JSON.stringify(defaultState),
     );
     this.openRightSidebarValueSource.next(defaultState);
   }
@@ -149,19 +149,19 @@ export class SharedService {
   getNotifications(queryParams: any) {
     var queryString = this.getQueryString(queryParams);
     return this.http.get(
-      `${environment.SERVER_ADDRESS}/notifications/` + queryString
+      `${environment.SERVER_ADDRESS}/notifications/` + queryString,
     );
   }
   readNotification(data: any) {
     return this.http.put(
       `${environment.SERVER_ADDRESS}/notifications/read/`,
-      data
+      data,
     );
   }
   deleteNotification(queryParams: any) {
     var queryString = this.getQueryString(queryParams);
     return this.http.delete(
-      `${environment.SERVER_ADDRESS}/notifications/` + queryString
+      `${environment.SERVER_ADDRESS}/notifications/` + queryString,
     );
   }
 
@@ -177,7 +177,7 @@ export class SharedService {
   //--------------------------language trasnlate----------------------------------------------
 
   private currentLang = new BehaviorSubject<string>(
-    this.storageService.getLanguage() || 'en'
+    this.storageService.getLanguage() || 'en',
   );
 
   lang$ = this.currentLang.asObservable();

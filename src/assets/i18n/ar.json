@@ -532,5 +532,6 @@
   "NO_PARKING": "عدد مواقف السيارات",
   "UNITS_NAME": "اسم الوحدات",
   "PARKING": "وقوف السيارات",
-  "REVENUE_GENERATED": "الإيرادات المتولدة"
+  "REVENUE_GENERATED": "الإيرادات المتولدة",
+  "EDIT_USER": "تحرير المستخدم"
 }

@@ -107,7 +107,7 @@ export const routes: Routes = [
       {
         path: 'rental',
         component: RentalComponent,
-        data: { titleKey: 'PAGE_TITLE.RENTAL_AMOUNT' },
+        data: { titleKey: 'PAGE_TITLE.RENTAL_PORTFOLIO' },
       },
       {
         path: 'add-rentalaccount',

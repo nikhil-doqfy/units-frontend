@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { OnChanges, SimpleChanges } from '@angular/core';
 import {
   ApexAxisChartSeries,
@@ -32,7 +32,7 @@ export type ChartOptions = {
   templateUrl: './column.component.html',
   styleUrl: './column.component.css',
 })
-export class ColumnChartComponent implements OnChanges {
+export class ColumnChartComponent implements OnChanges, AfterViewInit {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   @Input() data: { name: string; value: number }[] = [];
@@ -98,25 +98,58 @@ export class ColumnChartComponent implements OnChanges {
   //       categories: this.data.map((d) => d.name),
   //     };
   //   }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] && this.data?.length && this.chart) {
-      const values = this.data.map((d) => d.value);
-      const categories = this.data.map((d) => d.name);
 
-      this.chart.updateOptions(
-        {
-          series: [
-            {
-              name: 'My-series',
-              data: values,
-            },
-          ],
-          xaxis: {
-            categories: categories,
-          },
-        },
-        true,
-      );
+  ngAfterViewInit() {
+    if (this.data?.length) {
+      this.updateChart();
     }
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data?.length) {
+      this.updateChart();
+    }
+  }
+  private updateChart() {
+    const values = this.data.map((d) => d.value);
+    const categories = this.data.map((d) => d.name);
+
+    this.chart.updateSeries([
+      {
+        name: 'My-series',
+        data: values,
+      },
+    ]);
+
+    this.chart.updateOptions(
+      {
+        xaxis: {
+          categories,
+        },
+      },
+
+      true,
+    );
+  }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['data'] && this.data?.length && this.chart) {
+  //     const values = this.data.map((d) => d.value);
+  //     const categories = this.data.map((d) => d.name);
+
+  //     this.chart.updateOptions(
+  //       {
+  //         series: [
+  //           {
+  //             name: 'My-series',
+  //             data: values,
+  //           },
+  //         ],
+  //         xaxis: {
+  //           categories: categories,
+  //         },
+  //       },
+  //       true,
+  //     );
+  //   }
+  // }
 }

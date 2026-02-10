@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { RevenueBarChartComponent } from '../charts/revenue-bar-chart/revenue-bar-chart.component';
 import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
@@ -45,6 +45,7 @@ import { TableImgItemComponent } from '../table-img-item/table-img-item.componen
   styleUrl: './property-analytics.component.css',
 })
 export class PropertyAnalyticsComponent {
+  @Output() detailViewChange = new EventEmitter<boolean>();
   showDetailView: boolean = false;
   leases: any[] = [];
   private translate = inject(TranslateService);
@@ -114,10 +115,14 @@ export class PropertyAnalyticsComponent {
     console.log('Revenue clicked');
     this.activeTab = 'properties';
     this.showDetailView = true;
+
+    this.detailViewChange.emit(false);
+    console.log('CHILD showDetailView:', this.showDetailView);
   }
   onRefresh() {}
   handleBackClick(): void {
     this.showDetailView = false;
+    this.detailViewChange.emit(true);
     this.router.navigate(['/dashboard/rental']);
   }
   componentName = 'RentalComponent';

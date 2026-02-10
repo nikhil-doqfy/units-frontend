@@ -1,6 +1,6 @@
 <ng-container *ngIf="!showDetailView">
   <app-white-card>
-    <div class="revenue-summary-card" *ngIf="!showDetailView">
+    <div class="revenue-summary-card">
       <!-- Left info -->
       <div class="revenue-left1">
         <div class="amount-row">
@@ -155,6 +155,7 @@
     </app-white-card>
   </div>
 </ng-container>
+
 <ng-container *ngIf="showDetailView">
   <div class="seven-items-view">
     <app-table-view-card
@@ -203,6 +204,7 @@
       </div>
     </app-white-card>
   </div>
+
   <div class="cmmnTblOuter mt-3">
     <div class="cmmnTblHdr">
       <div class="row align-items-center">

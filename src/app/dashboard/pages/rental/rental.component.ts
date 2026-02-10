@@ -1,4 +1,11 @@
-import { Component, DestroyRef, Input, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -55,6 +62,7 @@ export class RentalComponent {
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private rentalAccountService = inject(RentalAccountService);
+  showNavBar: boolean = true;
 
   constructor(
     private router: Router,
@@ -90,95 +98,6 @@ export class RentalComponent {
   rowsPerPage = 10;
   currentPage = 1;
 
-  // leases = [
-  //   {
-  //     title: 'Abhram | Khaleejia Building | 302',
-  //     leaseNo: 'LV-24-0908',
-  //     status: 'Active',
-  //     tenantNo: '98909897',
-  //     from: '28/02/24',
-  //     to: '28/02/25',
-  //     unitType: 'Residential',
-  //     yearRent: '67,000',
-  //     otherCharges: '13,000',
-  //     vat: '--',
-  //     total: '1,00,000',
-  //   },
-  //   {
-  //     title: 'Al Najah | Platinum Tower | 1201',
-  //     leaseNo: 'LK-24-1011',
-  //     status: 'Inactive',
-  //     tenantNo: '87654321',
-  //     from: '01/03/24',
-  //     to: '28/02/25',
-  //     unitType: 'Commercial',
-  //     yearRent: '83,000',
-  //     otherCharges: '17,000',
-  //     vat: '4,000 @ 5%',
-  //     total: '1,04,000',
-  //   },
-  //   {
-  //     title: 'Basil | Emerald Heights | 507',
-  //     leaseNo: 'LM-24-1112',
-  //     status: 'Active',
-  //     tenantNo: '23456789',
-  //     from: '15/01/24',
-  //     to: '14/01/25',
-  //     unitType: 'Mixed-Use',
-  //     yearRent: '75,000',
-  //     otherCharges: '10,000',
-  //     vat: '--',
-  //     total: '85,000',
-  //   },
-  //   {
-  //     title: 'Zara | Sapphire Tower | 805',
-  //     leaseNo: 'LN-24-2022',
-  //     status: 'Active',
-  //     tenantNo: '12345678',
-  //     from: '01/04/24',
-  //     to: '31/03/25',
-  //     unitType: 'Office',
-  //     yearRent: '90,000',
-  //     otherCharges: '15,000',
-  //     vat: '5,000',
-  //     total: '1,10,000',
-  //   },
-  // ];
-  chequeStatusList = [
-    { status: 'Credited', amount: 9000 },
-    { status: 'InProgress', amount: 9000 },
-    { status: 'Bounce', amount: 9000 },
-  ];
-
-  otherChargesList = [
-    { label: 'Admin Fee', base: 32.71, vat: 1.64, total: 34.35 },
-    { label: 'Ejari Charge Disb...', base: 175.65, vat: 1.64, total: 175.65 },
-    { label: 'Gas Charges', base: 1000.0, vat: 50.0, total: 1050.0 },
-    { label: 'Commission - Dubai', base: 1200.0, vat: 60.0, total: 1260.0 },
-    { label: 'Security Deposit', base: 2400.0, vat: 0.0, total: 2400.0 },
-  ];
-
-  summaryData = [
-    {
-      title: 'Total Amount Received',
-      amount: 'AED 1,20,573',
-      badge: '12% ↑ last month',
-      badgeType: 'success',
-    },
-    {
-      title: 'Cheques Approved',
-      amount: 'AED 2,20,789',
-      badge: '5678 Cheques',
-      badgeType: 'success',
-    },
-    {
-      title: 'Cheques Deposited',
-      amount: 'AED 20,573',
-      badge: '1124 Cheques',
-      badgeType: 'warning',
-    },
-  ];
-
   chartData = [
     380000, 350000, 310000, 380000, 300000, 350000, 370000, 420000, 280000,
     340000, 410000, 230000,
@@ -195,7 +114,12 @@ export class RentalComponent {
     this.initLanguageListener();
     this.getLeases();
   }
-
+  onPropertyDetailToggle(flag: boolean) {
+    this.showNavBar = flag;
+    // this.showDetailView = flag;
+    console.log('flag', flag);
+    // this.showDetailView = false;
+  }
   getLabel(key: string): string {
     return this.translate.instant(key);
   }
