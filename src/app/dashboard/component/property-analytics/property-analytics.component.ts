@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { RevenueBarChartComponent } from '../charts/revenue-bar-chart/revenue-bar-chart.component';
 import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
@@ -34,7 +34,6 @@ import { TableImgItemComponent } from '../table-img-item/table-img-item.componen
     TableFilterButtonComponent,
     FilterIconComponent,
     ExportIconComponent,
-    TableActionButtonComponent,
     TableSelectComponent,
     TablePaginationComponent,
     CommonModule,
@@ -44,17 +43,19 @@ import { TableImgItemComponent } from '../table-img-item/table-img-item.componen
   templateUrl: './property-analytics.component.html',
   styleUrl: './property-analytics.component.css',
 })
-export class PropertyAnalyticsComponent {
+export class PropertyAnalyticsComponent implements OnInit {
   @Output() detailViewChange = new EventEmitter<boolean>();
   showDetailView: boolean = false;
   leases: any[] = [];
   private translate = inject(TranslateService);
   constructor(private router: Router) {}
+  ngOnInit(): void {
+    // this.test();
+  }
   photos: string[] = [
     '../assets/property/property-comprison1.svg',
     '../assets/property/property-comprison2.svg',
     'assets/property/property-comprison3.svg',
-    // 'assets/complaint/complaint-8.svg',
   ];
   activeTab: any = 'properties';
 
@@ -133,5 +134,16 @@ export class PropertyAnalyticsComponent {
   handleExportClick(): void {}
   handlePreviewClick() {
     this.router.navigate(['/dashboard/invoice-template']);
+  }
+
+  test() {
+    this.translate.use('en');
+    const englishText = this.translate.instant('TOTAL_REVENUE_RECEIVED');
+    console.log('English:', englishText);
+
+    // Arabic
+    this.translate.use('ar');
+    const arabicText = this.translate.instant('TOTAL_REVENUE_RECEIVED');
+    console.log('Arabic:', arabicText);
   }
 }

@@ -16,8 +16,8 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
 import { DashFormComponent } from '../../shared/component/dash-form/dash-form.component';
-import { EditIconComponent } from '../component/icons/edit-icon/edit-icon.component';
-import { UserService } from '../services/user.service';
+import { EditIconComponent } from '../../user/component/icons/edit-icon/edit-icon.component';
+import { UserService } from '../../user/services/user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { StorageService } from '../../shared/services/storage.service';

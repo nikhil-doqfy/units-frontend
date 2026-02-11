@@ -1,0 +1,133 @@
+.settings-container {
+  display: flex;
+  gap: 20px;
+  min-height: calc(100vh - 140px);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  height: 411px;
+  background: #ffffff;
+  border: 1px solid #ecf0f2;
+  border-radius: 12px;
+  padding: 16px;
+  margin-left: 12px;
+}
+
+.sidebar-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-link {
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  transition: 0.2s ease;
+  font-size: 14px;
+  font-style: unset;
+  line-height: 100%;
+}
+
+.sidebar-link:hover {
+  background: #eef9ff;
+  color: #0c6ce9;
+}
+
+.sidebar-link.active {
+  background: #eef1ff;
+  color: #0c6ce9;
+  font-weight: 600;
+}
+
+/* Right Content */
+.settings-content {
+  flex: 1;
+  /* background: #fff; */
+  border-radius: 12px;
+  border: 1px solid #ecf0f2;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 220px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .settings-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+  }
+
+  .sidebar-link {
+    white-space: nowrap;
+  }
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-link span,
+.sidebar-link {
+  max-width: 100%;
+}
+
+/* Icon fix – shrink होऊ नये म्हणून */
+.sidebar-link i,
+.sidebar-link app-user-icon,
+.sidebar-link app-termscondition-icon,
+.sidebar-link app-charges-icon {
+  flex-shrink: 0;
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar-link .icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-link .link-text {
+  display: block;
+  max-width: calc(100% - 34px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

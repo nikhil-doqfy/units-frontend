@@ -40,6 +40,15 @@ import { DashBreadcrumbComponent } from '../component/dash-breadcrumb/dash-bread
 import { AuthService } from '../../auth/services/auth.service';
 import { StorageService } from '../services/storage.service';
 import { AlertService } from '../services/alert.service';
+import { SignatureIconComponent } from '../../dashboard/component/icons/signature-icon/signature-icon.component';
+import { EditIconComponent } from '../../dashboard/component/icons/edit-icon/edit-icon.component';
+import { DeleteIconComponent } from '../../dashboard/component/icons/delete-icon/delete-icon.component';
+import { UploadDocumentComponent } from '../../dashboard/component/upload-document/upload-document.component';
+import { UploadFileModel } from '../model/shared.model';
+import { UploadDocIconComponent } from '../../dashboard/component/icons/upload-doc-icon/upload-doc-icon.component';
+import { TermsconditionIconComponent } from '../../icons/termscondition-icon/termscondition-icon.component';
+import { ChargesIconComponent } from '../../icons/charges-icon/charges-icon.component';
+import { AuditlogIconComponent } from '../../icons/auditlog-icon/auditlog-icon.component';
 
 @Component({
   selector: 'app-header',
@@ -60,6 +69,14 @@ import { AlertService } from '../services/alert.service';
     LogoutModalIconComponent,
     DashBreadcrumbComponent,
     TranslateModule,
+    SignatureIconComponent,
+    DeleteIconComponent,
+    EditIconComponent,
+    UploadDocumentComponent,
+    UploadDocIconComponent,
+    TermsconditionIconComponent,
+    ChargesIconComponent,
+    AuditlogIconComponent,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -75,7 +92,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAddPropertyActive = false;
   isAddLeaseActive = false;
   currentLanguage = 'en';
-
+  isOpen = false;
   userProfile = this.storage.getUserProfile();
 
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
@@ -95,7 +112,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private translate: TranslateService,
     private storage: StorageService,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
@@ -109,7 +126,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.translate.onLangChange.subscribe((event: any) => {
         this.currentLanguage = event.lang;
         this.pageTitle = this.getRouteTitle(this.router.routerState.root);
-      })
+      }),
     );
 
     translate.use(storage.getLanguage());
@@ -120,7 +137,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.sharedService.breadcrumb$.subscribe((res) => {
         this.breadcrumbData = res;
-      })
+      }),
     );
 
     this.pageTitle = this.getRouteTitle(this.router.routerState.root);
@@ -130,7 +147,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.sharedService.openSidebarValue$.subscribe((value) => {
         this.openSidebarValue = value;
-      })
+      }),
     );
 
     this.subscriptions.add(
@@ -139,7 +156,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           const currentRoute = this.router.routerState.root;
           this.pageTitle = this.getRouteTitle(currentRoute);
-        })
+        }),
     );
 
     this.subscriptions.add(
@@ -153,7 +170,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.isProfileActive = url.includes('/user/my-profile');
 
           this.pageTitle = this.getRouteTitle(this.router.routerState.root);
-        })
+        }),
     );
 
     this.isProfileActive = this.router.url.includes('/user/my-profile');
@@ -161,10 +178,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.themeService.currentRole$.subscribe((role) => {
         this.currentRole = role;
-      })
+      }),
     );
   }
 
+  onUpload(event: UploadFileModel) {}
+  toggleDropdown() {
+    this.isOpen = !this.isOpen;
+  }
+
+  onFileSelect(event: any) {
+    const file = event.target.files[0];
+    console.log(file); // selected file
+  }
+  closeDropdown() {
+    this.isOpen = false;
+  }
   async setLanguage(lang: string) {
     this.currentLang = lang;
     this.translate.use(lang);
@@ -172,7 +201,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.updateDirection();
 
     await this.sharedService.getBreadcrumbs(
-      this.sharedService.currentbreadcrumb
+      this.sharedService.currentbreadcrumb,
     );
   }
 
@@ -237,7 +266,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   goToMyProfile(): void {
-    this.router.navigate(['/user/my-profile']);
+    this.router.navigate(['/settings/profile']);
+  }
+  goToTermsConditions() {
+    this.router.navigate(['/settings/terms']);
+    console.log('function clicked');
   }
 
   openLogoutModal(logoutContent: TemplateRef<any>) {
@@ -253,7 +286,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
       (reason) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
+      },
     );
   }
 
@@ -271,7 +304,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.router.navigate(['/auth/login']);
           localStorage.clear();
         },
-      })
+      }),
     );
   }
 
@@ -302,16 +335,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.sharedService.getNotifications({}).subscribe((resp: any) => {
       this.notifications = resp.content.notifications_data;
       this.unDeletedNotifications = this.notifications.filter(
-        (n: any) => !n.is_deleted
+        (n: any) => !n.is_deleted,
       );
       this.readNotifications = this.notifications.filter(
-        (n: any) => n.is_read && !n.is_deleted
+        (n: any) => n.is_read && !n.is_deleted,
       );
       this.unreadNotifications = this.notifications.filter(
-        (n: any) => !n.is_read && !n.is_deleted
+        (n: any) => !n.is_read && !n.is_deleted,
       );
       this.deletedNotifications = this.notifications.filter(
-        (n: any) => n.is_deleted
+        (n: any) => n.is_deleted,
       );
       this.allCount = resp.content.notification_count;
       this.readCount = resp.content.read_notifications;
@@ -370,5 +403,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.getNotifications();
         }
       });
+  }
+
+  goToCharges() {
+    this.router.navigate(['/settings/charges']);
+  }
+  goToAuditLog() {
+    this.router.navigate(['/auditlog']);
   }
 }

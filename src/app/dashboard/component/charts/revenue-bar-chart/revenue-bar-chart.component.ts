@@ -10,9 +10,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 export class RevenueBarChartComponent {
   @Output() barClick = new EventEmitter<any>();
 
-  // onBarClicked(data: any) {
-  //   this.barClick.emit(data);
-  // }
   chartOptions: any = {
     series: [
       {

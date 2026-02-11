@@ -374,5 +374,7 @@
   "ADD_LEAD": "Add Lead",
   "UPLOAD_FILE": "Upload",
   "UPDATE_LEAD": "Update Lead",
-  "EDIT_LEAD": "Edit Lead"
+  "EDIT_LEAD": "Edit Lead",
+  "TOTAL_REVENUE_RECEIVED": "Total Revenue Received",
+  "PROPERTY_COMPRISON": "Property Comprison"
 }

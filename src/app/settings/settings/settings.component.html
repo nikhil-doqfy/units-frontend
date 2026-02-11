@@ -1,0 +1,49 @@
+<div class="settings-layout">
+  <app-dash-outer>
+    <app-header></app-header>
+    <app-sidebar></app-sidebar>
+
+    <app-dash-body>
+      <div class="settings-container">
+        <!-- LEFT SETTINGS SIDEBAR -->
+        <aside class="sidebar">
+          <nav class="sidebar-nav">
+            <a
+              routerLink="/settings/profile"
+              routerLinkActive="active"
+              class="sidebar-link"
+            >
+              <i><app-profile-icon></app-profile-icon></i>
+              MY PROFILE
+            </a>
+
+            <a
+              routerLink="/settings/terms"
+              routerLinkActive="active"
+              class="sidebar-link"
+            >
+              <app-termscondition-icon></app-termscondition-icon>
+              TERMS & CONDITIONS
+            </a>
+
+            <a
+              routerLink="/settings/charges"
+              routerLinkActive="active"
+              class="sidebar-link"
+            >
+              <app-charges-icon></app-charges-icon>
+              CHARGES
+            </a>
+          </nav>
+        </aside>
+
+        <!-- RIGHT CONTENT -->
+        <main class="settings-content">
+          <router-outlet></router-outlet>
+        </main>
+      </div>
+    </app-dash-body>
+
+    <app-footer></app-footer>
+  </app-dash-outer>
+</div>

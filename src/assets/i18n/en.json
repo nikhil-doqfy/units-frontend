@@ -529,5 +529,7 @@
   "UNITS_NAME": "Units Name",
   "PARKING": "Parking",
   "REVENUE_GENERATED": "Revenue Generated",
-  "EDIT_USER": "Edit User"
+  "EDIT_USER": "Edit User",
+  "TOTAL_REVENUE_RECEIVED": "Total Revenue Received",
+  "PROPERTY_COMPRISON": "Property Comprison"
 }

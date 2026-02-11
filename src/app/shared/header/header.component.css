@@ -56,23 +56,6 @@
   gap: 0.5rem;
   padding: 0;
   border: 0;
-  /* 
-  background: var(--whiteBg);
-  color: var(--greyText);
-  box-shadow: 0 0 6px 0 #00000026;
-  font-size: 14px;
-  font-weight: 400;
-  padding: 0 12px;
-  line-height: 40px;
-
-  height: 40px;
-  border: 0;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: all 0.3s ease 0s; */
 }
 
 .hdrDrpdwn .hdrDrpdwnBtn::after {
@@ -654,4 +637,198 @@
 
 .notificationOffcanvas .hdrNotiDrpdwnTtl h5 {
   font-size: 15px;
+}
+
+/*------------------------------------------------------ Signature-----------------------------------------------------------------------------------------------------*/
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.add-btn {
+  border-radius: 50%;
+  border: 1px solid #ecf0f2;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  background-color: white;
+  align-items: center;
+  gap: 6px;
+}
+
+.card {
+  border: 1px dashed #cfd8dc;
+  border-radius: 10px;
+  padding: 12px;
+  width: 110px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-dropdown {
+  width: 490px;
+  height: 149px;
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  transform: translateX(100%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+}
+
+.add-card {
+  flex: 1;
+  /* border: 1px solid #ecf0f2; */
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.add-card:hover {
+  border: 1px solid #ecf0f2;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.sub {
+  font-size: 12px;
+  color: #777;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.draw-box {
+  width: 130px;
+  height: 57px;
+  border: 1px dashed #cfd6ff;
+  border-radius: 6px;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scribble {
+  font-size: 20px;
+}
+
+.draw-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.draw-card {
+  text-align: left;
+  position: relative;
+}
+
+.draw-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.draw-check {
+  width: 16px;
+  height: 16px;
+  accent-color: #5b6cff;
+}
+
+.draw-box {
+  width: 100%;
+  height: 60px;
+  border: 1px dashed #ebebec;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.draw-preview {
+  max-height: 40px;
+  object-fit: contain;
+}
+
+.draw-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  font-size: 16px;
+  color: #666;
+}
+
+.draw-actions i {
+  cursor: pointer;
+}
+
+.add-card {
+  position: relative;
+}
+
+/* Default hide checkbox + icons */
+.add-card .draw-check,
+.add-card .draw-actions {
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s ease;
+}
+
+/* Show on hover */
+.add-card:hover .draw-check,
+.add-card:hover .draw-actions {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* FIRST CARD → always visible */
+.add-card.draw-card .draw-check,
+.add-card.draw-card .draw-actions {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Position checkbox (top right) */
+.draw-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* Position icons (bottom right) */
+.draw-actions {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+}
+.add-card.draw-card {
+  border: 1px solid #ebebec;
+}
+.add-card.upload .draw-actions {
+  display: none !important;
 }

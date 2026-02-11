@@ -15,8 +15,87 @@
           <app-dash-title [title]="pageTitle" />
         </div>
       </div>
+
       <div class="col-auto">
         <div class="hdrOptns">
+          <ng-container *ngIf="currentRole === 'property-manager'">
+            <div class="dropdown-wrapper" (clickOutside)="closeDropdown()">
+              <button class="add-btn" (click)="toggleDropdown()">
+                <app-signature-icon></app-signature-icon>
+              </button>
+
+              <div class="add-dropdown" *ngIf="isOpen">
+                <div class="add-card draw-card">
+                  <!-- Top Row -->
+                  <div class="draw-header">
+                    <span class="title">Draw</span>
+                    <input type="radio" name="signType" class="draw-check" />
+                  </div>
+
+                  <!-- Draw Box -->
+                  <div class="draw-box">
+                    <img
+                      src="assets/Signature/Signature.svg"
+                      alt="sign"
+                      class="draw-preview"
+                    />
+                  </div>
+
+                  <!-- Bottom Icons -->
+                  <div class="draw-actions">
+                    <app-edit-icon></app-edit-icon>
+                    <app-delete-icon></app-delete-icon>
+                  </div>
+                </div>
+
+                <div class="add-card font">
+                  <div class="draw-header">
+                    <span class="title">Font</span>
+                    <input type="radio" name="signType" class="draw-check" />
+                  </div>
+
+                  <!-- Draw Box -->
+                  <div class="draw-box">
+                    <img
+                      src="assets/Signature/Signature1.svg"
+                      alt="sign"
+                      class="draw-preview"
+                    />
+                  </div>
+
+                  <!-- Bottom Icons -->
+                  <div class="draw-actions">
+                    <app-edit-icon></app-edit-icon>
+                    <app-delete-icon></app-delete-icon>
+                  </div>
+                </div>
+
+                <div class="add-card upload">
+                  <div class="draw-header">
+                    <span class="title">Upload</span>
+                    <input type="radio" name="signType" class="draw-check" />
+                  </div>
+
+                  <!-- Draw Box -->
+                  <div class="draw-box">
+                    <!-- <app-upload-document
+                      [isMultipleFiles]="false"
+                      [fileTypes]="['jpg', 'jpeg', 'png', 'pdf']"
+                      [maxSize]="20"
+                      (uploadProgress)="onUpload($event)"
+                    >
+                    </app-upload-document> -->
+                  </div>
+
+                  <!-- Bottom Icons -->
+                  <div class="draw-actions">
+                    <app-edit-icon></app-edit-icon>
+                    <app-delete-icon></app-delete-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
           <ng-container
             *ngIf="
               currentRole === 'owner' || currentRole === 'property-manager'
@@ -116,11 +195,11 @@
                               *ngIf="notification.timestamp"
                             >
                               <span>{{
-                                notification.timestamp | date : "d MMM yyyy"
+                                notification.timestamp | date: "d MMM yyyy"
                               }}</span>
                               <span>|</span>
                               <span>{{
-                                notification.timestamp | date : "hh.mma"
+                                notification.timestamp | date: "hh.mma"
                               }}</span>
                             </div>
                           </div>
@@ -156,11 +235,11 @@
                               *ngIf="notification.timestamp"
                             >
                               <span>{{
-                                notification.timestamp | date : "d MMM yyyy"
+                                notification.timestamp | date: "d MMM yyyy"
                               }}</span>
                               <span>|</span>
                               <span>{{
-                                notification.timestamp | date : "hh.mma"
+                                notification.timestamp | date: "hh.mma"
                               }}</span>
                             </div>
                           </div>
@@ -196,11 +275,11 @@
                               *ngIf="notification.timestamp"
                             >
                               <span>{{
-                                notification.timestamp | date : "d MMM yyyy"
+                                notification.timestamp | date: "d MMM yyyy"
                               }}</span>
                               <span>|</span>
                               <span>{{
-                                notification.timestamp | date : "hh.mma"
+                                notification.timestamp | date: "hh.mma"
                               }}</span>
                             </div>
                           </div>
@@ -257,11 +336,11 @@
                               *ngIf="notification.timestamp"
                             >
                               <span>{{
-                                notification.timestamp | date : "d MMM yyyy"
+                                notification.timestamp | date: "d MMM yyyy"
                               }}</span>
                               <span>|</span>
                               <span>{{
-                                notification.timestamp | date : "hh.mma"
+                                notification.timestamp | date: "hh.mma"
                               }}</span>
                             </div>
                           </div>
@@ -376,6 +455,19 @@
                 <button ngbDropdownItem (click)="goToMyProfile()">
                   <i><app-profile-icon /></i>{{ "MY_PROFILE" | translate }}
                 </button>
+                <ng-container *ngIf="currentRole === 'property-manager'">
+                  <button ngbDropdownItem (click)="goToTermsConditions()">
+                    <i><app-termscondition-icon></app-termscondition-icon></i
+                    >Terms & Conditions
+                  </button>
+                  <button ngbDropdownItem (click)="goToCharges()">
+                    <i><app-charges-icon></app-charges-icon></i>Charges
+                  </button>
+                  <button ngbDropdownItem (click)="goToAuditLog()">
+                    <i><app-auditlog-icon>s</app-auditlog-icon></i
+                    >Audit Log
+                  </button>
+                </ng-container>
                 <button ngbDropdownItem (click)="goToDocumentation()">
                   <i><app-document-icon /></i>{{ "DOCUMENTATION" | translate }}
                 </button>
