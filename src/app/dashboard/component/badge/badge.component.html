@@ -1,5 +1,12 @@
-<div class="badgeText" [class.green]="status === 'green'" [class.greenLight]="status === 'light-green'"
-    [class.orange]="status === 'orange'" [class.blue]="status === 'blue'" [class.red]="status === 'red'"
-    [class.yellow]="status === 'yellow'">
-    {{ title }}
+<div
+  class="badgeText"
+  [class.green]="status === 'green'"
+  [class.greenLight]="status === 'light-green'"
+  [class.orange]="status === 'orange'"
+  [class.blue]="status === 'blue'"
+  [class.red]="status === 'red'"
+  [class.yellow]="status === 'yellow'"
+>
+  {{ title }}
+  <span class="arrow">▼</span>
 </div>

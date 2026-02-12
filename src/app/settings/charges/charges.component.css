@@ -1,0 +1,120 @@
+.btnCommonsx {
+  background-color: var(--whiteBg);
+  box-shadow: 0 0 6px 0 #00000026;
+  border-radius: 10px;
+}
+
+.cmmnTblBody table thead tr th {
+  background-color: var(--muteBg1);
+  color: black;
+}
+
+.form-switch .form-check-input {
+  background-color: #adb5bd;
+  border-color: #adb5bd;
+}
+
+.form-switch .form-check-input:checked {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+/* Row background color on hover */
+.charges-row:hover {
+  background-color: var(--muteBg1);
+}
+
+/* Hover actions hidden by default */
+.hover-actions {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  gap: 5px;
+}
+
+/* Show all hover actions when hovering tbody */
+tbody.show-hover-actions .hover-actions {
+  display: flex;
+}
+
+/* Buttons styling */
+.btn-edit {
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Edit/Delete buttons hidden by default */
+.hover-actions {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  gap: 5px;
+}
+
+/* Show buttons only on hover of that row */
+.charges-row:hover .hover-actions {
+  display: flex;
+}
+
+/* Buttons styling */
+.btn-edit {
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  color: white;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+/* Row hover background */
+:host ::ng-deep .charges-row:hover {
+  background-color: var(--muteBg1);
+}
+
+/* Buttons hidden by default */
+:host ::ng-deep .hover-actions {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  gap: 5px;
+}
+
+/* Show buttons only when hovering that row */
+:host ::ng-deep .charges-row:hover .hover-actions {
+  display: flex;
+}
+
+/* Buttons styling */
+:host ::ng-deep .btn-edit {
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+:host ::ng-deep .btn-delete {
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}

@@ -1,1 +1,75 @@
-<p>charges works!</p>
+<div class="mb-4" [ngClass]="{ arabic: currentLanguage === 'ar' }">
+  <app-white-card title="Charges"> </app-white-card>
+  <div class="mt-3">
+    <app-white-card>
+      <div class="cmmnTblHdr">
+        <div class="row g-3 align-items-center">
+          <div class="col-md">Add / Delete</div>
+          <div class="col-md-auto">
+            <div class="d-flex align-items-center gap-2 gap-md-3">
+              <button class="btn btnCommonsx">
+                <app-plus-icon></app-plus-icon>
+                {{ "Add More" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cmmnTblBody">
+        <div class="table-responsive">
+          <table class="charges-table">
+            <thead>
+              <tr>
+                <th>{{ "DESCRIPTION" | translate }}</th>
+                <th>
+                  {{ "AMOUNT" | translate }}
+                </th>
+                <th>{{ "TAX_CODE" | translate }}</th>
+                <th>{{ "VAT" | translate }}</th>
+                <th>Editable</th>
+                <th>{{ "TOTAL_AMOUNT" | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let c of charges" class="charges-row">
+                <td>
+                  <label class="checkbox">
+                    <input type="checkbox" [(ngModel)]="c.checked" />
+                    <span class="desc-cell"></span>
+                    {{ c.label }}
+                  </label>
+                </td>
+                <td>{{ c.amount | number: "1.2-2" }}</td>
+                <td>{{ c.tax }}</td>
+                <td>{{ c.vat | number: "1.2-2" }}</td>
+                <td class="text-center">
+                  <div
+                    class="form-check form-switch d-flex justify-content-center"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [(ngModel)]="c.editable"
+                    />
+                  </div>
+                </td>
+                <td>
+                  {{ c.total | number: "1.2-2" }}
+                </td>
+                <div class="hover-actions">
+                  <button class="btn btn-sm btn-edit">
+                    <app-edit-icon></app-edit-icon>
+                  </button>
+                  <button class="btn btn-sm btn-delete">
+                    <app-delete-icon></app-delete-icon>
+                  </button>
+                </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+</div>
