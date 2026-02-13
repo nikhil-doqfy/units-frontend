@@ -5,6 +5,7 @@ import { MyProfileComponent } from '../my-profile/my-profile.component';
 import { TermsconditionsComponent } from '../termsconditions/termsconditions.component';
 import { ChargesComponent } from '../charges/charges.component';
 import { SettingsComponent } from './settings.component';
+import { AuditlogComponent } from '../../user/auditlog/auditlog.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
       },
       { path: 'terms', component: TermsconditionsComponent },
       { path: 'charges', component: ChargesComponent },
+      { path: 'auditlog', component: AuditlogComponent },
       { path: '', redirectTo: 'profile', pathMatch: 'full' },
     ],
   },

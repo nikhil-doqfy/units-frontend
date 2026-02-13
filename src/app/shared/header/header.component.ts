@@ -409,6 +409,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/settings/charges']);
   }
   goToAuditLog() {
-    this.router.navigate(['/auditlog']);
+    this.router.navigate(['/user/auditlog']);
   }
 }

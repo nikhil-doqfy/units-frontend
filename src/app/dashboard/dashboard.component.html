@@ -1,8 +1,8 @@
 <app-dash-outer>
-    <app-header [breadcrumbData]="breadcrumbData"></app-header>
-    <app-sidebar></app-sidebar>
-    <app-dash-body>
-        <router-outlet (activate)="onRouteActivate($event)"></router-outlet>
-    </app-dash-body>
-    <app-footer></app-footer>
+  <app-header [breadcrumbData]="breadcrumbData"></app-header>
+  <app-sidebar></app-sidebar>
+  <app-dash-body>
+    <router-outlet (activate)="onRouteActivate($event)"></router-outlet>
+  </app-dash-body>
+  <app-footer></app-footer>
 </app-dash-outer>

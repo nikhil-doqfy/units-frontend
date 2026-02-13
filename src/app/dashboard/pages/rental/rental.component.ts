@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ɵEmptyOutletComponent } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../../shared.service';
@@ -65,6 +65,7 @@ import { AreaGraphComponent } from '../../component/charts/area-graph/area-graph
     BadgeComponent,
     StatusDropdownComponent,
     AreaGraphComponent,
+    ɵEmptyOutletComponent,
   ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',
@@ -199,6 +200,7 @@ export class RentalComponent {
   onLeaseClick(lease: any) {
     this.selectedLease = lease;
     this.showDetailView = true;
+    this.showInvoiceDetails = false;
   }
 
   toggleMenu() {
@@ -241,5 +243,21 @@ export class RentalComponent {
 
   handlePreviewDocumentClick(): void {
     console.log('Preview Document button clicked');
+  }
+
+  showInvoiceDetails = false;
+  onViewInvoiceClick(lease: any, event: Event) {
+    event.preventDefault();
+    this.selectedLease = lease;
+    this.showInvoiceDetails = true;
+    console.log('Invoice Details for:', lease);
+  }
+  handleDownload(type: string) {
+    console.log('Download:', type);
+    // API call / file generate logic
+  }
+  handleShare(type: string) {
+    console.log('Share:', type);
+    // Sharing logic
   }
 }

@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserComponent } from './user.component';
 
 import { MyProfileComponent } from '../settings/my-profile/my-profile.component';
+import { AuditlogComponent } from './auditlog/auditlog.component';
 
 export const routes: Routes = [
   {
@@ -17,10 +18,10 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'my-profile',
-        title: 'My Profile | Doqfy',
-        component: MyProfileComponent,
-        data: { title: 'My Profile' },
+        path: 'auditlog',
+        title: 'Audit Log | Doqfy',
+        component: AuditlogComponent,
+        data: { title: 'Audit Log' },
       },
     ],
   },

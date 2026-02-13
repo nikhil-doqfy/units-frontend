@@ -681,5 +681,104 @@ Replace Cheque Link .replace-link {
 .line {
   flex: 1;
   height: 1px;
-  background: #e5e7eb; /* light grey line */
+  background: #e5e7eb;
+}
+
+/*invoice-info-card-----------------------------------------*/
+.invoice-info {
+  display: flex;
+  background: #f5f7f8;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.info-col {
+  flex: 0 1 0;
+}
+
+.totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 24px;
+}
+
+.words {
+  max-width: 55%;
+}
+
+.words p {
+  margin: 4px 0;
+  line-height: 1.6;
+}
+
+.summary {
+  min-width: 260px;
+  text-align: right;
+}
+
+.summary p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.summary .grand {
+  display: inline-block;
+  background: var(--ownerGradientBg);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-weight: 600;
+  border: none;
+}
+
+.invoice-card {
+  background: #fff;
+  border-radius: 12px;
+
+  padding: 18px 22px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
+  max-width: 900px; /* 🔥 KEY FIX */
+  margin: 0 auto;
+}
+
+.invoice-info {
+  display: flex;
+
+  display: grid;
+  grid-template-columns: 0.3fr 1fr;
+  column-gap: 8px;
+}
+
+.info-col {
+  flex: 1;
+}
+
+.info-col h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.info-col p {
+  font-size: 14px;
+  color: #374151;
+  margin: 3px 0;
+  line-height: 1.4;
+}
+
+.info-col .bold {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .invoice-info {
+    flex-direction: column;
+    gap: 18px;
+  }
 }

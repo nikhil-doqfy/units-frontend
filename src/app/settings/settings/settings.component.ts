@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DashOuterComponent } from '../../shared/component/dash-outer/dash-outer.component';
 import { HeaderComponent } from '../../shared/header/header.component';
@@ -28,4 +28,6 @@ import { ProfileIconComponent } from '../../icons/profile-icon/profile-icon.comp
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',
 })
-export class SettingsComponent {}
+export class SettingsComponent {
+  @Input() breadcrumbData: { label: string; link?: string }[] = [];
+}

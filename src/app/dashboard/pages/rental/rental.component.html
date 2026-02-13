@@ -362,7 +362,9 @@
               ><i><app-invoice-icon></app-invoice-icon></i> Invoice Generated
               Succesfully</span
             >
-            <a href="">View Invoice</a>
+            <a href="#" (click)="onViewInvoiceClick(selectedLease, $event)"
+              >View Invoice</a
+            >
           </div>
         </div>
       </div>
@@ -824,4 +826,140 @@
       </div>
     </app-white-card>
   </div>
+</ng-container>
+
+<ng-container *ngIf="showInvoiceDetails">
+  <app-table-view-card
+    [showImage]="false"
+    [title]="'RECEIPT DETAILS' | translate"
+    [showDownload]="true"
+    [showShare]="true"
+    [showBack]="false"
+    (download)="handleDownload($event)"
+    (share)="handleShare($event)"
+  >
+    <div rental class="other-charges-box mt-3">
+      <div class="invoice-info">
+        <div class="info-col">
+          <h5>Invoice to:</h5>
+          <p class="bold">ABHRAM</p>
+          <p>Addr: P.O. BOX # 95801, Sharjah</p>
+          <p>Phone: +41-827282982</p>
+          <p>TRN: 100300564000003</p>
+        </div>
+
+        <div class="info-col">
+          <h5>Property Details:</h5>
+          <p class="bold">KHALEEJA BUILDING | 302</p>
+          <p>Period: 01-Sep-2025 TO 31-Aug-2026</p>
+          <p>Lease No: LV-25-01335</p>
+          <p>Ref No: P48/LGI-25-13230</p>
+        </div>
+      </div>
+    </div>
+
+    <div rental class="mt-3">
+      <div class="cmmnTblBody">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{ "SI.No" | translate }}</th>
+                <th>
+                  {{ "Invoice NO" | translate }}
+                </th>
+
+                <th>{{ "Description" | translate }}</th>
+                <th>{{ "Invoice Date" | translate }}</th>
+                <th>{{ "Prepared By" | translate }}</th>
+                <th>{{ "Payment mode" | translate }}</th>
+                <th>{{ "Reference No" | translate }}</th>
+                <th>{{ "Status" | translate }}</th>
+                <th>{{ "Quantity" }}</th>
+                <th>{{ "Rate" | translate }}</th>
+                <th>{{ "Amount" | translate }}</th>
+
+                <th>{{ "Vat" | translate }}</th>
+                <th>{{ "Vat Amount" | translate }}</th>
+                <th>{{ "Total Amount" | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>01</td>
+                <td>LP26272</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+
+              <tr>
+                <td rowspan="2">02</td>
+                <td>LP672628</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+
+              <tr>
+                <td>LP672628</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div rental class="totals">
+      <div class="words">
+        <p><strong>Amount in words:</strong></p>
+        <p>Fifteen Thousand Three Hundred Five Dirhams And Zero Fils</p>
+      </div>
+
+      <div class="summary">
+        <p>Sub Total: <strong>14,576.20</strong></p>
+        <p>VAT Amount: <strong>728.80</strong></p>
+        <button class="grand">Grand Total: <strong>15,305.00</strong></button>
+      </div>
+    </div>
+  </app-table-view-card>
 </ng-container>

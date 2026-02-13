@@ -1,7 +1,7 @@
 <div class="cmmnTblViewCol">
   <div class="cmmnTblViewHdr">
     <div class="cmmnTblViewTtl">
-      <i>
+      <i *ngIf="showImage">
         <ng-container *ngIf="imgSrc; else noImg">
           <img [src]="imgSrc" alt="" />
         </ng-container>
@@ -28,17 +28,38 @@
       >
         <app-edit-icon />
       </button>
-      <div
-        class="cmmnTblViewComboBtns"
-        *ngIf="hasProjectedContent; else noActionButtons"
-      >
+      <div class="cmmnTblViewComboBtns">
+        <!-- *ngIf="hasProjectedContent; else noActionButtons" -->
         <button
+          *ngIf="showBack"
           type="button"
           class="btn btnCommon btnWhite"
           (click)="onBackClick()"
         >
           <i><app-back-icon /></i>{{ "BACK" | translate }}
         </button>
+
+        <button
+          class="btn btnCommon btnWhite"
+          *ngIf="showDownload"
+          (click)="download.emit('pdf')"
+        >
+          <i><app-download-icon></app-download-icon></i>
+          Download
+        </button>
+        <div class="dropdownWrap" *ngIf="showShare">
+          <button class="btn btnCommon btnWhite">
+            <i><app-share-icon></app-share-icon></i>
+            Share
+          </button>
+
+          <ul class="dropdownMenu">
+            <li (click)="share.emit('email')">Email</li>
+            <li (click)="share.emit('whatsapp')">WhatsApp</li>
+            <li (click)="share.emit('link')">Copy Link</li>
+          </ul>
+        </div>
+
         <div class="actionRow">
           <ng-content select="[header-actions]"></ng-content>
         </div>
