@@ -131,3 +131,35 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar-link app-profile-icon,
+.sidebar-link app-termscondition-icon,
+.sidebar-link app-charges-icon {
+  flex-shrink: 0;
+}
+
+.sidebar-link .link-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-link.active {
+  background: #eef9ff;
+  color: #0c6ce9;
+}
+
+.sidebar-link.active app-profile-icon,
+.sidebar-link.active app-termscondition-icon,
+.sidebar-link.active app-charges-icon {
+  color: #0c6ce9;
+}

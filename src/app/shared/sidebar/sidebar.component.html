@@ -108,6 +108,12 @@
           <app-tenant-icon></app-tenant-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          title="{{ 'Cheques' | translate }}"
+          href="/dashboard/cheques"
+        >
+          <app-cheques-icon></app-cheques-icon>
+        </app-sidebar-item>
+        <app-sidebar-item
           title="{{ 'OWNER' | translate }}"
           href="/dashboard/owners"
         >
@@ -138,6 +144,12 @@
           [count]="243"
         >
           <app-raise-complaint-icon></app-raise-complaint-icon>
+        </app-sidebar-item>
+        <app-sidebar-item
+          title="{{ 'PAGE_TITLE.ANNOUNCEMENTS' | translate }}"
+          href="/dashboard/announcements"
+        >
+          <app-announcements-icon></app-announcements-icon>
         </app-sidebar-item>
       </div>
     </div>

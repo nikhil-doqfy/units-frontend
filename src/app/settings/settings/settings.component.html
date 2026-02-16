@@ -11,6 +11,7 @@
             <a
               routerLink="/settings/profile"
               routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
               class="sidebar-link"
             >
               <i><app-profile-icon></app-profile-icon></i>
@@ -23,7 +24,7 @@
               class="sidebar-link"
             >
               <app-termscondition-icon></app-termscondition-icon>
-              TERMS & CONDITIONS
+              <span class="link-text">TERMS & CONDITIONS</span>
             </a>
 
             <a

@@ -26,6 +26,8 @@ import { ComplaintsComponent } from './pages/complaints/complaints.component';
 import { authGuard } from '../auth.guard';
 import { PropertyLeadsComponent } from './component/property-leads.component';
 import { InvoiceTemplateComponent } from '../shared/invoice-template/invoice-template.component';
+import { ChequesComponent } from './pages/cheques/cheques.component';
+import { AnnouncementsComponent } from './pages/announcements/announcements.component';
 export const routes: Routes = [
   {
     path: '',
@@ -90,6 +92,11 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
       },
       {
+        path: 'cheques',
+        component: ChequesComponent,
+        data: { titleKey: 'PAGE_TITLE.CHEQUES' },
+      },
+      {
         path: 'lease-tenancy',
         component: LeaseTenancyComponent,
         data: { titleKey: 'PAGE_TITLE.LEASE' },
@@ -129,6 +136,11 @@ export const routes: Routes = [
         path: 'complaints/detail/:ticket_id',
         component: ComplaintsComponent,
         data: { titleKey: 'PAGE_TITLE.COMPLAINTS' },
+      },
+      {
+        path: 'announcements',
+        component: AnnouncementsComponent,
+        data: { titleKey: 'PAGE_TITLE.ANNOUNCEMENTS' },
       },
       {
         path: 'owners',

@@ -6,6 +6,7 @@
   [class.blue]="status === 'blue'"
   [class.red]="status === 'red'"
   [class.yellow]="status === 'yellow'"
+  [ngClass]="enableBg ? status : ''"
 >
   {{ title }}
 </div>

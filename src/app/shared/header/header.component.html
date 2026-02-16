@@ -77,7 +77,19 @@
                   </div>
 
                   <!-- Draw Box -->
-                  <div class="draw-box">
+                  <div class="draw-box" (click)="fileInput.click()">
+                    <i class="fa fa-cloud-upload upload-icon"
+                      ><app-upload-doc-icon></app-upload-doc-icon
+                    ></i>
+                    <div class="upload-text">click to select file</div>
+
+                    <input
+                      type="file"
+                      #fileInput
+                      hidden
+                      (change)="onFileSelected($event)"
+                    />
+
                     <!-- <app-upload-document
                       [isMultipleFiles]="false"
                       [fileTypes]="['jpg', 'jpeg', 'png', 'pdf']"
@@ -363,7 +375,27 @@
               </div>
             </div>
           </div>
+
           <!------------------------------------------------------notification End here-------------------------------------------------------------->
+          <ng-container *ngIf="currentRole === 'property-manager'">
+            <div ngbDropdown class="hdrDrpdwn hdrLanguageDrpdwn">
+              <button
+                type="button"
+                class="hdrDrpdwnBtn btn btnCommon btnWhite d-flex w-200px justify-content-between"
+                id="userLanguageDropdown"
+                ngbDropdownToggle
+              >
+                <em class="arrow">
+                  <span class="down"><app-arrow-down-icon /></span>
+                  <span class="up"><app-arrow-up-icon /></span>
+                </em>
+                <span class="m-2" (click)="openModal()">AED</span>
+
+                <app-transaction *ngIf="isModalOpen" (close)="closeModal()">
+                </app-transaction>
+              </button>
+            </div>
+          </ng-container>
           <div ngbDropdown class="hdrDrpdwn hdrLanguageDrpdwn">
             <button
               type="button"
@@ -453,7 +485,8 @@
               </div>
               <div class="hdrUserDrpdwnLinks">
                 <button ngbDropdownItem (click)="goToMyProfile()">
-                  <i><app-profile-icon /></i>{{ "MY_PROFILE" | translate }}
+                  <i><app-profile-icon /></i
+                  >{{ "PAGE_TITLE.MY_PROFILE" | translate }}
                 </button>
                 <ng-container *ngIf="currentRole === 'property-manager'">
                   <button ngbDropdownItem (click)="goToTermsConditions()">

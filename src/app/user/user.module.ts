@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { UserComponent } from './user.component';
 
-import { MyProfileComponent } from '../settings/my-profile/my-profile.component';
 import { AuditlogComponent } from './auditlog/auditlog.component';
 
 export const routes: Routes = [
@@ -12,16 +11,10 @@ export const routes: Routes = [
     component: UserComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'my-profile',
-        title: 'My Profile | Doqfy',
-        pathMatch: 'full',
-      },
-      {
         path: 'auditlog',
-        title: 'Audit Log | Doqfy',
+
         component: AuditlogComponent,
-        data: { title: 'Audit Log' },
+        data: { titleKey: 'PAGE_TITLE.AUDIT_LOG' },
       },
     ],
   },

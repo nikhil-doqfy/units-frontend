@@ -1,52 +1,111 @@
-<div class="mb-4" [ngClass]="{ arabic: currentLanguage === 'ar' }">
-  <app-white-card title="Charges"> </app-white-card>
+<div class="mb-4">
+  <app-white-card title="Charges"></app-white-card>
+
   <div class="mt-3">
     <app-white-card>
       <div class="cmmnTblHdr">
         <div class="row g-3 align-items-center">
           <div class="col-md">Add / Delete</div>
           <div class="col-md-auto">
-            <div class="d-flex align-items-center gap-2 gap-md-3">
-              <button class="btn btnCommonsx">
-                <app-plus-icon></app-plus-icon>
-                {{ "Add More" | translate }}
-              </button>
-            </div>
+            <button
+              *ngIf="!showSave"
+              class="btn btnCommonsx"
+              (click)="addNewRow()"
+            >
+              <app-plus-icon></app-plus-icon>
+              Add More
+            </button>
+
+            <button *ngIf="showSave" class="btn btnCommon" (click)="saveRow()">
+              <i><app-save-icon></app-save-icon> </i>Save
+            </button>
           </div>
         </div>
       </div>
+
       <div class="cmmnTblBody">
         <div class="table-responsive">
           <table class="charges-table">
             <thead>
               <tr>
-                <th>{{ "DESCRIPTION" | translate }}</th>
-                <th>
-                  {{ "AMOUNT" | translate }}
-                </th>
-                <th>{{ "TAX_CODE" | translate }}</th>
-                <th>{{ "VAT" | translate }}</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Tax Code</th>
+                <th>VAT</th>
                 <th>Editable</th>
-                <th>{{ "TOTAL_AMOUNT" | translate }}</th>
+                <th>Total Amount</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let c of charges" class="charges-row">
+              <tr
+                *ngFor="let c of charges; let i = index"
+                class="charges-row"
+                [class.new-row]="c.isNew"
+              >
                 <td>
-                  <label class="checkbox">
-                    <input type="checkbox" [(ngModel)]="c.checked" />
-                    <span class="desc-cell"></span>
+                  {{ c.isNew ? charges.length : i + 1 }}.
+                  <ng-container *ngIf="c.isNew; else normalLabel">
+                    <input
+                      class="inline-input"
+                      placeholder="Enter here"
+                      [(ngModel)]="c.label"
+                    />
+                  </ng-container>
+
+                  <ng-template #normalLabel>
                     {{ c.label }}
-                  </label>
+                  </ng-template>
                 </td>
-                <td>{{ c.amount | number: "1.2-2" }}</td>
-                <td>{{ c.tax }}</td>
-                <td>{{ c.vat | number: "1.2-2" }}</td>
+
+                <td>
+                  <ng-container *ngIf="c.isNew; else amtText">
+                    <input
+                      class="inline-input"
+                      type="number"
+                      placeholder="Enter here"
+                      [(ngModel)]="c.amount"
+                      (input)="calculateTotal(c)"
+                    />
+                  </ng-container>
+
+                  <ng-template #amtText>
+                    {{ c.amount | number: "1.2-2" }}
+                  </ng-template>
+                </td>
+
+                <td>
+                  <ng-container *ngIf="c.isNew; else taxText">
+                    <input
+                      class="inline-input"
+                      placeholder="Enter here"
+                      [(ngModel)]="c.tax"
+                    />
+                  </ng-container>
+
+                  <ng-template #taxText>
+                    {{ c.tax }}
+                  </ng-template>
+                </td>
+
+                <td>
+                  <ng-container *ngIf="c.isNew; else vatText">
+                    <input
+                      class="inline-input"
+                      type="number"
+                      placeholder="Enter here"
+                      [(ngModel)]="c.vat"
+                      (input)="calculateTotal(c)"
+                    />
+                  </ng-container>
+
+                  <ng-template #vatText>
+                    {{ c.vat | number: "1.2-2" }}
+                  </ng-template>
+                </td>
+
                 <td class="text-center">
-                  <div
-                    class="form-check form-switch d-flex justify-content-center"
-                  >
+                  <div class="form-check form-switch">
                     <input
                       class="form-check-input"
                       type="checkbox"
@@ -54,17 +113,28 @@
                     />
                   </div>
                 </td>
-                <td>
-                  {{ c.total | number: "1.2-2" }}
+
+                <td class="total-cell">
+                  <span *ngIf="!c.isNew">
+                    {{ c.total | number: "1.2-2" }}
+                  </span>
+
+                  <span *ngIf="c.isNew">
+                    {{ c.total || 0 | number: "1.2-2" }}
+                  </span>
+
+                  <div class="hover-actions">
+                    <button class="btn btn-sm btn-edit">
+                      <app-edit-icon></app-edit-icon>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-delete"
+                      (click)="deleteRow(i)"
+                    >
+                      <app-delete-icon></app-delete-icon>
+                    </button>
+                  </div>
                 </td>
-                <div class="hover-actions">
-                  <button class="btn btn-sm btn-edit">
-                    <app-edit-icon></app-edit-icon>
-                  </button>
-                  <button class="btn btn-sm btn-delete">
-                    <app-delete-icon></app-delete-icon>
-                  </button>
-                </div>
               </tr>
             </tbody>
           </table>

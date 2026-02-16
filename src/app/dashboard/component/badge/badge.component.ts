@@ -6,10 +6,10 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './badge.component.html',
-  styleUrl: './badge.component.css'
+  styleUrl: './badge.component.css',
 })
 export class BadgeComponent {
   @Input() title: string | undefined;
   @Input() status: string | undefined;
+  @Input() enableBg: boolean = false;
 }
-

@@ -29,6 +29,9 @@ import { SidebarSupportComponent } from './sidebar-support/sidebar-support.compo
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RentalIconComponent } from '../component/icons/rental-icon/rental-icon.component';
 import { RentalPortfolioIconComponent } from '../../icons/rental-portfolio-icon/rental-portfolio-icon.component';
+import { ChequesIconComponent } from '../../icons/cheques-icon/cheques-icon.component';
+import { AnnouncementsComponent } from '../../dashboard/pages/announcements/announcements.component';
+import { AnnouncementsIconComponent } from '../../icons/announcements-icon/announcements-icon.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -57,6 +60,9 @@ import { RentalPortfolioIconComponent } from '../../icons/rental-portfolio-icon/
     TranslateModule,
     RentalIconComponent,
     RentalPortfolioIconComponent,
+    ChequesIconComponent,
+    AnnouncementsComponent,
+    AnnouncementsIconComponent,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',

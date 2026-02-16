@@ -15,6 +15,9 @@
     "USERS": "Users",
     "COMPLAINTS": "Complaints",
     "ADD": "Add",
+    "TERMS_CONDITIONS": "Terms & Conditions",
+    "CHARGES": "Charges",
+    "AUDIT_LOG": "Audit Log",
     "ROLES_PERMISSIONS": "Roles & Permissions",
     "DOCUMENTATIONS": "Documentations",
     "PAYMENTS_INVOICE": "Payments & Invoice",
@@ -22,11 +25,14 @@
     "RAISE_COMPLAINT": "Raise Complaint",
     "PRIVACY_POLICY": "Privacy Policy",
     "RENTAL_PORTFOLIO": "Rental Portfolio",
-    "RENTAL": "Rental"
+    "RENTAL": "Rental",
+    "MY_PROFILE": "My Profile",
+    "ANNOUNCEMENTS": "Announcements",
+    "CHEQUES": "Cheques"
   },
   "ADD_PROPERTY": "Add Property",
   "NEW_LEASE": "New Lease",
-  "MY_PROFILE": "My Profile",
+
   "DOCUMENTATION": "Documentation",
   "LOGOUT": "Logout",
   "LOGOUT_CONFIRM": "Are you sure you want to logout?",
@@ -453,6 +459,7 @@
   "PERIOD_TO": "Period To",
   "UNIT_TYPE": "Unit Type",
   "YEAR_RENT": "Year Rent",
+
   "OTHER_CHARGES": "OTHER CHARGES",
   "VAT": "Vat",
   "TOTAL_RENT": "Total Rent",

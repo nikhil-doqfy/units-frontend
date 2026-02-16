@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { DashOuterComponent } from '../../shared/component/dash-outer/dash-outer.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
@@ -14,6 +14,7 @@ import { ProfileIconComponent } from '../../icons/profile-icon/profile-icon.comp
   selector: 'app-settings',
   standalone: true,
   imports: [
+    RouterModule,
     RouterOutlet,
     DashOuterComponent,
     HeaderComponent,

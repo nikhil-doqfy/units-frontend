@@ -1,0 +1,360 @@
+<div class="mb-3">
+  <app-white-card *ngIf="!showCreateScreen">
+    <div class="row align-items-center justify-content-between g-3">
+      <div class="col-md">
+        <div class="commonBoxTabs">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="notification-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#notification-tab-pane"
+                type="button"
+                role="tab"
+                [class.active]="prop === 'logs'"
+                (click)="changeTab('logs')"
+                aria-controls="notification-tab-pane"
+                aria-selected="true"
+              >
+                {{ "Notification Logs" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="sentItems-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#sentItems-tab-pane"
+                type="button"
+                role="tab"
+                [class.active]="prop === 'sent'"
+                (click)="changeTab('sent')"
+                aria-controls="sentItems-tab-pane"
+                aria-selected="false"
+              >
+                {{ "Sents Items" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="scheduled-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#scheduled-tab-pane"
+                type="button"
+                role="tab"
+                [class.active]="prop === 'scheduled'"
+                (click)="changeTab('scheduled')"
+                aria-controls="scheduled-tab-pane"
+                aria-selected="false"
+              >
+                {{ "Scheduled" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="drafts-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#drafts-tab-pane"
+                type="button"
+                role="tab"
+                [class.active]="prop === 'draft'"
+                (click)="changeTab('draft')"
+                aria-controls="drafts-tab-pane"
+                aria-selected="false"
+              >
+                {{ "Drafts" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="deletedItems-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#deletedItems-tab-pane"
+                type="button"
+                role="tab"
+                [class.active]="prop === 'deleted'"
+                (click)="changeTab('deleted')"
+                aria-controls="deletedItems-tab-pane"
+                aria-selected="false"
+              >
+                {{ "Deleted Items" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-auto">
+        <button type="button" class="btn btnCommon" (click)="openCreate()">
+          <i><app-plus-icon /></i> {{ "New Announcement" | translate }}
+        </button>
+      </div>
+    </div>
+  </app-white-card>
+  <ng-container *ngIf="!showCreateScreen">
+    <!-- EXISTING FULL TABLE + TABS UI HERE -->
+
+    <div class="tab-content mt-3" id="myTabContent">
+      <div
+        class="tab-pane fade show active"
+        id="allUsers-tab-pane"
+        role="tabpanel"
+        aria-labelledby="allUsers-tab"
+        tabindex="0"
+      >
+        <div class="cmmnTblOuter">
+          <div class="cmmnTblHdr">
+            <div class="row align-items-center">
+              <div class="col-md">
+                <app-table-title
+                  [title]="'Results' | translate"
+                  [subtitle]="'(' + totalRecords + ')'"
+                  (onRefresh)="onRefresh()"
+                ></app-table-title>
+              </div>
+              <div class="col-md-auto">
+                <div class="d-flex align-items-center gap-2 gap-md-3">
+                  <app-table-search
+                    [placeholder]="'SEARCH_HERE' | translate"
+                    (onValueChange)="searchTextChange($event)"
+                  />
+
+                  <app-table-filter-btn
+                    [title]="'EXPORT' | translate"
+                    [hasIcon]="true"
+                  >
+                    <app-export-icon />
+                  </app-table-filter-btn>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cmmnTblBody">
+            <div class="table-responsive">
+              <table class="charges-table">
+                <thead>
+                  <tr>
+                    <th>Sl.No</th>
+                    <th>Log ID</th>
+                    <th>Announcement Title</th>
+
+                    <th *ngIf="prop !== 'deleted'">
+                      Property Name<i><app-sorting-icon></app-sorting-icon></i>
+                    </th>
+                    <th *ngIf="prop !== 'deleted'">Block / Tower</th>
+                    <th *ngIf="prop !== 'deleted'">Unit</th>
+
+                    <th *ngIf="prop === 'sent'">Sent By</th>
+                    <th *ngIf="prop === 'logs' || prop === 'sent'">
+                      Sent Date<i><app-sorting-icon></app-sorting-icon></i>
+                    </th>
+                    <th>Channel</th>
+                    <th>Recipients</th>
+                    <th>Delivered</th>
+                    <th>Failed</th>
+                    <th *ngIf="prop === 'scheduled'">Scheduled Date</th>
+
+                    <th *ngIf="prop === 'draft'">Last Updated</th>
+                    <th *ngIf="prop === 'deleted'">Deleted Date</th>
+
+                    <th width="120"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>01</td>
+                    <td>LP9021</td>
+                    <td>Water Supply Maintenance Notice</td>
+                    <td>
+                      <app-table-img-item img="" title="Novatis AG" />
+                    </td>
+                    <td>Evergreen(B)</td>
+                    <td>All Units</td>
+                    <td>01 Feb 25</td>
+                    <td>App/Email/SMS</td>
+                    <td>240</td>
+                    <td>240</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>02</td>
+                    <td>LP8021</td>
+                    <td>Parking Area Refreshing</td>
+                    <td>
+                      <app-table-img-item img="" title="Sliechi tower" />
+                    </td>
+                    <td>All Blocks/Towers</td>
+                    <td>All Units</td>
+                    <td>01 Mar 25</td>
+                    <td>App/SMS</td>
+                    <td>240</td>
+                    <td>210</td>
+                    <td>30</td>
+                  </tr>
+                  <tr>
+                    <td>03</td>
+                    <td>VC79021</td>
+                    <td>Garage Expansion Project</td>
+                    <td>
+                      <app-table-img-item img="" title="Jainhalilla" />
+                    </td>
+                    <td>Sunrise(D)</td>
+                    <td>All Units</td>
+                    <td>03 Apr 25</td>
+                    <td>App/SMS</td>
+                    <td>140</td>
+                    <td>140</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>04</td>
+                    <td>VC69021</td>
+                    <td>Parking Area Refreshing</td>
+                    <td>
+                      <app-table-img-item img="" title="Property C" />
+                    </td>
+                    <td>Majestic(E)</td>
+                    <td>All Units</td>
+                    <td>01 May 25</td>
+                    <td>App/SMS</td>
+                    <td>120</td>
+                    <td>120</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>05</td>
+                    <td>VC59021</td>
+                    <td>Electric Vehicle Charging</td>
+                    <td>
+                      <app-table-img-item img="" title="Rithi Tower B" />
+                    </td>
+                    <td>Pinnacle(F)</td>
+                    <td>pinnacle (F)606</td>
+                    <td>04 Jun 25</td>
+                    <td>App/Email/SMS</td>
+                    <td>240</td>
+                    <td>240</td>
+                    <td>0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="cmmnTblFtr">
+            <app-table-select
+              [componentName]="componentName"
+              [rowsPerPage]="rowsPerPage"
+              [rowsPerPageOptions]="rowsPerPageOptions"
+              (rowsPerPageChange)="onPageSizeChange($event)"
+            />
+            <app-table-pagination
+              [componentName]="componentName"
+              [currentPage]="currentPage"
+              [totalRecords]="totalRecords"
+              [rowsPerPage]="rowsPerPage"
+              (pageChange)="onPageChange($event)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="showCreateScreen">
+    <div class="announcement-page">
+      <!-- Header -->
+      <div class="top-actions">
+        <div></div>
+
+        <div class="right-actions">
+          <app-preview-icon></app-preview-icon>
+          <app-delete-icon></app-delete-icon>|
+          <button class="btn-outline">Save as Draft</button>
+
+          <div class="send-btn-group">
+            <button class="btn-primary">Send Now</button>
+            <button class="btn-primary dropdown">▼</button>
+          </div>
+
+          <button class="icon-btn close" (click)="closeCreate()">
+            <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Form Card -->
+      <div class="form-card">
+        <!-- Section 1 -->
+        <div class="form-section">
+          <div class="section-header">
+            <span>01</span>
+            <h4>Audience Selection</h4>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label>Property</label>
+              <select>
+                <option>--Select--</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Block / Tower</label>
+              <select>
+                <option>--Select--</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Unit</label>
+              <select>
+                <option>--Select--</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="form-section">
+          <div class="section-header">
+            <span>02</span>
+            <h4>Announcement Details</h4>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" placeholder="Enter here" />
+            </div>
+
+            <div class="form-group">
+              <label>Priority</label>
+              <div class="radio-group">
+                <label><input type="radio" checked /> Normal</label>
+                <label><input type="radio" /> Important</label>
+                <label><input type="radio" /> Urgent</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea rows="5" placeholder="Enter here"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Upload Banner Image</label>
+            <div class="upload-box">
+              <p>Upload here</p>
+              <small>800px * 350px | Max 5MB</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

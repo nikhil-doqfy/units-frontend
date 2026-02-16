@@ -49,6 +49,7 @@ import { UploadDocIconComponent } from '../../dashboard/component/icons/upload-d
 import { TermsconditionIconComponent } from '../../icons/termscondition-icon/termscondition-icon.component';
 import { ChargesIconComponent } from '../../icons/charges-icon/charges-icon.component';
 import { AuditlogIconComponent } from '../../icons/auditlog-icon/auditlog-icon.component';
+import { TransactionComponent } from '../transaction/transaction.component';
 
 @Component({
   selector: 'app-header',
@@ -77,6 +78,7 @@ import { AuditlogIconComponent } from '../../icons/auditlog-icon/auditlog-icon.c
     TermsconditionIconComponent,
     ChargesIconComponent,
     AuditlogIconComponent,
+    TransactionComponent,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -205,6 +207,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      console.log('Selected file:', file);
+    }
+  }
   private updateDirection() {
     document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
   }
@@ -410,5 +418,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   goToAuditLog() {
     this.router.navigate(['/user/auditlog']);
+  }
+  isModalOpen = false;
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
   }
 }

@@ -7,7 +7,17 @@ import { FormsModule } from '@angular/forms';
 import { PlusIconComponent } from '../../shared/component/icons/plus-icon/plus-icon.component';
 import { EditIconComponent } from '../../dashboard/component/icons/edit-icon/edit-icon.component';
 import { DeleteIconComponent } from '../../dashboard/component/icons/delete-icon/delete-icon.component';
-
+import { SaveIconComponent } from '../../icons/save-icon/save-icon.component';
+export interface Charge {
+  label: string;
+  amount: number | null;
+  tax: string;
+  vat: number | null;
+  editable?: boolean;
+  total: number | null;
+  checked: boolean;
+  isNew?: boolean;
+}
 @Component({
   selector: 'app-charges',
   standalone: true,
@@ -21,14 +31,15 @@ import { DeleteIconComponent } from '../../dashboard/component/icons/delete-icon
     PlusIconComponent,
     EditIconComponent,
     DeleteIconComponent,
+    SaveIconComponent,
   ],
   templateUrl: './charges.component.html',
   styleUrl: './charges.component.css',
 })
 export class ChargesComponent {
   currentLanguage = 'en';
-
-  charges = [
+  showSave = false;
+  charges: Charge[] = [
     {
       label: 'Admin Fee',
       amount: 32.71,
@@ -61,6 +72,7 @@ export class ChargesComponent {
       amount: 1200,
       tax: 'VAT @5%',
       vat: 60,
+      editable: false,
       total: 1260,
       checked: true,
     },
@@ -121,10 +133,46 @@ export class ChargesComponent {
       checked: false,
     },
   ];
-  get totalAmount(): number {
-    return this.charges
-      .filter((c) => c.checked)
-      .reduce((sum, c) => sum + c.total, 0);
+
+  addNewRow() {
+    this.showSave = true;
+
+    this.charges.unshift({
+      label: '',
+      amount: null,
+      tax: '',
+      vat: null,
+      editable: false,
+      total: null,
+      checked: true,
+      isNew: true,
+    });
   }
-  hovering = false;
+
+  deleteRow(i: number) {
+    this.charges.splice(i, 1);
+  }
+
+  calculateTotal(c: Charge) {
+    if (c.amount != null) {
+      const vat = c.vat || 0;
+      c.total = +c.amount + +vat;
+    }
+  }
+  saveRow() {
+    const index = this.charges.findIndex((c) => c.isNew);
+    if (index === -1) return;
+
+    const row = this.charges[index];
+
+    row.isNew = false;
+
+    // remove from top
+    this.charges.splice(index, 1);
+
+    // add at bottom
+    this.charges.push(row);
+
+    this.showSave = false;
+  }
 }

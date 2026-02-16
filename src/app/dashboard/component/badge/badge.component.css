@@ -5,9 +5,9 @@
   line-height: 18px;
 }
 
-.badgeText.green {
+/* .badgeText.green {
   color: var(--greenText);
-}
+} */
 
 .badgeText.greenLight {
   color: var(--greenLightText);
@@ -48,4 +48,71 @@
 
 .rejected {
   color: #d32f2f;
+}
+
+.green {
+  background-color: #458453;
+
+  color: #fff;
+}
+.orange {
+  background: #f39c12;
+  color: #fff;
+}
+.red {
+  background: #e74c3c;
+  color: #fff;
+}
+.blue {
+  background: #3498db;
+  color: #fff;
+}
+/* Only for this component */
+.green {
+  background: #458453;
+  border-radius: 10px;
+  color: #fff;
+  min-width: 166px;
+  min-height: 38px;
+  padding: 6px 14px;
+}
+.orange {
+  background: #f39c12;
+  border-radius: 10px;
+  color: #fff;
+  min-width: 166px;
+  min-height: 38px;
+  padding: 6px 14px;
+}
+.red {
+  background: #e74c3c;
+  border-radius: 10px;
+  color: #fff;
+  min-width: 166px;
+  min-height: 38px;
+  padding: 6px 14px;
+}
+.blue {
+  background: #3498db;
+  border-radius: 10px;
+  color: #fff;
+  min-width: 166px;
+  min-height: 38px;
+  padding: 6px 14px;
+}
+.yellow {
+  background: #f1c40f;
+  border-radius: 10px;
+  color: #333;
+  min-width: 166px;
+  min-height: 38px;
+  padding: 6px 14px;
+}
+.greenLight {
+  background: #a8e6cf;
+  border-radius: 10px;
+  color: #2d6a4f;
+  min-width: 166px;
+  min-height: 38px;
+  padding: 6px 14px;
 }

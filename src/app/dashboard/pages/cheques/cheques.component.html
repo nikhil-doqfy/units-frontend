@@ -1,0 +1,174 @@
+<ng-container *ngIf="!showDetailView">
+  <app-white-card>
+    <!-- Filters Bar -->
+    <div class="top-filter-bar">
+      <div class="left-controls">
+        <div class="custom-select">
+          <div class="custom-select-wrapper">
+            <span class="select-icon"> </span>
+            <app-custom-select
+              class="with-left-icon"
+              [placeholder]="'Year:2025'"
+            ></app-custom-select>
+          </div>
+
+          <!-- TIME SELECT -->
+          <div class="custom-select-wrapper">
+            <span class="select-icon"> </span>
+            <app-custom-select
+              class="with-left-icon"
+              [placeholder]="'Property All'"
+            ></app-custom-select>
+          </div>
+          <div class="custom-select-wrapper">
+            <span class="select-icon"> </span>
+            <app-custom-select
+              class="with-left-icon"
+              [placeholder]="'Block/Tower:All'"
+            ></app-custom-select>
+          </div>
+          <div class="custom-select-wrapper">
+            <span class="select-icon"> </span>
+            <app-custom-select
+              class="with-left-icon"
+              [placeholder]="'Unit:All'"
+            ></app-custom-select>
+          </div>
+        </div>
+      </div>
+      <div class="right-controls">
+        <div class="search-box">
+          <i><app-search-icon></app-search-icon></i>
+          <input type="text" placeholder="Search here" />
+        </div>
+      </div>
+    </div>
+    <!-- <div class="summary-grid">
+      <div
+        class="summary-card"
+        *ngFor="let card of summaryCards"
+        [class.active]="activeSummary === card.key"
+        (click)="onSummaryClick(card.key)"
+      >
+        <div class="value">AED 1,24,000</div>
+        <div class="title">{{ card.title }}</div>
+      </div>
+    </div> -->
+    <div class="summary-grid">
+      <div
+        class="summary-card"
+        *ngFor="let card of summaryCards"
+        [class.active]="activeSummary === card.key"
+        (click)="onSummaryClick(card.key)"
+      >
+        <div class="top-row">
+          <div class="main-value">{{ card.amount }}</div>
+          <span class="tag" [ngClass]="card.color">
+            {{ card.count }} Cheques
+          </span>
+        </div>
+
+        <div class="title">{{ card.title }}</div>
+        <div class="subtitle">{{ card.subtitle }}</div>
+
+        <span class="arrow"></span>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <!-- <table>
+        <thead>
+          <tr>
+            <th *ngFor="let col of displayedColumns">
+              {{ col | titlecase }}
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of tableData">
+            <td *ngFor="let col of displayedColumns">
+              {{ row[col] }}
+            </td>
+          </tr>
+        </tbody>
+      </table> -->
+
+      <div class="cmmnTblBody">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Sl.No</th>
+                <th>Unit ID</th>
+
+                <th *ngIf="activeSummary === 'total'">Property Name</th>
+                <th *ngIf="activeSummary === 'total'">Block / Tower</th>
+                <th *ngIf="activeSummary === 'total'">Unit</th>
+
+                <th>Tenant</th>
+                <th>Cheque No</th>
+
+                <th *ngIf="activeSummary === 'total'">Reference ID</th>
+
+                <th>Amount</th>
+
+                <th *ngIf="activeSummary === 'credited'">Credited Date</th>
+                <th *ngIf="activeSummary === 'realized'">Realized Date</th>
+                <th *ngIf="activeSummary === 'bounce'">Bounce Reason</th>
+                <th *ngIf="activeSummary === 'balance'">Pending Days</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let row of tableData">
+                <td>{{ row.slNo }}</td>
+                <td>{{ row.unitId }}</td>
+
+                <td *ngIf="activeSummary === 'total'">{{ row.property }}</td>
+                <td *ngIf="activeSummary === 'total'">{{ row.block }}</td>
+                <td *ngIf="activeSummary === 'total'">{{ row.unit }}</td>
+
+                <td>{{ row.tenant }}</td>
+                <td>{{ row.cheque }}</td>
+
+                <td *ngIf="activeSummary === 'total'">{{ row.reference }}</td>
+
+                <td>{{ row.amount }}</td>
+
+                <td *ngIf="activeSummary === 'credited'">
+                  {{ row.creditedDate }}
+                </td>
+                <td *ngIf="activeSummary === 'realized'">
+                  {{ row.realizedDate }}
+                </td>
+                <td *ngIf="activeSummary === 'bounce'">
+                  {{ row.bounceReason }}
+                </td>
+                <td *ngIf="activeSummary === 'balance'">
+                  {{ row.pendingDays }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="cmmnTblFtr">
+        <app-table-select
+          [componentName]="componentName"
+          [rowsPerPage]="rowsPerPage"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          (rowsPerPageChange)="onPageSizeChange($event)"
+        />
+        <app-table-pagination
+          [componentName]="componentName"
+          [currentPage]="currentPage"
+          [totalRecords]="totalRecords"
+          [rowsPerPage]="rowsPerPage"
+          (pageChange)="onPageChange($event)"
+        />
+      </div>
+    </div>
+  </app-white-card>
+</ng-container>

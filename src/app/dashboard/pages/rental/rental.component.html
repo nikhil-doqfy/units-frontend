@@ -488,6 +488,154 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="Search here..." />
+            <!-- 
+            <div class="report-top-bar d-flex align-items-start gap-2">
+              <div class="custom-dropdown position-relative">
+                <button class="btn cmmnTblFltrBtn" (click)="toggleReceipt()">
+                  <i><app-receipt-icon></app-receipt-icon></i>
+                  Receipt
+                  <i><app-arrow-down-icon></app-arrow-down-icon></i>
+                </button>
+
+                <div class="custom-menu" *ngIf="showReceiptDropdown">
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('rental')"
+                  >
+                    Rental
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('charges')"
+                  >
+                    Other Charges
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('combined')"
+                  >
+                    Combined
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="custom-dropdown position-relative"
+                *ngIf="showMonthDropdown"
+              >
+                <div class="custom-menu filter-box show-right">
+                  <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="jan" />
+                    <label for="jan">Jan 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="feb"
+                      checked
+                    />
+                    <label for="feb">Feb 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="mar"
+                      checked
+                    />
+                    <label for="mar">Mar 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="apr" />
+                    <label for="apr">Apr 2025</label>
+                  </div>
+
+                  <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="may" />
+                    <label for="may">May 2025</label>
+                  </div>
+
+                  <button class="btn generate-btn w-100">Generate</button>
+                </div>
+              </div>
+            </div> -->
+
+            <div class="report-top-bar d-flex align-items-start gap-2">
+              <!-- Receipt Dropdown -->
+              <div class="custom-dropdown position-relative">
+                <button class="btn cmmnTblFltrBtn" (click)="toggleReceipt()">
+                  <i><app-receipt-icon></app-receipt-icon></i>
+                  Receipt
+                  <i><app-arrow-down-icon></app-arrow-down-icon></i>
+                </button>
+
+                <div class="custom-menu" *ngIf="showReceiptDropdown">
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('rental')"
+                  >
+                    Rental
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('charges')"
+                  >
+                    Other Charges
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('combined')"
+                  >
+                    Combined
+                  </div>
+                </div>
+              </div>
+
+              <!-- Month Dropdown (Side by Side) -->
+              <div
+                class="custom-dropdown position-relative"
+                *ngIf="showMonthDropdown"
+              >
+                <div class="custom-menu filter-box">
+                  <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="jan" />
+                    <label for="jan">Jan 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="feb"
+                      checked
+                    />
+                    <label for="feb">Feb 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="mar"
+                      checked
+                    />
+                    <label for="mar">Mar 2025</label>
+                  </div>
+
+                  <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="apr" />
+                    <label for="apr">Apr 2025</label>
+                  </div>
+
+                  <button class="btn generate-btn w-100">Generate</button>
+                </div>
+              </div>
+            </div>
+
             <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
@@ -530,48 +678,6 @@
               <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- @for(property of pmcList[0]?.properties_assigned; track $index){
-            <tr>
-              <td>{{ property?.property_code || "N/A" }}</td>
-              <td>
-                <app-table-img-item
-                  [img]="
-                    property?.property_images?.[0]?.data ||
-                    '../../assets/property/property-img-default.svg'
-                  "
-                  size="md"
-                  [title]="property?.property_name"
-                />
-              </td>
-              <td>
-                @if(property?.tennat && property?.tennat?.name){
-                <app-table-img-item
-                  [img]="
-                    property?.tennat?.profile_image ||
-                    '../../assets/userDefaultProImg.png'
-                  "
-                  [title]="property?.tennat?.name"
-                />
-                }@else {N/A}
-              </td>
-              <td>{{ property.tenancy_status }}</td>
-              <td>{{ property.dimension }}</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            } -->
-          </tbody>
 
           <tbody>
             <tr>
@@ -583,10 +689,20 @@
               <td>Cheque</td>
               <td>Jan 2025 Rent</td>
 
-              <td>
-                <app-badge title="Amount Credited" status="green"> </app-badge>
-                <div style="margin-top: 4px">
-                  <app-status-dropdown></app-status-dropdown>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                  >
+                  </app-badge>
+
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
 
@@ -612,20 +728,20 @@
               <td>11/01/2024</td>
               <td>Cheque</td>
               <td>Feb 2025 Rent</td>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                  >
+                  </app-badge>
 
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
-
-                  <span class="status-line done"></span>
-
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Credited</span>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
 
@@ -663,22 +779,22 @@
               <td>11/15/2024</td>
               <td>Cheque</td>
               <td>Mar 2025 Rent</td>
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                  >
+                  </app-badge>
 
-                  <span class="status-line done"></span>
-
-                  <div class="status-step danger">
-                    <span class="dot"></span>
-                    <span class="text">InProgress</span>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
-
               <td>9,000</td>
               <td>---</td>
               <td align="center">
@@ -701,20 +817,20 @@
               <td>Cheque</td>
               <td>Other Charges</td>
 
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                  >
+                  </app-badge>
 
-                  <span class="status-line done"></span>
-
-                  <div class="status-step danger">
-                    <span class="dot"></span>
-                    <span class="text">Bounce</span>
-                    <a class="replace-link">Replace Cheque</a>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
 
@@ -739,19 +855,21 @@
               <td>12/15/2024</td>
               <td>Cheque</td>
               <td>Apr 2025 Rent</td>
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                    [enableBg]="true"
+                  >
+                  </app-badge>
 
-                  <span class="status-line done"></span>
-
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Credited</span>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
 

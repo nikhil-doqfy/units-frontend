@@ -16,10 +16,19 @@ const routes: Routes = [
         path: 'profile',
 
         component: MyProfileComponent,
+        data: { titleKey: 'PAGE_TITLE.MY_PROFILE' },
       },
-      { path: 'terms', component: TermsconditionsComponent },
-      { path: 'charges', component: ChargesComponent },
-      { path: 'auditlog', component: AuditlogComponent },
+      {
+        path: 'terms',
+        component: TermsconditionsComponent,
+        data: { titleKey: 'PAGE_TITLE.TERMS_CONDITIONS' },
+      },
+      {
+        path: 'charges',
+        component: ChargesComponent,
+        data: { titleKey: 'PAGE_TITLE.CHARGES' },
+      },
+
       { path: '', redirectTo: 'profile', pathMatch: 'full' },
     ],
   },
