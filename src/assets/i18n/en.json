@@ -32,7 +32,9 @@
   },
   "ADD_PROPERTY": "Add Property",
   "NEW_LEASE": "New Lease",
+  "UNITS": "Units",
 
+  "TENANCY_LEDGER": "Tenancy Ledger",
   "DOCUMENTATION": "Documentation",
   "LOGOUT": "Logout",
   "LOGOUT_CONFIRM": "Are you sure you want to logout?",

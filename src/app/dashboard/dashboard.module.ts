@@ -28,6 +28,7 @@ import { PropertyLeadsComponent } from './component/property-leads.component';
 import { InvoiceTemplateComponent } from '../shared/invoice-template/invoice-template.component';
 import { ChequesComponent } from './pages/cheques/cheques.component';
 import { AnnouncementsComponent } from './pages/announcements/announcements.component';
+import { LeadsComponent } from './pages/leads/leads.component';
 export const routes: Routes = [
   {
     path: '',
@@ -52,9 +53,9 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.PROPERTIES' },
       },
       {
-        path: 'property-leads',
-        component: PropertyLeadsComponent,
-        data: { titleKey: 'PAGE_TITLE.PROPERTY_LEADS' },
+        path: 'leads',
+        component: LeadsComponent,
+        data: { titleKey: 'PAGE_TITLE.LEADS' },
       },
       {
         path: 'add-property',

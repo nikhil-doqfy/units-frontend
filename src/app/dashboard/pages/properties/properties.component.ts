@@ -47,6 +47,14 @@ import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/fil
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { PropertyLeadsComponent } from '../../component/property-leads.component';
 import { AllPropertiesComponent } from '../../component/all-properties/all-properties.component';
+import { EmailIconComponent } from '../../../user/component/icons/email-icon/email-icon.component';
+import { WhatsappIconComponent } from '../../../icons/whatsapp-icon/whatsapp-icon.component';
+import { CallIconsNewComponent } from '../../../icons/call-icons-new/call-icons-new.component';
+import { AllLeadsComponent } from '../../component/all-leads/all-leads.component';
+import { EmailLeadsComponent } from '../../component/email-leads/email-leads.component';
+import { WhatsappLeadsComponent } from '../../component/whatsapp-leads/whatsapp-leads.component';
+import { TenancyLedgerComponent } from '../tenancy-ledger/tenancy-ledger.component';
+import { UnitsComponent } from '../units/units.component';
 
 type PropertyImages = Record<'imgSrc', string>;
 
@@ -104,507 +112,474 @@ interface PropertyDetails {
     FilterPopupButtonComponent,
     PropertyLeadsComponent,
     AllPropertiesComponent,
+    EmailIconComponent,
+    WhatsappIconComponent,
+    CallIconsNewComponent,
+    AllLeadsComponent,
+    EmailLeadsComponent,
+    WhatsappLeadsComponent,
+    TenancyLedgerComponent,
+    UnitsComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',
 })
 export class PropertiesComponent {
-  private propertyService = inject(PropertyService);
-  private sharedApiService = inject(SharedApiService);
-  private alertService = inject(AlertService);
-  private route = inject(ActivatedRoute);
-  private sharedService = inject(SharedService);
-  private destroyRef = inject(DestroyRef);
-  private translate = inject(TranslateService);
-  activeTab: string = 'properties';
-  componentName: string = 'PropertiesComponent';
-  breadcrumbData: BreadCrumb[] = [];
-  currentRole: UserRole = 'owner';
-  propertyView: 'my-properties' | 'all-properties' = 'all-properties';
-  selected: string = 'Falcom city';
-  documentActions = [
-    { label: 'Share', icon: ShareIconComponent, action: 'share' },
-    { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
-  ];
-  showDetailView: boolean = false;
-  rentalStatus: any = [];
-  propertiesList: any[] = [];
-  propertyDetails: Record<string, any> = {};
-  selectedrentalstatus: any = null;
-  propertiesFilter: Record<string, any> = {};
-  totalRecords: number = 0;
-  rowsPerPageOptions: number[] = [10, 25, 50, 100];
-  rowsPerPage: number = 10;
-  currentPage: number = 1;
-  currentLanguage = 'en';
-  currentPropertyId!: number;
-  propertyDocumentType: any[] = [];
-  propertyDocuments: Record<string, any[]> = {};
-  activeDocTypeKey!: string;
-
-  private onPropertySearch$ = new Subject<string>();
-
-  constructor(
-    private router: Router,
-    private themeService: ThemeService,
-  ) {
-    const key = this.route.snapshot.data['titleKey'];
-    this.sharedService.setTitle(key);
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.currentPropertyId = +id;
-      this.propertiesFilter['property_id'] = +id;
-      this.showDetailView = true;
-    }
-  }
-
-  ngOnInit() {
-    this.loadBreadcrumb();
-    this.sharedService.initLanguage();
-
-    this.initLanguageListener();
-    this.initPropertySearchListener();
-    this.getProperties();
-    this.currentRole = this.themeService.getRole();
-    if (this.currentRole === 'tenant' && !this.currentPropertyId) {
-      this.propertyView = 'my-properties';
-      this.propertiesFilter['MY_PROPERTY'] = true;
-    }
-    this.getOptionTypes();
-  }
-
-  changeLanguage(lang: string) {
-    this.sharedService.setLanguage(lang);
-  }
-
-  getOptionTypes() {
-    if (this.showDetailView || this.propertyView === 'my-properties') {
-      this.sharedApiService.getOptionsType([
-        {
-          param: 'PROPERTY_DOCUMENT_CHOICE',
-          key: 'Property_Document',
-          setter: (v) => {
-            ((this.propertyDocumentType = v), this.getProperties());
-          },
-        },
-      ]);
-    }
-  }
-
-  getTenancyStatusOptions() {
-    this.sharedApiService.getOptionsType([
-      {
-        param: 'TENANCY_STATUS',
-        key: 'tenancy_status',
-        setter: (v) => (this.rentalStatus = v),
-      },
-    ]);
-  }
-
-  onRentalTenancyClick() {
-    this.getTenancyStatusOptions();
-  }
-  initLanguageListener() {
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.loadBreadcrumb();
-      });
-  }
-
-  loadBreadcrumb() {
-    if (this.showDetailView) {
-      this.setBreadCrumb([
-        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
-        { label: 'PROPERTY_DETAILS', link: '' },
-      ]);
-    } else {
-      this.setBreadCrumb([
-        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.PROPERTIES', link: '' },
-      ]);
-    }
-  }
-
-  setBreadCrumb(breadCrumb: BreadCrumb[]) {
-    this.sharedService
-      .getBreadcrumbs(breadCrumb)
-      .subscribe((data) => (this.breadcrumbData = data));
-  }
-
-  onPropertyViewChange() {
-    if (this.propertyView === 'all-properties') {
-      delete this.propertiesFilter['property_id'];
-      delete this.propertiesFilter['MY_PROPERTY'];
-    } else if (this.propertyView === 'my-properties') {
-      delete this.propertiesFilter['property_id'];
-      this.propertiesFilter['MY_PROPERTY'] = true;
-    }
-    this.getOptionTypes();
-    this.getProperties();
-  }
-
-  private getProperties() {
-    this.propertiesFilter = {
-      ...this.propertiesFilter,
-      limit: this.rowsPerPage,
-      page: this.currentPage,
-    };
-
-    this.propertyService
-      .getProperties(this.propertiesFilter)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: any) => {
-          if (this.propertyView === 'my-properties' || this.showDetailView) {
-            this.propertyDetails = response?.content ?? {};
-            this.handlePropertyDetails();
-          } else {
-            this.propertiesList = response?.content ?? [];
-            this.totalRecords = response?.pagination?.total_records ?? 0;
-          }
-        },
-      });
-  }
-
-  onRefresh() {
-    this.getProperties();
-  }
-
-  initPropertySearchListener() {
-    this.onPropertySearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => {
-        if (value?.trim()) this.propertiesFilter['search'] = value.trim();
-        else delete this.propertiesFilter['search'];
-
-        this.currentPage = 1;
-        this.getProperties();
-      });
-  }
-
-  searchTextChange(search: string): void {
-    this.onPropertySearch$.next(search);
-  }
-
-  onPageSizeChange(event: PageSizeChange): void {
-    if (event.componentName !== this.componentName) return;
-    this.rowsPerPage = event.pageSize;
-    this.currentPage = 1;
-    this.getProperties();
-  }
-
-  onPageChange(event: PageChange): void {
-    if (event.componentName !== this.componentName) return;
-    this.currentPage = event.currentPage;
-    this.getProperties();
-  }
-
-  getAgreementExpirationStatusColor(status: string): string {
-    if (!status) return '';
-
-    let colorMapimg: any = {
-      Expired: 'red',
-      'About to Expire': 'orange',
-      Ongoing: 'green',
-    };
-
-    return colorMapimg[status];
-  }
-
-  removeFilter() {
-    this.selectedrentalstatus = null;
-    delete this.propertiesFilter['tenancy_status'];
-
-    this.currentPage = 1;
-    this.getProperties();
-  }
-
-  property: PropertyDetails = {
-    name: '--',
-    location: '--',
-    status: '--',
-    rent: '--',
-    bhk: '--',
-    sqft: '--',
-    propertyImages: [
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-    ],
-    sections: [
-      {
-        title: 'Property details',
-        items: [
-          { label: 'Phone Number', value: '--' },
-          { label: 'Property Code', value: '--' },
-          { label: 'City', value: '--' },
-          { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '--' },
-          { label: 'Address Line 1', value: '--' },
-          { label: 'Address Line 2 ', value: '--' },
-        ],
-      },
-      {
-        title: 'Property Costing',
-        items: [{ label: 'Rent Cost', value: '--' }],
-      },
-      {
-        title: 'Tenant details',
-        items: [
-          { label: 'Name', value: '--' },
-          { label: 'Email', value: '--' },
-          { label: 'Phone Number', value: '--' },
-          { label: 'Emirates ID', value: '--' },
-          { label: 'City', value: '--' },
-          { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '--' },
-          { label: 'Address Line 1', value: '--' },
-          { label: 'Address Line 2', value: '--' },
-        ],
-      },
-      {
-        title: 'Owner details',
-        items: [
-          { label: 'Name', value: '--' },
-          { label: 'Emirates ID', value: '--' },
-          { label: 'Residence Visa', value: '--' },
-          { label: 'Trade License', value: '--' },
-          { label: 'Owner Code', value: '--' },
-        ],
-      },
-    ],
-  };
-
-  getBasicDetailsOfProperty(data: Record<string, any>) {
-    return {
-      name: `${data?.['property_unit']?.['property_unit_name']}, ${data?.['parent_property']?.['property_name']}`,
-      location: `${data?.['parent_property']?.['state']?.['value']}, ${data?.['parent_property']?.['city']?.['value']}`,
-      status: data?.['property_unit']?.['status'] || 'N/A',
-      rent: data?.['property_unit']?.['commercial_details']?.['rent'] ?? 'N/A',
-      bhk: data?.['property_unit']?.['dimension'] || 'N/A',
-      sqft: data?.['property_unit']?.['area_of_property'] ?? 'N/A',
-    };
-  }
-
-  getPropertyImages(data: Record<string, any>): PropertyImages[] {
-    const imagesArray = data?.['images'] ?? [];
-    // const images = data?.['images'].map((img: any) => ({ imgSrc: img.url }));
-    const images = Array.isArray(imagesArray)
-      ? imagesArray.map((img: any) => ({ imgSrc: img.url }))
-      : [];
-    return images.length
-      ? images
-      : Array.from({ length: 5 }).map((_, i) => ({
-          imgSrc: 'assets/property/property-img-default.svg',
-        }));
-  }
-
-  getOtherDetailsOfProperty(data: Record<string, any>): Section[] {
-    return [
-      {
-        title: 'PROPERTY_DETAILS',
-        items: [
-          {
-            label: 'PHONE_NUMBER',
-            value: data?.['owner']?.['contact_number'] || 'N/A',
-          },
-          {
-            label: 'PROPERTY_CODE',
-            value: data?.['property_unit']?.['property_code'] || 'N/A',
-          },
-          {
-            label: 'CITY',
-            value: data?.['parent_property']?.['city']?.['value'] || 'N/A',
-          },
-          {
-            label: 'LOCALITY',
-            value: data?.['parent_property']?.['locality'] || 'N/A',
-          },
-          {
-            label: 'POSTAL_CODE',
-            value: data?.['parent_property']?.['postal_code'] || 'N/A',
-          },
-          {
-            label: 'ADDRESS_LINE_1',
-            value: data?.['property_unit']?.['address'] || 'N/A',
-          },
-          {
-            label: 'ADDRESS_LINE_2',
-            value: data?.['parent_property']?.['additional_address'] || 'N/A',
-          },
-        ],
-      },
-      {
-        title: 'PROPERTY_COSTING',
-        items: [
-          {
-            label: 'RENT_COST',
-            value:
-              data?.['property_unit']?.['commercial_details']?.['rent'] ??
-              'N/A',
-          },
-        ],
-      },
-      {
-        title: 'TENANT_DETAILS',
-        items: [
-          {
-            label: 'NAME',
-            value: `${data?.['tenant']?.['first_name']} ${data?.['tenant']?.['last_name']}`,
-          },
-          { label: 'EMAIL', value: data?.['tenant']?.['email'] || 'N/A' },
-          {
-            label: 'PHONE_NUMBER',
-            value: data?.['tenant']?.['contact_number'] || 'N/A',
-          },
-          {
-            label: 'EMIRATES_ID',
-            value: data?.['tenant']?.['emirate_id'] || 'N/A',
-          },
-          {
-            label: 'CITY',
-            value: data?.['tenant']?.['city']?.['value'] || 'N/A',
-          },
-          { label: 'LOCALITY', value: data?.['tenant']?.['locality'] || 'N/A' },
-          {
-            label: 'POSTAL_CODE',
-            value: data?.['tenant']?.['postal_code'] || 'N/A',
-          },
-          {
-            label: 'ADDRESS_LINE_1',
-            value: data?.['tenant']?.['address'] || 'N/A',
-          },
-          {
-            label: 'ADDRESS_LINE_2',
-            value: data?.['tenant']?.['additional_address'] || 'N/A',
-          },
-        ],
-      },
-      {
-        title: 'OWNER_DETAILS',
-        items: [
-          {
-            label: 'NAME',
-            value: `${data?.['owner']?.['first_name']} ${data?.['owner']?.['last_name']}`,
-          },
-          {
-            label: 'EMIRATES_ID',
-            value: data?.['postal_code']?.['emirate_id'] || 'N/A',
-          },
-          {
-            label: 'RESIDENCE_VISA',
-            value: data?.['postal_code']?.['uae_residence_visa'] || 'N/A',
-          },
-          {
-            label: 'TRADE_LICENSE',
-            value: data?.['postal_code']?.['trade_license'] || 'N/A',
-          },
-          {
-            label: 'OWNER_CODE',
-            value: data?.['postal_code']?.['owner_code'] || 'N/A',
-          },
-        ],
-      },
-    ];
-  }
-
-  handlePropertyDetails() {
-    let basicDetails = this.getBasicDetailsOfProperty(this.propertyDetails);
-    let propertyImages = this.getPropertyImages(this.propertyDetails);
-    let sections = this.getOtherDetailsOfProperty(this.propertyDetails);
-    this.property = { ...basicDetails, propertyImages, sections };
-
-    this.propertyDocumentType.forEach(
-      (type: any) => (this.propertyDocuments[type.key] = []),
-    );
-
-    this.activeDocTypeKey = this.propertyDocumentType[0]?.key;
-    const documents = Array.isArray(this.propertyDetails?.['documents'])
-      ? this.propertyDetails['documents']
-      : [];
-    // this.propertyDetails?.['documents'].map((doc: any) => {
-    documents.forEach((doc: any) => {
-      if (this.propertyDocuments[doc.type]) {
-        this.propertyDocuments[doc.type].push(doc);
-      } else {
-        // this.propertyDocuments[doc.type] = [doc];
-      }
-    });
-  }
-
-  onDocTabClick(type: any) {
-    this.activeDocTypeKey = type.key;
-  }
-
-  onOptionSelected(option: string) {
-    this.selected = option;
-  }
-
-  goToAddProperty(): void {
-    this.router.navigate(['/dashboard/add-property']);
-  }
-
-  handleDropdownAction(action: string) {
-    console.log(`${action} action clicked`);
-  }
-
-  applyFilter() {
-    this.propertiesFilter['tenancy_status'] = this.selectedrentalstatus.key;
-    this.currentPage = 1;
-    this.getProperties();
-  }
-
-  handleExportClick(): void {
-    this.propertyService
-      .getExcelFileOfProperty({})
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp) => {
-        const url = window.URL.createObjectURL(resp);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'property_export.csv';
-        a.click();
-
-        window.URL.revokeObjectURL(url);
-        this.alertService.success('File downloaded successfully!');
-      });
-  }
-
-  handleEditClick(propertyId: number): void {
-    if (!propertyId) {
-      throw new Error('Property ID not found!');
-    }
-    this.router.navigate(['/dashboard/edit-property', propertyId]);
-  }
-
-  handleDeleteClick(): void {
-    console.log('Delete button clicked');
-  }
-
-  handleBackClick(): void {
-    this.showDetailView = false;
-    this.router.navigate(['/dashboard/properties']);
-  }
-
-  handleViewClick(propertyId: number): void {
-    if (!propertyId) {
-      throw new Error('Property ID not found!');
-    }
-    this.router.navigate(['/dashboard/property/details/', propertyId]);
-  }
+  // private propertyService = inject(PropertyService);
+  // private sharedApiService = inject(SharedApiService);
+  // private alertService = inject(AlertService);
+  // private route = inject(ActivatedRoute);
+  // private sharedService = inject(SharedService);
+  // private destroyRef = inject(DestroyRef);
+  // private translate = inject(TranslateService);
+  // activeTab: string = 'properties';
+  // componentName: string = 'PropertiesComponent';
+  // breadcrumbData: BreadCrumb[] = [];
+  // currentRole: UserRole = 'owner';
+  // propertyView: 'my-properties' | 'all-properties' = 'all-properties';
+  // selected: string = 'Falcom city';
+  // documentActions = [
+  //   { label: 'Share', icon: ShareIconComponent, action: 'share' },
+  //   { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
+  // ];
+  // showDetailView: boolean = false;
+  // rentalStatus: any = [];
+  // propertiesList: any[] = [];
+  // propertyDetails: Record<string, any> = {};
+  // selectedrentalstatus: any = null;
+  // propertiesFilter: Record<string, any> = {};
+  // totalRecords: number = 0;
+  // rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  // rowsPerPage: number = 10;
+  // currentPage: number = 1;
+  // currentLanguage = 'en';
+  // currentPropertyId!: number;
+  // propertyDocumentType: any[] = [];
+  // propertyDocuments: Record<string, any[]> = {};
+  // activeDocTypeKey!: string;
+  // private onPropertySearch$ = new Subject<string>();
+  // constructor(
+  //   private router: Router,
+  //   private themeService: ThemeService,
+  // ) {
+  //   const key = this.route.snapshot.data['titleKey'];
+  //   this.sharedService.setTitle(key);
+  //   const id = this.route.snapshot.paramMap.get('id');
+  //   if (id) {
+  //     this.currentPropertyId = +id;
+  //     this.propertiesFilter['property_id'] = +id;
+  //     this.showDetailView = true;
+  //   }
+  // }
+  // ngOnInit() {
+  //   this.loadBreadcrumb();
+  //   this.sharedService.initLanguage();
+  //   this.initLanguageListener();
+  //   this.initPropertySearchListener();
+  //   this.getProperties();
+  //   this.currentRole = this.themeService.getRole();
+  //   if (this.currentRole === 'tenant' && !this.currentPropertyId) {
+  //     this.propertyView = 'my-properties';
+  //     this.propertiesFilter['MY_PROPERTY'] = true;
+  //   }
+  //   this.getOptionTypes();
+  // }
+  // changeLanguage(lang: string) {
+  //   this.sharedService.setLanguage(lang);
+  // }
+  // getOptionTypes() {
+  //   if (this.showDetailView || this.propertyView === 'my-properties') {
+  //     this.sharedApiService.getOptionsType([
+  //       {
+  //         param: 'PROPERTY_DOCUMENT_CHOICE',
+  //         key: 'Property_Document',
+  //         setter: (v) => {
+  //           ((this.propertyDocumentType = v), this.getProperties());
+  //         },
+  //       },
+  //     ]);
+  //   }
+  // }
+  // getTenancyStatusOptions() {
+  //   this.sharedApiService.getOptionsType([
+  //     {
+  //       param: 'TENANCY_STATUS',
+  //       key: 'tenancy_status',
+  //       setter: (v) => (this.rentalStatus = v),
+  //     },
+  //   ]);
+  // }
+  // onRentalTenancyClick() {
+  //   this.getTenancyStatusOptions();
+  // }
+  // initLanguageListener() {
+  //   this.translate.onLangChange
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe(() => {
+  //       this.loadBreadcrumb();
+  //     });
+  // }
+  // loadBreadcrumb() {
+  //   if (this.showDetailView) {
+  //     this.setBreadCrumb([
+  //       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+  //       { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
+  //       { label: 'PROPERTY_DETAILS', link: '' },
+  //     ]);
+  //   } else {
+  //     this.setBreadCrumb([
+  //       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+  //       { label: 'PAGE_TITLE.PROPERTIES', link: '' },
+  //     ]);
+  //   }
+  // }
+  // setBreadCrumb(breadCrumb: BreadCrumb[]) {
+  //   this.sharedService
+  //     .getBreadcrumbs(breadCrumb)
+  //     .subscribe((data) => (this.breadcrumbData = data));
+  // }
+  // onPropertyViewChange() {
+  //   if (this.propertyView === 'all-properties') {
+  //     delete this.propertiesFilter['property_id'];
+  //     delete this.propertiesFilter['MY_PROPERTY'];
+  //   } else if (this.propertyView === 'my-properties') {
+  //     delete this.propertiesFilter['property_id'];
+  //     this.propertiesFilter['MY_PROPERTY'] = true;
+  //   }
+  //   this.getOptionTypes();
+  //   this.getProperties();
+  // }
+  // private getProperties() {
+  //   this.propertiesFilter = {
+  //     ...this.propertiesFilter,
+  //     limit: this.rowsPerPage,
+  //     page: this.currentPage,
+  //   };
+  //   this.propertyService
+  //     .getProperties(this.propertiesFilter)
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe({
+  //       next: (response: any) => {
+  //         if (this.propertyView === 'my-properties' || this.showDetailView) {
+  //           this.propertyDetails = response?.content ?? {};
+  //           this.handlePropertyDetails();
+  //         } else {
+  //           this.propertiesList = response?.content ?? [];
+  //           this.totalRecords = response?.pagination?.total_records ?? 0;
+  //         }
+  //       },
+  //     });
+  // }
+  // onRefresh() {
+  //   this.getProperties();
+  // }
+  // initPropertySearchListener() {
+  //   this.onPropertySearch$
+  //     .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((value) => {
+  //       if (value?.trim()) this.propertiesFilter['search'] = value.trim();
+  //       else delete this.propertiesFilter['search'];
+  //       this.currentPage = 1;
+  //       this.getProperties();
+  //     });
+  // }
+  // searchTextChange(search: string): void {
+  //   this.onPropertySearch$.next(search);
+  // }
+  // onPageSizeChange(event: PageSizeChange): void {
+  //   if (event.componentName !== this.componentName) return;
+  //   this.rowsPerPage = event.pageSize;
+  //   this.currentPage = 1;
+  //   this.getProperties();
+  // }
+  // onPageChange(event: PageChange): void {
+  //   if (event.componentName !== this.componentName) return;
+  //   this.currentPage = event.currentPage;
+  //   this.getProperties();
+  // }
+  // getAgreementExpirationStatusColor(status: string): string {
+  //   if (!status) return '';
+  //   let colorMapimg: any = {
+  //     Expired: 'red',
+  //     'About to Expire': 'orange',
+  //     Ongoing: 'green',
+  //   };
+  //   return colorMapimg[status];
+  // }
+  // removeFilter() {
+  //   this.selectedrentalstatus = null;
+  //   delete this.propertiesFilter['tenancy_status'];
+  //   this.currentPage = 1;
+  //   this.getProperties();
+  // }
+  // property: PropertyDetails = {
+  //   name: '--',
+  //   location: '--',
+  //   status: '--',
+  //   rent: '--',
+  //   bhk: '--',
+  //   sqft: '--',
+  //   propertyImages: [
+  //     {
+  //       imgSrc: 'assets/property/property-img-default.svg',
+  //     },
+  //     {
+  //       imgSrc: 'assets/property/property-img-default.svg',
+  //     },
+  //     {
+  //       imgSrc: 'assets/property/property-img-default.svg',
+  //     },
+  //     {
+  //       imgSrc: 'assets/property/property-img-default.svg',
+  //     },
+  //     {
+  //       imgSrc: 'assets/property/property-img-default.svg',
+  //     },
+  //   ],
+  //   sections: [
+  //     {
+  //       title: 'Property details',
+  //       items: [
+  //         { label: 'Phone Number', value: '--' },
+  //         { label: 'Property Code', value: '--' },
+  //         { label: 'City', value: '--' },
+  //         { label: 'Locality', value: '--' },
+  //         { label: 'Postal Code', value: '--' },
+  //         { label: 'Address Line 1', value: '--' },
+  //         { label: 'Address Line 2 ', value: '--' },
+  //       ],
+  //     },
+  //     {
+  //       title: 'Property Costing',
+  //       items: [{ label: 'Rent Cost', value: '--' }],
+  //     },
+  //     {
+  //       title: 'Tenant details',
+  //       items: [
+  //         { label: 'Name', value: '--' },
+  //         { label: 'Email', value: '--' },
+  //         { label: 'Phone Number', value: '--' },
+  //         { label: 'Emirates ID', value: '--' },
+  //         { label: 'City', value: '--' },
+  //         { label: 'Locality', value: '--' },
+  //         { label: 'Postal Code', value: '--' },
+  //         { label: 'Address Line 1', value: '--' },
+  //         { label: 'Address Line 2', value: '--' },
+  //       ],
+  //     },
+  //     {
+  //       title: 'Owner details',
+  //       items: [
+  //         { label: 'Name', value: '--' },
+  //         { label: 'Emirates ID', value: '--' },
+  //         { label: 'Residence Visa', value: '--' },
+  //         { label: 'Trade License', value: '--' },
+  //         { label: 'Owner Code', value: '--' },
+  //       ],
+  //     },
+  //   ],
+  // };
+  // getBasicDetailsOfProperty(data: Record<string, any>) {
+  //   return {
+  //     name: `${data?.['property_unit']?.['property_unit_name']}, ${data?.['parent_property']?.['property_name']}`,
+  //     location: `${data?.['parent_property']?.['state']?.['value']}, ${data?.['parent_property']?.['city']?.['value']}`,
+  //     status: data?.['property_unit']?.['status'] || 'N/A',
+  //     rent: data?.['property_unit']?.['commercial_details']?.['rent'] ?? 'N/A',
+  //     bhk: data?.['property_unit']?.['dimension'] || 'N/A',
+  //     sqft: data?.['property_unit']?.['area_of_property'] ?? 'N/A',
+  //   };
+  // }
+  // getPropertyImages(data: Record<string, any>): PropertyImages[] {
+  //   const imagesArray = data?.['images'] ?? [];
+  //   // const images = data?.['images'].map((img: any) => ({ imgSrc: img.url }));
+  //   const images = Array.isArray(imagesArray)
+  //     ? imagesArray.map((img: any) => ({ imgSrc: img.url }))
+  //     : [];
+  //   return images.length
+  //     ? images
+  //     : Array.from({ length: 5 }).map((_, i) => ({
+  //         imgSrc: 'assets/property/property-img-default.svg',
+  //       }));
+  // }
+  // getOtherDetailsOfProperty(data: Record<string, any>): Section[] {
+  //   return [
+  //     {
+  //       title: 'PROPERTY_DETAILS',
+  //       items: [
+  //         {
+  //           label: 'PHONE_NUMBER',
+  //           value: data?.['owner']?.['contact_number'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'PROPERTY_CODE',
+  //           value: data?.['property_unit']?.['property_code'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'CITY',
+  //           value: data?.['parent_property']?.['city']?.['value'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'LOCALITY',
+  //           value: data?.['parent_property']?.['locality'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'POSTAL_CODE',
+  //           value: data?.['parent_property']?.['postal_code'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'ADDRESS_LINE_1',
+  //           value: data?.['property_unit']?.['address'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'ADDRESS_LINE_2',
+  //           value: data?.['parent_property']?.['additional_address'] || 'N/A',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: 'PROPERTY_COSTING',
+  //       items: [
+  //         {
+  //           label: 'RENT_COST',
+  //           value:
+  //             data?.['property_unit']?.['commercial_details']?.['rent'] ??
+  //             'N/A',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: 'TENANT_DETAILS',
+  //       items: [
+  //         {
+  //           label: 'NAME',
+  //           value: `${data?.['tenant']?.['first_name']} ${data?.['tenant']?.['last_name']}`,
+  //         },
+  //         { label: 'EMAIL', value: data?.['tenant']?.['email'] || 'N/A' },
+  //         {
+  //           label: 'PHONE_NUMBER',
+  //           value: data?.['tenant']?.['contact_number'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'EMIRATES_ID',
+  //           value: data?.['tenant']?.['emirate_id'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'CITY',
+  //           value: data?.['tenant']?.['city']?.['value'] || 'N/A',
+  //         },
+  //         { label: 'LOCALITY', value: data?.['tenant']?.['locality'] || 'N/A' },
+  //         {
+  //           label: 'POSTAL_CODE',
+  //           value: data?.['tenant']?.['postal_code'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'ADDRESS_LINE_1',
+  //           value: data?.['tenant']?.['address'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'ADDRESS_LINE_2',
+  //           value: data?.['tenant']?.['additional_address'] || 'N/A',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: 'OWNER_DETAILS',
+  //       items: [
+  //         {
+  //           label: 'NAME',
+  //           value: `${data?.['owner']?.['first_name']} ${data?.['owner']?.['last_name']}`,
+  //         },
+  //         {
+  //           label: 'EMIRATES_ID',
+  //           value: data?.['postal_code']?.['emirate_id'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'RESIDENCE_VISA',
+  //           value: data?.['postal_code']?.['uae_residence_visa'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'TRADE_LICENSE',
+  //           value: data?.['postal_code']?.['trade_license'] || 'N/A',
+  //         },
+  //         {
+  //           label: 'OWNER_CODE',
+  //           value: data?.['postal_code']?.['owner_code'] || 'N/A',
+  //         },
+  //       ],
+  //     },
+  //   ];
+  // }
+  // handlePropertyDetails() {
+  //   let basicDetails = this.getBasicDetailsOfProperty(this.propertyDetails);
+  //   let propertyImages = this.getPropertyImages(this.propertyDetails);
+  //   let sections = this.getOtherDetailsOfProperty(this.propertyDetails);
+  //   this.property = { ...basicDetails, propertyImages, sections };
+  //   this.propertyDocumentType.forEach(
+  //     (type: any) => (this.propertyDocuments[type.key] = []),
+  //   );
+  //   this.activeDocTypeKey = this.propertyDocumentType[0]?.key;
+  //   const documents = Array.isArray(this.propertyDetails?.['documents'])
+  //     ? this.propertyDetails['documents']
+  //     : [];
+  //   // this.propertyDetails?.['documents'].map((doc: any) => {
+  //   documents.forEach((doc: any) => {
+  //     if (this.propertyDocuments[doc.type]) {
+  //       this.propertyDocuments[doc.type].push(doc);
+  //     } else {
+  //       // this.propertyDocuments[doc.type] = [doc];
+  //     }
+  //   });
+  // }
+  // onDocTabClick(type: any) {
+  //   this.activeDocTypeKey = type.key;
+  // }
+  // onOptionSelected(option: string) {
+  //   this.selected = option;
+  // }
+  // goToAddProperty(): void {
+  //   this.router.navigate(['/dashboard/add-property']);
+  // }
+  // handleDropdownAction(action: string) {
+  //   console.log(`${action} action clicked`);
+  // }
+  // applyFilter() {
+  //   this.propertiesFilter['tenancy_status'] = this.selectedrentalstatus.key;
+  //   this.currentPage = 1;
+  //   this.getProperties();
+  // }
+  // handleExportClick(): void {
+  //   this.propertyService
+  //     .getExcelFileOfProperty({})
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((resp) => {
+  //       const url = window.URL.createObjectURL(resp);
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = 'property_export.csv';
+  //       a.click();
+  //       window.URL.revokeObjectURL(url);
+  //       this.alertService.success('File downloaded successfully!');
+  //     });
+  // }
+  // handleEditClick(propertyId: number): void {
+  //   if (!propertyId) {
+  //     throw new Error('Property ID not found!');
+  //   }
+  //   this.router.navigate(['/dashboard/edit-property', propertyId]);
+  // }
+  // handleDeleteClick(): void {
+  //   console.log('Delete button clicked');
+  // }
+  // handleBackClick(): void {
+  //   this.showDetailView = false;
+  //   this.router.navigate(['/dashboard/properties']);
+  // }
+  // handleViewClick(propertyId: number): void {
+  //   if (!propertyId) {
+  //     throw new Error('Property ID not found!');
+  //   }
+  //   this.router.navigate(['/dashboard/property/details/', propertyId]);
+  // }
+  activeLeadTab: string = 'properties';
+  currentRole: UserRole = 'property-manager';
 }

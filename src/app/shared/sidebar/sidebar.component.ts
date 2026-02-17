@@ -32,6 +32,7 @@ import { RentalPortfolioIconComponent } from '../../icons/rental-portfolio-icon/
 import { ChequesIconComponent } from '../../icons/cheques-icon/cheques-icon.component';
 import { AnnouncementsComponent } from '../../dashboard/pages/announcements/announcements.component';
 import { AnnouncementsIconComponent } from '../../icons/announcements-icon/announcements-icon.component';
+import { LeadIconComponent } from '../../icon/lead-icon/lead-icon.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -63,6 +64,7 @@ import { AnnouncementsIconComponent } from '../../icons/announcements-icon/annou
     ChequesIconComponent,
     AnnouncementsComponent,
     AnnouncementsIconComponent,
+    LeadIconComponent,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',

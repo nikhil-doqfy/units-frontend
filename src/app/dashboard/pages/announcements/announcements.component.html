@@ -134,31 +134,90 @@
           </div>
           <div class="cmmnTblBody">
             <div class="table-responsive">
-              <table class="charges-table">
+              <table class="table-bordered table">
                 <thead>
                   <tr>
                     <th>Sl.No</th>
-                    <th>Log ID</th>
+                    <th
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
+                      "
+                    >
+                      Log ID
+                    </th>
+                    <th
+                      *ngIf="
+                        prop === 'sent' ||
+                        prop === 'scheduled' ||
+                        prop === 'deleted'
+                      "
+                    >
+                      ID
+                    </th>
+                    <th *ngIf="prop == 'draft'">Draft ID</th>
+
                     <th>Announcement Title</th>
 
-                    <th *ngIf="prop !== 'deleted'">
+                    <th>
                       Property Name<i><app-sorting-icon></app-sorting-icon></i>
                     </th>
-                    <th *ngIf="prop !== 'deleted'">Block / Tower</th>
-                    <th *ngIf="prop !== 'deleted'">Unit</th>
-
-                    <th *ngIf="prop === 'sent'">Sent By</th>
-                    <th *ngIf="prop === 'logs' || prop === 'sent'">
+                    <th>Block / Tower</th>
+                    <th>Unit</th>
+                    <th *ngIf="prop == 'draft'">
+                      Last Edited Date
+                      <i><app-sorting-icon></app-sorting-icon></i>
+                    </th>
+                    <th *ngIf="prop === 'deleted'">Deleted Date</th>
+                    <th
+                      *ngIf="
+                        prop === 'sent' ||
+                        prop === 'draft' ||
+                        prop !== 'deleted'
+                      "
+                    >
+                      Sent By
+                    </th>
+                    <th
+                      *ngIf="
+                        prop === 'logs' || prop === 'sent' || prop !== 'deleted'
+                      "
+                    >
                       Sent Date<i><app-sorting-icon></app-sorting-icon></i>
                     </th>
-                    <th>Channel</th>
-                    <th>Recipients</th>
-                    <th>Delivered</th>
-                    <th>Failed</th>
-                    <th *ngIf="prop === 'scheduled'">Scheduled Date</th>
+                    <th *ngIf="prop === 'scheduled'">
+                      Scheduled Date & Time
+                      <i><app-sorting-icon></app-sorting-icon></i>
+                    </th>
 
-                    <th *ngIf="prop === 'draft'">Last Updated</th>
-                    <th *ngIf="prop === 'deleted'">Deleted Date</th>
+                    <th *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                      Channel
+                    </th>
+                    <th
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
+                      "
+                    >
+                      Recipients
+                    </th>
+                    <!-- <th *ngIf="prop !== 'sent' && prop !== 'scheduled'">
+                      Delivered
+                    </th> -->
+                    <th
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
+                      "
+                    >
+                      Failed
+                    </th>
 
                     <th width="120"></th>
                   </tr>
@@ -167,62 +226,207 @@
                   <tr>
                     <td>01</td>
                     <td>LP9021</td>
-                    <td>Water Supply Maintenance Notice</td>
+                    <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
+                      Water Supply Maintenance Notice
+                    </td>
+
+                    <td *ngIf="prop === 'sent'">Lift Maintenance Notice</td>
+                    <td *ngIf="prop === 'scheduled'">
+                      Monthly press control Notice
+                    </td>
                     <td>
                       <app-table-img-item img="" title="Novatis AG" />
                     </td>
                     <td>Evergreen(B)</td>
                     <td>All Units</td>
-                    <td>01 Feb 25</td>
-                    <td>App/Email/SMS</td>
-                    <td>240</td>
-                    <td>240</td>
-                    <td>0</td>
+                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                      12 Jan 2026 02:00 PM
+                    </td>
+                    <td *ngIf="prop === 'sent'">Ayesha Siddiqui</td>
+                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                      01 Feb 25
+                    </td>
+                    <td *ngIf="prop !== 'draft'">App/Email/SMS</td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      240
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      240
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      0
+                    </td>
                   </tr>
                   <tr>
                     <td>02</td>
                     <td>LP8021</td>
                     <td>Parking Area Refreshing</td>
+
                     <td>
                       <app-table-img-item img="" title="Sliechi tower" />
                     </td>
                     <td>All Blocks/Towers</td>
                     <td>All Units</td>
-                    <td>01 Mar 25</td>
-                    <td>App/SMS</td>
-                    <td>240</td>
-                    <td>210</td>
-                    <td>30</td>
+                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                      12 Jan 2026 02:00 PM
+                    </td>
+
+                    <td *ngIf="prop === 'sent'">Fatima khan</td>
+                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                      01 Mar 25
+                    </td>
+                    <td *ngIf="prop !== 'draft'">App/SMS</td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      240
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      210
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      30
+                    </td>
                   </tr>
                   <tr>
                     <td>03</td>
                     <td>VC79021</td>
-                    <td>Garage Expansion Project</td>
+                    <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
+                      Garage Expansion Project
+                    </td>
+                    <td *ngIf="prop === 'sent'">Community Event Invitation</td>
+                    <td *ngIf="prop === 'scheduled'">
+                      Fire Drill Announcement
+                    </td>
+
                     <td>
                       <app-table-img-item img="" title="Jainhalilla" />
                     </td>
                     <td>Sunrise(D)</td>
                     <td>All Units</td>
-                    <td>03 Apr 25</td>
-                    <td>App/SMS</td>
-                    <td>140</td>
-                    <td>140</td>
-                    <td>0</td>
+                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                      12 Jan 2026 02:00 PM
+                    </td>
+
+                    <td *ngIf="prop === 'sent'">Ahemed Raza</td>
+                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                      03 Apr 25
+                    </td>
+                    <td *ngIf="prop !== 'draft'">App/SMS</td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      140
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      140
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      0
+                    </td>
                   </tr>
                   <tr>
                     <td>04</td>
                     <td>VC69021</td>
-                    <td>Parking Area Refreshing</td>
+                    <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
+                      Parking Area Refreshing
+                    </td>
+                    <td *ngIf="prop === 'sent'">Security update</td>
+                    <td *ngIf="prop === 'scheduled'">
+                      Fire Drill Announcement
+                    </td>
+
                     <td>
                       <app-table-img-item img="" title="Property C" />
                     </td>
                     <td>Majestic(E)</td>
                     <td>All Units</td>
-                    <td>01 May 25</td>
-                    <td>App/SMS</td>
-                    <td>120</td>
-                    <td>120</td>
-                    <td>0</td>
+                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                      12 Jan 2026 02:00 PM
+                    </td>
+
+                    <td *ngIf="prop === 'sent'">Ali hasan</td>
+                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                      01 May 25
+                    </td>
+                    <td *ngIf="prop !== 'draft'">App/SMS</td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      120
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      120
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      0
+                    </td>
                   </tr>
                   <tr>
                     <td>05</td>
@@ -233,11 +437,42 @@
                     </td>
                     <td>Pinnacle(F)</td>
                     <td>pinnacle (F)606</td>
-                    <td>04 Jun 25</td>
-                    <td>App/Email/SMS</td>
-                    <td>240</td>
-                    <td>240</td>
-                    <td>0</td>
+                    <td *ngIf="prop === 'sent'">Zainab Malik</td>
+                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                      04 Jun 25
+                    </td>
+                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                      12 Jan 2026 02:00 PM
+                    </td>
+
+                    <td *ngIf="prop !== 'draft'">App/Email/SMS</td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      240
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      240
+                    </td>
+                    <td
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft'
+                      "
+                    >
+                      0
+                    </td>
                   </tr>
                 </tbody>
               </table>

@@ -52,6 +52,7 @@
         >
           <app-property-icon></app-property-icon>
         </app-sidebar-item>
+
         <app-sidebar-item title="{{ 'PMC' | translate }}" href="/dashboard/pmc">
           <app-pmc-icon></app-pmc-icon>
         </app-sidebar-item>
@@ -100,6 +101,13 @@
           href="/dashboard/properties"
         >
           <app-property-icon></app-property-icon>
+        </app-sidebar-item>
+        <app-sidebar-item
+          title="{{ 'Leads' | translate }}"
+          href="/dashboard/leads"
+          [count]="11243"
+        >
+          <app-lead-icon></app-lead-icon>
         </app-sidebar-item>
         <app-sidebar-item
           title="{{ 'TENANTS' | translate }}"
