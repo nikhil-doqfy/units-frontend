@@ -4,7 +4,7 @@
       <div class="row g-3 align-items-center">
         <div class="col-md">
           <app-table-title
-            [title]="'ALL_PROPERTIES' | translate"
+            [title]="'All Properties & Tenants' | translate"
             [subtitle]="'(' + totalRecords + ')'"
             (onRefresh)="onRefresh()"
           ></app-table-title>
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="cmmnTblBody">
+    <div class="cmmnTbl">
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
@@ -39,15 +39,17 @@
               <th>
                 Property Name <i><app-sorting-icon></app-sorting-icon></i>
               </th>
-              <th>Location</th>
-              <th>Owner</th>
-              <th>Total Blocks /Tower</th>
-              <th>Total No of Units</th>
+
+              <th>Blocks /Tower</th>
+              <th>Unit</th>
+              <th>Tenant Name</th>
+              <th>Agreement Status</th>
+              <th>Dimension</th>
+              <th>Property Status</th>
               <th>PMC</th>
-              <th>Plot No</th>
-              <th>Plot Area(Sqft)</th>
-              <th>Makani No</th>
-              <th>Dewa No</th>
+              <th>Rental Amount(AED)</th>
+              <th>Rera Index(AED)</th>
+              <th>Platfrom</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -56,99 +58,229 @@
               <td>133</td>
               <td>
                 <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
+                  [img]="'assets/property/property-img-1.png'"
                   [title]="'Novastis AG'"
                 />
               </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
-            </tr>
-            <tr>
-              <td>133</td>
+              <td>A</td>
+              <td>A102</td>
               <td>
                 <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
-                  [title]="'Novastis AG'"
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Jenshin'"
                 />
               </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
-            </tr>
-            <tr>
-              <td>133</td>
+
               <td>
-                <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
-                  [title]="'Novastis AG'"
-                />
+                <app-badge title="Ongoing" status="green"></app-badge>
               </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
-            </tr>
-            <tr>
-              <td>133</td>
+              <td>1BHK</td>
               <td>
-                <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
-                  [title]="'Novastis AG'"
-                />
+                <app-badge title="Occupied" status="green"></app-badge>
               </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
               <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
-            </tr>
-            <tr>
-              <td>133</td>
               <td>
-                <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
-                  [title]="'Novastis AG'"
-                />
+                <app-rental-amount [amount]="1200" [percentage]="12">
+                </app-rental-amount>
               </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
+              <td>1,300.00</td>
+              <td align="center">--</td>
               <td align="center">
-                <app-edit-icon></app-edit-icon>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>133</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Novastis AG'"
+                />
+              </td>
+              <td>A</td>
+              <td>A102</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Jenshin'"
+                />
+              </td>
+
+              <td>
+                <app-badge title="Ongoing" status="green"></app-badge>
+              </td>
+              <td>1BHK</td>
+              <td>
+                <app-badge title="Occupied" status="green"></app-badge>
+              </td>
+              <td>3g real estate</td>
+              <td>
+                <app-rental-amount [amount]="1200" [percentage]="12">
+                </app-rental-amount>
+              </td>
+              <td>1,300.00</td>
+              <td align="center">--</td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>133</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Novastis AG'"
+                />
+              </td>
+              <td>A</td>
+              <td>A102</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Jenshin'"
+                />
+              </td>
+
+              <td>
+                <app-badge title="Ongoing" status="green"></app-badge>
+              </td>
+              <td>1BHK</td>
+              <td>
+                <app-badge title="Occupied" status="green"></app-badge>
+              </td>
+              <td>3g real estate</td>
+              <td>
+                <app-rental-amount [amount]="1200" [percentage]="12">
+                </app-rental-amount>
+              </td>
+              <td>1,300.00</td>
+              <td align="center">--</td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>133</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Novastis AG'"
+                />
+              </td>
+              <td>A</td>
+              <td>A102</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Jenshin'"
+                />
+              </td>
+
+              <td>
+                <app-badge title="Ongoing" status="green"></app-badge>
+              </td>
+              <td>1BHK</td>
+              <td>
+                <app-badge title="Occupied" status="green"></app-badge>
+              </td>
+              <td>3g real estate</td>
+              <td>
+                <app-rental-amount [amount]="1200" [percentage]="12">
+                </app-rental-amount>
+              </td>
+              <td>1,300.00</td>
+              <td align="center">--</td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>133</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Novastis AG'"
+                />
+              </td>
+              <td>A</td>
+              <td>A102</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-1.png'"
+                  [title]="'Jenshin'"
+                />
+              </td>
+
+              <td>
+                <app-badge title="Ongoing" status="green"></app-badge>
+              </td>
+              <td>1BHK</td>
+              <td>
+                <app-badge title="Occupied" status="green"></app-badge>
+              </td>
+              <td>3g real estate</td>
+              <td>
+                <app-rental-amount [amount]="1200" [percentage]="12">
+                </app-rental-amount>
+              </td>
+              <td>1,300.00</td>
+              <td align="center">
+                <img src="assets/platfrom/platfrom-1.png" />
+
+                <img src="assets/platfrom/platfrom-2.png" />
+                <img src="assets/icons/property-finder.svg" />
+              </td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
                 </div>
               </td>
             </tr>

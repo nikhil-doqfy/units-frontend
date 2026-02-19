@@ -14,11 +14,12 @@
 
           <!-- TIME SELECT -->
           <div class="custom-select-wrapper">
-            <span class="select-icon"> </span>
-            <app-custom-select
-              class="with-left-icon"
-              [placeholder]="'Property All'"
-            ></app-custom-select>
+            <span class=".cmmnTblFltrBtn">
+              <app-custom-select
+                class="with-left-icon"
+                [placeholder]="'Property All'"
+              ></app-custom-select>
+            </span>
           </div>
           <div class="custom-select-wrapper">
             <span class="select-icon"> </span>
@@ -94,7 +95,7 @@
         </tbody>
       </table> -->
 
-      <div class="cmmnTblBody">
+      <div class="cmmnTbl">
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
@@ -102,52 +103,340 @@
                 <th>Sl.No</th>
                 <th>Unit ID</th>
 
-                <th *ngIf="activeSummary === 'total'">Property Name</th>
-                <th *ngIf="activeSummary === 'total'">Block / Tower</th>
-                <th *ngIf="activeSummary === 'total'">Unit</th>
+                <th>
+                  Property Name<i><app-sorting-icon></app-sorting-icon></i>
+                </th>
+                <th>Block / Tower<app-sorting-icon></app-sorting-icon></th>
+                <th>Unit</th>
 
-                <th>Tenant</th>
+                <th>
+                  Tenant Name<i><app-sorting-icon></app-sorting-icon></i>
+                </th>
                 <th>Cheque No</th>
 
-                <th *ngIf="activeSummary === 'total'">Reference ID</th>
+                <th
+                  *ngIf="
+                    (activeSummary !== 'total' &&
+                      activeSummary === 'credited') ||
+                    activeSummary === 'realized' ||
+                    activeSummary == 'bounce'
+                  "
+                >
+                  Reference ID
+                </th>
+                <th
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  Settlement Bank
+                </th>
+                <th
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  Settlement Acc
+                </th>
 
-                <th>Amount</th>
-
-                <th *ngIf="activeSummary === 'credited'">Credited Date</th>
-                <th *ngIf="activeSummary === 'realized'">Realized Date</th>
-                <th *ngIf="activeSummary === 'bounce'">Bounce Reason</th>
-                <th *ngIf="activeSummary === 'balance'">Pending Days</th>
+                <th *ngIf="activeSummary !== 'total'">Amount</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of tableData">
-                <td>{{ row.slNo }}</td>
-                <td>{{ row.unitId }}</td>
-
-                <td *ngIf="activeSummary === 'total'">{{ row.property }}</td>
-                <td *ngIf="activeSummary === 'total'">{{ row.block }}</td>
-                <td *ngIf="activeSummary === 'total'">{{ row.unit }}</td>
-
-                <td>{{ row.tenant }}</td>
-                <td>{{ row.cheque }}</td>
-
-                <td *ngIf="activeSummary === 'total'">{{ row.reference }}</td>
-
-                <td>{{ row.amount }}</td>
-
-                <td *ngIf="activeSummary === 'credited'">
-                  {{ row.creditedDate }}
+              <tr>
+                <td>01</td>
+                <td>LP9021</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-1.png'"
+                    [title]="'Novastic AG'"
+                  >
+                  </app-table-img-item>
                 </td>
-                <td *ngIf="activeSummary === 'realized'">
-                  {{ row.realizedDate }}
+                <td>Tower A</td>
+                <td>204</td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  <app-table-img-item
+                    [img]="'/assets/user/user-1.png'"
+                    [title]="'Jenshi'"
+                  ></app-table-img-item>
                 </td>
-                <td *ngIf="activeSummary === 'bounce'">
-                  {{ row.bounceReason }}
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  1234 56789 2345
                 </td>
-                <td *ngIf="activeSummary === 'balance'">
-                  {{ row.pendingDays }}
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
                 </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="activeSummary !== 'total'"
+                >
+                  AED,12,000
+                </td>
+              </tr>
+              <tr>
+                <td>02</td>
+                <td>LP8021</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-2.png'"
+                    [title]="'Novastic AG'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower B</td>
+                <td>302</td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  <app-table-img-item
+                    [img]="'/assets/user/user-2.png'"
+                    [title]="'Richard'"
+                  ></app-table-img-item>
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  1234 56789 2345
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="activeSummary !== 'total'"
+                >
+                  AED,12,000
+                </td>
+              </tr>
+              <tr>
+                <td>03</td>
+                <td>LP8021</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-2.png'"
+                    [title]="'Novastic AG'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower B</td>
+                <td>302</td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  <app-table-img-item
+                    [img]="'/assets/user/user-3.png'"
+                    [title]="'Richard'"
+                  ></app-table-img-item>
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  1234 56789 2345
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="activeSummary !== 'total'"
+                >
+                  AED,12,000
+                </td>
+              </tr>
+              <tr>
+                <td>04</td>
+                <td>VC5921</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-2.png'"
+                    [title]="'property C'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower B</td>
+                <td>505</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/user/user-4.png'"
+                    [title]="'Akshay'"
+                  ></app-table-img-item>
+                </td>
+                <td>1234 56789 2345</td>
+                <td
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td *ngIf="activeSummary !== 'total'">AED,12,000</td>
+              </tr>
+              <tr>
+                <td>05</td>
+                <td>VC6021</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-2.png'"
+                    [title]="'Rithi Tower B'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower B</td>
+                <td>606</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/user/user-5.png'"
+                    [title]="'Avanashi'"
+                  ></app-table-img-item>
+                </td>
+                <td>1234 56789 2345</td>
+                <td
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td *ngIf="activeSummary !== 'total'">AED,12,000</td>
               </tr>
             </tbody>
           </table>

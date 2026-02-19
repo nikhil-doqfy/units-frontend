@@ -15,6 +15,9 @@ import { ResetIconComponent } from '../../component/icons/reset-icon/reset-icon.
 import { ShareIconComponent } from '../../component/icons/share-icon/share-icon.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CommonModule } from '@angular/common';
+import { BadgeComponent } from '../../component/badge/badge.component';
+import { RentalAmountComponent } from '../../component/rental-amount/rental-amount.component';
+import { PlatfromCellComponent } from '../../component/platfrom-cell/platfrom-cell.component';
 
 @Component({
   selector: 'app-tenancy-ledger',
@@ -33,6 +36,8 @@ import { CommonModule } from '@angular/common';
     TablePaginationComponent,
     TranslateModule,
     CommonModule,
+    BadgeComponent,
+    RentalAmountComponent,
   ],
   templateUrl: './tenancy-ledger.component.html',
   styleUrl: './tenancy-ledger.component.css',

@@ -123,7 +123,7 @@
               {{ "ADD_PROPERTY" | translate }}
             </button>
           </ng-container>
-          <ng-container *ngIf="currentRole === 'property-manager'">
+          <!-- <ng-container *ngIf="currentRole === 'property-manager'">
             <button
               type="button"
               class="btn btnCommon btnMinWidth d-none d-xl-flex"
@@ -132,6 +132,21 @@
             >
               <i><app-plus-icon></app-plus-icon></i>
               {{ "NEW_LEASE" | translate }}
+            </button>
+          </ng-container>
+          <button type="button" class="btn btnCommon btnWhite">
+            <i><app-appearance-icon></app-appearance-icon></i>
+          </button> -->
+
+          <ng-container *ngIf="currentRole === 'property-manager'">
+            <button
+              type="button"
+              class="btn btnCommon btnMinWidth d-none d-xl-flex"
+              (click)="goToNewTenant()"
+              [ngClass]="isAddLeaseActive ? 'btnActive' : 'btnWhite'"
+            >
+              <i><app-plus-icon></app-plus-icon></i>
+              {{ "New Tenant" | translate }}
             </button>
           </ng-container>
           <button type="button" class="btn btnCommon btnWhite">

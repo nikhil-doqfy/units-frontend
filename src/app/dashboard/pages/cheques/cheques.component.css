@@ -249,9 +249,13 @@
   font-weight: 500;
   white-space: nowrap; /* 🔥 keeps badge in same line */
 }
-.cmmnTblBody.chart-table,
-table,
-thead tr,
-th {
-  background-color: #1565c0;
+
+.cmmnTbl,
+table {
+  border-radius: 10px;
+}
+
+.bounce-highlight {
+  background: #fff1e6;
+  font-weight: 500;
 }

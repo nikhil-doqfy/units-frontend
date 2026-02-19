@@ -1,0 +1,13 @@
+<div class="rent-wrapper">
+  <span class="rent-value">
+    {{ amount | number: "1.2-2" }}
+  </span>
+
+  <span *ngIf="percentage !== null" class="rent-badge" [ngClass]="badgeClass">
+    {{ percentage }}%
+    <i class="ri-arrow-right-up-line" *ngIf="trend === 'up'"
+      ><app-arrow></app-arrow>
+    </i>
+    <i class="ri-arrow-right-down-line" *ngIf="trend === 'down'"></i>
+  </span>
+</div>

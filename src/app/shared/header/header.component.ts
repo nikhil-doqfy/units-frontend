@@ -269,8 +269,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard/add-property']);
   }
 
-  goToAddLease(): void {
-    this.router.navigate(['/dashboard/add-lease']);
+  // goToAddLease(): void {
+  //   this.router.navigate(['/dashboard/add-lease']);
+  // }
+
+  goToNewTenant(): void {
+    this.router.navigate(['/dashboard/new-tenant']);
   }
 
   goToMyProfile(): void {

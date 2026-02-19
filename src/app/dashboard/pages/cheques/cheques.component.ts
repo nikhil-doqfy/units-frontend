@@ -1,15 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { SearchIconComponent } from '../../../shared/component/icons/search-icon/search-icon.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
+import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
+import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
+import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-cheques',
@@ -22,13 +30,14 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
     SearchIconComponent,
     TableSelectComponent,
     TablePaginationComponent,
+    SortingIconComponent,
+    TableImgItemComponent,
   ],
   templateUrl: './cheques.component.html',
   styleUrl: './cheques.component.css',
 })
 export class ChequesComponent {
   showDetailView: boolean = false;
-  activeSummary = 'total';
   componentName: string = 'ChequesComponent';
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
@@ -78,24 +87,41 @@ export class ChequesComponent {
     },
   ];
 
-  displayedColumns: string[] = [
-    'slNo',
-    'unitId',
-    'property',
-    'block',
-    'unit',
-    'tenant',
-    'cheque',
-    'reference',
-    'amount',
-  ];
-
   tableData: any[] = [];
-
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
   ngOnInit() {
-    this.loadTableBySummary('total');
+    this.loadBreadcrumb();
   }
+  private sharedService = inject(SharedService);
+  breadcrumbData: BreadCrumb[] = [];
 
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/Cheques' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.CHEQUES', link: '' },
+      ]);
+    }
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
@@ -105,106 +131,20 @@ export class ChequesComponent {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
   }
-  onSummaryClick(key: string) {
+
+  activeSummary: 'total' | 'credited' | 'realized' | 'bounce' | 'balance' =
+    'total';
+
+  onSummaryClick(key: any) {
     this.activeSummary = key;
-    this.loadTableBySummary(key);
+    this.showDetailView = false;
   }
 
-  loadTableBySummary(type: string) {
-    switch (type) {
-      case 'credited':
-        this.displayedColumns = [
-          'slNo',
-          'unitId',
-          'tenant',
-          'cheque',
-          'amount',
-          'creditedDate',
-        ];
-        break;
-
-      case 'realized':
-        this.displayedColumns = [
-          'slNo',
-          'unitId',
-          'tenant',
-          'cheque',
-          'amount',
-          'realizedDate',
-        ];
-        break;
-
-      case 'bounce':
-        this.displayedColumns = [
-          'slNo',
-          'unitId',
-          'tenant',
-          'cheque',
-          'amount',
-          'bounceReason',
-        ];
-        break;
-
-      case 'balance':
-        this.displayedColumns = [
-          'slNo',
-          'unitId',
-          'tenant',
-          'cheque',
-          'amount',
-          'pendingDays',
-        ];
-        break;
-
-      default:
-        this.displayedColumns = [
-          'slNo',
-          'unitId',
-          'property',
-          'block',
-          'unit',
-          'tenant',
-          'cheque',
-          'reference',
-          'amount',
-        ];
-    }
-
-    this.tableData = this.getDummyData();
+  openDetails(row: any) {
+    this.showDetailView = true;
   }
 
-  getDummyData() {
-    return [
-      {
-        slNo: 1,
-        unitId: 'LP9021',
-        property: 'Novatis AG',
-        block: 'Tower A',
-        unit: '204',
-        tenant: 'Jensi',
-        cheque: '1234 3335 52426',
-        reference: 'REF-29876',
-        amount: 'AED 12,000',
-        creditedDate: '12 Jan 2025',
-        realizedDate: '14 Jan 2025',
-        bounceReason: 'Insufficient Balance',
-        pendingDays: 12,
-      },
-      {
-        slNo: 2,
-        unitId: 'LP8021',
-        property: 'Silechi Tower',
-        block: 'Tower B',
-        unit: '302',
-        tenant: 'Richard',
-        cheque: '2563 3789 9876',
-        reference: 'REF-23456',
-        amount: 'AED 10,000',
-        creditedDate: '10 Jan 2025',
-        realizedDate: '13 Jan 2025',
-        bounceReason: 'Signature Mismatch',
-        pendingDays: 5,
-      },
-    ];
+  backToList() {
+    this.showDetailView = false;
   }
 }

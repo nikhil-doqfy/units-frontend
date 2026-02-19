@@ -1,0 +1,69 @@
+<!-- <div class="property-wrapper">
+  Header
+  <div class="header-card">
+    <div class="left">
+      <h6>Property details</h6>
+      <p>Fill all the fields to add create your lease</p>
+    </div>
+
+    <div class="stepper-wrap">
+      <div class="step active">
+        <span class="circle">1</span>
+        <span class="text">Invite</span>
+      </div>
+
+      <div class="step">
+        <span class="circle">2</span>
+        <span class="text">Onboarding</span>
+      </div>
+
+      <div class="step">
+        <span class="circle">3</span>
+        <span class="text">Agreement</span>
+      </div>
+
+      <div class="step">
+        <span class="circle">4</span>
+        <span class="text">Ejari</span>
+      </div>
+
+      <div class="step">
+        <span class="circle">5</span>
+        <span class="text">Activated</span>
+      </div>
+    </div>
+
+    <div class="right">
+      <button class="cmmnTblFltrBtn">Add / Edit Fields</button>
+      <button class="btn btnCommon">Save & Next</button>
+      <button class="btn">
+        <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
+      </button>
+    </div>
+  </div>
+</div> -->
+<div class="timeline-wrapper">
+  <div class="timeline">
+    <div
+      class="step"
+      *ngFor="let step of steps; let i = index"
+      [ngClass]="{
+        active: i === currentStep,
+        completed: i < currentStep,
+      }"
+    >
+      <div class="circle">
+        <span *ngIf="i < currentStep">✔</span>
+        <span *ngIf="i >= currentStep">{{ i + 1 }}</span>
+      </div>
+
+      <div class="label">
+        {{ step.label }}
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 text-end">
+    <button class="btn btn-primary" (click)="nextStep()">Save & Next</button>
+  </div>
+</div>

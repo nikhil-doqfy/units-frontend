@@ -1377,6 +1377,28 @@ linearGradient .authBgPatt stop:last-child {
   font-weight: 600;
   border: 0;
 }
+/* new screen header color chnages */
+.cmmnTbl table thead tr th,
+.cmmnTbl table tbody tr td {
+  padding: 10px 16px;
+  border-color: var(--muteBorder1);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.cmmnTbl table thead tr th {
+  background-color: var(--activeBg);
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 600;
+  border: 0;
+}
+.cmmnTbl table tbody tr td {
+  font-size: 13px;
+  color: var(--greyDarkText);
+  font-weight: 400;
+  padding: 16px;
+}
+/* end here */
 
 .cmmnTblBody table thead tr th button {
   background-color: transparent;

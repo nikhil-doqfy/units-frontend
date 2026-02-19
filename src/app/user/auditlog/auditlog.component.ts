@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
 import { DownloadIconComponent } from '../component/icons/download-icon/download-icon.component';
 import { SearchIconComponent } from '../../shared/component/icons/search-icon/search-icon.component';
@@ -10,6 +10,9 @@ import { CustomSelectComponent } from '../../dashboard/component/custom-select/c
 import { DashTitleComponent } from '../../shared/component/dash-title/dash-title.component';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { BreadCrumb } from '../../shared/model/shared.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SharedService } from '../../shared.service';
 
 @Component({
   selector: 'app-auditlog',
@@ -97,5 +100,44 @@ export class AuditlogComponent {
     }
 
     return this.translate.instant(titleKey);
+  }
+
+  private destroyRef = inject(DestroyRef);
+  ngOnInit() {
+    this.loadBreadcrumb();
+  }
+  showDetailView: boolean = false;
+
+  private sharedService = inject(SharedService);
+  breadcrumbData: BreadCrumb[] = [];
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        {
+          label: 'PAGE_TITLE.PROPERTIES',
+          link: '/dashboard/Charges',
+        },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.AUDIT_LOG', link: '/dashboard/auditlog' },
+      ]);
+    }
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 }

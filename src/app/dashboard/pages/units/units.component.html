@@ -4,7 +4,7 @@
       <div class="row g-3 align-items-center">
         <div class="col-md">
           <app-table-title
-            [title]="'ALL_PROPERTIES' | translate"
+            [title]="'All Units' | translate"
             [subtitle]="'(' + totalRecords + ')'"
             (onRefresh)="onRefresh()"
           ></app-table-title>
@@ -30,19 +30,19 @@
         </div>
       </div>
     </div>
-    <div class="cmmnTblBody">
+    <div class="cmmnTbl">
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Property ID</th>
+              <th>Unit ID</th>
               <th>
                 Property Name <i><app-sorting-icon></app-sorting-icon></i>
               </th>
+              <th>Unit Name</th>
+              <th>Blocks /Tower</th>
+              <th>Floor No</th>
               <th>Location</th>
-              <th>Owner</th>
-              <th>Total Blocks /Tower</th>
-              <th>Total No of Units</th>
               <th>PMC</th>
               <th>Plot No</th>
               <th>Plot Area(Sqft)</th>
@@ -56,99 +56,159 @@
               <td>133</td>
               <td>
                 <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
+                  [imgSrc]="'assets/property/property-img-1.png'"
                   [title]="'Novastis AG'"
                 />
               </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
+              <td>A122</td>
               <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
-            </tr>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
-                  [title]="'Novastis AG'"
-                />
-              </td>
+              <td>12</td>
               <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
-            </tr>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
-                  [title]="'Novastis AG'"
-                />
-              </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
-            </tr>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
-                  [title]="'Novastis AG'"
-                />
-              </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
-            </tr>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [imgSrc]="'assets/images/property-img-1.jpg'"
-                  [title]="'Novastis AG'"
-                />
-              </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
+
               <td>3g real estate</td>
               <td>123</td>
               <td>12345</td>
               <td>2043***7733</td>
               <td>2043***7733</td>
               <td align="center">
-                <app-edit-icon></app-edit-icon>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-dropdown
-                    [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>11333</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-2.png'"
+                  [title]="'Siliechi tower'"
+                />
+              </td>
+              <td>A234</td>
+              <td>11</td>
+              <td>1</td>
+              <td>Bur Dubai,Dubai</td>
+
+              <td>3g real estate</td>
+              <td>455</td>
+              <td>3456</td>
+              <td>2043***7733</td>
+              <td>2043***7755</td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>12333</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-3.png'"
+                  [title]="'Jainhailia'"
+                />
+              </td>
+              <td>B234</td>
+              <td>24</td>
+              <td>24</td>
+              <td>Al Barshi,Dubai</td>
+
+              <td>3g real estate</td>
+              <td>455</td>
+              <td>3456</td>
+              <td>2043***7733</td>
+              <td>2043***7755</td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>123</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-4.png'"
+                  [title]="'Property C'"
+                />
+              </td>
+
+              <td>C222</td>
+              <td>05</td>
+              <td>11</td>
+              <td>jumeriah,Dubai</td>
+              <td>3g real estate</td>
+              <td>123</td>
+              <td>12345</td>
+              <td>2043***7733</td>
+              <td>2043***7733</td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>133</td>
+              <td>
+                <app-table-img-item
+                  [img]="'assets/property/property-img-5.png'"
+                  [title]="'Rithi Tower B'"
+                />
+              </td>
+              <td>S222</td>
+              <td>11</td>
+              <td>11</td>
+              <td>Deira,Dubai</td>
+
+              <td>3g real estate</td>
+              <td>678</td>
+              <td>1200</td>
+              <td>2043***7733</td>
+              <td>2043***7799</td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon></app-edit-icon>
+
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
+                    </app-table-action-dropdown>
+                  </div>
                 </div>
               </td>
             </tr>

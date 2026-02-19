@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
 import { CommonModule } from '@angular/common';
 import { TableTitleComponent } from '../../dashboard/component/table-title/table-title.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { PlusIconComponent } from '../../shared/component/icons/plus-icon/plus-icon.component';
 import { EditIconComponent } from '../../dashboard/component/icons/edit-icon/edit-icon.component';
 import { DeleteIconComponent } from '../../dashboard/component/icons/delete-icon/delete-icon.component';
 import { SaveIconComponent } from '../../icons/save-icon/save-icon.component';
+import { BreadCrumb } from '../../shared/model/shared.model';
+import { SharedService } from '../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export interface Charge {
   label: string;
   amount: number | null;
@@ -174,5 +177,45 @@ export class ChargesComponent {
     this.charges.push(row);
 
     this.showSave = false;
+  }
+
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+  ngOnInit() {
+    this.loadBreadcrumb();
+  }
+  showDetailView: boolean = false;
+
+  private sharedService = inject(SharedService);
+  breadcrumbData: BreadCrumb[] = [];
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        {
+          label: 'PAGE_TITLE.PROPERTIES',
+          link: '/dashboard/Charges',
+        },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.CHARGES', link: '/dashboard/Charges' },
+      ]);
+    }
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 }

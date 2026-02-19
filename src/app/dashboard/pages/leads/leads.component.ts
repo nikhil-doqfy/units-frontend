@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   signal,
   TemplateRef,
@@ -21,7 +22,10 @@ import { WhatsappLeadsComponent } from '../../component/whatsapp-leads/whatsapp-
 import { CallLeadsComponent } from '../../component/call-leads/call-leads.component';
 import { AddNewLeadsComponent } from '../../component/forms/add-new-leads/add-new-leads.component';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
+import { BreadCrumb } from '../../../shared/model/shared.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-leads',
@@ -44,13 +48,47 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './leads.component.css',
 })
 export class LeadsComponent {
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
 
   selectedLead: any = null;
   activeLeadTab: string = 'all';
   isEditMode: boolean = false;
+  ngOnInit() {
+    this.loadBreadcrumb();
+  }
+  private sharedService = inject(SharedService);
+  breadcrumbData: BreadCrumb[] = [];
 
+  showDetailView: boolean = false;
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/Leads' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.LEADS', link: '' },
+      ]);
+    }
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   openAddLeadModal(
     addLeadContent: TemplateRef<any>,
     editMode: boolean = false,

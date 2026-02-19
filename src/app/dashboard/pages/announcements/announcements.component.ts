@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
@@ -12,11 +12,21 @@ import { CommonModule } from '@angular/common';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 import { PreviewIconComponent } from '../../component/icons/preview-icon/preview-icon.component';
 import { DeleteIconComponent } from '../../component/icons/delete-icon/delete-icon.component';
+import { ReportIconComponent } from '../../../icons/report-icon/report-icon.component';
+import { ResendIconComponent } from '../../../icons/resend-icon/resend-icon.component';
+import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
+import { UploadDocIconComponent } from '../../component/icons/upload-doc-icon/upload-doc-icon.component';
+import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-announcements',
@@ -37,6 +47,10 @@ import { DeleteIconComponent } from '../../component/icons/delete-icon/delete-ic
     CircularCrossBtnIconComponent,
     PreviewIconComponent,
     DeleteIconComponent,
+    ReportIconComponent,
+    ResendIconComponent,
+    ArrowDownIconComponent,
+    UploadDocIconComponent,
   ],
   templateUrl: './announcements.component.html',
   styleUrl: './announcements.component.css',
@@ -49,6 +63,42 @@ export class AnnouncementsComponent {
   currentPage: number = 1;
   prop: 'logs' | 'sent' | 'scheduled' | 'draft' | 'deleted' | null = 'logs';
 
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+  ngOnInit() {
+    this.loadBreadcrumb();
+  }
+  showDetailView: boolean = false;
+
+  private sharedService = inject(SharedService);
+  breadcrumbData: BreadCrumb[] = [];
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/Announcements' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.ANNOUNCEMENTS', link: '' },
+      ]);
+    }
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   changeTab(type: any) {
     this.prop = type;
   }

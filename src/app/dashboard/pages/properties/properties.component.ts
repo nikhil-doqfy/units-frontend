@@ -130,8 +130,8 @@ export class PropertiesComponent {
   // private alertService = inject(AlertService);
   // private route = inject(ActivatedRoute);
   // private sharedService = inject(SharedService);
-  // private destroyRef = inject(DestroyRef);
-  // private translate = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
   // activeTab: string = 'properties';
   // componentName: string = 'PropertiesComponent';
   // breadcrumbData: BreadCrumb[] = [];
@@ -171,19 +171,19 @@ export class PropertiesComponent {
   //     this.showDetailView = true;
   //   }
   // }
-  // ngOnInit() {
-  //   this.loadBreadcrumb();
-  //   this.sharedService.initLanguage();
-  //   this.initLanguageListener();
-  //   this.initPropertySearchListener();
-  //   this.getProperties();
-  //   this.currentRole = this.themeService.getRole();
-  //   if (this.currentRole === 'tenant' && !this.currentPropertyId) {
-  //     this.propertyView = 'my-properties';
-  //     this.propertiesFilter['MY_PROPERTY'] = true;
-  //   }
-  //   this.getOptionTypes();
-  // }
+  ngOnInit() {
+    this.loadBreadcrumb();
+    //   this.sharedService.initLanguage();
+    //   this.initLanguageListener();
+    //   this.initPropertySearchListener();
+    //   this.getProperties();
+    //   this.currentRole = this.themeService.getRole();
+    //   if (this.currentRole === 'tenant' && !this.currentPropertyId) {
+    //     this.propertyView = 'my-properties';
+    //     this.propertiesFilter['MY_PROPERTY'] = true;
+    //   }
+    //   this.getOptionTypes();
+  }
   // changeLanguage(lang: string) {
   //   this.sharedService.setLanguage(lang);
   // }
@@ -580,6 +580,36 @@ export class PropertiesComponent {
   //   }
   //   this.router.navigate(['/dashboard/property/details/', propertyId]);
   // }
+  private sharedService = inject(SharedService);
+  breadcrumbData: BreadCrumb[] = [];
+
+  showDetailView: boolean = false;
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '' },
+      ]);
+    }
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
   activeLeadTab: string = 'properties';
   currentRole: UserRole = 'property-manager';
 }

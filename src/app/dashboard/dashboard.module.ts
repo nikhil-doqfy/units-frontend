@@ -29,6 +29,7 @@ import { InvoiceTemplateComponent } from '../shared/invoice-template/invoice-tem
 import { ChequesComponent } from './pages/cheques/cheques.component';
 import { AnnouncementsComponent } from './pages/announcements/announcements.component';
 import { LeadsComponent } from './pages/leads/leads.component';
+import { NewTenantComponent } from './pages/new-tenant/new-tenant.component';
 export const routes: Routes = [
   {
     path: '',
@@ -86,6 +87,11 @@ export const routes: Routes = [
         path: 'tenants',
         component: TenantsComponent,
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
+      },
+      {
+        path: 'new-tenant',
+        component: NewTenantComponent,
+        data: { titleKey: 'PAGE_TITLE.NEW_TENANT' },
       },
       {
         path: 'tenants/detail/:id',

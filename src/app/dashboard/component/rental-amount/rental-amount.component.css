@@ -1,0 +1,40 @@
+.rent-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rent-badge {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* GREEN */
+.badge-success {
+  background: #dff3e3;
+  color: #1b7f3c;
+}
+
+/* ORANGE */
+.badge-warning {
+  background: #fff1d6;
+  color: #ff8a00;
+}
+
+/* RED */
+.badge-danger {
+  background: #ffe1e1;
+  color: #d92d20;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rent-value {
+    font-size: 14px;
+  }
+}

@@ -174,15 +174,21 @@
                     <th
                       *ngIf="
                         prop === 'sent' ||
-                        prop === 'draft' ||
-                        prop !== 'deleted'
+                        (prop !== 'deleted' &&
+                          prop !== 'logs' &&
+                          prop !== 'scheduled' &&
+                          prop !== 'draft')
                       "
                     >
                       Sent By
                     </th>
                     <th
                       *ngIf="
-                        prop === 'logs' || prop === 'sent' || prop !== 'deleted'
+                        prop === 'logs' ||
+                        prop === 'sent' ||
+                        (prop !== 'deleted' &&
+                          prop !== 'scheduled' &&
+                          prop !== 'draft')
                       "
                     >
                       Sent Date<i><app-sorting-icon></app-sorting-icon></i>
@@ -205,9 +211,16 @@
                     >
                       Recipients
                     </th>
-                    <!-- <th *ngIf="prop !== 'sent' && prop !== 'scheduled'">
+                    <th
+                      *ngIf="
+                        prop !== 'sent' &&
+                        prop !== 'scheduled' &&
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
+                      "
+                    >
                       Delivered
-                    </th> -->
+                    </th>
                     <th
                       *ngIf="
                         prop !== 'sent' &&
@@ -246,12 +259,15 @@
                     <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
                       01 Feb 25
                     </td>
-                    <td *ngIf="prop !== 'draft'">App/Email/SMS</td>
+                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                      App/Email/SMS
+                    </td>
                     <td
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       240
@@ -260,7 +276,8 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       240
@@ -269,10 +286,17 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       0
+                    </td>
+                    <td align="center">
+                      <div class="tbl-action-inline">
+                        <app-report-icon></app-report-icon>
+                        <div class="cmmnTblActnBtnDiv">View Reports</div>
+                      </div>
                     </td>
                   </tr>
                   <tr>
@@ -293,12 +317,15 @@
                     <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
                       01 Mar 25
                     </td>
-                    <td *ngIf="prop !== 'draft'">App/SMS</td>
+                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                      App/SMS
+                    </td>
                     <td
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       240
@@ -307,7 +334,8 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       210
@@ -316,10 +344,21 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       30
+                    </td>
+                    <td align="center">
+                      <div class="tbl-action-inline">
+                        <app-report-icon></app-report-icon>
+                        <div class="cmmnTblActnBtnDiv">View Reports</div>
+                      </div>
+                      <div class="tbl-action">
+                        <app-resend-icon></app-resend-icon>
+                        <div class="cmmnTblActnBtnDiv">Resend Failed</div>
+                      </div>
                     </td>
                   </tr>
                   <tr>
@@ -346,12 +385,15 @@
                     <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
                       03 Apr 25
                     </td>
-                    <td *ngIf="prop !== 'draft'">App/SMS</td>
+                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                      App/SMS
+                    </td>
                     <td
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       140
@@ -360,7 +402,8 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       140
@@ -369,10 +412,17 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       0
+                    </td>
+                    <td align="center">
+                      <div class="tbl-action-inline">
+                        <app-report-icon></app-report-icon>
+                        <div class="cmmnTblActnBtnDiv">View Reports</div>
+                      </div>
                     </td>
                   </tr>
                   <tr>
@@ -399,12 +449,15 @@
                     <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
                       01 May 25
                     </td>
-                    <td *ngIf="prop !== 'draft'">App/SMS</td>
+                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                      App/SMS
+                    </td>
                     <td
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       120
@@ -413,7 +466,8 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       120
@@ -422,10 +476,17 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       0
+                    </td>
+                    <td align="center">
+                      <div class="tbl-action-inline">
+                        <app-report-icon></app-report-icon>
+                        <div class="cmmnTblActnBtnDiv">View Reports</div>
+                      </div>
                     </td>
                   </tr>
                   <tr>
@@ -445,12 +506,15 @@
                       12 Jan 2026 02:00 PM
                     </td>
 
-                    <td *ngIf="prop !== 'draft'">App/Email/SMS</td>
+                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                      App/Email/SMS
+                    </td>
                     <td
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       240
@@ -459,7 +523,8 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       240
@@ -468,10 +533,17 @@
                       *ngIf="
                         prop !== 'sent' &&
                         prop !== 'scheduled' &&
-                        prop !== 'draft'
+                        prop !== 'draft' &&
+                        prop !== 'deleted'
                       "
                     >
                       0
+                    </td>
+                    <td align="center">
+                      <div class="tbl-action-inline">
+                        <app-report-icon></app-report-icon>
+                        <div class="cmmnTblActnBtnDiv">View Reports</div>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -509,9 +581,10 @@
           <app-delete-icon></app-delete-icon>|
           <button class="btn-outline">Save as Draft</button>
 
-          <div class="send-btn-group">
-            <button class="btn-primary">Send Now</button>
-            <button class="btn-primary dropdown">▼</button>
+          <div class="btn btncommon">
+            <button class="btn btnCommon">
+              Send Now |<i><app-arrow-down-icon></app-arrow-down-icon></i>
+            </button>
           </div>
 
           <button class="icon-btn close" (click)="closeCreate()">
@@ -519,17 +592,14 @@
           </button>
         </div>
       </div>
-
-      <!-- Form Card -->
-      <div class="form-card">
-        <!-- Section 1 -->
-        <div class="form-section">
-          <div class="section-header">
-            <span>01</span>
-            <h4>Audience Selection</h4>
+      <div class="mt-3">
+        <app-white-card>
+          <div class="audience-header">
+            <span class="title">Audience Selection</span>
+            <span class="badge">01</span>
           </div>
 
-          <div class="grid-3">
+          <div class="audience-form">
             <div class="form-group">
               <label>Property</label>
               <select>
@@ -551,44 +621,66 @@
               </select>
             </div>
           </div>
-        </div>
-
-        <!-- Section 2 -->
-        <div class="form-section">
-          <div class="section-header">
-            <span>02</span>
-            <h4>Announcement Details</h4>
+        </app-white-card>
+      </div>
+      <div class="mt-3">
+        <app-white-card>
+          <div class="announce-header">
+            <span class="title">Announcement Details</span>
+            <span class="badge">02</span>
           </div>
 
-          <div class="grid-2">
-            <div class="form-group">
+          <div class="form-grid">
+            <!-- Title -->
+            <div class="form-group title-width">
               <label>Title</label>
               <input type="text" placeholder="Enter here" />
             </div>
 
-            <div class="form-group">
+            <!-- Priority -->
+            <div class="from-model">
               <label>Priority</label>
               <div class="radio-group">
-                <label><input type="radio" checked /> Normal</label>
-                <label><input type="radio" /> Important</label>
-                <label><input type="radio" /> Urgent</label>
+                <label class="radio">
+                  <input type="radio" name="priority" checked />
+                  <span></span> Normal
+                </label>
+
+                <label class="radio">
+                  <input type="radio" name="priority" />
+                  <span></span> Important
+                </label>
+
+                <label class="radio">
+                  <input type="radio" name="priority" />
+                  <span></span> Urgent
+                </label>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group full">
+              <label>Description</label>
+              <textarea rows="4" placeholder="Enter here"></textarea>
+            </div>
+
+            <!-- Upload -->
+            <div class="form-group full">
+              <label>Upload Banner Image</label>
+
+              <div class="upload-box">
+                <i class="upload-icon"
+                  ><app-upload-doc-icon></app-upload-doc-icon
+                ></i>
+                <span class="upload-text">Upload here</span>
+                <div class="upload-info">
+                  800px * 350px &nbsp;|&nbsp; Max 5MB
+                </div>
+                <input type="file" />
               </div>
             </div>
           </div>
-
-          <div class="form-group">
-            <label>Description</label>
-            <textarea rows="5" placeholder="Enter here"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>Upload Banner Image</label>
-            <div class="upload-box">
-              <p>Upload here</p>
-              <small>800px * 350px | Max 5MB</small>
-            </div>
-          </div>
-        </div>
+        </app-white-card>
       </div>
     </div>
   </ng-container>

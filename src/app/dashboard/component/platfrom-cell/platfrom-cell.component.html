@@ -1,0 +1,42 @@
+<div class="platform-cell">
+  <div class="icons-row">
+    <div class="icon red" (click)="togglePopup()">
+      <img src="assets/icons/property-finder.svg" alt="pf" />
+    </div>
+
+    <div class="icon green" (click)="togglePopup()">
+      <img src="assets/icons/bayut.svg" alt="bayut" />
+    </div>
+
+    <div class="icon blue" (click)="togglePopup()">
+      <i class="ri-upload-cloud-2-line"></i>
+    </div>
+  </div>
+
+  <div class="list-property">
+    <i class="ri-upload-cloud-2-line"></i>
+    <span>List Property</span>
+  </div>
+
+  <!-- POPUP -->
+  <div class="share-popup" *ngIf="showPopup">
+    <div class="popup-content">
+      <label class="check-row">
+        <input type="checkbox" checked />
+        <img src="assets/icons/property-finder.svg" />
+        <span>Property Finder</span>
+      </label>
+
+      <label class="check-row">
+        <input type="checkbox" checked />
+        <img src="assets/icons/bayut.svg" />
+        <span>bayut</span>
+      </label>
+
+      <button class="share-btn">
+        <i class="ri-send-plane-fill"></i>
+        Share
+      </button>
+    </div>
+  </div>
+</div>

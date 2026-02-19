@@ -131,6 +131,8 @@ export class MyProfileComponent implements AfterViewInit {
     this.sharedService.setLanguage(lang);
   }
 
+  showDetailView: boolean = false;
+
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -138,14 +140,19 @@ export class MyProfileComponent implements AfterViewInit {
         this.loadBreadcrumb();
       });
   }
-
   loadBreadcrumb() {
-    this.setBreadCrumb([
-      {
-        label: 'PAGE_TITLE.DASHBOARD',
-        link: '/dashboard/home',
-      },
-    ]);
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/My Profile' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.MY_PROFILE', link: '' },
+      ]);
+    }
   }
 
   setBreadCrumb(breadCrumb: BreadCrumb[]) {

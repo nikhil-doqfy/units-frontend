@@ -28,7 +28,9 @@
     "RENTAL": "Rental",
     "MY_PROFILE": "My Profile",
     "ANNOUNCEMENTS": "Announcements",
-    "CHEQUES": "Cheques"
+    "CHEQUES": "Cheques",
+    "LEADS": "Leads",
+    "TERMS_AND_CONDITIONS": "Terms & Conditions"
   },
   "ADD_PROPERTY": "Add Property",
   "NEW_LEASE": "New Lease",

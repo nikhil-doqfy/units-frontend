@@ -5,9 +5,9 @@
   line-height: 18px;
 }
 
-/* .badgeText.green {
+.badgeText.green {
   color: var(--greenText);
-} */
+}
 
 .badgeText.greenLight {
   color: var(--greenLightText);
@@ -49,7 +49,7 @@
 .rejected {
   color: #d32f2f;
 }
-
+/* 
 .green {
   background-color: #458453;
 
@@ -66,9 +66,9 @@
 .blue {
   background: #3498db;
   color: #fff;
-}
+} */
 /* Only for this component */
-.green {
+/* .green {
   background: #458453;
   border-radius: 10px;
   color: #fff;
@@ -115,4 +115,4 @@
   min-width: 166px;
   min-height: 38px;
   padding: 6px 14px;
-}
+} */
