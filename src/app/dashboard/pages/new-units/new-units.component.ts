@@ -1,28 +1,27 @@
 import { Component, DestroyRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ThemeService, UserRole } from '../../../theme.service';
-
-import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
-import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
-import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
-import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
-import { PropertyFormService } from '../../services/property-form.service';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SharedApiService } from '../../../shared/services/shared-api.service';
-import { FormService } from '../../../shared/services/form.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { SharedService } from '../../../shared.service';
 import {
   BreadCrumb,
   OptionsParams,
   UploadFileModel,
 } from '../../../shared/model/shared.model';
-import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
-import { StepSchema } from '../../model/step-engine/step-schema';
-import { StepEngine } from '../../model/step-engine/step-engine';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SharedService } from '../../../shared.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
+import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
+import { PropertyFormService } from '../../services/property-form.service';
 import { PropertyService } from '../../services/property.service';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { FormService } from '../../../shared/services/form.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ThemeService, UserRole } from '../../../theme.service';
+import { StepEngine } from '../../model/step-engine/step-engine';
+import { StepSchema } from '../../model/step-engine/step-schema';
+import { CommonModule } from '@angular/common';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
+import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 
 type FormKey = 'images' | 'documents';
 
@@ -36,24 +35,27 @@ interface UploadConfig {
   form: FormGroup;
   formKey: FormKey;
 }
-
 @Component({
-  selector: 'app-add-property',
+  selector: 'app-new-units',
   standalone: true,
   imports: [
-    CommonModule,
     StepFormLayoutComponent,
     StepPaneComponent,
+    CommonModule,
     CustomSelectComponent,
     UploadDocumentComponent,
     ReactiveFormsModule,
     FileUploadItemComponent,
     TranslateModule,
   ],
-  templateUrl: './add-property.component.html',
-  styleUrl: './add-property.component.css',
+  templateUrl: './new-units.component.html',
+  styleUrl: './new-units.component.css',
 })
-export class AddPropertyComponent {
+export class NewUnitsComponent {
+  showDetailView: boolean = false;
+
+  breadcrumbData: BreadCrumb[] = [];
+
   private propertyFormService = inject(PropertyFormService);
   private propertyService = inject(PropertyService);
   private sharedAPIService = inject(SharedApiService);
@@ -62,12 +64,6 @@ export class AddPropertyComponent {
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
-
-  breadcrumbData = [
-    { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-    { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
-    { label: 'ADD_PROPERTY', link: '' },
-  ];
 
   currentRole: UserRole = 'owner';
   isInvalid = this.formService.isInvalid;
@@ -115,6 +111,7 @@ export class AddPropertyComponent {
   }
 
   ngOnInit() {
+    this.loadBreadcrumb();
     let options: OptionsParams[] = [];
     this.currentRole = this.themeService.getRole();
 
@@ -212,19 +209,18 @@ export class AddPropertyComponent {
   //     { label: 'ADD_PROPERTY', link: '' },
   //   ]);
   // }
-  showDetailView: boolean = false;
 
   loadBreadcrumb() {
     if (this.showDetailView) {
       this.setBreadCrumb([
         { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/Add-property' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/new-units' },
         { label: 'PROPERTY_DETAILS', link: '' },
       ]);
     } else {
       this.setBreadCrumb([
         { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.ADD_PROPERTY', link: '' },
+        { label: 'PAGE_TITLE.NEW_UNITS', link: '' },
       ]);
     }
   }

@@ -866,3 +866,28 @@
   color: #6b7280;
   margin-bottom: 4px; /* icon वर space */
 }
+
+/* proerty dropdown css */
+.custom-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  min-width: 161px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 999;
+  margin-top: 6px;
+}
+
+.dropdown-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #f5f7fa;
+}

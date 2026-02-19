@@ -30,6 +30,9 @@ import { ChequesComponent } from './pages/cheques/cheques.component';
 import { AnnouncementsComponent } from './pages/announcements/announcements.component';
 import { LeadsComponent } from './pages/leads/leads.component';
 import { NewTenantComponent } from './pages/new-tenant/new-tenant.component';
+import { UnitsComponent } from './pages/units/units.component';
+import { NewUnitsComponent } from './pages/new-units/new-units.component';
+import { BasicpersonalComponent } from '../newtenant/component/basicpersonal/basicpersonal.component';
 export const routes: Routes = [
   {
     path: '',
@@ -64,6 +67,11 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.ADD_PROPERTY' },
       },
       {
+        path: 'new-units',
+        component: NewUnitsComponent,
+        data: { titleKey: 'PAGE_TITLE.NEW_UNITS' },
+      },
+      {
         path: 'edit-property/:id',
         component: AddPropertyComponent,
         data: { titleKey: 'PAGE_TITLE.EDIT_PROPERTY' },
@@ -93,6 +101,7 @@ export const routes: Routes = [
         component: NewTenantComponent,
         data: { titleKey: 'PAGE_TITLE.NEW_TENANT' },
       },
+
       {
         path: 'tenants/detail/:id',
         component: TenantsComponent,

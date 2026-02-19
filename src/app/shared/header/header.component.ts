@@ -50,6 +50,9 @@ import { TermsconditionIconComponent } from '../../icons/termscondition-icon/ter
 import { ChargesIconComponent } from '../../icons/charges-icon/charges-icon.component';
 import { AuditlogIconComponent } from '../../icons/auditlog-icon/auditlog-icon.component';
 import { TransactionComponent } from '../transaction/transaction.component';
+import { NewPropertryIconsComponent } from '../../icons/new-propertry-icons/new-propertry-icons.component';
+import { NewUnitsComponent } from '../../dashboard/pages/new-units/new-units.component';
+import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon.component';
 
 @Component({
   selector: 'app-header',
@@ -73,12 +76,14 @@ import { TransactionComponent } from '../transaction/transaction.component';
     SignatureIconComponent,
     DeleteIconComponent,
     EditIconComponent,
-    UploadDocumentComponent,
     UploadDocIconComponent,
     TermsconditionIconComponent,
     ChargesIconComponent,
     AuditlogIconComponent,
     TransactionComponent,
+    NewPropertryIconsComponent,
+    NewUnitsComponent,
+    NewUnitsIconComponent,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -431,5 +436,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   closeModal() {
     this.isModalOpen = false;
+  }
+
+  // New Property dropdown functions
+
+  showDropdown = false;
+
+  togglePropertyDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  openProperty() {
+    this.showDropdown = false;
+    this.goToAddProperty(); // tumcha existing method
+  }
+
+  openUnit() {
+    this.showDropdown = false;
+    this.goToAddUnit(); // new function
+  }
+
+  goToAddUnit() {
+    this.router.navigate(['/dashboard/new-units']); // route tumchya project nusar change kara
   }
 }

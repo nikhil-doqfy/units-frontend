@@ -30,9 +30,11 @@
     "ANNOUNCEMENTS": "Announcements",
     "CHEQUES": "Cheques",
     "LEADS": "Leads",
-    "TERMS_AND_CONDITIONS": "Terms & Conditions"
+    "TERMS_AND_CONDITIONS": "Terms & Conditions",
+    "NEW_UNITS": "New Units",
+    "NEW_TENANT": "New Tenant"
   },
-  "ADD_PROPERTY": "Add Property",
+
   "NEW_LEASE": "New Lease",
   "UNITS": "Units",
 

@@ -108,7 +108,7 @@
               </div>
             </div>
           </ng-container>
-          <ng-container
+          <!-- <ng-container
             *ngIf="
               currentRole === 'owner' || currentRole === 'property-manager'
             "
@@ -122,7 +122,38 @@
               <i><app-plus-icon></app-plus-icon></i>
               {{ "ADD_PROPERTY" | translate }}
             </button>
+          </ng-container> -->
+          <ng-container
+            *ngIf="
+              currentRole === 'owner' || currentRole === 'property-manager'
+            "
+          >
+            <div class="position-relative d-inline-block">
+              <!-- Button -->
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="togglePropertyDropdown()"
+                [ngClass]="isAddPropertyActive ? 'btnActive' : 'btnGrey'"
+              >
+                <i><app-plus-icon></app-plus-icon></i>
+                {{ "Add" | translate }}
+                <i><app-arrow-down-icon></app-arrow-down-icon></i>
+              </button>
+
+              <!-- Dropdown -->
+              <div class="custom-dropdown" *ngIf="showDropdown">
+                <div class="dropdown-item" (click)="openProperty()">
+                  <i><app-new-propertry-icons></app-new-propertry-icons></i>
+                  New Property
+                </div>
+                <div class="dropdown-item" (click)="openUnit()">
+                  <i><app-new-units-icon></app-new-units-icon></i> New Unit
+                </div>
+              </div>
+            </div>
           </ng-container>
+
           <!-- <ng-container *ngIf="currentRole === 'property-manager'">
             <button
               type="button"
