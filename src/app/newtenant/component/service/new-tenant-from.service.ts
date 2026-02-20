@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { NewTenant } from '../modules/new-tenant';
 import { CommercialdetailsComponent } from '../commercialdetails/commercialdetails.component';
+import { BasicpersonalComponent } from '../basicpersonal/basicpersonal.component';
 
 @Injectable({
   providedIn: 'root',
@@ -12,52 +13,111 @@ import { CommercialdetailsComponent } from '../commercialdetails/commercialdetai
 export class NewTenantFromService {
   private steps = signal<NewTenant[]>([]);
   private activeIndex = signal<number>(0);
-
+  private activeSubIndex = signal<number>(0);
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
   ) {}
 
-  PropertySteps(): NewTenant[] {
-    return [
+  PropertySteps() {
+    return signal<NewTenant[]>([
       {
-        id: 'BASIC_DETAILS',
-        title: 'Basic Details',
-        route: 'basic-details',
-        formGroup: this.fb.group({}),
-
+        id: '1',
+        title: 'Invite',
         subSteps: [
           {
-            id: 'ADDRESS_INFO',
-            title: 'Address Info',
+            id: '1-1',
+            title: 'Basic Personal',
+            description: 'Enter tenant personal details',
+            component: BasicpersonalComponent,
+            formGroup: this.createBasicForm(),
+          },
+          {
+            id: '1-2',
+            title: 'Commercial Details',
             component: CommercialdetailsComponent,
-            formGroup: this.fb.group({
-              address: [''],
-              city: [''],
-            }),
+            formGroup: this.createCommercialForm(),
           },
         ],
       },
-
       {
-        id: 'PROPERTY_IMAGES_DETAILS',
-        title: 'Property Image Details',
-        route: 'property-images',
-        formGroup: this.fb.group({}),
+        id: '2',
+        title: 'Onboarding',
+        subSteps: [
+          {
+            id: '2-1',
+            title: 'Commercial Details',
+            component: CommercialdetailsComponent,
+            formGroup: this.createCommercialForm(),
+          },
+          {
+            id: '2-2',
+            title: 'Basic Personal',
+            component: BasicpersonalComponent,
+            formGroup: this.createBasicForm(),
+          },
+        ],
       },
-
       {
-        id: 'DOCUMENTS_DETAILS',
-        title: 'Document Details',
-        route: 'documents',
-        formGroup: this.fb.group({}),
+        id: '3',
+        title: 'Agreement',
+        subSteps: [
+          {
+            id: '3-1',
+            title: 'Basic Personal',
+            component: BasicpersonalComponent,
+            formGroup: this.createBasicForm(),
+          },
+        ],
       },
-    ];
+      {
+        id: '4',
+        title: 'Ejari',
+        subSteps: [
+          {
+            id: '4-1',
+            title: 'Commercial Details',
+            component: CommercialdetailsComponent,
+            formGroup: this.createCommercialForm(),
+          },
+        ],
+      },
+      {
+        id: '5',
+        title: 'Activated',
+        subSteps: [
+          {
+            id: '5-1',
+            title: 'Summary',
+            component: BasicpersonalComponent,
+            formGroup: this.createBasicForm(),
+          },
+        ],
+      },
+    ]);
   }
+
   getActiveIndex() {
     return this.activeIndex;
   }
-  getSteps() {
-    return this.steps;
+
+  getActiveSubIndex() {
+    return this.activeSubIndex;
+  }
+  private createBasicForm(): FormGroup {
+    return this.fb.group({
+      firstName: [''],
+      lastName: [''],
+      email: [''],
+      phone: [''],
+    });
+  }
+
+  private createCommercialForm(): FormGroup {
+    return this.fb.group({
+      companyName: [''],
+      tradeLicense: [''],
+      vatNumber: [''],
+    });
   }
 }

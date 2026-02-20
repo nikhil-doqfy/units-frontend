@@ -18,96 +18,78 @@ import { NewTenantFromService } from '../../../newtenant/component/service/new-t
   styleUrl: './new-tenant.component.css',
 })
 export class NewTenantComponent {
+  // private destroyRef = inject(DestroyRef);
+  // private translate = inject(TranslateService);
+  // private newTenantService = inject(NewTenantFromService);
+
+  // showDetailView: boolean = false;
+
+  // private sharedService = inject(SharedService);
+  // breadcrumbData: BreadCrumb[] = [];
+  // steps = this.newTenantService.PropertySteps();
+  // activeIndex = this.newTenantService.getActiveIndex();
+
+  // constructor() {}
+
+  // ngOnInit() {
+  //   this.loadBreadcrumb();
+  //   this.initLanguageListener();
+  // }
+  // loadBreadcrumb() {
+  //   if (this.showDetailView) {
+  //     this.setBreadCrumb([
+  //       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+  //       { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/new-tenant' },
+  //       { label: 'PROPERTY_DETAILS', link: '' },
+  //     ]);
+  //   } else {
+  //     this.setBreadCrumb([
+  //       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+  //       { label: 'PAGE_TITLE.NEW_TENANT', link: '' },
+  //     ]);
+  //   }
+  // }
+  // setBreadCrumb(breadCrumb: BreadCrumb[]) {
+  //   this.sharedService
+  //     .getBreadcrumbs(breadCrumb)
+  //     .subscribe((data) => (this.breadcrumbData = data));
+  // }
+
+  // initLanguageListener() {
+  //   this.translate.onLangChange
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe(() => {
+  //       this.loadBreadcrumb();
+  //     });
+  // }
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   private newTenantService = inject(NewTenantFromService);
+  private sharedService = inject(SharedService);
+
+  steps = this.newTenantService.PropertySteps(); // signal
+  activeIndex = this.newTenantService.getActiveIndex(); // signal
 
   showDetailView: boolean = false;
-
-  private sharedService = inject(SharedService);
   breadcrumbData: BreadCrumb[] = [];
-  steps = this.newTenantService.PropertySteps();
-  activeIndex = this.newTenantService.getActiveIndex();
 
-  constructor() {}
-
-  initLanguageListener() {
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.loadBreadcrumb();
-      });
-  }
   ngOnInit() {
     this.loadBreadcrumb();
-    this.initLanguageListener();
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadBreadcrumb());
   }
+
   loadBreadcrumb() {
-    if (this.showDetailView) {
-      this.setBreadCrumb([
-        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/new-tenant' },
-        { label: 'PROPERTY_DETAILS', link: '' },
-      ]);
-    } else {
-      this.setBreadCrumb([
-        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.NEW_TENANT', link: '' },
-      ]);
-    }
+    this.setBreadCrumb([
+      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+      { label: 'PAGE_TITLE.NEW_TENANT', link: '' },
+    ]);
   }
+
   setBreadCrumb(breadCrumb: BreadCrumb[]) {
     this.sharedService
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-
-  // steps: NewTenant[] = [];
-  // activeIndex = 0;
-
-  // constructor(
-  //   private router: Router,
-  //   private route: ActivatedRoute,
-  // ) {}
-
-  // ngOnInit() {
-  //   this.steps = this.newTenantService.PropertySteps();
-  //   this.syncStepWithUrl();
-  //   this.loadBreadcrumb();
-  // }
-
-  // /* URL → Timeline Sync */
-  // syncStepWithUrl() {
-  //   const currentRoute = this.router.url.split('/').pop();
-  //   const index = this.steps.findIndex((s) => s.route === currentRoute);
-  //   this.activeIndex = index >= 0 ? index : 0;
-  // }
-
-  // /* Timeline Click */
-  // goToStep(index: number) {
-  //   this.activeIndex = index;
-  //   this.router.navigate([this.steps[index].route], {
-  //     relativeTo: this.route,
-  //   });
-  // }
-
-  // /* Next */
-  // next() {
-  //   if (this.activeIndex < this.steps.length - 1) {
-  //     this.activeIndex++;
-  //     this.router.navigate([this.steps[this.activeIndex].route], {
-  //       relativeTo: this.route,
-  //     });
-  //   }
-  // }
-
-  // /* Back */
-  // prev() {
-  //   if (this.activeIndex > 0) {
-  //     this.activeIndex--;
-  //     this.router.navigate([this.steps[this.activeIndex].route], {
-  //       relativeTo: this.route,
-  //     });
-  //   }
-  // }
 }

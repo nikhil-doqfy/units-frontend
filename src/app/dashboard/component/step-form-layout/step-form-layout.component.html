@@ -9,10 +9,7 @@
             *ngFor="let step of filteredSteps; let i = index"
             [class.active]="i === currentStep"
           >
-            <button
-              type="button"
-              (click)="goToStep(i)"
-              >
+            <button type="button" (click)="goToStep(i)">
               <!--[disabled]="getStatus(i) === 'LOCKED' || getStatus(i) === 'READY'" -->
               <span>{{ step.title }}</span>
               <i *ngIf="i < currentStep">
@@ -35,6 +32,7 @@
     <ng-container *ngFor="let group of stepGroups; let i = index">
       <ng-container *ngIf="i === currentStep">
         <!-- MAIN CARD -->
+
         <app-white-card>
           <div class="cmnStepFrmHdr mb-4">
             <app-card-title
@@ -42,6 +40,14 @@
               [description]="group.main.description"
             >
             </app-card-title>
+            <button
+              type="button"
+              class="btn btnCommon"
+              *ngIf="i < stepGroups.length - 1"
+              (click)="nextStep()"
+            >
+              {{ "Add/Edit Fields" | translate }}
+            </button>
             <button
               type="button"
               class="btn btnCommon"
@@ -77,10 +83,11 @@
                   [title]="sub.title"
                   [description]="sub.description"
                 ></app-card-title>
-                @if(sub.showInvitePmcBtn){
-                <app-invite-pmc-btn />
-                } @if (sub.showInviteOwnerBtn) {
-                <app-invite-owner-btn />
+                @if (sub.showInvitePmcBtn) {
+                  <app-invite-pmc-btn />
+                }
+                @if (sub.showInviteOwnerBtn) {
+                  <app-invite-owner-btn />
                 }
               </div>
               <div class="cmnStepFrmOuter">

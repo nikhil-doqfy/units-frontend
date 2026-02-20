@@ -1,26 +1,39 @@
-<div class="stepper-wrapper">
-  <div
-    class="stepper-item"
-    *ngFor="let step of steps; let i = index"
-    [class.active]="i === activeIndex()"
-    [class.completed]="i < activeIndex()"
-    (click)="goToStep(i)"
-  >
-    <div class="step-counter">
-      <ng-container *ngIf="i < activeIndex(); else num">✓</ng-container>
-      <ng-template #num>{{ i + 1 }}</ng-template>
+<app-white-card>
+  <div class="stepper-container">
+    <div class="sub-stepper" *ngIf="currentSubStep">
+      <div class="sub-step active">
+        {{ currentSubStep.title }}
+        <span class="sub-desc">
+          {{ currentSubStep.description || "" }}
+        </span>
+      </div>
     </div>
-    <div class="step-name">{{ step.title }}</div>
+    <div
+      class="step-item"
+      *ngFor="let step of steps(); let i = index"
+      [class.active]="i === activeIndex()"
+      [class.completed]="i < activeIndex()"
+    >
+      <div class="circle">{{ i + 1 }}</div>
+      <div class="label">{{ step.title }}</div>
+      <div class="line" *ngIf="i < steps().length - 1"></div>
+    </div>
+    <div class="stepper-actions">
+      <button class="btn-back" (click)="prev()">Back</button>
+      <button class="cmmnTblFltrBtn">Add / Edit Fields</button>
+      <button class="btn-next btn btnCommon" (click)="next()">
+        Save & Next
+      </button>
+    </div>
   </div>
-</div>
-
+</app-white-card>
 <div class="step-content">
   <ng-container *ngIf="currentSubStep">
-    <ng-container *ngComponentOutlet="currentSubStep.component"></ng-container>
+    <ng-container
+      *ngComponentOutlet="
+        currentSubStep.component;
+        inputs: { form: currentSubStep.formGroup }
+      "
+    ></ng-container>
   </ng-container>
-</div>
-
-<div class="d-flex justify-content-between mt-4">
-  <button class="btn btn-outline-secondary" (click)="prev()">Back</button>
-  <button class="btn btn-primary" (click)="next()">Next</button>
 </div>

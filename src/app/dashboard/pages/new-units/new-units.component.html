@@ -8,12 +8,12 @@
   <!-- Step Basic Details Content -->
   <ng-container>
     <app-step-pane
-      [title]="'BASIC_DETAILS' | translate"
+      [title]="'OWNER_DETAILS' | translate"
       [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
     >
       <form class="row g-3" [formGroup]="basicDetailsForm">
         <div class="col-md-6">
-          <label class="form-label">{{ "PROPERETY" | translate }}</label>
+          <label class="form-label">{{ "PROPERETY_owner_" | translate }}</label>
           <app-custom-select
             [options]="propertyList"
             key="key"
@@ -328,7 +328,7 @@
   <!-- Step Commercials Content -->
   <ng-container>
     <app-step-pane
-      [title]="'COMMERCIALS' | translate"
+      [title]="'BLOCKS/TOWER' | translate"
       [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
     >
       <form class="row g-3" [formGroup]="commercialsForm">
