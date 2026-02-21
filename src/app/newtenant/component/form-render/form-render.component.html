@@ -1,3 +1,7 @@
+<div class="success-toast" *ngIf="showInviteMsg">
+  <span class="dot"></span>
+  Invite Sent Successfully
+</div>
 <app-white-card>
   <div class="stepper-container">
     <div class="sub-stepper" *ngIf="currentSubStep">
@@ -15,15 +19,24 @@
       [class.completed]="i < activeIndex()"
     >
       <div class="circle">{{ i + 1 }}</div>
+
       <div class="label">{{ step.title }}</div>
+
       <div class="line" *ngIf="i < steps().length - 1"></div>
     </div>
     <div class="stepper-actions">
-      <button class="btn-back" (click)="prev()">Back</button>
-      <button class="cmmnTblFltrBtn">Add / Edit Fields</button>
-      <button class="btn-next btn btnCommon" (click)="next()">
-        Save & Next
+      <button
+        class="btn-back"
+        *ngIf="activeIndex() > 0 || subIndex() > 0"
+        (click)="prev()"
+      >
+        <app-left-arrow-icon></app-left-arrow-icon>
       </button>
+      <button class="cmmnTblFltrBtn">Add / Edit Fields</button>
+      <button class="btn btnCommon" (click)="next()">
+        {{ getNextBtnLabel() }}
+      </button>
+      <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
     </div>
   </div>
 </app-white-card>

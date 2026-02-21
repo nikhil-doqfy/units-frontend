@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NewTenant } from '../modules/new-tenant';
 import { CommercialdetailsComponent } from '../commercialdetails/commercialdetails.component';
 import { BasicpersonalComponent } from '../basicpersonal/basicpersonal.component';
+import { ProfileComponent } from '../profile/profile.component';
+import { OnboardingComponent } from '../onboarding/onboarding.component';
 
 @Injectable({
   providedIn: 'root',
@@ -28,13 +30,14 @@ export class NewTenantFromService {
           {
             id: '1-1',
             title: 'Basic Personal',
-            description: 'Enter tenant personal details',
+            description: 'Fill all the fields to add create your lease',
             component: BasicpersonalComponent,
             formGroup: this.createBasicForm(),
           },
           {
             id: '1-2',
             title: 'Commercial Details',
+            description: 'Fill all the fields to add create your lease',
             component: CommercialdetailsComponent,
             formGroup: this.createCommercialForm(),
           },
@@ -46,15 +49,15 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '2-1',
-            title: 'Commercial Details',
-            component: CommercialdetailsComponent,
-            formGroup: this.createCommercialForm(),
+            title: 'Profile',
+            component: ProfileComponent,
+            formGroup: this.createProfileForm(),
           },
           {
             id: '2-2',
-            title: 'Basic Personal',
-            component: BasicpersonalComponent,
-            formGroup: this.createBasicForm(),
+            title: 'Profile',
+            component: OnboardingComponent,
+            formGroup: this.createOnboardingForm(),
           },
         ],
       },
@@ -114,6 +117,21 @@ export class NewTenantFromService {
   }
 
   private createCommercialForm(): FormGroup {
+    return this.fb.group({
+      companyName: [''],
+      tradeLicense: [''],
+      vatNumber: [''],
+    });
+  }
+
+  private createProfileForm(): FormGroup {
+    return this.fb.group({
+      companyName: [''],
+      tradeLicense: [''],
+      vatNumber: [''],
+    });
+  }
+  private createOnboardingForm(): FormGroup {
     return this.fb.group({
       companyName: [''],
       tradeLicense: [''],

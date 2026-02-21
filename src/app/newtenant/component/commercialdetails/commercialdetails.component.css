@@ -1,0 +1,4 @@
+.cmmnTblBody table.charges-table thead tr th {
+  background-color: var(--muteBorder1);
+  color: black;
+}
