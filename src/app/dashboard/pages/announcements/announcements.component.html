@@ -121,6 +121,24 @@
                     [placeholder]="'SEARCH_HERE' | translate"
                     (onValueChange)="searchTextChange($event)"
                   />
+                  <app-custom-select
+                    placeholder="Property:All"
+                    key="key"
+                    value="value"
+                  >
+                  </app-custom-select>
+                  <app-custom-select
+                    placeholder="Block/Tower:All"
+                    key="key"
+                    value="value"
+                  >
+                  </app-custom-select>
+                  <app-custom-select
+                    placeholder="Unit:All"
+                    key="key"
+                    value="value"
+                  >
+                  </app-custom-select>
 
                   <app-table-filter-btn
                     [title]="'EXPORT' | translate"
@@ -621,6 +639,15 @@
               </select>
             </div>
           </div>
+          <div class="d-flex gap-3 align-items-center mt-3">
+            <label> <input type="checkbox" /> App Notification </label>
+
+            <label> <input type="checkbox" /> SMS </label>
+
+            <label> <input type="checkbox" /> Mail </label>
+
+            <label> <input type="checkbox" /> WhatsApp </label>
+          </div>
         </app-white-card>
       </div>
       <div class="mt-3">
@@ -630,14 +657,12 @@
             <span class="badge">02</span>
           </div>
 
-          <div class="form-grid">
-            <!-- Title -->
+          <!-- <div class="form-grid">
             <div class="form-group title-width">
               <label>Title</label>
               <input type="text" placeholder="Enter here" />
             </div>
 
-            <!-- Priority -->
             <div class="from-model">
               <label>Priority</label>
               <div class="radio-group">
@@ -656,6 +681,32 @@
                   <span></span> Urgent
                 </label>
               </div>
+            </div> -->
+          <div class="form-grid">
+            <div class="form-group title-width">
+              <label>Title</label>
+              <input type="text" placeholder="Enter here" />
+            </div>
+
+            <!-- Priority -->
+            <div class="form-group priority-inline">
+              <label>Priority</label>
+              <div class="radio-group">
+                <label class="radio">
+                  <input type="radio" name="priority" checked />
+                  Normal
+                </label>
+
+                <label class="radio">
+                  <input type="radio" name="priority" />
+                  Important
+                </label>
+
+                <label class="radio">
+                  <input type="radio" name="priority" />
+                  Urgent
+                </label>
+              </div>
             </div>
 
             <!-- Description -->
@@ -670,8 +721,8 @@
 
               <div class="upload-box">
                 <i class="upload-icon"
-                  ><app-upload-doc-icon></app-upload-doc-icon
-                ></i>
+                  ><app-download-icon></app-download-icon>
+                </i>
                 <span class="upload-text">Upload here</span>
                 <div class="upload-info">
                   800px * 350px &nbsp;|&nbsp; Max 5MB

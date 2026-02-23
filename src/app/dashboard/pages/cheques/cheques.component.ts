@@ -4,8 +4,9 @@ import { TableSearchComponent } from '../../component/table-search/table-search.
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
-import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+
+import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { SearchIconComponent } from '../../../shared/component/icons/search-icon/search-icon.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';

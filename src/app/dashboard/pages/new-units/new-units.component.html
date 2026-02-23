@@ -13,7 +13,9 @@
     >
       <form class="row g-3" [formGroup]="basicDetailsForm">
         <div class="col-md-6">
-          <label class="form-label">{{ "PROPERETY_owner_" | translate }}</label>
+          <label class="form-label">{{
+            "Property Owner Name" | translate
+          }}</label>
           <app-custom-select
             [options]="propertyList"
             key="key"
@@ -31,7 +33,7 @@
         </div>
         <div class="col-md-6">
           <label class="form-label">
-            {{ "PROPERTY_UNIT_NAME" | translate }}
+            {{ "Email" | translate }}
           </label>
           <input
             type="text"
@@ -46,7 +48,7 @@
           }
         </div>
         <div class="col-md-6">
-          <label class="form-label">{{ "PROPERTY_TYPE" | translate }}</label>
+          <label class="form-label">{{ "Contact Number" | translate }}</label>
           <app-custom-select
             [options]="propertyType"
             key="key"
@@ -61,7 +63,7 @@
         </div>
         <div class="col-md-6">
           <label class="form-label"
-            >{{ "LAND_AREA" | translate }}
+            >{{ "Emirates ID" | translate }}
             <small>{{ "SQ-FT" | translate }}</small></label
           >
           <input

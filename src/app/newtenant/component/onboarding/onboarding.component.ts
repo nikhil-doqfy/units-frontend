@@ -6,6 +6,7 @@ import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-do
 import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 import { CustomSelectComponent } from '../../../dashboard/component/custom-select/custom-select.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { CalenderIconComponent } from '../../../icons/calender-icon/calender-icon.component';
 
 @Component({
   selector: 'app-onboarding',
@@ -18,6 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
     DownloadIconComponent,
     CustomSelectComponent,
     TranslateModule,
+    CalenderIconComponent,
   ],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',

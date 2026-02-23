@@ -2372,3 +2372,9 @@ a .simple {
 .form-label {
   white-space: nowrap;
 }
+.template-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}

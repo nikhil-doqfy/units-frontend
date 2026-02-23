@@ -7,4 +7,9 @@
     <span>{{ subtitle }}</span>
     <em *ngIf="size">{{ size }}</em>
   </div>
+  <span *ngIf="status === 'success'" class="status-icon check">✔</span>
+  <span *ngIf="status === 'warning'" class="status-icon warn">!</span>
+
+  <!-- Replace -->
+  <span *ngIf="showReplace" class="replace-text">Replace</span>
 </div>

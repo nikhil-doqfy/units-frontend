@@ -24,7 +24,7 @@ app-document-type-item {
 
 /* Upload more button */
 .upload-more-btn {
-  background: transparent;
+  background: rgba(13, 110, 253, 0.05);
   border: 1px dashed #0d6efd;
   padding: 5px 12px;
   border-radius: 10px;
@@ -35,10 +35,6 @@ app-document-type-item {
   gap: 6px;
   cursor: pointer;
   transition: 0.2s ease;
-}
-
-.upload-more-btn:hover {
-  background: rgba(13, 110, 253, 0.05);
 }
 
 .upload-icon {
@@ -150,4 +146,189 @@ app-document-type-item {
 .cmmnTblBody table.charges-table thead tr th {
   background-color: #0d6efd;
   color: white;
+}
+
+.progress-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: conic-gradient(#4f8f5f 0deg 349deg, #e6e6e6 349deg 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Inner white circle */
+.progress-circle::before {
+  content: "";
+  width: 34px;
+  height: 34px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+}
+
+/* Percentage text */
+.progress-circle span {
+  position: relative;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4f8f5f;
+}
+
+.progress-wrap {
+  width: 44px;
+  height: 44px;
+  position: relative;
+}
+
+svg {
+  transform: rotate(-90deg);
+}
+
+circle {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: butt;
+}
+
+.bg {
+  stroke: #e9eeea;
+}
+
+.progress {
+  stroke: #4f8f5f;
+  stroke-dasharray: 339;
+  stroke-dashoffset: 10; /* GAP */
+}
+
+.percent-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #2f6f3e;
+}
+
+.confirm-box {
+  border: 1.5px solid #1988fd;
+  background-color: #eef9ff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.confirm-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.confirm-label input {
+  display: none;
+}
+
+.custom-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccd1d6;
+  border-radius: 4px;
+  position: relative;
+  background-color: #fff;
+}
+
+/* Checked State */
+.confirm-label input:checked + .custom-checkbox {
+  background-color: #2f80ed;
+}
+
+.confirm-label input:checked + .custom-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.confirm-text {
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.custom-table-wrapper {
+  background: #f7f9fc;
+  padding: 15px;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+}
+
+.custom-table thead th {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  padding: 8px 12px;
+}
+
+.custom-table tbody tr {
+  background: #ffffff;
+}
+
+.custom-table tbody td {
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+.input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 165px;
+  max-height: 100px;
+}
+
+.input-box input,
+.input-box select {
+  width: 100%;
+  max-width: 165px;
+  min-height: 43px;
+  border-radius: 10px;
+  border: 1px solid #d6dee1;
+  width: 100%;
+  padding: 8px 35px 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e5ec;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  font-size: 14px;
+  opacity: 0.6;
+}
+.img-box {
+  width: 100%;
+  max-width: 165px;
+  max-height: 100px;
+  border-radius: 10px;
+  border: 1px solid #d6dee1;
 }

@@ -8,6 +8,9 @@ import { CommercialdetailsComponent } from '../commercialdetails/commercialdetai
 import { BasicpersonalComponent } from '../basicpersonal/basicpersonal.component';
 import { ProfileComponent } from '../profile/profile.component';
 import { OnboardingComponent } from '../onboarding/onboarding.component';
+import { AgreementComponent } from '../agreement/agreement.component';
+import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
+import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
 
 @Injectable({
   providedIn: 'root',
@@ -67,8 +70,8 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '3-1',
-            title: 'Basic Personal',
-            component: BasicpersonalComponent,
+            title: 'Profile',
+            component: AgreementComponent,
             formGroup: this.createBasicForm(),
           },
         ],
@@ -79,8 +82,14 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '4-1',
-            title: 'Commercial Details',
-            component: CommercialdetailsComponent,
+            title: 'Profile',
+            component: EjariDocComponent,
+            formGroup: this.createCommercialForm(),
+          },
+          {
+            id: '4-2',
+            title: 'Profile',
+            component: EjariDocSignatureComponent,
             formGroup: this.createCommercialForm(),
           },
         ],
@@ -88,14 +97,6 @@ export class NewTenantFromService {
       {
         id: '5',
         title: 'Activated',
-        subSteps: [
-          {
-            id: '5-1',
-            title: 'Summary',
-            component: BasicpersonalComponent,
-            formGroup: this.createBasicForm(),
-          },
-        ],
       },
     ]);
   }

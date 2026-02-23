@@ -16,11 +16,20 @@
       >{{ placeholder }}</span
     >
     <span *ngIf="selectedOption">{{ selectedOption[value] }}</span>
-    <i *ngIf="!isDropdownOpen">
+    <!-- <i *ngIf="!isDropdownOpen">
       <app-arrow-down-icon />
     </i>
     <i *ngIf="isDropdownOpen">
       <app-arrow-up-icon />
+    </i> -->
+    <i *ngIf="iconType === 'default'">
+      <app-arrow-down-icon *ngIf="!isDropdownOpen" />
+      <app-arrow-up-icon *ngIf="isDropdownOpen" />
+    </i>
+
+    <i *ngIf="iconType === 'custom'">
+      <app-calender-icon *ngIf="!isDropdownOpen" />
+      <app-calender-icon *ngIf="isDropdownOpen" />
     </i>
   </div>
   <ul *ngIf="isDropdownOpen" class="customSelectDropdown">

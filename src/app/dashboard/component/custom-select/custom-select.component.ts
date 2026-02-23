@@ -27,6 +27,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AlertService } from '../../../shared/services/alert.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { CalenderIconComponent } from '../../../icons/calender-icon/calender-icon.component';
 
 @Component({
   selector: 'app-custom-select',
@@ -37,6 +38,7 @@ import { TranslateModule } from '@ngx-translate/core';
     ArrowUpIconComponent,
     FormsModule,
     TranslateModule,
+    CalenderIconComponent,
   ],
   templateUrl: './custom-select.component.html',
   styleUrls: ['./custom-select.component.css'],
@@ -63,7 +65,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   @Input() selectedOption: any | null = null;
   @Input() showFilterInput: boolean = false;
   @Input() allowAddOption: boolean = false;
-
+  @Input() iconType: 'default' | 'custom' = 'default';
   @Output() optionSelected = new EventEmitter<string>();
   @Output() onOptionAdded = new EventEmitter<any>();
 

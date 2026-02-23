@@ -27,6 +27,8 @@ import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-do
 import { UploadDocIconComponent } from '../../component/icons/upload-doc-icon/upload-doc-icon.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 
 @Component({
   selector: 'app-announcements',
@@ -51,6 +53,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     ResendIconComponent,
     ArrowDownIconComponent,
     UploadDocIconComponent,
+    CustomSelectComponent,
+    DownloadIconComponent,
   ],
   templateUrl: './announcements.component.html',
   styleUrl: './announcements.component.css',

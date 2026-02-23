@@ -6,6 +6,7 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 import { LeftArrowIconComponent } from '../../../icons/left-arrow-icon/left-arrow-icon.component';
 import { CommercialdetailsComponent } from '../commercialdetails/commercialdetails.component';
+import { SendInviteIconComponent } from '../../../icon/send-invite-icon/send-invite-icon.component';
 
 @Component({
   selector: 'app-form-render',
@@ -15,6 +16,7 @@ import { CommercialdetailsComponent } from '../commercialdetails/commercialdetai
     WhiteCardComponent,
     CircularCrossBtnIconComponent,
     LeftArrowIconComponent,
+    SendInviteIconComponent,
   ],
   templateUrl: './form-render.component.html',
   styleUrl: './form-render.component.css',

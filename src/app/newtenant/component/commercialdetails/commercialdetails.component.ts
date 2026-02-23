@@ -4,6 +4,7 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { CustomSelectComponent } from '../../../dashboard/component/custom-select/custom-select.component';
+import { ToastService } from '../../../core/toast.service';
 
 @Component({
   selector: 'app-commercialdetails',
@@ -21,7 +22,7 @@ import { CustomSelectComponent } from '../../../dashboard/component/custom-selec
 })
 export class CommercialdetailsComponent {
   @Input() form!: FormGroup;
-
+  constructor(private toastService: ToastService) {}
   charges = [
     {
       label: 'Admin Fee',
@@ -116,5 +117,9 @@ export class CommercialdetailsComponent {
     return this.charges
       .filter((c) => c.checked)
       .reduce((sum, c) => sum + c.total, 0);
+  }
+  sendInvite() {
+    // API call success zala ki
+    this.toastService.show('Invite Sent Successfully');
   }
 }

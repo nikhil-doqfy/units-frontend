@@ -15,7 +15,8 @@ export class DocumentTypeItemComponent {
   @Input() size!: string;
   @Input() fileUrl!: string;
   @Output() clicked = new EventEmitter<void>();
-
+  @Input() status: 'success' | 'warning' | 'none' = 'none';
+  @Input() showReplace = false;
   onClick(): void {
     this.clicked.emit();
   }

@@ -471,6 +471,43 @@
   }
 }
 
-.title-width {
-  max-width: 250px;
+/* Grid tuning */
+.form-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Title input smaller */
+.title-width input {
+  width: 273.75px;
+}
+
+/* Priority inline alignment */
+.priority-inline {
+  display: flex;
+  flex-direction: column;
+}
+
+.priority-inline label {
+  margin-bottom: 4px;
+}
+
+/* Radio look & spacing */
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.radio input {
+  margin: 0;
 }

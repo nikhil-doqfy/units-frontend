@@ -217,8 +217,8 @@
 
 /* Completed */
 .step-item.completed .circle {
-  background: #2fa51a;
-  border-color: #2fa51a;
+  /* background: #2fa51a; */
+  /* border-color: #2fa51a; */
   color: #fff;
 }
 
@@ -352,7 +352,145 @@
 .stepper-container {
   display: flex;
   align-items: center;
-  justify-content: center; /* 🔥 MAIN LINE */
   width: 100%;
   margin: 0 auto; /* 🔥 horizontally center */
 }
+
+/* ACTIVE = Process (Orange) */
+.step-item.active .circle {
+  background: #f97316; /* Orange */
+  border-color: #f97316;
+  color: #fff;
+}
+
+/* Completed = Green */
+.step-item.completed .circle {
+  /* background: #2fa51a; Green */
+  /* border-color: #2fa51a; */
+  color: #fff;
+}
+.step-item-container {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 5%;
+}
+
+/* Default Label */
+.label {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #9db3bd; /* Grey default */
+  transition: all 0.3s ease;
+}
+
+/* ===== COMPLETED (Green) ===== */
+.step-item.completed .circle {
+  /* background: #2fa51a; */
+  /* border-color: #2fa51a; */
+  color: #fff;
+}
+
+.step-item.completed .label {
+  color: #2fa51a;
+  font-weight: 600;
+}
+
+/* ===== ACTIVE FIRST STEP (Index 0 Green) ===== */
+.step-item.active.first-step .circle {
+  background: #2fa51a;
+  border-color: #2fa51a;
+  color: #fff;
+}
+
+.step-item.active.first-step .label {
+  color: #2fa51a;
+  font-weight: 600;
+}
+
+/* ===== ACTIVE OTHER STEPS (Orange Process) ===== */
+.step-item.active:not(.first-step) .circle {
+  color: #fff;
+}
+
+.step-item.active:not(.first-step) .label {
+  font-weight: 600;
+}
+
+/* Default circle */
+.circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #9db3bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  background: #fff;
+  color: #607d8b;
+  transition: all 0.3s ease;
+}
+
+/* Default label */
+.label {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #9db3bd;
+  transition: all 0.3s ease;
+}
+
+/* ===== FIRST STEP ALWAYS GREEN ===== */
+.step-item:first-child .circle {
+  background: #2fa51a;
+  border-color: #2fa51a;
+  color: #fff;
+}
+
+.step-item:first-child .label {
+  color: #2fa51a;
+  font-weight: 600;
+}
+
+/* ===== ACTIVE (Process - Orange except first) ===== */
+.step-item.active:not(:first-child) .circle {
+  /* background: #f97316; */
+  /* border-color: #f97316; */
+  background-color: white;
+  color: #f97316;
+}
+
+.step-item.active:not(:first-child) .label {
+  color: #f97316;
+  font-weight: 600;
+}
+
+/* ===== COMPLETED ===== */
+.step-item.completed .circle {
+  /* background: #2fa51a; */
+  /* border-color: #2fa51a; */
+  color: #fff;
+}
+
+.step-item.completed .label {
+  color: #2fa51a;
+  font-weight: 600;
+}
+
+/* Completed line */
+.step-item.completed .line {
+  background: #2fa51a;
+}
+
+/* ::ng-deep app-send-invite-icon {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+::ng-deep app-send-invite-icon * {
+  background: transparent !important;
+  border: none !important;
+} */
