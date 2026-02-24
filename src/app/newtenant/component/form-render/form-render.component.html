@@ -1,7 +1,3 @@
-<div class="success-toast" *ngIf="showInviteMsg">
-  <span class="dot"></span>
-  Invite Sent Successfully
-</div>
 <app-white-card>
   <div class="stepper-container">
     <div class="sub-stepper" *ngIf="currentSubStep">
@@ -13,18 +9,6 @@
       </div>
     </div>
     <div class="step-item-container">
-      <!-- <div
-        class="step-item"
-        *ngFor="let step of steps(); let i = index"
-        [class.active]="i === activeIndex()"
-        [class.completed]="i < activeIndex()"
-      >
-        <div class="circle">{{ i + 1 }}</div>
-
-        <div class="label">{{ step.title }}</div>
-
-        <div class="line" *ngIf="i < steps().length - 1"></div>
-      </div> -->
       <div
         class="step-item"
         *ngFor="let step of steps(); let i = index"
@@ -56,8 +40,47 @@
       >
         <app-left-arrow-icon></app-left-arrow-icon>
       </button>
-      <button class="cmmnTblFltrBtn">Add / Edit Fields</button>
-      <button class="btn btnCommon" (click)="next()">
+      <!-- Refresh button instead of Edit Fields -->
+      <button
+        class="btn-refresh"
+        *ngIf="
+          currentSubStep?.component === ProfileComponent && subIndex() === 0
+        "
+      >
+        <app-refresh-icon></app-refresh-icon>
+      </button>
+
+      <button
+        class="cmmnTblFltrBtn"
+        *ngIf="
+          !(currentSubStep?.component === ProfileComponent && subIndex() === 0)
+        "
+      >
+        Add / Edit Fields
+      </button>
+      <!-- <button
+        class="btn btnCommon"
+        [ngClass]="{
+          'save-btn': getNextBtnLabel() === 'Save & Next',
+
+          'invite-btn': getNextBtnLabel() === 'Send Invite',
+        }"
+        (click)="next()"
+      >
+        {{ getNextBtnLabel() }}
+      </button> -->
+
+      <button
+        [ngClass]="{
+          'profile-save-btn':
+            currentSubStep?.component === ProfileComponent && subIndex() === 0,
+          'save-btn':
+            currentSubStep?.component !== ProfileComponent &&
+            getNextBtnLabel() === 'Save & Next',
+          'invite-btn': getNextBtnLabel() === 'Send Invite',
+        }"
+        (click)="next()"
+      >
         {{ getNextBtnLabel() }}
       </button>
       <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>

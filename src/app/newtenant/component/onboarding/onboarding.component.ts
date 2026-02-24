@@ -1,12 +1,23 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  signal,
+  TemplateRef,
+  WritableSignal,
+} from '@angular/core';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DocumentTypeItemComponent } from '../../../dashboard/component/document-type-item/document-type-item.component';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 import { CustomSelectComponent } from '../../../dashboard/component/custom-select/custom-select.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CalenderIconComponent } from '../../../icons/calender-icon/calender-icon.component';
+import { CommonModule } from '@angular/common';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AddTenantFormComponent } from '../../../dashboard/component/forms/add-tenant-form/add-tenant-form.component';
+import { AditionaldocumentComponent } from '../../../dashboard/component/forms/aditionaldocument/aditionaldocument.component';
 
 @Component({
   selector: 'app-onboarding',
@@ -20,10 +31,55 @@ import { CalenderIconComponent } from '../../../icons/calender-icon/calender-ico
     CustomSelectComponent,
     TranslateModule,
     CalenderIconComponent,
+    CommonModule,
+    FormsModule,
+    AddTenantFormComponent,
+    AditionaldocumentComponent,
   ],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',
 })
 export class OnboardingComponent {
   @Input() form!: FormGroup;
+  private modalService = inject(NgbModal);
+  closeResult: WritableSignal<string> = signal('');
+
+  showDropdown = false;
+  toggleDropdown() {
+    console.log('CLICKED');
+    this.showDropdown = !this.showDropdown;
+    console.log('showDropdown = ', this.showDropdown);
+  }
+  uploadAdditionalDoc() {
+    this.showDropdown = false;
+    console.log('Additional Document clicked');
+    // इथे तुमचं upload logic टाका
+  }
+
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
+    }
+  }
+  openAdditionalDocumentModal(additionalDocumentContent: TemplateRef<any>) {
+    const modalRef = this.modalService.open(additionalDocumentContent, {
+      ariaLabelledBy: 'modal-title',
+      windowClass: 'mdlCommon',
+      centered: true,
+    });
+
+    modalRef.result.then(
+      (result) => {
+        this.closeResult.set(`Closed with: ${result}`);
+      },
+      (reason) => {
+        this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
+      },
+    );
+  }
 }

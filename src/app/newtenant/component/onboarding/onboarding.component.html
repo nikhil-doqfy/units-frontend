@@ -67,16 +67,33 @@
                 </div>
               </div>
 
-              <!-- Upload More Button -->
               <div class="col-auto">
-                <button class="upload-more-btn">
-                  <i class="upload-icon"
-                    ><app-download-icon></app-download-icon
-                  ></i>
-                  Upload More<span>|</span
-                  ><i><app-arrow-down-icon></app-arrow-down-icon></i>
+                <button
+                  type="button"
+                  class="upload-more-btn"
+                  (click)="toggleDropdown()"
+                >
+                  <i class="upload-icon">
+                    <app-download-icon></app-download-icon>
+                  </i>
+                  Upload More
+                  <span>|</span>
+                  <i>
+                    <app-arrow-down-icon></app-arrow-down-icon>
+                  </i>
                 </button>
+
+                <div
+                  class="global-dropdown"
+                  *ngIf="showDropdown"
+                  (click)="
+                    openAdditionalDocumentModal(additionalDocumentContent)
+                  "
+                >
+                  Additional Document
+                </div>
               </div>
+              <!-- Dropdown OUTSIDE parent wrapper -->
 
               <!-- Right Side Score -->
               <div
@@ -487,3 +504,34 @@
     </app-white-card>
   </div>
 </form>
+
+<ng-template #additionalDocumentContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "Additional Document" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-aditionaldocument #additionalDocumentComponent></app-aditionaldocument>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button type="button" class="btn btnCommon">
+      <!-- (click)="onTenantSave(addTenantFormComponent, modal)" -->
+
+      {{ "Send" | translate }}
+    </button>
+  </div>
+</ng-template>

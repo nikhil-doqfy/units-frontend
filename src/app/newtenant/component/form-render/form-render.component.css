@@ -337,15 +337,6 @@
   display: none;
 }
 
-/* Active */
-/* .step-item.active .circle,
-.step-item.completed .circle {
-  background: #2fa51a;
-  border-color: #2fa51a;
-  color: #fff;
-} */
-
-/* Completed line green */
 .step-item.completed .line {
   background: #2fa51a;
 }
@@ -353,20 +344,17 @@
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 0 auto; /* 🔥 horizontally center */
+  margin: 0 auto;
 }
 
-/* ACTIVE = Process (Orange) */
 .step-item.active .circle {
-  background: #f97316; /* Orange */
+  background: #f97316;
   border-color: #f97316;
   color: #fff;
 }
 
 /* Completed = Green */
 .step-item.completed .circle {
-  /* background: #2fa51a; Green */
-  /* border-color: #2fa51a; */
   color: #fff;
 }
 .step-item-container {
@@ -381,14 +369,12 @@
   margin-top: 6px;
   font-size: 14px;
   font-weight: 500;
-  color: #9db3bd; /* Grey default */
+  color: #9db3bd;
   transition: all 0.3s ease;
 }
 
 /* ===== COMPLETED (Green) ===== */
 .step-item.completed .circle {
-  /* background: #2fa51a; */
-  /* border-color: #2fa51a; */
   color: #fff;
 }
 
@@ -456,8 +442,6 @@
 
 /* ===== ACTIVE (Process - Orange except first) ===== */
 .step-item.active:not(:first-child) .circle {
-  /* background: #f97316; */
-  /* border-color: #f97316; */
   background-color: white;
   color: #f97316;
 }
@@ -469,8 +453,6 @@
 
 /* ===== COMPLETED ===== */
 .step-item.completed .circle {
-  /* background: #2fa51a; */
-  /* border-color: #2fa51a; */
   color: #fff;
 }
 
@@ -479,18 +461,63 @@
   font-weight: 600;
 }
 
-/* Completed line */
 .step-item.completed .line {
   background: #2fa51a;
 }
 
-/* ::ng-deep app-send-invite-icon {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+.btn-refresh {
+  all: unset; /* 🔥 removes all default button styles */
 }
 
-::ng-deep app-send-invite-icon * {
-  background: transparent !important;
-  border: none !important;
-} */
+.profile-save-btn {
+  background: #68868f;
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}
+
+/* Default Save & Next button */
+.save-btn {
+  background: var(--ownerGradientBg);
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}
+
+/* Invite button (CommercialDetails) */
+.invite-btn {
+  background: var(--ownerGradientBg);
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}

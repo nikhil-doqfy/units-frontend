@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { CustomSelectComponent } from '../../../dashboard/component/custom-select/custom-select.component';
 import { ToastService } from '../../../core/toast.service';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-commercialdetails',
@@ -22,7 +23,10 @@ import { ToastService } from '../../../core/toast.service';
 })
 export class CommercialdetailsComponent {
   @Input() form!: FormGroup;
-  constructor(private toastService: ToastService) {}
+  constructor(
+    private toastService: ToastService,
+    private alertService: AlertService,
+  ) {}
   charges = [
     {
       label: 'Admin Fee',
@@ -120,6 +124,6 @@ export class CommercialdetailsComponent {
   }
   sendInvite() {
     // API call success zala ki
-    this.toastService.show('Invite Sent Successfully');
+    this.alertService.customSuccess('Invite Sent Successfully');
   }
 }
