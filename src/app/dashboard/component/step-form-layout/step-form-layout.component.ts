@@ -80,7 +80,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
     if (this.engine) {
       this.subs.add(
-        this.engine.currentIndex.subscribe((i) => (this.currentStep = i))
+        this.engine.currentIndex.subscribe((i) => (this.currentStep = i)),
       );
       this.subs.add(this.engine.statuses.subscribe(() => {}));
       this.subs.add(this.engine.loading.subscribe(() => {}));

@@ -466,7 +466,7 @@
 }
 
 .btn-refresh {
-  all: unset; /* 🔥 removes all default button styles */
+  all: unset;
 }
 
 .profile-save-btn {
@@ -486,7 +486,6 @@
   transition: all 0.3s ease 0s;
 }
 
-/* Default Save & Next button */
 .save-btn {
   background: var(--ownerGradientBg);
   font-size: 14px;
@@ -504,7 +503,6 @@
   transition: all 0.3s ease 0s;
 }
 
-/* Invite button (CommercialDetails) */
 .invite-btn {
   background: var(--ownerGradientBg);
   font-size: 14px;
@@ -520,4 +518,40 @@
   justify-content: center;
   gap: 10px;
   transition: all 0.3s ease 0s;
+}
+.send-negotiation-btn {
+  background: var(--ownerGradientBg);
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}
+.send-negotiation-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.negotiation-btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.cheque-btn {
+  background-color: #10b981;
+  color: #ffffff;
 }

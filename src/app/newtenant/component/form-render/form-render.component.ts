@@ -1,4 +1,13 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+  TemplateRef,
+  WritableSignal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { NewTenant } from '../modules/new-tenant';
@@ -10,6 +19,11 @@ import { SendInviteIconComponent } from '../../../icon/send-invite-icon/send-inv
 import { AlertService } from '../../../shared/services/alert.service';
 import { RefreshIconComponent } from '../../../dashboard/component/icons/refresh-icon/refresh-icon.component';
 import { ProfileComponent } from '../profile/profile.component';
+import { OnboardingComponent } from '../onboarding/onboarding.component';
+import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SendNegotiationComponent } from '../../../dashboard/component/forms/send-negotiation/send-negotiation.component';
 
 @Component({
   selector: 'app-form-render',
@@ -22,6 +36,9 @@ import { ProfileComponent } from '../profile/profile.component';
     SendInviteIconComponent,
     RefreshIconComponent,
     ProfileComponent,
+    ArrowDownIconComponent,
+    TranslateModule,
+    SendNegotiationComponent,
   ],
   templateUrl: './form-render.component.html',
   styleUrl: './form-render.component.css',
@@ -29,14 +46,43 @@ import { ProfileComponent } from '../profile/profile.component';
 export class FormRenderComponent {
   @Input() steps: any;
   @Input() activeIndex: any;
-  constructor(private alertService: AlertService) {}
+  private modalService = inject(NgbModal);
+  closeResult: WritableSignal<string> = signal('');
+
+  constructor(
+    private alertService: AlertService,
+    private formService: NewTenantFromService,
+  ) {}
   showInviteMsg = false;
   subIndex = signal(0);
   ProfileComponent = ProfileComponent;
+  OnboardingComponent = OnboardingComponent;
   get currentStep() {
     return this.steps()[this.activeIndex()];
   }
 
+  showWaitingMsg = true;
+  isChequeStep = false;
+  @Output() negotiationClick = new EventEmitter<void>();
+
+  onClick() {
+    this.negotiationClick.emit();
+  }
+  nextStepAction() {
+    if (this.isChequeStep) {
+    } else {
+    }
+  }
+  showNegotiationMsg = false;
+  sendNegotiation() {
+    this.showNegotiationMsg = true;
+
+    setTimeout(() => {
+      this.showNegotiationMsg = false;
+    }, 2000);
+
+    this.goToNextStep();
+  }
   get currentSubStep() {
     return this.currentStep?.subSteps?.[this.subIndex()];
   }
@@ -48,8 +94,6 @@ export class FormRenderComponent {
   // }
 
   getNextBtnLabel() {
-    // For CommercialDetails or Profile's first substep
-
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
       return 'Send Invite';
     }
@@ -93,6 +137,48 @@ export class FormRenderComponent {
       this.activeIndex.set(this.activeIndex() - 1);
       const prevStep = this.steps()[this.activeIndex()];
       this.subIndex.set(prevStep.subSteps.length - 1);
+    }
+  }
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
+    }
+  }
+  openAddTenantModal(addTenantContent: TemplateRef<any>) {
+    const modalRef = this.modalService.open(addTenantContent, {
+      ariaLabelledBy: 'modal-title',
+      windowClass: 'mdlCommon',
+      centered: true,
+    });
+
+    modalRef.result.then(
+      (result) => {
+        this.closeResult.set(`Closed with: ${result}`);
+      },
+      (reason) => {
+        this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
+      },
+    );
+  }
+  // btnTitle$ = this.formService.getBtnTitle();
+  // onMainClick() {
+  //   this.formService.handleMainButtonClick();
+  // }
+
+  btnTitle$ = this.formService.getBtnTitle();
+  showMsg$ = this.formService.getShowMsg();
+  msgText$ = this.formService.getMsgText();
+  showRefresh$ = this.formService.showRefresh$;
+  onMainClick() {
+    if (this.btnTitle$() === 'Save & Next') {
+      this.goToNextStep(); // 👉 NEXT COMPONENT
+    } else {
+      this.formService.handleMainButtonClick();
     }
   }
 }

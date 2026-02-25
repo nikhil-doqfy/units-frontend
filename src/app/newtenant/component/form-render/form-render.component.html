@@ -1,3 +1,5 @@
+<!-- Waiting/Status Overlay -->
+
 <app-white-card>
   <div class="stepper-container">
     <div class="sub-stepper" *ngIf="currentSubStep">
@@ -40,11 +42,12 @@
       >
         <app-left-arrow-icon></app-left-arrow-icon>
       </button>
-      <!-- Refresh button instead of Edit Fields -->
       <button
         class="btn-refresh"
         *ngIf="
-          currentSubStep?.component === ProfileComponent && subIndex() === 0
+          (currentSubStep?.component === ProfileComponent &&
+            subIndex() === 0) ||
+          showRefresh$()
         "
       >
         <app-refresh-icon></app-refresh-icon>
@@ -53,24 +56,17 @@
       <button
         class="cmmnTblFltrBtn"
         *ngIf="
-          !(currentSubStep?.component === ProfileComponent && subIndex() === 0)
+          !(
+            currentSubStep?.component === OnboardingComponent ||
+            currentSubStep?.component === ProfileComponent
+          )
         "
       >
         Add / Edit Fields
       </button>
-      <!-- <button
-        class="btn btnCommon"
-        [ngClass]="{
-          'save-btn': getNextBtnLabel() === 'Save & Next',
-
-          'invite-btn': getNextBtnLabel() === 'Send Invite',
-        }"
-        (click)="next()"
-      >
-        {{ getNextBtnLabel() }}
-      </button> -->
 
       <button
+        *ngIf="currentSubStep?.component !== OnboardingComponent"
         [ngClass]="{
           'profile-save-btn':
             currentSubStep?.component === ProfileComponent && subIndex() === 0,
@@ -83,6 +79,40 @@
       >
         {{ getNextBtnLabel() }}
       </button>
+      <!-- <div
+        *ngIf="currentSubStep?.component === OnboardingComponent"
+        class="send-negotiation-wrap"
+      >
+        <button class="send-negotiation-btn" (click)="onMainClick()">
+          {{ btnTitle$() }}
+          <span
+            class="arrow-down"
+            (click)="openAddTenantModal(inviteTenantContent)"
+            ><app-arrow-down-icon></app-arrow-down-icon
+          ></span>
+        </button>
+      </div>
+      <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
+    </div> -->
+      <div
+        *ngIf="currentSubStep?.component === OnboardingComponent"
+        class="send-negotiation-wrap"
+      >
+        <button class="send-negotiation-btn" (click)="onMainClick()">
+          {{ btnTitle$() }}
+
+          <!-- Dropdown icon ONLY for Send Negotiation -->
+          <span
+            *ngIf="btnTitle$() === 'Send Negotiation'"
+            class="arrow-down"
+            (click)="
+              openAddTenantModal(inviteTenantContent); $event.stopPropagation()
+            "
+          >
+            <app-arrow-down-icon></app-arrow-down-icon>
+          </span>
+        </button>
+      </div>
       <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
     </div>
   </div>
@@ -97,3 +127,32 @@
     ></ng-container>
   </ng-container>
 </div>
+
+<ng-template #inviteTenantContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "INVITE_TENANT" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-send-negotiation></app-send-negotiation>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button type="button" class="btn btnCommon">
+      {{ "SEND_INVITATION" | translate }}
+    </button>
+  </div>
+</ng-template>

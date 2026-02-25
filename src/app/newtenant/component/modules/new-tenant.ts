@@ -13,4 +13,9 @@ export interface SubStepSchema {
   description?: string;
   component: any;
   formGroup: FormGroup;
+  saveButtonDetails?: {
+    title: string;
+    buttonType: 'SIMPLE' | 'SIMPLE+DROPDOWN';
+    onClick?: () => void;
+  };
 }

@@ -18,6 +18,11 @@ import { CommonModule } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddTenantFormComponent } from '../../../dashboard/component/forms/add-tenant-form/add-tenant-form.component';
 import { AditionaldocumentComponent } from '../../../dashboard/component/forms/aditionaldocument/aditionaldocument.component';
+import { SendNegotiationComponent } from '../../../dashboard/component/forms/send-negotiation/send-negotiation.component';
+import { FormRenderComponent } from '../form-render/form-render.component';
+import { NewTenantFromService } from '../service/new-tenant-from.service';
+import { SubStepSchema } from '../modules/new-tenant';
+import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.component';
 
 @Component({
   selector: 'app-onboarding',
@@ -33,27 +38,45 @@ import { AditionaldocumentComponent } from '../../../dashboard/component/forms/a
     CalenderIconComponent,
     CommonModule,
     FormsModule,
-    AddTenantFormComponent,
     AditionaldocumentComponent,
+    WarningIconComponent,
   ],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',
 })
 export class OnboardingComponent {
+  showCheckSection$ = this.formService.getShowCheckSection();
   @Input() form!: FormGroup;
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
-
+  // currentSubStep: number = 0;
   showDropdown = false;
+  ngOnInit() {
+    this.formService.resetFlow();
+  }
   toggleDropdown() {
     console.log('CLICKED');
     this.showDropdown = !this.showDropdown;
     console.log('showDropdown = ', this.showDropdown);
   }
+
   uploadAdditionalDoc() {
     this.showDropdown = false;
     console.log('Additional Document clicked');
     // इथे तुमचं upload logic टाका
+  }
+  showWaitingMsg = false;
+
+  sendNegotiation() {
+    // Show msg + blur overlay
+    this.showWaitingMsg = true;
+
+    // Hide after 2 sec
+    setTimeout(() => {
+      this.showWaitingMsg = false;
+    }, 2000);
+
+    // Call next step
   }
 
   private getDismissReason(reason: any): string {
@@ -81,5 +104,17 @@ export class OnboardingComponent {
         this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
       },
     );
+  }
+  /*------------------------------------------msg -----------------------------*/
+  btnTitle$ = this.formService.getBtnTitle();
+  showMsg$ = this.formService.getShowMsg();
+  msgText$ = this.formService.getMsgText();
+  currentSubStep!: SubStepSchema;
+  constructor(private formService: NewTenantFromService) {}
+
+  // showCheckSection = false;
+
+  onSaveClick() {
+    this.formService.handleMainButtonClick();
   }
 }

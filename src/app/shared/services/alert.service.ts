@@ -157,7 +157,7 @@ export class AlertService {
       timerProgressBar: false,
       html: `
         <div class="invite-toast">
-          <span class="invite-icon"><app-send-invite-icon></app-send-invite-icon></span>
+          <span class="invite-icon"><img src="assets/"></span>
           <span class="invite-text">${msg}</span>
         </div>
       `,

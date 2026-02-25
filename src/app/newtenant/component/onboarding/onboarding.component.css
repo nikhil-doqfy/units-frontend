@@ -3,24 +3,24 @@
 }
 
 /* Document Card Look */
-app-document-type-item {
+/* app-document-type-item {
   display: inline-flex;
   background: #f8fafc;
   border-radius: 10px;
   padding: 8px 12px;
   min-width: 200px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
+} */
 
 /* Replace text */
-.replace-text {
+/* .replace-text {
   display: block;
   font-size: 11px;
   color: #f39c12;
   margin-left: 38px;
   margin-top: -4px;
   cursor: pointer;
-}
+} */
 
 /* Upload more button */
 .upload-more-btn {
@@ -87,7 +87,7 @@ app-document-type-item {
 /* Wrapper */
 .doc-wrap {
   position: relative;
-  background: #f8fafc;
+  /* background: #f8fafc; */
   border-radius: 12px;
   padding: 8px 12px;
   min-width: 200px;
@@ -104,10 +104,11 @@ app-document-type-item {
 /* Status icon common */
 .status-icon {
   position: absolute;
-  right: -6px;
+  right: -14px;
   bottom: -6px;
   width: 18px;
   height: 18px;
+  top: 56px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -132,9 +133,10 @@ app-document-type-item {
   position: absolute;
   right: 10px;
   bottom: -16px;
+  top: 56px;
   font-size: 11px;
-  color: #f39c12;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 /* Responsive */
@@ -443,4 +445,46 @@ circle {
   padding: 10px 14px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 999999;
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(125, 125, 125, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.msg-box {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+/* Top Alert Bar */
+.top-alert {
+  background: #fff3cd;
+  color: #ff6b00;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  margin: auto;
+}
+
+.top-alert .icon {
+  font-size: 18px;
+}
+
+/* Blur Effect */
+.blur {
+  filter: blur(1.5px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.75;
+  transition: all 0.3s ease;
 }
