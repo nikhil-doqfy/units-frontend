@@ -1,5 +1,9 @@
+<div class="top-alert" *ngIf="showMsg$()">
+  <span class="icon"><app-warning-icon></app-warning-icon></span>
+  <span class="text">{{ msgText$() }}</span>
+</div>
 <form [formGroup]="form">
-  <div class="doc-form-wrapper">
+  <div class="doc-form-wrapper mt-3">
     <!-- Left: Document Preview -->
     <app-white-card>
       <div class="doc-preview">

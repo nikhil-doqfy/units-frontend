@@ -555,3 +555,69 @@
   background-color: #10b981;
   color: #ffffff;
 }
+
+.sign-btn {
+  background: var(--ownerGradientBg);
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}
+.submit-for-ejari {
+  background: var(--ownerGradientBg);
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}
+.Approval-Generate-invoice {
+  background: #458453;
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}
+
+.reject-btn {
+  background: #ff6500;
+  font-size: 14px;
+  color: var(--whiteText);
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}

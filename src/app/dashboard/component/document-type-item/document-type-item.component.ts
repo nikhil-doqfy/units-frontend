@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ErrorOutlineIconComponent } from '../../../icons/error-outline-icon/error-outline-icon.component';
 
 @Component({
   selector: 'app-document-type-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ErrorOutlineIconComponent],
   templateUrl: './document-type-item.component.html',
   styleUrl: './document-type-item.component.css',
 })

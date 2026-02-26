@@ -124,9 +124,6 @@ app-document-type-item {
 }
 
 /* Warning */
-.warn {
-  background: #f39c12;
-}
 
 /* Replace text */
 .replace-text {
@@ -455,36 +452,68 @@ circle {
   justify-content: center;
   z-index: 9999;
 }
-
-.msg-box {
-  background: #fff;
-  padding: 20px 30px;
-  border-radius: 12px;
+.rent-cheque-counter {
+  display: flex;
+  gap: 15px;
+  padding-top: 10px;
   text-align: center;
 }
-/* Top Alert Bar */
-.top-alert {
-  background: #fff3cd;
-  color: #ff6b00;
+
+.rent-cheque-counter .title {
+  padding-left: 15px;
+  padding-top: 15px;
+  text-decoration: underline;
+}
+
+.minus-btn {
+  border: 2px solid #b1c2c8; /* red border */
+  color: #b1c2c8; /* red text */
+}
+/* .plus-btn {
+  border: 1px solid #3b4a51;
+  color: #3b4a51;
+} */
+.counter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  min-width: 119px;
+  max-height: 38px;
   border-radius: 8px;
-  padding: 12px 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  width: fit-content;
+  min-height: 50px;
+}
+
+.text-btn {
+  font-size: 14px;
+  border-radius: 50px; /* pill shape */
+  /* padding: 5px 12px; */
+  display: flex;
+  font-style: normal;
+
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* not clickable */
+}
+
+/* + and - buttons */
+.btn-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  /* border: 1px solid #007bff; */
+  /* background-color: #fff; */
+  /* color: #007bff; */
+  cursor: pointer;
   display: flex;
   justify-content: center;
-  gap: 10px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  margin: auto;
+  align-items: center;
+  transition: all 0.2s;
 }
 
-.top-alert .icon {
-  font-size: 18px;
-}
-
-/* Blur Effect */
-.blur {
-  filter: blur(1.5px);
-  pointer-events: none;
-  user-select: none;
-  opacity: 0.75;
-  transition: all 0.3s ease;
+/* Count number inside box */
+.count {
+  text-align: center;
 }

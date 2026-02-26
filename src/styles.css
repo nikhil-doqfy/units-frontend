@@ -2378,113 +2378,12 @@ a .simple {
   align-items: center;
   margin-bottom: 16px;
 }
-/* .invite-toast-popup {
-  background: #ffffff !important;
-
-  padding: 0 10px !important;
-
-  border-radius: 8px !important;
-  width: fit-content;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12) !important;
-  border: 1px solid #dcfce7 !important;
-
-  overflow: hidden !important; 
-}
-
-.invite-toast {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  height: 100%;
-}
-
-.invite-icon {
-  width: 16px;
-  height: 16px;
-  background: #22c55e;
-  color: #ffffff;
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.invite-text {
-  font-size: 13px;
-  font-weight: 500;
-  color: #166534;
-
-  display: flex;
-  align-items: center;
-
-  height: 100%;
-  line-height: 1;
-  white-space: nowrap; 
-}
-
-.swal2-popup {
-  padding: 0 !important;
-  min-height: unset !important;
-}
-
-.swal2-html-container {
-  margin: 0 !important;
-  height: 100%;
-  display: flex !important;
-  align-items: center !important;
-  overflow: hidden !important;
-}
-
-.swal2-container {
-  z-index: 999999 !important;
-} */
-/* Only for invite success popup */
-/* .invite-toast-popup {
-  padding: 8px 14px !important;
-  border-radius: 8px !important;
-  background: #e8f7ec !important;
-  width: auto !important;
-  min-width: 260px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-}
-
-.invite-toast {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.invite-icon {
-  display: flex;
-  align-items: center;
-  color: #22c55e;
-  font-size: 14px;
-}
-
-.invite-text {
-  font-size: 14px;
-  font-weight: 500;
-  color: #166534;
-}
-
- */
-/* Only for invite success popup */
 .invite-toast-popup {
   padding: 4px 12px !important; /* 🔽 height kami */
   border-radius: 6px !important;
   background: #e8f7ec !important;
   width: auto !important;
-  min-width: 240px !important;
+  min-width: 209px !important;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
 }
 
@@ -2537,7 +2436,7 @@ a .simple {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 20px;
 }
 
 .invite-text {
@@ -2545,4 +2444,74 @@ a .simple {
   font-weight: 500;
   color: #166534;
   margin: 0;
+}
+
+/*----------------------------msg alert show in top component ----------------------------*/
+
+.msg-box {
+  background: #ffffff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+/* Top Alert Bar */
+.top-alert {
+  background: #fff3cd;
+  color: #ff6b00;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  margin: auto;
+}
+
+.top-alert .icon {
+  font-size: 18px;
+}
+
+/* Blur Effect */
+.blur {
+  filter: blur(0.5px); /* 🔽 softer blur */
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.75;
+  transition: all 0.3s ease;
+}
+
+.top-alert {
+  background: #fff3cd;
+  color: #ff6b00;
+  border-radius: 8px;
+  padding: 12px 16px;
+
+  display: flex;
+  align-items: center; /* ✅ vertical center */
+  justify-content: center; /* ✅ horizontal center */
+  gap: 10px;
+
+  font-weight: 600;
+  text-align: center; /* ensures text inside spans is centered */
+}
+
+.top-alert .icon {
+  font-size: 18px;
+  display: flex;
+  align-items: center; /* icon vertical alignment */
+}
+
+.top-alert .text {
+  display: flex;
+  align-items: center; /* text vertical alignment */
+}
+
+/* Blur Effect */
+.blur {
+  filter: blur(0.5px); /* 🔽 softer blur */
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.75;
+  transition: all 0.3s ease;
 }

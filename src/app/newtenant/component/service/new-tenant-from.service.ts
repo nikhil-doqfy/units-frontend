@@ -32,7 +32,7 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '1-1',
-            title: 'Basic Personal',
+            title: 'Property details',
             description: 'Fill all the fields to add create your lease',
             component: BasicpersonalComponent,
             formGroup: this.createBasicForm(),
@@ -78,6 +78,11 @@ export class NewTenantFromService {
             title: 'Profile',
             component: AgreementComponent,
             formGroup: this.createBasicForm(),
+            saveButtonDetails: {
+              title: 'Send for Signature',
+              buttonType: 'SIMPLE',
+              onClick: () => this.handleMainButtonClick(),
+            },
           },
         ],
       },
@@ -90,12 +95,22 @@ export class NewTenantFromService {
             title: 'Profile',
             component: EjariDocComponent,
             formGroup: this.createCommercialForm(),
+            saveButtonDetails: {
+              title: 'Send for Signature',
+              buttonType: 'SIMPLE',
+              onClick: () => this.startEjariFlow(),
+            },
           },
           {
             id: '4-2',
             title: 'Profile',
             component: EjariDocSignatureComponent,
             formGroup: this.createCommercialForm(),
+            saveButtonDetails: {
+              title: 'Send for Signature',
+              buttonType: 'SIMPLE',
+              onClick: () => this.ejariDoc(),
+            },
           },
         ],
       },
@@ -145,55 +160,6 @@ export class NewTenantFromService {
     });
   }
 
-  // private showMsg = signal(false);
-  // private msgText = signal('');
-  // private btnTitle = signal('Send Negotiation');
-  // private stepPhase = signal<'NEGOTIATION' | 'CHEQUE'>('NEGOTIATION');
-
-  // getShowMsg() {
-  //   return this.showMsg;
-  // }
-
-  // getMsgText() {
-  //   return this.msgText;
-  // }
-
-  // getBtnTitle() {
-  //   return this.btnTitle;
-  // }
-
-  // /* ================= FLOW LOGIC ================= */
-
-  // handleMainButtonClick() {
-  //   if (this.stepPhase() === 'NEGOTIATION') {
-  //     this.triggerNegotiation();
-  //   } else {
-  //     this.triggerChequeRequest();
-  //   }
-  // }
-
-  // private triggerNegotiation() {
-  //   this.msgText.set('Waiting for Negotiation');
-  //   this.btnTitle.set('Waiting for Negotiation');
-  //   this.showMsg.set(true);
-
-  //   setTimeout(() => {
-  //     this.showMsg.set(false);
-  //     this.btnTitle.set('Cheque Request');
-  //     this.stepPhase.set('CHEQUE');
-  //   }, 3000);
-  // }
-
-  // private triggerChequeRequest() {
-  //   this.msgText.set('Waiting for Cheque');
-  //   this.btnTitle.set('Waiting for Cheque');
-  //   this.showMsg.set(true);
-
-  //   setTimeout(() => {
-  //     this.showMsg.set(false);
-  //   }, 3000);
-  // }
-
   /* ================= FORMS ================= */
 
   private showCheckSection = signal(false);
@@ -204,12 +170,18 @@ export class NewTenantFromService {
   private showMsg = signal(false);
   private msgText = signal('');
   private btnTitle = signal<
-    'Send Negotiation' | 'Cheque Request' | 'Save & Next'
+    | 'Send Negotiation'
+    | 'Cheque Request'
+    | 'Save & Next'
+    | 'Send for Signature'
+    | 'Submit for Ejari'
+    | 'Approval & Generate Invoice'
   >('Send Negotiation');
   private showRefresh = signal(false);
   showRefresh$ = computed(() => this.showRefresh());
   private stepPhase = signal<'NEGOTIATION' | 'CHEQUE' | 'FINAL'>('NEGOTIATION');
-
+  private agreementPhase = signal<'INIT' | 'SIGNING' | 'SIGNED'>('INIT');
+  private ejariPhase = signal<'INIT' | 'SIGNING' | 'SIGNED'>('INIT');
   getShowMsg() {
     return this.showMsg;
   }
@@ -222,11 +194,15 @@ export class NewTenantFromService {
     return this.btnTitle;
   }
 
-  handleMainButtonClick() {
+  handleMainButtonClick(goNext?: () => void) {
     if (this.stepPhase() === 'NEGOTIATION') {
       this.triggerNegotiation();
     } else if (this.stepPhase() === 'CHEQUE') {
       this.triggerChequeRequest();
+    } else if (this.agreementPhase() !== 'SIGNED') {
+      this.triggerAgreementSignature(goNext!);
+    } else {
+      this.triggerEjariSignature(goNext);
     }
   }
 
@@ -253,6 +229,66 @@ export class NewTenantFromService {
       this.showCheckSection.set(true);
       this.stepPhase.set('FINAL');
     }, 3000);
+  }
+  startAgreementFlow() {
+    this.btnTitle.set('Send for Signature');
+    this.agreementPhase.set('INIT');
+    this.showMsg.set(false);
+    this.msgText.set('');
+  }
+
+  triggerAgreementSignature(goNext: () => void) {
+    if (this.agreementPhase() === 'INIT') {
+      // 1️⃣ First click → Waiting + Btn change
+      this.msgText.set('Waiting for Signature');
+      this.showMsg.set(true);
+      this.btnTitle.set('Submit for Ejari');
+      this.agreementPhase.set('SIGNING');
+
+      // 2️⃣ After 3 sec → Signed msg
+      setTimeout(() => {
+        this.msgText.set('Signed Successfully');
+        this.agreementPhase.set('SIGNED');
+
+        setTimeout(() => {
+          this.showMsg.set(false);
+        }, 2000);
+      }, 3000);
+    } else if (this.agreementPhase() === 'SIGNED') {
+      // 3️⃣ Submit for Ejari click → Next step
+      goNext();
+    }
+  }
+
+  triggerEjariSignature(goNext?: () => void) {
+    if (this.ejariPhase() === 'INIT') {
+      // First click
+      this.msgText.set('Waiting for Signature');
+      this.showMsg.set(true);
+      this.btnTitle.set('Approval & Generate Invoice');
+      this.ejariPhase.set('SIGNING');
+
+      setTimeout(() => {
+        this.msgText.set('Signed Successfully');
+        this.ejariPhase.set('SIGNED');
+
+        setTimeout(() => {
+          this.showMsg.set(false);
+        }, 2000);
+      }, 3000);
+    } else if (this.ejariPhase() === 'SIGNED') {
+      goNext?.();
+    }
+  }
+  ejariDoc() {
+    this.btnTitle.set('Send for Signature');
+
+    this.msgText.set('');
+    this.showMsg.set(false);
+    this.ejariPhase.set('INIT');
+  }
+  startEjariFlow() {
+    this.btnTitle.set('Send for Signature');
   }
   resetFlow() {
     this.btnTitle.set('Send Negotiation');

@@ -47,6 +47,8 @@
         *ngIf="
           (currentSubStep?.component === ProfileComponent &&
             subIndex() === 0) ||
+          currentSubStep?.component === EjariComponent ||
+          currentSubStep?.component === EjariDocSignatureComponent ||
           showRefresh$()
         "
       >
@@ -58,7 +60,10 @@
         *ngIf="
           !(
             currentSubStep?.component === OnboardingComponent ||
-            currentSubStep?.component === ProfileComponent
+            currentSubStep?.component === ProfileComponent ||
+            currentSubStep?.component === AgreementComponent ||
+            currentSubStep?.component === EjariComponent ||
+            currentSubStep?.component === EjariDocSignatureComponent
           )
         "
       >
@@ -66,7 +71,22 @@
       </button>
 
       <button
-        *ngIf="currentSubStep?.component !== OnboardingComponent"
+        class="reject-btn"
+        *ngIf="
+          getNextBtnLabel() === 'Approval & Generate Invoice' &&
+          currentSubStep?.component === EjariDocSignatureComponent
+        "
+      >
+        Reject
+      </button>
+      <button
+        *ngIf="
+          currentSubStep?.component !== OnboardingComponent &&
+          !(
+            currentSubStep?.component === EjariComponent &&
+            getNextBtnLabel() === 'Approval & Generate Invoice'
+          )
+        "
         [ngClass]="{
           'profile-save-btn':
             currentSubStep?.component === ProfileComponent && subIndex() === 0,
@@ -74,26 +94,16 @@
             currentSubStep?.component !== ProfileComponent &&
             getNextBtnLabel() === 'Save & Next',
           'invite-btn': getNextBtnLabel() === 'Send Invite',
+          'sign-btn': getNextBtnLabel() === 'Send for Signature',
+          'submit-for-ejari': getNextBtnLabel() === 'Submit for Ejari',
+          'Approval-Generate-invoice ':
+            getNextBtnLabel() === 'Approval & Generate Invoice',
         }"
         (click)="next()"
       >
         {{ getNextBtnLabel() }}
       </button>
-      <!-- <div
-        *ngIf="currentSubStep?.component === OnboardingComponent"
-        class="send-negotiation-wrap"
-      >
-        <button class="send-negotiation-btn" (click)="onMainClick()">
-          {{ btnTitle$() }}
-          <span
-            class="arrow-down"
-            (click)="openAddTenantModal(inviteTenantContent)"
-            ><app-arrow-down-icon></app-arrow-down-icon
-          ></span>
-        </button>
-      </div>
-      <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
-    </div> -->
+
       <div
         *ngIf="currentSubStep?.component === OnboardingComponent"
         class="send-negotiation-wrap"
@@ -108,12 +118,14 @@
             (click)="
               openAddTenantModal(inviteTenantContent); $event.stopPropagation()
             "
-          >
+            >|
             <app-arrow-down-icon></app-arrow-down-icon>
           </span>
         </button>
       </div>
-      <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
+      <i *ngIf="getNextBtnLabel() !== 'Approval & Generate Invoice'">
+        <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
+      </i>
     </div>
   </div>
 </app-white-card>

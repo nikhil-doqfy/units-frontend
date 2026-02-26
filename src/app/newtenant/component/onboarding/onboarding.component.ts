@@ -23,6 +23,7 @@ import { FormRenderComponent } from '../form-render/form-render.component';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { SubStepSchema } from '../modules/new-tenant';
 import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.component';
+import { ErrorOutlineIconComponent } from '../../../icons/error-outline-icon/error-outline-icon.component';
 
 @Component({
   selector: 'app-onboarding',
@@ -40,6 +41,7 @@ import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.c
     FormsModule,
     AditionaldocumentComponent,
     WarningIconComponent,
+    ErrorOutlineIconComponent,
   ],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',
@@ -116,5 +118,17 @@ export class OnboardingComponent {
 
   onSaveClick() {
     this.formService.handleMainButtonClick();
+  }
+
+  chequeCount: number = 0;
+
+  increment() {
+    this.chequeCount++;
+  }
+
+  decrement() {
+    if (this.chequeCount > 0) {
+      this.chequeCount--;
+    }
   }
 }

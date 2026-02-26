@@ -24,6 +24,9 @@ import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-do
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SendNegotiationComponent } from '../../../dashboard/component/forms/send-negotiation/send-negotiation.component';
+import { AgreementComponent } from '../agreement/agreement.component';
+import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
+import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
 
 @Component({
   selector: 'app-form-render',
@@ -48,7 +51,8 @@ export class FormRenderComponent {
   @Input() activeIndex: any;
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
-
+  btnTitle = signal<string>('Save & Next');
+  agreementPhase = signal<string>('');
   constructor(
     private alertService: AlertService,
     private formService: NewTenantFromService,
@@ -57,6 +61,9 @@ export class FormRenderComponent {
   subIndex = signal(0);
   ProfileComponent = ProfileComponent;
   OnboardingComponent = OnboardingComponent;
+  AgreementComponent = AgreementComponent;
+  EjariComponent = EjariDocComponent;
+  EjariDocSignatureComponent = EjariDocSignatureComponent;
   get currentStep() {
     return this.steps()[this.activeIndex()];
   }
@@ -94,6 +101,16 @@ export class FormRenderComponent {
   // }
 
   getNextBtnLabel() {
+    if (this.currentSubStep?.component === AgreementComponent) {
+      return this.btnTitle$(); // 👈 service मधून dynamic value
+    }
+    if (this.currentSubStep?.component === EjariDocComponent) {
+      return 'Send for Signature';
+    }
+
+    if (this.currentSubStep?.component === EjariDocSignatureComponent) {
+      return this.btnTitle$();
+    }
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
       return 'Send Invite';
     }
@@ -109,6 +126,18 @@ export class FormRenderComponent {
   }
 
   next() {
+    if (this.currentSubStep?.component === AgreementComponent) {
+      this.formService.handleMainButtonClick(() => {
+        this.goToNextStep(); // 👈 Submit for Ejari वर क्लिक केल्यावर पुढे जाईल
+      });
+      return;
+    }
+    if (this.currentSubStep?.component === EjariDocSignatureComponent) {
+      this.formService.triggerEjariSignature(() => {
+        this.goToNextStep();
+      });
+      return;
+    }
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
       this.alertService.customSuccess('Invite Sent Successfully');
 
