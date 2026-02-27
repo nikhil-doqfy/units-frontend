@@ -1,0 +1,57 @@
+<!-- <div class="search-box">
+  <button class="close-btn" (click)="closeSearch()">✖</button>
+  <i class="">
+    <app-search-icon></app-search-icon>
+  </i>
+  <input
+    #searchInput
+    type="text"
+    class="search-input"
+    placeholder="Search contacts"
+  />
+</div> -->
+<div class="search-wrapper">
+  <div class="search-box">
+    <button class="close-btn" (click)="closeSearch()">✖</button>
+
+    <i>
+      <app-search-icon></app-search-icon>
+    </i>
+
+    <input
+      #searchInput
+      type="text"
+      class="search-input"
+      placeholder="Search contacts"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+    />
+  </div>
+
+  <!-- Dropdown -->
+  <div class="search-dropdown" *ngIf="isFocused">
+    <div class="filter-tabs">
+      <button class="active">All</button>
+      <button>Tenants</button>
+      <button>Team</button>
+    </div>
+
+    <p class="recent-title">Recent search's (6)</p>
+
+    <div class="contact-item" *ngFor="let contact of contacts">
+      <div class="left">
+        <div class="avatar"></div>
+        <div>
+          <h6>{{ contact.name }}</h6>
+          <span class="badge">{{ contact.role }}</span>
+        </div>
+      </div>
+
+      <div class="contact-info">
+        <span>{{ contact.phone }}</span>
+        <span>{{ contact.email }}</span>
+        <span class="whatsapp">{{ contact.phone }}</span>
+      </div>
+    </div>
+  </div>
+</div>

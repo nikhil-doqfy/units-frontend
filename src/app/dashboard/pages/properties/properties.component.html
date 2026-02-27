@@ -583,11 +583,9 @@
 <!-- Dynamic content below tabs -->
 <div class="mt-3">
   <ng-container [ngSwitch]="activeLeadTab">
-    <app-white-card>
-      <app-all-properties *ngSwitchCase="'properties'"></app-all-properties>
-      <app-units *ngSwitchCase="'units'"></app-units>
+    <app-all-properties *ngSwitchCase="'properties'"></app-all-properties>
+    <app-units *ngSwitchCase="'units'"></app-units>
 
-      <app-tenancy-ledger *ngSwitchCase="'tenancy-ledger'"></app-tenancy-ledger>
-    </app-white-card>
+    <app-tenancy-ledger *ngSwitchCase="'tenancy-ledger'"></app-tenancy-ledger>
   </ng-container>
 </div>

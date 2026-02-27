@@ -17,98 +17,99 @@
       </div>
 
       <div class="col-auto">
-        <div class="hdrOptns">
-          <ng-container *ngIf="currentRole === 'property-manager'">
-            <div class="dropdown-wrapper" (clickOutside)="closeDropdown()">
-              <button class="add-btn" (click)="toggleDropdown()">
-                <app-signature-icon></app-signature-icon>
-              </button>
+        @if (!isContactSearchOpen) {
+          <div class="hdrOptns">
+            <ng-container *ngIf="currentRole === 'property-manager'">
+              <div class="dropdown-wrapper" (clickOutside)="closeDropdown()">
+                <button class="add-btn" (click)="toggleDropdown()">
+                  <app-signature-icon></app-signature-icon>
+                </button>
 
-              <div class="add-dropdown" *ngIf="isOpen">
-                <div class="add-card draw-card">
-                  <!-- Top Row -->
-                  <div class="draw-header">
-                    <span class="title">Draw</span>
-                    <input type="radio" name="signType" class="draw-check" />
+                <div class="add-dropdown" *ngIf="isOpen">
+                  <div class="add-card draw-card">
+                    <!-- Top Row -->
+                    <div class="draw-header">
+                      <span class="title">Draw</span>
+                      <input type="radio" name="signType" class="draw-check" />
+                    </div>
+
+                    <!-- Draw Box -->
+                    <div class="draw-box">
+                      <img
+                        src="assets/Signature/Signature.svg"
+                        alt="sign"
+                        class="draw-preview"
+                      />
+                    </div>
+
+                    <!-- Bottom Icons -->
+                    <div class="draw-actions">
+                      <app-edit-icon></app-edit-icon>
+                      <app-delete-icon></app-delete-icon>
+                    </div>
                   </div>
 
-                  <!-- Draw Box -->
-                  <div class="draw-box">
-                    <img
-                      src="assets/Signature/Signature.svg"
-                      alt="sign"
-                      class="draw-preview"
-                    />
+                  <div class="add-card font">
+                    <div class="draw-header">
+                      <span class="title">Font</span>
+                      <input type="radio" name="signType" class="draw-check" />
+                    </div>
+
+                    <!-- Draw Box -->
+                    <div class="draw-box">
+                      <img
+                        src="assets/Signature/Signature1.svg"
+                        alt="sign"
+                        class="draw-preview"
+                      />
+                    </div>
+
+                    <!-- Bottom Icons -->
+                    <div class="draw-actions">
+                      <app-edit-icon></app-edit-icon>
+                      <app-delete-icon></app-delete-icon>
+                    </div>
                   </div>
 
-                  <!-- Bottom Icons -->
-                  <div class="draw-actions">
-                    <app-edit-icon></app-edit-icon>
-                    <app-delete-icon></app-delete-icon>
-                  </div>
-                </div>
+                  <div class="add-card upload">
+                    <div class="draw-header">
+                      <span class="title">Upload</span>
+                      <input type="radio" name="signType" class="draw-check" />
+                    </div>
 
-                <div class="add-card font">
-                  <div class="draw-header">
-                    <span class="title">Font</span>
-                    <input type="radio" name="signType" class="draw-check" />
-                  </div>
+                    <!-- Draw Box -->
+                    <div class="draw-box" (click)="fileInput.click()">
+                      <i class="fa fa-cloud-upload upload-icon"
+                        ><app-upload-doc-icon></app-upload-doc-icon
+                      ></i>
+                      <div class="upload-text">click to select file</div>
 
-                  <!-- Draw Box -->
-                  <div class="draw-box">
-                    <img
-                      src="assets/Signature/Signature1.svg"
-                      alt="sign"
-                      class="draw-preview"
-                    />
-                  </div>
+                      <input
+                        type="file"
+                        #fileInput
+                        hidden
+                        (change)="onFileSelected($event)"
+                      />
 
-                  <!-- Bottom Icons -->
-                  <div class="draw-actions">
-                    <app-edit-icon></app-edit-icon>
-                    <app-delete-icon></app-delete-icon>
-                  </div>
-                </div>
-
-                <div class="add-card upload">
-                  <div class="draw-header">
-                    <span class="title">Upload</span>
-                    <input type="radio" name="signType" class="draw-check" />
-                  </div>
-
-                  <!-- Draw Box -->
-                  <div class="draw-box" (click)="fileInput.click()">
-                    <i class="fa fa-cloud-upload upload-icon"
-                      ><app-upload-doc-icon></app-upload-doc-icon
-                    ></i>
-                    <div class="upload-text">click to select file</div>
-
-                    <input
-                      type="file"
-                      #fileInput
-                      hidden
-                      (change)="onFileSelected($event)"
-                    />
-
-                    <!-- <app-upload-document
+                      <!-- <app-upload-document
                       [isMultipleFiles]="false"
                       [fileTypes]="['jpg', 'jpeg', 'png', 'pdf']"
                       [maxSize]="20"
                       (uploadProgress)="onUpload($event)"
                     >
                     </app-upload-document> -->
-                  </div>
+                    </div>
 
-                  <!-- Bottom Icons -->
-                  <div class="draw-actions">
-                    <app-edit-icon></app-edit-icon>
-                    <app-delete-icon></app-delete-icon>
+                    <!-- Bottom Icons -->
+                    <div class="draw-actions">
+                      <app-edit-icon></app-edit-icon>
+                      <app-delete-icon></app-delete-icon>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </ng-container>
-          <!-- <ng-container
+            </ng-container>
+            <!-- <ng-container
             *ngIf="
               currentRole === 'owner' || currentRole === 'property-manager'
             "
@@ -123,38 +124,38 @@
               {{ "ADD_PROPERTY" | translate }}
             </button>
           </ng-container> -->
-          <ng-container
-            *ngIf="
-              currentRole === 'owner' || currentRole === 'property-manager'
-            "
-          >
-            <div class="position-relative d-inline-block">
-              <!-- Button -->
-              <button
-                type="button"
-                class="btn btnCommon"
-                (click)="togglePropertyDropdown()"
-                [ngClass]="isAddPropertyActive ? 'btnActive' : 'btnGrey'"
-              >
-                <i><app-plus-icon></app-plus-icon></i>
-                {{ "Add" | translate }}
-                <i><app-arrow-down-icon></app-arrow-down-icon></i>
-              </button>
+            <ng-container
+              *ngIf="
+                currentRole === 'owner' || currentRole === 'property-manager'
+              "
+            >
+              <div class="position-relative d-inline-block">
+                <!-- Button -->
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="togglePropertyDropdown()"
+                  [ngClass]="isAddPropertyActive ? 'btnActive' : 'btnGrey'"
+                >
+                  <i><app-plus-icon></app-plus-icon></i>
+                  {{ "Add" | translate }}
+                  <i><app-arrow-down-icon></app-arrow-down-icon></i>
+                </button>
 
-              <!-- Dropdown -->
-              <div class="custom-dropdown" *ngIf="showDropdown">
-                <div class="dropdown-item" (click)="openProperty()">
-                  <i><app-new-propertry-icons></app-new-propertry-icons></i>
-                  New Property
-                </div>
-                <div class="dropdown-item" (click)="openUnit()">
-                  <i><app-new-units-icon></app-new-units-icon></i> New Unit
+                <!-- Dropdown -->
+                <div class="custom-dropdown" *ngIf="showDropdown">
+                  <div class="dropdown-item" (click)="openProperty()">
+                    <i><app-new-propertry-icons></app-new-propertry-icons></i>
+                    New Property
+                  </div>
+                  <div class="dropdown-item" (click)="openUnit()">
+                    <i><app-new-units-icon></app-new-units-icon></i> New Unit
+                  </div>
                 </div>
               </div>
-            </div>
-          </ng-container>
+            </ng-container>
 
-          <!-- <ng-container *ngIf="currentRole === 'property-manager'">
+            <!-- <ng-container *ngIf="currentRole === 'property-manager'">
             <button
               type="button"
               class="btn btnCommon btnMinWidth d-none d-xl-flex"
@@ -169,403 +170,422 @@
             <i><app-appearance-icon></app-appearance-icon></i>
           </button> -->
 
-          <ng-container *ngIf="currentRole === 'property-manager'">
+            <ng-container *ngIf="currentRole === 'property-manager'">
+              <button
+                type="button"
+                class="btn btnCommon btnMinWidth d-none d-xl-flex"
+                (click)="goToNewTenant()"
+                [ngClass]="isAddLeaseActive ? 'btnActive' : 'btnWhite'"
+              >
+                <i><app-plus-icon></app-plus-icon></i>
+                {{ "New Tenant" | translate }}
+              </button>
+            </ng-container>
+            <button type="button" class="btn btnCommon btnWhite">
+              <i><app-appearance-icon></app-appearance-icon></i>
+            </button>
+
             <button
               type="button"
-              class="btn btnCommon btnMinWidth d-none d-xl-flex"
-              (click)="goToNewTenant()"
-              [ngClass]="isAddLeaseActive ? 'btnActive' : 'btnWhite'"
+              class="btn btnCommon btnWhite"
+              (click)="openSearch()"
             >
-              <i><app-plus-icon></app-plus-icon></i>
-              {{ "New Tenant" | translate }}
+              <app-search-contact-icon></app-search-contact-icon>
             </button>
-          </ng-container>
-          <button type="button" class="btn btnCommon btnWhite">
-            <i><app-appearance-icon></app-appearance-icon></i>
-          </button>
-          <!---------------------------------------notification work---------------------------------------------------------------------------------------->
-          <!-- <button type="button" class="btn btnCommon btnWhite">
+            <!---------------------------------------notification work---------------------------------------------------------------------------------------->
+            <!-- <button type="button" class="btn btnCommon btnWhite">
             <i><app-notification-icon></app-notification-icon></i>
           </button> -->
 
-          <div ngbDropdown class="hdrDrpdwn hdrNotiDrpdwn">
-            <!-- <div class="btn btnCommon btnWhite d-flex"> -->
-            <button
-              type="button"
-              class="hdrDrpdwnBtns btn btnCommon d-none btnWhite d-md-block"
-              id="dropdownBasic1"
-              ngbDropdownToggle
-            >
-              <i><app-notification-icon /><span></span></i>
-            </button>
-            <!-- </div> -->
-            <button
-              type="button"
-              class="hdrDrpdwnBtns btn btnCommon btnWhite d-md-none"
-              (click)="openNotificaion(content)"
-            >
-              <i><app-notification-icon /><span></span></i>
-            </button>
-            <div
-              class="hdrDrpdwnMenu hdrNotiDrpdwnMenu"
-              ngbDropdownMenu
-              aria-labelledby="dropdownBasic1"
-            >
-              <div class="hdrNotiDrpdwnInfo">
-                <div class="hdrNotiDrpdwnHdr">
-                  <h5>Notifications</h5>
-                  <button
-                    type="button"
-                    (click)="clearAllClearedNotifications()"
-                  >
-                    Clear all
-                  </button>
-                </div>
-                <div class="hdrNotiDrpdwnBody">
-                  <ul
-                    ngbNav
-                    #nav="ngbNav"
-                    [(activeId)]="active"
-                    class="commonTabs"
-                  >
-                    <li [ngbNavItem]="1">
-                      <button ngbNavLink>
-                        All <span>{{ allCount }}</span>
-                      </button>
-                      <ng-template ngbNavContent>
-                        <div
-                          class="hdrNotiDrpdwnCol"
-                          [class.unread]="!notification.is_read"
-                          *ngFor="let notification of unDeletedNotifications"
-                        >
+            <div ngbDropdown class="hdrDrpdwn hdrNotiDrpdwn">
+              <!-- <div class="btn btnCommon btnWhite d-flex"> -->
+              <button
+                type="button"
+                class="hdrDrpdwnBtns btn btnCommon d-none btnWhite d-md-block"
+                id="dropdownBasic1"
+                ngbDropdownToggle
+              >
+                <i><app-notification-icon /><span></span></i>
+              </button>
+              <!-- </div> -->
+              <button
+                type="button"
+                class="hdrDrpdwnBtns btn btnCommon btnWhite d-md-none"
+                (click)="openNotificaion(content)"
+              >
+                <i><app-notification-icon /><span></span></i>
+              </button>
+              <div
+                class="hdrDrpdwnMenu hdrNotiDrpdwnMenu"
+                ngbDropdownMenu
+                aria-labelledby="dropdownBasic1"
+              >
+                <div class="hdrNotiDrpdwnInfo">
+                  <div class="hdrNotiDrpdwnHdr">
+                    <h5>Notifications</h5>
+                    <button
+                      type="button"
+                      (click)="clearAllClearedNotifications()"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                  <div class="hdrNotiDrpdwnBody">
+                    <ul
+                      ngbNav
+                      #nav="ngbNav"
+                      [(activeId)]="active"
+                      class="commonTabs"
+                    >
+                      <li [ngbNavItem]="1">
+                        <button ngbNavLink>
+                          All <span>{{ allCount }}</span>
+                        </button>
+                        <ng-template ngbNavContent>
                           <div
-                            class="hdrNotiDrpdwnTtl"
-                            (click)="markNotiFicationAsRead(notification.id)"
+                            class="hdrNotiDrpdwnCol"
+                            [class.unread]="!notification.is_read"
+                            *ngFor="let notification of unDeletedNotifications"
                           >
-                            <h5>
-                              {{ notification.notification_type }} <span></span>
-                            </h5>
-                            <p>
-                              {{ notification.message }}
-                            </p>
                             <div
-                              class="hdrNotiDrpdwnTime"
-                              *ngIf="notification.timestamp"
+                              class="hdrNotiDrpdwnTtl"
+                              (click)="markNotiFicationAsRead(notification.id)"
                             >
-                              <span>{{
-                                notification.timestamp | date: "d MMM yyyy"
-                              }}</span>
-                              <span>|</span>
-                              <span>{{
-                                notification.timestamp | date: "hh.mma"
-                              }}</span>
+                              <h5>
+                                {{ notification.notification_type }}
+                                <span></span>
+                              </h5>
+                              <p>
+                                {{ notification.message }}
+                              </p>
+                              <div
+                                class="hdrNotiDrpdwnTime"
+                                *ngIf="notification.timestamp"
+                              >
+                                <span>{{
+                                  notification.timestamp | date: "d MMM yyyy"
+                                }}</span>
+                                <span>|</span>
+                                <span>{{
+                                  notification.timestamp | date: "hh.mma"
+                                }}</span>
+                              </div>
+                            </div>
+                            <div class="hdrNotiDrpdwnDlt">
+                              <button
+                                type="button"
+                                (click)="deleteNotification(notification.id)"
+                              >
+                                <!-- <app-delete-icon /> -->
+                              </button>
                             </div>
                           </div>
-                          <div class="hdrNotiDrpdwnDlt">
-                            <button
-                              type="button"
-                              (click)="deleteNotification(notification.id)"
-                            >
-                              <!-- <app-delete-icon /> -->
-                            </button>
-                          </div>
-                        </div>
-                      </ng-template>
-                    </li>
-                    <li [ngbNavItem]="2">
-                      <button ngbNavLink>
-                        Read <span>{{ readCount }}</span>
-                      </button>
-                      <ng-template ngbNavContent>
-                        <div
-                          class="hdrNotiDrpdwnCol"
-                          *ngFor="let notification of readNotifications"
-                        >
-                          <div class="hdrNotiDrpdwnTtl">
-                            <h5>
-                              {{ notification.notification_type }} <span></span>
-                            </h5>
-                            <p>
-                              {{ notification.message }}
-                            </p>
-                            <div
-                              class="hdrNotiDrpdwnTime"
-                              *ngIf="notification.timestamp"
-                            >
-                              <span>{{
-                                notification.timestamp | date: "d MMM yyyy"
-                              }}</span>
-                              <span>|</span>
-                              <span>{{
-                                notification.timestamp | date: "hh.mma"
-                              }}</span>
+                        </ng-template>
+                      </li>
+                      <li [ngbNavItem]="2">
+                        <button ngbNavLink>
+                          Read <span>{{ readCount }}</span>
+                        </button>
+                        <ng-template ngbNavContent>
+                          <div
+                            class="hdrNotiDrpdwnCol"
+                            *ngFor="let notification of readNotifications"
+                          >
+                            <div class="hdrNotiDrpdwnTtl">
+                              <h5>
+                                {{ notification.notification_type }}
+                                <span></span>
+                              </h5>
+                              <p>
+                                {{ notification.message }}
+                              </p>
+                              <div
+                                class="hdrNotiDrpdwnTime"
+                                *ngIf="notification.timestamp"
+                              >
+                                <span>{{
+                                  notification.timestamp | date: "d MMM yyyy"
+                                }}</span>
+                                <span>|</span>
+                                <span>{{
+                                  notification.timestamp | date: "hh.mma"
+                                }}</span>
+                              </div>
+                            </div>
+                            <div class="hdrNotiDrpdwnDlt">
+                              <button
+                                type="button"
+                                (click)="deleteNotification(notification.id)"
+                              >
+                                <!-- <app-delete-icon /> -->
+                              </button>
                             </div>
                           </div>
-                          <div class="hdrNotiDrpdwnDlt">
-                            <button
-                              type="button"
-                              (click)="deleteNotification(notification.id)"
-                            >
-                              <!-- <app-delete-icon /> -->
-                            </button>
-                          </div>
-                        </div>
-                      </ng-template>
-                    </li>
-                    <li [ngbNavItem]="3">
-                      <button ngbNavLink>
-                        Unread <span>{{ unreadCount }}</span>
-                      </button>
-                      <ng-template ngbNavContent>
-                        <div
-                          class="hdrNotiDrpdwnCol unread"
-                          *ngFor="let notification of unreadNotifications"
-                        >
-                          <div class="hdrNotiDrpdwnTtl">
-                            <h5>
-                              {{ notification.notification_type }} <span></span>
-                            </h5>
-                            <p>
-                              {{ notification.message }}
-                            </p>
-                            <div
-                              class="hdrNotiDrpdwnTime"
-                              *ngIf="notification.timestamp"
-                            >
-                              <span>{{
-                                notification.timestamp | date: "d MMM yyyy"
-                              }}</span>
-                              <span>|</span>
-                              <span>{{
-                                notification.timestamp | date: "hh.mma"
-                              }}</span>
+                        </ng-template>
+                      </li>
+                      <li [ngbNavItem]="3">
+                        <button ngbNavLink>
+                          Unread <span>{{ unreadCount }}</span>
+                        </button>
+                        <ng-template ngbNavContent>
+                          <div
+                            class="hdrNotiDrpdwnCol unread"
+                            *ngFor="let notification of unreadNotifications"
+                          >
+                            <div class="hdrNotiDrpdwnTtl">
+                              <h5>
+                                {{ notification.notification_type }}
+                                <span></span>
+                              </h5>
+                              <p>
+                                {{ notification.message }}
+                              </p>
+                              <div
+                                class="hdrNotiDrpdwnTime"
+                                *ngIf="notification.timestamp"
+                              >
+                                <span>{{
+                                  notification.timestamp | date: "d MMM yyyy"
+                                }}</span>
+                                <span>|</span>
+                                <span>{{
+                                  notification.timestamp | date: "hh.mma"
+                                }}</span>
+                              </div>
+                            </div>
+                            <div class="hdrNotiDrpdwnDlt">
+                              <button
+                                type="button"
+                                (click)="deleteNotification(notification.id)"
+                              >
+                                <!-- <app-delete-icon /> -->
+                              </button>
                             </div>
                           </div>
-                          <div class="hdrNotiDrpdwnDlt">
-                            <button
-                              type="button"
-                              (click)="deleteNotification(notification.id)"
-                            >
-                              <!-- <app-delete-icon /> -->
-                            </button>
-                          </div>
-                        </div>
-                      </ng-template>
-                    </li>
-                    <li [ngbNavItem]="4">
-                      <button ngbNavLink>Cleared</button>
-                      <ng-template ngbNavContent>
-                        <div
-                          class="hdrNotiEmptyCol"
-                          *ngIf="deletedNotifications.length === 0"
-                        >
-                          <div class="hdrNotiEmptyInfo">
-                            <div class="hdrNotiEmptyIcon">
-                              <!-- <img
+                        </ng-template>
+                      </li>
+                      <li [ngbNavItem]="4">
+                        <button ngbNavLink>Cleared</button>
+                        <ng-template ngbNavContent>
+                          <div
+                            class="hdrNotiEmptyCol"
+                            *ngIf="deletedNotifications.length === 0"
+                          >
+                            <div class="hdrNotiEmptyInfo">
+                              <div class="hdrNotiEmptyIcon">
+                                <!-- <img
                                 src="../../../assets/notificationBell.gif"
                                 alt="Notification Bell"
                               /> -->
-                              <!-- <app-notification-icon></app-notification-icon> -->
+                                <!-- <app-notification-icon></app-notification-icon> -->
+                              </div>
+                              <h4>No cleared Invitations</h4>
                             </div>
-                            <h4>No cleared Invitations</h4>
+                            <div class="hdrNotiEmptyNote">
+                              <i>
+                                <!-- <app-info-icon /> -->
+                              </i>
+                              <p>
+                                Cleared invitations will be retained for 30 days
+                                from the date of rejection.
+                              </p>
+                            </div>
                           </div>
-                          <div class="hdrNotiEmptyNote">
-                            <i>
-                              <!-- <app-info-icon /> -->
-                            </i>
-                            <p>
-                              Cleared invitations will be retained for 30 days
-                              from the date of rejection.
-                            </p>
-                          </div>
-                        </div>
 
-                        <div
-                          class="hdrNotiDrpdwnCol"
-                          *ngFor="let notification of deletedNotifications"
-                        >
-                          <div class="hdrNotiDrpdwnTtl">
-                            <h5>
-                              {{ notification.notification_type }} <span></span>
-                            </h5>
-                            <p>{{ notification.message }}</p>
-                            <div
-                              class="hdrNotiDrpdwnTime"
-                              *ngIf="notification.timestamp"
-                            >
-                              <span>{{
-                                notification.timestamp | date: "d MMM yyyy"
-                              }}</span>
-                              <span>|</span>
-                              <span>{{
-                                notification.timestamp | date: "hh.mma"
-                              }}</span>
+                          <div
+                            class="hdrNotiDrpdwnCol"
+                            *ngFor="let notification of deletedNotifications"
+                          >
+                            <div class="hdrNotiDrpdwnTtl">
+                              <h5>
+                                {{ notification.notification_type }}
+                                <span></span>
+                              </h5>
+                              <p>{{ notification.message }}</p>
+                              <div
+                                class="hdrNotiDrpdwnTime"
+                                *ngIf="notification.timestamp"
+                              >
+                                <span>{{
+                                  notification.timestamp | date: "d MMM yyyy"
+                                }}</span>
+                                <span>|</span>
+                                <span>{{
+                                  notification.timestamp | date: "hh.mma"
+                                }}</span>
+                              </div>
+                            </div>
+                            <div class="hdrNotiDrpdwnDlt">
+                              <button
+                                type="button"
+                                (click)="
+                                  clearSingleNotifications(notification.id)
+                                "
+                              >
+                                <!-- <app-delete-icon /> -->
+                              </button>
                             </div>
                           </div>
-                          <div class="hdrNotiDrpdwnDlt">
-                            <button
-                              type="button"
-                              (click)="
-                                clearSingleNotifications(notification.id)
-                              "
-                            >
-                              <!-- <app-delete-icon /> -->
-                            </button>
-                          </div>
-                        </div>
-                      </ng-template>
-                    </li>
-                  </ul>
-                  <div [ngbNavOutlet]="nav" class="hdrNotiDrpdwnList"></div>
+                        </ng-template>
+                      </li>
+                    </ul>
+                    <div [ngbNavOutlet]="nav" class="hdrNotiDrpdwnList"></div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!------------------------------------------------------notification End here-------------------------------------------------------------->
-          <ng-container *ngIf="currentRole === 'property-manager'">
+            <!------------------------------------------------------notification End here-------------------------------------------------------------->
+            <ng-container *ngIf="currentRole === 'property-manager'">
+              <div ngbDropdown class="hdrDrpdwn hdrLanguageDrpdwn">
+                <button
+                  type="button"
+                  class="hdrDrpdwnBtn btn btnCommon btnWhite d-flex w-200px justify-content-between"
+                  id="userLanguageDropdown"
+                  ngbDropdownToggle
+                >
+                  <em class="arrow">
+                    <span class="down"><app-arrow-down-icon /></span>
+                    <span class="up"><app-arrow-up-icon /></span>
+                  </em>
+                  <span class="m-2" (click)="openModal()">AED</span>
+
+                  <app-transaction *ngIf="isModalOpen" (close)="closeModal()">
+                  </app-transaction>
+                </button>
+              </div>
+            </ng-container>
             <div ngbDropdown class="hdrDrpdwn hdrLanguageDrpdwn">
               <button
                 type="button"
-                class="hdrDrpdwnBtn btn btnCommon btnWhite d-flex w-200px justify-content-between"
+                class="hdrDrpdwnBtn"
                 id="userLanguageDropdown"
                 ngbDropdownToggle
               >
-                <em class="arrow">
+                <i>
+                  <img
+                    [src]="flagIcon"
+                    width="24"
+                    height="24"
+                    [alt]="currentLang === 'ar' ? 'Arabic' : 'English'"
+                  />
+                </i>
+                <em>
                   <span class="down"><app-arrow-down-icon /></span>
                   <span class="up"><app-arrow-up-icon /></span>
                 </em>
-                <span class="m-2" (click)="openModal()">AED</span>
-
-                <app-transaction *ngIf="isModalOpen" (close)="closeModal()">
-                </app-transaction>
               </button>
-            </div>
-          </ng-container>
-          <div ngbDropdown class="hdrDrpdwn hdrLanguageDrpdwn">
-            <button
-              type="button"
-              class="hdrDrpdwnBtn"
-              id="userLanguageDropdown"
-              ngbDropdownToggle
-            >
-              <i>
-                <img
-                  [src]="flagIcon"
-                  width="24"
-                  height="24"
-                  [alt]="currentLang === 'ar' ? 'Arabic' : 'English'"
-                />
-              </i>
-              <em>
-                <span class="down"><app-arrow-down-icon /></span>
-                <span class="up"><app-arrow-up-icon /></span>
-              </em>
-            </button>
-            <div
-              class="hdrDrpdwnMenu hdrLanguageDrpdwnMenu"
-              ngbDropdownMenu
-              aria-labelledby="userProfileDropdown"
-            >
-              <div class="hdrUserDrpdwnLinks">
-                <button ngbDropdownItem (click)="setLanguage('en')">
-                  <i
-                    ><img
-                      src="assets/language/united-kingdom.png"
-                      alt="English"
-                  /></i>
-                  English
-                </button>
-                <div class="dropdown-divider"></div>
-                <button ngbDropdownItem (click)="setLanguage('ar')">
-                  <i
-                    ><img
-                      src="assets/language/united-arab-emirates.png"
-                      alt="Arabic"
-                  /></i>
-                  العربية
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div ngbDropdown class="hdrDrpdwn hdrUserDrpdwn">
-            <button
-              type="button"
-              class="hdrDrpdwnBtn"
-              id="userProfileDropdown"
-              ngbDropdownToggle
-              [ngClass]="{ active: isProfileActive }"
-            >
-              <i
-                ><img
-                  [src]="profileImageUrl"
-                  [alt]="
-                    userProfile?.first_name + ' ' + userProfile?.last_name
-                  "
-              /></i>
-              <span class="list">
-                {{ userProfile?.first_name + " " + userProfile?.last_name }}
-              </span>
-              <em>
-                <span class="down">
-                  <app-arrow-down-icon />
-                </span>
-                <span class="up">
-                  <app-arrow-up-icon />
-                </span>
-              </em>
-            </button>
-            <div
-              class="hdrDrpdwnMenu hdrUserDrpdwnMenu"
-              ngbDropdownMenu
-              aria-labelledby="userProfileDropdown"
-            >
-              <div class="hdrUserDrpdwnTop">
-                <div class="hdrUserDrpdwnTopInfo">
-                  <p>
-                    {{ userProfile?.first_name + " " + userProfile?.last_name }}
-                  </p>
-                  <span>User ID: {{ userProfile?.email }}</span>
+              <div
+                class="hdrDrpdwnMenu hdrLanguageDrpdwnMenu"
+                ngbDropdownMenu
+                aria-labelledby="userProfileDropdown"
+              >
+                <div class="hdrUserDrpdwnLinks">
+                  <button ngbDropdownItem (click)="setLanguage('en')">
+                    <i
+                      ><img
+                        src="assets/language/united-kingdom.png"
+                        alt="English"
+                    /></i>
+                    English
+                  </button>
+                  <div class="dropdown-divider"></div>
+                  <button ngbDropdownItem (click)="setLanguage('ar')">
+                    <i
+                      ><img
+                        src="assets/language/united-arab-emirates.png"
+                        alt="Arabic"
+                    /></i>
+                    العربية
+                  </button>
                 </div>
               </div>
-              <div class="hdrUserDrpdwnLinks">
-                <button ngbDropdownItem (click)="goToMyProfile()">
-                  <i><app-profile-icon /></i
-                  >{{ "PAGE_TITLE.MY_PROFILE" | translate }}
-                </button>
-                <ng-container *ngIf="currentRole === 'property-manager'">
-                  <button ngbDropdownItem (click)="goToTermsConditions()">
-                    <i><app-termscondition-icon></app-termscondition-icon></i
-                    >Terms & Conditions
-                  </button>
-                  <button ngbDropdownItem (click)="goToCharges()">
-                    <i><app-charges-icon></app-charges-icon></i>Charges
-                  </button>
-                  <button ngbDropdownItem (click)="goToAuditLog()">
-                    <i><app-auditlog-icon></app-auditlog-icon></i>Audit Log
-                  </button>
-                </ng-container>
-                <button ngbDropdownItem (click)="goToDocumentation()">
-                  <i><app-document-icon /></i>{{ "DOCUMENTATION" | translate }}
-                </button>
-                <div class="dropdown-divider"></div>
-                <button
-                  ngbDropdownItem
-                  (click)="openLogoutModal(logoutContent)"
-                >
-                  <i><app-logout-icon></app-logout-icon></i
-                  >{{ "LOGOUT" | translate }}
-                </button>
-              </div>
             </div>
+
+            <ng-container *ngTemplateOutlet="profileTemplate"></ng-container>
           </div>
-        </div>
+        } @else if (isContactSearchOpen) {
+          <div class="hdrOptns">
+            <app-search-contact (close)="closeSearch()" />
+            <ng-container *ngTemplateOutlet="profileTemplate"></ng-container>
+          </div>
+        }
       </div>
     </div>
   </div>
   <app-dash-breadcrumb [breadcrumbItems]="breadcrumbData"></app-dash-breadcrumb>
 </header>
+
+<!-----------------profile ------------------------------------------------------------------->
+
+<ng-template #profileTemplate>
+  <div class="hdrProfileWrapper">
+    <div ngbDropdown class="hdrDrpdwn hdrUserDrpdwn">
+      <button
+        type="button"
+        class="hdrDrpdwnBtn"
+        id="userProfileDropdown"
+        ngbDropdownToggle
+        [ngClass]="{ active: isProfileActive }"
+      >
+        <i
+          ><img
+            [src]="profileImageUrl"
+            [alt]="userProfile?.first_name + ' ' + userProfile?.last_name"
+        /></i>
+        <span class="list">
+          {{ userProfile?.first_name + " " + userProfile?.last_name }}
+        </span>
+        <em>
+          <span class="down">
+            <app-arrow-down-icon />
+          </span>
+          <span class="up">
+            <app-arrow-up-icon />
+          </span>
+        </em>
+      </button>
+      <div
+        class="hdrDrpdwnMenu hdrUserDrpdwnMenu"
+        ngbDropdownMenu
+        aria-labelledby="userProfileDropdown"
+      >
+        <div class="hdrUserDrpdwnTop">
+          <div class="hdrUserDrpdwnTopInfo">
+            <p>
+              {{ userProfile?.first_name + " " + userProfile?.last_name }}
+            </p>
+            <span>User ID: {{ userProfile?.email }}</span>
+          </div>
+        </div>
+        <div class="hdrUserDrpdwnLinks">
+          <button ngbDropdownItem (click)="goToMyProfile()">
+            <i><app-profile-icon /></i>{{ "PAGE_TITLE.MY_PROFILE" | translate }}
+          </button>
+          <ng-container *ngIf="currentRole === 'property-manager'">
+            <button ngbDropdownItem (click)="goToTermsConditions()">
+              <i><app-termscondition-icon></app-termscondition-icon></i>Terms &
+              Conditions
+            </button>
+            <button ngbDropdownItem (click)="goToCharges()">
+              <i><app-charges-icon></app-charges-icon></i>Charges
+            </button>
+            <button ngbDropdownItem (click)="goToAuditLog()">
+              <i><app-auditlog-icon></app-auditlog-icon></i>Audit Log
+            </button>
+          </ng-container>
+          <button ngbDropdownItem (click)="goToDocumentation()">
+            <i><app-document-icon /></i>{{ "DOCUMENTATION" | translate }}
+          </button>
+          <div class="dropdown-divider"></div>
+          <button ngbDropdownItem (click)="openLogoutModal(logoutContent)">
+            <i><app-logout-icon></app-logout-icon></i>{{ "LOGOUT" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
 <!-------------------------------------------------------notification work---------------------------------------------------------------------------------->
 <ng-template #content let-offcanvas>
   <div class="offcanvas-header">

@@ -53,6 +53,8 @@ import { TransactionComponent } from '../transaction/transaction.component';
 import { NewPropertryIconsComponent } from '../../icons/new-propertry-icons/new-propertry-icons.component';
 import { NewUnitsComponent } from '../../dashboard/pages/new-units/new-units.component';
 import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon.component';
+import { SearchContactIconComponent } from '../../icon/search-contact-icon/search-contact-icon.component';
+import { SearchContactComponent } from '../search-contact/search-contact.component';
 
 @Component({
   selector: 'app-header',
@@ -84,6 +86,8 @@ import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon
     NewPropertryIconsComponent,
     NewUnitsComponent,
     NewUnitsIconComponent,
+    SearchContactIconComponent,
+    SearchContactComponent,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -458,5 +462,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   goToAddUnit() {
     this.router.navigate(['/dashboard/new-units']); // route tumchya project nusar change kara
+  }
+  isContactSearchOpen = false;
+
+  openSearch() {
+    this.isContactSearchOpen = true;
+  }
+
+  closeSearch() {
+    this.isContactSearchOpen = false;
   }
 }

@@ -52,6 +52,8 @@ import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
+import { PlatfromBadgeComponent } from '../../component/platfrom-badge/platfrom-badge.component';
 
 @Component({
   selector: 'app-tenants',
@@ -78,6 +80,8 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     TranslateModule,
     NoDataComponent,
     MaskPhonePipe,
+    EditIconComponent,
+    PlatfromBadgeComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',

@@ -212,20 +212,21 @@
         </table>
       </div>
     </div>
-  </div>
-  <div class="cmmnTblFtr">
-    <app-table-select
-      [componentName]="componentName"
-      [rowsPerPage]="rowsPerPage"
-      [rowsPerPageOptions]="rowsPerPageOptions"
-      (rowsPerPageChange)="onPageSizeChange($event)"
-    />
-    <app-table-pagination
-      [componentName]="componentName"
-      [currentPage]="currentPage"
-      [totalRecords]="totalRecords"
-      [rowsPerPage]="rowsPerPage"
-      (pageChange)="onPageChange($event)"
-    />
+
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
   </div>
 </ng-container>

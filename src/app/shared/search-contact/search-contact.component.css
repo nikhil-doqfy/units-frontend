@@ -1,0 +1,110 @@
+.search-box {
+  display: flex;
+  align-items: center;
+  border: 2px solid #3b82f6;
+  border-radius: 10px;
+  width: 651px;
+  background: #fff;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 6px;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 750px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  z-index: 999;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.filter-tabs button {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+.filter-tabs .active {
+  border: 1px solid #4f7cff;
+  color: #4f7cff;
+  background: #eef3ff;
+}
+
+.recent-title {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  background: #ddd;
+  border-radius: 50%;
+}
+
+.badge {
+  font-size: 11px;
+  background: #e6f0ff;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.contact-info {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+}
+
+.whatsapp {
+  color: green;
+}

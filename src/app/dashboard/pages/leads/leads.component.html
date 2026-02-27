@@ -92,14 +92,12 @@
 <!-- Dynamic content below tabs -->
 <div class="mt-3">
   <ng-container [ngSwitch]="activeLeadTab">
-    <app-white-card>
-      <app-all-leads *ngSwitchCase="'all'"></app-all-leads>
-      <app-email-leads *ngSwitchCase="'email'"></app-email-leads>
+    <app-all-leads *ngSwitchCase="'all'"></app-all-leads>
+    <app-email-leads *ngSwitchCase="'email'"></app-email-leads>
 
-      <app-whatsapp-leads *ngSwitchCase="'whatsapp'"></app-whatsapp-leads>
+    <app-whatsapp-leads *ngSwitchCase="'whatsapp'"></app-whatsapp-leads>
 
-      <app-call-leads *ngSwitchCase="'call'"></app-call-leads>
-    </app-white-card>
+    <app-call-leads *ngSwitchCase="'call'"></app-call-leads>
   </ng-container>
 </div>
 <!---Add lead modal-->

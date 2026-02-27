@@ -33,6 +33,7 @@ import { NewTenantComponent } from './pages/new-tenant/new-tenant.component';
 import { UnitsComponent } from './pages/units/units.component';
 import { NewUnitsComponent } from './pages/new-units/new-units.component';
 import { BasicpersonalComponent } from '../newtenant/component/basicpersonal/basicpersonal.component';
+import { SearchContactComponent } from '../shared/search-contact/search-contact.component';
 export const routes: Routes = [
   {
     path: '',
@@ -60,6 +61,11 @@ export const routes: Routes = [
         path: 'leads',
         component: LeadsComponent,
         data: { titleKey: 'PAGE_TITLE.LEADS' },
+      },
+      {
+        path: 'search-tenant',
+        component: SearchContactComponent,
+        data: { titlekey: 'PAGE_TITLE.PROPERTIES' },
       },
       {
         path: 'add-property',
