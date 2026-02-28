@@ -54,6 +54,7 @@ import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/fil
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
 import { PlatfromBadgeComponent } from '../../component/platfrom-badge/platfrom-badge.component';
+import { BadgeComponent } from '../../component/badge/badge.component';
 
 @Component({
   selector: 'app-tenants',
@@ -82,6 +83,7 @@ import { PlatfromBadgeComponent } from '../../component/platfrom-badge/platfrom-
     MaskPhonePipe,
     EditIconComponent,
     PlatfromBadgeComponent,
+    BadgeComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',

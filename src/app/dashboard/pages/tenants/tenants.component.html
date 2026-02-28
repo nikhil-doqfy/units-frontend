@@ -521,6 +521,173 @@
                     logo="assets/platfrom/platfrom-1.png"
                   ></app-platfrom-badge>
                 </td>
+
+                <td style="display: flex; align-items: center; gap: 8px">
+                  <app-badge title="Invitation Sent" status="green"></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
+              </tr>
+              <tr>
+                <td>02</td>
+                <td>LP9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-2.png"
+                    title="Richard"
+                  ></app-table-img-item>
+                </td>
+                <td>1Mar 25 -2 Apr 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-2.png"
+                    title="Sliechi Tower"
+                  ></app-table-img-item>
+                </td>
+                <td>Harmony(B)</td>
+                <td>Harmony(c) 302</td>
+                <td>+91-70*******76</td>
+                <td>richard&#64;***kmail.com</td>
+                <td>1,145.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'bayut' }"
+                    logo="assets/platfrom/platfrom-2.png"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td style="display: flex; align-items: center; gap: 8px">
+                  <app-badge
+                    title="Waiting for physical Documents"
+                    status="orange"
+                  ></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
+              </tr>
+              <tr>
+                <td>03</td>
+                <td>VP9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-3.png"
+                    title="Thomas"
+                  ></app-table-img-item>
+                </td>
+                <td>3Apr 25 -2 Apr 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-2.png"
+                    title="Jainhailia"
+                  ></app-table-img-item>
+                </td>
+                <td>Sunrise(D)</td>
+                <td>Sunrise(D) 101</td>
+                <td>+91-70*******12</td>
+                <td>thomas&#64;***mail.com</td>
+                <td>1,350.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'direct' }"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td style="display: flex; align-items: center; gap: 8px">
+                  <app-badge
+                    title="Waiting for Ejari"
+                    status="orange"
+                  ></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
+              </tr>
+              <tr>
+                <td>04</td>
+                <td>VC9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-4.png"
+                    title="Thomas"
+                  ></app-table-img-item>
+                </td>
+                <td>3Apr 25 -2 Apr 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-2.png"
+                    title="Jainhailia"
+                  ></app-table-img-item>
+                </td>
+                <td>Sunrise(D)</td>
+                <td>Sunrise(D) 101</td>
+                <td>+91-70*******12</td>
+                <td>thomas&#64;***mail.com</td>
+                <td>1,350.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'referral' }"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td style="display: flex; align-items: center; gap: 8px">
+                  <app-badge
+                    title="Waiting for Approval"
+                    status="orange"
+                  ></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
+              </tr>
+              <tr>
+                <td>05</td>
+                <td>VC9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-4.png"
+                    title="Thomas"
+                  ></app-table-img-item>
+                </td>
+                <td>3Apr 25 -2 Apr 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-2.png"
+                    title="Jainhailia"
+                  ></app-table-img-item>
+                </td>
+                <td>Sunrise(D)</td>
+                <td>Sunrise(D) 101</td>
+                <td>+91-70*******12</td>
+                <td>thomas&#64;***mail.com</td>
+                <td>1,350.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'bayut' }"
+                    logo="assets/platfrom/platfrom-2.png"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td style="display: flex; align-items: center; gap: 8px">
+                  <app-badge
+                    title="Waiting for Signature"
+                    status="orange"
+                  ></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
               </tr>
             </tbody>
           </table>

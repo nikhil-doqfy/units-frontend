@@ -1,56 +1,65 @@
-<!-- <div class="search-box">
-  <button class="close-btn" (click)="closeSearch()">✖</button>
-  <i class="">
-    <app-search-icon></app-search-icon>
-  </i>
-  <input
-    #searchInput
-    type="text"
-    class="search-input"
-    placeholder="Search contacts"
-  />
-</div> -->
 <div class="search-wrapper">
   <div class="search-box">
-    <button class="close-btn" (click)="closeSearch()">✖</button>
+    <div class="inner-search">
+      <button class="close-btn" (click)="closeSearch()">
+        <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
+      </button>
 
-    <i>
-      <app-search-icon></app-search-icon>
-    </i>
+      <i>
+        <app-search-icon></app-search-icon>
+      </i>
 
-    <input
-      #searchInput
-      type="text"
-      class="search-input"
-      placeholder="Search contacts"
-      (focus)="onFocus()"
-      (blur)="onBlur()"
-    />
+      <input
+        #searchInput
+        type="text"
+        class="search-input"
+        placeholder="Search contacts"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+      />
+    </div>
   </div>
 
-  <!-- Dropdown -->
   <div class="search-dropdown" *ngIf="isFocused">
     <div class="filter-tabs">
       <button class="active">All</button>
-      <button>Tenants</button>
-      <button>Team</button>
+      <button class="btnWhite btnCommon">Tenants</button>
+      <button class="btnWhite btnCommon">Team</button>
     </div>
 
     <p class="recent-title">Recent search's (6)</p>
 
     <div class="contact-item" *ngFor="let contact of contacts">
       <div class="left">
-        <div class="avatar"></div>
+        <div class="avatar"><img [src]="contact.img" /></div>
         <div>
           <h6>{{ contact.name }}</h6>
-          <span class="badge">{{ contact.role }}</span>
+          <span
+            class="badge"
+            [ngClass]="{
+              tenant: contact.role === 'Tenant',
+              team: contact.role === 'Team',
+              landlord: contact.role === 'Landlord',
+            }"
+            >{{ contact.role }}</span
+          >
         </div>
       </div>
 
       <div class="contact-info">
-        <span>{{ contact.phone }}</span>
-        <span>{{ contact.email }}</span>
-        <span class="whatsapp">{{ contact.phone }}</span>
+        <span class="info-item">
+          <app-phone-icon></app-phone-icon>
+
+          {{ contact.phone }}
+        </span>
+        <span class="info-item">
+          <app-search-mail-icon></app-search-mail-icon>
+          {{ contact.email }}
+        </span>
+        <span class="info-item whatsapp">
+          <app-search-whatsapp-icon></app-search-whatsapp-icon>
+          {{ contact.phone }}
+        </span>
       </div>
     </div>
   </div>

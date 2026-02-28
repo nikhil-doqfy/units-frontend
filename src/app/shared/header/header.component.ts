@@ -9,6 +9,8 @@ import {
   OnDestroy,
   OnInit,
   Input,
+  WritableSignal,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -113,7 +115,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('searchContainer') searchContainer!: ElementRef;
   private offcanvasService = inject(NgbOffcanvas);
   private modalService = inject(NgbModal);
-  closeResult = '';
   currentbreadcrumb: { label: string; link?: string }[] = [];
   constructor(
     private renderer: Renderer2,
@@ -302,11 +303,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     modalRef.result.then(
       (result) => {
-        this.closeResult = `Closed with: ${result}`;
+        this.closeResult.set(`Closed with: ${result}`);
         this.logout();
       },
       (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
       },
     );
   }
@@ -329,16 +330,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getDismissReason(reason: any): string {
-    switch (reason) {
-      case ModalDismissReasons.ESC:
-        return 'by pressing ESC';
-      case ModalDismissReasons.BACKDROP_CLICK:
-        return 'by clicking on a backdrop';
-      default:
-        return `with: ${reason}`;
-    }
-  }
+  // private getDismissReason(reason: any): string {
+  //   switch (reason) {
+  //     case ModalDismissReasons.ESC:
+  //       return 'by pressing ESC';
+  //     case ModalDismissReasons.BACKDROP_CLICK:
+  //       return 'by clicking on a backdrop';
+  //     default:
+  //       return `with: ${reason}`;
+  //   }
+  // }
 
   //----------------------------------notification----------------------------------------------------
   unreadCount: number = 0;
@@ -434,14 +435,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   isModalOpen = false;
 
-  openModal() {
-    this.isModalOpen = true;
-  }
-
-  closeModal() {
-    this.isModalOpen = false;
-  }
-
   // New Property dropdown functions
 
   showDropdown = false;
@@ -471,5 +464,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   closeSearch() {
     this.isContactSearchOpen = false;
+  }
+
+  /*--------------------------notification model------------------------------------------------*/
+  closeResult: WritableSignal<string> = signal('');
+
+  openNotificationModal(addUserContent: TemplateRef<any>) {
+    this.modalService
+      .open(addUserContent, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon right-side-modal',
+        centered: true,
+      })
+      .result.then(
+        (result) => {
+          this.closeResult.set(`Closed with: ${result}`);
+        },
+        (reason) => {
+          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
+        },
+      );
+  }
+
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
+    }
   }
 }
