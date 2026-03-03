@@ -28,12 +28,12 @@
       >
         <app-edit-icon />
       </button>
-      <div class="cmmnTblViewComboBtns">
+      <div class="column">
         <!-- *ngIf="hasProjectedContent; else noActionButtons" -->
         <button
           *ngIf="showBack"
           type="button"
-          class="btn btnCommon btnWhite"
+          class="btn btnWhite btnCommon"
           (click)="onBackClick()"
         >
           <i><app-back-icon /></i>{{ "BACK" | translate }}
@@ -68,7 +68,7 @@
       <ng-template #noActionButtons>
         <button
           type="button"
-          class="btn btnCommon btnWhite"
+          class="btnWhite btnCommon"
           (click)="onBackClick()"
         >
           <i><app-back-icon /></i> {{ "BACK" | translate }}

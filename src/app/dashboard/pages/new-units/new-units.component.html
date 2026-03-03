@@ -8,318 +8,199 @@
   <!-- Step Basic Details Content -->
   <ng-container>
     <app-step-pane
-      [title]="'OWNER_DETAILS' | translate"
+      [title]="'Basic Details' | translate"
       [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
     >
       <form class="row g-3" [formGroup]="basicDetailsForm">
-        <div class="col-md-6">
+        <div class="col-md-3">
+          <label class="form-label">{{ "Property Name" | translate }}</label>
+          <app-custom-select
+            [options]="PMC_List"
+            key="key"
+            value="value"
+            formControlName="pmc"
+          ></app-custom-select>
+          @if (isInvalid(commercialsForm, "rent").status) {
+            <small class="errorMsg">
+              {{ isInvalid(commercialsForm, "rent").msg }}
+            </small>
+          }
+        </div>
+        <div class="col-md-3">
           <label class="form-label">{{
-            "Property Owner Name" | translate
+            "Property Block/ Tower" | translate
           }}</label>
           <app-custom-select
-            [options]="propertyList"
+            [options]="PMC_List"
             key="key"
             value="value"
-            [showFilterInput]="true"
-            [allowAddOption]="true"
-            formControlName="property"
-            (optionSelected)="onPropertySelect($event)"
+            formControlName="pmc"
           ></app-custom-select>
-          @if (isInvalid(basicDetailsForm, "property").status) {
+          @if (isInvalid(commercialsForm, "securityDeposit").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "property").msg }}
+              {{ isInvalid(commercialsForm, "securityDeposit").msg }}
             </small>
           }
         </div>
-        <div class="col-md-6">
-          <label class="form-label">
-            {{ "Email" | translate }}
-          </label>
+        <div class="col-md-3">
+          <label class="form-label">{{ "Property Unit" | translate }}</label>
           <input
             type="text"
             class="form-control"
             [placeholder]="'ENTER_HERE' | translate"
-            formControlName="propertyUnitName"
           />
-          @if (isInvalid(basicDetailsForm, "propertyUnitName").status) {
+          @if (isInvalid(commercialsForm, "bookingAmount").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "propertyUnitName").msg }}
+              {{ isInvalid(commercialsForm, "bookingAmount").msg }}
             </small>
           }
         </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "Contact Number" | translate }}</label>
+        <div class="col-md-3">
+          <label class="form-label">{{ "Property Type" | translate }}</label>
           <app-custom-select
-            [options]="propertyType"
+            [options]="PMC_List"
             key="key"
             value="value"
-            formControlName="propertyType"
+            formControlName="pmc"
           ></app-custom-select>
-          @if (isInvalid(basicDetailsForm, "propertyType").status) {
+          @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "propertyType").msg }}
+              {{ isInvalid(commercialsForm, "maintenanceCharges").msg }}
             </small>
           }
         </div>
-        <div class="col-md-6">
-          <label class="form-label"
-            >{{ "Emirates ID" | translate }}
-            <small>{{ "SQ-FT" | translate }}</small></label
-          >
-          <input
-            type="number"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="landArea"
-          />
-          @if (isInvalid(basicDetailsForm, "landArea").status) {
+        <div class="col-md-3">
+          <label class="form-label">{{ "Land Area" | translate }}</label>
+          <app-custom-select
+            [options]="PMC_List"
+            key="key"
+            value="value"
+            unitText="Sq-ft"
+          ></app-custom-select>
+          @if (isInvalid(commercialsForm, "cycle").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "landArea").msg }}
+              {{ isInvalid(commercialsForm, "cycle").msg }}
             </small>
           }
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
           <label class="form-label">{{
-            "LAND_DM_NO(AFFECTION PLAN)" | translate
+            "Land DM No(Affection  Plan)" | translate
           }}</label>
           <input
-            type="text"
+            type="number"
             class="form-control"
-            [placeholder]="'ENTER_LAND_DM_NO' | translate"
-            formControlName="landDMNo"
+            [placeholder]="'ENTER_HERE' | translate"
           />
-          @if (isInvalid(basicDetailsForm, "landDMNo").status) {
+          @if (isInvalid(commercialsForm, "noticePeriod").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "landDMNo").msg }}
+              {{ isInvalid(commercialsForm, "noticePeriod").msg }}
             </small>
           }
         </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "APARTMENT_NO" | translate }}</label>
-          <input
-            type="text"
-            class="form-control"
-            [placeholder]="'ENTER_APARTMENT_NUMBER' | translate"
-            formControlName="apartmentNo"
-          />
-          @if (isInvalid(basicDetailsForm, "apartmentNo").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "apartmentNo").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "COUNTRY" | translate }}</label>
+        <div class="col-md-3">
+          <label class="form-label">{{ "No of Bedrooms" | translate }}</label>
           <app-custom-select
-            [options]="country"
+            [options]="PMC_List"
             key="key"
             value="value"
-            formControlName="country"
-            (optionSelected)="onCountrySelect($event)"
           ></app-custom-select>
-          @if (isInvalid(basicDetailsForm, "country").status) {
+          @if (isInvalid(commercialsForm, "commission").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "country").msg }}
+              {{ isInvalid(commercialsForm, "commission").msg }}
             </small>
           }
         </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "STATE" | translate }}</label>
+        <div class="col-md-3">
+          <label class="form-label">{{ "Area of Property" | translate }}</label>
           <app-custom-select
-            [options]="state"
+            [options]="PMC_List"
             key="key"
             value="value"
-            formControlName="state"
-            (optionSelected)="onStateSelect($event)"
+            unitText="Sq-ft"
           ></app-custom-select>
-          @if (isInvalid(basicDetailsForm, "state").status) {
+          @if (isInvalid(commercialsForm, "commission").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "state").msg }}
+              {{ isInvalid(commercialsForm, "commission").msg }}
             </small>
           }
         </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "CITY" | translate }}</label>
+        <div class="col-md-3">
+          <label class="form-label">{{ " Floor No" | translate }}</label>
           <app-custom-select
-            [options]="city"
+            [options]="PMC_List"
             key="key"
             value="value"
-            formControlName="city"
           ></app-custom-select>
-          @if (isInvalid(basicDetailsForm, "city").status) {
+          @if (isInvalid(commercialsForm, "commission").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "city").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "LOCALITY" | translate }}</label>
-          <input
-            type="text"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="locality"
-          />
-          @if (isInvalid(basicDetailsForm, "locality").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "locality").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "ADDRESS_LINE_1" | translate }}</label>
-          <input
-            type="text"
-            class="form-control"
-            [placeholder]="'ENTER_ADDRESS_HERE' | translate"
-            formControlName="addressLine1"
-          />
-          @if (isInvalid(basicDetailsForm, "addressLine1").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "addressLine1").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "ADDRESS_LINE_2" | translate }}</label>
-          <input
-            type="text"
-            class="form-control"
-            [placeholder]="'ENTER_ADDRESS_HERE' | translate"
-            formControlName="addressLine2"
-          />
-          @if (isInvalid(basicDetailsForm, "addressLine2").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "addressLine2").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "POSTAL_CODE" | translate }}</label>
-          <input
-            type="number"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="postalCode"
-          />
-          @if (isInvalid(basicDetailsForm, "postalCode").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "postalCode").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "NO_OF_BEDROOMS" | translate }}</label>
-          <input
-            type="number"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="NoOfBedrooms"
-          />
-          @if (isInvalid(basicDetailsForm, "NoOfBedrooms").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "NoOfBedrooms").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label"
-            >{{ "AREA_OF_PROPERTY" | translate }}
-            <small>{{ "SQ-FT" | translate }}</small></label
-          >
-          <input
-            type="number"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="areaOfProperty"
-          />
-          @if (isInvalid(basicDetailsForm, "areaOfProperty").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "areaOfProperty").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "NO_OF_FLOORS" | translate }}</label>
-          <input
-            type="number"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="NoOfFloors"
-          />
-          @if (isInvalid(basicDetailsForm, "NoOfFloors").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "NoOfFloors").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">{{ "NO_OF_PARKING" | translate }}</label>
-          <input
-            type="number"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="NoOfParking"
-          />
-          @if (isInvalid(basicDetailsForm, "NoOfParking").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "NoOfParking").msg }}
+              {{ isInvalid(commercialsForm, "commission").msg }}
             </small>
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{ "NO_OF_BALCONY" | translate }}</label>
-          <input
-            type="number"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="NoOfBalcony"
-          />
-          @if (isInvalid(basicDetailsForm, "NoOfBalcony").status) {
-            <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "NoOfBalcony").msg }}
-            </small>
-          }
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">{{ "PLOT_NO" | translate }}</label>
+          <label class="form-label">{{ "Parking No" | translate }}</label>
           <input
             type="text"
             class="form-control"
             [placeholder]="'ENTER_HERE' | translate"
-            formControlName="plotNo"
           />
-          @if (isInvalid(basicDetailsForm, "plotNo").status) {
+          @if (isInvalid(commercialsForm, "commission").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "plotNo").msg }}
+              {{ isInvalid(commercialsForm, "commission").msg }}
             </small>
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{ "MAKANI_NO" | translate }}</label>
-          <input
-            type="text"
-            class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="makaniNo"
-          />
-          @if (isInvalid(basicDetailsForm, "makaniNo").status) {
+          <label class="form-label">{{ "No of Balcony" | translate }}</label>
+          <app-custom-select
+            [options]="PMC_List"
+            key="key"
+            value="value"
+            formControlName="pmc"
+          ></app-custom-select>
+          @if (isInvalid(commercialsForm, "commission").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "makaniNo").msg }}
+              {{ isInvalid(commercialsForm, "commission").msg }}
             </small>
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{ "DEWA_NO" | translate }}</label>
+          <label class="form-label">{{ "Plot No" | translate }}</label>
           <input
             type="text"
             class="form-control"
             [placeholder]="'ENTER_HERE' | translate"
-            formControlName="dewaNo"
           />
-          @if (isInvalid(basicDetailsForm, "dewaNo").status) {
+          @if (isInvalid(commercialsForm, "commission").status) {
             <small class="errorMsg">
-              {{ isInvalid(basicDetailsForm, "dewaNo").msg }}
+              {{ isInvalid(commercialsForm, "commission").msg }}
+            </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "Makani No" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+          />
+          @if (isInvalid(commercialsForm, "commission").status) {
+            <small class="errorMsg">
+              {{ isInvalid(commercialsForm, "commission").msg }}
+            </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "Dewa No" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+          />
+          @if (isInvalid(commercialsForm, "commission").status) {
+            <small class="errorMsg">
+              {{ isInvalid(commercialsForm, "commission").msg }}
             </small>
           }
         </div>
@@ -330,7 +211,7 @@
   <!-- Step Commercials Content -->
   <ng-container>
     <app-step-pane
-      [title]="'BLOCKS/TOWER' | translate"
+      [title]="'COMMERCIALS' | translate"
       [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
     >
       <form class="row g-3" [formGroup]="commercialsForm">
@@ -441,7 +322,7 @@
       </form>
     </app-step-pane>
 
-    <ng-container *ngIf="currentRole === 'owner'">
+    <!-- <ng-container *ngIf="currentRole === 'owner'">
       <app-step-pane
         [title]="'ADD_PMC' | translate"
         [secondCard]="true"
@@ -489,7 +370,7 @@
           </div>
         </form>
       </app-step-pane>
-    </ng-container>
+    </ng-container> -->
   </ng-container>
 
   <!-- Step Property Images Content -->

@@ -162,7 +162,7 @@ export const routes: Routes = [
       {
         path: 'announcements',
         component: AnnouncementsComponent,
-        data: { titleKey: 'PAGE_TITLE.ANNOUNCEMENTS' },
+        data: { titleKey: 'PAGE_TITLE.BROADCAST' },
       },
       {
         path: 'owners',
@@ -187,7 +187,7 @@ export const routes: Routes = [
       {
         path: 'staff',
         component: StaffComponent,
-        data: { titleKey: 'PAGE_TITLE.STAFF' },
+        data: { titleKey: 'PAGE_TITLE.TEAM' },
       },
       {
         path: 'staff/detail/:staff_id',

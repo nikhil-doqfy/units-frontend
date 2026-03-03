@@ -40,30 +40,35 @@
               [description]="group.main.description"
             >
             </app-card-title>
-            <button
-              type="button"
-              class="btn btnCommon"
-              *ngIf="i < stepGroups.length - 1"
-              (click)="nextStep()"
-            >
-              {{ "Add/Edit Fields" | translate }}
-            </button>
-            <button
-              type="button"
-              class="btn btnCommon"
-              *ngIf="i < stepGroups.length - 1"
-              (click)="nextStep()"
-            >
-              {{ "SAVE_&_NEXT" | translate }}
-            </button>
-            <button
-              type="button"
-              class="btn btnCommon"
-              *ngIf="i === stepGroups.length - 1"
-              (click)="nextStep()"
-            >
-              {{ finishButtonText }}
-            </button>
+            <div class="stepActionBtns">
+              <button
+                type="button"
+                class="btnWhite btnCommon"
+                *ngIf="group.main.showEditButton"
+                (click)="nextStep()"
+              >
+                {{ "Add/Edit Fields" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btnCommon"
+                *ngIf="i < stepGroups.length - 1"
+                (click)="nextStep()"
+              >
+                {{ "SAVE_&_NEXT" | translate }}
+              </button>
+              <button class="closeBtn">
+                <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
+              </button>
+              <button
+                type="button"
+                class="btn btnCommon"
+                *ngIf="i === stepGroups.length - 1"
+                (click)="nextStep()"
+              >
+                {{ finishButtonText }}
+              </button>
+            </div>
           </div>
           <div class="cmnStepFrmOuter">
             <app-dash-form>

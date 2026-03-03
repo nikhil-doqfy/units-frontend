@@ -5,12 +5,13 @@
 }
 
 .cmmnTblViewHdr {
-  background-color: var(--lightDarkBg);
+  /* background-color: var(--lightDarkBg); */
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding: 16px;
+  border-bottom: 1px solid #ecf0f2;
 }
 
 .cmmnTblViewTtl {
@@ -42,7 +43,7 @@
 
 .cmmnTblViewTtl h4 {
   font-size: 16px;
-  color: var(--whiteText);
+  color: var(--blackText);
   font-weight: 600;
   line-height: 100%;
   margin: 0;
@@ -79,7 +80,7 @@
 }
 
 .cmmnTblViewComboBtns {
-  background-color: var(--whiteBg);
+  /* background-color: var(--whiteBg); */
   display: flex;
   align-items: flex-start;
   flex-direction: column;

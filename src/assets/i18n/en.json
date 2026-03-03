@@ -32,7 +32,9 @@
     "LEADS": "Leads",
     "TERMS_AND_CONDITIONS": "Terms & Conditions",
     "NEW_UNITS": "New Units",
-    "NEW_TENANT": "New Tenant"
+    "NEW_TENANT": "New Tenant",
+    "TEAM": "Team",
+    "BROADCAST": "Broadcast"
   },
 
   "NEW_LEASE": "New Lease",

@@ -54,6 +54,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   private destroyRef = inject(DestroyRef);
   private alertService = inject(AlertService);
   @Input() width: string = '100%';
+  @Input() unitText?: string;
   @Input() isFilter: boolean = false;
   @Input() isPlain: boolean = false;
   @Input() isSmall: boolean = false;

@@ -6,7 +6,7 @@
   (finish)="submitProperty()"
 >
   <!-- Step Basic Details Content -->
-  <ng-container>
+  <!-- <ng-container>
     <app-step-pane
       [title]="'BASIC_DETAILS' | translate"
       [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
@@ -323,10 +323,345 @@
         </div>
       </form>
     </app-step-pane>
-  </ng-container>
+  </ng-container> -->
 
-  <!-- Step Commercials Content -->
   <ng-container>
+    <app-step-pane
+      [title]="'Basic Details' | translate"
+      [pageTitle]="'Owner Details'"
+      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
+      [showEditButton]="true"
+    >
+      <div class="ownerCardWrapper">
+        <span class="ownerCount">01</span>
+        <form class="row g-3" [formGroup]="commercialsForm">
+          <div class="col-md-3">
+            <label class="form-label">{{
+              "Property Owner Name" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="rent"
+            />
+            @if (isInvalid(commercialsForm, "rent").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "rent").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Email" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="securityDeposit"
+            />
+            @if (isInvalid(commercialsForm, "securityDeposit").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "securityDeposit").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Contact Number" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="bookingAmount"
+            />
+            @if (isInvalid(commercialsForm, "bookingAmount").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "bookingAmount").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Emirates ID" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="maintenanceCharges"
+            />
+            @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "maintenanceCharges").msg }}
+              </small>
+            }
+          </div>
+        </form>
+      </div>
+      <div class="ownerActionBtns">
+        <button type="button" class="circleBtn minusBtn">−</button>
+        <button type="button" class="circleBtn plusBtn">+</button>
+      </div>
+    </app-step-pane>
+
+    <ng-container *ngIf="currentRole === 'property-manager'">
+      <app-step-pane [title]="'Basic Details' | translate" [secondCard]="true">
+        <form class="row g-3" [formGroup]="commercialsForm">
+          <div class="col-md-3">
+            <label class="form-label">{{ "Property Name" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+            />
+            @if (isInvalid(commercialsForm, "rent").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "rent").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{
+              "No of Blocks / Tower" | translate
+            }}</label>
+            <app-custom-select
+              [options]="propertyList"
+              key="key"
+              value="value"
+              [showFilterInput]="true"
+              [allowAddOption]="true"
+              (optionSelected)="onPropertySelect($event)"
+            ></app-custom-select>
+            @if (isInvalid(commercialsForm, "securityDeposit").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "securityDeposit").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "No of Units" | translate }}</label>
+            <app-custom-select
+              [options]="propertyList"
+              key="key"
+              value="value"
+              [showFilterInput]="true"
+              [allowAddOption]="true"
+              (optionSelected)="onPropertySelect($event)"
+            ></app-custom-select>
+            @if (isInvalid(commercialsForm, "bookingAmount").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "bookingAmount").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Property Type" | translate }}</label>
+            <app-custom-select
+              [options]="propertyList"
+              key="key"
+              value="value"
+              [showFilterInput]="true"
+              [allowAddOption]="true"
+              (optionSelected)="onPropertySelect($event)"
+            ></app-custom-select>
+            @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "maintenanceCharges").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Land Area" | translate }}</label>
+            <app-custom-select
+              [options]="propertyList"
+              key="key"
+              value="value"
+              [showFilterInput]="true"
+              [allowAddOption]="true"
+              unitText="Sq-ft"
+              (optionSelected)="onPropertySelect($event)"
+            ></app-custom-select>
+            @if (isInvalid(commercialsForm, "cycle").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "cycle").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{
+              "Land DM No(Affection Plan)" | translate
+            }}</label>
+            <input
+              type="number"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="cycle"
+            />
+            @if (isInvalid(commercialsForm, "cycle").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "cycle").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Plot No" | translate }}</label>
+            <input
+              type="number"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="cycle"
+            />
+            @if (isInvalid(commercialsForm, "cycle").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "cycle").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Makani No" | translate }}</label>
+            <input
+              type="number"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="cycle"
+            />
+            @if (isInvalid(commercialsForm, "cycle").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "cycle").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Dewa No" | translate }}</label>
+            <input
+              type="number"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="cycle"
+            />
+            @if (isInvalid(commercialsForm, "cycle").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "cycle").msg }}
+              </small>
+            }
+          </div>
+        </form>
+      </app-step-pane>
+    </ng-container>
+
+    <ng-container *ngIf="currentRole === 'property-manager'">
+      <app-step-pane
+        [title]="'Location / Address Details' | translate"
+        [secondCard]="true"
+      >
+        <form class="row g-3" [formGroup]="commercialsForm">
+          <div class="col-md-3">
+            <label class="form-label">{{
+              "Address  Lane 1" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="rent"
+            />
+            @if (isInvalid(commercialsForm, "rent").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "rent").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Address Lane 2" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="rent"
+            />
+            @if (isInvalid(commercialsForm, "securityDeposit").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "securityDeposit").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Landmark" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="rent"
+            />
+            @if (isInvalid(commercialsForm, "bookingAmount").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "bookingAmount").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Pincode" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="rent"
+            />
+            @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "maintenanceCharges").msg }}
+              </small>
+            }
+          </div>
+          <div class="col-12">
+            <label class="form-label">{{
+              "Select From Map" | translate
+            }}</label>
+            <div class="inputWithIcon">
+              <img src="assets/location.svg" class="inputIcon" />
+
+              <input
+                type="text"
+                class="form-control customInput"
+                [placeholder]="
+                  'Locations comes here automatically form map' | translate
+                "
+                formControlName="rent"
+              />
+            </div>
+            @if (isInvalid(commercialsForm, "cycle").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "cycle").msg }}
+              </small>
+            }
+          </div>
+        </form>
+      </app-step-pane>
+    </ng-container>
+    <ng-container *ngIf="currentRole === 'property-manager'">
+      <app-step-pane
+        [title]="'ADD_PMC' | translate"
+        [secondCard]="true"
+        [showInvitePmcBtn]="true"
+      >
+        <form class="row g-3" [formGroup]="commercialsForm">
+          <div class="col-md-6">
+            <label class="form-label">{{ "Property PMC" | translate }}</label>
+            <app-custom-select
+              [options]="ownerList"
+              key="key"
+              value="value"
+              formControlName="owner"
+            ></app-custom-select>
+            @if (isInvalid(commercialsForm, "pmc").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "pmc").msg }}
+              </small>
+            }
+          </div>
+        </form>
+      </app-step-pane>
+    </ng-container>
+  </ng-container>
+  <!-- Step Commercials Content -->
+  <!-- <ng-container>
     <app-step-pane
       [title]="'COMMERCIALS' | translate"
       [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
@@ -488,6 +823,179 @@
         </form>
       </app-step-pane>
     </ng-container>
+  </ng-container> -->
+
+  <ng-container>
+    <app-step-pane
+      [title]="'BLOCKS / TOWER' | translate"
+      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
+    >
+      <form class="row g-3" [formGroup]="commercialsForm">
+        <div class="ownerCardWrapper">
+          <span class="ownerCount">01</span>
+          <div class="row">
+            <div class="col-md-3">
+              <label class="form-label">{{ "RENT" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                formControlName="rent"
+              />
+              @if (isInvalid(commercialsForm, "rent").status) {
+                <small class="errorMsg">
+                  {{ isInvalid(commercialsForm, "rent").msg }}
+                </small>
+              }
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">{{
+                "SECURITY_DEPOSIT" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                formControlName="securityDeposit"
+              />
+              @if (isInvalid(commercialsForm, "securityDeposit").status) {
+                <small class="errorMsg">
+                  {{ isInvalid(commercialsForm, "securityDeposit").msg }}
+                </small>
+              }
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">{{
+                "BOOKING_AMOUNT" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                formControlName="bookingAmount"
+              />
+              @if (isInvalid(commercialsForm, "bookingAmount").status) {
+                <small class="errorMsg">
+                  {{ isInvalid(commercialsForm, "bookingAmount").msg }}
+                </small>
+              }
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">{{
+                "MAINTENCE_CHARGES" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                formControlName="maintenanceCharges"
+              />
+              @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
+                <small class="errorMsg">
+                  {{ isInvalid(commercialsForm, "maintenanceCharges").msg }}
+                </small>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{
+            "CYCLE_(IN MONTHS)" | translate
+          }}</label>
+          <input
+            type="number"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="cycle"
+          />
+          @if (isInvalid(commercialsForm, "cycle").status) {
+            <small class="errorMsg">
+              {{ isInvalid(commercialsForm, "cycle").msg }}
+            </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{
+            "NOTICE_PERIOD(IN_MONTHS)" | translate
+          }}</label>
+          <input
+            type="number"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="noticePeriod"
+          />
+          @if (isInvalid(commercialsForm, "noticePeriod").status) {
+            <small class="errorMsg">
+              {{ isInvalid(commercialsForm, "noticePeriod").msg }}
+            </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "COMMISION_IN %" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'ENTER_HERE' | translate"
+            formControlName="commission"
+          />
+          @if (isInvalid(commercialsForm, "commission").status) {
+            <small class="errorMsg">
+              {{ isInvalid(commercialsForm, "commission").msg }}
+            </small>
+          }
+        </div>
+      </form>
+    </app-step-pane>
+
+    <!-- <ng-container *ngIf="currentRole === 'owner'">
+      <app-step-pane
+        [title]="'ADD_PMC' | translate"
+        [secondCard]="true"
+        [showInvitePmcBtn]="true"
+      >
+        <form class="row g-3" [formGroup]="commercialsForm">
+          <div class="col-md-6">
+            <label class="form-label">{{ "PROPERTY_PMC" | translate }}</label>
+            <app-custom-select
+              [options]="PMC_List"
+              key="key"
+              value="value"
+              formControlName="pmc"
+            ></app-custom-select>
+            @if (isInvalid(commercialsForm, "pmc").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "pmc").msg }}
+              </small>
+            }
+          </div>
+        </form>
+      </app-step-pane>
+    </ng-container>
+
+    <ng-container *ngIf="currentRole === 'property-manager'">
+      <app-step-pane
+        [title]="'ADD_PMC' | translate"
+        [secondCard]="true"
+        [showInviteOwnerBtn]="true"
+      >
+        <form class="row g-3" [formGroup]="commercialsForm">
+          <div class="col-md-6">
+            <label class="form-label">{{ "OWNER" | translate }}</label>
+            <app-custom-select
+              [options]="ownerList"
+              key="key"
+              value="value"
+              formControlName="owner"
+            ></app-custom-select>
+            @if (isInvalid(commercialsForm, "pmc").status) {
+              <small class="errorMsg">
+                {{ isInvalid(commercialsForm, "pmc").msg }}
+              </small>
+            }
+          </div>
+        </form>
+      </app-step-pane>
+    </ng-container> -->
   </ng-container>
 
   <!-- Step Property Images Content -->

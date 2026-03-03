@@ -94,7 +94,7 @@ export class AnnouncementsComponent {
     } else {
       this.setBreadCrumb([
         { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.ANNOUNCEMENTS', link: '' },
+        { label: 'PAGE_TITLE.BROADCAST', link: '' },
       ]);
     }
   }

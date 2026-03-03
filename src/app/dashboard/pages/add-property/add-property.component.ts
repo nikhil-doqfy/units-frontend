@@ -23,6 +23,7 @@ import { StepSchema } from '../../model/step-engine/step-schema';
 import { StepEngine } from '../../model/step-engine/step-engine';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PropertyService } from '../../services/property.service';
+import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 
 type FormKey = 'images' | 'documents';
 
@@ -49,6 +50,7 @@ interface UploadConfig {
     ReactiveFormsModule,
     FileUploadItemComponent,
     TranslateModule,
+    WhiteCardComponent,
   ],
   templateUrl: './add-property.component.html',
   styleUrl: './add-property.component.css',

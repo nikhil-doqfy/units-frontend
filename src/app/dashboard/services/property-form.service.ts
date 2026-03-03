@@ -184,7 +184,7 @@ export class PropertyFormService {
 
   saveBasicDetails(
     payload: Record<string, any>,
-    context: any
+    context: any,
   ): Observable<any> {
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {

@@ -22,44 +22,50 @@
     <i *ngIf="isDropdownOpen">
       <app-arrow-up-icon />
     </i> -->
-    <i *ngIf="iconType === 'default'">
-      <app-arrow-down-icon *ngIf="!isDropdownOpen" />
-      <app-arrow-up-icon *ngIf="isDropdownOpen" />
-    </i>
+    <div class="rightSection">
+      <!-- Unit text only if passed -->
+      <span *ngIf="unitText" class="unitText">
+        {{ unitText }}
+      </span>
+      <i *ngIf="iconType === 'default'">
+        <app-arrow-down-icon *ngIf="!isDropdownOpen" />
+        <app-arrow-up-icon *ngIf="isDropdownOpen" />
+      </i>
 
-    <i *ngIf="iconType === 'custom'">
-      <app-calender-icon *ngIf="!isDropdownOpen" />
-      <app-calender-icon *ngIf="isDropdownOpen" />
-    </i>
-  </div>
-  <ul *ngIf="isDropdownOpen" class="customSelectDropdown">
-    <li *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
-      <input
-        type="text"
-        [placeholder]="allowAddOption ? 'Search or Add...' : 'Add option...'"
-        [(ngModel)]="filterText"
-        (ngModelChange)="onInputChange($event)"
-        (click)="$event.stopPropagation()"
-        (keydown.enter)="$event.preventDefault(); $event.stopPropagation()"
-      />
+      <i *ngIf="iconType === 'custom'">
+        <app-calender-icon *ngIf="!isDropdownOpen" />
+        <app-calender-icon *ngIf="isDropdownOpen" />
+      </i>
+    </div>
+    <ul *ngIf="isDropdownOpen" class="customSelectDropdown">
+      <li *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
+        <input
+          type="text"
+          [placeholder]="allowAddOption ? 'Search or Add...' : 'Add option...'"
+          [(ngModel)]="filterText"
+          (ngModelChange)="onInputChange($event)"
+          (click)="$event.stopPropagation()"
+          (keydown.enter)="$event.preventDefault(); $event.stopPropagation()"
+        />
 
-      <button
-        *ngIf="allowAddOption"
-        class="addBtn"
-        (click)="addOption(); $event.stopPropagation()"
-      >
-        Add
-      </button>
-    </li>
-    @for (option of displayOptions; track option[key]) {
-      <li
-        (click)="selectOption(option); $event.stopPropagation()"
-        [class.active]="option[key] === selectedOption?.[key]"
-      >
-        {{ option[value] }}
+        <button
+          *ngIf="allowAddOption"
+          class="addBtn"
+          (click)="addOption(); $event.stopPropagation()"
+        >
+          Add
+        </button>
       </li>
-    } @empty {
-      <li>No Data Found</li>
-    }
-  </ul>
+      @for (option of displayOptions; track option[key]) {
+        <li
+          (click)="selectOption(option); $event.stopPropagation()"
+          [class.active]="option[key] === selectedOption?.[key]"
+        >
+          {{ option[value] }}
+        </li>
+      } @empty {
+        <li>No Data Found</li>
+      }
+    </ul>
+  </div>
 </div>

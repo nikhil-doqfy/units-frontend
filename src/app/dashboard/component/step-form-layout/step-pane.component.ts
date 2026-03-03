@@ -11,10 +11,11 @@ import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 })
 export class StepPaneComponent {
   @Input() title!: string;
+  @Input() pageTitle!: string;
+  @Input() showEditButton: boolean = false;
   @Input() description!: string;
   @Input() secondCard: boolean = false;
   @Input() showInvitePmcBtn: boolean = false;
   @Input() showInviteOwnerBtn: boolean = false;
   @ViewChild('paneContent', { static: true }) content!: TemplateRef<any>;
 }
-

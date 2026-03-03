@@ -23,6 +23,7 @@ import { StepSchema } from '../../model/step-engine/step-schema';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
 import { InviteOwnerBtnComponent } from '../invite-owner-btn/invite-owner-btn.component';
+import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 
 interface StepGroup {
   main: StepPaneComponent;
@@ -40,6 +41,7 @@ interface StepGroup {
     InvitePMCButtonComponent,
     TranslateModule,
     InviteOwnerBtnComponent,
+    CircularCrossBtnIconComponent,
   ],
   templateUrl: './step-form-layout.component.html',
   styleUrls: ['./step-form-layout.component.css'],
