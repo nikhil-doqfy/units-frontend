@@ -13,10 +13,8 @@ export type CompanyName = 'OPTIEX' | 'DOQFY';
   styleUrl: './platfrom-badge.component.css',
 })
 export class PlatfromBadgeComponent {
-  // 👈 optional image input
   @Input() logo?: string;
 
-  // 👈 platform type (for label)
   @Input() platform!: {
     type: 'propertyFinder' | 'bayut' | 'direct' | 'referral';
   };

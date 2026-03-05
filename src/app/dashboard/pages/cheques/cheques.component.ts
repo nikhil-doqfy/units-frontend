@@ -38,13 +38,20 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './cheques.component.css',
 })
 export class ChequesComponent {
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+  private sharedService = inject(SharedService);
+
   showDetailView: boolean = false;
   componentName: string = 'ChequesComponent';
   totalRecords: number = 0;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
-
+  tableData: any[] = [];
+  activeSummary: 'total' | 'credited' | 'realized' | 'bounce' | 'balance' =
+    'total';
+  breadcrumbData: BreadCrumb[] = [];
   summaryCards = [
     {
       key: 'total',
@@ -88,14 +95,9 @@ export class ChequesComponent {
     },
   ];
 
-  tableData: any[] = [];
-  private destroyRef = inject(DestroyRef);
-  private translate = inject(TranslateService);
   ngOnInit() {
     this.loadBreadcrumb();
   }
-  private sharedService = inject(SharedService);
-  breadcrumbData: BreadCrumb[] = [];
 
   initLanguageListener() {
     this.translate.onLangChange
@@ -132,9 +134,6 @@ export class ChequesComponent {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
   }
-
-  activeSummary: 'total' | 'credited' | 'realized' | 'bounce' | 'balance' =
-    'total';
 
   onSummaryClick(key: any) {
     this.activeSummary = key;

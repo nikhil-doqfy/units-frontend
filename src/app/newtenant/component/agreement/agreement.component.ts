@@ -24,6 +24,6 @@ export class AgreementComponent {
   showMsg$ = this.formService.getShowMsg();
   msgText$ = this.formService.getMsgText();
   ngOnInit(): void {
-    this.formService.startAgreementFlow(); // 👈 IMPORTANT
+    this.formService.startAgreementFlow();
   }
 }

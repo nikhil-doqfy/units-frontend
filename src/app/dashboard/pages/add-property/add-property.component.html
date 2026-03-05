@@ -342,7 +342,7 @@
             <input
               type="text"
               class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
+              [placeholder]="'Enter name here' | translate"
               formControlName="rent"
             />
             @if (isInvalid(commercialsForm, "rent").status) {
@@ -356,7 +356,7 @@
             <input
               type="text"
               class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
+              [placeholder]="'Enter email here' | translate"
               formControlName="securityDeposit"
             />
             @if (isInvalid(commercialsForm, "securityDeposit").status) {
@@ -370,7 +370,7 @@
             <input
               type="text"
               class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
+              [placeholder]="'Enter number here' | translate"
               formControlName="bookingAmount"
             />
             @if (isInvalid(commercialsForm, "bookingAmount").status) {
@@ -384,7 +384,7 @@
             <input
               type="text"
               class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
+              [placeholder]="'Enter ID here' | translate"
               formControlName="maintenanceCharges"
             />
             @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
@@ -409,7 +409,7 @@
             <input
               type="text"
               class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
+              [placeholder]="'Enter name here' | translate"
             />
             @if (isInvalid(commercialsForm, "rent").status) {
               <small class="errorMsg">
@@ -491,7 +491,7 @@
             <input
               type="number"
               class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
+              [placeholder]="'Enter Land DM N' | translate"
               formControlName="cycle"
             />
             @if (isInvalid(commercialsForm, "cycle").status) {
@@ -829,17 +829,20 @@
     <app-step-pane
       [title]="'BLOCKS / TOWER' | translate"
       [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
+      [showBulkUpload]="true"
     >
       <form class="row g-3" [formGroup]="commercialsForm">
         <div class="ownerCardWrapper">
           <span class="ownerCount">01</span>
           <div class="row">
             <div class="col-md-3">
-              <label class="form-label">{{ "RENT" | translate }}</label>
+              <label class="form-label">{{
+                "Block /Tower Name" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'ENTER_HERE' | translate"
+                [placeholder]="'Enter number here' | translate"
                 formControlName="rent"
               />
               @if (isInvalid(commercialsForm, "rent").status) {
@@ -855,7 +858,7 @@
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'ENTER_HERE' | translate"
+                [placeholder]="'Enter number here' | translate"
                 formControlName="securityDeposit"
               />
               @if (isInvalid(commercialsForm, "securityDeposit").status) {
@@ -865,13 +868,11 @@
               }
             </div>
             <div class="col-md-3">
-              <label class="form-label">{{
-                "BOOKING_AMOUNT" | translate
-              }}</label>
+              <label class="form-label">{{ "No of Floors" | translate }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'ENTER_HERE' | translate"
+                [placeholder]="'Enter number here' | translate"
                 formControlName="bookingAmount"
               />
               @if (isInvalid(commercialsForm, "bookingAmount").status) {
@@ -882,12 +883,12 @@
             </div>
             <div class="col-md-3">
               <label class="form-label">{{
-                "MAINTENCE_CHARGES" | translate
+                "No of Parking" | translate
               }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'ENTER_HERE' | translate"
+                [placeholder]="'Enter number here' | translate"
                 formControlName="maintenanceCharges"
               />
               @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
@@ -899,13 +900,11 @@
           </div>
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{
-            "CYCLE_(IN MONTHS)" | translate
-          }}</label>
+          <label class="form-label">{{ "No of Units" | translate }}</label>
           <input
             type="number"
             class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
+            [placeholder]="'Enter number here' | translate"
             formControlName="cycle"
           />
           @if (isInvalid(commercialsForm, "cycle").status) {
@@ -916,12 +915,12 @@
         </div>
         <div class="col-md-3">
           <label class="form-label">{{
-            "NOTICE_PERIOD(IN_MONTHS)" | translate
+            "Block / Tower Name" | translate
           }}</label>
           <input
             type="number"
             class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
+            [placeholder]="'Enter number here' | translate"
             formControlName="noticePeriod"
           />
           @if (isInvalid(commercialsForm, "noticePeriod").status) {
@@ -931,11 +930,25 @@
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{ "COMMISION_IN %" | translate }}</label>
+          <label class="form-label">{{ "No of Floors" | translate }}</label>
           <input
             type="text"
             class="form-control"
-            [placeholder]="'ENTER_HERE' | translate"
+            [placeholder]="'Enter number here' | translate"
+            formControlName="commission"
+          />
+          @if (isInvalid(commercialsForm, "commission").status) {
+            <small class="errorMsg">
+              {{ isInvalid(commercialsForm, "commission").msg }}
+            </small>
+          }
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ "No of Units" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="'Enter number here' | translate"
             formControlName="commission"
           />
           @if (isInvalid(commercialsForm, "commission").status) {
@@ -945,6 +958,10 @@
           }
         </div>
       </form>
+      <div class="ownerActionBtns">
+        <button type="button" class="circleBtn minusBtn">−</button>
+        <button type="button" class="circleBtn plusBtn">+</button>
+      </div>
     </app-step-pane>
 
     <!-- <ng-container *ngIf="currentRole === 'owner'">

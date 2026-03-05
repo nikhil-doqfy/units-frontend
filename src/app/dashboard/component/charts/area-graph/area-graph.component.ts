@@ -38,7 +38,7 @@ export class AreaGraphComponent {
       // show: true,
       position: 'top',
       horizontalAlign: 'center',
-      floating: true, // 👈 graph container मध्येच राहील
+      floating: true,
       offsetY: -5,
       markers: {
         width: 10,
@@ -50,7 +50,7 @@ export class AreaGraphComponent {
     stroke: {
       curve: 'smooth',
       width: [3, 3],
-      colors: ['#16a34a', '#2563eb'], // green + blue
+      colors: ['#16a34a', '#2563eb'],
     },
 
     fill: {

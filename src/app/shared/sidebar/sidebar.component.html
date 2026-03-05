@@ -115,12 +115,7 @@
         >
           <app-tenant-icon></app-tenant-icon>
         </app-sidebar-item>
-        <app-sidebar-item
-          title="{{ 'Cheques' | translate }}"
-          href="/dashboard/cheques"
-        >
-          <app-cheques-icon></app-cheques-icon>
-        </app-sidebar-item>
+
         <app-sidebar-item
           title="{{ 'OWNER' | translate }}"
           href="/dashboard/owners"
@@ -128,22 +123,28 @@
           <app-owner-icon></app-owner-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          title="{{ 'Cheques' | translate }}"
+          href="/dashboard/cheques"
+        >
+          <app-cheques-icon></app-cheques-icon>
+        </app-sidebar-item>
+        <!-- <app-sidebar-item
           title="{{ 'LEASE_TENANCY' | translate }}"
           href="/dashboard/lease-tenancy"
         >
           <app-lease-tenancy-icon></app-lease-tenancy-icon>
+        </app-sidebar-item> -->
+        <app-sidebar-item
+          title="{{ 'PAGE_TITLE.RENTAL_PORTFOLIO' | translate }}"
+          href="/dashboard/rental"
+        >
+          <app-rental-portfolio-icon></app-rental-portfolio-icon>
         </app-sidebar-item>
         <app-sidebar-item
           title="{{ 'APPROVAL' | translate }}"
           href="/dashboard/approval"
         >
           <app-approval-icon></app-approval-icon>
-        </app-sidebar-item>
-        <app-sidebar-item
-          title="{{ 'PAGE_TITLE.RENTAL_PORTFOLIO' | translate }}"
-          href="/dashboard/rental"
-        >
-          <app-rental-portfolio-icon></app-rental-portfolio-icon>
         </app-sidebar-item>
 
         <app-sidebar-item

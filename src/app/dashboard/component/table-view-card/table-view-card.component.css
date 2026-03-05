@@ -242,12 +242,10 @@
   background: #f5f7f8;
 }
 
-/* 🔥 Hover open */
 .dropdownWrap:hover .dropdownMenu {
   display: block;
 }
 
-/* 🔥 Click open support */
 .dropdownWrap.active .dropdownMenu {
   display: block;
 }

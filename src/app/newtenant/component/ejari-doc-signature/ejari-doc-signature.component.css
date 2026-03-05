@@ -5,7 +5,6 @@
   border-radius: 14px;
 }
 
-/* Left Preview */
 .doc-preview {
   border-radius: 12px;
   padding: 12px;
@@ -20,7 +19,6 @@
   object-fit: contain;
 }
 
-/* Right Form */
 .doc-form {
   max-width: 561px;
   display: flex;
@@ -54,7 +52,7 @@
 }
 .doc-preview img {
   width: 100%;
-  max-width: 650px; /* हवं असल्यास 700 / 800 ठेऊ शकता */
+  max-width: 650px;
 }
 
 .modal-backdrop {
@@ -79,7 +77,6 @@
   overflow: hidden;
 }
 
-/* Decorative background curves */
 .success-modal::before,
 .success-modal::after {
   content: "";
@@ -132,7 +129,6 @@
   line-height: 1.5;
 }
 
-/* Buttons */
 .primary-btn {
   background: #22c55e;
   border: none;

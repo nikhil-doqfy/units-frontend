@@ -71,8 +71,6 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
         enabled: false,
       },
       yaxis: {
-        // min: 100000,
-        // max: 500000,
         labels: {
           formatter: (value) => 'AED ' + value.toLocaleString('en-IN'),
         },

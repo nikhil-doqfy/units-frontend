@@ -4,7 +4,6 @@
   min-height: calc(100vh - 140px);
 }
 
-/* Sidebar */
 .sidebar {
   width: 220px;
   height: 411px;
@@ -53,22 +52,18 @@
   font-weight: 600;
 }
 
-/* Right Content */
 .settings-content {
   flex: 1;
-  /* background: #fff; */
   border-radius: 12px;
   border: 1px solid #ecf0f2;
 }
 
-/* Tablet */
 @media (max-width: 992px) {
   .sidebar {
     width: 220px;
   }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .settings-container {
     flex-direction: column;
@@ -103,7 +98,6 @@
   max-width: 100%;
 }
 
-/* Icon fix – shrink होऊ नये म्हणून */
 .sidebar-link i,
 .sidebar-link app-user-icon,
 .sidebar-link app-termscondition-icon,

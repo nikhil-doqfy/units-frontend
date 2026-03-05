@@ -20,16 +20,15 @@ import { TranslateModule } from '@ngx-translate/core';
 export class AddNewLeadsComponent {
   @Input() editData: any = null;
   @Output() formSubmitted = new EventEmitter<any>();
+  @Output() tabChanged = new EventEmitter<'manual' | 'bulk'>();
 
+  uploadedFile?: UploadFileModel;
   submitForm() {}
   activeTab: 'manual' | 'bulk' = 'manual';
 
   sampleCsvDownload() {
-    // API / static file logic later
     console.log('Download sample CSV');
   }
-
-  @Output() tabChanged = new EventEmitter<'manual' | 'bulk'>();
 
   setTab(tab: 'manual' | 'bulk') {
     this.activeTab = tab;
@@ -44,15 +43,11 @@ export class AddNewLeadsComponent {
     console.log('Upload clicked');
   }
 
-  uploadedFile?: UploadFileModel;
-
   onBulkUpload(event: UploadFileModel) {
     if (event.status === 'done') {
       this.uploadedFile = event;
     }
   }
 
-  uploadBulkFile() {
-    // logic for bulk upload
-  }
+  uploadBulkFile() {}
 }

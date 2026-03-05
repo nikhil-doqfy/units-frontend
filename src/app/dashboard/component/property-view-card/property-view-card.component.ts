@@ -49,10 +49,6 @@ export class PropertyViewCardComponent {
   }[];
 
   @Output() back = new EventEmitter<void>();
-  onBackClick() {
-    this.back.emit();
-  }
-
   @ViewChild('mainSwiper', { static: false }) mainSwiper!: ElementRef;
   @ViewChild('thumbSwiper', { static: false }) thumbSwiper!: ElementRef;
 
@@ -79,6 +75,10 @@ export class PropertyViewCardComponent {
     },
     breakpoints: this.swiperBreakpoints,
   };
+
+  onBackClick() {
+    this.back.emit();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['propertyImages'] && this.propertyImages.length > 0) {

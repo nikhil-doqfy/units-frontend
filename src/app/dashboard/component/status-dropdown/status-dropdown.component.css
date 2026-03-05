@@ -39,7 +39,6 @@
   z-index: 9999;
 }
 
-/* IMPORTANT */
 :host {
   position: absolute;
   top: 0;

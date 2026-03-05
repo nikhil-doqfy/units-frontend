@@ -8,13 +8,14 @@
   background: #fff;
   border-radius: 12px;
   padding: 16px;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .rent-card:hover {
-  /* Shadow on all sides */
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px); /* optional lift effect */
+  transform: translateY(-2px);
   cursor: pointer;
 }
 
@@ -68,7 +69,6 @@
   font-weight: 700;
 }
 
-/* Responsive */
 @media (max-width: 1200px) {
   .card-grid {
     grid-template-columns: repeat(4, 1fr);

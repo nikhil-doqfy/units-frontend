@@ -62,7 +62,6 @@ a {
   text-decoration: underline;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .terms-card {
     padding: 16px;

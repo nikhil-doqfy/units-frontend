@@ -103,7 +103,7 @@ export class MyProfileComponent implements AfterViewInit {
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
   ngOnInit() {
-    // this.loadBre adcrumb();
+    // this.loadBreadcrumb();
     this.sharedService.initLanguage();
     this.initLanguageListener();
     this.getUserProfileData();

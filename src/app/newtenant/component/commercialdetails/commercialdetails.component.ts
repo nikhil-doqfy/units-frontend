@@ -123,7 +123,6 @@ export class CommercialdetailsComponent {
       .reduce((sum, c) => sum + c.total, 0);
   }
   sendInvite() {
-    // API call success zala ki
     this.alertService.customSuccess('Invite Sent Successfully');
   }
 }

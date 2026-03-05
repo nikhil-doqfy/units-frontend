@@ -38,25 +38,22 @@ import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-sig
     LeftArrowIconComponent,
     SendInviteIconComponent,
     RefreshIconComponent,
-    ProfileComponent,
     ArrowDownIconComponent,
     TranslateModule,
-    SendNegotiationComponent,
   ],
   templateUrl: './form-render.component.html',
   styleUrl: './form-render.component.css',
 })
 export class FormRenderComponent {
+  @Output() negotiationClick = new EventEmitter<void>();
+
   @Input() steps: any;
   @Input() activeIndex: any;
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
   btnTitle = signal<string>('Save & Next');
   agreementPhase = signal<string>('');
-  constructor(
-    private alertService: AlertService,
-    private formService: NewTenantFromService,
-  ) {}
+  isDropdownOpen = false;
   showInviteMsg = false;
   subIndex = signal(0);
   ProfileComponent = ProfileComponent;
@@ -64,13 +61,20 @@ export class FormRenderComponent {
   AgreementComponent = AgreementComponent;
   EjariComponent = EjariDocComponent;
   EjariDocSignatureComponent = EjariDocSignatureComponent;
+  showWaitingMsg = true;
+  showNegotiationMsg = false;
+  isChequeStep = false;
+  btnTitle$ = this.formService.getBtnTitle();
+  showMsg$ = this.formService.getShowMsg();
+  msgText$ = this.formService.getMsgText();
+  showRefresh$ = this.formService.showRefresh$;
+  constructor(
+    private alertService: AlertService,
+    private formService: NewTenantFromService,
+  ) {}
   get currentStep() {
     return this.steps()[this.activeIndex()];
   }
-
-  showWaitingMsg = true;
-  isChequeStep = false;
-  @Output() negotiationClick = new EventEmitter<void>();
 
   onClick() {
     this.negotiationClick.emit();
@@ -80,7 +84,6 @@ export class FormRenderComponent {
     } else {
     }
   }
-  showNegotiationMsg = false;
   sendNegotiation() {
     this.showNegotiationMsg = true;
 
@@ -93,17 +96,15 @@ export class FormRenderComponent {
   get currentSubStep() {
     return this.currentStep?.subSteps?.[this.subIndex()];
   }
-  // getNextBtnLabel() {
-  //   if (this.currentSubStep?.component === CommercialdetailsComponent) {
-  //     return 'Send Invite';
-  //   }
-  //   return 'Save & Next';
-  // }
 
   getNextBtnLabel() {
-    if (this.currentSubStep?.component === AgreementComponent) {
-      return this.btnTitle$(); // 👈 service मधून dynamic value
+    if (this.currentSubStep?.component === EjariDocSignatureComponent) {
+      return this.btnTitle$();
     }
+    if (this.currentSubStep?.component === AgreementComponent) {
+      return this.btnTitle$();
+    }
+
     if (this.currentSubStep?.component === EjariDocComponent) {
       return 'Send for Signature';
     }
@@ -111,9 +112,11 @@ export class FormRenderComponent {
     if (this.currentSubStep?.component === EjariDocSignatureComponent) {
       return this.btnTitle$();
     }
+
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
       return 'Send Invite';
     }
+
     if (
       this.currentSubStep?.component === ProfileComponent &&
       this.subIndex() === 0
@@ -121,21 +124,23 @@ export class FormRenderComponent {
       return 'Save & Next';
     }
 
-    // Default label
     return 'Save & Next';
   }
 
   next() {
     if (this.currentSubStep?.component === AgreementComponent) {
-      this.formService.handleMainButtonClick(() => {
-        this.goToNextStep(); // 👈 Submit for Ejari वर क्लिक केल्यावर पुढे जाईल
-      });
+      this.formService.handleMainButtonClick(
+        () => this.goToNextStep(),
+        'AGREEMENT',
+      );
       return;
     }
+
     if (this.currentSubStep?.component === EjariDocSignatureComponent) {
-      this.formService.triggerEjariSignature(() => {
-        this.goToNextStep();
-      });
+      this.formService.handleMainButtonClick(
+        () => this.goToNextStep(),
+        'EJARI',
+      );
       return;
     }
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
@@ -181,7 +186,7 @@ export class FormRenderComponent {
   openAddTenantModal(addTenantContent: TemplateRef<any>) {
     const modalRef = this.modalService.open(addTenantContent, {
       ariaLabelledBy: 'modal-title',
-      windowClass: 'mdlCommon',
+      windowClass: 'mdlCommon right-side-modal',
       centered: true,
     });
 
@@ -194,20 +199,20 @@ export class FormRenderComponent {
       },
     );
   }
-  // btnTitle$ = this.formService.getBtnTitle();
-  // onMainClick() {
-  //   this.formService.handleMainButtonClick();
-  // }
 
-  btnTitle$ = this.formService.getBtnTitle();
-  showMsg$ = this.formService.getShowMsg();
-  msgText$ = this.formService.getMsgText();
-  showRefresh$ = this.formService.showRefresh$;
   onMainClick() {
     if (this.btnTitle$() === 'Save & Next') {
-      this.goToNextStep(); // 👉 NEXT COMPONENT
+      this.goToNextStep();
     } else {
       this.formService.handleMainButtonClick();
     }
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+  onArrowClick(event: MouseEvent) {
+    event.stopPropagation();
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 }

@@ -120,11 +120,19 @@
   }
 }
 
+/* mdlCommon .modal-content {
+  border: 0;
+  width: 573px;
+  height: 564px;
+  border-radius: 6px;
+} */
+
 .infoBox {
   background-color: #eef8ff;
   border-radius: 8px;
   padding: 14px 16px;
   width: 509px;
+  /* height: 86px; */
   border-radius: 6px;
   padding: 16px;
   gap: 10px;

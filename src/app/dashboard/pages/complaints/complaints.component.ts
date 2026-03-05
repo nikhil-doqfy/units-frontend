@@ -89,6 +89,8 @@ export class ComplaintsComponent {
   totalRecords: number = 0;
   rowsPerPage: number = 10;
   currentPage: number = 1;
+  selectedProperty: any = null;
+
   showDetailView: boolean = false;
   showMenu = false;
   complaintsStatus: any = [];
@@ -132,6 +134,12 @@ export class ComplaintsComponent {
     total_in_progress: 0,
     total_rejected: 0,
   };
+  photos: string[] = [
+    '../assets/complaint/complaint-3.png',
+    '../assets/complaint/complaint-6.svg',
+    'assets/complaint/complaint-7.svg',
+    'assets/complaint/complaint-8.svg',
+  ];
   assignEnginnerForm!: FormGroup;
   constructor(
     private destroyRef: DestroyRef,
@@ -236,12 +244,7 @@ export class ComplaintsComponent {
     this.searchTerm = search;
     this.onComplaintsSearch$.next(search);
   }
-  photos: string[] = [
-    '../assets/complaint/complaint-3.png',
-    '../assets/complaint/complaint-6.svg',
-    'assets/complaint/complaint-7.svg',
-    'assets/complaint/complaint-8.svg',
-  ];
+
   onUpload(event: any) {
     this.uploadedImages.push(event);
   }
@@ -310,7 +313,6 @@ export class ComplaintsComponent {
   closeComplaintModal() {
     this.showComplaintModal = false;
   }
-  selectedProperty: any = null;
 
   //--------------------------------------------complaint details--------------------------------------------------------------------
   loadDetailView(ticketID: number): void {

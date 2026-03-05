@@ -1,33 +1,15 @@
-/* ===== WRAPPER ===== */
-
-.stepper-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-/* ===== SUB STEP (LEFT TITLE PILL) ===== */
 .sub-stepper {
   background: #ffffff;
   padding: 12px 16px;
   border-radius: 8px;
-  /* border: 1px solid #e5e7eb; */
   margin-bottom: 12px;
+  padding: 10px 0 4px 0;
 }
 
 .sub-step {
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-
-.sub-step.active {
-  color: #111827;
-}
-
-.sub-step {
   font-size: 18px;
   font-weight: 600;
 }
@@ -37,17 +19,7 @@
   font-weight: 400;
   color: #6b7280;
   line-height: 1.4;
-}
-
-/* ===== SUB TITLE & DESCRIPTION ===== */
-
-.sub-stepper {
-  padding: 10px 0 4px 0;
-}
-
-.sub-step {
-  display: flex;
-  flex-direction: column;
+  margin-top: 2px;
 }
 
 .sub-step.active {
@@ -55,14 +27,6 @@
   font-weight: 500;
   color: #111827;
 }
-
-.sub-desc {
-  font-size: 13px;
-  color: #6b7280;
-  margin-top: 2px;
-}
-
-/* ===== ACTION BUTTONS ===== */
 
 .stepper-actions {
   display: flex;
@@ -99,8 +63,6 @@
   cursor: pointer;
 }
 
-/* ===== RESPONSIVE ===== */
-
 @media (max-width: 992px) {
   .label {
     font-size: 13px;
@@ -133,13 +95,9 @@
   }
 }
 
-/* ===== CONTENT CARD ===== */
-
 .step-content {
   padding: 12px 0px;
 }
-
-/* ===== RESPONSIVE ===== */
 
 @media (max-width: 992px) {
   .stepper-container {
@@ -174,92 +132,26 @@
     width: 100%;
   }
 }
-.step-item {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  position: relative;
-  height: 24px;
-  padding: 2px 16px;
-}
 
-/* Horizontal Flow */
-.stepper-container {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 0;
-}
-
-/* Circle */
-.circle {
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
-  border-radius: 50%;
-  border: 2px solid #9db3bd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: #607d8b;
-  background: #fff;
-  z-index: 2;
-}
-
-/* Active */
 .step-item.active .circle {
   background: #2fa51a;
   border-color: #2fa51a;
   color: #fff;
 }
 
-/* Completed */
 .step-item.completed .circle {
-  /* background: #2fa51a; */
-  /* border-color: #2fa51a; */
   color: #fff;
 }
 
-/* Label */
-.label {
-  margin-left: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #607d8b;
-  white-space: nowrap;
-}
-
-/* Active Label */
 .step-item.active .label {
   font-weight: 600;
   color: black;
 }
 
-/* Connecting Line */
-.line {
-  position: absolute;
-  top: 12px;
-  left: calc(50% + 12px);
-  width: calc(100% - 0.5px);
-  height: 1px;
-  background: repeating-linear-gradient(
-    to right,
-    #9db3bd,
-    #9db3bd 6px,
-    transparent 6px,
-    transparent 12px
-  );
-  z-index: 1;
-}
-
-/* Completed Line */
 .step-item.completed .line {
   background: #2fa51a;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .label {
     font-size: 12px;
@@ -288,36 +180,34 @@
   transition: all 0.3s ease 0s;
 }
 
-/* STEP ITEM */
 .step-item {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   flex: 1;
+  height: 24px;
+  padding: 2px 16px;
 }
 
-/* Circle */
-.circle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid #9db3bd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: #607d8b;
-  background: #fff;
-  z-index: 2;
-  position: relative;
-}
-
-/* Horizontal Line */
+/* .line {
+  position: absolute;
+  top: 12px;
+  left: calc(50% + 12px);
+  width: calc(100% - 0.5px);
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    #9db3bd,
+    #9db3bd 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  z-index: 1;
+} */
 .line {
   position: absolute;
-  top: 13px; /* circle center */
+  top: 13px;
   left: 50%;
   width: 100%;
   height: 1px;
@@ -332,7 +222,6 @@
   z-index: 1;
 }
 
-/* Remove line for last step */
 .step-item:last-child .line {
   display: none;
 }
@@ -353,7 +242,6 @@
   color: #fff;
 }
 
-/* Completed = Green */
 .step-item.completed .circle {
   color: #fff;
 }
@@ -362,18 +250,9 @@
   align-items: center;
   margin-left: auto;
   margin-right: 5%;
+  margin-top: -24px;
 }
 
-/* Default Label */
-.label {
-  margin-top: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #9db3bd;
-  transition: all 0.3s ease;
-}
-
-/* ===== COMPLETED (Green) ===== */
 .step-item.completed .circle {
   color: #fff;
 }
@@ -383,7 +262,6 @@
   font-weight: 600;
 }
 
-/* ===== ACTIVE FIRST STEP (Index 0 Green) ===== */
 .step-item.active.first-step .circle {
   background: #2fa51a;
   border-color: #2fa51a;
@@ -395,7 +273,6 @@
   font-weight: 600;
 }
 
-/* ===== ACTIVE OTHER STEPS (Orange Process) ===== */
 .step-item.active:not(.first-step) .circle {
   color: #fff;
 }
@@ -404,10 +281,9 @@
   font-weight: 600;
 }
 
-/* Default circle */
 .circle {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid #9db3bd;
   display: flex;
@@ -417,18 +293,19 @@
   font-weight: 600;
   background: #fff;
   color: #607d8b;
+  z-index: 2;
+  position: relative;
   transition: all 0.3s ease;
 }
 
-/* Default label */
 .label {
   margin-top: 6px;
   font-size: 14px;
   color: #9db3bd;
+  font-weight: 500;
   transition: all 0.3s ease;
 }
 
-/* ===== FIRST STEP ALWAYS GREEN ===== */
 .step-item:first-child .circle {
   background: #2fa51a;
   border-color: #2fa51a;
@@ -440,7 +317,6 @@
   font-weight: 600;
 }
 
-/* ===== ACTIVE (Process - Orange except first) ===== */
 .step-item.active:not(:first-child) .circle {
   background-color: white;
   color: #f97316;
@@ -451,7 +327,6 @@
   font-weight: 600;
 }
 
-/* ===== COMPLETED ===== */
 .step-item.completed .circle {
   color: #fff;
 }
@@ -620,4 +495,186 @@
   justify-content: center;
   gap: 10px;
   transition: all 0.3s ease 0s;
+}
+
+.right-side-modal .modal-dialog {
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  width: 323px;
+  max-width: 355px;
+  margin: 0 !important;
+  width: 498px;
+  animation: slideInRight 0.3s ease-out;
+}
+
+.right-side-modal .modal-content {
+  width: 323px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+  border-radius: 12px 0 0 12px;
+}
+.right-side-modal .modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  width: 474px;
+  min-height: 386px;
+}
+
+.title {
+  background: none;
+}
+.img {
+  width: 28px;
+  height: 28px;
+}
+.modal-header .title {
+  font-family: "Onest", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #232b2e;
+}
+.modal-header {
+  padding: 0;
+  gap: 8px;
+}
+.right-side-modal .modal-content {
+  height: 100vh;
+  border-radius: 12px 0 0 12px;
+}
+.right-side-modal .modal-dialog {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.right-side-modal .modal-content {
+  width: 323px;
+  max-height: 308px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.right-side-modal .modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.right-side-modal .modal-header {
+  padding: 0 !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 8px;
+}
+
+.sendWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.approvalDropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  width: 323px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.dropdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.dropdownHeader h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.dropdownBody {
+  padding: 20px;
+}
+
+.dropdownBody label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.inputBox {
+  min-height: 110px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e4e4e4;
+  background: #fafafa;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.dropdownFooter {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sendBtn {
+  background: #6f8b95;
+  color: white;
+  border: none;
+  padding: 8px 22px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+::ng-deep .completeStepICon svg {
+  height: 24px;
+  width: 24px;
 }

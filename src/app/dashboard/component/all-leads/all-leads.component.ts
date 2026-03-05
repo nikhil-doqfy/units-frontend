@@ -58,7 +58,6 @@ import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn
     EditLeadsFormComponent,
     ActivityHistoryFormComponent,
     ActivityHistroyIconsComponent,
-    DateIconComponent,
     NgbDatepickerModule,
     CalenderIconComponent,
     CircularCrossBtnIconComponent,

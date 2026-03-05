@@ -48,16 +48,18 @@ export class PropertyAnalyticsComponent implements OnInit {
   showDetailView: boolean = false;
   leases: any[] = [];
   private translate = inject(TranslateService);
-  constructor(private router: Router) {}
-  ngOnInit(): void {
-    // this.test();
-  }
+  activeTab: any = 'properties';
+  selectedLease: any = null;
+  componentName = 'RentalComponent';
+  totalRecords = 0;
+  rowsPerPageOptions = [10, 25, 50, 100];
+  rowsPerPage = 10;
+  currentPage = 1;
   photos: string[] = [
     '../assets/property/property-comprison1.svg',
     '../assets/property/property-comprison2.svg',
     'assets/property/property-comprison3.svg',
   ];
-  activeTab: any = 'properties';
 
   properties = [
     {
@@ -100,7 +102,10 @@ export class PropertyAnalyticsComponent implements OnInit {
       parking: 500,
     },
   ];
-  selectedLease: any = null;
+  constructor(private router: Router) {}
+  ngOnInit(): void {
+    // this.test();
+  }
 
   onRentalClick(event: any) {
     console.log('BAR CLICKED', event);
@@ -126,11 +131,7 @@ export class PropertyAnalyticsComponent implements OnInit {
     this.detailViewChange.emit(true);
     this.router.navigate(['/dashboard/rental']);
   }
-  componentName = 'RentalComponent';
-  totalRecords = 0;
-  rowsPerPageOptions = [10, 25, 50, 100];
-  rowsPerPage = 10;
-  currentPage = 1;
+
   handleExportClick(): void {}
   handlePreviewClick() {
     this.router.navigate(['/dashboard/invoice-template']);

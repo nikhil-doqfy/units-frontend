@@ -1,5 +1,4 @@
 <div class="cmnStepLayout">
-  <!-- LEFT SIDE -->
   <div class="cmnStepLayoutLft">
     <div class="cmnStepNav">
       <app-white-card [title]="leftCardTitle">
@@ -36,11 +35,22 @@
         <app-white-card>
           <div class="cmnStepFrmHdr mb-4">
             <app-card-title
-              [title]="group.main.title"
+              [title]="group.main.pageTitle"
               [description]="group.main.description"
             >
             </app-card-title>
             <div class="stepActionBtns">
+              <button
+                type="button"
+                class="bulkUploadBtn"
+                *ngIf="group.main.showBulkUpload"
+                (click)="openBulkUploadModal(bulkuploadContent)"
+              >
+                <i class="uploadIcon"
+                  ><app-download-icon></app-download-icon
+                ></i>
+                Bulk Uploads
+              </button>
               <button
                 type="button"
                 class="btnWhite btnCommon"
@@ -107,3 +117,34 @@
     </ng-container>
   </div>
 </div>
+
+<!-----------bulk model ----------------------------------------->
+
+<ng-template #bulkuploadContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "Bulk Upload" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-bulk-upload #BulkUploadComponent />
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button type="button" class="btn btnCommon">
+      {{ "Upload" | translate }}
+    </button>
+  </div>
+</ng-template>

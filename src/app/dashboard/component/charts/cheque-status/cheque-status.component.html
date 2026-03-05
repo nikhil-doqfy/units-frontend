@@ -2,9 +2,7 @@
   <div class="chequeStatMain">
     <h4 class="chequeStatTitle">Total Cheques - {{ totalCheques }}</h4>
 
-    <!-- Stacked bar -->
     <div class="barWrapper">
-      <!-- REALIZED half -->
       <div class="halfBar">
         <div
           class="realizedRemaining"
@@ -20,7 +18,6 @@
         </div>
       </div>
 
-      <!-- BOUNCED half -->
       <div class="halfBar">
         <div class="bouncedFill" [style.width.%]="bouncedFillPercent"></div>
         <div class="halfBarHover">
@@ -43,7 +40,6 @@
     </div>
   </div>
 
-  <!-- Aging Blocks -->
   <div class="agingBlockOuter">
     <div
       class="agingBlock"

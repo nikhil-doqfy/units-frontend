@@ -72,7 +72,7 @@ export class RevenueBarChartComponent {
       axisBorder: { show: false },
       axisTicks: { show: false },
       labels: {
-        rotate: -35, // 👈 yahin teda hoga
+        rotate: -35,
         rotateAlways: true,
         offsetY: -2,
         style: {

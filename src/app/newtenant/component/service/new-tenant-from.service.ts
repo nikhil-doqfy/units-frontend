@@ -194,15 +194,33 @@ export class NewTenantFromService {
     return this.btnTitle;
   }
 
-  handleMainButtonClick(goNext?: () => void) {
+  // handleMainButtonClick(goNext?: () => void) {
+  //   if (this.stepPhase() === 'NEGOTIATION') {
+  //     this.triggerNegotiation();
+  //   } else if (this.stepPhase() === 'CHEQUE') {
+  //     this.triggerChequeRequest();
+  //   } else if (this.agreementPhase() !== 'SIGNED') {
+  //     this.triggerAgreementSignature(goNext!);
+  //   } else {
+  //     this.triggerEjariSignature(goNext);
+  //   }
+  // }
+
+  handleMainButtonClick(goNext?: () => void, type?: 'AGREEMENT' | 'EJARI') {
+    if (type === 'AGREEMENT') {
+      this.triggerAgreementSignature(goNext!);
+      return;
+    }
+
+    if (type === 'EJARI') {
+      this.triggerEjariSignature(goNext);
+      return;
+    }
+
     if (this.stepPhase() === 'NEGOTIATION') {
       this.triggerNegotiation();
     } else if (this.stepPhase() === 'CHEQUE') {
       this.triggerChequeRequest();
-    } else if (this.agreementPhase() !== 'SIGNED') {
-      this.triggerAgreementSignature(goNext!);
-    } else {
-      this.triggerEjariSignature(goNext);
     }
   }
 
@@ -239,13 +257,11 @@ export class NewTenantFromService {
 
   triggerAgreementSignature(goNext: () => void) {
     if (this.agreementPhase() === 'INIT') {
-      // 1️⃣ First click → Waiting + Btn change
       this.msgText.set('Waiting for Signature');
       this.showMsg.set(true);
       this.btnTitle.set('Submit for Ejari');
       this.agreementPhase.set('SIGNING');
 
-      // 2️⃣ After 3 sec → Signed msg
       setTimeout(() => {
         this.msgText.set('Signed Successfully');
         this.agreementPhase.set('SIGNED');
@@ -255,14 +271,12 @@ export class NewTenantFromService {
         }, 2000);
       }, 3000);
     } else if (this.agreementPhase() === 'SIGNED') {
-      // 3️⃣ Submit for Ejari click → Next step
       goNext();
     }
   }
 
   triggerEjariSignature(goNext?: () => void) {
     if (this.ejariPhase() === 'INIT') {
-      // First click
       this.msgText.set('Waiting for Signature');
       this.showMsg.set(true);
       this.btnTitle.set('Approval & Generate Invoice');

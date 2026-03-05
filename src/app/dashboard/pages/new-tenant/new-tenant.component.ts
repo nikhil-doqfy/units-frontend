@@ -18,57 +18,13 @@ import { NewTenantFromService } from '../../../newtenant/component/service/new-t
   styleUrl: './new-tenant.component.css',
 })
 export class NewTenantComponent {
-  // private destroyRef = inject(DestroyRef);
-  // private translate = inject(TranslateService);
-  // private newTenantService = inject(NewTenantFromService);
-
-  // showDetailView: boolean = false;
-
-  // private sharedService = inject(SharedService);
-  // breadcrumbData: BreadCrumb[] = [];
-  // steps = this.newTenantService.PropertySteps();
-  // activeIndex = this.newTenantService.getActiveIndex();
-
-  // constructor() {}
-
-  // ngOnInit() {
-  //   this.loadBreadcrumb();
-  //   this.initLanguageListener();
-  // }
-  // loadBreadcrumb() {
-  //   if (this.showDetailView) {
-  //     this.setBreadCrumb([
-  //       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-  //       { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/new-tenant' },
-  //       { label: 'PROPERTY_DETAILS', link: '' },
-  //     ]);
-  //   } else {
-  //     this.setBreadCrumb([
-  //       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-  //       { label: 'PAGE_TITLE.NEW_TENANT', link: '' },
-  //     ]);
-  //   }
-  // }
-  // setBreadCrumb(breadCrumb: BreadCrumb[]) {
-  //   this.sharedService
-  //     .getBreadcrumbs(breadCrumb)
-  //     .subscribe((data) => (this.breadcrumbData = data));
-  // }
-
-  // initLanguageListener() {
-  //   this.translate.onLangChange
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe(() => {
-  //       this.loadBreadcrumb();
-  //     });
-  // }
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   private newTenantService = inject(NewTenantFromService);
   private sharedService = inject(SharedService);
 
-  steps = this.newTenantService.PropertySteps(); // signal
-  activeIndex = this.newTenantService.getActiveIndex(); // signal
+  steps = this.newTenantService.PropertySteps();
+  activeIndex = this.newTenantService.getActiveIndex();
 
   showDetailView: boolean = false;
   breadcrumbData: BreadCrumb[] = [];

@@ -1,5 +1,3 @@
-<!-- Waiting/Status Overlay -->
-
 <app-white-card>
   <div class="stepper-container">
     <div class="sub-stepper" *ngIf="currentSubStep">
@@ -17,16 +15,16 @@
         [class.active]="i === activeIndex()"
         [class.completed]="i < activeIndex()"
       >
-        <div class="circle">
-          <ng-container *ngIf="i < activeIndex(); else stepNumber">
-            <i>
-              <app-send-invite-icon></app-send-invite-icon>
-            </i>
-          </ng-container>
-          <ng-template #stepNumber>
+        <ng-container *ngIf="i < activeIndex(); else stepNumber">
+          <i class="completeStepICon">
+            <app-send-invite-icon></app-send-invite-icon>
+          </i>
+        </ng-container>
+        <ng-template #stepNumber>
+          <div class="circle">
             {{ i + 1 }}
-          </ng-template>
-        </div>
+          </div>
+        </ng-template>
 
         <div class="label">{{ step.title }}</div>
 
@@ -111,17 +109,32 @@
         <button class="send-negotiation-btn" (click)="onMainClick()">
           {{ btnTitle$() }}
 
-          <!-- Dropdown icon ONLY for Send Negotiation -->
           <span
             *ngIf="btnTitle$() === 'Send Negotiation'"
             class="arrow-down"
-            (click)="
-              openAddTenantModal(inviteTenantContent); $event.stopPropagation()
-            "
+            (click)="onArrowClick($event)"
             >|
             <app-arrow-down-icon></app-arrow-down-icon>
           </span>
         </button>
+        <div class="approvalDropdown" *ngIf="isDropdownOpen">
+          <div class="dropdownHeader">
+            <h4>Send for Approval</h4>
+            <button class="closeBtn" (click)="isDropdownOpen = false">✕</button>
+          </div>
+
+          <div class="dropdownBody">
+            <label>Select Recipient</label>
+
+            <div class="inputBox">
+              Type "&#64;" to search and add managers or users.
+            </div>
+          </div>
+
+          <div class="dropdownFooter">
+            <button class="sendBtn">Send</button>
+          </div>
+        </div>
       </div>
       <i *ngIf="getNextBtnLabel() !== 'Approval & Generate Invoice'">
         <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
@@ -139,11 +152,11 @@
     ></ng-container>
   </ng-container>
 </div>
-
+<!-- 
 <ng-template #inviteTenantContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
-      {{ "INVITE_TENANT" | translate }}
+      {{ "Send for Approval " | translate }}
     </h4>
     <button
       type="button"
@@ -156,15 +169,15 @@
     <app-send-negotiation></app-send-negotiation>
   </div>
   <div class="modal-footer">
-    <button
+     <button
       type="button"
       class="btn btnCommon btnTransparent"
       (click)="modal.dismiss('Save click')"
     >
       {{ "CANCEL" | translate }}
-    </button>
+    </button> 
     <button type="button" class="btn btnCommon">
-      {{ "SEND_INVITATION" | translate }}
+      {{ "Send" | translate }}
     </button>
   </div>
-</ng-template>
+</ng-template> -->

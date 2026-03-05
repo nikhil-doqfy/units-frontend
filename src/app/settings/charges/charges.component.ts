@@ -40,8 +40,15 @@ export interface Charge {
   styleUrl: './charges.component.css',
 })
 export class ChargesComponent {
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+  private sharedService = inject(SharedService);
+
   currentLanguage = 'en';
   showSave = false;
+  showDetailView: boolean = false;
+  breadcrumbData: BreadCrumb[] = [];
+
   charges: Charge[] = [
     {
       label: 'Admin Fee',
@@ -137,6 +144,10 @@ export class ChargesComponent {
     },
   ];
 
+  ngOnInit() {
+    this.loadBreadcrumb();
+  }
+
   addNewRow() {
     this.showSave = true;
 
@@ -170,24 +181,12 @@ export class ChargesComponent {
 
     row.isNew = false;
 
-    // remove from top
     this.charges.splice(index, 1);
 
-    // add at bottom
     this.charges.push(row);
 
     this.showSave = false;
   }
-
-  private destroyRef = inject(DestroyRef);
-  private translate = inject(TranslateService);
-  ngOnInit() {
-    this.loadBreadcrumb();
-  }
-  showDetailView: boolean = false;
-
-  private sharedService = inject(SharedService);
-  breadcrumbData: BreadCrumb[] = [];
 
   initLanguageListener() {
     this.translate.onLangChange

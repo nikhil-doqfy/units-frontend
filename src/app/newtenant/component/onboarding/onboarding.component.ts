@@ -65,20 +65,15 @@ export class OnboardingComponent {
   uploadAdditionalDoc() {
     this.showDropdown = false;
     console.log('Additional Document clicked');
-    // इथे तुमचं upload logic टाका
   }
   showWaitingMsg = false;
 
   sendNegotiation() {
-    // Show msg + blur overlay
     this.showWaitingMsg = true;
 
-    // Hide after 2 sec
     setTimeout(() => {
       this.showWaitingMsg = false;
     }, 2000);
-
-    // Call next step
   }
 
   private getDismissReason(reason: any): string {

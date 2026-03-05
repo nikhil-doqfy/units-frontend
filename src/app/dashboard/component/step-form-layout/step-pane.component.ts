@@ -13,6 +13,7 @@ export class StepPaneComponent {
   @Input() title!: string;
   @Input() pageTitle!: string;
   @Input() showEditButton: boolean = false;
+  @Input() showBulkUpload: boolean = false;
   @Input() description!: string;
   @Input() secondCard: boolean = false;
   @Input() showInvitePmcBtn: boolean = false;

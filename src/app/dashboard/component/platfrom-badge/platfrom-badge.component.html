@@ -1,9 +1,7 @@
 <div class="platform-wrapper">
   <div class="platform-badge">
-    <!-- Image asel tar -->
     <img *ngIf="logo" [src]="logo" [alt]="label" class="platform-logo" />
 
-    <!-- Image nasel tar -->
     <span *ngIf="!logo" class="platform-text">
       {{ label }}
     </span>

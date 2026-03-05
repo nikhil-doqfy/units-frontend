@@ -146,12 +146,12 @@
   background-color: var(--whiteBg);
   display: inline-flex;
   align-items: center;
-  gap: 12px; /* spacing between icon and text */
+  gap: 12px;
   padding: 8px 20px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative; /* for status icon */
+  position: relative;
 }
 
 .pdfDcmntItem:hover {
@@ -210,15 +210,14 @@
   background-color: #f39c12;
 }
 
-/* ===== Replace Inline ===== */
 .replace-wrap {
-  display: inline-flex; /* inline and horizontal */
-  align-items: center; /* center text + icon vertically */
-  gap: 4px; /* space between text and icon */
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   margin-top: 4px;
 }
 
 .replace-icon {
   font-size: 12px;
-  color: #f39c12; /* same color as text */
+  color: #f39c12;
 }

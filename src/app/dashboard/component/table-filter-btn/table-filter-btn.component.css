@@ -27,9 +27,9 @@
 }
 
 app-scannericon {
-  order: 2; /* Scan Cheque icon second */
+  order: 2;
 }
 
 app-plus-icon {
-  order: 1; /* Add Cheque icon first */
+  order: 1;
 }

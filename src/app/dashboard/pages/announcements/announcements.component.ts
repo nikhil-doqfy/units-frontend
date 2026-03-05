@@ -66,7 +66,7 @@ export class AnnouncementsComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   prop: 'logs' | 'sent' | 'scheduled' | 'draft' | 'deleted' | null = 'logs';
-
+  activeTab: 'marketing' | 'ads' = 'marketing';
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   ngOnInit() {

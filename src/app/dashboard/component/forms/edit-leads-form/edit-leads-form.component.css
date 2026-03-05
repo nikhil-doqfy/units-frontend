@@ -1,9 +1,7 @@
-/* ---------- FORM ---------- */
 .leadForm {
   padding: 4px 2px;
 }
 
-/* ---------- LABEL ---------- */
 .form-label {
   font-size: 14px;
   font-weight: 500;
@@ -15,7 +13,6 @@
   color: #ef4444;
 }
 
-/* ---------- INPUT ---------- */
 .form-control {
   height: 42px;
   border-radius: 8px;
@@ -28,7 +25,6 @@
   box-shadow: none;
 }
 
-/* ---------- SOURCE RADIO ---------- */
 .sourceWrap {
   display: flex;
   gap: 24px;
@@ -48,7 +44,6 @@
   accent-color: #2563eb;
 }
 
-/* ---------- SEND LINK ---------- */
 .sendLink {
   font-size: 13px;
   color: #2563eb;
@@ -56,7 +51,6 @@
   text-decoration: underline;
 }
 
-/* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {
   .form-control {
     height: 40px;

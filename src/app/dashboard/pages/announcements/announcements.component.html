@@ -1,663 +1,728 @@
 <div class="mb-3">
-  <app-white-card *ngIf="!showCreateScreen">
-    <div class="row align-items-center justify-content-between g-3">
-      <div class="col-md">
-        <div class="commonBoxTabs">
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link active"
-                id="notification-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#notification-tab-pane"
-                type="button"
-                role="tab"
-                [class.active]="prop === 'logs'"
-                (click)="changeTab('logs')"
-                aria-controls="notification-tab-pane"
-                aria-selected="true"
-              >
-                {{ "Notification Logs" | translate }}
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="sentItems-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#sentItems-tab-pane"
-                type="button"
-                role="tab"
-                [class.active]="prop === 'sent'"
-                (click)="changeTab('sent')"
-                aria-controls="sentItems-tab-pane"
-                aria-selected="false"
-              >
-                {{ "Sents Items" | translate }}
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="scheduled-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#scheduled-tab-pane"
-                type="button"
-                role="tab"
-                [class.active]="prop === 'scheduled'"
-                (click)="changeTab('scheduled')"
-                aria-controls="scheduled-tab-pane"
-                aria-selected="false"
-              >
-                {{ "Scheduled" | translate }}
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="drafts-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#drafts-tab-pane"
-                type="button"
-                role="tab"
-                [class.active]="prop === 'draft'"
-                (click)="changeTab('draft')"
-                aria-controls="drafts-tab-pane"
-                aria-selected="false"
-              >
-                {{ "Drafts" | translate }}
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="deletedItems-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#deletedItems-tab-pane"
-                type="button"
-                role="tab"
-                [class.active]="prop === 'deleted'"
-                (click)="changeTab('deleted')"
-                aria-controls="deletedItems-tab-pane"
-                aria-selected="false"
-              >
-                {{ "Deleted Items" | translate }}
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="col-md-auto">
-        <button type="button" class="btn btnCommon" (click)="openCreate()">
-          <i><app-plus-icon /></i> {{ "New Announcement" | translate }}
-        </button>
-      </div>
+  <app-white-card>
+    <div class="commonTabs">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="marketingNotification-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#marketingNotification-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="marketingNotification-tab-pane"
+            aria-selected="true"
+            (click)="activeTab = 'marketing'"
+          >
+            {{ "Marketing Notification" | translate }}
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="ads-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#ads-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="ads-tab-pane"
+            aria-selected="false"
+            (click)="activeTab = 'ads'"
+          >
+            Ads
+          </button>
+        </li>
+      </ul>
     </div>
   </app-white-card>
-  <ng-container *ngIf="!showCreateScreen">
-    <!-- EXISTING FULL TABLE + TABS UI HERE -->
+</div>
 
-    <div class="tab-content mt-3" id="myTabContent">
-      <div
-        class="tab-pane fade show active"
-        id="allUsers-tab-pane"
-        role="tabpanel"
-        aria-labelledby="allUsers-tab"
-        tabindex="0"
-      >
-        <div class="cmmnTblOuter">
-          <div class="cmmnTblHdr">
-            <div class="row align-items-center">
-              <div class="col-md">
-                <app-table-title
-                  [title]="'Results' | translate"
-                  [subtitle]="'(' + totalRecords + ')'"
-                  (onRefresh)="onRefresh()"
-                ></app-table-title>
-              </div>
-              <div class="col-md-auto">
-                <div class="d-flex align-items-center gap-2 gap-md-3">
-                  <app-table-search
-                    [placeholder]="'SEARCH_HERE' | translate"
-                    (onValueChange)="searchTextChange($event)"
-                  />
-                  <app-custom-select
-                    placeholder="Property:All"
-                    key="key"
-                    value="value"
+<div class="tab-content" id="myTabContent">
+  <!-- <div
+    class="tab-pane fade show active"
+    id="inOnboarding-tab-pane"
+    role="tabpanel"
+    aria-labelledby="inOnboarding-tab"
+    tabindex="0"
+  > -->
+  <div
+    class="tab-pane fade show active"
+    id="marketingNotification-tab-pane"
+    role="tabpanel"
+  >
+    <ng-container *ngTemplateOutlet="commonContent"></ng-container>
+  </div>
+  <div class="tab-pane fade show active" id="ads-tab-pane" role="tabpanel">
+    <ng-container *ngTemplateOutlet="commonContent"></ng-container>
+  </div>
+  <ng-template #commonContent>
+    <div class="mb-3">
+      <app-white-card *ngIf="!showCreateScreen">
+        <div class="row align-items-center justify-content-between g-3">
+          <div class="col-md">
+            <div class="commonBoxTabs">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active"
+                    id="notification-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#notification-tab-pane"
+                    type="button"
+                    role="tab"
+                    [class.active]="prop === 'logs'"
+                    (click)="changeTab('logs')"
+                    aria-controls="notification-tab-pane"
+                    aria-selected="true"
                   >
-                  </app-custom-select>
-                  <app-custom-select
-                    placeholder="Block/Tower:All"
-                    key="key"
-                    value="value"
+                    {{ "Notification Logs" | translate }}
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="sentItems-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#sentItems-tab-pane"
+                    type="button"
+                    role="tab"
+                    [class.active]="prop === 'sent'"
+                    (click)="changeTab('sent')"
+                    aria-controls="sentItems-tab-pane"
+                    aria-selected="false"
                   >
-                  </app-custom-select>
-                  <app-custom-select
-                    placeholder="Unit:All"
-                    key="key"
-                    value="value"
+                    {{ "Sents Items" | translate }}
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="scheduled-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#scheduled-tab-pane"
+                    type="button"
+                    role="tab"
+                    [class.active]="prop === 'scheduled'"
+                    (click)="changeTab('scheduled')"
+                    aria-controls="scheduled-tab-pane"
+                    aria-selected="false"
                   >
-                  </app-custom-select>
-
-                  <app-table-filter-btn
-                    [title]="'EXPORT' | translate"
-                    [hasIcon]="true"
+                    {{ "Scheduled" | translate }}
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="drafts-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#drafts-tab-pane"
+                    type="button"
+                    role="tab"
+                    [class.active]="prop === 'draft'"
+                    (click)="changeTab('draft')"
+                    aria-controls="drafts-tab-pane"
+                    aria-selected="false"
                   >
-                    <app-export-icon />
-                  </app-table-filter-btn>
-                </div>
-              </div>
+                    {{ "Drafts" | translate }}
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="deletedItems-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#deletedItems-tab-pane"
+                    type="button"
+                    role="tab"
+                    [class.active]="prop === 'deleted'"
+                    (click)="changeTab('deleted')"
+                    aria-controls="deletedItems-tab-pane"
+                    aria-selected="false"
+                  >
+                    {{ "Deleted Items" | translate }}
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="cmmnTblBody">
-            <div class="table-responsive">
-              <table class="table-bordered table">
-                <thead>
-                  <tr>
-                    <th>Sl.No</th>
-                    <th
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      Log ID
-                    </th>
-                    <th
-                      *ngIf="
-                        prop === 'sent' ||
-                        prop === 'scheduled' ||
-                        prop === 'deleted'
-                      "
-                    >
-                      ID
-                    </th>
-                    <th *ngIf="prop == 'draft'">Draft ID</th>
-
-                    <th>Announcement Title</th>
-
-                    <th>
-                      Property Name<i><app-sorting-icon></app-sorting-icon></i>
-                    </th>
-                    <th>Block / Tower</th>
-                    <th>Unit</th>
-                    <th *ngIf="prop == 'draft'">
-                      Last Edited Date
-                      <i><app-sorting-icon></app-sorting-icon></i>
-                    </th>
-                    <th *ngIf="prop === 'deleted'">Deleted Date</th>
-                    <th
-                      *ngIf="
-                        prop === 'sent' ||
-                        (prop !== 'deleted' &&
-                          prop !== 'logs' &&
-                          prop !== 'scheduled' &&
-                          prop !== 'draft')
-                      "
-                    >
-                      Sent By
-                    </th>
-                    <th
-                      *ngIf="
-                        prop === 'logs' ||
-                        prop === 'sent' ||
-                        (prop !== 'deleted' &&
-                          prop !== 'scheduled' &&
-                          prop !== 'draft')
-                      "
-                    >
-                      Sent Date<i><app-sorting-icon></app-sorting-icon></i>
-                    </th>
-                    <th *ngIf="prop === 'scheduled'">
-                      Scheduled Date & Time
-                      <i><app-sorting-icon></app-sorting-icon></i>
-                    </th>
-
-                    <th *ngIf="prop !== 'draft' && prop !== 'deleted'">
-                      Channel
-                    </th>
-                    <th
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      Recipients
-                    </th>
-                    <th
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      Delivered
-                    </th>
-                    <th
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      Failed
-                    </th>
-
-                    <th width="120"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>01</td>
-                    <td>LP9021</td>
-                    <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
-                      Water Supply Maintenance Notice
-                    </td>
-
-                    <td *ngIf="prop === 'sent'">Lift Maintenance Notice</td>
-                    <td *ngIf="prop === 'scheduled'">
-                      Monthly press control Notice
-                    </td>
-                    <td>
-                      <app-table-img-item img="" title="Novatis AG" />
-                    </td>
-                    <td>Evergreen(B)</td>
-                    <td>All Units</td>
-                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
-                      12 Jan 2026 02:00 PM
-                    </td>
-                    <td *ngIf="prop === 'sent'">Ayesha Siddiqui</td>
-                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
-                      01 Feb 25
-                    </td>
-                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
-                      App/Email/SMS
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      240
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      240
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      0
-                    </td>
-                    <td align="center">
-                      <div class="tbl-action-inline">
-                        <app-report-icon></app-report-icon>
-                        <div class="cmmnTblActnBtnDiv">View Reports</div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>02</td>
-                    <td>LP8021</td>
-                    <td>Parking Area Refreshing</td>
-
-                    <td>
-                      <app-table-img-item img="" title="Sliechi tower" />
-                    </td>
-                    <td>All Blocks/Towers</td>
-                    <td>All Units</td>
-                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
-                      12 Jan 2026 02:00 PM
-                    </td>
-
-                    <td *ngIf="prop === 'sent'">Fatima khan</td>
-                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
-                      01 Mar 25
-                    </td>
-                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
-                      App/SMS
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      240
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      210
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      30
-                    </td>
-                    <td align="center">
-                      <div class="tbl-action-inline">
-                        <app-report-icon></app-report-icon>
-                        <div class="cmmnTblActnBtnDiv">View Reports</div>
-                      </div>
-                      <div class="tbl-action">
-                        <app-resend-icon></app-resend-icon>
-                        <div class="cmmnTblActnBtnDiv">Resend Failed</div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>03</td>
-                    <td>VC79021</td>
-                    <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
-                      Garage Expansion Project
-                    </td>
-                    <td *ngIf="prop === 'sent'">Community Event Invitation</td>
-                    <td *ngIf="prop === 'scheduled'">
-                      Fire Drill Announcement
-                    </td>
-
-                    <td>
-                      <app-table-img-item img="" title="Jainhalilla" />
-                    </td>
-                    <td>Sunrise(D)</td>
-                    <td>All Units</td>
-                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
-                      12 Jan 2026 02:00 PM
-                    </td>
-
-                    <td *ngIf="prop === 'sent'">Ahemed Raza</td>
-                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
-                      03 Apr 25
-                    </td>
-                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
-                      App/SMS
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      140
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      140
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      0
-                    </td>
-                    <td align="center">
-                      <div class="tbl-action-inline">
-                        <app-report-icon></app-report-icon>
-                        <div class="cmmnTblActnBtnDiv">View Reports</div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>04</td>
-                    <td>VC69021</td>
-                    <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
-                      Parking Area Refreshing
-                    </td>
-                    <td *ngIf="prop === 'sent'">Security update</td>
-                    <td *ngIf="prop === 'scheduled'">
-                      Fire Drill Announcement
-                    </td>
-
-                    <td>
-                      <app-table-img-item img="" title="Property C" />
-                    </td>
-                    <td>Majestic(E)</td>
-                    <td>All Units</td>
-                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
-                      12 Jan 2026 02:00 PM
-                    </td>
-
-                    <td *ngIf="prop === 'sent'">Ali hasan</td>
-                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
-                      01 May 25
-                    </td>
-                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
-                      App/SMS
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      120
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      120
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      0
-                    </td>
-                    <td align="center">
-                      <div class="tbl-action-inline">
-                        <app-report-icon></app-report-icon>
-                        <div class="cmmnTblActnBtnDiv">View Reports</div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>05</td>
-                    <td>VC59021</td>
-                    <td>Electric Vehicle Charging</td>
-                    <td>
-                      <app-table-img-item img="" title="Rithi Tower B" />
-                    </td>
-                    <td>Pinnacle(F)</td>
-                    <td>pinnacle (F)606</td>
-                    <td *ngIf="prop === 'sent'">Zainab Malik</td>
-                    <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
-                      04 Jun 25
-                    </td>
-                    <td *ngIf="prop === 'scheduled' || prop === 'draft'">
-                      12 Jan 2026 02:00 PM
-                    </td>
-
-                    <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
-                      App/Email/SMS
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      240
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      240
-                    </td>
-                    <td
-                      *ngIf="
-                        prop !== 'sent' &&
-                        prop !== 'scheduled' &&
-                        prop !== 'draft' &&
-                        prop !== 'deleted'
-                      "
-                    >
-                      0
-                    </td>
-                    <td align="center">
-                      <div class="tbl-action-inline">
-                        <app-report-icon></app-report-icon>
-                        <div class="cmmnTblActnBtnDiv">View Reports</div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="cmmnTblFtr">
-            <app-table-select
-              [componentName]="componentName"
-              [rowsPerPage]="rowsPerPage"
-              [rowsPerPageOptions]="rowsPerPageOptions"
-              (rowsPerPageChange)="onPageSizeChange($event)"
-            />
-            <app-table-pagination
-              [componentName]="componentName"
-              [currentPage]="currentPage"
-              [totalRecords]="totalRecords"
-              [rowsPerPage]="rowsPerPage"
-              (pageChange)="onPageChange($event)"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="showCreateScreen">
-    <div class="announcement-page">
-      <!-- Header -->
-      <div class="top-actions">
-        <div></div>
-
-        <div class="right-actions">
-          <app-preview-icon></app-preview-icon>
-          <app-delete-icon></app-delete-icon>|
-          <button class="btn-outline">Save as Draft</button>
-
-          <div class="btn btncommon">
-            <button class="btn btnCommon">
-              Send Now |<i><app-arrow-down-icon></app-arrow-down-icon></i>
+          <div class="col-md-auto">
+            <button type="button" class="btn btnCommon" (click)="openCreate()">
+              <i><app-plus-icon /></i>
+              {{
+                activeTab === "ads"
+                  ? "Create New"
+                  : ("New Announcement" | translate)
+              }}
             </button>
           </div>
-
-          <button class="icon-btn close" (click)="closeCreate()">
-            <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
-          </button>
         </div>
-      </div>
-      <div class="mt-3">
-        <app-white-card>
-          <div class="audience-header">
-            <span class="title">Audience Selection</span>
-            <span class="badge">01</span>
-          </div>
+      </app-white-card>
+      <ng-container *ngIf="!showCreateScreen">
+        <div class="tab-content mt-3" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="allUsers-tab-pane"
+            role="tabpanel"
+            aria-labelledby="allUsers-tab"
+            tabindex="0"
+          >
+            <div class="cmmnTblOuter">
+              <div class="cmmnTblHdr">
+                <div class="row align-items-center">
+                  <div class="col-md">
+                    <app-table-title
+                      [title]="'Results' | translate"
+                      [subtitle]="'(' + totalRecords + ')'"
+                      (onRefresh)="onRefresh()"
+                    ></app-table-title>
+                  </div>
+                  <div class="col-md-auto">
+                    <div class="d-flex align-items-center gap-2 gap-md-3">
+                      <app-table-search
+                        [placeholder]="'SEARCH_HERE' | translate"
+                        (onValueChange)="searchTextChange($event)"
+                      />
+                      <app-custom-select
+                        placeholder="Property:All"
+                        key="key"
+                        value="value"
+                      >
+                      </app-custom-select>
+                      <app-custom-select
+                        placeholder="Block/Tower:All"
+                        key="key"
+                        value="value"
+                      >
+                      </app-custom-select>
+                      <app-custom-select
+                        placeholder="Unit:All"
+                        key="key"
+                        value="value"
+                      >
+                      </app-custom-select>
 
-          <div class="audience-form">
-            <div class="form-group">
-              <label>Property</label>
-              <select>
-                <option>--Select--</option>
-              </select>
+                      <app-table-filter-btn
+                        [title]="'EXPORT' | translate"
+                        [hasIcon]="true"
+                      >
+                        <app-export-icon />
+                      </app-table-filter-btn>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cmmnTblBody">
+                <div class="table-responsive">
+                  <table class="table-bordered table">
+                    <thead>
+                      <tr>
+                        <th>Sl.No</th>
+                        <th
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          Log ID
+                        </th>
+                        <th
+                          *ngIf="
+                            prop === 'sent' ||
+                            prop === 'scheduled' ||
+                            prop === 'deleted'
+                          "
+                        >
+                          ID
+                        </th>
+                        <th *ngIf="prop == 'draft'">Draft ID</th>
+
+                        <th>Announcement Title</th>
+
+                        <th>
+                          Property Name<i
+                            ><app-sorting-icon></app-sorting-icon
+                          ></i>
+                        </th>
+                        <th>Block / Tower</th>
+                        <th>Unit</th>
+                        <th *ngIf="prop == 'draft'">
+                          Last Edited Date
+                          <i><app-sorting-icon></app-sorting-icon></i>
+                        </th>
+                        <th *ngIf="prop === 'deleted'">Deleted Date</th>
+                        <th
+                          *ngIf="
+                            prop === 'sent' ||
+                            (prop !== 'deleted' &&
+                              prop !== 'logs' &&
+                              prop !== 'scheduled' &&
+                              prop !== 'draft')
+                          "
+                        >
+                          Sent By
+                        </th>
+                        <th
+                          *ngIf="
+                            prop === 'logs' ||
+                            prop === 'sent' ||
+                            (prop !== 'deleted' &&
+                              prop !== 'scheduled' &&
+                              prop !== 'draft')
+                          "
+                        >
+                          Sent Date<i><app-sorting-icon></app-sorting-icon></i>
+                        </th>
+                        <th *ngIf="prop === 'scheduled'">
+                          Scheduled Date & Time
+                          <i><app-sorting-icon></app-sorting-icon></i>
+                        </th>
+
+                        <th *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                          Channel
+                        </th>
+                        <th
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          Recipients
+                        </th>
+                        <th
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          Delivered
+                        </th>
+                        <th
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          Failed
+                        </th>
+
+                        <th width="120"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>01</td>
+                        <td>LP9021</td>
+                        <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
+                          Water Supply Maintenance Notice
+                        </td>
+
+                        <td *ngIf="prop === 'sent'">Lift Maintenance Notice</td>
+                        <td *ngIf="prop === 'scheduled'">
+                          Monthly press control Notice
+                        </td>
+                        <td>
+                          <app-table-img-item img="" title="Novatis AG" />
+                        </td>
+                        <td>Evergreen(B)</td>
+                        <td>All Units</td>
+                        <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                          12 Jan 2026 02:00 PM
+                        </td>
+                        <td *ngIf="prop === 'sent'">Ayesha Siddiqui</td>
+                        <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                          01 Feb 25
+                        </td>
+                        <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                          App/Email/SMS
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          240
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          240
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          0
+                        </td>
+                        <td align="center">
+                          <div class="tbl-action-inline">
+                            <app-report-icon></app-report-icon>
+                            <div class="cmmnTblActnBtnDiv">View Reports</div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>02</td>
+                        <td>LP8021</td>
+                        <td>Parking Area Refreshing</td>
+
+                        <td>
+                          <app-table-img-item img="" title="Sliechi tower" />
+                        </td>
+                        <td>All Blocks/Towers</td>
+                        <td>All Units</td>
+                        <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                          12 Jan 2026 02:00 PM
+                        </td>
+
+                        <td *ngIf="prop === 'sent'">Fatima khan</td>
+                        <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                          01 Mar 25
+                        </td>
+                        <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                          App/SMS
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          240
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          210
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          30
+                        </td>
+                        <td align="center">
+                          <div class="tbl-action-inline">
+                            <app-report-icon></app-report-icon>
+                            <div class="cmmnTblActnBtnDiv">View Reports</div>
+                          </div>
+                          <div class="tbl-action">
+                            <app-resend-icon></app-resend-icon>
+                            <div class="cmmnTblActnBtnDiv">Resend Failed</div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>03</td>
+                        <td>VC79021</td>
+                        <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
+                          Garage Expansion Project
+                        </td>
+                        <td *ngIf="prop === 'sent'">
+                          Community Event Invitation
+                        </td>
+                        <td *ngIf="prop === 'scheduled'">
+                          Fire Drill Announcement
+                        </td>
+
+                        <td>
+                          <app-table-img-item img="" title="Jainhalilla" />
+                        </td>
+                        <td>Sunrise(D)</td>
+                        <td>All Units</td>
+                        <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                          12 Jan 2026 02:00 PM
+                        </td>
+
+                        <td *ngIf="prop === 'sent'">Ahemed Raza</td>
+                        <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                          03 Apr 25
+                        </td>
+                        <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                          App/SMS
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          140
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          140
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          0
+                        </td>
+                        <td align="center">
+                          <div class="tbl-action-inline">
+                            <app-report-icon></app-report-icon>
+                            <div class="cmmnTblActnBtnDiv">View Reports</div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>04</td>
+                        <td>VC69021</td>
+                        <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
+                          Parking Area Refreshing
+                        </td>
+                        <td *ngIf="prop === 'sent'">Security update</td>
+                        <td *ngIf="prop === 'scheduled'">
+                          Fire Drill Announcement
+                        </td>
+
+                        <td>
+                          <app-table-img-item img="" title="Property C" />
+                        </td>
+                        <td>Majestic(E)</td>
+                        <td>All Units</td>
+                        <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                          12 Jan 2026 02:00 PM
+                        </td>
+
+                        <td *ngIf="prop === 'sent'">Ali hasan</td>
+                        <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                          01 May 25
+                        </td>
+                        <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                          App/SMS
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          120
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          120
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          0
+                        </td>
+                        <td align="center">
+                          <div class="tbl-action-inline">
+                            <app-report-icon></app-report-icon>
+                            <div class="cmmnTblActnBtnDiv">View Reports</div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>05</td>
+                        <td>VC59021</td>
+                        <td>Electric Vehicle Charging</td>
+                        <td>
+                          <app-table-img-item img="" title="Rithi Tower B" />
+                        </td>
+                        <td>Pinnacle(F)</td>
+                        <td>pinnacle (F)606</td>
+                        <td *ngIf="prop === 'sent'">Zainab Malik</td>
+                        <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
+                          04 Jun 25
+                        </td>
+                        <td *ngIf="prop === 'scheduled' || prop === 'draft'">
+                          12 Jan 2026 02:00 PM
+                        </td>
+
+                        <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
+                          App/Email/SMS
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          240
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          240
+                        </td>
+                        <td
+                          *ngIf="
+                            prop !== 'sent' &&
+                            prop !== 'scheduled' &&
+                            prop !== 'draft' &&
+                            prop !== 'deleted'
+                          "
+                        >
+                          0
+                        </td>
+                        <td align="center">
+                          <div class="tbl-action-inline">
+                            <app-report-icon></app-report-icon>
+                            <div class="cmmnTblActnBtnDiv">View Reports</div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="cmmnTblFtr">
+                <app-table-select
+                  [componentName]="componentName"
+                  [rowsPerPage]="rowsPerPage"
+                  [rowsPerPageOptions]="rowsPerPageOptions"
+                  (rowsPerPageChange)="onPageSizeChange($event)"
+                />
+                <app-table-pagination
+                  [componentName]="componentName"
+                  [currentPage]="currentPage"
+                  [totalRecords]="totalRecords"
+                  [rowsPerPage]="rowsPerPage"
+                  (pageChange)="onPageChange($event)"
+                />
+              </div>
             </div>
+          </div>
+        </div>
+      </ng-container>
 
-            <div class="form-group">
-              <label>Block / Tower</label>
-              <select>
-                <option>--Select--</option>
-              </select>
+      <ng-container *ngIf="showCreateScreen">
+        <div class="announcement-page">
+          <!-- Header -->
+          <div class="top-actions">
+            <div></div>
+
+            <div class="right-actions">
+              <app-preview-icon></app-preview-icon>
+              <app-delete-icon></app-delete-icon>|
+              <button class="btn-outline">Save as Draft</button>
+
+              <div class="btn btncommon">
+                <button class="btn btnCommon">
+                  Send Now |<i><app-arrow-down-icon></app-arrow-down-icon></i>
+                </button>
+              </div>
+
+              <button class="icon-btn close" (click)="closeCreate()">
+                <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
+              </button>
             </div>
-
-            <div class="form-group">
-              <label>Unit</label>
-              <select>
-                <option>--Select--</option>
-              </select>
-            </div>
           </div>
-          <div class="d-flex gap-3 align-items-center mt-3">
-            <label> <input type="checkbox" /> App Notification </label>
+          <div class="mt-3">
+            <app-white-card>
+              <div class="audience-header">
+                <span class="title">Audience Selection</span>
+                <span class="badge">01</span>
+              </div>
 
-            <label> <input type="checkbox" /> SMS </label>
+              <div class="audience-form">
+                <div class="form-group">
+                  <label>Property</label>
+                  <select>
+                    <option>--Select--</option>
+                  </select>
+                </div>
 
-            <label> <input type="checkbox" /> Mail </label>
+                <div class="form-group">
+                  <label>Block / Tower</label>
+                  <select>
+                    <option>--Select--</option>
+                  </select>
+                </div>
 
-            <label> <input type="checkbox" /> WhatsApp </label>
+                <div class="form-group">
+                  <label>Unit</label>
+                  <select>
+                    <option>--Select--</option>
+                  </select>
+                </div>
+              </div>
+              <div class="d-flex gap-3 align-items-center mt-3">
+                <label> <input type="checkbox" /> App Notification </label>
+
+                <label> <input type="checkbox" /> SMS </label>
+
+                <label> <input type="checkbox" /> Mail </label>
+
+                <label> <input type="checkbox" /> WhatsApp </label>
+              </div>
+            </app-white-card>
           </div>
-        </app-white-card>
-      </div>
-      <div class="mt-3">
-        <app-white-card>
-          <div class="announce-header">
-            <span class="title">Announcement Details</span>
-            <span class="badge">02</span>
-          </div>
+          <div class="mt-3">
+            <app-white-card>
+              <div class="announce-header">
+                <span class="title">Announcement Details</span>
+                <span class="badge">02</span>
+              </div>
 
-          <!-- <div class="form-grid">
+              <!-- <div class="form-grid">
             <div class="form-group title-width">
               <label>Title</label>
               <input type="text" placeholder="Enter here" />
@@ -682,57 +747,61 @@
                 </label>
               </div>
             </div> -->
-          <div class="form-grid">
-            <div class="form-group title-width">
-              <label>Title</label>
-              <input type="text" placeholder="Enter here" />
-            </div>
-
-            <!-- Priority -->
-            <div class="form-group priority-inline">
-              <label>Priority</label>
-              <div class="radio-group">
-                <label class="radio">
-                  <input type="radio" name="priority" checked />
-                  Normal
-                </label>
-
-                <label class="radio">
-                  <input type="radio" name="priority" />
-                  Important
-                </label>
-
-                <label class="radio">
-                  <input type="radio" name="priority" />
-                  Urgent
-                </label>
-              </div>
-            </div>
-
-            <!-- Description -->
-            <div class="form-group full">
-              <label>Description</label>
-              <textarea rows="4" placeholder="Enter here"></textarea>
-            </div>
-
-            <!-- Upload -->
-            <div class="form-group full">
-              <label>Upload Banner Image</label>
-
-              <div class="upload-box">
-                <i class="upload-icon"
-                  ><app-download-icon></app-download-icon>
-                </i>
-                <span class="upload-text">Upload here</span>
-                <div class="upload-info">
-                  800px * 350px &nbsp;|&nbsp; Max 5MB
+              <div class="form-grid">
+                <div class="form-group title-width">
+                  <label>Title</label>
+                  <input type="text" placeholder="Enter here" />
                 </div>
-                <input type="file" />
+
+                <!-- Priority -->
+                <div class="form-group priority-inline">
+                  <label>Priority</label>
+                  <div class="radio-group">
+                    <label class="radio">
+                      <input type="radio" name="priority" checked />
+                      Normal
+                    </label>
+
+                    <label class="radio">
+                      <input type="radio" name="priority" />
+                      Important
+                    </label>
+
+                    <label class="radio">
+                      <input type="radio" name="priority" />
+                      Urgent
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group full">
+                  <label>Description</label>
+                  <textarea rows="4" placeholder="Enter here"></textarea>
+                </div>
+
+                <!-- Upload -->
+                <div class="form-group full">
+                  <label>Upload Banner Image</label>
+
+                  <div class="upload-box">
+                    <i class="upload-icon"
+                      ><app-download-icon></app-download-icon>
+                    </i>
+                    <span class="upload-text">Upload here</span>
+                    <div class="upload-info">
+                      800px * 350px &nbsp;|&nbsp; Max 5MB
+                    </div>
+                    <input type="file" />
+                  </div>
+                </div>
               </div>
-            </div>
+            </app-white-card>
           </div>
-        </app-white-card>
-      </div>
+        </div>
+      </ng-container>
     </div>
-  </ng-container>
+  </ng-template>
+  <!-- </div> -->
+  <!-- </div> -->
 </div>
