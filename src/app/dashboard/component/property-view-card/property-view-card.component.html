@@ -34,9 +34,45 @@
     <div class="cmmnPrprtyViewTop">
       <p>{{ "PROPERTY_INFORMATION" | translate }}</p>
       <div>
+        <div class="statusIcons">
+          <img src="assets/platfrom/property-finder.svg" />
+          <img src="assets/platfrom/buyut.svg" />
+          <div class="shareIconWrapper">
+            <img
+              src="assets/platfrom/list-more-icon.svg"
+              (click)="toggleShare()"
+              class="clickIcon"
+            />
+
+            <!-- Popup -->
+            <div class="sharePopup" *ngIf="showSharePopup">
+              <div class="shareItem">
+                <input type="checkbox" checked />
+                <span class="propertyFinder"
+                  ><img src="assets/platfrom/platfrom-1.png"
+                /></span>
+              </div>
+
+              <div class="shareItem">
+                <input type="checkbox" checked />
+                <span class="bayut"
+                  ><img src="assets/platfrom/platfrom-2.png"
+                /></span>
+              </div>
+
+              <button class="shareBtn">
+                <i class="fa fa-paper-plane"
+                  ><app-share-platfrom-icon></app-share-platfrom-icon>
+                </i>
+                Share
+              </button>
+            </div>
+          </div>
+        </div>
         <p>
           {{ "STATUS" | translate }}: <span>{{ status }}</span>
         </p>
+
         <button
           type="button"
           class="btn btnCommon btnWhite"
@@ -52,8 +88,16 @@
       <h5>{{ location }}</h5>
     </div>
     <div class="cmmnPrprtyViewCost">
-      <span>{{ "RENT_COST" | translate }}</span>
-      <h3>{{ price }}</h3>
+      <div class="rentRow">
+        <div class="rentLeft">
+          <span>{{ "RENT_COST" | translate }}</span>
+          <h3>{{ price }}</h3>
+        </div>
+        <div class="reraBox">
+          <h6 class="reraTitle">RERA Index Value</h6>
+          <h4 class="reraValue">AED 31,000</h4>
+        </div>
+      </div>
       <ul>
         <li *ngIf="sqft">
           <i><app-bhk-icon /></i> {{ bhk }}

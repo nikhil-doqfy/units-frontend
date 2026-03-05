@@ -17,6 +17,7 @@ import { BHKIconComponent } from '../icons/bhk-icon/bhk-icon.component';
 import { SqaureFeetIconComponent } from '../icons/sqaure-feet-icon/sqaure-feet-icon.component';
 import { PropertyAccordianCardComponent } from '../property-accordian-card/property-accordian-card.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharePlatfromIconComponent } from '../../../icons/share-platfrom-icon/share-platfrom-icon.component';
 
 @Component({
   selector: 'app-property-view-card',
@@ -29,6 +30,7 @@ import { TranslateModule } from '@ngx-translate/core';
     BHKIconComponent,
     SqaureFeetIconComponent,
     PropertyAccordianCardComponent,
+    SharePlatfromIconComponent,
   ],
   templateUrl: './property-view-card.component.html',
   styleUrls: ['./property-view-card.component.css'],
@@ -51,7 +53,7 @@ export class PropertyViewCardComponent {
   @Output() back = new EventEmitter<void>();
   @ViewChild('mainSwiper', { static: false }) mainSwiper!: ElementRef;
   @ViewChild('thumbSwiper', { static: false }) thumbSwiper!: ElementRef;
-
+  showSharePopup = false;
   thumbsSwiper: any;
 
   swiperBreakpoints = {
@@ -79,7 +81,9 @@ export class PropertyViewCardComponent {
   onBackClick() {
     this.back.emit();
   }
-
+  toggleShare() {
+    this.showSharePopup = !this.showSharePopup;
+  }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['propertyImages'] && this.propertyImages.length > 0) {
       this.initSwipersSafely();

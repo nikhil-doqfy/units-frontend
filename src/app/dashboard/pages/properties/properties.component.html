@@ -520,7 +520,11 @@
     </app-white-card>
   </div>
 </ng-container> -->
-<div class="mb-3" class="mb-3" *ngIf="currentRole === 'property-manager'">
+<div
+  class="mb-3"
+  class="mb-3"
+  *ngIf="currentRole === 'property-manager' && !isUnitDetailView"
+>
   <app-white-card>
     <div class="row align-items-center justify-content-between g-3">
       <div class="col-md">
@@ -584,7 +588,10 @@
 <div class="mt-3">
   <ng-container [ngSwitch]="activeLeadTab">
     <app-all-properties *ngSwitchCase="'properties'"></app-all-properties>
-    <app-units *ngSwitchCase="'units'"></app-units>
+    <app-units
+      *ngSwitchCase="'units'"
+      (detailViewChanges)="onUnitDetailChanges($event)"
+    ></app-units>
 
     <app-tenancy-ledger *ngSwitchCase="'tenancy-ledger'"></app-tenancy-ledger>
   </ng-container>

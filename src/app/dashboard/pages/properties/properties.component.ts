@@ -582,7 +582,7 @@ export class PropertiesComponent {
   // }
   private sharedService = inject(SharedService);
   breadcrumbData: BreadCrumb[] = [];
-
+  showNavbar: boolean = true;
   showDetailView: boolean = false;
   initLanguageListener() {
     this.translate.onLangChange
@@ -612,4 +612,8 @@ export class PropertiesComponent {
   }
   activeLeadTab: string = 'properties';
   currentRole: UserRole = 'property-manager';
+  isUnitDetailView: boolean = false;
+  onUnitDetailChanges(event: boolean) {
+    this.isUnitDetailView = event;
+  }
 }

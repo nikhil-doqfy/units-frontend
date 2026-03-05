@@ -278,3 +278,90 @@
     padding: 0;
   }
 }
+.statusIcons {
+  display: flex;
+  align-items: center;
+}
+.shareItem img {
+  width: 120px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.statusIcons img:nth-child(2) {
+  margin-left: -10px;
+}
+
+.statusIcons img:nth-child(3) {
+  margin-left: -10px;
+}
+
+.shareIconWrapper {
+  position: relative;
+  margin-left: -10px;
+}
+
+.sharePopup {
+  position: absolute;
+  top: -30px;
+  right: 90px;
+  background: #fff;
+  padding: 15px;
+  width: 186px;
+  height: 88px;
+  gap: 12px;
+  border-radius: 12px;
+  box-shadow: 0 0px 20px black;
+}
+
+.shareItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.shareBtn {
+  width: 186px;
+  border: none;
+  right: 90px;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #2b4eff, #00a6ff);
+  color: white;
+  margin-left: -15px;
+}
+
+.rentRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.rentLeft {
+  display: flex;
+  flex-direction: column;
+}
+
+.rentPrice {
+  margin: 4px 0 0 0;
+}
+
+.reraBox {
+  background: #f8e4c5;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.reraTitle {
+  font-size: 10px;
+  color: black;
+  display: block;
+}
+
+.reraValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: black;
+}
