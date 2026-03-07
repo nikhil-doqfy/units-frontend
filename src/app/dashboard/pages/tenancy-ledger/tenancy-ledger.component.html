@@ -220,7 +220,11 @@
                 </app-rental-amount>
               </td>
               <td>1,300.00</td>
-              <td align="center">--</td>
+              <td align="center">
+                <app-property-share-platfrom
+                  type="icons"
+                ></app-property-share-platfrom>
+              </td>
               <td align="center">
                 <div class="tbl-action-inline">
                   <app-edit-icon></app-edit-icon>
@@ -266,10 +270,9 @@
               </td>
               <td>1,300.00</td>
               <td align="center">
-                <img src="assets/platfrom/platfrom-1.png" />
-
-                <img src="assets/platfrom/platfrom-2.png" />
-                <img src="assets/icons/property-finder.svg" />
+                <app-property-share-platfrom
+                  type="list"
+                ></app-property-share-platfrom>
               </td>
               <td align="center">
                 <div class="tbl-action-inline">
@@ -565,5 +568,305 @@
         </div>
       </div>
     </app-white-card>
+  </div>
+  <div class="cmmnTblOuter mt-3">
+    <div class="cmmnTblHdr">
+      <div class="row align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'RENT_TRANSACTIONS' | translate"
+            subtitle="(5)"
+          ></app-table-title>
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search placeholder="Search here..." />
+            <div class="report-top-bar d-flex align-items-start gap-2">
+              <!-- Receipt Dropdown -->
+              <div class="custom-dropdown position-relative">
+                <button class="btn cmmnTblFltrBtn" (click)="toggleReceipt()">
+                  <i><app-receipt-icon></app-receipt-icon></i>
+                  Receipt
+                  <i><app-arrow-down-icon></app-arrow-down-icon></i>
+                </button>
+
+                <div class="custom-menu" *ngIf="showReceiptDropdown">
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('rental')"
+                  >
+                    Rental
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('charges')"
+                  >
+                    Other Charges
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('combined')"
+                  >
+                    Combined
+                  </div>
+                </div>
+              </div>
+
+              <!-- Month Dropdown (Side by Side) -->
+              <div
+                class="custom-dropdown position-relative"
+                *ngIf="showMonthDropdown"
+              >
+                <div class="custom-menu filter-box">
+                  <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="jan" />
+                    <label for="jan">Jan 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="feb"
+                      checked
+                    />
+                    <label for="feb">Feb 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="mar"
+                      checked
+                    />
+                    <label for="mar">Mar 2025</label>
+                  </div>
+
+                  <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="apr" />
+                    <label for="apr">Apr 2025</label>
+                  </div>
+
+                  <button class="btn generate-btn w-100">Generate</button>
+                </div>
+              </div>
+            </div>
+
+            <app-table-filter-btn
+              [title]="'FILTER' | translate"
+              [hasIcon]="true"
+            >
+              <app-filter-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>{{ "TRANSACTION_ID" | translate }}</th>
+              <th>
+                {{ "BANK_NAME" | translate }}
+              </th>
+              <th>
+                {{ "BANK_ACCOUNT" | translate }}
+              </th>
+              <th>{{ "CHEQUE_NUMBER" | translate }}</th>
+              <th>{{ "CHEQUE_DATE" | translate }}</th>
+              <th>{{ "PAYMENT_TYPE" | translate }}</th>
+              <th>{{ "PURPOSE" | translate }}</th>
+              <th>{{ "STATUS" | translate }}</th>
+              <th>{{ "AMOUNT" | translate }}</th>
+              <th>{{ "Additional Charges" }}</th>
+              <th>{{ "ACTIONS" | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>CHQ-AX104</td>
+              <td>EIB</td>
+              <td>20394857</td>
+              <td>928374</td>
+              <td>10/10/2024</td>
+              <td>Cheque</td>
+              <td>Jan 2025 Rent</td>
+
+              <td>
+                <app-status-action-dropdown
+                  status="Amount Credited"
+                ></app-status-action-dropdown>
+              </td>
+
+              <td>9,000</td>
+              <td>---</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>CHQ-AX105</td>
+              <td>EIB</td>
+              <td>89475639</td>
+              <td>857493</td>
+              <td>11/01/2024</td>
+              <td>Cheque</td>
+              <td>Feb 2025 Rent</td>
+
+              <td>
+                <app-status-action-dropdown
+                  status="Check Bounce"
+                ></app-status-action-dropdown>
+              </td>
+
+              <td>9,000</td>
+              <td>
+                300.00
+                <i><app-termscondition-icon></app-termscondition-icon></i>
+
+                <div class="badge-wrapper">
+                  <div class="additional cheque">
+                    <span>Cheque bounce</span>
+                  </div>
+
+                  <div class="additional tax">
+                    <span>Tax</span>
+                  </div>
+                </div>
+              </td>
+
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>--</td>
+              <td>EIB</td>
+              <td>39576849</td>
+              <td>746382</td>
+              <td>11/15/2024</td>
+              <td>Cheque</td>
+              <td>Mar 2025 Rent</td>
+              <td>
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
+              </td>
+              <td>9,000</td>
+              <td>---</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>--</td>
+              <td>EIB</td>
+              <td>94837659</td>
+              <td>635271</td>
+              <td>12/01/2024</td>
+              <td>Cheque</td>
+              <td>Other Charges</td>
+
+              <td>
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
+              </td>
+
+              <td>9,000</td>
+              <td>---</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>CHQ-AX109</td>
+              <td>EIB</td>
+              <td>69304857</td>
+              <td>524160</td>
+              <td>12/15/2024</td>
+              <td>Cheque</td>
+              <td>Apr 2025 Rent</td>
+              <td>
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
+              </td>
+
+              <td>9,000</td>
+              <td>---</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+            <tr class="totalRow">
+              <td colspan="8"></td>
+
+              <td class="totalCell">45,000.00</td>
+              <td class="totalCell">300.00</td>
+              <td class="totalCell">45,300.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+      >
+      </app-table-select>
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+      >
+      </app-table-pagination>
+    </div>
   </div>
 </ng-container>

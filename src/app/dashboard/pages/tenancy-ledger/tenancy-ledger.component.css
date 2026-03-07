@@ -27,3 +27,25 @@
 .tbl-action-inline .cmmnTblActnBtnDiv:hover {
   color: #2563eb;
 }
+
+/* 
+
+.totalCell {
+  text-align: center;
+  padding: 12px;
+} */
+
+.totalRow td {
+  background: #f3f4f6; /* grey background */
+  border: none !important; /* lines remove */
+  font-weight: 600;
+  padding: 14px;
+}
+
+.totalCell {
+  background: #f3f4f6;
+  border: none !important;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px;
+}

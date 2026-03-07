@@ -51,7 +51,8 @@ export class TableActionButtonComponent {
     | 'sendLink'
     | 'reject'
     | 'rejectOrange'
-    | 'approve';
+    | 'approve'
+    | 'restart';
   @Output() clicked = new EventEmitter<void>();
 
   getTooltip(type: string): string {
@@ -84,6 +85,8 @@ export class TableActionButtonComponent {
         return 'File';
       case 'sendLink':
         return 'Send App Link';
+      case 'restart':
+        return 'Restart';
       default:
         return '';
     }

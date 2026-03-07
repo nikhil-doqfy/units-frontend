@@ -285,11 +285,11 @@ export class RentalComponent {
 
   toggleReceipt() {
     this.showReceiptDropdown = !this.showReceiptDropdown;
-    this.showMonthDropdown = false; // first click ला month नको
+    this.showMonthDropdown = false;
   }
 
   selectReceiptType(type: string) {
     this.selectedReceiptType = type;
-    this.showMonthDropdown = true; // option click केल्यावर month open
+    this.showMonthDropdown = true;
   }
 }

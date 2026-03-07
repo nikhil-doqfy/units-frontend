@@ -1,0 +1,178 @@
+<div class="cmmnTblOuter">
+  <div class="cmmnTblHdr">
+    <div class="row g-3 align-items-center">
+      <div class="col-md">
+        <app-table-title
+          [title]="'ALL_TENANTS' | translate"
+          [subtitle]="'(' + totalRecords + ')'"
+          (onRefresh)="onRefresh()"
+        ></app-table-title>
+      </div>
+      <div class="col-md-auto">
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+          <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+
+          <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true">
+            <app-export-icon />
+          </app-table-filter-btn>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cmmnTbl">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>
+              {{ "SI.No" | translate }}
+            </th>
+            <th>{{ "Tenant ID" | translate }}</th>
+            <th>
+              {{ "Tenanat Name" | translate }}
+              <i><app-sorting-icon></app-sorting-icon></i>
+            </th>
+            <th>{{ "Tenure Start & End Date" | translate }}</th>
+            <th>
+              {{ "Property Name " | translate
+              }}<i><app-sorting-icon></app-sorting-icon></i>
+            </th>
+            <th>Block /Tower</th>
+            <th>Unit</th>
+            <th>Contact Number</th>
+            <th>Email</th>
+            <th>Rent(AED)</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td>LP9021</td>
+            <td>
+              <app-table-img-item
+                img="assets/user/user-1.png"
+                title="Jensi"
+              ></app-table-img-item>
+            </td>
+            <td>1Feb 25 -2 Mar 26</td>
+            <td>
+              <app-table-img-item
+                img="assets/property/property-list-1.png"
+                title="Novatis AG"
+              ></app-table-img-item>
+            </td>
+            <td>Evergreen(B)</td>
+            <td>Evergreen(B) 204</td>
+            <td>+91-70*******23</td>
+            <td>Jensi&#64;***kmail.com</td>
+            <td>1,800.00</td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td>LP9021</td>
+            <td>
+              <app-table-img-item
+                img="assets/user/user-2.png"
+                title="Richard"
+              ></app-table-img-item>
+            </td>
+            <td>1Mar 25 -2 Apr 26</td>
+            <td>
+              <app-table-img-item
+                img="assets/property/property-list-2.png"
+                title="Sliechi Tower"
+              ></app-table-img-item>
+            </td>
+            <td>Harmony(B)</td>
+            <td>Harmony(c) 302</td>
+            <td>+91-70*******76</td>
+            <td>richard&#64;***kmail.com</td>
+            <td>1,145.00</td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <td>VP9021</td>
+            <td>
+              <app-table-img-item
+                img="assets/user/user-3.png"
+                title="Thomas"
+              ></app-table-img-item>
+            </td>
+            <td>3Apr 25 -2 Apr 26</td>
+            <td>
+              <app-table-img-item
+                img="assets/property/property-list-2.png"
+                title="Jainhailia"
+              ></app-table-img-item>
+            </td>
+            <td>Sunrise(D)</td>
+            <td>Sunrise(D) 101</td>
+            <td>+91-70*******12</td>
+            <td>thomas&#64;***mail.com</td>
+            <td>1,350.00</td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <td>VC9021</td>
+            <td>
+              <app-table-img-item
+                img="assets/user/user-4.png"
+                title="Thomas"
+              ></app-table-img-item>
+            </td>
+            <td>3Apr 25 -2 Apr 26</td>
+            <td>
+              <app-table-img-item
+                img="assets/property/property-list-2.png"
+                title="Jainhailia"
+              ></app-table-img-item>
+            </td>
+            <td>Sunrise(D)</td>
+            <td>Sunrise(D) 101</td>
+            <td>+91-70*******12</td>
+            <td>thomas&#64;***mail.com</td>
+            <td>1,350.00</td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <td>VC9021</td>
+            <td>
+              <app-table-img-item
+                img="assets/user/user-4.png"
+                title="Thomas"
+              ></app-table-img-item>
+            </td>
+            <td>3Apr 25 -2 Apr 26</td>
+            <td>
+              <app-table-img-item
+                img="assets/property/property-list-2.png"
+                title="Jainhailia"
+              ></app-table-img-item>
+            </td>
+            <td>Sunrise(D)</td>
+            <td>Sunrise(D) 101</td>
+            <td>+91-70*******12</td>
+            <td>thomas&#64;***mail.com</td>
+            <td>1,350.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="cmmnTblFtr">
+    <app-table-select
+      [componentName]="componentName"
+      [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (rowsPerPageChange)="onPageSizeChange($event)"
+    />
+    <app-table-pagination
+      [componentName]="componentName"
+      [currentPage]="currentPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage"
+      (pageChange)="onPageChange($event)"
+    />
+  </div>
+</div>

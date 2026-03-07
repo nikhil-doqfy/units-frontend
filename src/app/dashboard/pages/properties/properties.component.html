@@ -593,6 +593,9 @@
       (detailViewChanges)="onUnitDetailChanges($event)"
     ></app-units>
 
-    <app-tenancy-ledger *ngSwitchCase="'tenancy-ledger'"></app-tenancy-ledger>
+    <app-tenancy-ledger
+      *ngSwitchCase="'tenancy-ledger'"
+      (detailViewChanges)="onUnitDetailChanges($event)"
+    ></app-tenancy-ledger>
   </ng-container>
 </div>

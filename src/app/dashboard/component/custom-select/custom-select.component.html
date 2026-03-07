@@ -8,7 +8,7 @@
   [class.show]="isDropdownOpen"
   (click)="toggleDropdown()"
 >
-  <div class="customSelectInput">
+  <div class="customSelectInput" [class.highlight]="highlight">
     <span
       *ngIf="!selectedOption"
       class="customSelectPlaceholder"

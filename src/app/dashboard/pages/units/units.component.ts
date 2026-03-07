@@ -19,6 +19,7 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { Router } from '@angular/router';
+import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
 type PropertyImages = Record<'imgSrc', string>;
 interface SectionItems {
   label: string;
@@ -59,6 +60,7 @@ interface PropertyDetails {
     WhiteCardComponent,
     PropertyViewCardComponent,
     DocumentTypeItemComponent,
+    PropertySharePlatfromComponent,
   ],
   templateUrl: './units.component.html',
   styleUrl: './units.component.css',

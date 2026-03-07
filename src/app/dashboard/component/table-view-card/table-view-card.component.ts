@@ -41,7 +41,7 @@ export class TableViewCardComponent {
   @Input() showEdit: boolean = false;
   @Input() showDownload: boolean = false;
   @Input() showShare: boolean = false;
-
+  @Input() showApprovalActions: boolean = false;
   @Output() download = new EventEmitter<string>();
   @Output() share = new EventEmitter<string>();
   @Output() edit = new EventEmitter<void>();
@@ -87,4 +87,6 @@ export class TableViewCardComponent {
     this.showMenu = false;
     console.log('Terminate Rental clicked');
   }
+  handleRejectClick() {}
+  handleApproveClick() {}
 }

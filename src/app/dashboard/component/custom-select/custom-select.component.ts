@@ -51,6 +51,7 @@ import { CalenderIconComponent } from '../../../icons/calender-icon/calender-ico
   ],
 })
 export class CustomSelectComponent implements OnInit, ControlValueAccessor {
+  @Input() highlight = false;
   private destroyRef = inject(DestroyRef);
   private alertService = inject(AlertService);
   @Input() width: string = '100%';

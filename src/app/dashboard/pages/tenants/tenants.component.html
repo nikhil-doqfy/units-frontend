@@ -444,8 +444,9 @@
             <app-table-title
               [title]="'ALL_TENANTS' | translate"
               [subtitle]="'(' + totalRecords + ')'"
-              (onRefresh)="onRefresh()"
             ></app-table-title>
+
+            <!-- (onRefresh)="onRefresh()" -->
           </div>
           <div class="col-md-auto">
             <div class="d-flex align-items-center gap-2 gap-md-3">
@@ -698,16 +699,26 @@
           [componentName]="componentName"
           [rowsPerPage]="rowsPerPage"
           [rowsPerPageOptions]="rowsPerPageOptions"
-          (rowsPerPageChange)="onPageSizeChange($event)"
         />
+        <!-- (rowsPerPageChange)="onPageSizeChange($event)" -->
+
         <app-table-pagination
           [componentName]="componentName"
           [currentPage]="currentPage"
           [totalRecords]="totalRecords"
           [rowsPerPage]="rowsPerPage"
-          (pageChange)="onPageChange($event)"
         />
+        <!-- (pageChange)="onPageChange($event)" -->
       </div>
     </div>
   </div>
+</div>
+<div
+  class="tab-pane fade"
+  id="activeTenants-tab-pane"
+  role="tabpanel"
+  aria-labelledby="activeTenants-tab"
+  tabindex="0"
+>
+  <app-active-tenant-tab></app-active-tenant-tab>
 </div>

@@ -22,6 +22,13 @@ import { DocumentTypeItemComponent } from '../../component/document-type-item/do
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
 import { Router } from '@angular/router';
+import { StatusDropdownComponent } from '../../component/status-dropdown/status-dropdown.component';
+import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
+import { TermsconditionIconComponent } from '../../../icons/termscondition-icon/termscondition-icon.component';
+import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
+import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.component';
+import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
+import { StatusActionDropdownComponent } from '../../../status-action-dropdown/status-action-dropdown.component';
 type PropertyImages = Record<'imgSrc', string>;
 interface SectionItems {
   label: string;
@@ -64,6 +71,12 @@ interface PropertyDetails {
     DocumentTypeItemComponent,
     WhiteCardComponent,
     PropertyViewCardComponent,
+    TableActionButtonComponent,
+    TermsconditionIconComponent,
+    ArrowDownIconComponent,
+    ReceiptIconComponent,
+    PropertySharePlatfromComponent,
+    StatusActionDropdownComponent,
   ],
   templateUrl: './tenancy-ledger.component.html',
   styleUrl: './tenancy-ledger.component.css',
@@ -98,6 +111,11 @@ export class TenancyLedgerComponent {
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
+  selectedq: any = {
+    label: 'Amount Credited',
+    status: 'green',
+  };
+
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
@@ -183,6 +201,19 @@ export class TenancyLedgerComponent {
   handleBackClick(): void {
     this.showDetailView = false;
     this.router.navigate(['/dashboard/properties']);
+    this.detailViewChanges.emit(false);
+  }
+  showReceiptDropdown = false;
+  showMonthDropdown = false;
+  selectedReceiptType = '';
+  toggleReceipt() {
+    this.showReceiptDropdown = !this.showReceiptDropdown;
+    this.showMonthDropdown = false;
+    this.detailViewChanges.emit(true);
+  }
+  selectReceiptType(type: string) {
+    this.selectedReceiptType = type;
+    this.showMonthDropdown = true;
     this.detailViewChanges.emit(false);
   }
 }
