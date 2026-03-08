@@ -93,9 +93,9 @@
           <span>{{ "RENT_COST" | translate }}</span>
           <h3>{{ price }}</h3>
         </div>
-        <div class="reraBox">
-          <h6 class="reraTitle">RERA Index Value</h6>
-          <h4 class="reraValue">AED 31,000</h4>
+        <div class="reraBox" *ngIf="priceLabel">
+          <h6 class="reraTitle">{{ priceLabel }}</h6>
+          <h4 class="reraValue">{{ priceValue }}</h4>
         </div>
       </div>
       <ul>

@@ -49,6 +49,7 @@
               <th>Plot Area(Sqft)</th>
               <th>Makani No</th>
               <th>Dewa No</th>
+              <th>Platform</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -70,9 +71,10 @@
               <td>12345</td>
               <td>2043***7733</td>
               <td>2043***7733</td>
+              <td>--</td>
               <td align="center">
                 <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
+                  <app-edit-icon (click)="onEditClick()"></app-edit-icon>
 
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-dropdown
@@ -101,6 +103,7 @@
               <td>234554</td>
               <td>2043***7733</td>
               <td>2043***7755</td>
+              <td>--</td>
               <td align="center">
                 <div class="tbl-action-inline">
                   <app-edit-icon></app-edit-icon>
@@ -132,6 +135,7 @@
               <td>234567</td>
               <td>2043***7733</td>
               <td>2043***7766</td>
+              <td>--</td>
               <td align="center">
                 <div class="tbl-action-inline">
                   <app-edit-icon></app-edit-icon>
@@ -163,6 +167,11 @@
               <td>3456</td>
               <td>2043***7733</td>
               <td>2043***7788</td>
+              <td>
+                <app-property-share-platfrom
+                  type="icons"
+                ></app-property-share-platfrom>
+              </td>
               <td align="center">
                 <div class="tbl-action-inline">
                   <app-edit-icon></app-edit-icon>
@@ -194,6 +203,11 @@
               <td>1200</td>
               <td>2043***7733</td>
               <td>2043***7799</td>
+              <td>
+                <app-property-share-platfrom
+                  type="list"
+                ></app-property-share-platfrom>
+              </td>
               <td align="center">
                 <div class="tbl-action-inline">
                   <app-edit-icon></app-edit-icon>

@@ -56,6 +56,7 @@ import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.com
 import { PlatfromBadgeComponent } from '../../component/platfrom-badge/platfrom-badge.component';
 import { BadgeComponent } from '../../component/badge/badge.component';
 import { ActiveTenantTabComponent } from '../active-tenant-tab/active-tenant-tab.component';
+import { CancelIconComponent } from '../../../icons/cancel-icon/cancel-icon.component';
 
 @Component({
   selector: 'app-tenants',
@@ -108,8 +109,12 @@ export class TenantsComponent {
   totalPages: number = 1;
   activeDocTypeKey!: string;
   documentActions = [
-    { label: 'Share', icon: ShareIconComponent, action: 'share' },
-    { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
+    {
+      label: 'Reject / Cancel Tenancy',
+      icon: CancelIconComponent,
+      action: 'rejectTenancy',
+      type: 'danger',
+    },
   ];
   selectedTenant: any = null;
   tenantsList: any[] = [];

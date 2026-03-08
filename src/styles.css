@@ -2757,7 +2757,7 @@ app-plus-icon {
 }
 
 .reraBox {
-  background: #f8e4c5;
+  background: #fff8ec;
   padding: 8px 12px;
   border-radius: 8px;
 }
@@ -2990,4 +2990,26 @@ app-plus-icon {
 .cmmnTblBody table.charges-table thead tr th {
   background-color: var(--muteBorder1);
   color: black;
+}
+
+.badge-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.additional {
+  display: flex;
+  padding: 2px 8px;
+  border-radius: 20px;
+
+  border: 1px solid #f5f7f8;
+  box-shadow: 0px 2px 6px rgba(29, 55, 36, 0.2);
+
+  background: #fff;
+  font-size: 12px;
+}
+
+.tax {
+  height: 23px;
 }

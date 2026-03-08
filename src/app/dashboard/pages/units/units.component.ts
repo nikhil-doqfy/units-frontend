@@ -185,4 +185,7 @@ export class UnitsComponent {
     this.router.navigate(['/dashboard/properties']);
     this.detailViewChanges.emit(false);
   }
+  onEditClick() {
+    this.router.navigate(['/dashboard/new-units']);
+  }
 }

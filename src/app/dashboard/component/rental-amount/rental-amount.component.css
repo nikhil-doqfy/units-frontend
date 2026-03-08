@@ -1,36 +1,43 @@
 .rent-wrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+}
+
+.rent-value {
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .rent-badge {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 6px;
-  display: inline-flex;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.badge-success {
-  background: #dff3e3;
-  color: #1b7f3c;
+/* 0.2% */
+.badge-green {
+  background: #e6f4ea;
+  color: #2e7d32;
 }
 
-.badge-warning {
-  background: #fff1d6;
-  color: #ff8a00;
+/* 12% light green */
+.badge-light-green {
+  background: #eaf7ee;
+  color: #3aa655;
 }
 
-.badge-danger {
-  background: #ffe1e1;
-  color: #d92d20;
+/* orange */
+.badge-orange {
+  background: #fff4e5;
+  color: #f59e0b;
 }
 
-@media (max-width: 768px) {
-  .rent-value {
-    font-size: 14px;
-  }
+/* red */
+.badge-red {
+  background: #fde8e8;
+  color: #ef4444;
 }

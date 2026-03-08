@@ -3,11 +3,17 @@
     {{ amount | number: "1.2-2" }}
   </span>
 
-  <span *ngIf="percentage !== null" class="rent-badge" [ngClass]="badgeClass">
+  <span
+    *ngIf="percentage !== null"
+    class="rent-badge"
+    [ngClass]="getBadgeClass()"
+  >
     {{ percentage }}%
-    <i class="ri-arrow-right-up-line" *ngIf="trend === 'up'"
-      ><app-arrow></app-arrow>
+
+    <i *ngIf="trend === 'up'">
+      <app-arrow></app-arrow>
     </i>
-    <i class="ri-arrow-right-down-line" *ngIf="trend === 'down'"></i>
+
+    <i *ngIf="trend === 'down'" class="ri-arrow-right-down-line"></i>
   </span>
 </div>

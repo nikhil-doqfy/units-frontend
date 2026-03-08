@@ -37,6 +37,8 @@ import { SharePlatfromIconComponent } from '../../../icons/share-platfrom-icon/s
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PropertyViewCardComponent {
+  @Input() priceLabel: string = '';
+  @Input() priceValue: string = '';
   @Input() showBack: boolean = false;
   @Input() propertyImages: { imgSrc: string }[] = [];
   @Input() status!: string;

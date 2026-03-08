@@ -49,3 +49,37 @@
   text-align: center;
   padding: 12px;
 }
+
+.chargesTooltip {
+  min-width: 163px;
+  padding: 5px 0;
+}
+
+.chargesRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #5f6b7a;
+}
+
+.chargesRow .value {
+  font-weight: 600;
+  color: black;
+}
+.charges-info {
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+/* Popover Header */
+.popover-header {
+  background: #1f6ed4;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+::ng-deep .popover .popover-body {
+  padding: 4px 8px !important;
+}

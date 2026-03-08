@@ -16,18 +16,19 @@ export class RentalAmountComponent {
   badgeClass = '';
   trend: 'up' | 'down' = 'up';
 
-  ngOnChanges() {
-    if (this.percentage === null) return;
+  getBadgeClass() {
+    if (this.percentage === null) {
+      return '';
+    }
 
-    if (this.percentage < 5) {
-      this.badgeClass = 'badge-success';
-      this.trend = 'up';
-    } else if (this.percentage < 15) {
-      this.badgeClass = 'badge-warning';
-      this.trend = 'up';
+    if (this.percentage <= 1) {
+      return 'badge-green';
+    } else if (this.percentage <= 10) {
+      return 'badge-light-green';
+    } else if (this.percentage <= 15) {
+      return 'badge-orange';
     } else {
-      this.badgeClass = 'badge-danger';
-      this.trend = 'up';
+      return 'badge-red';
     }
   }
 }

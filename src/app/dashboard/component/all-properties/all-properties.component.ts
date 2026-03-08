@@ -15,6 +15,8 @@ import { EditIconComponent } from '../icons/edit-icon/edit-icon.component';
 import { TableActionDropdownComponent } from '../table-action-dropdown/table-action-dropdown.component';
 import { ResetIconComponent } from '../icons/reset-icon/reset-icon.component';
 import { ShareIconComponent } from '../icons/share-icon/share-icon.component';
+import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-properties',
@@ -33,6 +35,7 @@ import { ShareIconComponent } from '../icons/share-icon/share-icon.component';
     TableImgItemComponent,
     EditIconComponent,
     TableActionDropdownComponent,
+    PropertySharePlatfromComponent,
   ],
   templateUrl: './all-properties.component.html',
   styleUrl: './all-properties.component.css',
@@ -44,6 +47,7 @@ export class AllPropertiesComponent {
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
+  constructor(private router: Router) {}
   onRefresh() {}
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
@@ -61,5 +65,8 @@ export class AllPropertiesComponent {
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+  }
+  onEditClick() {
+    this.router.navigate(['/dashboard/add-property']);
   }
 }

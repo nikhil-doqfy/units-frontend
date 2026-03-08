@@ -44,6 +44,7 @@
               <th>Floor No</th>
               <th>Location</th>
               <th>PMC</th>
+              <th>RERA INDEX(AED)</th>
               <th>Plot No</th>
               <th>Plot Area(Sqft)</th>
               <th>Makani No</th>
@@ -68,6 +69,7 @@
               <td>Al Wasl,Dubai</td>
 
               <td>3g real estate</td>
+              <td>1,300.00</td>
               <td>123</td>
               <td>12345</td>
               <td>2043***7733</td>
@@ -75,7 +77,7 @@
               <td>--</td>
               <td align="center">
                 <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
+                  <app-edit-icon (click)="onEditClick()"></app-edit-icon>
 
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-dropdown
@@ -101,6 +103,7 @@
               <td>Bur Dubai,Dubai</td>
 
               <td>3g real estate</td>
+              <td>1,500.00</td>
               <td>455</td>
               <td>3456</td>
               <td>2043***7733</td>
@@ -134,6 +137,7 @@
               <td>Al Barshi,Dubai</td>
 
               <td>3g real estate</td>
+              <td>1,000.00</td>
               <td>455</td>
               <td>3456</td>
               <td>2043***7733</td>
@@ -167,6 +171,7 @@
               <td>11</td>
               <td>jumeriah,Dubai</td>
               <td>3g real estate</td>
+              <td>800.00</td>
               <td>123</td>
               <td>12345</td>
               <td>2043***7733</td>
@@ -204,6 +209,7 @@
               <td>Deira,Dubai</td>
 
               <td>3g real estate</td>
+              <td>1,200.00</td>
               <td>678</td>
               <td>1200</td>
               <td>2043***7733</td>
@@ -261,8 +267,11 @@
       [sqft]="property.sqft"
       [sections]="property.sections"
       [showBack]="true"
-      (back)="handleBackClick()"
+      (click)="handleBackClick()"
+      [priceLabel]="'RERA Index Value'"
+      [priceValue]="'AED 31,000'"
     >
+      (back)="handleBackClick()" >
     </app-property-view-card>
   </app-white-card>
   <div class="mt-3">

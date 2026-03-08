@@ -29,6 +29,7 @@ import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-do
 import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.component';
 import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
 import { StatusActionDropdownComponent } from '../../../status-action-dropdown/status-action-dropdown.component';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 type PropertyImages = Record<'imgSrc', string>;
 interface SectionItems {
   label: string;
@@ -77,6 +78,7 @@ interface PropertyDetails {
     ReceiptIconComponent,
     PropertySharePlatfromComponent,
     StatusActionDropdownComponent,
+    NgbPopoverModule,
   ],
   templateUrl: './tenancy-ledger.component.html',
   styleUrl: './tenancy-ledger.component.css',

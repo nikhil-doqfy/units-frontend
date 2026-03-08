@@ -7,6 +7,7 @@ import { SharedService } from './shared.service';
 import { InvoiceTemplateComponent } from './shared/invoice-template/invoice-template.component';
 import { ToastService } from './core/toast.service';
 import { CommonModule } from '@angular/common';
+import { WhatsappQrCodeComponent } from './whatsapp-qr-code/whatsapp-qr-code.component';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ import { CommonModule } from '@angular/common';
     HttpClientModule,
     TranslateModule,
     CommonModule,
+    WhatsappQrCodeComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

@@ -42,14 +42,23 @@
           <thead>
             <tr>
               <th>{{ "LEAD_ID" | translate }}</th>
-              <th>{{ "CREATION_DATE" | translate }}</th>
-              <th>{{ "PROPERTY_NAME" | translate }}</th>
+              <th>
+                {{ "CREATION_DATE" | translate
+                }}<i><app-sorting-icon></app-sorting-icon></i>
+              </th>
+              <th>
+                {{ "PROPERTY_NAME" | translate
+                }}<i><app-sorting-icon></app-sorting-icon></i>
+              </th>
               <th>{{ "UNIT" | translate }}</th>
               <th>{{ "RENT(AED)" | translate }}</th>
               <th>{{ "TENANT_NAME" | translate }}</th>
               <th>{{ "CONTACT_NUMBER" | translate }}</th>
               <th>{{ "EMAIL" | translate }}</th>
-              <th>{{ "STATUS" | translate }}</th>
+              <th>
+                {{ "STATUS" | translate
+                }}<i><app-sorting-icon></app-sorting-icon></i>
+              </th>
               <th>{{ "PLATFROM" | translate }}</th>
               <th>{{ "TYPE_OF_LEAD" | translate }}</th>
               <th>{{ "ACTIONS" | translate }}</th>
@@ -78,7 +87,8 @@
               <td>+91-70******23</td>
               <td>jensi&#64;***kmail.com</td>
               <td>
-                <app-badge title="Interested" status="green"> </app-badge>
+                <app-badge title="Interested" status="green" [showIcon]="true">
+                </app-badge>
               </td>
               <td>
                 <app-platfrom-badge
@@ -89,6 +99,9 @@
               <td>Email</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
+                  <app-check-icon
+                    (click)="openLeadToTenantModel(convertLeadToTenentContent)"
+                  ></app-check-icon>
                   <app-table-action-btn
                     type="edit"
                     (clicked)="openEditLeadModal(editLeadContent)"
@@ -97,7 +110,6 @@
                     type="file"
                     (clicked)="openActivityHistroyModal(activityHistroyContent)"
                   ></app-table-action-btn>
-                  <app-table-action-btn type="sendLink"></app-table-action-btn>
                 </div>
               </td>
             </tr>
@@ -126,7 +138,12 @@
               <td>+91-99******76</td>
               <td>richard&#64;***kmail.com</td>
               <td>
-                <app-badge title="Not Interested" status="red"> </app-badge>
+                <app-badge
+                  title="Not Interested"
+                  status="red"
+                  [showIcon]="true"
+                >
+                </app-badge>
               </td>
               <td>
                 <app-platfrom-badge
@@ -137,9 +154,9 @@
               <td>Whatsapp</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
+                  <app-check-icon></app-check-icon>
                   <app-table-action-btn type="edit"></app-table-action-btn>
                   <app-table-action-btn type="file"></app-table-action-btn>
-                  <app-table-action-btn type="sendLink"></app-table-action-btn>
                 </div>
               </td>
             </tr>
@@ -168,7 +185,12 @@
               <td>+91-89******12</td>
               <td>thomas&#64;***kmail.com</td>
               <td>
-                <app-badge title="Lease/Tenancy" status="black"> </app-badge>
+                <app-badge
+                  title="Lease/Tenancy"
+                  status="black"
+                  [showIcon]="true"
+                >
+                </app-badge>
               </td>
               <td>
                 <app-platfrom-badge
@@ -178,9 +200,9 @@
               <td>Call</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
+                  <app-check-icon></app-check-icon>
                   <app-table-action-btn type="edit"></app-table-action-btn>
                   <app-table-action-btn type="file"></app-table-action-btn>
-                  <app-table-action-btn type="sendLink"></app-table-action-btn>
                 </div>
               </td>
             </tr>
@@ -209,7 +231,12 @@
               <td>+91-90******45</td>
               <td>thomas&#64;***kmail.com</td>
               <td>
-                <app-badge title="Lease/Tenancy" status="black"> </app-badge>
+                <app-badge
+                  title="Lease/Tenancy"
+                  status="black"
+                  [showIcon]="true"
+                >
+                </app-badge>
               </td>
               <td>
                 <app-platfrom-badge
@@ -219,9 +246,9 @@
               <td>Call</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
+                  <app-check-icon></app-check-icon>
                   <app-table-action-btn type="edit"></app-table-action-btn>
                   <app-table-action-btn type="file"></app-table-action-btn>
-                  <app-table-action-btn type="sendLink"></app-table-action-btn>
                 </div>
               </td>
             </tr>
@@ -250,7 +277,8 @@
               <td>+91-78******90</td>
               <td>akshay&#64;***kmail.com</td>
               <td>
-                <app-badge title="Interested" status="green"> </app-badge>
+                <app-badge title="Interested" status="green" [showIcon]="true">
+                </app-badge>
               </td>
               <td>
                 <app-platfrom-badge
@@ -262,9 +290,9 @@
               <td>Email</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
+                  <app-check-icon></app-check-icon>
                   <app-table-action-btn type="edit"></app-table-action-btn>
                   <app-table-action-btn type="file"></app-table-action-btn>
-                  <app-table-action-btn type="sendLink"></app-table-action-btn>
                 </div>
               </td>
             </tr>
@@ -361,5 +389,35 @@
     <app-activity-history-form
       [editData]="selectedLead"
     ></app-activity-history-form>
+  </div>
+</ng-template>
+<!---------------------------------------Lead TO Tenant From---------------------------------------------------------->
+<ng-template #convertLeadToTenentContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "Convert Lead to Tenant" | translate }}
+      <span class="lead-id">#LP9021</span>
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body" style="padding: 0">
+    <app-convert-lead-to-tenent-from #convertLeadToTenantForm />
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button type="button" class="btn btnCommon">
+      {{ "Convert to  tenancy" | translate }}
+    </button>
   </div>
 </ng-template>

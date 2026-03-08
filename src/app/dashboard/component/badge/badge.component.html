@@ -8,5 +8,29 @@
   [class.yellow]="status === 'yellow'"
   [ngClass]="enableBg ? status : ''"
 >
+  <!-- Icons -->
+  <i *ngIf="showIcon && status === 'green'">
+    <app-check-icon></app-check-icon>
+  </i>
+
+  <!-- <i *ngIf="showIcon && status === 'light-green'">
+    <app-success-icon></app-success-icon>
+  </i> -->
+
+  <i *ngIf="showIcon && status === 'orange'">
+    <app-warning-icon></app-warning-icon>
+  </i>
+
+  <i *ngIf="showIcon && status === 'black'">
+    <app-info-icon></app-info-icon>
+  </i>
+
+  <i *ngIf="showIcon && status === 'red'">
+    <app-close-icon></app-close-icon>
+  </i>
+
+  <i *ngIf="showIcon && status === 'yellow'">
+    <app-pending-icon></app-pending-icon>
+  </i>
   {{ title }}
 </div>

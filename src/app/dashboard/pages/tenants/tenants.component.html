@@ -523,10 +523,11 @@
                   ></app-platfrom-badge>
                 </td>
 
-                <td style="display: flex; align-items: center; gap: 8px">
+                <td class="status-row">
                   <app-badge title="Invitation Sent" status="green"></app-badge>
                   <app-table-action-dropdown
                     [dropdownItems]="documentActions"
+                    menuClass="rejectDropdown"
                     (actionClicked)="handleDropdownAction($event)"
                   >
                   </app-table-action-dropdown>
@@ -560,7 +561,7 @@
                   ></app-platfrom-badge>
                 </td>
 
-                <td style="display: flex; align-items: center; gap: 8px">
+                <td class="status-row">
                   <app-badge
                     title="Waiting for physical Documents"
                     status="orange"
@@ -599,7 +600,7 @@
                   ></app-platfrom-badge>
                 </td>
 
-                <td style="display: flex; align-items: center; gap: 8px">
+                <td class="status-row">
                   <app-badge
                     title="Waiting for Ejari"
                     status="orange"
@@ -638,7 +639,7 @@
                   ></app-platfrom-badge>
                 </td>
 
-                <td style="display: flex; align-items: center; gap: 8px">
+                <td class="status-row">
                   <app-badge
                     title="Waiting for Approval"
                     status="orange"
@@ -678,16 +679,16 @@
                   ></app-platfrom-badge>
                 </td>
 
-                <td style="display: flex; align-items: center; gap: 8px">
+                <td class="status-row">
                   <app-badge
                     title="Waiting for Signature"
                     status="orange"
                   ></app-badge>
+
                   <app-table-action-dropdown
                     [dropdownItems]="documentActions"
                     (actionClicked)="handleDropdownAction($event)"
-                  >
-                  </app-table-action-dropdown>
+                  ></app-table-action-dropdown>
                 </td>
               </tr>
             </tbody>
