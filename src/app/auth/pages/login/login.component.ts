@@ -130,37 +130,37 @@ export class LoginComponent implements OnInit {
     return userTypes[selectedUserType];
   }
 
-  // signIn(): void {
-  //   if (this.loginForm.invalid) {
-  //     this.loginForm.markAllAsTouched();
-  //     this.alertService.error('Please enter email and password');
-  //     return;
-  //   }
+  signIn(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      this.alertService.error('Please enter email and password');
+      return;
+    }
 
-  //   let payload = {
-  //     email: this.loginForm.value.email,
-  //     password: this.loginForm.value.password,
-  //     user_role: this.getUserType(),
-  //   };
+    let payload = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password,
+      user_role: this.getUserType(),
+    };
 
-  //   this.login(payload);
-  // }
+    this.login(payload);
+  }
 
-  // login(payload: any): void {
-  //   this.authService
-  //     .login(payload)
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe({
-  //       next: (resp: any) => {
-  //         this.alertService.success(resp.message);
-  //         this.goToDashboard();
-  //       },
-  //       error: (err) => {
-  //         console.log(err);
-  //         this.alertService.error(err?.error?.message || 'Login failed');
-  //       },
-  //     });
-  // }
+  login(payload: any): void {
+    this.authService
+      .login(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp.message);
+          this.goToDashboard();
+        },
+        error: (err) => {
+          console.log(err);
+          this.alertService.error(err?.error?.message || 'Login failed');
+        },
+      });
+  }
 
   onOtpChange(evt: any) {
     this.otp = evt;
@@ -232,23 +232,23 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  // signInWithOtp(): void {
-  //   if (this.otpForm.invalid) {
-  //     this.alertService.error('Enter a valid email and OTP');
-  //     return;
-  //   }
-  //   const payload: any = {
-  //     email: this.otpForm.value.email,
-  //     otp: Number(this.otpForm.value.otp),
-  //   };
+  signInWithOtp(): void {
+    if (this.otpForm.invalid) {
+      this.alertService.error('Enter a valid email and OTP');
+      return;
+    }
+    const payload: any = {
+      email: this.otpForm.value.email,
+      otp: Number(this.otpForm.value.otp),
+    };
 
-  //   if (this.isOTPVerified) {
-  //     payload['user_role'] = this.getUserType();
-  //     this.login(payload);
-  //   } else {
-  //     this.verifyOtp(payload);
-  //   }
-  // }
+    if (this.isOTPVerified) {
+      payload['user_role'] = this.getUserType();
+      this.login(payload);
+    } else {
+      this.verifyOtp(payload);
+    }
+  }
 
   verifyOtp(payload: any): void {
     this.authService

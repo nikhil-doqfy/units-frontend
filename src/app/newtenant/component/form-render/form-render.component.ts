@@ -27,6 +27,7 @@ import { SendNegotiationComponent } from '../../../dashboard/component/forms/sen
 import { AgreementComponent } from '../agreement/agreement.component';
 import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
 import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
+import { EjariModalServiceService } from '../../../ejari-modal-service.service';
 
 @Component({
   selector: 'app-form-render',
@@ -69,7 +70,7 @@ export class FormRenderComponent {
   msgText$ = this.formService.getMsgText();
   showRefresh$ = this.formService.showRefresh$;
   constructor(
-    private alertService: AlertService,
+    private ejariModelService: EjariModalServiceService,
     private formService: NewTenantFromService,
   ) {}
   get currentStep() {
@@ -99,7 +100,7 @@ export class FormRenderComponent {
 
   getNextBtnLabel() {
     if (this.currentSubStep?.component === EjariDocSignatureComponent) {
-      return this.btnTitle$();
+      return this.btnTitle$().trim();
     }
     if (this.currentSubStep?.component === AgreementComponent) {
       return this.btnTitle$();
@@ -126,8 +127,33 @@ export class FormRenderComponent {
 
     return 'Save & Next';
   }
-
   next() {
+    if (
+      this.currentSubStep?.component === EjariDocSignatureComponent &&
+      this.getNextBtnLabel() === 'Approval & Generate Invoice'
+    ) {
+      const button = document.querySelector(
+        '.Approval-Generate-invoice',
+      ) as HTMLElement;
+      // Call your alert service modal
+      this.ejariModelService.customTenantSuccessModal(
+        'The tenant has been activated and the invoice has been generated successfully.',
+        (action) => {
+          // Handle actions when user clicks buttons
+          if (action === 'invoice') {
+            // navigate to invoice page or just close
+            console.log('Go to Invoice clicked');
+          } else if (action === 'profile') {
+            // navigate to tenant profile page
+            console.log('View Profile clicked');
+          }
+          // Move to next step if needed
+          this.goToNextStep();
+        },
+      );
+
+      return; // stop further next() execution
+    }
     if (this.currentSubStep?.component === AgreementComponent) {
       this.formService.handleMainButtonClick(
         () => this.goToNextStep(),

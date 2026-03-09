@@ -94,9 +94,12 @@
   </form>
   <!--signin with otp-->
 
-  <form *ngIf="loginMode === 'otp'" class="mb-4" [formGroup]="otpForm">
-    <!-- (ngSubmit)="signInWithOtp()" -->
-
+  <form
+    *ngIf="loginMode === 'otp'"
+    class="mb-4"
+    [formGroup]="otpForm"
+    (ngSubmit)="signInWithOtp()"
+  >
     <div class="mb-4">
       <label for="email" class="form-label">
         Email Address

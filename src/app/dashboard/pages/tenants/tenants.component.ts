@@ -129,47 +129,44 @@ export class TenantsComponent {
   constructor(
     private tenantService: NewTenantFromService,
     private router: Router,
-  ) {}
-  // constructor(
-  //   private router: Router,
-  //   private themeService: ThemeService,
-  // ) {
-  //   const key = this.route.snapshot.data['titleKey'];
-  //   this.sharedService.setTitle(key);
-  //   this.initTenantSearchListener();
+    private themeService: ThemeService,
+  ) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+    this.initTenantSearchListener();
 
-  //   const id = this.route.snapshot.paramMap.get('id');
-  //   if (id) {
-  //     this.showDetailView = true;
-  //     this.getTenantDetails(+id);
-  //   } else {
-  //     this.showDetailView = false;
-  //     this.getTenants();
-  //   }
-  // }
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.showDetailView = true;
+      this.getTenantDetails(+id);
+    } else {
+      this.showDetailView = false;
+      this.getTenants();
+    }
+  }
 
-  // ngOnInit() {
-  //   this.loadBreadcrumb();
-  //   this.initCurrentRoleListener();
-  //   this.sharedService.initLanguage();
-  //   this.initLanguageListener();
-  //   this.sharedService.lang$
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((lang) => {
-  //       this.currentLanguage = lang;
-  //       this.loadBreadcrumb();
-  //     });
-  // }
+  ngOnInit() {
+    this.loadBreadcrumb();
+    this.initCurrentRoleListener();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+    this.sharedService.lang$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((lang) => {
+        this.currentLanguage = lang;
+        this.loadBreadcrumb();
+      });
+  }
   getLabel(key: string): string {
     return this.translate.instant(key);
   }
-  // initCurrentRoleListener() {
-  //   this.themeService.currentRole$
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((role) => {
-  //       this.currentRole = role;
-  //     });
-  // }
+  initCurrentRoleListener() {
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+  }
 
   initLanguageListener() {
     this.translate.onLangChange
@@ -192,32 +189,32 @@ export class TenantsComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  // private getTenants() {
-  //   this.tenantsFilter = {
-  //     ...this.tenantsFilter,
-  //     limit: this.rowsPerPage,
-  //     page: this.currentPage,
-  //   };
+  private getTenants() {
+    this.tenantsFilter = {
+      ...this.tenantsFilter,
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
 
-  //   this.tenantsService
-  //     .getTenants(this.tenantsFilter)
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe({
-  //       next: (resp: any) => {
-  //         this.tenantsList = resp?.content ?? [];
-  //         this.totalRecords = resp?.pagination?.total_records ?? 0;
-  //         this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
-  //       },
-  //       error: (err) => {},
-  //     });
-  // }
+    this.tenantsService
+      .getTenants(this.tenantsFilter)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.tenantsList = resp?.content ?? [];
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+        },
+        error: (err) => {},
+      });
+  }
 
   onDocTabClick(type: any) {
     this.activeDocTypeKey = type.key;
   }
-  // onRefresh() {
-  //   this.getTenants();
-  // }
+  onRefresh() {
+    this.getTenants();
+  }
 
   goToInvitationStep() {
     // Go to step 1, sub-step 1 (Property details)
@@ -227,44 +224,44 @@ export class TenantsComponent {
     this.onTenantsSearch$.next(search);
   }
   tenantDocumentType: any[] = [];
-  // getOptionTypes() {
-  //   if (this.showDetailView) {
-  //     this.sharedApiService.getOptionsType([
-  //       {
-  //         param: 'PROPERTY_DOCUMENT_CHOICE',
-  //         key: 'Property_Document',
-  //         setter: (v) => {
-  //           ((this.tenantDocumentType = v), this.getTenants());
-  //         },
-  //       },
-  //     ]);
-  //   }
-  // }
+  getOptionTypes() {
+    if (this.showDetailView) {
+      this.sharedApiService.getOptionsType([
+        {
+          param: 'PROPERTY_DOCUMENT_CHOICE',
+          key: 'Property_Document',
+          setter: (v) => {
+            ((this.tenantDocumentType = v), this.getTenants());
+          },
+        },
+      ]);
+    }
+  }
 
-  // initTenantSearchListener() {
-  //   this.onTenantsSearch$
-  //     .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((value) => {
-  //       if (value?.trim()) this.tenantsFilter['search'] = value.trim();
-  //       else delete this.tenantsFilter['search'];
+  initTenantSearchListener() {
+    this.onTenantsSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        if (value?.trim()) this.tenantsFilter['search'] = value.trim();
+        else delete this.tenantsFilter['search'];
 
-  //       this.currentPage = 1;
-  //       this.getTenants();
-  //     });
-  // }
+        this.currentPage = 1;
+        this.getTenants();
+      });
+  }
 
-  // onPageSizeChange(event: PageSizeChange): void {
-  //   if (event.componentName !== this.componentName) return;
-  //   this.rowsPerPage = event.pageSize;
-  //   this.currentPage = 1;
-  //   this.getTenants();
-  // }
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getTenants();
+  }
 
-  // onPageChange(event: PageChange): void {
-  //   if (event.componentName !== this.componentName) return;
-  //   this.currentPage = event.currentPage;
-  //   this.getTenants();
-  // }
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getTenants();
+  }
   isUnitDetailView = false;
   addTenant() {
     this.router.navigate(['/dashboard/new-tenant']);
@@ -412,24 +409,24 @@ export class TenantsComponent {
     console.log('Delete button clicked');
   }
 
-  // handleViewClick(tenantID: number): void {
-  //   // this.showDetailView = true;
-  //   this.router.navigate(['/dashboard/tenants/detail/', tenantID]);
-  // }
+  handleViewClick(tenantID: number): void {
+    // this.showDetailView = true;
+    this.router.navigate(['/dashboard/tenants/detail/', tenantID]);
+  }
 
-  // handleBackClick(): void {
-  //   this.showDetailView = false;
-  //   this.router.navigate(['/dashboard/tenants']);
-  // }
+  handleBackClick(): void {
+    this.showDetailView = false;
+    this.router.navigate(['/dashboard/tenants']);
+  }
 
   // ------------------------- Access tenant form data -------------------------
 
-  // onTenantSave(component: AddTenantFormComponent, modal: NgbActiveModal) {
-  //   component.submitTenantForm();
+  onTenantSave(component: AddTenantFormComponent, modal: NgbActiveModal) {
+    component.submitTenantForm();
 
-  //   modal.close();
-  //   this.getTenants();
-  // }
+    modal.close();
+    this.getTenants();
+  }
 
   getTenantDetails(tenantID: number): void {
     this.tenantsService

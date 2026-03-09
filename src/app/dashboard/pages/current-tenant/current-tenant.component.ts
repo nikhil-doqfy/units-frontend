@@ -157,9 +157,9 @@ export class CurrentTenantComponent {
   openreplaceChequeModal(replaceChequeContent: TemplateRef<any>) {
     const modalRef = this.modalService.open(replaceChequeContent, {
       ariaLabelledBy: 'modal-title',
-      windowClass: 'mdlCommon',
+      windowClass: 'mdlCommon replaceChequeModel',
       centered: true,
-      size: 'xl',
+      size: '900px',
     });
   }
   openReceiptModal(receiptContent: TemplateRef<any>) {
