@@ -27,7 +27,7 @@ import { SendNegotiationComponent } from '../../../dashboard/component/forms/sen
 import { AgreementComponent } from '../agreement/agreement.component';
 import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
 import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
-import { EjariModalServiceService } from '../../../ejari-modal-service.service';
+import { EjarimodelService } from '../../../ejarimodel.service';
 
 @Component({
   selector: 'app-form-render',
@@ -70,8 +70,9 @@ export class FormRenderComponent {
   msgText$ = this.formService.getMsgText();
   showRefresh$ = this.formService.showRefresh$;
   constructor(
-    private ejariModelService: EjariModalServiceService,
+    private ejariModelService: EjarimodelService,
     private formService: NewTenantFromService,
+    private alertService: AlertService,
   ) {}
   get currentStep() {
     return this.steps()[this.activeIndex()];

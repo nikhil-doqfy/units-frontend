@@ -3195,19 +3195,23 @@ app-plus-icon {
   margin: 0 auto;
 }
 
-.success-modal h3 {
+.success-modal h6 {
   font-size: 16px;
   font-weight: 600;
   margin: 10px 0 6px;
 }
 
-.success-modal p {
-  font-size: 13px;
+.success-modal span.success-text {
+  font-family: "Onest", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0%;
+  text-align: center;
   color: #6b7280;
+  display: block;
   margin-bottom: 18px;
-  line-height: 1.5;
 }
-
 .primary-btn {
   background: #22c55e;
   border: none;
@@ -3233,6 +3237,29 @@ app-plus-icon {
   font-weight: 500;
   text-decoration: underline;
 }
+.success-modal::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 70px;
+  height: 70px;
+  background: url("assets/Vector/vector-1.svg") no-repeat center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* BOTTOM RIGHT ICON */
+.success-modal::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 70px;
+  height: 70px;
+  background: url("assets/Vector/Vector-2.svg") no-repeat center;
+  background-size: contain;
+}
 
 .btnCommonsx {
   background-color: #fff;
@@ -3248,7 +3275,7 @@ app-plus-icon {
 }
 .custom-approval-right {
   position: fixed !important;
-  top: 51%;
+  top: 49%;
   right: 20px;
   transform: translateY(-50%);
   margin: 0 !important;
@@ -3268,4 +3295,33 @@ app-plus-icon {
 }
 .replaceChequeModel .modal-dialog {
   max-width: 828px !important;
+}
+
+.success-modal {
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px 28px 30px;
+  width: 360px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+/* corner icon common */
+.corner-icon {
+  position: absolute;
+  width: 80px;
+  pointer-events: none;
+}
+
+/* top left */
+.top-left {
+  top: 0;
+  left: 0;
+}
+
+/* bottom right */
+.bottom-right {
+  bottom: 0;
+  right: 0;
 }

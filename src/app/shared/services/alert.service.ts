@@ -149,66 +149,66 @@ export class AlertService {
   //       },
   //     });
   //   }
-  customTenantSuccessModal(msg: string, onAction?: (action: string) => void) {
-    Swal.fire({
-      html: `
-      <div class="success-model">
-        <div class="success-icon">
-          <img src="assets/Verify.svg" />
-        </div>
+  // customTenantSuccessModal(msg: string, onAction?: (action: string) => void) {
+  //   Swal.fire({
+  //     html: `
+  //     <div class="success-model">
+  //       <div class="success-icon">
+  //         <img src="assets/Verify.svg" />
+  //       </div>
 
-        <h3>Tenant Activated Successfully</h3>
+  //       <h3>Tenant Activated Successfully</h3>
 
-        <p>
-          The tenant has been activated and the invoice has been generated
-          successfully.
-        </p>
+  //       <p>
+  //         The tenant has been activated and the invoice has been generated
+  //         successfully.
+  //       </p>
 
-        <div class="modal-actions">
-          <button id="invoiceBtn" class="btn btnCommonsx">Go to Invoice</button>
-          <span class="mt-3">
-            <a href="#" id="profileBtn" class="secondary-link">View Tenant Profile</a>
-          </span>
-        </div>
-        </div>
-    `,
+  //       <div class="modal-actions">
+  //         <button id="invoiceBtn" class="btn btnCommonsx">Go to Invoice</button>
+  //         <span class="mt-3">
+  //           <a href="#" id="profileBtn" class="secondary-link">View Tenant Profile</a>
+  //         </span>
+  //       </div>
+  //       </div>
+  //   `,
 
-      showConfirmButton: false,
-      allowOutsideClick: false,
-      backdrop: `
-      rgba(0,0,0,0.25)
-      backdrop-filter: blur(6px)
-      -webkit-backdrop-filter: blur(6px)
-    `,
-      customClass: {
-        popup: 'custom-approval-right', // your styling
-      },
-      didOpen: () => {
-        // button actions
-        document.getElementById('invoiceBtn')?.addEventListener('click', () => {
-          Swal.close();
-          onAction?.('invoice');
-        });
-        document
-          .getElementById('profileBtn')
-          ?.addEventListener('click', (e) => {
-            e.preventDefault();
-            Swal.close();
-            onAction?.('profile');
-          });
+  //     showConfirmButton: false,
+  //     allowOutsideClick: false,
+  //     backdrop: `
+  //     rgba(0,0,0,0.25)
+  //     backdrop-filter: blur(6px)
+  //     -webkit-backdrop-filter: blur(6px)
+  //   `,
+  //     customClass: {
+  //       popup: 'custom-approval-right', // your styling
+  //     },
+  //     didOpen: () => {
+  //       // button actions
+  //       document.getElementById('invoiceBtn')?.addEventListener('click', () => {
+  //         Swal.close();
+  //         onAction?.('invoice');
+  //       });
+  //       document
+  //         .getElementById('profileBtn')
+  //         ?.addEventListener('click', (e) => {
+  //           e.preventDefault();
+  //           Swal.close();
+  //           onAction?.('profile');
+  //         });
 
-        // detect outside clicks
-        const popup = Swal.getPopup();
-        const clickOutsideListener = (event: MouseEvent) => {
-          if (popup && !popup.contains(event.target as Node)) {
-            Swal.close();
-            document.removeEventListener('click', clickOutsideListener);
-          }
-        };
-        setTimeout(() => {
-          document.addEventListener('click', clickOutsideListener);
-        }, 0);
-      },
-    });
-  }
+  //       // detect outside clicks
+  //       const popup = Swal.getPopup();
+  //       const clickOutsideListener = (event: MouseEvent) => {
+  //         if (popup && !popup.contains(event.target as Node)) {
+  //           Swal.close();
+  //           document.removeEventListener('click', clickOutsideListener);
+  //         }
+  //       };
+  //       setTimeout(() => {
+  //         document.addEventListener('click', clickOutsideListener);
+  //       }, 0);
+  //     },
+  //   });
+  // }
 }
