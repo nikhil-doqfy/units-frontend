@@ -3237,29 +3237,6 @@ app-plus-icon {
   font-weight: 500;
   text-decoration: underline;
 }
-.success-modal::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 70px;
-  height: 70px;
-  background: url("assets/Vector/vector-1.svg") no-repeat center;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-/* BOTTOM RIGHT ICON */
-.success-modal::after {
-  content: "";
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  width: 70px;
-  height: 70px;
-  background: url("assets/Vector/Vector-2.svg") no-repeat center;
-  background-size: contain;
-}
 
 .btnCommonsx {
   background-color: #fff;
@@ -3297,30 +3274,17 @@ app-plus-icon {
   max-width: 828px !important;
 }
 
-.success-modal {
-  background: #fff;
-  border-radius: 18px;
-  padding: 28px 28px 30px;
-  width: 360px;
-  text-align: center;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-  position: relative;
-}
-
-/* corner icon common */
 .corner-icon {
   position: absolute;
   width: 80px;
   pointer-events: none;
 }
 
-/* top left */
 .top-left {
   top: 0;
   left: 0;
 }
 
-/* bottom right */
 .bottom-right {
   bottom: 0;
   right: 0;

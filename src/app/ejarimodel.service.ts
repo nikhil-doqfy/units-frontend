@@ -33,17 +33,22 @@ export class EjarimodelService {
       `,
 
       showConfirmButton: false,
-      allowOutsideClick: false,
+      allowOutsideClick: true,
       backdrop: `
         rgba(0,0,0,0.25)
         backdrop-filter: blur(6px)
         -webkit-backdrop-filter: blur(6px)
       `,
       customClass: {
-        popup: 'custom-approval-right', // your styling
+        popup: 'custom-approval-right',
+      },
+      showClass: {
+        popup: '',
+      },
+      hideClass: {
+        popup: '',
       },
       didOpen: () => {
-        // button actions
         document.getElementById('invoiceBtn')?.addEventListener('click', () => {
           Swal.close();
           onAction?.('invoice');
@@ -55,18 +60,6 @@ export class EjarimodelService {
             Swal.close();
             onAction?.('profile');
           });
-
-        // detect outside clicks
-        const popup = Swal.getPopup();
-        const clickOutsideListener = (event: MouseEvent) => {
-          if (popup && !popup.contains(event.target as Node)) {
-            Swal.close();
-            document.removeEventListener('click', clickOutsideListener);
-          }
-        };
-        setTimeout(() => {
-          document.addEventListener('click', clickOutsideListener);
-        }, 0);
       },
     });
   }
