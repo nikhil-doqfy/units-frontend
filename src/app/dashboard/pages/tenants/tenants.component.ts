@@ -57,6 +57,7 @@ import { PlatfromBadgeComponent } from '../../component/platfrom-badge/platfrom-
 import { BadgeComponent } from '../../component/badge/badge.component';
 import { ActiveTenantTabComponent } from '../active-tenant-tab/active-tenant-tab.component';
 import { CancelIconComponent } from '../../../icons/cancel-icon/cancel-icon.component';
+import { NewTenantFromService } from '../../../newtenant/component/service/new-tenant-from.service';
 
 @Component({
   selector: 'app-tenants',
@@ -125,7 +126,10 @@ export class TenantsComponent {
   currentPage: number = 1;
   private onTenantsSearch$ = new Subject<string>();
   currentLanguage = 'en';
-
+  constructor(
+    private tenantService: NewTenantFromService,
+    private router: Router,
+  ) {}
   // constructor(
   //   private router: Router,
   //   private themeService: ThemeService,
@@ -215,6 +219,10 @@ export class TenantsComponent {
   //   this.getTenants();
   // }
 
+  goToInvitationStep() {
+    // Go to step 1, sub-step 1 (Property details)
+    this.tenantService.goToStep('2', '2-1');
+  }
   searchTextChange(search: string): void {
     this.onTenantsSearch$.next(search);
   }
@@ -257,7 +265,13 @@ export class TenantsComponent {
   //   this.currentPage = event.currentPage;
   //   this.getTenants();
   // }
-
+  isUnitDetailView = false;
+  addTenant() {
+    this.router.navigate(['/dashboard/new-tenant']);
+  }
+  onDetailViewChange(event: boolean) {
+    this.isUnitDetailView = event;
+  }
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }

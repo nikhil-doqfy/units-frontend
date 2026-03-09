@@ -14,6 +14,7 @@ import { RejectIconComponent } from '../icons/reject-icon/reject-icon.component'
 import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
 import { FileIconComponent } from '../../../icons/file-icon/file-icon.component';
 import { SendAppLinkIconComponent } from '../../../icons/send-app-link-icon/send-app-link-icon.component';
+import { HistoryIconComponent } from '../../../icons/history-icon/history-icon.component';
 
 @Component({
   selector: 'app-table-action-btn',
@@ -32,6 +33,7 @@ import { SendAppLinkIconComponent } from '../../../icons/send-app-link-icon/send
     DisableIconComponent,
     FileIconComponent,
     SendAppLinkIconComponent,
+    HistoryIconComponent,
   ],
   templateUrl: './table-action-btn.component.html',
   styleUrls: ['./table-action-btn.component.css'],
@@ -52,7 +54,8 @@ export class TableActionButtonComponent {
     | 'reject'
     | 'rejectOrange'
     | 'approve'
-    | 'restart';
+    | 'restart'
+    | 'history';
   @Output() clicked = new EventEmitter<void>();
 
   getTooltip(type: string): string {
@@ -87,6 +90,8 @@ export class TableActionButtonComponent {
         return 'Send App Link';
       case 'restart':
         return 'Restart';
+      case 'history':
+        return 'History';
       default:
         return '';
     }

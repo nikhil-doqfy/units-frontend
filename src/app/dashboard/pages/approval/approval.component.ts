@@ -34,6 +34,7 @@ import {
 import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BackIconComponent } from '../../component/icons/back-icon/back-icon.component';
 @Component({
   selector: 'app-approval',
   standalone: true,
@@ -58,6 +59,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TranslateModule,
     CommonModule,
     FormsModule,
+    BackIconComponent,
   ],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.css',

@@ -1,0 +1,74 @@
+.replace-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.charge-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 381px;
+  border: 1px solid rgb(248, 243, 243);
+}
+
+.tag {
+  border: 1px solid rgb(248, 243, 243);
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.scan-box {
+  display: flex;
+  gap: 10px;
+}
+
+.scan-btn {
+  display: flex;
+  background: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.summary-box {
+  background: #f7f7f7;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.row-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.total {
+  font-weight: 600;
+}
+
+.input-scan-wrapper {
+  position: relative;
+}
+
+.scan-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: #f5f5f5;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.input-scan-wrapper input {
+  padding-right: 90px;
+}

@@ -6,6 +6,9 @@ import { CheckIconComponent } from '../../../icons/check-icon/check-icon.compone
 import { SuccessIconComponent } from '../../../icons/success-icon/success-icon.component';
 import { CloseIconComponent } from '../../../icons/close-icon/close-icon.component';
 import { PendingIconComponent } from '../../../icons/pending-icon/pending-icon.component';
+import { AmountCreditedIconComponent } from '../../../icons/amount-credited-icon/amount-credited-icon.component';
+import { DeleteIconComponent } from '../icons/delete-icon/delete-icon.component';
+import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
 
 @Component({
   selector: 'app-badge',
@@ -18,6 +21,9 @@ import { PendingIconComponent } from '../../../icons/pending-icon/pending-icon.c
     SuccessIconComponent,
     CloseIconComponent,
     PendingIconComponent,
+    AmountCreditedIconComponent,
+    DeleteIconComponent,
+    DisableIconComponent,
   ],
   templateUrl: './badge.component.html',
   styleUrl: './badge.component.css',

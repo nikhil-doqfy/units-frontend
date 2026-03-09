@@ -388,7 +388,7 @@
   </div>
 </ng-container> -->
 
-<div class="mb-3">
+<div class="mb-3" *ngIf="!isUnitDetailView">
   <app-white-card>
     <div class="commonTabs">
       <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -421,7 +421,7 @@
           </button>
         </li>
       </ul>
-      <button class="btn">
+      <button class="btn" (click)="addTenant()">
         <i class="btn-icon"><app-plus-icon></app-plus-icon></i>
         Add Tenant
       </button>
@@ -442,7 +442,7 @@
         <div class="row g-3 align-items-center">
           <div class="col-md">
             <app-table-title
-              [title]="'ALL_TENANTS' | translate"
+              [title]="'Results' | translate"
               [subtitle]="'(' + totalRecords + ')'"
             ></app-table-title>
 
@@ -524,7 +524,11 @@
                 </td>
 
                 <td class="status-row">
-                  <app-badge title="Invitation Sent" status="green"></app-badge>
+                  <app-badge
+                    title="Invitation Sent"
+                    status="green"
+                    (click)="goToInvitationStep()"
+                  ></app-badge>
                   <app-table-action-dropdown
                     [dropdownItems]="documentActions"
                     menuClass="rejectDropdown"
@@ -721,5 +725,7 @@
   aria-labelledby="activeTenants-tab"
   tabindex="0"
 >
-  <app-active-tenant-tab></app-active-tenant-tab>
+  <app-active-tenant-tab
+    (detailViewChanges)="onDetailViewChange($event)"
+  ></app-active-tenant-tab>
 </div>

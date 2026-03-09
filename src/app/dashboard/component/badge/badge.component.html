@@ -10,23 +10,21 @@
 >
   <!-- Icons -->
   <i *ngIf="showIcon && status === 'green'">
-    <app-check-icon></app-check-icon>
+    <span style="color: green">&#x2713;</span>
   </i>
 
   <!-- <i *ngIf="showIcon && status === 'light-green'">
     <app-success-icon></app-success-icon>
   </i> -->
 
-  <i *ngIf="showIcon && status === 'orange'">
-    <app-warning-icon></app-warning-icon>
-  </i>
+  <i *ngIf="showIcon && status === 'orange'"> </i>
 
   <i *ngIf="showIcon && status === 'black'">
-    <app-info-icon></app-info-icon>
+    <app-amount-credited-icon></app-amount-credited-icon>
   </i>
 
   <i *ngIf="showIcon && status === 'red'">
-    <app-close-icon></app-close-icon>
+    <app-disable-icon></app-disable-icon>
   </i>
 
   <i *ngIf="showIcon && status === 'yellow'">

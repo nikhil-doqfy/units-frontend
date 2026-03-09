@@ -1,0 +1,218 @@
+.summary-card {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 14px 26px;
+  box-shadow: 0 1px 10px rgba(66, 66, 66, 0.2);
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-right: 38px;
+  min-width: 160px;
+}
+
+.amount {
+  font-size: 15px;
+  font-weight: 600;
+  color: #030507;
+  line-height: 1.2;
+}
+
+.label {
+  font-size: 14px;
+  color: #545659;
+  line-height: 1.2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .summary-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+  }
+
+  .summary-item {
+    min-width: auto;
+  }
+}
+
+.weekLabel .line {
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+/* .status-cell {
+  padding: 10px;
+}
+
+.status-cell app-status-action-dropdown {
+  background: green;
+  color: white;
+  border-radius: 10px;
+  padding: 6px 12px;
+} */
+
+:host ::ng-deep .status-black app-status-action-dropdown {
+  background: orange;
+  border-radius: 10px;
+  display: inline-block;
+}
+:host ::ng-deep .status-green app-status-action-dropdown {
+  background: green;
+  border-radius: 10px;
+  display: inline-block;
+}
+:host ::ng-deep .status-grey app-status-action-dropdown {
+  background: #6c757d;
+  border-radius: 10px;
+  display: inline-block;
+}
+.payment-link-btn {
+  color: blue !important;
+  text-decoration: underline !important;
+  background: transparent;
+  border: none;
+}
+.ref {
+  font-size: 14px;
+  color: #666;
+  margin-left: 10px;
+}
+
+.ref-badge {
+  background: #eee;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+.mdlCommon .modal-dialog {
+  max-width: 1000px !important;
+}
+
+.mdlCommon .modal-content {
+  border: 0;
+  border-radius: 12px;
+  width: 900px;
+}
+
+.mdlCommon .modal-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--muteBorder1);
+}
+
+.mdlCommon .modal-title {
+  font-size: 16px;
+  color: var(--greyDarkText1);
+  font-weight: 600;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mdlCommon .modal-title i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mdlCommon .modal-title span {
+  background-color: var(--muteBg2);
+  display: inline-block;
+  font-size: 13px;
+  color: var(--greyDarkText2);
+  font-weight: 600;
+  line-height: 16px;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.modal .btn-close {
+  /* position: absolute; */
+  font-size: 12px;
+  right: 20px;
+  top: 22px;
+  opacity: 0.8;
+}
+
+.modal .btn-close:focus {
+  box-shadow: none;
+}
+
+.mdlCommon .modal-body {
+  padding: 24px 16px;
+}
+
+.mdlMedium .modal-dialog {
+  max-width: 544px;
+}
+
+.mdlCommon .modal-footer {
+  padding: 8px 16px;
+  border-top: 1px solid var(--muteBorder1);
+  gap: 8px;
+}
+
+.mdlCommon .modal-footer * {
+  margin: 0;
+}
+
+.dues-card {
+  width: 210px;
+  background: #f3f3f3;
+  padding: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dues-title {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.dues-amount {
+  color: red;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.payment-link {
+  color: #007bff;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.renewal-alert {
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center; /* vertical center */
+  text-align: center;
+  gap: 6px;
+
+  background: #fff1f2;
+  color: #b00020;
+  padding: 15px;
+  border-radius: 4px;
+  font-size: 15px;
+  margin-bottom: 10px;
+}

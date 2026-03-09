@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, TemplateRef } from '@angular/core';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -19,6 +19,9 @@ import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
+import { ChequeBounceHistoryModalComponent } from '../../forms/cheque-bounce-history-modal/cheque-bounce-history-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-cheques',
@@ -33,6 +36,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TablePaginationComponent,
     SortingIconComponent,
     TableImgItemComponent,
+    TableActionButtonComponent,
+    ChequeBounceHistoryModalComponent,
   ],
   templateUrl: './cheques.component.html',
   styleUrl: './cheques.component.css',
@@ -52,6 +57,8 @@ export class ChequesComponent {
   activeSummary: 'total' | 'credited' | 'realized' | 'bounce' | 'balance' =
     'total';
   breadcrumbData: BreadCrumb[] = [];
+  private modalService = inject(NgbModal);
+
   summaryCards = [
     {
       key: 'total',
@@ -146,5 +153,13 @@ export class ChequesComponent {
 
   backToList() {
     this.showDetailView = false;
+  }
+
+  openChequeBounceHistoryModel(activityHistoryContent: TemplateRef<any>) {
+    const modalRef = this.modalService.open(activityHistoryContent, {
+      ariaLabelledBy: 'modal-title',
+      windowClass: 'mdlCommon',
+      centered: true,
+    });
   }
 }

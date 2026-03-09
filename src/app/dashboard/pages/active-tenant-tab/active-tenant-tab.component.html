@@ -1,4 +1,7 @@
-<div class="mb-3" *ngIf="currentRole === 'property-manager'">
+<div
+  class="mb-3"
+  *ngIf="currentRole === 'property-manager' && !isUnitDetailView"
+>
   <app-white-card>
     <div class="row align-items-center justify-content-between g-3">
       <div class="col-md">
@@ -61,8 +64,19 @@
 <!-- Dynamic content below tabs -->
 <div class="mt-3">
   <ng-container [ngSwitch]="activeTenantTab">
-    <app-current-tenant *ngSwitchCase="'currenttenant'"></app-current-tenant>
-    <app-past-tenant *ngSwitchCase="'pasttenant'"> </app-past-tenant>
-    <app-rejected-tenant *ngSwitchCase="'rejected'"> </app-rejected-tenant>
+    <app-current-tenant
+      *ngSwitchCase="'currenttenant'"
+      (detailViewChanges)="onUnitDetailChanges($event)"
+    ></app-current-tenant>
+    <app-past-tenant
+      *ngSwitchCase="'pasttenant'"
+      (detailViewChanges)="onUnitDetailChanges($event)"
+    >
+    </app-past-tenant>
+    <app-rejected-tenant
+      *ngSwitchCase="'rejected'"
+      (detailViewChanges)="onUnitDetailChanges($event)"
+    >
+    </app-rejected-tenant>
   </ng-container>
 </div>

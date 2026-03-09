@@ -1,178 +1,904 @@
-<div class="cmmnTblOuter">
-  <div class="cmmnTblHdr">
-    <div class="row g-3 align-items-center">
-      <div class="col-md">
-        <app-table-title
-          [title]="'ALL_TENANTS' | translate"
-          [subtitle]="'(' + totalRecords + ')'"
-          (onRefresh)="onRefresh()"
-        ></app-table-title>
-      </div>
-      <div class="col-md-auto">
-        <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+@if (!showDetailView && !showInvoiceDetails) {
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'ALL_TENANTS' | translate"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+            <app-custom-select
+              placeholder="Property:AI Ajera "
+            ></app-custom-select>
+            <app-custom-select
+              placeholder="Block / Tower:All"
+            ></app-custom-select>
+            <app-custom-select placeholder="Unit:All"></app-custom-select>
 
-          <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true">
-            <app-export-icon />
-          </app-table-filter-btn>
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="cmmnTbl">
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>
-              {{ "SI.No" | translate }}
-            </th>
-            <th>{{ "Tenant ID" | translate }}</th>
-            <th>
-              {{ "Tenanat Name" | translate }}
-              <i><app-sorting-icon></app-sorting-icon></i>
-            </th>
-            <th>{{ "Tenure Start & End Date" | translate }}</th>
-            <th>
-              {{ "Property Name " | translate
-              }}<i><app-sorting-icon></app-sorting-icon></i>
-            </th>
-            <th>Block /Tower</th>
-            <th>Unit</th>
-            <th>Contact Number</th>
-            <th>Email</th>
-            <th>Rent(AED)</th>
-          </tr>
-        </thead>
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>
+                {{ "SI.No" | translate }}
+              </th>
+              <th>{{ "Tenant ID" | translate }}</th>
+              <th>
+                {{ "Tenanat Name" | translate }}
+                <i><app-sorting-icon></app-sorting-icon></i>
+              </th>
+              <th>{{ "Tenure Start & End Date" | translate }}</th>
+              <th>
+                {{ "Property Name " | translate
+                }}<i><app-sorting-icon></app-sorting-icon></i>
+              </th>
+              <th>Block /Tower</th>
+              <th>Unit</th>
+              <th>Contact Number</th>
+              <th>Email</th>
+              <th>Rent(AED)</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <tr>
-            <td>01</td>
-            <td>LP9021</td>
-            <td>
-              <app-table-img-item
-                img="assets/user/user-1.png"
-                title="Jensi"
-              ></app-table-img-item>
-            </td>
-            <td>1Feb 25 -2 Mar 26</td>
-            <td>
-              <app-table-img-item
-                img="assets/property/property-list-1.png"
-                title="Novatis AG"
-              ></app-table-img-item>
-            </td>
-            <td>Evergreen(B)</td>
-            <td>Evergreen(B) 204</td>
-            <td>+91-70*******23</td>
-            <td>Jensi&#64;***kmail.com</td>
-            <td>1,800.00</td>
-          </tr>
-          <tr>
-            <td>02</td>
-            <td>LP9021</td>
-            <td>
-              <app-table-img-item
-                img="assets/user/user-2.png"
-                title="Richard"
-              ></app-table-img-item>
-            </td>
-            <td>1Mar 25 -2 Apr 26</td>
-            <td>
-              <app-table-img-item
-                img="assets/property/property-list-2.png"
-                title="Sliechi Tower"
-              ></app-table-img-item>
-            </td>
-            <td>Harmony(B)</td>
-            <td>Harmony(c) 302</td>
-            <td>+91-70*******76</td>
-            <td>richard&#64;***kmail.com</td>
-            <td>1,145.00</td>
-          </tr>
-          <tr>
-            <td>03</td>
-            <td>VP9021</td>
-            <td>
-              <app-table-img-item
-                img="assets/user/user-3.png"
-                title="Thomas"
-              ></app-table-img-item>
-            </td>
-            <td>3Apr 25 -2 Apr 26</td>
-            <td>
-              <app-table-img-item
-                img="assets/property/property-list-2.png"
-                title="Jainhailia"
-              ></app-table-img-item>
-            </td>
-            <td>Sunrise(D)</td>
-            <td>Sunrise(D) 101</td>
-            <td>+91-70*******12</td>
-            <td>thomas&#64;***mail.com</td>
-            <td>1,350.00</td>
-          </tr>
-          <tr>
-            <td>04</td>
-            <td>VC9021</td>
-            <td>
-              <app-table-img-item
-                img="assets/user/user-4.png"
-                title="Thomas"
-              ></app-table-img-item>
-            </td>
-            <td>3Apr 25 -2 Apr 26</td>
-            <td>
-              <app-table-img-item
-                img="assets/property/property-list-2.png"
-                title="Jainhailia"
-              ></app-table-img-item>
-            </td>
-            <td>Sunrise(D)</td>
-            <td>Sunrise(D) 101</td>
-            <td>+91-70*******12</td>
-            <td>thomas&#64;***mail.com</td>
-            <td>1,350.00</td>
-          </tr>
-          <tr>
-            <td>05</td>
-            <td>VC9021</td>
-            <td>
-              <app-table-img-item
-                img="assets/user/user-4.png"
-                title="Thomas"
-              ></app-table-img-item>
-            </td>
-            <td>3Apr 25 -2 Apr 26</td>
-            <td>
-              <app-table-img-item
-                img="assets/property/property-list-2.png"
-                title="Jainhailia"
-              ></app-table-img-item>
-            </td>
-            <td>Sunrise(D)</td>
-            <td>Sunrise(D) 101</td>
-            <td>+91-70*******12</td>
-            <td>thomas&#64;***mail.com</td>
-            <td>1,350.00</td>
-          </tr>
-        </tbody>
-      </table>
+          <tbody>
+            <tr>
+              <td>01</td>
+              <td>LP9021</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-1.png"
+                  title="Jensi"
+                  (click)="onLeaseClick(leases)"
+                ></app-table-img-item>
+              </td>
+              <td>1Feb 25 -2 Mar 26</td>
+              <td>
+                <app-table-img-item
+                  img="assets/property/property-list-1.png"
+                  title="Novatis AG"
+                ></app-table-img-item>
+              </td>
+              <td>Evergreen(B)</td>
+              <td>Evergreen(B) 204</td>
+              <td>+91-70*******23</td>
+              <td>Jensi&#64;***kmail.com</td>
+              <td>1,800.00</td>
+            </tr>
+            <tr>
+              <td>02</td>
+              <td>LP9021</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-2.png"
+                  title="Richard"
+                ></app-table-img-item>
+              </td>
+              <td>1Mar 25 -2 Apr 26</td>
+              <td>
+                <app-table-img-item
+                  img="assets/property/property-list-2.png"
+                  title="Sliechi Tower"
+                ></app-table-img-item>
+              </td>
+              <td>Harmony(B)</td>
+              <td>Harmony(c) 302</td>
+              <td>+91-70*******76</td>
+              <td>richard&#64;***kmail.com</td>
+              <td>1,145.00</td>
+            </tr>
+            <tr>
+              <td>03</td>
+              <td>VP9021</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-3.png"
+                  title="Thomas"
+                ></app-table-img-item>
+              </td>
+              <td>3Apr 25 -2 Apr 26</td>
+              <td>
+                <app-table-img-item
+                  img="assets/property/property-list-2.png"
+                  title="Jainhailia"
+                ></app-table-img-item>
+              </td>
+              <td>Sunrise(D)</td>
+              <td>Sunrise(D) 101</td>
+              <td>+91-70*******12</td>
+              <td>thomas&#64;***mail.com</td>
+              <td>1,350.00</td>
+            </tr>
+            <tr>
+              <td>04</td>
+              <td>VC9021</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-4.png"
+                  title="Thomas"
+                ></app-table-img-item>
+              </td>
+              <td>3Apr 25 -2 Apr 26</td>
+              <td>
+                <app-table-img-item
+                  img="assets/property/property-list-2.png"
+                  title="Jainhailia"
+                ></app-table-img-item>
+              </td>
+              <td>Sunrise(D)</td>
+              <td>Sunrise(D) 101</td>
+              <td>+91-70*******12</td>
+              <td>thomas&#64;***mail.com</td>
+              <td>1,350.00</td>
+            </tr>
+            <tr>
+              <td>05</td>
+              <td>VC9021</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-4.png"
+                  title="Thomas"
+                ></app-table-img-item>
+              </td>
+              <td>3Apr 25 -2 Apr 26</td>
+              <td>
+                <app-table-img-item
+                  img="assets/property/property-list-2.png"
+                  title="Jainhailia"
+                ></app-table-img-item>
+              </td>
+              <td>Sunrise(D)</td>
+              <td>Sunrise(D) 101</td>
+              <td>+91-70*******12</td>
+              <td>thomas&#64;***mail.com</td>
+              <td>1,350.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
-  <div class="cmmnTblFtr">
-    <app-table-select
-      [componentName]="componentName"
-      [rowsPerPage]="rowsPerPage"
-      [rowsPerPageOptions]="rowsPerPageOptions"
-      (rowsPerPageChange)="onPageSizeChange($event)"
-    />
-    <app-table-pagination
-      [componentName]="componentName"
-      [currentPage]="currentPage"
-      [totalRecords]="totalRecords"
-      [rowsPerPage]="rowsPerPage"
-      (pageChange)="onPageChange($event)"
-    />
+}
+
+<ng-container *ngIf="showDetailView">
+  <app-table-view-card
+    title="Abhram|Khaleeja Building|302"
+    [imgSrc]="''"
+    [items]="[
+      { label: getLabel('TENANT_NO'), value: '98909897' },
+      { label: getLabel('PERIOD_FROM'), value: '28/02/24' },
+      { label: getLabel('PERIOD_TO'), value: '28/02/25' },
+      { label: getLabel('UNIT_TYPE'), value: 'Residential' },
+      { label: getLabel('YEAR_RENT'), value: '67,000' },
+      { label: getLabel('OTHER_CHARGESE'), value: '13,000' },
+      { label: getLabel('VAT'), value: '--' },
+      { label: getLabel('TOTAL_RENT'), value: '1,00,000' },
+    ]"
+    [showCloseBtn]="false"
+    (back)="handleBackClick()"
+  >
+    <!-- (edit)="handleEditClick()"
+    (back)="handleBackClick()" -->
+    <div class="threeDotWrap" rental-btn>
+      <button class="threeDotBtn" (click)="toggleMenu()">⋮</button>
+
+      <div class="threeDotDropdown" *ngIf="showMenu">
+        <button class="dropItem">
+          <app-refresh-icon></app-refresh-icon>{{ "RENEW_ACCOUNT" | translate }}
+        </button>
+        <!-- (click)="onRenew()" -->
+        <button class="dropItem danger">
+          <!-- (click)="onTerminate()" -->
+          <app-disable-icon></app-disable-icon>
+          {{ "TERMINATE_ACCOUNT" | translate }}
+        </button>
+      </div>
+    </div>
+    <div rental class="mt-3">
+      <h5 class="section-title">{{ "OTHER_CHARGES" | translate }}</h5>
+
+      <div class="other-charges-box mt-3">
+        <div class="charges-grid">
+          <div class="charge-item">
+            <label>Admin Fee <span>VAT &#64;5%</span></label>
+            <small>32.71 + 1.64</small>
+            <strong>34.35</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
+            <small>175.65 + 1.64</small>
+            <strong>175.65</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Gas Charges <span>VAT &#64;5%</span></label>
+            <small>1,000.00 + 50.00</small>
+            <strong>1,050.00</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Commission - Dubai <span>VAT &#64;5%</span></label>
+            <small>1,200.00 + 60.00</small>
+            <strong>1,260.00</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Security Deposit <span>VAT &#64;nill</span></label>
+            <small>2,400.00 + 0.00</small>
+            <strong>2,400.00</strong>
+          </div>
+        </div>
+
+        <div class="payment-info">
+          <div>
+            <label>{{ "STATUS" | translate }}</label>
+            <span class="paid">Paid</span>
+          </div>
+
+          <div>
+            <label>{{ "PAYMENT_TYPE" | translate }}</label>
+            <strong>Cheque</strong>
+          </div>
+
+          <div>
+            <label>{{ "CHEQUE_NUMBER" | translate }}</label>
+            <strong>6738398268291</strong>
+          </div>
+
+          <div>
+            <label>{{ "TOTAL_AMOUNT" | translate }}</label>
+            <strong>11,260.00</strong>
+          </div>
+          <div *ngIf="showRenewalBlockedMsg">
+            <div class="dues-card">
+              <div class="dues-title">Outstanding Dues</div>
+
+              <div class="dues-amount">AED540.00</div>
+            </div>
+            <a class="payment-link"> Send Payment Link </a>
+          </div>
+        </div>
+        <div class="invoice-section mt-3">
+          <div class="mt-1">
+            <span
+              ><i><app-invoice-icon></app-invoice-icon></i> Invoice Generated
+              Succesfully</span
+            >
+            <a href="#" (click)="onViewInvoiceClick(selectedLease, $event)"
+              >View Invoice</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-table-view-card>
+  <div class="mt-3">
+    <app-white-card title="Photos & Documents">
+      <div class="commonTabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="tenantDocument-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tenantDocument-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="tenantDocument-tab-pane"
+              aria-selected="false"
+            >
+              Tenants Documents
+            </button>
+          </li>
+
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="ejariDocuments-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#ejariDocuments-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="ejariDocuments-tab-pane"
+              aria-selected="false"
+            >
+              Ejari Documents
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="commonTabsContent">
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="tenantDocument-tab-pane"
+            role="tabpanel"
+            aria-labelledby="tenantDocument-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="ejariDocuments-tab-pane"
+            role="tabpanel"
+            aria-labelledby="ejariDocuments-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
   </div>
-</div>
+  <div class="mt-3">
+    <app-white-card>
+      <div class="summary-card">
+        <div class="summary-item">
+          <div class="amount">{{ totalAmount }}</div>
+          <div class="label">Total Rental Amount</div>
+        </div>
+
+        <div class="summary-item">
+          <div class="amount">{{ receivedAmount }}</div>
+          <div class="label">Amount Received</div>
+        </div>
+
+        <div class="summary-item">
+          <div class="amount">{{ pendingAmount }}</div>
+          <div class="label">Pending Amount</div>
+        </div>
+      </div>
+      <app-area-graph></app-area-graph>
+    </app-white-card>
+  </div>
+  <div class="cmmnTblOuter mt-3">
+    <div class="cmmnTblHdr">
+      <div class="row align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'RENT_TRANSACTIONS' | translate"
+            subtitle="(5)"
+          ></app-table-title>
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search placeholder="Search here..." />
+
+            <div class="report-top-bar d-flex align-items-start gap-2">
+              <!-- Receipt Dropdown -->
+              <div class="custom-dropdown position-relative">
+                <button class="btn cmmnTblFltrBtn" (click)="toggleReceipt()">
+                  <i><app-receipt-icon></app-receipt-icon></i>
+                  Receipt
+                  <i><app-arrow-down-icon></app-arrow-down-icon></i>
+                </button>
+
+                <div class="custom-menu" *ngIf="showReceiptDropdown">
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('rental')"
+                  >
+                    Rental
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('charges')"
+                  >
+                    Other Charges
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('combined')"
+                  >
+                    Combined
+                  </div>
+                </div>
+              </div>
+
+              <!-- Month Dropdown (Side by Side) -->
+              <div
+                class="custom-dropdown position-relative"
+                *ngIf="showMonthDropdown"
+              >
+                <div class="custom-menu filter-box">
+                  <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="jan" />
+                    <label for="jan">Jan 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="feb"
+                      checked
+                    />
+                    <label for="feb">Feb 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="mar"
+                      checked
+                    />
+                    <label for="mar">Mar 2025</label>
+                  </div>
+
+                  <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="apr" />
+                    <label for="apr">Apr 2025</label>
+                  </div>
+
+                  <button
+                    class="btn generate-btn w-100"
+                    (click)="onViewInvoiceClick(selectedLease, $event)"
+                  >
+                    Generate
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <app-table-filter-btn
+              [title]="'FILTER' | translate"
+              [hasIcon]="true"
+            >
+              <app-filter-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>{{ "TRANSACTION_ID" | translate }}</th>
+              <th>
+                {{ "BANK_NAME" | translate }}
+              </th>
+              <th>
+                {{ "BANK_ACCOUNT" | translate }}
+              </th>
+              <th>{{ "CHEQUE_NUMBER" | translate }}</th>
+              <th>{{ "CHEQUE_DATE" | translate }}</th>
+              <th>{{ "PAYMENT_TYPE" | translate }}</th>
+              <th>{{ "PURPOSE" | translate }}</th>
+              <th>{{ "STATUS" | translate }}</th>
+              <th>{{ "AMOUNT" | translate }}</th>
+              <th>{{ "Additional Charges" }}</th>
+              <th>Total Amount</th>
+              <th>{{ "ACTIONS" | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>CHQ-AX104</td>
+              <td>EIB</td>
+              <td>20394857</td>
+              <td>928374</td>
+              <td>10/10/2024</td>
+              <td>Cheque</td>
+              <td>Jan 2025 Rent</td>
+
+              <td class="status-green">
+                <app-status-action-dropdown
+                  status="Amount Credited"
+                ></app-status-action-dropdown>
+              </td>
+
+              <td>9,000</td>
+              <td>---</td>
+              <td>9,000.00</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="preview" />
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>CHQ-AX105</td>
+              <td>EIB</td>
+              <td>89475639</td>
+              <td>857493</td>
+              <td>11/01/2024</td>
+              <td>Cheque</td>
+              <td>Feb 2025 Rent</td>
+
+              <td class="status-black">
+                <app-status-action-dropdown
+                  status="Check Bounce"
+                ></app-status-action-dropdown>
+              </td>
+
+              <td>9,000</td>
+              <td>
+                300.00
+                <i
+                  [ngbPopover]="chargesPopover"
+                  triggers="click"
+                  placement="top"
+                  container="body"
+                  class="charges-info"
+                >
+                  <app-termscondition-icon></app-termscondition-icon>
+                </i>
+
+                <ng-template #chargesPopover>
+                  <div class="chargesTooltip">
+                    <div class="chargesRow">
+                      <span>Cheque Bounce</span>
+                      <span class="value">240</span>
+                    </div>
+
+                    <div class="chargesRow">
+                      <span>Tax</span>
+                      <span class="value">60</span>
+                    </div>
+
+                    <div class="chargesRow">
+                      <span>Total</span>
+                      <span class="value">300</span>
+                    </div>
+                  </div>
+                </ng-template>
+                <div class="badge-wrapper">
+                  <div class="additional cheque">
+                    <span>Cheque bounce</span>
+                  </div>
+
+                  <div class="additional tax">
+                    <span>Tax</span>
+                  </div>
+                </div>
+              </td>
+              <td>9,000.00</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>--</td>
+              <td>EIB</td>
+              <td>39576849</td>
+              <td>746382</td>
+              <td>11/15/2024</td>
+              <td>Cheque</td>
+              <td>Mar 2025 Rent</td>
+              <td class="status-grey">
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
+              </td>
+              <td>9,000</td>
+              <td>---</td>
+              <td>9,000.00</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="download" />
+                  <!-- (clicked)="handleDownloadClick()" -->
+                  <app-table-action-btn type="preview" />
+
+                  <!-- (clicked)="handlePreviewClick()" -->
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>--</td>
+              <td>EIB</td>
+              <td>94837659</td>
+              <td>635271</td>
+              <td>12/01/2024</td>
+              <td>Cheque</td>
+              <td>Other Charges</td>
+
+              <td class="status-grey">
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
+              </td>
+
+              <td>9,000</td>
+              <td>---</td>
+              <td>9,000.00</td>
+              <td align="center">--</td>
+            </tr>
+
+            <tr>
+              <td>CHQ-AX109</td>
+              <td>EIB</td>
+              <td>69304857</td>
+              <td>524160</td>
+              <td>12/15/2024</td>
+              <td>Cheque</td>
+              <td>Apr 2025 Rent</td>
+              <td class="status-grey">
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
+              </td>
+
+              <td>9,000</td>
+              <td>---</td>
+              <td>9,000.00</td>
+              <td align="center">--</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+      >
+      </app-table-select>
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+      >
+      </app-table-pagination>
+    </div>
+  </div>
+  <div class="mt-3">
+    <app-white-card [title]="'ACTIVITY_HISTORY' | translate">
+      <div class="activityWrapper">
+        <div class="year">2025</div>
+
+        <div class="weekLabel">
+          This week
+          <span class="line"></span>
+        </div>
+
+        <!-- Item 1 -->
+        <div class="activityItem">
+          <div class="icon orange">H</div>
+
+          <div class="content">
+            <div class="title"><strong>Ali</strong> added notes</div>
+            <div class="title"><strong>Cheques</strong> changes</div>
+            <span> Old Cheque 83683638363838 to new cheque 726826282627 </span>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="activityItem mt-3">
+          <div class="icon orange">H</div>
+          <div class="content simple"><strong>Hajji</strong> added Account</div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="activityItem">
+          <div class="icon blue">P</div>
+          <div class="content simple">
+            <strong>Prnjitha</strong> account was created by
+            <strong>Hajji</strong>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showInvoiceDetails">
+  <app-table-view-card
+    [showImage]="false"
+    [title]="'INVOICE DETAILS' | translate"
+    [showDownload]="true"
+    [showShare]="true"
+    [showCloseBtn]="true"
+    [showBack]="false"
+    (close)="handleCloseClick()"
+  >
+    <!-- (download)="handleDownload($event)" -->
+
+    <!-- (share)="handleShare($event)" -->
+
+    <div rental class="other-charges-box mt-3">
+      <div class="invoice-info">
+        <div class="info-col">
+          <h5>Invoice to:</h5>
+          <p class="bold">ABHRAM</p>
+          <p>Addr: P.O. BOX # 95801, Sharjah</p>
+          <p>Phone: +41-827282982</p>
+          <p>TRN: 100300564000003</p>
+        </div>
+
+        <div class="info-col">
+          <h5>Property Details:</h5>
+          <p class="bold">KHALEEJA BUILDING | 302</p>
+          <p>Period: 01-Sep-2025 TO 31-Aug-2026</p>
+          <p>Lease No: LV-25-01335</p>
+          <p>Ref No: P48/LGI-25-13230</p>
+        </div>
+      </div>
+    </div>
+
+    <div rental class="mt-3">
+      <div class="cmmnTbl">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{ "SI.No" | translate }}</th>
+                <th>
+                  {{ "Invoice NO" | translate }}
+                </th>
+
+                <th>{{ "Description" | translate }}</th>
+                <th>{{ "Invoice Date" | translate }}</th>
+                <th>{{ "Prepared By" | translate }}</th>
+                <th>{{ "Payment mode" | translate }}</th>
+                <th>{{ "Reference No" | translate }}</th>
+                <th>{{ "Status" | translate }}</th>
+                <th>{{ "Quantity" }}</th>
+                <th>{{ "Rate" | translate }}</th>
+                <th>{{ "Amount" | translate }}</th>
+
+                <th>{{ "Vat" | translate }}</th>
+                <th>{{ "Vat Amount" | translate }}</th>
+                <th>{{ "Total Amount" | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>01</td>
+                <td>LP26272</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+
+              <tr>
+                <td rowspan="2">02</td>
+                <td>LP672628</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+
+              <tr>
+                <td>LP672628</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div rental class="totals">
+      <div class="words">
+        <p><strong>Amount in words:</strong></p>
+        <p>Fifteen Thousand Three Hundred Five Dirhams And Zero Fils</p>
+      </div>
+
+      <div class="summary">
+        <p>Sub Total: <strong>14,576.20</strong></p>
+        <p>VAT Amount: <strong>728.80</strong></p>
+        <button class="grand">Grand Total: <strong>15,305.00</strong></button>
+      </div>
+    </div>
+  </app-table-view-card>
+</ng-container>

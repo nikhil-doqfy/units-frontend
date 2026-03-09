@@ -249,3 +249,48 @@
 .dropdownWrap.active .dropdownMenu {
   display: block;
 }
+.dropdownWrap {
+  position: relative;
+}
+
+.shareDropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 194px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  z-index: 10;
+}
+
+.shareItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.shareItem input {
+  width: 16px;
+  height: 16px;
+}
+
+.doneBtn {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  background: linear-gradient(90deg, #8a2be2, #1e90ff);
+}
+.column {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}

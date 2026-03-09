@@ -31,14 +31,14 @@
       <div class="column">
         <!-- *ngIf="hasProjectedContent; else noActionButtons" -->
         <button
-          *ngIf="showBack || !showApprovalActions"
+          *ngIf="showBack"
           type="button"
           class="btn btnWhite btnCommon"
           (click)="onBackClick()"
         >
           <i><app-back-icon /></i>{{ "BACK" | translate }}
         </button>
-        <button
+        <!-- <button
           *ngIf="showBack"
           type="button"
           class="btn btnWhite btnCommon"
@@ -62,7 +62,7 @@
           >
             Approve
           </button>
-        </button>
+        </button> -->
 
         <button
           class="btn btnCommon btnWhite"
@@ -72,19 +72,49 @@
           <i><app-download-icon></app-download-icon></i>
           Download
         </button>
+
         <div class="dropdownWrap" *ngIf="showShare">
-          <button class="btn btnCommon btnWhite">
-            <i><app-share-icon></app-share-icon></i>
-            Share
+          <button class="btn btnCommon btnWhite" (click)="toggleShare()">
+            <i><app-whatsapp-share-icon></app-whatsapp-share-icon></i>
+            Share<i><app-arrow-down-icon></app-arrow-down-icon></i>
           </button>
 
-          <ul class="dropdownMenu">
-            <li (click)="share.emit('email')">Email</li>
-            <li (click)="share.emit('whatsapp')">WhatsApp</li>
-            <li (click)="share.emit('link')">Copy Link</li>
-          </ul>
-        </div>
+          <div class="shareDropdown" *ngIf="openShare">
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.whatsapp" />
+              <span class="icon whatsapp"
+                ><img src="assets/whatsapp.png"
+              /></span>
+              Whatsapp
+            </label>
 
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.mail" />
+              <span class="icon mail">
+                <img src="assets/email.svg" />
+              </span>
+              Mail
+            </label>
+
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.sms" />
+              <span class="icon sms">
+                <img src="assets/text-icon.svg" />
+              </span>
+              Text Message
+            </label>
+
+            <button class="doneBtn" (click)="shareSelected()">Done</button>
+          </div>
+        </div>
+        <button
+          *ngIf="showCloseBtn || !showApprovalActions"
+          type="button"
+          class="btn"
+          (click)="onCloseClick()"
+        >
+          <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
+        </button>
         <div class="actionRow">
           <ng-content select="[header-actions]"></ng-content>
         </div>

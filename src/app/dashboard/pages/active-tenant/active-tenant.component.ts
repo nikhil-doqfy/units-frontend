@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AllPropertiesComponent } from '../../component/all-properties/all-properties.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { CommonModule } from '@angular/common';
@@ -25,6 +25,12 @@ import { ActiveTenantTabComponent } from '../active-tenant-tab/active-tenant-tab
   styleUrl: './active-tenant.component.css',
 })
 export class ActiveTenantComponent {
+  @Output() detailViewChanges = new EventEmitter<boolean>();
+
   currentRole: UserRole = 'property-manager';
   activeTenantTab: string = 'currenttenant';
+  isUnitDetailView: boolean = false;
+  onUnitDetailChanges(event: boolean) {
+    this.isUnitDetailView = event;
+  }
 }

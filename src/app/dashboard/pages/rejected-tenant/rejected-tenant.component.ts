@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
@@ -26,6 +26,9 @@ import { FilterIconComponent } from '../../component/icons/filter-icon/filter-ic
 import { BadgeComponent } from '../../component/badge/badge.component';
 import { StatusDropdownComponent } from '../../component/status-dropdown/status-dropdown.component';
 import { TermsconditionIconComponent } from '../../../icons/termscondition-icon/termscondition-icon.component';
+import { CustomSelectComponent } from '../../../auth/component/custom-select/custom-select.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rejected-tenant',
@@ -56,11 +59,17 @@ import { TermsconditionIconComponent } from '../../../icons/termscondition-icon/
     BadgeComponent,
     StatusDropdownComponent,
     TermsconditionIconComponent,
+    CustomSelectComponent,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   templateUrl: './rejected-tenant.component.html',
   styleUrl: './rejected-tenant.component.css',
 })
 export class RejectedTenantComponent {
+  @Output() detailViewChanges = new EventEmitter<boolean>();
+
   totalRecords: number = 0;
   rowsPerPage: number = 10;
   componentName: string = 'TenantsComponent';
@@ -79,7 +88,15 @@ export class RejectedTenantComponent {
   pendingAmount = 'AED 800.00';
   leases: any[] = [];
   private translate = inject(TranslateService);
+  selectedFilter = 'approval';
+  constructor(private router: Router) {}
+  ngOnChanges() {
+    this.applyFilter();
+  }
 
+  applyFilter() {
+    console.log(this.selectedFilter);
+  }
   getLabel(key: string): string {
     return this.translate.instant(key);
   }
@@ -117,10 +134,16 @@ export class RejectedTenantComponent {
     this.showDetailView = true;
     this.showInvoiceDetails = false;
     console.log('clicked');
+    this.detailViewChanges.emit(true);
   }
   toggleReceipt() {
     this.showReceiptDropdown = !this.showReceiptDropdown;
     this.showMonthDropdown = false;
+  }
+  handleBackClick() {
+    this.showDetailView = false;
+    this.router.navigate(['/dashboard/tenants']);
+    this.detailViewChanges.emit(false);
   }
   selectReceiptType(type: string) {
     this.selectedReceiptType = type;

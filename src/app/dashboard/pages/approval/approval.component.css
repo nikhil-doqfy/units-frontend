@@ -33,3 +33,18 @@
   color: #ff6500;
   opacity: 1;
 }
+
+.column {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.rejectBtn {
+  background-color: rgb(255, 115, 0);
+  color: white;
+}
+.approveBtn {
+  background-color: green;
+  color: white;
+}

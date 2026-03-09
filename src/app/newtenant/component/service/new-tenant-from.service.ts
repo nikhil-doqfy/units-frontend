@@ -2,7 +2,7 @@ import { computed, Injectable, signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NewTenant } from '../modules/new-tenant';
 import { CommercialdetailsComponent } from '../commercialdetails/commercialdetails.component';
 import { BasicpersonalComponent } from '../basicpersonal/basicpersonal.component';
@@ -22,6 +22,7 @@ export class NewTenantFromService {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   PropertySteps() {
@@ -310,5 +311,41 @@ export class NewTenantFromService {
     this.showMsg.set(false);
     this.msgText.set('');
     this.showCheckSection.set(false);
+  }
+  stepRoutes: { [key: string]: string } = {
+    '1-1': '/new-tenant/invite/property',
+    '1-2': '/new-tenant/invite/commercial',
+    '2-1': '/new-tenant/onboarding/profile',
+    '2-2': '/new-tenant/onboarding/onboarding',
+    '3-1': '/new-tenant/agreement',
+    '4-1': '/new-tenant/ejari/doc',
+    '4-2': '/new-tenant/ejari/signature',
+  };
+  goToStep(stepId: string, subStepId?: string) {
+    const steps = this.PropertySteps()();
+
+    // Find the main step index
+    const stepIndex = steps.findIndex((s) => s.id === stepId);
+    if (stepIndex === -1) return;
+
+    this.activeIndex.set(stepIndex);
+
+    const step = steps[stepIndex];
+
+    // Sub-step handling safely
+    let subIndex = 0;
+    if (subStepId && step?.subSteps?.length) {
+      const foundIndex = step.subSteps.findIndex(
+        (sub) => sub?.id === subStepId,
+      );
+      subIndex = foundIndex !== -1 ? foundIndex : 0;
+    }
+    this.activeSubIndex.set(subIndex);
+
+    // Router redirect only if subStepId exists in map
+    const route = subStepId ? this.stepRoutes[subStepId] : null;
+    if (route) {
+      this.router.navigate([route]);
+    }
   }
 }

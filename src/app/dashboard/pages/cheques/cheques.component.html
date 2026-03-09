@@ -146,6 +146,7 @@
                 </th>
 
                 <th *ngIf="activeSummary !== 'total'">Amount</th>
+                <th *ngIf="activeSummary == 'bounce'">Actions</th>
               </tr>
             </thead>
 
@@ -211,6 +212,14 @@
                 >
                   AED,12,000
                 </td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn
+                    type="history"
+                    (clicked)="
+                      openChequeBounceHistoryModel(activityHistoryContent)
+                    "
+                  ></app-table-action-btn>
+                </td>
               </tr>
               <tr>
                 <td>02</td>
@@ -272,6 +281,9 @@
                   *ngIf="activeSummary !== 'total'"
                 >
                   AED,12,000
+                </td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn type="history"></app-table-action-btn>
                 </td>
               </tr>
               <tr>
@@ -335,6 +347,9 @@
                 >
                   AED,12,000
                 </td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn type="history"></app-table-action-btn>
+                </td>
               </tr>
               <tr>
                 <td>04</td>
@@ -385,7 +400,11 @@
                   1224567787
                 </td>
                 <td *ngIf="activeSummary !== 'total'">AED,12,000</td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn type="history"></app-table-action-btn>
+                </td>
               </tr>
+
               <tr>
                 <td>05</td>
                 <td>VC6021</td>
@@ -435,6 +454,9 @@
                   1224567787
                 </td>
                 <td *ngIf="activeSummary !== 'total'">AED,12,000</td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn type="history"></app-table-action-btn>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -459,3 +481,21 @@
     </div>
   </app-white-card>
 </ng-container>
+
+<!----------------------------------------------------------Activity history from------------------------------------------------------------------------------>
+<ng-template #activityHistoryContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "Activity History" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-cheque-bounce-history-modal #chequeBounceHistoryModel />
+  </div>
+</ng-template>

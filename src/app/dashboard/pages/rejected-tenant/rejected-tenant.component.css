@@ -59,3 +59,9 @@
   height: 1px;
   background: #e5e7eb;
 }
+.customRadio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}

@@ -2,16 +2,44 @@
   <div class="cmmnTblOuter">
     <div class="cmmnTblHdr">
       <div class="row g-3 align-items-center">
-        <div class="col-md">
+        <div class="col-md d-flex">
           <app-table-title
             [title]="'ALL_TENANTS' | translate"
             [subtitle]="'(' + totalRecords + ')'"
             (onRefresh)="onRefresh()"
           ></app-table-title>
+          <label class="customRadio">
+            <input
+              type="radio"
+              name="validationFilter"
+              value="approval"
+              [(ngModel)]="selectedFilter"
+            />
+            <span></span>
+            Approval Rejection
+          </label>
+
+          <label class="customRadio">
+            <input
+              type="radio"
+              name="validationFilter"
+              value="tenant"
+              [(ngModel)]="selectedFilter"
+            />
+            <span></span>
+            Tenant Onboarding Rejection
+          </label>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+            <app-custom-select
+              placeholder="Property:AI Ajera "
+            ></app-custom-select>
+            <app-custom-select
+              placeholder="Block / Tower:All"
+            ></app-custom-select>
+            <app-custom-select placeholder="Unit:All"></app-custom-select>
 
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
@@ -232,6 +260,7 @@
       { label: getLabel('TOTAL_RENT'), value: '1,00,000' },
     ]"
     [showEdit]="true"
+    (back)="handleBackClick()"
   >
     <!-- (edit)="handleEditClick()"
     (back)="handleBackClick()" -->
