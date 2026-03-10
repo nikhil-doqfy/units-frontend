@@ -1,0 +1,6 @@
+<div class="dropdown" *ngIf="show">
+  <div class="item" *ngFor="let opt of options" (click)="onSelect(opt)">
+    <span class="icon">{{ opt.icon }}</span>
+    <span>{{ opt.label }}</span>
+  </div>
+</div>

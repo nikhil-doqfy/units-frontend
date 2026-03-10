@@ -4,12 +4,9 @@
 />
 
 <app-auth-form>
-  <form
-    *ngIf="loginMode === 'password'"
-    class="mb-4"
-    [formGroup]="loginForm"
-    (ngSubmit)="signIn()"
-  >
+  <form *ngIf="loginMode === 'password'" class="mb-4" [formGroup]="loginForm">
+    <!-- (ngSubmit)="signIn()" -->
+
     <div class="mb-4">
       <label for="email" class="form-label">Email Address</label>
       <div class="iconInput">
@@ -21,10 +18,10 @@
           placeholder="Enter your email"
           autocomplete="email"
         />
-        @if (isInvalid(loginForm, 'email').status) {
-        <small class="errorMsg">
-          {{ isInvalid(loginForm, "email").msg }}
-        </small>
+        @if (isInvalid(loginForm, "email").status) {
+          <small class="errorMsg">
+            {{ isInvalid(loginForm, "email").msg }}
+          </small>
         }
       </div>
     </div>
@@ -86,10 +83,17 @@
     </div>
 
     <div class="frmBtns">
-      <button type="submit" class="btn btnCommon btnMinWidth">Sign In</button>
+      <button
+        type="submit"
+        class="btn btnCommon btnMinWidth"
+        (click)="goToDashboard()"
+      >
+        Sign In
+      </button>
     </div>
   </form>
   <!--signin with otp-->
+
   <form
     *ngIf="loginMode === 'otp'"
     class="mb-4"
@@ -117,10 +121,10 @@
           formControlName="email"
           [readonly]="emailLocked"
         />
-        @if (isInvalid(loginForm, 'email').status) {
-        <small class="errorMsg">
-          {{ isInvalid(loginForm, "email").msg }}
-        </small>
+        @if (isInvalid(loginForm, "email").status) {
+          <small class="errorMsg">
+            {{ isInvalid(loginForm, "email").msg }}
+          </small>
         }
         <button type="button" *ngIf="!otpSent" (click)="sendOtp()">
           Send OTP
@@ -138,7 +142,7 @@
           placeholder: '',
 
           disableAutoFocus: true,
-          allowNumbersOnly: true
+          allowNumbersOnly: true,
         }"
       ></ng-otp-input>
     </div>

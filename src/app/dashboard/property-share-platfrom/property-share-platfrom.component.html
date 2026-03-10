@@ -1,0 +1,40 @@
+<div class="statusIcons" *ngIf="type === 'icons'">
+  <img src="assets/platfrom/property-finder.svg" />
+  <img src="assets/platfrom/buyut.svg" />
+  <div class="shareIconWrapper">
+    <img
+      src="assets/platfrom/list-more-icon.svg"
+      (click)="toggleShare()"
+      class="clickIcon"
+    />
+
+    <!-- Popup -->
+    <div class="sharePopup" *ngIf="showSharePopup">
+      <div class="shareItem">
+        <input type="checkbox" checked />
+        <span class="propertyFinder"
+          ><img src="assets/platfrom/platfrom-1.png"
+        /></span>
+      </div>
+
+      <div class="shareItem">
+        <input type="checkbox" checked />
+        <span class="bayut"><img src="assets/platfrom/platfrom-2.png" /></span>
+      </div>
+
+      <button class="shareBtn">
+        <i class="fa fa-paper-plane"
+          ><app-share-platfrom-icon></app-share-platfrom-icon>
+        </i>
+        Share
+      </button>
+    </div>
+  </div>
+</div>
+<div *ngIf="type === 'list'" class="listProperty">
+  <div class="listIcon">
+    <img src="assets/platfrom/list-more-icon.svg" />
+  </div>
+
+  <span class="listText">List Property</span>
+</div>

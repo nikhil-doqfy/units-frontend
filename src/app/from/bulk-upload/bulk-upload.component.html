@@ -1,0 +1,34 @@
+<div class="bulkImportWrapper">
+  <!-- Info Box -->
+  <div class="infoBox mb-3">
+    <ul class="mb-0">
+      <li>
+        {{ "IMPORT_CONTACTS_VIA_CSV" | translate }}
+      </li>
+      <li>
+        {{ "VERIFY_NAME_EMAIL_FIELDS" | translate }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Download CSV -->
+  <div class="text-center mb-4">
+    <button class="downloadbtn btn-transparent" (click)="sampleCsvDownload()">
+      <img src="../../assets/XlsIcon.svg" alt="download" />
+      {{ "DOWNLOAD_SAMPLE_CSV" | translate }}
+    </button>
+  </div>
+  <app-upload-document
+    [title]="'DROP_FILES_HERE' | translate"
+    [isMultipleFiles]="false"
+    [fileTypes]="['pdf']"
+    [maxSize]="20"
+    (uploadProgress)="onBulkUpload($event)"
+  ></app-upload-document>
+
+  <!-- Uploaded file preview -->
+  <div class="uploadedFile mt-3" *ngIf="uploadedFile">
+    <span>{{ uploadedFile.file.name }}</span>
+    <span class="successText">{{ "UPLOADED" | translate }}</span>
+  </div>
+</div>

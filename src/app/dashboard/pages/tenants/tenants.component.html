@@ -1,4 +1,4 @@
-<ng-container *ngIf="!showDetailView">
+<!-- <ng-container *ngIf="!showDetailView">
   <div class="cmmnTblOuter">
     <div class="cmmnTblHdr">
       <div class="row g-3 align-items-center">
@@ -16,12 +16,12 @@
               (onValueChange)="searchTextChange($event)"
             />
 
-            <!-- <app-table-filter-btn
+         <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
             >
               <app-filter-icon />
-            </app-table-filter-btn> -->
+            </app-table-filter-btn>
 
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
@@ -70,7 +70,7 @@
               </th>
               <th>{{ "EJARI_CERTIFICATE" | translate }}</th>
 
-              <!-- <th>{{ "RENTAL_AGREEMENT" | translate }}</th> -->
+         <th>{{ "RENTAL_AGREEMENT" | translate }}</th>
               <th width="200"></th>
             </tr>
           </thead>
@@ -109,23 +109,23 @@
                     <span class="waiting-text">Waiting for document</span>
                   </ng-template>
                 </td>
-                <!-- <td>
+               <td>
                 <app-document-type-item
                   title="Lease_001.pdf"
                   subtitle="1.2 MB"
                   (clicked)="handleViewPdf(tenant.lease_id)"
                 />
-              </td> -->
+              </td> 
                 <td align="center">
                   <div class="cmmnTblActnBtnDiv">
-                    <!-- <app-table-action-btn
+                    <app-table-action-btn
                     type="edit"
                     (clicked)="handleEditClick()"
                   />
                   <app-table-action-btn
                     type="delete"
                     (clicked)="handleDeleteClick()"
-                  /> -->
+                  /> 
                     <app-table-action-dropdown
                       [dropdownItems]="documentActions"
                       (actionClicked)="handleDropdownAction($event)"
@@ -160,7 +160,7 @@
     </div>
   </div>
 
-  <!-- -------------------- ADD Tenant Form -------------------- -->
+  -------------------- ADD Tenant Form --------------------
   <ng-template #addTenantContent let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-title">
@@ -194,7 +194,7 @@
     </div>
   </ng-template>
 
-  <!-- -------------------- Invite Tenant Form -------------------- -->
+  -------------------- Invite Tenant Form --------------------
   <ng-template #inviteTenantContent let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-title">
@@ -286,14 +286,14 @@
                 [attr.aria-selected]="type.key === activeDocTypeKey"
                 (click)="onDocTabClick(type)"
               >
-                <!-- id="tenantDocument-tab" data-bs-target="#tenantDocument-tab-pane"
-              aria-controls="tenantDocument-tab-pane" aria-selected="true" -->
-                <!-- Tenant Document -->
+              id="tenantDocument-tab" data-bs-target="#tenantDocument-tab-pane"
+              aria-controls="tenantDocument-tab-pane" aria-selected="true"
+              Tenant Document 
                 {{ type.value }}
               </button>
             </li>
           }
-          <!-- <li class="nav-item" role="presentation">
+         <li class="nav-item" role="presentation">
             <button
               class="nav-link"
               id="ejariDocuments-tab"
@@ -306,19 +306,19 @@
             >
               Ejari Documents
             </button>
-          </li> -->
+          </li> 
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="myTabContent">
           @for (type of tenantDocumentType; track type.key; let i = $index) {
-            <!-- <div
+          <div
             class="tab-pane fade show active"
             id="tenantDocument-tab-pane"
             role="tabpanel"
             aria-labelledby="tenantDocument-tab"
             tabindex="0"
-          > -->
+          > 
 
             <div
               [ngClass]="{
@@ -346,7 +346,7 @@
               </div>
             </div>
           }
-          <!-- <div class="col-auto">
+          <div class="col-auto">
                 <app-document-type-item title="Contract.pdf" size="1.2 MB" />
               </div>
               <div class="col-auto">
@@ -381,9 +381,351 @@
                 <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
               </div>
             </div>
-          </div> -->
+          </div> 
         </div>
       </div>
     </app-white-card>
   </div>
-</ng-container>
+</ng-container> -->
+
+<div class="mb-3" *ngIf="!isUnitDetailView">
+  <app-white-card>
+    <div class="commonTabs">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="inOnboarding-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#inOnboarding-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="inOnboarding-tab-pane"
+            aria-selected="true"
+          >
+            {{ "Onboarding Tenants" | translate }}
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="activeTenants-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#activeTenants-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="activeTenants-tab-pane"
+            aria-selected="false"
+          >
+            Active Tenants
+          </button>
+        </li>
+      </ul>
+      <button class="btn" (click)="addTenant()">
+        <i class="btn-icon"><app-plus-icon></app-plus-icon></i>
+        Add Tenant
+      </button>
+    </div>
+  </app-white-card>
+</div>
+
+<div class="tab-content" id="myTabContent">
+  <div
+    class="tab-pane fade show active"
+    id="inOnboarding-tab-pane"
+    role="tabpanel"
+    aria-labelledby="inOnboarding-tab"
+    tabindex="0"
+  >
+    <div class="cmmnTblOuter">
+      <div class="cmmnTblHdr">
+        <div class="row g-3 align-items-center">
+          <div class="col-md">
+            <app-table-title
+              [title]="'Results' | translate"
+              [subtitle]="'(' + totalRecords + ')'"
+            ></app-table-title>
+
+            <!-- (onRefresh)="onRefresh()" -->
+          </div>
+          <div class="col-md-auto">
+            <div class="d-flex align-items-center gap-2 gap-md-3">
+              <app-table-search
+                [placeholder]="'SEARCH_HERE' | translate"
+                (onValueChange)="searchTextChange($event)"
+              />
+
+              <app-table-filter-btn
+                [title]="'EXPORT' | translate"
+                [hasIcon]="true"
+                (clicked)="handleExportClick()"
+              >
+                <app-export-icon />
+              </app-table-filter-btn>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cmmnTbl">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>
+                  {{ "SI.No" | translate }}
+                </th>
+                <th>{{ "Tenant ID" | translate }}</th>
+                <th>
+                  {{ "Tenanat Name" | translate }}
+                  <i><app-sorting-icon></app-sorting-icon></i>
+                </th>
+                <th>{{ "Tenure Start & End Date" | translate }}</th>
+                <th>
+                  {{ "Property Name " | translate
+                  }}<i><app-sorting-icon></app-sorting-icon></i>
+                </th>
+                <th>Block /Tower</th>
+                <th>Unit</th>
+                <th>Contact Number</th>
+                <th>Email</th>
+                <th>Rent(AED)</th>
+                <th>Platform</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>01</td>
+                <td>LP9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-1.png"
+                    title="Jensi"
+                  ></app-table-img-item>
+                </td>
+                <td>1Feb 25 -2 Mar 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-1.png"
+                    title="Novatis AG"
+                  ></app-table-img-item>
+                </td>
+                <td>Evergreen(B)</td>
+                <td>Evergreen(B) 204</td>
+                <td>+91-70*******23</td>
+                <td>Jensi&#64;***kmail.com</td>
+                <td>1,800.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'propertyFinder' }"
+                    logo="assets/platfrom/platfrom-1.png"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td class="status-row">
+                  <app-badge
+                    title="Invitation Sent"
+                    status="green"
+                    (click)="goToInvitationStep()"
+                  ></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    menuClass="rejectDropdown"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
+              </tr>
+              <tr>
+                <td>02</td>
+                <td>LP9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-2.png"
+                    title="Richard"
+                  ></app-table-img-item>
+                </td>
+                <td>1Mar 25 -2 Apr 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-2.png"
+                    title="Sliechi Tower"
+                  ></app-table-img-item>
+                </td>
+                <td>Harmony(B)</td>
+                <td>Harmony(c) 302</td>
+                <td>+91-70*******76</td>
+                <td>richard&#64;***kmail.com</td>
+                <td>1,145.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'bayut' }"
+                    logo="assets/platfrom/platfrom-2.png"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td class="status-row">
+                  <app-badge
+                    title="Waiting for physical Documents"
+                    status="orange"
+                  ></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
+              </tr>
+              <tr>
+                <td>03</td>
+                <td>VP9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-3.png"
+                    title="Thomas"
+                  ></app-table-img-item>
+                </td>
+                <td>3Apr 25 -2 Apr 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-2.png"
+                    title="Jainhailia"
+                  ></app-table-img-item>
+                </td>
+                <td>Sunrise(D)</td>
+                <td>Sunrise(D) 101</td>
+                <td>+91-70*******12</td>
+                <td>thomas&#64;***mail.com</td>
+                <td>1,350.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'direct' }"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td class="status-row">
+                  <app-badge
+                    title="Waiting for Ejari"
+                    status="orange"
+                  ></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
+              </tr>
+              <tr>
+                <td>04</td>
+                <td>VC9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-4.png"
+                    title="Thomas"
+                  ></app-table-img-item>
+                </td>
+                <td>3Apr 25 -2 Apr 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-2.png"
+                    title="Jainhailia"
+                  ></app-table-img-item>
+                </td>
+                <td>Sunrise(D)</td>
+                <td>Sunrise(D) 101</td>
+                <td>+91-70*******12</td>
+                <td>thomas&#64;***mail.com</td>
+                <td>1,350.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'referral' }"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td class="status-row">
+                  <app-badge
+                    title="Waiting for Approval"
+                    status="orange"
+                  ></app-badge>
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  >
+                  </app-table-action-dropdown>
+                </td>
+              </tr>
+              <tr>
+                <td>05</td>
+                <td>VC9021</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/user/user-4.png"
+                    title="Thomas"
+                  ></app-table-img-item>
+                </td>
+                <td>3Apr 25 -2 Apr 26</td>
+                <td>
+                  <app-table-img-item
+                    img="assets/property/property-list-2.png"
+                    title="Jainhailia"
+                  ></app-table-img-item>
+                </td>
+                <td>Sunrise(D)</td>
+                <td>Sunrise(D) 101</td>
+                <td>+91-70*******12</td>
+                <td>thomas&#64;***mail.com</td>
+                <td>1,350.00</td>
+                <td>
+                  <app-platfrom-badge
+                    [platform]="{ type: 'bayut' }"
+                    logo="assets/platfrom/platfrom-2.png"
+                  ></app-platfrom-badge>
+                </td>
+
+                <td class="status-row">
+                  <app-badge
+                    title="Waiting for Signature"
+                    status="orange"
+                  ></app-badge>
+
+                  <app-table-action-dropdown
+                    [dropdownItems]="documentActions"
+                    (actionClicked)="handleDropdownAction($event)"
+                  ></app-table-action-dropdown>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="cmmnTblFtr">
+        <app-table-select
+          [componentName]="componentName"
+          [rowsPerPage]="rowsPerPage"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+        />
+        <!-- (rowsPerPageChange)="onPageSizeChange($event)" -->
+
+        <app-table-pagination
+          [componentName]="componentName"
+          [currentPage]="currentPage"
+          [totalRecords]="totalRecords"
+          [rowsPerPage]="rowsPerPage"
+        />
+        <!-- (pageChange)="onPageChange($event)" -->
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="tab-pane fade"
+  id="activeTenants-tab-pane"
+  role="tabpanel"
+  aria-labelledby="activeTenants-tab"
+  tabindex="0"
+>
+  <app-active-tenant-tab
+    (detailViewChanges)="onDetailViewChange($event)"
+  ></app-active-tenant-tab>
+</div>

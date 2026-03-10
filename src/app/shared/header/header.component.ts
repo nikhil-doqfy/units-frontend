@@ -9,6 +9,8 @@ import {
   OnDestroy,
   OnInit,
   Input,
+  WritableSignal,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -40,6 +42,21 @@ import { DashBreadcrumbComponent } from '../component/dash-breadcrumb/dash-bread
 import { AuthService } from '../../auth/services/auth.service';
 import { StorageService } from '../services/storage.service';
 import { AlertService } from '../services/alert.service';
+import { SignatureIconComponent } from '../../dashboard/component/icons/signature-icon/signature-icon.component';
+import { EditIconComponent } from '../../dashboard/component/icons/edit-icon/edit-icon.component';
+import { DeleteIconComponent } from '../../dashboard/component/icons/delete-icon/delete-icon.component';
+import { UploadDocumentComponent } from '../../dashboard/component/upload-document/upload-document.component';
+import { UploadFileModel } from '../model/shared.model';
+import { UploadDocIconComponent } from '../../dashboard/component/icons/upload-doc-icon/upload-doc-icon.component';
+import { TermsconditionIconComponent } from '../../icons/termscondition-icon/termscondition-icon.component';
+import { ChargesIconComponent } from '../../icons/charges-icon/charges-icon.component';
+import { AuditlogIconComponent } from '../../icons/auditlog-icon/auditlog-icon.component';
+import { TransactionComponent } from '../transaction/transaction.component';
+import { NewPropertryIconsComponent } from '../../icons/new-propertry-icons/new-propertry-icons.component';
+import { NewUnitsComponent } from '../../dashboard/pages/new-units/new-units.component';
+import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon.component';
+import { SearchContactIconComponent } from '../../icon/search-contact-icon/search-contact-icon.component';
+import { SearchContactComponent } from '../search-contact/search-contact.component';
 
 @Component({
   selector: 'app-header',
@@ -60,6 +77,19 @@ import { AlertService } from '../services/alert.service';
     LogoutModalIconComponent,
     DashBreadcrumbComponent,
     TranslateModule,
+    SignatureIconComponent,
+    DeleteIconComponent,
+    EditIconComponent,
+    UploadDocIconComponent,
+    TermsconditionIconComponent,
+    ChargesIconComponent,
+    AuditlogIconComponent,
+    TransactionComponent,
+    NewPropertryIconsComponent,
+    NewUnitsComponent,
+    NewUnitsIconComponent,
+    SearchContactIconComponent,
+    SearchContactComponent,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -75,7 +105,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAddPropertyActive = false;
   isAddLeaseActive = false;
   currentLanguage = 'en';
-
+  isOpen = false;
   userProfile = this.storage.getUserProfile();
 
   @Input() breadcrumbData: { label: string; link?: string }[] = [];
@@ -85,7 +115,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('searchContainer') searchContainer!: ElementRef;
   private offcanvasService = inject(NgbOffcanvas);
   private modalService = inject(NgbModal);
-  closeResult = '';
   currentbreadcrumb: { label: string; link?: string }[] = [];
   constructor(
     private renderer: Renderer2,
@@ -95,7 +124,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private translate: TranslateService,
     private storage: StorageService,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
@@ -109,7 +138,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.translate.onLangChange.subscribe((event: any) => {
         this.currentLanguage = event.lang;
         this.pageTitle = this.getRouteTitle(this.router.routerState.root);
-      })
+      }),
     );
 
     translate.use(storage.getLanguage());
@@ -120,7 +149,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.sharedService.breadcrumb$.subscribe((res) => {
         this.breadcrumbData = res;
-      })
+      }),
     );
 
     this.pageTitle = this.getRouteTitle(this.router.routerState.root);
@@ -130,7 +159,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.sharedService.openSidebarValue$.subscribe((value) => {
         this.openSidebarValue = value;
-      })
+      }),
     );
 
     this.subscriptions.add(
@@ -139,7 +168,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           const currentRoute = this.router.routerState.root;
           this.pageTitle = this.getRouteTitle(currentRoute);
-        })
+        }),
     );
 
     this.subscriptions.add(
@@ -153,7 +182,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.isProfileActive = url.includes('/user/my-profile');
 
           this.pageTitle = this.getRouteTitle(this.router.routerState.root);
-        })
+        }),
     );
 
     this.isProfileActive = this.router.url.includes('/user/my-profile');
@@ -161,10 +190,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.themeService.currentRole$.subscribe((role) => {
         this.currentRole = role;
-      })
+      }),
     );
   }
 
+  onUpload(event: UploadFileModel) {}
+  toggleDropdown() {
+    this.isOpen = !this.isOpen;
+  }
+
+  onFileSelect(event: any) {
+    const file = event.target.files[0];
+    console.log(file); // selected file
+  }
+  closeDropdown() {
+    this.isOpen = false;
+  }
   async setLanguage(lang: string) {
     this.currentLang = lang;
     this.translate.use(lang);
@@ -172,10 +213,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.updateDirection();
 
     await this.sharedService.getBreadcrumbs(
-      this.sharedService.currentbreadcrumb
+      this.sharedService.currentbreadcrumb,
     );
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      console.log('Selected file:', file);
+    }
+  }
   private updateDirection() {
     document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
   }
@@ -232,12 +279,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard/add-property']);
   }
 
-  goToAddLease(): void {
-    this.router.navigate(['/dashboard/add-lease']);
+  // goToAddLease(): void {
+  //   this.router.navigate(['/dashboard/add-lease']);
+  // }
+
+  goToNewTenant(): void {
+    this.router.navigate(['/dashboard/new-tenant']);
   }
 
   goToMyProfile(): void {
-    this.router.navigate(['/user/my-profile']);
+    this.router.navigate(['/settings/profile']);
+  }
+  goToTermsConditions() {
+    this.router.navigate(['/settings/terms']);
+    console.log('function clicked');
   }
 
   openLogoutModal(logoutContent: TemplateRef<any>) {
@@ -248,12 +303,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     modalRef.result.then(
       (result) => {
-        this.closeResult = `Closed with: ${result}`;
+        this.closeResult.set(`Closed with: ${result}`);
         this.logout();
       },
       (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
+        this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
+      },
     );
   }
 
@@ -271,20 +326,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.router.navigate(['/auth/login']);
           localStorage.clear();
         },
-      })
+      }),
     );
   }
 
-  private getDismissReason(reason: any): string {
-    switch (reason) {
-      case ModalDismissReasons.ESC:
-        return 'by pressing ESC';
-      case ModalDismissReasons.BACKDROP_CLICK:
-        return 'by clicking on a backdrop';
-      default:
-        return `with: ${reason}`;
-    }
-  }
+  // private getDismissReason(reason: any): string {
+  //   switch (reason) {
+  //     case ModalDismissReasons.ESC:
+  //       return 'by pressing ESC';
+  //     case ModalDismissReasons.BACKDROP_CLICK:
+  //       return 'by clicking on a backdrop';
+  //     default:
+  //       return `with: ${reason}`;
+  //   }
+  // }
 
   //----------------------------------notification----------------------------------------------------
   unreadCount: number = 0;
@@ -302,16 +357,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.sharedService.getNotifications({}).subscribe((resp: any) => {
       this.notifications = resp.content.notifications_data;
       this.unDeletedNotifications = this.notifications.filter(
-        (n: any) => !n.is_deleted
+        (n: any) => !n.is_deleted,
       );
       this.readNotifications = this.notifications.filter(
-        (n: any) => n.is_read && !n.is_deleted
+        (n: any) => n.is_read && !n.is_deleted,
       );
       this.unreadNotifications = this.notifications.filter(
-        (n: any) => !n.is_read && !n.is_deleted
+        (n: any) => !n.is_read && !n.is_deleted,
       );
       this.deletedNotifications = this.notifications.filter(
-        (n: any) => n.is_deleted
+        (n: any) => n.is_deleted,
       );
       this.allCount = resp.content.notification_count;
       this.readCount = resp.content.read_notifications;
@@ -370,5 +425,75 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.getNotifications();
         }
       });
+  }
+
+  goToCharges() {
+    this.router.navigate(['/settings/charges']);
+  }
+  goToAuditLog() {
+    this.router.navigate(['/user/auditlog']);
+  }
+  isModalOpen = false;
+
+  // New Property dropdown functions
+
+  showDropdown = false;
+
+  togglePropertyDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  openProperty() {
+    this.showDropdown = false;
+    this.goToAddProperty(); // tumcha existing method
+  }
+
+  openUnit() {
+    this.showDropdown = false;
+    this.goToAddUnit(); // new function
+  }
+
+  goToAddUnit() {
+    this.router.navigate(['/dashboard/new-units']); // route tumchya project nusar change kara
+  }
+  isContactSearchOpen = false;
+
+  openSearch() {
+    this.isContactSearchOpen = true;
+  }
+
+  closeSearch() {
+    this.isContactSearchOpen = false;
+  }
+
+  /*--------------------------notification model------------------------------------------------*/
+  closeResult: WritableSignal<string> = signal('');
+
+  openNotificationModal(addUserContent: TemplateRef<any>) {
+    this.modalService
+      .open(addUserContent, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon right-side-modal',
+        centered: true,
+      })
+      .result.then(
+        (result) => {
+          this.closeResult.set(`Closed with: ${result}`);
+        },
+        (reason) => {
+          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
+        },
+      );
+  }
+
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
+    }
   }
 }

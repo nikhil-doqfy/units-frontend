@@ -23,6 +23,7 @@ import { StepSchema } from '../../model/step-engine/step-schema';
 import { StepEngine } from '../../model/step-engine/step-engine';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PropertyService } from '../../services/property.service';
+import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 
 type FormKey = 'images' | 'documents';
 
@@ -49,6 +50,7 @@ interface UploadConfig {
     ReactiveFormsModule,
     FileUploadItemComponent,
     TranslateModule,
+    WhiteCardComponent,
   ],
   templateUrl: './add-property.component.html',
   styleUrl: './add-property.component.css',
@@ -206,13 +208,28 @@ export class AddPropertyComponent {
       });
   }
 
-  loadBreadcrumb() {
-    this.setBreadCrumb([
-      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { label: 'ADD_PROPERTY', link: '' },
-    ]);
-  }
+  // loadBreadcrumb() {
+  //   this.setBreadCrumb([
+  //     { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+  //     { label: 'ADD_PROPERTY', link: '' },
+  //   ]);
+  // }
+  showDetailView: boolean = false;
 
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/Add-property' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.ADD_PROPERTY', link: '' },
+      ]);
+    }
+  }
   setBreadCrumb(breadCrumb: BreadCrumb[]) {
     this.sharedService
       .getBreadcrumbs(breadCrumb)

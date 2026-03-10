@@ -10,9 +10,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 export class RevenueBarChartComponent {
   @Output() barClick = new EventEmitter<any>();
 
-  // onBarClicked(data: any) {
-  //   this.barClick.emit(data);
-  // }
   chartOptions: any = {
     series: [
       {
@@ -75,7 +72,7 @@ export class RevenueBarChartComponent {
       axisBorder: { show: false },
       axisTicks: { show: false },
       labels: {
-        rotate: -35, // 👈 yahin teda hoga
+        rotate: -35,
         rotateAlways: true,
         offsetY: -2,
         style: {

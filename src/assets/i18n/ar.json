@@ -533,5 +533,8 @@
   "UNITS_NAME": "اسم الوحدات",
   "PARKING": "وقوف السيارات",
   "REVENUE_GENERATED": "الإيرادات المتولدة",
-  "EDIT_USER": "تحرير المستخدم"
+  "EDIT_USER": "تحرير المستخدم",
+  "TOTAL_REVENUE_RECEIVED": "إجمالي الإيرادات المحصلة",
+  "PROPERTY_COMPRISON": "ملكية الملكية",
+  "LOGIN_SIGNUP": "تسجيل الدخول / الاشتراك"
 }

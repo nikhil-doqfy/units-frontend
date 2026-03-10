@@ -1,0 +1,43 @@
+.rent-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rent-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rent-badge {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 0.2% */
+.badge-green {
+  background: #e6f4ea;
+  color: #2e7d32;
+}
+
+/* 12% light green */
+.badge-light-green {
+  background: #eaf7ee;
+  color: #3aa655;
+}
+
+/* orange */
+.badge-orange {
+  background: #fff4e5;
+  color: #f59e0b;
+}
+
+/* red */
+.badge-red {
+  background: #fde8e8;
+  color: #ef4444;
+}

@@ -26,6 +26,7 @@ import { ScannericonComponent } from '../../../icon/scannericon/scannericon.comp
 import { FormService } from '../../../shared/services/form.service';
 import { ToggleiconComponent } from '../../../icon/toggleicon/toggleicon.component';
 import { ThemeService, UserRole } from '../../../theme.service';
+import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 
 @Component({
   selector: 'app-add-rentalaccount',
@@ -46,6 +47,7 @@ import { ThemeService, UserRole } from '../../../theme.service';
     ScannericonComponent,
     NgbDatepickerModule,
     ToggleiconComponent,
+    WhiteCardComponent,
   ],
   templateUrl: './add-rentalaccount.component.html',
   styleUrl: './add-rentalaccount.component.css',

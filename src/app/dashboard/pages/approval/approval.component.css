@@ -1,0 +1,50 @@
+.tenant-property-card {
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+
+.section-title {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.main-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #1f2937;
+}
+
+.info-text {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 4px;
+}
+.rentHighlight {
+  border: 1px solid #ff6500;
+  color: #ff6500;
+  background: #fff8ec;
+}
+
+.rentHighlight::placeholder {
+  color: #ff6500;
+  opacity: 1;
+}
+
+.column {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.rejectBtn {
+  background-color: rgb(255, 115, 0);
+  color: white;
+}
+.approveBtn {
+  background-color: green;
+  color: white;
+}

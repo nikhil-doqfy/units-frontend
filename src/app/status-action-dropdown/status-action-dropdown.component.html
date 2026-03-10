@@ -1,0 +1,21 @@
+<div class="statusWrapper">
+  <div class="statusText" (click)="toggleDropdown()">
+    {{ status }}
+    <i class="arrowIcon"><app-arrow-down-icon></app-arrow-down-icon></i>
+  </div>
+
+  <div class="dropdownMenu" *ngIf="isOpen">
+    <div class="dropdownItem">
+      <i><app-amount-credited-icon></app-amount-credited-icon></i>Amount
+      Credited
+    </div>
+
+    <div class="dropdownItem">
+      <i><app-cheques-bounce-icon></app-cheques-bounce-icon></i>Check Bounce
+    </div>
+
+    <div class="dropdownItem">
+      <i><app-amount-failed-icon></app-amount-failed-icon></i>Payment Failed
+    </div>
+  </div>
+</div>

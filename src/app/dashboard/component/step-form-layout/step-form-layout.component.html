@@ -1,5 +1,4 @@
 <div class="cmnStepLayout">
-  <!-- LEFT SIDE -->
   <div class="cmnStepLayoutLft">
     <div class="cmnStepNav">
       <app-white-card [title]="leftCardTitle">
@@ -9,10 +8,7 @@
             *ngFor="let step of filteredSteps; let i = index"
             [class.active]="i === currentStep"
           >
-            <button
-              type="button"
-              (click)="goToStep(i)"
-              >
+            <button type="button" (click)="goToStep(i)">
               <!--[disabled]="getStatus(i) === 'LOCKED' || getStatus(i) === 'READY'" -->
               <span>{{ step.title }}</span>
               <i *ngIf="i < currentStep">
@@ -35,29 +31,54 @@
     <ng-container *ngFor="let group of stepGroups; let i = index">
       <ng-container *ngIf="i === currentStep">
         <!-- MAIN CARD -->
+
         <app-white-card>
           <div class="cmnStepFrmHdr mb-4">
             <app-card-title
-              [title]="group.main.title"
+              [title]="group.main.pageTitle"
               [description]="group.main.description"
             >
             </app-card-title>
-            <button
-              type="button"
-              class="btn btnCommon"
-              *ngIf="i < stepGroups.length - 1"
-              (click)="nextStep()"
-            >
-              {{ "SAVE_&_NEXT" | translate }}
-            </button>
-            <button
-              type="button"
-              class="btn btnCommon"
-              *ngIf="i === stepGroups.length - 1"
-              (click)="nextStep()"
-            >
-              {{ finishButtonText }}
-            </button>
+            <div class="stepActionBtns">
+              <button
+                type="button"
+                class="bulkUploadBtn"
+                *ngIf="group.main.showBulkUpload"
+                (click)="openBulkUploadModal(bulkuploadContent)"
+              >
+                <i class="uploadIcon"
+                  ><app-download-icon></app-download-icon
+                ></i>
+                Bulk Uploads
+              </button>
+              <button
+                type="button"
+                class="btnWhite btnCommon"
+                *ngIf="group.main.showEditButton"
+                (click)="nextStep()"
+              >
+                {{ "Add/Edit Fields" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btnCommon"
+                *ngIf="i < stepGroups.length - 1"
+                (click)="nextStep()"
+              >
+                {{ "SAVE_&_NEXT" | translate }}
+              </button>
+              <button class="closeBtn">
+                <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
+              </button>
+              <button
+                type="button"
+                class="btn btnCommon"
+                *ngIf="i === stepGroups.length - 1"
+                (click)="nextStep()"
+              >
+                {{ finishButtonText }}
+              </button>
+            </div>
           </div>
           <div class="cmnStepFrmOuter">
             <app-dash-form>
@@ -77,10 +98,11 @@
                   [title]="sub.title"
                   [description]="sub.description"
                 ></app-card-title>
-                @if(sub.showInvitePmcBtn){
-                <app-invite-pmc-btn />
-                } @if (sub.showInviteOwnerBtn) {
-                <app-invite-owner-btn />
+                @if (sub.showInvitePmcBtn) {
+                  <app-invite-pmc-btn />
+                }
+                @if (sub.showInviteOwnerBtn) {
+                  <app-invite-owner-btn />
                 }
               </div>
               <div class="cmnStepFrmOuter">
@@ -95,3 +117,34 @@
     </ng-container>
   </div>
 </div>
+
+<!-----------bulk model ----------------------------------------->
+
+<ng-template #bulkuploadContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "Bulk Upload" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-bulk-upload #BulkUploadComponent />
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button type="button" class="btn btnCommon">
+      {{ "Upload" | translate }}
+    </button>
+  </div>
+</ng-template>

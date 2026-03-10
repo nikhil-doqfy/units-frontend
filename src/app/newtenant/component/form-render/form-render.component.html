@@ -1,0 +1,183 @@
+<app-white-card>
+  <div class="stepper-container">
+    <div class="sub-stepper" *ngIf="currentSubStep">
+      <div class="sub-step active">
+        {{ currentSubStep.title }}
+        <span class="sub-desc">
+          {{ currentSubStep.description || "" }}
+        </span>
+      </div>
+    </div>
+    <div class="step-item-container">
+      <div
+        class="step-item"
+        *ngFor="let step of steps(); let i = index"
+        [class.active]="i === activeIndex()"
+        [class.completed]="i < activeIndex()"
+      >
+        <ng-container *ngIf="i < activeIndex(); else stepNumber">
+          <i class="completeStepICon">
+            <app-send-invite-icon></app-send-invite-icon>
+          </i>
+        </ng-container>
+        <ng-template #stepNumber>
+          <div class="circle">
+            {{ i + 1 }}
+          </div>
+        </ng-template>
+
+        <div class="label">{{ step.title }}</div>
+
+        <div class="line" *ngIf="i < steps().length - 1"></div>
+      </div>
+    </div>
+
+    <div class="stepper-actions">
+      <button
+        class="btn-back"
+        *ngIf="activeIndex() > 0 || subIndex() > 0"
+        (click)="prev()"
+      >
+        <app-left-arrow-icon></app-left-arrow-icon>
+      </button>
+      <button
+        class="btn-refresh"
+        *ngIf="
+          (currentSubStep?.component === ProfileComponent &&
+            subIndex() === 0) ||
+          currentSubStep?.component === EjariComponent ||
+          currentSubStep?.component === EjariDocSignatureComponent ||
+          showRefresh$()
+        "
+      >
+        <app-refresh-icon></app-refresh-icon>
+      </button>
+
+      <button
+        class="cmmnTblFltrBtn"
+        *ngIf="
+          !(
+            currentSubStep?.component === OnboardingComponent ||
+            currentSubStep?.component === ProfileComponent ||
+            currentSubStep?.component === AgreementComponent ||
+            currentSubStep?.component === EjariComponent ||
+            currentSubStep?.component === EjariDocSignatureComponent
+          )
+        "
+      >
+        Add / Edit Fields
+      </button>
+
+      <button
+        class="reject-btn"
+        *ngIf="
+          getNextBtnLabel() === 'Approval & Generate Invoice' &&
+          currentSubStep?.component === EjariDocSignatureComponent
+        "
+      >
+        Reject
+      </button>
+      <button
+        *ngIf="
+          currentSubStep?.component !== OnboardingComponent &&
+          !(
+            currentSubStep?.component === EjariComponent &&
+            getNextBtnLabel() === 'Approval & Generate Invoice'
+          )
+        "
+        [ngClass]="{
+          'profile-save-btn':
+            currentSubStep?.component === ProfileComponent && subIndex() === 0,
+          'save-btn':
+            currentSubStep?.component !== ProfileComponent &&
+            getNextBtnLabel() === 'Save & Next',
+          'invite-btn': getNextBtnLabel() === 'Send Invite',
+          'sign-btn': getNextBtnLabel() === 'Send for Signature',
+          'submit-for-ejari': getNextBtnLabel() === 'Submit for Ejari',
+          'Approval-Generate-invoice ':
+            getNextBtnLabel() === 'Approval & Generate Invoice',
+        }"
+        (click)="next()"
+      >
+        {{ getNextBtnLabel() }}
+      </button>
+
+      <div
+        *ngIf="currentSubStep?.component === OnboardingComponent"
+        class="send-negotiation-wrap"
+      >
+        <button class="send-negotiation-btn" (click)="onMainClick()">
+          {{ btnTitle$() }}
+
+          <span
+            *ngIf="btnTitle$() === 'Send Negotiation'"
+            class="arrow-down"
+            (click)="onArrowClick($event)"
+            >|
+            <app-arrow-down-icon></app-arrow-down-icon>
+          </span>
+        </button>
+        <div class="approvalDropdown" *ngIf="isDropdownOpen">
+          <div class="dropdownHeader">
+            <h4>Send for Approval</h4>
+            <button class="closeBtn" (click)="isDropdownOpen = false">✕</button>
+          </div>
+
+          <div class="dropdownBody">
+            <label>Select Recipient</label>
+
+            <div class="inputBox">
+              Type "&#64;" to search and add managers or users.
+            </div>
+          </div>
+
+          <div class="dropdownFooter">
+            <button class="sendBtn">Send</button>
+          </div>
+        </div>
+      </div>
+      <i *ngIf="getNextBtnLabel() !== 'Approval & Generate Invoice'">
+        <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
+      </i>
+    </div>
+  </div>
+</app-white-card>
+<div class="step-content">
+  <ng-container *ngIf="currentSubStep">
+    <ng-container
+      *ngComponentOutlet="
+        currentSubStep.component;
+        inputs: { form: currentSubStep.formGroup }
+      "
+    ></ng-container>
+  </ng-container>
+</div>
+<!-- 
+<ng-template #inviteTenantContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "Send for Approval " | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-send-negotiation></app-send-negotiation>
+  </div>
+  <div class="modal-footer">
+     <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button> 
+    <button type="button" class="btn btnCommon">
+      {{ "Send" | translate }}
+    </button>
+  </div>
+</ng-template> -->

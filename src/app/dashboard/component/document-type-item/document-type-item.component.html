@@ -7,4 +7,24 @@
     <span>{{ subtitle }}</span>
     <em *ngIf="size">{{ size }}</em>
   </div>
+  <span *ngIf="showReplace" class="replace-wrap">
+    <span class="replace-text">Replace</span>
+    <span class="replace-icon"
+      ><app-error-outline-icon></app-error-outline-icon
+    ></span>
+  </span>
+</div>
+
+<div *ngIf="status !== 'none'" class="status-wrap">
+  <span
+    [ngClass]="{
+      'status-icon check': status === 'success',
+      'status-icon warn': status === 'warning',
+    }"
+  >
+    <!-- <app-check-circle-icon *ngIf="status === 'success'"></app-check-circle-icon> -->
+    <app-error-outline-icon
+      *ngIf="status === 'warning'"
+    ></app-error-outline-icon>
+  </span>
 </div>

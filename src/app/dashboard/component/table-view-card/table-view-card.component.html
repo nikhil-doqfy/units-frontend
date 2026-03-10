@@ -1,7 +1,7 @@
 <div class="cmmnTblViewCol">
   <div class="cmmnTblViewHdr">
     <div class="cmmnTblViewTtl">
-      <i>
+      <i *ngIf="showImage">
         <ng-container *ngIf="imgSrc; else noImg">
           <img [src]="imgSrc" alt="" />
         </ng-container>
@@ -28,16 +28,92 @@
       >
         <app-edit-icon />
       </button>
-      <div
-        class="cmmnTblViewComboBtns"
-        *ngIf="hasProjectedContent; else noActionButtons"
-      >
+      <div class="column">
+        <!-- *ngIf="hasProjectedContent; else noActionButtons" -->
         <button
+          *ngIf="showBack"
           type="button"
-          class="btn btnCommon btnWhite"
+          class="btn btnWhite btnCommon"
           (click)="onBackClick()"
         >
           <i><app-back-icon /></i>{{ "BACK" | translate }}
+        </button>
+        <!-- <button
+          *ngIf="showBack"
+          type="button"
+          class="btn btnWhite btnCommon"
+          (click)="onBackClick()"
+        >
+          <i><app-back-icon /></i>{{ "BACK" | translate }}
+          <button
+            *ngIf="showApprovalActions"
+            type="button"
+            class="btn btnCommon btnReject"
+            (click)="handleRejectClick()"
+          >
+            Reject
+          </button>
+
+          <button
+            type="button"
+            *ngIf="showApprovalActions"
+            class="btn btnCommon btnApprove"
+            (click)="handleApproveClick()"
+          >
+            Approve
+          </button>
+        </button> -->
+
+        <button
+          class="btn btnCommon btnWhite"
+          *ngIf="showDownload"
+          (click)="download.emit('pdf')"
+        >
+          <i><app-download-icon></app-download-icon></i>
+          Download
+        </button>
+
+        <div class="dropdownWrap" *ngIf="showShare">
+          <button class="btn btnCommon btnWhite" (click)="toggleShare()">
+            <i><app-whatsapp-share-icon></app-whatsapp-share-icon></i>
+            Share<i><app-arrow-down-icon></app-arrow-down-icon></i>
+          </button>
+
+          <div class="shareDropdown" *ngIf="openShare">
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.whatsapp" />
+              <span class="icon whatsapp"
+                ><img src="assets/whatsapp.png"
+              /></span>
+              Whatsapp
+            </label>
+
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.mail" />
+              <span class="icon mail">
+                <img src="assets/email.svg" />
+              </span>
+              Mail
+            </label>
+
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.sms" />
+              <span class="icon sms">
+                <img src="assets/text-icon.svg" />
+              </span>
+              Text Message
+            </label>
+
+            <button class="doneBtn" (click)="shareSelected()">Done</button>
+          </div>
+        </div>
+        <button
+          *ngIf="showCloseBtn || !showApprovalActions"
+          type="button"
+          class="btn"
+          (click)="onCloseClick()"
+        >
+          <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
         </button>
         <div class="actionRow">
           <ng-content select="[header-actions]"></ng-content>
@@ -47,7 +123,7 @@
       <ng-template #noActionButtons>
         <button
           type="button"
-          class="btn btnCommon btnWhite"
+          class="btnWhite btnCommon"
           (click)="onBackClick()"
         >
           <i><app-back-icon /></i> {{ "BACK" | translate }}

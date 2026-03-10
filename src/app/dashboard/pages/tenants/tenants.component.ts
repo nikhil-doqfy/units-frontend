@@ -52,6 +52,12 @@ import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
+import { PlatfromBadgeComponent } from '../../component/platfrom-badge/platfrom-badge.component';
+import { BadgeComponent } from '../../component/badge/badge.component';
+import { ActiveTenantTabComponent } from '../active-tenant-tab/active-tenant-tab.component';
+import { CancelIconComponent } from '../../../icons/cancel-icon/cancel-icon.component';
+import { NewTenantFromService } from '../../../newtenant/component/service/new-tenant-from.service';
 
 @Component({
   selector: 'app-tenants',
@@ -78,6 +84,10 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     TranslateModule,
     NoDataComponent,
     MaskPhonePipe,
+    EditIconComponent,
+    PlatfromBadgeComponent,
+    BadgeComponent,
+    ActiveTenantTabComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
@@ -100,8 +110,12 @@ export class TenantsComponent {
   totalPages: number = 1;
   activeDocTypeKey!: string;
   documentActions = [
-    { label: 'Share', icon: ShareIconComponent, action: 'share' },
-    { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
+    {
+      label: 'Reject / Cancel Tenancy',
+      icon: CancelIconComponent,
+      action: 'rejectTenancy',
+      type: 'danger',
+    },
   ];
   selectedTenant: any = null;
   tenantsList: any[] = [];
@@ -112,8 +126,8 @@ export class TenantsComponent {
   currentPage: number = 1;
   private onTenantsSearch$ = new Subject<string>();
   currentLanguage = 'en';
-
   constructor(
+    private tenantService: NewTenantFromService,
     private router: Router,
     private themeService: ThemeService,
   ) {
@@ -202,6 +216,10 @@ export class TenantsComponent {
     this.getTenants();
   }
 
+  goToInvitationStep() {
+    // Go to step 1, sub-step 1 (Property details)
+    this.tenantService.goToStep('2', '2-1');
+  }
   searchTextChange(search: string): void {
     this.onTenantsSearch$.next(search);
   }
@@ -244,7 +262,13 @@ export class TenantsComponent {
     this.currentPage = event.currentPage;
     this.getTenants();
   }
-
+  isUnitDetailView = false;
+  addTenant() {
+    this.router.navigate(['/dashboard/new-tenant']);
+  }
+  onDetailViewChange(event: boolean) {
+    this.isUnitDetailView = event;
+  }
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }

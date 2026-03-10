@@ -1,5 +1,34 @@
-<div class="badgeText" [class.green]="status === 'green'" [class.greenLight]="status === 'light-green'"
-    [class.orange]="status === 'orange'" [class.blue]="status === 'blue'" [class.red]="status === 'red'"
-    [class.yellow]="status === 'yellow'">
-    {{ title }}
+<div
+  class="badgeText"
+  [class.green]="status === 'green'"
+  [class.greenLight]="status === 'light-green'"
+  [class.orange]="status === 'orange'"
+  [class.blue]="status === 'blue'"
+  [class.red]="status === 'red'"
+  [class.yellow]="status === 'yellow'"
+  [ngClass]="enableBg ? status : ''"
+>
+  <!-- Icons -->
+  <i *ngIf="showIcon && status === 'green'">
+    <span style="color: green">&#x2713;</span>
+  </i>
+
+  <!-- <i *ngIf="showIcon && status === 'light-green'">
+    <app-success-icon></app-success-icon>
+  </i> -->
+
+  <i *ngIf="showIcon && status === 'orange'"> </i>
+
+  <i *ngIf="showIcon && status === 'black'">
+    <app-amount-credited-icon></app-amount-credited-icon>
+  </i>
+
+  <i *ngIf="showIcon && status === 'red'">
+    <app-disable-icon></app-disable-icon>
+  </i>
+
+  <i *ngIf="showIcon && status === 'yellow'">
+    <app-pending-icon></app-pending-icon>
+  </i>
+  {{ title }}
 </div>

@@ -1,0 +1,85 @@
+.tbl-action-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+:host ::ng-deep app-edit-icon i,
+:host ::ng-deep app-edit-icon svg {
+  font-size: 16px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+:host ::ng-deep .cmmnTblActnBtnDiv i,
+:host ::ng-deep .cmmnTblActnBtnDiv svg,
+:host ::ng-deep .cmmnTblActnBtnDiv button {
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.tbl-action-inline app-edit-icon:hover,
+.tbl-action-inline .cmmnTblActnBtnDiv:hover {
+  color: #2563eb;
+}
+
+/* 
+
+.totalCell {
+  text-align: center;
+  padding: 12px;
+} */
+
+.totalRow td {
+  background: #f3f4f6; /* grey background */
+  border: none !important; /* lines remove */
+  font-weight: 600;
+  padding: 14px;
+}
+
+.totalCell {
+  background: #f3f4f6;
+  border: none !important;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px;
+}
+
+.chargesTooltip {
+  min-width: 163px;
+  padding: 5px 0;
+}
+
+.chargesRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #5f6b7a;
+}
+
+.chargesRow .value {
+  font-weight: 600;
+  color: black;
+}
+.charges-info {
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+/* Popover Header */
+.popover-header {
+  background: #1f6ed4;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+::ng-deep .popover .popover-body {
+  padding: 4px 8px !important;
+}

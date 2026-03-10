@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { RevenueBarChartComponent } from '../charts/revenue-bar-chart/revenue-bar-chart.component';
 import { ArrowComponent } from '../../../shared/component/icons/arrow/arrow.component';
@@ -34,7 +34,6 @@ import { TableImgItemComponent } from '../table-img-item/table-img-item.componen
     TableFilterButtonComponent,
     FilterIconComponent,
     ExportIconComponent,
-    TableActionButtonComponent,
     TableSelectComponent,
     TablePaginationComponent,
     CommonModule,
@@ -44,19 +43,23 @@ import { TableImgItemComponent } from '../table-img-item/table-img-item.componen
   templateUrl: './property-analytics.component.html',
   styleUrl: './property-analytics.component.css',
 })
-export class PropertyAnalyticsComponent {
+export class PropertyAnalyticsComponent implements OnInit {
   @Output() detailViewChange = new EventEmitter<boolean>();
   showDetailView: boolean = false;
   leases: any[] = [];
   private translate = inject(TranslateService);
-  constructor(private router: Router) {}
+  activeTab: any = 'properties';
+  selectedLease: any = null;
+  componentName = 'RentalComponent';
+  totalRecords = 0;
+  rowsPerPageOptions = [10, 25, 50, 100];
+  rowsPerPage = 10;
+  currentPage = 1;
   photos: string[] = [
     '../assets/property/property-comprison1.svg',
     '../assets/property/property-comprison2.svg',
     'assets/property/property-comprison3.svg',
-    // 'assets/complaint/complaint-8.svg',
   ];
-  activeTab: any = 'properties';
 
   properties = [
     {
@@ -99,7 +102,10 @@ export class PropertyAnalyticsComponent {
       parking: 500,
     },
   ];
-  selectedLease: any = null;
+  constructor(private router: Router) {}
+  ngOnInit(): void {
+    // this.test();
+  }
 
   onRentalClick(event: any) {
     console.log('BAR CLICKED', event);
@@ -125,13 +131,20 @@ export class PropertyAnalyticsComponent {
     this.detailViewChange.emit(true);
     this.router.navigate(['/dashboard/rental']);
   }
-  componentName = 'RentalComponent';
-  totalRecords = 0;
-  rowsPerPageOptions = [10, 25, 50, 100];
-  rowsPerPage = 10;
-  currentPage = 1;
+
   handleExportClick(): void {}
   handlePreviewClick() {
     this.router.navigate(['/dashboard/invoice-template']);
+  }
+
+  test() {
+    this.translate.use('en');
+    const englishText = this.translate.instant('TOTAL_REVENUE_RECEIVED');
+    console.log('English:', englishText);
+
+    // Arabic
+    this.translate.use('ar');
+    const arabicText = this.translate.instant('TOTAL_REVENUE_RECEIVED');
+    console.log('Arabic:', arabicText);
   }
 }

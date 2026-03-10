@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { CustomSelectComponent } from './custom-select.component';

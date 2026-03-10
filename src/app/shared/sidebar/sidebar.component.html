@@ -52,6 +52,7 @@
         >
           <app-property-icon></app-property-icon>
         </app-sidebar-item>
+
         <app-sidebar-item title="{{ 'PMC' | translate }}" href="/dashboard/pmc">
           <app-pmc-icon></app-pmc-icon>
         </app-sidebar-item>
@@ -102,11 +103,19 @@
           <app-property-icon></app-property-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          title="{{ 'Leads' | translate }}"
+          href="/dashboard/leads"
+          [count]="11243"
+        >
+          <app-lead-icon></app-lead-icon>
+        </app-sidebar-item>
+        <app-sidebar-item
           title="{{ 'TENANTS' | translate }}"
           href="/dashboard/tenants"
         >
           <app-tenant-icon></app-tenant-icon>
         </app-sidebar-item>
+
         <app-sidebar-item
           title="{{ 'OWNER' | translate }}"
           href="/dashboard/owners"
@@ -114,22 +123,28 @@
           <app-owner-icon></app-owner-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          title="{{ 'Cheques' | translate }}"
+          href="/dashboard/cheques"
+        >
+          <app-cheques-icon></app-cheques-icon>
+        </app-sidebar-item>
+        <!-- <app-sidebar-item
           title="{{ 'LEASE_TENANCY' | translate }}"
           href="/dashboard/lease-tenancy"
         >
           <app-lease-tenancy-icon></app-lease-tenancy-icon>
+        </app-sidebar-item> -->
+        <app-sidebar-item
+          title="{{ 'PAGE_TITLE.RENTAL_PORTFOLIO' | translate }}"
+          href="/dashboard/rental"
+        >
+          <app-rental-portfolio-icon></app-rental-portfolio-icon>
         </app-sidebar-item>
         <app-sidebar-item
           title="{{ 'APPROVAL' | translate }}"
           href="/dashboard/approval"
         >
           <app-approval-icon></app-approval-icon>
-        </app-sidebar-item>
-        <app-sidebar-item
-          title="{{ 'PAGE_TITLE.RENTAL_PORTFOLIO' | translate }}"
-          href="/dashboard/rental"
-        >
-          <app-rental-portfolio-icon></app-rental-portfolio-icon>
         </app-sidebar-item>
 
         <app-sidebar-item
@@ -138,6 +153,12 @@
           [count]="243"
         >
           <app-raise-complaint-icon></app-raise-complaint-icon>
+        </app-sidebar-item>
+        <app-sidebar-item
+          title="{{ 'PAGE_TITLE.BROADCAST' | translate }}"
+          href="/dashboard/announcements"
+        >
+          <app-announcements-icon></app-announcements-icon>
         </app-sidebar-item>
       </div>
     </div>
@@ -152,7 +173,7 @@
           <app-staff-icon></app-staff-icon>
         </app-sidebar-item>
         <app-sidebar-item
-          title="{{ 'STAFF' | translate }}"
+          title="{{ 'Team' | translate }}"
           href="/dashboard/staff"
         >
           <app-staff-icon></app-staff-icon>

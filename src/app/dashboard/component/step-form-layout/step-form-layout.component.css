@@ -1,110 +1,144 @@
 .cmnStepLayout {
-    display: flex;
-    gap: 16px;
-    overflow: auto;
+  display: flex;
+  gap: 16px;
+  overflow: auto;
 }
 
 .cmnStepLayoutLft {
-    width: 220px;
-    min-width: 220px;
-    height: 100%;
+  width: 220px;
+  min-width: 220px;
+  height: 100%;
 }
 
 .cmnStepNav {
-    background-color: var(--whiteBg);
-    height: calc(100vh - 196px);
-    border-radius: 12px;
+  background-color: var(--whiteBg);
+  height: calc(100vh - 196px);
+  border-radius: 12px;
 }
 
 .cmnStepLayoutLft h6 {
-    font-size: 12px;
-    color: var(--lightText);
-    font-weight: 400;
-    line-height: 16px;
-    text-transform: uppercase;
-    margin: 32px 0 0 0;
+  font-size: 12px;
+  color: var(--lightText);
+  font-weight: 400;
+  line-height: 16px;
+  text-transform: uppercase;
+  margin: 32px 0 0 0;
 }
 
 .cmnStepLayoutLft ul {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
 }
 
 .cmnStepLayoutLft ul li {
-    width: 100%;
+  width: 100%;
 }
 
 .cmnStepLayoutLft ul li button {
-    background-color: var(--whiteBg);
-    font-size: 14px;
-    color: var(--greyText);
-    font-weight: 500;
-    line-height: 18px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    width: 100%;
-    height: 40px;
-    padding: 0 10px;
-    border: 0;
-    border-radius: 8px;
-    transition: all 0.3s ease 0s;
+  background-color: var(--whiteBg);
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 500;
+  line-height: 18px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  transition: all 0.3s ease 0s;
 }
 
 .cmnStepLayoutLft ul li.active button {
-    background-color: var(--activeLightBg);
-    color: var(--activeText);
+  background-color: var(--activeLightBg);
+  color: var(--activeText);
 }
 
 .cmnStepLayoutLft ul li i {
-    display: flex;
-    width: 20px;
-    height: 20px;
+  display: flex;
+  width: 20px;
+  height: 20px;
 }
 
 .cmnStepLayoutRght {
-    width: calc(100% - 220px);
+  width: calc(100% - 220px);
 }
 
 .cmnStepFrmHdr {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 @media (max-width: 767px) {
-    .cmnStepLayout {
-        flex-direction: column;
-        gap: 16px;
-    }
+  .cmnStepLayout {
+    flex-direction: column;
+    gap: 16px;
+  }
 
-    .cmnStepNav {
-        height: auto;
-    }
+  .cmnStepNav {
+    height: auto;
+  }
 
-    .cmnStepLayoutLft {
-        width: 100%;
-    }
+  .cmnStepLayoutLft {
+    width: 100%;
+  }
 
-    .cmnStepLayoutRght {
-        width: 100%;
-    }
+  .cmnStepLayoutRght {
+    width: 100%;
+  }
 
-    .cmnStepFrmHdr {
-        flex-direction: column;
-        align-items: flex-start;
-        max-width: 180px;
-    }
+  .cmnStepFrmHdr {
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 180px;
+  }
 
-    .cmnStepFrmHdr button {
-        position: absolute;
-        right: 16px;
-        top: 16px;
-    }
+  .cmnStepFrmHdr button {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+  }
+}
+.stepActionBtns {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
 
+.closeBtn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.bulkUploadBtn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #2b65f8;
+  text-decoration: underline;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }

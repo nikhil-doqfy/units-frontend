@@ -1,0 +1,10 @@
+.listProperty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.listText {
+  text-decoration: underline;
+  font-weight: 500;
+}

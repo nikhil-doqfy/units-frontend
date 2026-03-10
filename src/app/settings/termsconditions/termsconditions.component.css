@@ -1,0 +1,75 @@
+.terms-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.edit-btn {
+  width: 70px;
+  height: 38px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--whiteBg);
+  color: var(--greyText);
+  box-shadow: 0 0 6px 0 #00000026;
+}
+
+.edit-btn:hover {
+  background: #f8fafc;
+}
+
+.content {
+  max-width: 914px;
+  max-height: 468px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.section h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #030507;
+  margin-bottom: 4px;
+}
+
+.section p,
+.section li {
+  list-style-type: disc;
+  font-weight: 400;
+  font-size: 14px;
+  color: #232b2e;
+  line-height: 1.6;
+}
+
+.section ul {
+  padding-left: 16px;
+}
+
+a {
+  color: black;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .terms-card {
+    padding: 16px;
+  }
+
+  .edit-btn {
+    top: 12px;
+    right: 12px;
+    padding: 5px 10px;
+  }
+}

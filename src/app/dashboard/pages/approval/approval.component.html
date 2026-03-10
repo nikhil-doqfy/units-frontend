@@ -68,16 +68,14 @@
       tabindex="0"
     >
       <div class="cmmnTblOuter">
-        <div class="cmmnTblBody">
+        <div class="cmmnTbl">
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
                 <tr>
                   <th>
-                    <button type="button">
-                      {{ "TENANT_NAME" | translate }}
-                      <i><app-sorting-icon /></i>
-                    </button>
+                    {{ "TENANT_NAME" | translate }}
+                    <i><app-sorting-icon /></i>
                   </th>
                   <th>{{ "EMIRATES_ID" | translate }}</th>
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
@@ -88,14 +86,27 @@
               </thead>
 
               <tbody>
-                @for (approval of tenantList; track $index) {
+                @for (
+                  approval of [
+                    {
+                      tenant_id: 1,
+                      name: "John Doe",
+                      profile_image: "",
+                      emirates_id: "784-1234-5678901-2",
+                      date_request: "07-03-2026",
+                      contact_number: "+971987654321",
+                      email: "john@example.com",
+                    },
+                  ];
+                  track $index
+                ) {
                   <tr>
                     <td>
+                      <!-- ? approval?.profile_image -->
                       <app-table-img-item
                         [img]="
-                          approval?.profile_image
-                            ? approval?.profile_image
-                            : '../../../../assets/userDefaultProImg.png'
+                          approval?.profile_image ||
+                          '../../../../assets/userDefaultProImg.png'
                         "
                         [clickable]="true"
                         (clicked)="handleViewClick(approval.tenant_id)"
@@ -169,7 +180,7 @@
     >
       <!-- accepted  -->
       <div class="cmmnTblOuter">
-        <div class="cmmnTblBody">
+        <div class="cmmnTbl">
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
@@ -267,7 +278,7 @@
       tabindex="0"
     >
       <div class="cmmnTblOuter">
-        <div class="cmmnTblBody">
+        <div class="cmmnTbl">
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
@@ -361,8 +372,8 @@
   </div>
 </ng-container>
 
-<ng-container *ngIf="showDetailView && selectedTenant">
-  <app-table-view-card
+<ng-container *ngIf="showDetailView">
+  <!-- <app-table-view-card
     [title]="selectedTenant?.first_name + ' ' + selectedTenant?.last_name"
     [imgSrc]="selectedTenant?.profile_image"
     [headerItems]="[
@@ -668,6 +679,305 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </app-white-card> 
+  </div>---->
+
+  <app-table-view-card
+    title="Requested :Ali Amar"
+    [showApprovalActions]="true"
+    [showBack]="false"
+  >
+    <div header-actions class="column">
+      <button type="button" class="btn btnWhite btnCommon">
+        <i><app-back-icon /></i>{{ "BACK" | translate }}
+      </button>
+
+      <button type="button" class="btn btnWhite btnCommon rejectBtn">
+        Reject
+      </button>
+
+      <button type="button" class="btn btnWhite btnCommon approveBtn">
+        Approve
+      </button>
+    </div>
+    <div rental class="mt-3">
+      <!-- <div class="other-charges-box mt-3">
+        <div class="charges-grid">
+          <div class="charge-item">
+            <label>Admin Fee <span>VAT &#64;5%</span></label>
+            <small>32.71 + 1.64</small>
+            <strong>34.35</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
+            <small>175.65 + 1.64</small>
+            <strong>175.65</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Gas Charges <span>VAT &#64;5%</span></label>
+            <small>1,000.00 + 50.00</small>
+            <strong>1,050.00</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Commission - Dubai <span>VAT &#64;5%</span></label>
+            <small>1,200.00 + 60.00</small>
+            <strong>1,260.00</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Security Deposit <span>VAT &#64;nill</span></label>
+            <small>2,400.00 + 0.00</small>
+            <strong>2,400.00</strong>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="tenant-property-card">
+        <div class="row">
+          <!-- Tenant Details -->
+          <div class="col-md-6">
+            <p class="section-title">Tenant Details</p>
+
+            <h6 class="main-name">ABHRAM</h6>
+
+            <p class="info-text">Addr: P.O. BOX # 95801, Sharjah</p>
+
+            <p class="info-text">Phone: +41-8272829282</p>
+          </div>
+
+          <!-- Property Details -->
+          <div class="col-md-6">
+            <p class="section-title">Property Details:</p>
+
+            <h6 class="main-name">KHALEEJA BUILDING | 302</h6>
+
+            <p class="info-text">Period: 01-Sep-2025 TO 31-Aug-2026</p>
+
+            <p class="info-text">Lease No: LV-25-01335</p>
+
+            <p class="info-text">Ref No: P48/LGI-25-13230</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-table-view-card>
+  <div class="mt-3">
+    <app-white-card>
+      <div class="lease-wrapper">
+        <div class="lease-card">
+          <!-- Header -->
+          <div class="lease-header">
+            <h6>Leased Unit</h6>
+            <span class="badge">01</span>
+          </div>
+
+          <div class="form-grid row g-3">
+            <div class="col-md-6">
+              <label class="form-label">{{ "Start Date" }}</label>
+              <app-custom-select
+                [width]="'300px'"
+                [iconType]="'custom'"
+              ></app-custom-select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "End Date" }}</label>
+              <app-custom-select
+                [highlight]="true"
+                [width]="'300px'"
+                [iconType]="'custom'"
+              ></app-custom-select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Grace Start Date" }}</label>
+              <app-custom-select
+                [width]="'300px'"
+                [iconType]="'custom'"
+              ></app-custom-select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ "Grace End Date" }}</label>
+              <app-custom-select
+                [width]="'300px'"
+                [iconType]="'custom'"
+              ></app-custom-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+  <div class="mt-3">
+    <app-white-card>
+      <div class="lease-wrapper">
+        <div class="lease-card">
+          <!-- Header -->
+          <div class="lease-header">
+            <h6>Amount/Rent Details</h6>
+            <span class="badge">02</span>
+          </div>
+
+          <!-- Form Grid -->
+          <div class="form-grid row g-3">
+            <div class="col-md-6">
+              <label class="form-label">{{ "Annual Amount" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Actual Annual  Amount " }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Security/Booking Amount" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ "Maintenance Charges" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Rent " }}</label>
+              <input
+                type="text"
+                class="form-control rentHighlight"
+                [placeholder]="'AED 1,100.00'"
+                style="width: 300px"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ "Security Deposit" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ "Commission in %" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Notice-Period" }}</label>
+              <app-custom-select [width]="'300px'"></app-custom-select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Contract Amount" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Discount (Optional)" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Shell & Core " }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Payment Count" }}</label>
+              <app-custom-select [width]="'300px'"></app-custom-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+  <div class="mt-3">
+    <app-white-card>
+      <div class="lease-header">
+        <h6>Other Charges</h6>
+        <span style="color: #bec1c2"> Total:</span> <span>AED 18,000.00</span>
+        <span class="badge">03</span>
+      </div>
+      <div class="cmmnTblBody">
+        <div class="table-responsive">
+          <table class="charges-table">
+            <thead>
+              <tr>
+                <th>{{ "DESCRIPTION" | translate }}</th>
+                <th>
+                  {{ "AMOUNT" | translate }}
+                </th>
+                <th>{{ "TAX_CODE" | translate }}</th>
+                <th>{{ "VAT" | translate }}</th>
+                <th>{{ "TOTAL_AMOUNT" | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let c of charges">
+                <td>
+                  <label class="checkbox">
+                    <input
+                      type="checkbox"
+                      [(ngModel)]="c.checked"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <span class="desc-cell"></span>
+                    {{ c.label }}
+                  </label>
+                </td>
+                <td>{{ c.amount | number: "1.2-2" }}</td>
+                <td>{{ c.tax }}</td>
+                <td>{{ c.vat | number: "1.2-2" }}</td>
+                <td>{{ c.total | number: "1.2-2" }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </app-white-card>

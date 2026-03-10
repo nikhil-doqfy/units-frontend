@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ɵEmptyOutletComponent } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../../shared.service';
@@ -30,6 +30,14 @@ import { RentalAccountService } from '../../rental-account.service';
 import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
 import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
 import { PropertyAnalyticsComponent } from '../../component/property-analytics/property-analytics.component';
+import { InvoiceIconComponent } from '../../../icons/invoice-icon/invoice-icon.component';
+import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
+import { TermsconditionIconComponent } from '../../../icons/termscondition-icon/termscondition-icon.component';
+import { BadgeComponent } from '../../component/badge/badge.component';
+import { StatusDropdownComponent } from '../../component/status-dropdown/status-dropdown.component';
+import { AreaGraphComponent } from '../../component/charts/area-graph/area-graph.component';
+import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.component';
+import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 
 @Component({
   selector: 'app-rental',
@@ -53,6 +61,15 @@ import { PropertyAnalyticsComponent } from '../../component/property-analytics/p
     DisableIconComponent,
     RefreshIconComponent,
     PropertyAnalyticsComponent,
+    InvoiceIconComponent,
+    DocumentTypeItemComponent,
+    TermsconditionIconComponent,
+    BadgeComponent,
+    StatusDropdownComponent,
+    AreaGraphComponent,
+    ɵEmptyOutletComponent,
+    ReceiptIconComponent,
+    ArrowDownIconComponent,
   ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',
@@ -154,6 +171,9 @@ export class RentalComponent {
 
   leases: any[] = [];
 
+  totalAmount = 'AED 2,000.00';
+  receivedAmount = 'AED 1,200.00';
+  pendingAmount = 'AED 800.00';
   getLeases() {
     const params = {
       page: this.currentPage,
@@ -184,6 +204,7 @@ export class RentalComponent {
   onLeaseClick(lease: any) {
     this.selectedLease = lease;
     this.showDetailView = true;
+    this.showInvoiceDetails = false;
   }
 
   toggleMenu() {
@@ -226,5 +247,49 @@ export class RentalComponent {
 
   handlePreviewDocumentClick(): void {
     console.log('Preview Document button clicked');
+  }
+
+  showInvoiceDetails = false;
+  onViewInvoiceClick(lease: any, event: Event) {
+    event.preventDefault();
+    this.selectedLease = lease;
+    this.showInvoiceDetails = true;
+    console.log('Invoice Details for:', lease);
+  }
+  handleDownload(type: string) {
+    console.log('Download:', type);
+    // API call / file generate logic
+  }
+  handleShare(type: string) {
+    console.log('Share:', type);
+  }
+  showDropdown = false;
+
+  selectedq: any = {
+    label: 'Amount Credited',
+    status: 'green',
+  };
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  onStatusSelect(item: any) {
+    this.selected = item;
+    this.showDropdown = false;
+  }
+
+  showReceiptDropdown = false;
+  showMonthDropdown = false;
+  selectedReceiptType = '';
+
+  toggleReceipt() {
+    this.showReceiptDropdown = !this.showReceiptDropdown;
+    this.showMonthDropdown = false;
+  }
+
+  selectReceiptType(type: string) {
+    this.selectedReceiptType = type;
+    this.showMonthDropdown = true;
   }
 }

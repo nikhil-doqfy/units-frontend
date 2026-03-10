@@ -15,6 +15,9 @@
     "USERS": "Users",
     "COMPLAINTS": "Complaints",
     "ADD": "Add",
+    "TERMS_CONDITIONS": "Terms & Conditions",
+    "CHARGES": "Charges",
+    "AUDIT_LOG": "Audit Log",
     "ROLES_PERMISSIONS": "Roles & Permissions",
     "DOCUMENTATIONS": "Documentations",
     "PAYMENTS_INVOICE": "Payments & Invoice",
@@ -22,11 +25,22 @@
     "RAISE_COMPLAINT": "Raise Complaint",
     "PRIVACY_POLICY": "Privacy Policy",
     "RENTAL_PORTFOLIO": "Rental Portfolio",
-    "RENTAL": "Rental"
+    "RENTAL": "Rental",
+    "MY_PROFILE": "My Profile",
+    "ANNOUNCEMENTS": "Announcements",
+    "CHEQUES": "Cheques",
+    "LEADS": "Leads",
+    "TERMS_AND_CONDITIONS": "Terms & Conditions",
+    "NEW_UNITS": "New Units",
+    "NEW_TENANT": "New Tenant",
+    "TEAM": "Team",
+    "BROADCAST": "Broadcast"
   },
-  "ADD_PROPERTY": "Add Property",
+
   "NEW_LEASE": "New Lease",
-  "MY_PROFILE": "My Profile",
+  "UNITS": "Units",
+
+  "TENANCY_LEDGER": "Tenancy Ledger",
   "DOCUMENTATION": "Documentation",
   "LOGOUT": "Logout",
   "LOGOUT_CONFIRM": "Are you sure you want to logout?",
@@ -453,7 +467,8 @@
   "PERIOD_TO": "Period To",
   "UNIT_TYPE": "Unit Type",
   "YEAR_RENT": "Year Rent",
-  "OTHER_CHARGES": "Other Charges",
+
+  "OTHER_CHARGES": "OTHER CHARGES",
   "VAT": "Vat",
   "TOTAL_RENT": "Total Rent",
   "RENEW_ACCOUNT": "Renew Account",
@@ -529,5 +544,8 @@
   "UNITS_NAME": "Units Name",
   "PARKING": "Parking",
   "REVENUE_GENERATED": "Revenue Generated",
-  "EDIT_USER": "Edit User"
+  "EDIT_USER": "Edit User",
+  "TOTAL_REVENUE_RECEIVED": "Total Revenue Received",
+  "PROPERTY_COMPRISON": "Property Comprison",
+  "LOGIN_SIGNUP": "Login / Signup"
 }
