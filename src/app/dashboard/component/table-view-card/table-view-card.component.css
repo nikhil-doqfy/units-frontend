@@ -5,12 +5,13 @@
 }
 
 .cmmnTblViewHdr {
-  background-color: var(--lightDarkBg);
+  /* background-color: var(--lightDarkBg); */
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding: 16px;
+  border-bottom: 1px solid #ecf0f2;
 }
 
 .cmmnTblViewTtl {
@@ -42,7 +43,7 @@
 
 .cmmnTblViewTtl h4 {
   font-size: 16px;
-  color: var(--whiteText);
+  color: var(--blackText);
   font-weight: 600;
   line-height: 100%;
   margin: 0;
@@ -79,7 +80,7 @@
 }
 
 .cmmnTblViewComboBtns {
-  background-color: var(--whiteBg);
+  /* background-color: var(--whiteBg); */
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -204,6 +205,92 @@
 
 .actionRow {
   display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.dropdownWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  min-width: 140px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  display: none;
+  z-index: 10;
+}
+
+.dropdownMenu li {
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.dropdownMenu li:hover {
+  background: #f5f7f8;
+}
+
+.dropdownWrap:hover .dropdownMenu {
+  display: block;
+}
+
+.dropdownWrap.active .dropdownMenu {
+  display: block;
+}
+.dropdownWrap {
+  position: relative;
+}
+
+.shareDropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 194px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  z-index: 10;
+}
+
+.shareItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.shareItem input {
+  width: 16px;
+  height: 16px;
+}
+
+.doneBtn {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  background: linear-gradient(90deg, #8a2be2, #1e90ff);
+}
+.column {
+  display: flex;
+  align-items: center;
   gap: 8px;
   flex-wrap: nowrap;
 }

@@ -35,6 +35,9 @@ import { ActivityHistroyIconsComponent } from '../../../icons/activity-histroy-i
 import { DateIconComponent } from '../icons/date-icon/date-icon.component';
 import { CalenderIconComponent } from '../../../icons/calender-icon/calender-icon.component';
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
+import { SortingIconComponent } from '../icons/sorting-icon/sorting-icon.component';
+import { CheckIconComponent } from '../../../icons/check-icon/check-icon.component';
+import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenent-from/convert-lead-to-tenent-from.component';
 
 @Component({
   selector: 'app-all-leads',
@@ -58,10 +61,12 @@ import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn
     EditLeadsFormComponent,
     ActivityHistoryFormComponent,
     ActivityHistroyIconsComponent,
-    DateIconComponent,
     NgbDatepickerModule,
     CalenderIconComponent,
     CircularCrossBtnIconComponent,
+    SortingIconComponent,
+    CheckIconComponent,
+    ConvertLeadToTenentFromComponent,
   ],
   templateUrl: './all-leads.component.html',
   styleUrl: './all-leads.component.css',
@@ -126,6 +131,24 @@ export class AllLeadsComponent {
         ariaLabelledBy: 'modal-title',
         windowClass: 'mdlCommon activity-history-modal',
         centered: true,
+      })
+      .result.then(
+        (result) => {
+          this.closeResult.set(`Closed with: ${result}`);
+        },
+        (reason) => {
+          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
+        },
+      );
+  }
+  openLeadToTenantModel(convertLeadToTenentContent: TemplateRef<any>) {
+    this.modalService
+      .open(convertLeadToTenentContent, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon convertTenantModal',
+        centered: true,
+
+        size: 'lg',
       })
       .result.then(
         (result) => {

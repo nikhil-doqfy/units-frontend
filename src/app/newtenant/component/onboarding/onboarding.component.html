@@ -1,0 +1,567 @@
+<div class="top-alert" *ngIf="showMsg$()">
+  <span class="icon"><app-warning-icon></app-warning-icon></span>
+  <span class="text">{{ msgText$() }}</span>
+</div>
+
+<!-- MAIN CONTENT WRAPPER -->
+<div class="page-wrapper" [class.blur]="showMsg$()">
+  <form [formGroup]="form">
+    <div class="confirm-box" *ngIf="showCheckSection$()">
+      <label class="confirm-label">
+        <input type="checkbox" />
+        <span class="custom-checkbox"></span>
+        <span class="confirm-text">
+          I confirm that the physical documents and cheques have been received
+          from the tenant.
+        </span>
+      </label>
+    </div>
+    <div class="mt-3">
+      <app-white-card title="Photos & Documents">
+        <div class="commonTabs">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="tenantDocument-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#tenantDocument-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="tenantDocument-tab-pane"
+                aria-selected="false"
+              >
+                Tenants Documents
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="commonTabsContent">
+          <div class="tab-content" id="myTabContent">
+            <div
+              class="tab-pane fade show active"
+              id="tenantDocument-tab-pane"
+              role="tabpanel"
+              aria-labelledby="tenantDocument-tab"
+              tabindex="0"
+            >
+              <div class="row g-2 align-items-center docs-row">
+                <div class="col-auto">
+                  <div class="doc-wrap success">
+                    <app-document-type-item
+                      title="Bank Account.pdf"
+                      size="1.2 MB"
+                    />
+                    <span class="status-icon check">✔</span>
+                  </div>
+                </div>
+
+                <div class="col-auto">
+                  <div class="doc-wrap warning">
+                    <app-document-type-item
+                      title="Emirates ID.pdf"
+                      size="1.2 MB"
+                    />
+                    <span class="replace-text">Replace</span>
+                    <span class="status-icon warn"
+                      ><app-error-outline-icon></app-error-outline-icon
+                    ></span>
+                  </div>
+                </div>
+
+                <div class="col-auto">
+                  <div class="doc-wrap success">
+                    <app-document-type-item
+                      title="Other ID.pdf"
+                      size="1.2 MB"
+                    />
+                    <span class="status-icon check">✔</span>
+                  </div>
+                </div>
+
+                <div class="col-auto">
+                  <button
+                    type="button"
+                    class="upload-more-btn"
+                    (click)="toggleDropdown()"
+                  >
+                    <i class="upload-icon">
+                      <app-download-icon></app-download-icon>
+                    </i>
+                    Upload More
+                    <span>|</span>
+                    <i>
+                      <app-arrow-down-icon></app-arrow-down-icon>
+                    </i>
+                  </button>
+
+                  <div
+                    class="global-dropdown"
+                    *ngIf="showDropdown"
+                    (click)="
+                      openAdditionalDocumentModal(additionalDocumentContent)
+                    "
+                  >
+                    Additional Document
+                  </div>
+                </div>
+
+                <div
+                  class="col ms-auto d-flex align-items-center justify-content-end gap-2 score-section"
+                >
+                  <a class="score-link">View Score Report</a>
+
+                  <div class="progress-wrap">
+                    <svg viewBox="0 0 120 120">
+                      <circle cx="60" cy="60" r="54" class="bg"></circle>
+
+                      <circle cx="60" cy="60" r="54" class="progress"></circle>
+                    </svg>
+
+                    <div class="percent-text">97%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-white-card>
+    </div>
+    <div class="mt-3" *ngIf="showCheckSection$()">
+      <div class="cmmnTblOuter">
+        <div class="rent-cheque-counter">
+          <span class="title">Rent Cheques</span>
+          <div class="counter-wrapper">
+            <span class="text-btn">No of Cheques :</span>
+            <button class="btn-circle minus-btn" (click)="decrement()">
+              –
+            </button>
+            <span class="count">{{ chequeCount }}</span>
+            <button class="btn-circle plus-btn" (click)="increment()">+</button>
+          </div>
+        </div>
+        <div class="cmmnTblHdr">
+          <div class="row g-3 align-items-center">
+            <div class="col-md"></div>
+            <div class="col-md-auto">
+              <div class="d-flex align-items-center gap-2 gap-md-3"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cmmnTbl">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>
+                    <div class="checkbox-input">
+                      <input type="checkbox" />
+                    </div>
+                  </th>
+                  <th>{{ "SI.No" | translate }}</th>
+                  <th>{{ "Reference ID" | translate }}</th>
+                  <th width="200px">
+                    {{ "Photo" | translate }}
+                  </th>
+                  <th>{{ "Rent Start & End Date" | translate }}</th>
+
+                  <th width="200">{{ "Origin Bank" }}</th>
+                  <th>{{ "Origin Account No" }}</th>
+                  <th>{{ "Origin IFSC Code" }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+
+                  <td>01</td>
+                  <td>LV2056</td>
+                  <td>
+                    <div class="img-box">
+                      <img src="assets/invoice.svg" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="Feb 25 - Mar 25" />
+                      <span class="calendar-icon"
+                        ><app-calender-icon></app-calender-icon
+                      ></span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="89475639" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="EIB00245" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+
+                  <td>02</td>
+                  <td>LV2056</td>
+                  <td>
+                    <div class="img-box">
+                      <img src="assets/invoice.svg" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="Feb 25 - Mar 25" />
+                      <span class="calendar-icon"
+                        ><app-calender-icon></app-calender-icon
+                      ></span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="89475639" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="EIB00245" />
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+
+                  <td>03</td>
+                  <td>LV2056</td>
+                  <td>
+                    <div class="img-box">
+                      <img src="assets/invoice.svg" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="Feb 25 - Mar 25" />
+                      <span class="calendar-icon"
+                        ><app-calender-icon></app-calender-icon
+                      ></span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="89475639" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="EIB00245" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+
+                  <td>04</td>
+                  <td>LV2056</td>
+                  <td>
+                    <div class="img-box">
+                      <img src="assets/invoice.svg" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="Feb 25 - Mar 25" />
+                      <span class="calendar-icon"
+                        ><app-calender-icon></app-calender-icon
+                      ></span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="89475639" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="EIB00245" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+
+                  <td>05</td>
+                  <td>LV2056</td>
+                  <td>
+                    <div class="img-box">
+                      <img src="assets/invoice.svg" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="Feb 25 - Mar 25" />
+                      <span class="calendar-icon"
+                        ><app-calender-icon></app-calender-icon
+                      ></span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="89475639" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="EIB00245" />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3" *ngIf="showCheckSection$()">
+      <div class="cmmnTblOuter">
+        <div class="rent-cheque-counter">
+          <span class="title">Additional Cheques </span>
+          <div class="counter-wrapper">
+            <span class="text-btn">No of Cheques :</span>
+            <button class="btn-circle minus-btn" (click)="decrement()">
+              –
+            </button>
+            <span class="count">{{ chequeCount }}</span>
+            <button class="btn-circle plus-btn" (click)="increment()">+</button>
+          </div>
+        </div>
+        <div class="cmmnTblHdr">
+          <div class="row g-3 align-items-center">
+            <div class="col-md"></div>
+            <div class="col-md-auto">
+              <div class="d-flex align-items-center gap-2 gap-md-3"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cmmnTbl">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>
+                    <div class="checkbox-input">
+                      <input type="checkbox" />
+                    </div>
+                  </th>
+                  <th>{{ "SI.No" | translate }}</th>
+                  <th>{{ "Reference ID" | translate }}</th>
+                  <th>{{ "Payment Type" }}</th>
+                  <th width="200px">
+                    {{ "Photo" | translate }}
+                  </th>
+
+                  <th width="200">{{ "Origin Bank" }}</th>
+                  <th>{{ "Origin Account No" }}</th>
+                  <th>{{ "Origin IFSC Code" }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+
+                  <td>01</td>
+                  <td>LV2056</td>
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="img-box">
+                      <img src="assets/invoice.svg" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="89475639" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="EIB00245" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+
+                  <td>02</td>
+                  <td>LV2056</td>
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="img-box">
+                      <img src="assets/invoice.svg" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <app-custom-select
+                        width="168px"
+                        placeholder="EIB"
+                      ></app-custom-select>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="89475639" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="input-box">
+                      <input type="text" value="EIB00245" />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3">
+      <app-white-card>
+        <div class="template-header">
+          <app-custom-select
+            placeholder="Temaplate: Lease Agreement"
+          ></app-custom-select>
+        </div>
+      </app-white-card>
+    </div>
+  </form>
+</div>
+
+<ng-template #additionalDocumentContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "Additional Document" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-aditionaldocument #additionalDocumentComponent></app-aditionaldocument>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button type="button" class="btn btnCommon">
+      <!-- (click)="onTenantSave(addTenantFormComponent, modal)" -->
+
+      {{ "Send" | translate }}
+    </button>
+  </div>
+</ng-template>

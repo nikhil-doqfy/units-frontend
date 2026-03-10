@@ -14,7 +14,7 @@ export class AuthService {
 
   constructor(
     private storageService: StorageService,
-    private http: HttpClient
+    private http: HttpClient,
   ) {}
 
   login(data: any) {
@@ -25,7 +25,7 @@ export class AuthService {
           this.storageService.setToken(resp['content'].access_token);
           this.storageService.setUserProfile(resp['content']);
           return resp;
-        })
+        }),
       );
   }
 
@@ -36,21 +36,21 @@ export class AuthService {
   verifyOtp(data: any) {
     return this.http.post(
       `${environment.SERVER_ADDRESS}/auth/otp/verify`,
-      data
+      data,
     );
   }
 
   resetPassword(data: any) {
     return this.http.post(
       `${environment.SERVER_ADDRESS}/auth/password/reset`,
-      data
+      data,
     );
   }
 
   changePassword(data: any) {
     return this.http.post(
       `${environment.SERVER_ADDRESS}/auth/change/password`,
-      data
+      data,
     );
   }
 

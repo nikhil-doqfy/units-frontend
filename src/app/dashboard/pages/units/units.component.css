@@ -1,0 +1,29 @@
+.tbl-action-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+:host ::ng-deep app-edit-icon i,
+:host ::ng-deep app-edit-icon svg {
+  font-size: 16px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+:host ::ng-deep .cmmnTblActnBtnDiv i,
+:host ::ng-deep .cmmnTblActnBtnDiv svg,
+:host ::ng-deep .cmmnTblActnBtnDiv button {
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.tbl-action-inline app-edit-icon:hover,
+.tbl-action-inline .cmmnTblActnBtnDiv:hover {
+  color: #2563eb;
+}

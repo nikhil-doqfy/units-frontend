@@ -62,7 +62,6 @@ a .simple {
   font-size: 14px;
 }
 
-/* Responsive */
 @media (max-width: 576px) {
   .noteCard {
     max-width: 100%;

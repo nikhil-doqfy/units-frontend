@@ -11,7 +11,7 @@ import { UploadFileModel } from '../../../shared/model/shared.model';
   styleUrl: './upload-document.component.css',
 })
 export class UploadDocumentComponent {
-  @Input() title = 'Drop your files here';
+  @Input() title = 'DROP_FILES_HERE';
   @Input() isMultipleFiles = false;
   @Input() fileTypes: string[] = ['jpg', 'jpeg', 'png'];
   @Input() maxSize = 20;
@@ -50,7 +50,7 @@ export class UploadDocumentComponent {
   private validateSingle(
     file: File,
     allowed: string[],
-    maxBytes: number
+    maxBytes: number,
   ): File[] {
     const ext = file.name.split('.').pop()?.toLowerCase() || '';
 
@@ -70,7 +70,7 @@ export class UploadDocumentComponent {
   private validateMultiple(
     files: File[],
     allowed: string[],
-    maxBytes: number
+    maxBytes: number,
   ): File[] {
     let totalSize = 0;
     const valid: File[] = [];
@@ -97,7 +97,7 @@ export class UploadDocumentComponent {
 
   private convertToBase64(
     file: File,
-    tempId: number
+    tempId: number,
   ): Promise<UploadFileModel> {
     return new Promise((resolve) => {
       let progress = 0;
@@ -106,7 +106,7 @@ export class UploadDocumentComponent {
       const emit = (
         p: number,
         status: 'processing' | 'done' | 'error',
-        err?: string
+        err?: string,
       ) => {
         this.uploadProgress.emit({
           tempId,

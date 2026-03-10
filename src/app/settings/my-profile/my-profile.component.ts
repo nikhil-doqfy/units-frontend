@@ -16,8 +16,8 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
 import { DashFormComponent } from '../../shared/component/dash-form/dash-form.component';
-import { EditIconComponent } from '../component/icons/edit-icon/edit-icon.component';
-import { UserService } from '../services/user.service';
+import { EditIconComponent } from '../../user/component/icons/edit-icon/edit-icon.component';
+import { UserService } from '../../user/services/user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { StorageService } from '../../shared/services/storage.service';
@@ -103,7 +103,7 @@ export class MyProfileComponent implements AfterViewInit {
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
   ngOnInit() {
-    // this.loadBre adcrumb();
+    // this.loadBreadcrumb();
     this.sharedService.initLanguage();
     this.initLanguageListener();
     this.getUserProfileData();
@@ -131,6 +131,8 @@ export class MyProfileComponent implements AfterViewInit {
     this.sharedService.setLanguage(lang);
   }
 
+  showDetailView: boolean = false;
+
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -138,14 +140,19 @@ export class MyProfileComponent implements AfterViewInit {
         this.loadBreadcrumb();
       });
   }
-
   loadBreadcrumb() {
-    this.setBreadCrumb([
-      {
-        label: 'PAGE_TITLE.DASHBOARD',
-        link: '/dashboard/home',
-      },
-    ]);
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/My Profile' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.MY_PROFILE', link: '' },
+      ]);
+    }
   }
 
   setBreadCrumb(breadCrumb: BreadCrumb[]) {

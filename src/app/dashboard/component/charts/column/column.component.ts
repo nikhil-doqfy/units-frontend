@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { OnChanges, SimpleChanges } from '@angular/core';
 import {
   ApexAxisChartSeries,
@@ -32,7 +32,7 @@ export type ChartOptions = {
   templateUrl: './column.component.html',
   styleUrl: './column.component.css',
 })
-export class ColumnChartComponent implements OnChanges {
+export class ColumnChartComponent implements OnChanges, AfterViewInit {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   @Input() data: { name: string; value: number }[] = [];
@@ -71,8 +71,6 @@ export class ColumnChartComponent implements OnChanges {
         enabled: false,
       },
       yaxis: {
-        // min: 100000,
-        // max: 500000,
         labels: {
           formatter: (value) => 'AED ' + value.toLocaleString('en-IN'),
         },
@@ -84,19 +82,72 @@ export class ColumnChartComponent implements OnChanges {
       },
     };
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] && this.data?.length) {
-      this.chartOptions.series = [
-        {
-          name: 'My-series',
-          data: this.data.map((d) => d.value),
-        },
-      ];
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['data'] && this.data?.length) {
+  //     this.chartOptions.series = [
+  //       {
+  //         name: 'My-series',
+  //         data: this.data.map((d) => d.value),
+  //       },
+  //     ];
 
-      this.chartOptions.xaxis = {
-        ...this.chartOptions.xaxis,
-        categories: this.data.map((d) => d.name),
-      };
+  //     this.chartOptions.xaxis = {
+  //       ...this.chartOptions.xaxis,
+  //       categories: this.data.map((d) => d.name),
+  //     };
+  //   }
+
+  ngAfterViewInit() {
+    if (this.data?.length) {
+      this.updateChart();
     }
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data?.length) {
+      this.updateChart();
+    }
+  }
+  private updateChart() {
+    const values = this.data.map((d) => d.value);
+    const categories = this.data.map((d) => d.name);
+
+    this.chart.updateSeries([
+      {
+        name: 'My-series',
+        data: values,
+      },
+    ]);
+
+    this.chart.updateOptions(
+      {
+        xaxis: {
+          categories,
+        },
+      },
+
+      true,
+    );
+  }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['data'] && this.data?.length && this.chart) {
+  //     const values = this.data.map((d) => d.value);
+  //     const categories = this.data.map((d) => d.name);
+
+  //     this.chart.updateOptions(
+  //       {
+  //         series: [
+  //           {
+  //             name: 'My-series',
+  //             data: values,
+  //           },
+  //         ],
+  //         xaxis: {
+  //           categories: categories,
+  //         },
+  //       },
+  //       true,
+  //     );
+  //   }
+  // }
 }

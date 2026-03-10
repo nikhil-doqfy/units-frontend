@@ -3,20 +3,24 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { UserComponent } from './user.component';
 
-import { MyProfileComponent } from './my-profile/my-profile.component';
+import { AuditlogComponent } from './auditlog/auditlog.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: UserComponent,
-        children: [
-            { path: '', redirectTo: 'my-profile', title: 'My Profile | Doqfy', pathMatch: 'full' },
-            { path: 'my-profile', title: 'My Profile | Doqfy', component: MyProfileComponent, data: { title: 'My Profile' } },
-        ]
-    },
+  {
+    path: '',
+    component: UserComponent,
+    children: [
+      {
+        path: 'auditlog',
+
+        component: AuditlogComponent,
+        data: { titleKey: 'PAGE_TITLE.AUDIT_LOG' },
+      },
+    ],
+  },
 ];
 
 @NgModule({
-    imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class UserModule { }
+export class UserModule {}

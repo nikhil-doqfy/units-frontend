@@ -44,5 +44,13 @@
     <button *ngSwitchCase="'reject'" type="button">Reject</button>
     <button *ngSwitchCase="'rejectOrange'" type="button">Reject</button>
     <button *ngSwitchCase="'approve'" type="button">Approve</button>
+    <i *ngSwitchCase="'restart'" class="restartAction">
+      <span class="restart-icon">⟳</span>
+      <span class="restart-text">Restart</span>
+    </i>
+    <i *ngSwitchCase="'history'" class="restartAction">
+      <span class="restart-icon"><app-history-icon></app-history-icon></span>
+      <span class="restart-text">History</span>
+    </i>
   </ng-container>
 </button>

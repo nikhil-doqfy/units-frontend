@@ -1,0 +1,14 @@
+<div class="top-alert" *ngIf="showMsg$()">
+  <span class="icon"><app-warning-icon></app-warning-icon></span>
+  <span class="text">{{ msgText$() }}</span>
+</div>
+
+<div class="page-wrapper mt-3" [class.blur]="showMsg$()">
+  <app-white-card>
+    <div class="template-header">
+      <app-custom-select
+        placeholder="Temaplate: Lease Agreement"
+      ></app-custom-select>
+    </div>
+  </app-white-card>
+</div>

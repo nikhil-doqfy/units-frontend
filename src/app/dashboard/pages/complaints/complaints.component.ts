@@ -89,6 +89,8 @@ export class ComplaintsComponent {
   totalRecords: number = 0;
   rowsPerPage: number = 10;
   currentPage: number = 1;
+  selectedProperty: any = null;
+
   showDetailView: boolean = false;
   showMenu = false;
   complaintsStatus: any = [];
@@ -132,6 +134,12 @@ export class ComplaintsComponent {
     total_in_progress: 0,
     total_rejected: 0,
   };
+  photos: string[] = [
+    '../assets/complaint/complaint-3.png',
+    '../assets/complaint/complaint-6.svg',
+    'assets/complaint/complaint-7.svg',
+    'assets/complaint/complaint-8.svg',
+  ];
   assignEnginnerForm!: FormGroup;
   constructor(
     private destroyRef: DestroyRef,
@@ -220,14 +228,14 @@ export class ComplaintsComponent {
       error: (err) => console.error('Error fetching complaints:', err),
     });
   }
-  // handleViewClick(item: any): void {
-  //   this.selectedProperty = item;
-  //   this.showDetailView = true;
-  // }
-  handleViewClick(ticketID: number): void {
-    // this.showDetailView = true;
-    this.router.navigate(['/dashboard/ticket/detail/', ticketID]);
+  handleViewClick(item: any): void {
+    this.selectedProperty = item;
+    this.showDetailView = true;
   }
+  // handleViewClick(ticketID: number): void {
+  //   // this.showDetailView = true;
+  //   this.router.navigate(['/dashboard/ticket/detail/', ticketID]);
+  // }
   handleBackClick(): void {
     this.showDetailView = false;
     this.selectedProperty = null;
@@ -236,12 +244,7 @@ export class ComplaintsComponent {
     this.searchTerm = search;
     this.onComplaintsSearch$.next(search);
   }
-  photos: string[] = [
-    '../assets/complaint/complaint-3.png',
-    '../assets/complaint/complaint-6.svg',
-    'assets/complaint/complaint-7.svg',
-    'assets/complaint/complaint-8.svg',
-  ];
+
   onUpload(event: any) {
     this.uploadedImages.push(event);
   }
@@ -310,7 +313,6 @@ export class ComplaintsComponent {
   closeComplaintModal() {
     this.showComplaintModal = false;
   }
-  selectedProperty: any = null;
 
   //--------------------------------------------complaint details--------------------------------------------------------------------
   loadDetailView(ticketID: number): void {

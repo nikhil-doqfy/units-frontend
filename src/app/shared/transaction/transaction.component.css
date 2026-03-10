@@ -1,0 +1,207 @@
+.user-info {
+  background: #f1f3f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.details {
+  font-size: 14px;
+  line-height: 1.4;
+}
+.validation-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  font-size: 14px;
+}
+
+.validation-table th {
+  background: #1e66d0;
+  color: white;
+  font-weight: 500;
+  text-align: left;
+  padding: 10px;
+}
+
+.validation-table td {
+  padding: 10px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.validation-table tr:last-child td {
+  border-bottom: none;
+}
+
+.bold {
+  font-weight: 600;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #ff6a00;
+  border-radius: 50%;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.reject {
+  margin-left: auto;
+  background: #ff6500;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.approve {
+  background: #458453;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+@media (max-width: 520px) {
+  .custom-modal {
+    width: 100%;
+    height: auto;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.user-info,
+.details {
+  margin-bottom: 16px;
+}
+.details > div {
+  margin-bottom: 6px;
+}
+
+.details > div:last-child {
+  margin-bottom: 0;
+}
+
+.validation-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  font-size: 14px;
+}
+
+.validation-table th {
+  background: #0c6ce9;
+  color: white;
+  font-weight: 500;
+  text-align: left;
+  padding: 10px;
+}
+
+.validation-table td {
+  padding: 10px;
+  border: 1px solid #e5e5e5;
+}
+
+.bold {
+  font-weight: 600;
+}
+.table-wrapper {
+  display: inline-block;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.validation-table th,
+.validation-table td {
+  min-width: 146px;
+
+  height: 49px;
+  padding: 0 12px;
+  vertical-align: middle;
+  line-height: 49px;
+  border: 1px solid #e5e5e5;
+  white-space: nowrap;
+}
+.dot {
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: #ff6a00;
+  border-radius: 50%;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+}
+.dot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  background-color: #ff6a00;
+  border-radius: 50%;
+}
+
+.dot::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 165, 0, 0.3);
+  border-radius: 50%;
+  z-index: -1;
+}
+.dot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  background-color: #ff6a00;
+  border-radius: 50%;
+  margin-right: auto;
+}
+
+.dot::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 165, 0, 0.3);
+  border-radius: 50%;
+  z-index: -1;
+}

@@ -1,223 +1,270 @@
-<app-white-card class="monthly-summary-card" *ngIf="!showDetailView">
-  <div class="rent-card">
-    <div
-      class="d-flex justify-content-between align-items-center mb-3 flex-wrap"
-    >
-      <div class="metric">
-        <div class="metric-value">
-          AED 1,20,573
-          <span class="percentage text-success">
-            12% <app-arrow></app-arrow> {{ "LAST_MONTH" | translate }}
-          </span>
-        </div>
-        <div class="metric-label">
-          {{ "AMOUNT_RECEIVED" | translate }}
-        </div>
-      </div>
+<ng-container *ngIf="!showDetailView">
+  <div
+    class="mb-3"
+    *ngIf="currentRole === 'owner' || currentRole === 'property-manager'"
+  >
+    @if (showNavBar) {
+      <app-white-card>
+        <ng-container>
+          <div class="commonTabs analytics-header">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  [class.active]="activeTab === 'properties'"
+                  (click)="activeTab = 'properties'; showDetailView = false"
+                >
+                  {{ "RENT_ANALYTICS" | translate }}
+                </button>
+              </li>
 
-      <div class="metric">
-        <div class="metric-value">
-          AED 2,20,789
-          <span class="badge text-success"
-            >5678 {{ "CHEQUES" | translate }}</span
-          >
-        </div>
-        <div class="metric-label">{{ "CHEQUES_APPROVED" | translate }}</div>
-      </div>
-
-      <div class="metric">
-        <div class="metric-value">
-          AED 20,573
-          <span class="badge text-warning"
-            >1124 {{ "CHEQUES" | translate }}</span
-          >
-        </div>
-        <div class="metric-label">{{ "CHEQUES_DEPOSITED" | translate }}</div>
-      </div>
-
-      <app-custom-select
-        [options]="[
-          'Falcom city',
-          'Novatis AG...',
-          'Agriculture',
-          'Honda',
-          'TVS',
-          'Samsung',
-        ]"
-        [placeholder]="selected"
-        [selectedOption]="selected"
-        (optionSelected)="onOptionSelected($event)"
-        [isFilter]="true"
-      >
-      </app-custom-select>
-    </div>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  [class.active]="activeTab === 'leads'"
+                  (click)="activeTab = 'leads'; showDetailView = false"
+                >
+                  {{ "PROPERTY_ANALYSTICS" | translate }}
+                </button>
+              </li>
+            </ul>
+            <div class="analytics-info">
+              {{ "ANALYZE_REVENUE_COMPARE_PROPERTY" | translate }}
+            </div>
+          </div>
+        </ng-container>
+      </app-white-card>
+    }
   </div>
+  <ng-container *ngIf="activeTab === 'properties'">
+    <app-white-card class="monthly-summary-card" *ngIf="!showDetailView">
+      <div class="rent-card">
+        <div
+          class="d-flex justify-content-between align-items-center mb-3 flex-wrap"
+        >
+          <div class="metric">
+            <div class="metric-value">
+              AED 1,20,573
+              <span class="percentage text-success">
+                12% <app-arrow></app-arrow> {{ "LAST_MONTH" | translate }}
+              </span>
+            </div>
+            <div class="metric-label">
+              {{ "AMOUNT_RECEIVED" | translate }}
+            </div>
+          </div>
 
-  <app-column-chart></app-column-chart>
-</app-white-card>
+          <div class="metric">
+            <div class="metric-value">
+              AED 2,20,789
+              <span class="badge text-success"
+                >5678 {{ "CHEQUES" | translate }}</span
+              >
+            </div>
+            <div class="metric-label">{{ "CHEQUES_APPROVED" | translate }}</div>
+          </div>
 
-<div class="mt-3" *ngIf="!showDetailView">
-  <app-white-card>
-    <div class="cmmnTblHdr">
-      <div class="row g-3 align-items-center">
-        <div class="col-md">
-          <app-table-title
-            [title]="'RENT_AMOUNTS' | translate"
-            [subtitle]="'(' + totalRecords + ')'"
-            (onRefresh)="onRefresh()"
+          <div class="metric">
+            <div class="metric-value">
+              AED 20,573
+              <span class="badge text-warning"
+                >1124 {{ "CHEQUES" | translate }}</span
+              >
+            </div>
+            <div class="metric-label">
+              {{ "CHEQUES_DEPOSITED" | translate }}
+            </div>
+          </div>
+
+          <app-custom-select
+            [options]="[
+              'Falcom city',
+              'Novatis AG...',
+              'Agriculture',
+              'Honda',
+              'TVS',
+              'Samsung',
+            ]"
+            [placeholder]="selected"
+            [selectedOption]="selected"
+            (optionSelected)="onOptionSelected($event)"
+            [isFilter]="true"
           >
-          </app-table-title>
-        </div>
-
-        <div class="col-md-auto">
-          <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search
-              placeholder="{{ 'SEARCH_HERE' | translate }}"
-              (onValueChange)="searchTextChange($event)"
-            >
-            </app-table-search>
-
-            <app-custom-select
-              [options]="[
-                'Falcom city',
-                'Novatis AG...',
-                'Agriculture',
-                'Honda',
-                'TVS',
-                'Samsung',
-              ]"
-              [placeholder]="selected"
-              [selectedOption]="selected"
-              (optionSelected)="onOptionSelected($event)"
-              [isFilter]="true"
-            >
-            </app-custom-select>
-
-            <app-custom-select
-              [options]="[
-                'Falcom city',
-                'Novatis AG...',
-                'Agriculture',
-                'Honda',
-                'TVS',
-                'Samsung',
-              ]"
-              [placeholder]="selected"
-              [selectedOption]="selected"
-              (optionSelected)="onOptionSelected($event)"
-              [isFilter]="true"
-            >
-            </app-custom-select>
-
-            <app-custom-select
-              [options]="[
-                'Falcom city',
-                'Novatis AG...',
-                'Agriculture',
-                'Honda',
-                'TVS',
-                'Samsung',
-              ]"
-              [placeholder]="selected"
-              [selectedOption]="selected"
-              (optionSelected)="onOptionSelected($event)"
-              [isFilter]="true"
-            >
-            </app-custom-select>
-
-            <button
-              type="button"
-              class="btn btnCommonsx btnMinWidth responsive-btn"
-              (click)="toAddRenatlAcc()"
-            >
-              {{ "ADD_ACCOUNT" | translate }}
-            </button>
-          </div>
+          </app-custom-select>
         </div>
       </div>
-    </div>
 
-    <div class="lease-wrapper">
-      <div
-        class="lease-card"
-        *ngFor="let l of leases"
-        (click)="onLeaseClick(l)"
-      >
-        <div class="lease-header">
-          <h4>{{ l.title }}</h4>
-          <div class="right">
-            <span class="lease-no"
-              >{{ "LEASE_NO" | translate }}: {{ l.leaseNo }}</span
-            >
-            <span class="status" [ngClass]="l.status.toLowerCase()">
-              {{ l.status }}
-            </span>
+      <app-column-chart></app-column-chart>
+    </app-white-card>
+
+    <div class="mt-3">
+      <app-white-card>
+        <div class="cmmnTblHdr">
+          <div class="row g-3 align-items-center">
+            <div class="col-md">
+              <app-table-title
+                [title]="'RENT_AMOUNTS' | translate"
+                [subtitle]="'(' + totalRecords + ')'"
+                (onRefresh)="onRefresh()"
+              >
+              </app-table-title>
+            </div>
+
+            <div class="col-md-auto">
+              <div class="d-flex align-items-center gap-2 gap-md-3">
+                <app-table-search
+                  placeholder="{{ 'SEARCH_HERE' | translate }}"
+                  (onValueChange)="searchTextChange($event)"
+                >
+                </app-table-search>
+
+                <app-custom-select
+                  [options]="[
+                    'Falcom city',
+                    'Novatis AG...',
+                    'Agriculture',
+                    'Honda',
+                    'TVS',
+                    'Samsung',
+                  ]"
+                  [placeholder]="selected"
+                  [selectedOption]="selected"
+                  (optionSelected)="onOptionSelected($event)"
+                  [isFilter]="true"
+                >
+                </app-custom-select>
+
+                <app-custom-select
+                  [options]="[
+                    'Falcom city',
+                    'Novatis AG...',
+                    'Agriculture',
+                    'Honda',
+                    'TVS',
+                    'Samsung',
+                  ]"
+                  [placeholder]="selected"
+                  [selectedOption]="selected"
+                  (optionSelected)="onOptionSelected($event)"
+                  [isFilter]="true"
+                >
+                </app-custom-select>
+
+                <app-custom-select
+                  [options]="[
+                    'Falcom city',
+                    'Novatis AG...',
+                    'Agriculture',
+                    'Honda',
+                    'TVS',
+                    'Samsung',
+                  ]"
+                  [placeholder]="selected"
+                  [selectedOption]="selected"
+                  (optionSelected)="onOptionSelected($event)"
+                  [isFilter]="true"
+                >
+                </app-custom-select>
+
+                <button
+                  type="button"
+                  class="btn btnCommonsx btnMinWidth responsive-btn"
+                  (click)="toAddRenatlAcc()"
+                >
+                  {{ "ADD_ACCOUNT" | translate }}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="lease-grid">
-          <div>
-            <label>{{ "TENANT_NO" | translate }}</label>
-            <span>{{ l.tenantNo }}</span>
-          </div>
+        <div class="lease-wrapper">
+          <div
+            class="lease-card"
+            *ngFor="let l of leases"
+            (click)="onLeaseClick(l)"
+          >
+            <div class="lease-header">
+              <h4>{{ l.title }}</h4>
+              <div class="right">
+                <span class="lease-no"
+                  >{{ "LEASE_NO" | translate }}: {{ l.leaseNo }}</span
+                >
+                <span class="status" [ngClass]="l.status.toLowerCase()">
+                  {{ l.status }}
+                </span>
+              </div>
+            </div>
 
-          <div>
-            <label>{{ "PERIOD_FROM" | translate }}</label>
-            <span>{{ l.period_from | date: "dd/MM/yyyy" }}</span>
-          </div>
+            <div class="lease-grid">
+              <div>
+                <label>{{ "TENANT_NO" | translate }}</label>
+                <span>{{ l.tenantNo }}</span>
+              </div>
 
-          <div>
-            <label>{{ "PERIOD_TO" | translate }}</label>
-            <span>{{ l.period_to | date: "dd/MM/yyyy" }}</span>
-          </div>
+              <div>
+                <label>{{ "PERIOD_FROM" | translate }}</label>
+                <span>{{ l.period_from | date: "dd/MM/yyyy" }}</span>
+              </div>
 
-          <div>
-            <label>{{ "UNIT_TYPE" | translate }}</label>
-            <span>{{ l.unitType }}</span>
-          </div>
+              <div>
+                <label>{{ "PERIOD_TO" | translate }}</label>
+                <span>{{ l.period_to | date: "dd/MM/yyyy" }}</span>
+              </div>
 
-          <div>
-            <label>{{ "YEAR_RENT" | translate }}</label>
-            <span>{{ l.year_rent || "N/A" }}</span>
-          </div>
+              <div>
+                <label>{{ "UNIT_TYPE" | translate }}</label>
+                <span>{{ l.unitType }}</span>
+              </div>
 
-          <div>
-            <label>{{ "OTHER_CHARGES" | translate }}</label>
-            <span>{{ l.other_charges || "N/A" }}</span>
-          </div>
+              <div>
+                <label>{{ "YEAR_RENT" | translate }}</label>
+                <span>{{ l.year_rent || "N/A" }}</span>
+              </div>
 
-          <div>
-            <label>{{ "VAT" | translate }}</label>
-            <span>{{ l.vat || "N/A" }}</span>
-          </div>
+              <div>
+                <label>{{ "OTHER_CHARGES" | translate }}</label>
+                <span>{{ l.other_charges || "N/A" }}</span>
+              </div>
 
-          <div>
-            <label>{{ "TOTAL_RENT" | translate }}</label>
-            <strong>{{ l.total_rent || "N/A" }}</strong>
+              <div>
+                <label>{{ "VAT" | translate }}</label>
+                <span>{{ l.vat || "N/A" }}</span>
+              </div>
+
+              <div>
+                <label>{{ "TOTAL_RENT" | translate }}</label>
+                <strong>{{ l.total_rent || "N/A" }}</strong>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
+        <div class="cmmnTblFtr">
+          <app-table-select
+            [componentName]="componentName"
+            [rowsPerPage]="rowsPerPage"
+            [rowsPerPageOptions]="rowsPerPageOptions"
+          >
+          </app-table-select>
+
+          <app-table-pagination
+            [componentName]="componentName"
+            [currentPage]="currentPage"
+            [totalRecords]="totalRecords"
+            [rowsPerPage]="rowsPerPage"
+          >
+          </app-table-pagination>
+        </div>
+      </app-white-card>
     </div>
-
-    <div class="cmmnTblFtr">
-      <app-table-select
-        [componentName]="componentName"
-        [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-      >
-      </app-table-select>
-
-      <app-table-pagination
-        [componentName]="componentName"
-        [currentPage]="currentPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage"
-      >
-      </app-table-pagination>
-    </div>
-  </app-white-card>
-</div>
-
+  </ng-container>
+  <ng-container *ngIf="activeTab === 'leads'">
+    <app-property-analytics
+      (detailViewChange)="onPropertyDetailToggle($event)"
+    ></app-property-analytics>
+  </ng-container>
+</ng-container>
 <ng-container *ngIf="showDetailView">
   <app-table-view-card
     title="Abhram|Khaleeja Building|302"
@@ -228,7 +275,7 @@
       { label: getLabel('PERIOD_TO'), value: '28/02/25' },
       { label: getLabel('UNIT_TYPE'), value: 'Residential' },
       { label: getLabel('YEAR_RENT'), value: '67,000' },
-      { label: getLabel('OTHER_CHARGES'), value: '13,000' },
+      { label: getLabel('OTHER_CHARGESE'), value: '13,000' },
       { label: getLabel('VAT'), value: '--' },
       { label: getLabel('TOTAL_RENT'), value: '1,00,000' },
     ]"
@@ -251,66 +298,184 @@
         </button>
       </div>
     </div>
+    <div rental class="mt-3">
+      <h5 class="section-title">{{ "OTHER_CHARGES" | translate }}</h5>
 
-    <div rental class="other-charges-box mt-3">
-      <h6 class="section-title">{{ "OTHER_CHARGES" | translate }}</h6>
+      <div class="other-charges-box mt-3">
+        <div class="charges-grid">
+          <div class="charge-item">
+            <label>Admin Fee <span>VAT &#64;5%</span></label>
+            <small>32.71 + 1.64</small>
+            <strong>34.35</strong>
+          </div>
 
-      <div class="charges-grid">
-        <div class="charge-item">
-          <label>Admin Fee <span>VAT &#64;5%</span></label>
-          <small>32.71 + 1.64</small>
-          <strong>34.35</strong>
+          <div class="charge-item">
+            <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
+            <small>175.65 + 1.64</small>
+            <strong>175.65</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Gas Charges <span>VAT &#64;5%</span></label>
+            <small>1,000.00 + 50.00</small>
+            <strong>1,050.00</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Commission - Dubai <span>VAT &#64;5%</span></label>
+            <small>1,200.00 + 60.00</small>
+            <strong>1,260.00</strong>
+          </div>
+
+          <div class="charge-item">
+            <label>Security Deposit <span>VAT &#64;nill</span></label>
+            <small>2,400.00 + 0.00</small>
+            <strong>2,400.00</strong>
+          </div>
         </div>
 
-        <div class="charge-item">
-          <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
-          <small>175.65 + 1.64</small>
-          <strong>175.65</strong>
-        </div>
+        <div class="payment-info">
+          <div>
+            <label>{{ "STATUS" | translate }}</label>
+            <span class="paid">Paid</span>
+          </div>
 
-        <div class="charge-item">
-          <label>Gas Charges <span>VAT &#64;5%</span></label>
-          <small>1,000.00 + 50.00</small>
-          <strong>1,050.00</strong>
-        </div>
+          <div>
+            <label>{{ "PAYMENT_TYPE" | translate }}</label>
+            <strong>Cheque</strong>
+          </div>
 
-        <div class="charge-item">
-          <label>Commission - Dubai <span>VAT &#64;5%</span></label>
-          <small>1,200.00 + 60.00</small>
-          <strong>1,260.00</strong>
-        </div>
+          <div>
+            <label>{{ "CHEQUE_NUMBER" | translate }}</label>
+            <strong>6738398268291</strong>
+          </div>
 
-        <div class="charge-item">
-          <label>Security Deposit <span>VAT &#64;nill</span></label>
-          <small>2,400.00 + 0.00</small>
-          <strong>2,400.00</strong>
+          <div>
+            <label>{{ "TOTAL_AMOUNT" | translate }}</label>
+            <strong>11,260.00</strong>
+          </div>
+          <div class=""></div>
         </div>
-      </div>
-
-      <div class="payment-info">
-        <div>
-          <label>{{ "STATUS" | translate }}</label>
-          <span class="paid">Paid</span>
-        </div>
-
-        <div>
-          <label>{{ "PAYMENT_TYPE" | translate }}</label>
-          <strong>Cheque</strong>
-        </div>
-
-        <div>
-          <label>{{ "CHEQUE_NUMBER" | translate }}</label>
-          <strong>6738398268291</strong>
-        </div>
-
-        <div>
-          <label>{{ "TOTAL_AMOUNT" | translate }}</label>
-          <strong>11,260.00</strong>
+        <div class="invoice-section mt-3">
+          <div class="mt-1">
+            <span
+              ><i><app-invoice-icon></app-invoice-icon></i> Invoice Generated
+              Succesfully</span
+            >
+            <a href="#" (click)="onViewInvoiceClick(selectedLease, $event)"
+              >View Invoice</a
+            >
+          </div>
         </div>
       </div>
     </div>
   </app-table-view-card>
+  <div class="mt-3">
+    <app-white-card title="Photos & Documents">
+      <div class="commonTabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="tenantDocument-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tenantDocument-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="tenantDocument-tab-pane"
+              aria-selected="false"
+            >
+              Tenants Documents
+            </button>
+          </li>
 
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="ejariDocuments-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#ejariDocuments-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="ejariDocuments-tab-pane"
+              aria-selected="false"
+            >
+              Ejari Documents
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="commonTabsContent">
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="tenantDocument-tab-pane"
+            role="tabpanel"
+            aria-labelledby="tenantDocument-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="ejariDocuments-tab-pane"
+            role="tabpanel"
+            aria-labelledby="ejariDocuments-tab"
+            tabindex="0"
+          >
+            <div class="row g-2">
+              <div class="col-auto">
+                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Finances.png" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
+              </div>
+              <div class="col-auto">
+                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+  <div class="mt-3">
+    <app-white-card>
+      <div class="summary-card">
+        <div class="summary-item">
+          <div class="amount">{{ totalAmount }}</div>
+          <div class="label">Total Rental Amount</div>
+        </div>
+
+        <div class="summary-item">
+          <div class="amount">{{ receivedAmount }}</div>
+          <div class="label">Amount Received</div>
+        </div>
+
+        <div class="summary-item">
+          <div class="amount">{{ pendingAmount }}</div>
+          <div class="label">Pending Amount</div>
+        </div>
+      </div>
+      <app-area-graph></app-area-graph>
+    </app-white-card>
+  </div>
   <div class="cmmnTblOuter mt-3">
     <div class="cmmnTblHdr">
       <div class="row align-items-center">
@@ -323,6 +488,79 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="Search here..." />
+
+            <div class="report-top-bar d-flex align-items-start gap-2">
+              <!-- Receipt Dropdown -->
+              <div class="custom-dropdown position-relative">
+                <button class="btn cmmnTblFltrBtn" (click)="toggleReceipt()">
+                  <i><app-receipt-icon></app-receipt-icon></i>
+                  Receipt
+                  <i><app-arrow-down-icon></app-arrow-down-icon></i>
+                </button>
+
+                <div class="custom-menu" *ngIf="showReceiptDropdown">
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('rental')"
+                  >
+                    Rental
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('charges')"
+                  >
+                    Other Charges
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    (click)="selectReceiptType('combined')"
+                  >
+                    Combined
+                  </div>
+                </div>
+              </div>
+
+              <!-- Month Dropdown (Side by Side) -->
+              <div
+                class="custom-dropdown position-relative"
+                *ngIf="showMonthDropdown"
+              >
+                <div class="custom-menu filter-box">
+                  <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="jan" />
+                    <label for="jan">Jan 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="feb"
+                      checked
+                    />
+                    <label for="feb">Feb 2025</label>
+                  </div>
+
+                  <div class="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="mar"
+                      checked
+                    />
+                    <label for="mar">Mar 2025</label>
+                  </div>
+
+                  <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="apr" />
+                    <label for="apr">Apr 2025</label>
+                  </div>
+
+                  <button class="btn generate-btn w-100">Generate</button>
+                </div>
+              </div>
+            </div>
+
             <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
@@ -351,7 +589,9 @@
                 <button type="button">{{ "BANK_NAME" | translate }}</button>
               </th>
               <th>
-                <button type="button">{{ "BANK_ACCOUNT" | translate }}</button>
+                <button type="button">
+                  {{ "BANK_ACCOUNT" | translate }}
+                </button>
               </th>
               <th>{{ "CHEQUE_NUMBER" | translate }}</th>
               <th>{{ "CHEQUE_DATE" | translate }}</th>
@@ -359,51 +599,10 @@
               <th>{{ "PURPOSE" | translate }}</th>
               <th>{{ "STATUS" | translate }}</th>
               <th>{{ "AMOUNT" | translate }}</th>
+              <th>{{ "Additional Charges" }}</th>
               <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- @for(property of pmcList[0]?.properties_assigned; track $index){
-            <tr>
-              <td>{{ property?.property_code || "N/A" }}</td>
-              <td>
-                <app-table-img-item
-                  [img]="
-                    property?.property_images?.[0]?.data ||
-                    '../../assets/property/property-img-default.svg'
-                  "
-                  size="md"
-                  [title]="property?.property_name"
-                />
-              </td>
-              <td>
-                @if(property?.tennat && property?.tennat?.name){
-                <app-table-img-item
-                  [img]="
-                    property?.tennat?.profile_image ||
-                    '../../assets/userDefaultProImg.png'
-                  "
-                  [title]="property?.tennat?.name"
-                />
-                }@else {N/A}
-              </td>
-              <td>{{ property.tenancy_status }}</td>
-              <td>{{ property.dimension }}</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn
-                    type="download"
-                    (clicked)="handleDownloadDocumentClick()"
-                  />
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewDocumentClick()"
-                  />
-                </div>
-              </td>
-            </tr>
-            } -->
-          </tbody>
 
           <tbody>
             <tr>
@@ -413,25 +612,27 @@
               <td>928374</td>
               <td>10/10/2024</td>
               <td>Cheque</td>
-              <td>Rent</td>
+              <td>Jan 2025 Rent</td>
 
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                  >
+                  </app-badge>
 
-                  <span class="status-line done"></span>
-
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Credited</span>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
 
               <td>9,000</td>
+              <td>---</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
@@ -451,25 +652,39 @@
               <td>857493</td>
               <td>11/01/2024</td>
               <td>Cheque</td>
-              <td>Rent</td>
+              <td>Feb 2025 Rent</td>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                  >
+                  </app-badge>
 
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
-
-                  <span class="status-line done"></span>
-
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Credited</span>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
 
               <td>9,000</td>
+              <td>
+                300.00
+                <i><app-termscondition-icon></app-termscondition-icon></i>
+
+                <div class="badge-wrapper">
+                  <div class="additional cheque">
+                    <span>Cheque bounce</span>
+                  </div>
+
+                  <div class="additional tax">
+                    <span>Tax</span>
+                  </div>
+                </div>
+              </td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
@@ -488,24 +703,25 @@
               <td>746382</td>
               <td>11/15/2024</td>
               <td>Cheque</td>
-              <td>Rent</td>
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
+              <td>Mar 2025 Rent</td>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                  >
+                  </app-badge>
 
-                  <span class="status-line done"></span>
-
-                  <div class="status-step danger">
-                    <span class="dot"></span>
-                    <span class="text">InProgress</span>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
-
               <td>9,000</td>
+              <td>---</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
@@ -526,24 +742,25 @@
               <td>Cheque</td>
               <td>Other Charges</td>
 
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                  >
+                  </app-badge>
 
-                  <span class="status-line done"></span>
-
-                  <div class="status-step danger">
-                    <span class="dot"></span>
-                    <span class="text">Bounce</span>
-                    <a class="replace-link">Replace Cheque</a>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
 
               <td>9,000</td>
+              <td>---</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
@@ -562,24 +779,27 @@
               <td>524160</td>
               <td>12/15/2024</td>
               <td>Cheque</td>
-              <td>Rent</td>
-              <td>
-                <div class="status-track">
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Disburse</span>
-                  </div>
+              <td>Apr 2025 Rent</td>
+              <td class="status-cell">
+                <div class="status-wrapper">
+                  <app-badge
+                    [title]="selectedq?.label || 'Amount Credited'"
+                    [status]="selectedq?.status || 'green'"
+                    (click)="toggleDropdown()"
+                    [enableBg]="true"
+                  >
+                  </app-badge>
 
-                  <span class="status-line done"></span>
-
-                  <div class="status-step done">
-                    <span class="dot"></span>
-                    <span class="text">Credited</span>
-                  </div>
+                  <app-status-dropdown
+                    [show]="showDropdown"
+                    (select)="onStatusSelect($event)"
+                  >
+                  </app-status-dropdown>
                 </div>
               </td>
 
               <td>9,000</td>
+              <td>---</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
@@ -611,4 +831,178 @@
       </app-table-pagination>
     </div>
   </div>
+  <div class="mt-3">
+    <app-white-card [title]="'ACTIVITY_HISTORY' | translate">
+      <div class="activityWrapper">
+        <div class="year">2025</div>
+
+        <div class="weekLabel">
+          This week
+          <span class="line"></span>
+        </div>
+
+        <!-- Item 1 -->
+        <div class="activityItem">
+          <div class="icon orange">H</div>
+
+          <div class="content">
+            <div class="title"><strong>Ali</strong> added notes</div>
+            <div class="title"><strong>Cheques</strong> changes</div>
+            <span> Old Cheque 83683638363838 to new cheque 726826282627 </span>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="activityItem mt-3">
+          <div class="icon orange">H</div>
+          <div class="content simple"><strong>Hajji</strong> added Account</div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="activityItem">
+          <div class="icon blue">P</div>
+          <div class="content simple">
+            <strong>Prnjitha</strong> account was created by
+            <strong>Hajji</strong>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showInvoiceDetails">
+  <app-table-view-card
+    [showImage]="false"
+    [title]="'RECEIPT DETAILS' | translate"
+    [showDownload]="true"
+    [showShare]="true"
+    [showBack]="false"
+    (download)="handleDownload($event)"
+    (share)="handleShare($event)"
+  >
+    <div rental class="other-charges-box mt-3">
+      <div class="invoice-info">
+        <div class="info-col">
+          <h5>Invoice to:</h5>
+          <p class="bold">ABHRAM</p>
+          <p>Addr: P.O. BOX # 95801, Sharjah</p>
+          <p>Phone: +41-827282982</p>
+          <p>TRN: 100300564000003</p>
+        </div>
+
+        <div class="info-col">
+          <h5>Property Details:</h5>
+          <p class="bold">KHALEEJA BUILDING | 302</p>
+          <p>Period: 01-Sep-2025 TO 31-Aug-2026</p>
+          <p>Lease No: LV-25-01335</p>
+          <p>Ref No: P48/LGI-25-13230</p>
+        </div>
+      </div>
+    </div>
+
+    <div rental class="mt-3">
+      <div class="cmmnTblBody">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{ "SI.No" | translate }}</th>
+                <th>
+                  {{ "Invoice NO" | translate }}
+                </th>
+
+                <th>{{ "Description" | translate }}</th>
+                <th>{{ "Invoice Date" | translate }}</th>
+                <th>{{ "Prepared By" | translate }}</th>
+                <th>{{ "Payment mode" | translate }}</th>
+                <th>{{ "Reference No" | translate }}</th>
+                <th>{{ "Status" | translate }}</th>
+                <th>{{ "Quantity" }}</th>
+                <th>{{ "Rate" | translate }}</th>
+                <th>{{ "Amount" | translate }}</th>
+
+                <th>{{ "Vat" | translate }}</th>
+                <th>{{ "Vat Amount" | translate }}</th>
+                <th>{{ "Total Amount" | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>01</td>
+                <td>LP26272</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+
+              <tr>
+                <td rowspan="2">02</td>
+                <td>LP672628</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+
+              <tr>
+                <td>LP672628</td>
+                <td>Rent for the period [Feb/2025-Mar/2025]</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
+                <td>1234 53635 6537</td>
+                <td>
+                  <app-badge title="Paid" status="green"> </app-badge>
+                </td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div rental class="totals">
+      <div class="words">
+        <p><strong>Amount in words:</strong></p>
+        <p>Fifteen Thousand Three Hundred Five Dirhams And Zero Fils</p>
+      </div>
+
+      <div class="summary">
+        <p>Sub Total: <strong>14,576.20</strong></p>
+        <p>VAT Amount: <strong>728.80</strong></p>
+        <button class="grand">Grand Total: <strong>15,305.00</strong></button>
+      </div>
+    </div>
+  </app-table-view-card>
 </ng-container>

@@ -7,6 +7,9 @@ import {
   EventEmitter,
   AfterContentInit,
   inject,
+  TemplateRef,
+  WritableSignal,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -23,6 +26,10 @@ import { StepSchema } from '../../model/step-engine/step-schema';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
 import { InviteOwnerBtnComponent } from '../invite-owner-btn/invite-owner-btn.component';
+import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
+import { BulkUploadComponent } from '../../../from/bulk-upload/bulk-upload.component';
+import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface StepGroup {
   main: StepPaneComponent;
@@ -40,6 +47,9 @@ interface StepGroup {
     InvitePMCButtonComponent,
     TranslateModule,
     InviteOwnerBtnComponent,
+    CircularCrossBtnIconComponent,
+    BulkUploadComponent,
+    DownloadIconComponent,
   ],
   templateUrl: './step-form-layout.component.html',
   styleUrls: ['./step-form-layout.component.css'],
@@ -80,13 +90,44 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
     if (this.engine) {
       this.subs.add(
-        this.engine.currentIndex.subscribe((i) => (this.currentStep = i))
+        this.engine.currentIndex.subscribe((i) => (this.currentStep = i)),
       );
       this.subs.add(this.engine.statuses.subscribe(() => {}));
       this.subs.add(this.engine.loading.subscribe(() => {}));
     }
   }
+  private modalService = inject(NgbModal);
+  closeResult: WritableSignal<string> = signal('');
 
+  openBulkUploadModal(
+    addLeadContent: TemplateRef<any>,
+    editMode: boolean = false,
+  ) {
+    this.modalService
+      .open(addLeadContent, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon',
+        centered: true,
+      })
+      .result.then(
+        (result) => {
+          this.closeResult.set(`Closed with: ${result}`);
+        },
+        (reason) => {
+          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
+        },
+      );
+  }
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
+    }
+  }
   ngOnDestroy() {
     this.engine.reset();
     this.subs.unsubscribe();

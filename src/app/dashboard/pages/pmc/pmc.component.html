@@ -172,7 +172,7 @@
   ></app-table-view-card>
 
   <div class="mt-3">
-    <app-white-card title="PMC Documents">
+    <app-white-card [title]="'PMC_DOCUMENTS' | translate">
       <div class="row g-2">
         @for (document of pmcList[0]?.documents; track $index) {
           <div class="col-auto">

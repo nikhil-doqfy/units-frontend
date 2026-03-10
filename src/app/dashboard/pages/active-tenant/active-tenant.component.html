@@ -1,0 +1,70 @@
+<!-- <div class="mb-3" *ngIf="currentRole === 'property-manager'">
+  <app-white-card>
+    <div class="row align-items-center justify-content-between g-3">
+      <div class="col-md">
+        <div class="commonBoxTabs">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="allUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#allUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="allUsers-tab-pane"
+                aria-selected="true"
+                [class.active]="activeTenantTab === 'currenttenant'"
+                (click)="activeTenantTab = 'currenttenant'"
+              >
+                {{ "PROPERTIES" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="newUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#newUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="newUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeTenantTab === 'pasttenant'"
+                (click)="activeTenantTab = 'pasttenant'"
+              >
+                {{ "UNITS" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="deletedUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#deletedUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="deletedUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeTenantTab === 'rejected'"
+                (click)="activeTenantTab = 'rejected'"
+              >
+                {{ "TENANCY_LEDGER" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </app-white-card>
+</div>
+<div class="mt-3">
+  <ng-container [ngSwitch]="activeTenantTab">
+    <app-current-tenant *ngSwitchCase="'currenttenant'"></app-current-tenant>
+    <app-past-tenant *ngSwitchCase="'pasttenant'"> </app-past-tenant>
+    <app-rejected-tenant *ngSwitchCase="'rejected'"> </app-rejected-tenant>
+  </ng-container>
+</div> -->
+<!-- <app-active-tenant-tab
+  (detailViewChanges)="onUnitDetailChanges($event)"
+></app-active-tenant-tab> -->

@@ -1,0 +1,270 @@
+.top-filter-bar {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  background: #fff;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.left-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.right-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.filter-select {
+  padding: 8px 14px;
+  border-radius: 10px;
+  /* border: 1px solid #ddd; */
+  background: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  /* box-shadow: #232b2e1a; */
+  min-width: 130px;
+}
+.custom-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.custom-select .icon {
+  position: absolute;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.filter-select.with-icon {
+  padding-left: 36px; /* icon sathi space */
+}
+
+.search-box {
+  display: flex;
+  width: 197px;
+  height: 34px;
+  align-items: center;
+  background: #f5f7f8;
+  border-radius: 10px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  min-width: 230px;
+  border: none;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 6px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.search-icon {
+  margin-right: 6px;
+  color: #888;
+}
+
+.clear-icon {
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .left-controls {
+    justify-content: space-between;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+}
+
+.logs-container {
+  background: #f5f6f8;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Header */
+.logs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logs-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  text-decoration: underline;
+}
+
+.download-link {
+  font-size: 14px;
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+}
+
+.timeline-item {
+  display: flex;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+/* Left Section */
+.timeline-left {
+  position: relative;
+  width: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 2;
+}
+
+/* Vertical Line */
+.vertical-line {
+  position: absolute;
+  top: 50px;
+  width: 1.5px;
+  height: calc(100% + -34px);
+  background: #e0e0e0;
+}
+
+/* Right Content */
+.timeline-content {
+  flex: 1;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.username {
+  color: #344046;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.date {
+  font-weight: bold;
+  font-size: 13px;
+  font-weight: 600;
+  color: #232b2e;
+}
+
+/* Activity Box */
+.activity-box {
+  /* background: #f1f2f4; */
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #ecf0f2;
+}
+
+.activity-box ul {
+  margin: 0;
+  padding-left: 15px;
+}
+
+.activity-box li {
+  margin-bottom: 14px;
+}
+
+.activity-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.activity-sub {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .timeline-item {
+    flex-direction: column;
+  }
+
+  .timeline-left {
+    width: auto;
+    margin-bottom: 10px;
+  }
+
+  .vertical-line {
+    display: none;
+  }
+
+  .user-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .activity-box {
+    padding: 12px;
+  }
+}
+.custom-select-wrapper .select-icon {
+  left: 12px;
+}
+.custom-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.custom-select-wrapper .select-icon {
+  position: absolute;
+  left: 12px;
+  z-index: 5;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+/* Push text right inside your custom select */
+.with-left-icon .customSelectInput {
+  padding-left: 38px !important;
+}
+.custom-select-wrapper .select-icon {
+  left: 12px;
+}
+
+:host ::ng-deep .with-left-icon .customSelectInput {
+  padding-left: 40px !important;
+}

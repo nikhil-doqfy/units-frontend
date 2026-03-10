@@ -50,15 +50,13 @@
       </ng-container>
 
       <!-- MODAL -->
-      <div class="modalOverlay" *ngIf="showComplaintModal">
+      <!-- <div class="modalOverlay" *ngIf="showComplaintModal">
         <div class="modalCard">
-          <!-- Header -->
           <div class="modalHeader">
             <h3>New Complaint <span>#LP2672</span></h3>
             <button class="closeBtn" (click)="closeComplaintModal()">✕</button>
           </div>
 
-          <!-- Body -->
           <div class="modalBody">
             <div class="row">
               <div class="col">
@@ -93,14 +91,13 @@
                 (remove)="removeImage(image)"
               ></app-file-upload-item>
             </div>
-          </div>
+          </div> 
 
-          <!-- Footer -->
           <div class="modalFooter">
             <button class="btnAdd">Add Complaint</button>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 
@@ -140,7 +137,7 @@
                         [options]="complaintsStatus"
                         key="key"
                         value="value"
-                        placeholder="Select complaints status"
+                        [placeholder]="'SELECT_COMPLAINTS_STATUS' | translate"
                         (optionSelected)="selectedComplaintstatus = $event"
                         (click)="onHandleComplaintsStatusClick()"
                       >
@@ -171,7 +168,7 @@
       </div>
     </div>
 
-    <div class="cmmnTblBody">
+    <div class="cmmnTbl">
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
@@ -204,6 +201,7 @@
                     [clickable]="true"
                     (clicked)="handleViewClick(item)"
                   />
+                  <!-- (clicked)="handleViewClick(item)" -->
                 </td>
                 <td>
                   <app-table-img-item
@@ -303,11 +301,7 @@
         {{ "DURATION" | translate }}: 3d, 6hr:30sec
       </div>
       <div class="timeline-wrapper">
-        <!-- Duration badge -->
-
-        <!-- Line -->
         <div class="timeline-line">
-          <!-- Step -->
           <div class="timeline-step completed">
             <span class="dot"></span>
             <div class="content">
@@ -366,7 +360,6 @@
 
         <div class="weekLabel">This week</div>
 
-        <!-- Item 1 -->
         <div class="activityItem">
           <div class="icon orange">H</div>
 
@@ -377,7 +370,6 @@
           </div>
         </div>
 
-        <!-- Item 2 -->
         <div class="activityItem">
           <div class="icon orange">H</div>
           <div class="content simple">
@@ -385,7 +377,6 @@
           </div>
         </div>
 
-        <!-- Item 3 -->
         <div class="activityItem">
           <div class="icon blue">P</div>
           <div class="content simple">
@@ -426,7 +417,7 @@
         </div>
       </div>
     </div>
-    <div class="cmmnTblBody">
+    <div class="cmmnTbl">
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>

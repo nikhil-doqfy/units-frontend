@@ -1,0 +1,21 @@
+<div class="top-alert" *ngIf="showMsg$()">
+  <span class="icon"><app-warning-icon></app-warning-icon></span>
+  <span class="text">{{ msgText$() }}</span>
+</div>
+<form [formGroup]="form">
+  <div class="doc-form-wrapper mt-3">
+    <app-white-card>
+      <div class="doc-preview">
+        <img src="assets/Ejari-Doc-signature.svg" alt="Tenancy Contract" />
+      </div>
+    </app-white-card>
+    <app-white-card>
+      <div class="doc-form">
+        <div class="form-group">
+          <label>Dewa No</label>
+          <input type="text" placeholder="12345 2622 6282" />
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+</form>

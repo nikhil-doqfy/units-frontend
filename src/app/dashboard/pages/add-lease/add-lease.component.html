@@ -9,9 +9,7 @@
   <ng-container>
     <app-step-pane
       [title]="'PROPERTY_DETAILS' | translate"
-      [description]="
-        'Select property and unit to see property details' | translate
-      "
+      [description]="'SELECT_PROPERTY_DETAILS' | translate"
     >
       <form class="row g-4" [formGroup]="propertyDetailForm">
         <div class="col-md-6">
@@ -183,7 +181,7 @@
             />
           </div>
           <div class="col-12">
-            <label for="" class="form-label">{{ "Address" | translate }}</label>
+            <label for="" class="form-label">{{ "ADDRESS" | translate }}</label>
             <textarea
               type="text"
               class="form-control"
@@ -259,7 +257,7 @@
         <form class="row g-4">
           <div class="col-md-6">
             <label for="" class="form-label">{{
-              "Company Name" | translate
+              "COMPANY_NAME" | translate
             }}</label>
             <input
               type="text"
@@ -355,7 +353,7 @@
             />
           </div>
           <div class="col-12">
-            <label for="" class="form-label">{{ "Address" | translate }}</label>
+            <label for="" class="form-label">{{ "ADDRESS" | translate }}</label>
             <textarea
               type="text"
               class="form-control"
@@ -372,7 +370,7 @@
   <ng-container>
     <app-step-pane
       [title]="'TENANT_DETAILS' | translate"
-      [description]="'Select tenant to see tenant details' | translate"
+      [description]="'SELECT_TENANT_DETAILS' | translate"
     >
       <form class="row g-4" [formGroup]="tenantDetailsForm">
         <div class="col-md-6">
@@ -466,7 +464,7 @@
             />
           </div>
           <div class="col-12">
-            <label for="" class="form-label">{{ "Address" | translate }}</label>
+            <label for="" class="form-label">{{ "ADDRESS" | translate }}</label>
             <textarea
               type="text"
               class="form-control"
@@ -848,13 +846,13 @@
   <!-- Step Payment Details Content -->
   <app-step-pane
     [title]="'PAYMENT_DETAILS' | translate"
-    [description]="'Fill info of payments' | translate"
+    [description]="'FILL_INFO_PAYMENT' | translate"
   ></app-step-pane>
 
   <!-- Step Terms and Conditions Content -->
   <app-step-pane
     [title]="'TERMS_&_CONDITIONS' | translate"
-    [description]="'You can also add your conditions' | translate"
+    [description]="'ADD_CONDITIONS' | translate"
   ></app-step-pane>
 
   <!-- Step Upload Ejari Content -->

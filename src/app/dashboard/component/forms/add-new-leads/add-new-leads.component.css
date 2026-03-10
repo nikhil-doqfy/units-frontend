@@ -97,7 +97,7 @@
   }
   .btn-transparent {
     background-color: transparent;
-    box-shadow: none; /* bootstrap shadow remove */
+    box-shadow: none;
   }
   .uploadBox {
     .uploadArea {
@@ -120,19 +120,11 @@
   }
 }
 
-/* mdlCommon .modal-content {
-  border: 0;
-  width: 573px;
-  height: 564px;
-  border-radius: 6px;
-} */
-
 .infoBox {
   background-color: #eef8ff;
   border-radius: 8px;
   padding: 14px 16px;
   width: 509px;
-  /* height: 86px; */
   border-radius: 6px;
   padding: 16px;
   gap: 10px;
@@ -163,24 +155,22 @@
 }
 
 .infoBox li {
-  display: list-item; /* THIS IS KEY */
+  display: list-item;
   color: #1677ff;
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 6px;
 }
 
-/* Info Box - base */
 .infoBox {
   background-color: #eef8ff;
   border-radius: 8px;
   padding: 16px;
   width: 100%;
-  max-width: 509px; /* desktop limit */
+  max-width: 509px;
   gap: 10px;
 }
 
-/* List styling */
 .infoBox ul {
   list-style: disc;
   padding-left: 20px;
@@ -196,7 +186,6 @@
 
 /* ---------- Responsive ---------- */
 
-/* Tablet */
 @media (max-width: 768px) {
   .infoBox {
     max-width: 100%;
@@ -208,7 +197,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 576px) {
   .infoBox {
     padding: 12px;

@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
     private themeService: ThemeService,
     private authService: AuthService,
     private storageService: StorageService,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) {
     this.themeService.setRole(this.selectedRole);
   }

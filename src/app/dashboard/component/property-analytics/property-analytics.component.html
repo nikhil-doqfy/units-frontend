@@ -1,0 +1,367 @@
+<ng-container *ngIf="!showDetailView">
+  <app-white-card>
+    <div class="revenue-summary-card">
+      <!-- Left info -->
+      <div class="revenue-left1">
+        <div class="amount-row">
+          <span class="amount">AED 1,20,573</span>
+          <span class="rank">
+            <span class="arrow-bg">
+              <app-arrow></app-arrow>
+            </span>
+            7th Rank
+          </span>
+        </div>
+        <div class="label">{{ "TOTAL_REVENUE_RECEIVED" | translate }}</div>
+      </div>
+
+      <!-- Right filters -->
+      <div class="revenue-filters">
+        <app-custom-select
+          [options]="[
+            'Falcom city',
+            'Novatis AG...',
+            'Agriculture',
+            'Honda',
+            'TVS',
+            'Samsung',
+          ]"
+          placeholder="Jan-Dec 2025"
+          [isFilter]="true"
+        >
+        </app-custom-select>
+        <app-custom-select
+          [options]="[
+            'Falcom city',
+            'Novatis AG...',
+            'Agriculture',
+            'Honda',
+            'TVS',
+            'Samsung',
+          ]"
+          placeholder="property:property1"
+          [isFilter]="true"
+        >
+        </app-custom-select>
+        <app-custom-select
+          [options]="[
+            'Falcom city',
+            'Novatis AG...',
+            'Agriculture',
+            'Honda',
+            'TVS',
+            'Samsung',
+          ]"
+          placeholder="Black/Towner:All"
+          [isFilter]="true"
+        >
+        </app-custom-select>
+        <app-custom-select
+          [options]="[
+            'Falcom city',
+            'Novatis AG...',
+            'Agriculture',
+            'Honda',
+            'TVS',
+            'Samsung',
+          ]"
+          placeholder="Unit:All"
+          [isFilter]="true"
+        >
+        </app-custom-select>
+      </div>
+    </div>
+
+    <app-revenue-bar-chart
+      (click)="showRevenueDetails()"
+      style="cursor: pointer"
+    ></app-revenue-bar-chart>
+  </app-white-card>
+  <div class="mt-3">
+    <app-white-card [title]="'PROPERTY_COMPRISON' | translate">
+      <!-- <div class="photos-row">
+      <div class="photo-thumb" *ngFor="let img of photos">
+        <img [src]="img" alt="photo" />
+      </div>
+    </div> -->
+
+      <!-- <div class="comparison-wrapper">
+      <h2 class="title">Property Comparison</h2> -->
+
+      <div class="cards-container">
+        <div class="property-card" *ngFor="let p of properties">
+          <div class="image-wrapper">
+            <img [src]="p.image" alt="property" />
+            <!-- <span class="close-btn">✕</span> -->
+          </div>
+
+          <select class="property-select">
+            <option>{{ p.name }}</option>
+          </select>
+
+          <div class="mt-3">
+            <div class="revenue-box">
+              <div class="amount">AED {{ p.revenue }}</div>
+              <span class="arrow-bg">
+                <app-arrow></app-arrow>
+              </span>
+              <div class="rank">{{ p.rank }}</div>
+              <div class="label">
+                {{ "TOTAL_REVENUE_RECEIVED" | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="details">
+              <div class="row">
+                <span>{{ "PLOT_AREA" | translate }}</span>
+                <span>{{ p.plotArea }}</span>
+              </div>
+              <div class="row">
+                <span>Built-up Area (sq ft)</span>
+                <span>{{ p.builtUpArea }}</span>
+              </div>
+              <div class="row">
+                <span>Blocks/Towers</span>
+                <span>{{ p.blocks }}</span>
+              </div>
+              <div class="row">
+                <span>Total Units</span>
+                <span>{{ p.totalUnits }}</span>
+              </div>
+              <div class="row">
+                <span>Occupied Units</span>
+                <span>{{ p.occupiedUnits }}</span>
+              </div>
+              <div class="row">
+                <span>Available Units</span>
+                <span>{{ p.availableUnits }}</span>
+              </div>
+              <div class="row">
+                <span>Total Parking Spaces</span>
+                <span>{{ p.parking }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="property-card">
+          <div class="image-wrapper empty-card">
+            <!-- <span class="close-btn">✕</span> -->
+          </div>
+          <select class="property-select">
+            <option>Select Property</option>
+          </select>
+        </div>
+      </div>
+      <!-- </div> -->
+    </app-white-card>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showDetailView">
+  <div class="seven-items-view">
+    <app-table-view-card
+      title="T7 Tower"
+      [imgSrc]="'assets/property/property-list-3.svg'"
+      [headerItems]="[
+        { label: 'Code', value: 'VC78012' },
+        { label: 'property', value: 'AI Sahab, Dubai' },
+      ]"
+      [items]="[
+        { label: getLabel('PLOt_AREA'), value: '13,000.00' },
+        { label: getLabel('BUID_UP_AREA'), value: '8,000.00' },
+        { label: getLabel('TOTAL_UNITS'), value: '445' },
+        { label: getLabel('OCCUPIED_UNITS'), value: '200' },
+        { label: getLabel('AVAILABLE_UNITS'), value: '245' },
+        { label: getLabel('NO_PARKING'), value: '550' },
+        { label: getLabel('PMC'), value: 'AI Saheb Group' },
+      ]"
+      (back)="handleBackClick()"
+    >
+      <div body-summary class="revenue-left">
+        <div class="amount-row">
+          <span class="amount">AED 1,20,573</span>
+          <span class="rank">
+            <span class="arrow-bg">
+              <app-arrow></app-arrow>
+            </span>
+            7th Rank
+          </span>
+        </div>
+        <div class="label">Total Revenue Received</div>
+      </div>
+    </app-table-view-card>
+  </div>
+  <div class="mt-3">
+    <app-white-card title="Block/Tower Photos">
+      <div class="block-photos-card">
+        <div class="photos-row">
+          <img src="assets/property/property-img-2.png" class="photo-thumb" />
+          <img src="assets/property/property-img-3.png" class="photo-thumb" />
+          <img src="assets/property/property-img-4.png" class="photo-thumb" />
+          <img src="assets/property/property-img-5.png" class="photo-thumb" />
+
+          <div class="photo-add">+</div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+
+  <div class="cmmnTblOuter mt-3">
+    <div class="cmmnTblHdr">
+      <div class="row align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'UNITS_DETAILS' | translate"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+          <!-- subtitle="(5)" -->
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search placeholder="Search here..." />
+            <app-table-filter-btn
+              [title]="'FILTER' | translate"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
+              <app-filter-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmmnTblBody">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>{{ "UNITS_NAME" | translate }}</th>
+              <th>
+                <button type="button">{{ "CODE" | translate }}</button>
+              </th>
+              <th>
+                <button type="button">
+                  {{ "FLOOR_NO" | translate }}
+                </button>
+              </th>
+              <th>{{ "PARKING" | translate }}</th>
+              <th>
+                {{ "TENANT_NAME" | translate }} <i><app-sorting-icon /></i>
+              </th>
+              <th>{{ "DIMENSION" | translate }}</th>
+              <th>{{ "TENANCY_STATUS" | translate }}</th>
+              <th>{{ "RENT" | translate }}</th>
+              <th>{{ "REVENUE_GENERATED" | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>100A</td>
+              <td>LP9021</td>
+              <td>01</td>
+              <td>01</td>
+              <td>N/A</td>
+              <td>1BHK</td>
+              <td class="status vacant">Vacant</td>
+              <td>AED 9,000.00</td>
+              <td>AED 9,000.00</td>
+            </tr>
+
+            <tr>
+              <td>101B</td>
+              <td>LP8021</td>
+              <td>02</td>
+              <td>02</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-2.png"
+                  title="Richard"
+                />
+              </td>
+              <td>2BHK</td>
+              <td class="status occupied">Occupied</td>
+              <td>AED 9,000.00</td>
+              <td>AED 12,000.00</td>
+            </tr>
+
+            <tr>
+              <td>202C</td>
+              <td>VC79021</td>
+              <td>03</td>
+              <td>--</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-3.png"
+                  title="Thaomas"
+                />
+              </td>
+              <td>5BHK</td>
+              <td class="status occupied">Occupied</td>
+              <td>AED 9,000.00</td>
+              <td>AED 15,000.00</td>
+            </tr>
+            <tr>
+              <td>203D</td>
+              <td>VC69021</td>
+              <td>04</td>
+              <td>01</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-4.png"
+                  title="Akashy"
+                />
+              </td>
+              <td>1RK</td>
+              <td class="status occupied">Occupied</td>
+              <td>AED 9,000.00</td>
+              <td>AED 21,000.00</td>
+            </tr>
+
+            <tr>
+              <td>304E</td>
+              <td>VC59021</td>
+              <td>05</td>
+              <td>02</td>
+              <td>
+                <app-table-img-item
+                  img="assets/user/user-5.png"
+                  title="Avanashi"
+                />
+              </td>
+              <td>1BHK</td>
+              <td class="status occupied">Occupied</td>
+              <td>AED 9,000.00</td>
+              <td>AED 24,000.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+      >
+      </app-table-select>
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+      >
+      </app-table-pagination>
+    </div>
+  </div>
+</ng-container>

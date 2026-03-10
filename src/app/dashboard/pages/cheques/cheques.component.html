@@ -1,0 +1,501 @@
+<ng-container *ngIf="!showDetailView">
+  <app-white-card>
+    <div class="top-filter-bar">
+      <div class="left-controls">
+        <div class="custom-select">
+          <div class="custom-select-wrapper">
+            <span class="select-icon"> </span>
+            <app-custom-select
+              class="with-left-icon"
+              [placeholder]="'Year:2025'"
+            ></app-custom-select>
+          </div>
+
+          <div class="custom-select-wrapper">
+            <span class=".cmmnTblFltrBtn">
+              <app-custom-select
+                class="with-left-icon"
+                [placeholder]="'Property All'"
+              ></app-custom-select>
+            </span>
+          </div>
+          <div class="custom-select-wrapper">
+            <span class="select-icon"> </span>
+            <app-custom-select
+              class="with-left-icon"
+              [placeholder]="'Block/Tower:All'"
+            ></app-custom-select>
+          </div>
+          <div class="custom-select-wrapper">
+            <span class="select-icon"> </span>
+            <app-custom-select
+              class="with-left-icon"
+              [placeholder]="'Unit:All'"
+            ></app-custom-select>
+          </div>
+        </div>
+      </div>
+      <div class="right-controls">
+        <div class="search-box">
+          <i><app-search-icon></app-search-icon></i>
+          <input type="text" placeholder="Search here" />
+        </div>
+      </div>
+    </div>
+    <!-- <div class="summary-grid">
+      <div
+        class="summary-card"
+        *ngFor="let card of summaryCards"
+        [class.active]="activeSummary === card.key"
+        (click)="onSummaryClick(card.key)"
+      >
+        <div class="value">AED 1,24,000</div>
+        <div class="title">{{ card.title }}</div>
+      </div>
+    </div> -->
+    <div class="summary-grid">
+      <div
+        class="summary-card"
+        *ngFor="let card of summaryCards"
+        [class.active]="activeSummary === card.key"
+        (click)="onSummaryClick(card.key)"
+      >
+        <div class="top-row">
+          <div class="main-value">{{ card.amount }}</div>
+          <span class="tag" [ngClass]="card.color">
+            {{ card.count }} Cheques
+          </span>
+        </div>
+
+        <div class="title">{{ card.title }}</div>
+        <div class="subtitle">{{ card.subtitle }}</div>
+
+        <span class="arrow"></span>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <!-- <table>
+        <thead>
+          <tr>
+            <th *ngFor="let col of displayedColumns">
+              {{ col | titlecase }}
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of tableData">
+            <td *ngFor="let col of displayedColumns">
+              {{ row[col] }}
+            </td>
+          </tr>
+        </tbody>
+      </table> -->
+
+      <div class="cmmnTbl">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Sl.No</th>
+                <th>Unit ID</th>
+
+                <th>
+                  Property Name<i><app-sorting-icon></app-sorting-icon></i>
+                </th>
+                <th>Block / Tower<app-sorting-icon></app-sorting-icon></th>
+                <th>Unit</th>
+
+                <th>
+                  Tenant Name<i><app-sorting-icon></app-sorting-icon></i>
+                </th>
+                <th>Cheque No</th>
+
+                <th
+                  *ngIf="
+                    (activeSummary !== 'total' &&
+                      activeSummary === 'credited') ||
+                    activeSummary === 'realized' ||
+                    activeSummary == 'bounce'
+                  "
+                >
+                  Reference ID
+                </th>
+                <th
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  Settlement Bank
+                </th>
+                <th
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  Settlement Acc
+                </th>
+
+                <th *ngIf="activeSummary !== 'total'">Amount</th>
+                <th *ngIf="activeSummary == 'bounce'">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>01</td>
+                <td>LP9021</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-1.png'"
+                    [title]="'Novastic AG'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower A</td>
+                <td>204</td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  <app-table-img-item
+                    [img]="'/assets/user/user-1.png'"
+                    [title]="'Jenshi'"
+                  ></app-table-img-item>
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  1234 56789 2345
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="activeSummary !== 'total'"
+                >
+                  AED,12,000
+                </td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn
+                    type="history"
+                    (clicked)="
+                      openChequeBounceHistoryModel(activityHistoryContent)
+                    "
+                  ></app-table-action-btn>
+                </td>
+              </tr>
+              <tr>
+                <td>02</td>
+                <td>LP8021</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-2.png'"
+                    [title]="'Novastic AG'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower B</td>
+                <td>302</td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  <app-table-img-item
+                    [img]="'/assets/user/user-2.png'"
+                    [title]="'Richard'"
+                  ></app-table-img-item>
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  1234 56789 2345
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="activeSummary !== 'total'"
+                >
+                  AED,12,000
+                </td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn type="history"></app-table-action-btn>
+                </td>
+              </tr>
+              <tr>
+                <td>03</td>
+                <td>LP8021</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-2.png'"
+                    [title]="'Novastic AG'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower B</td>
+                <td>302</td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  <app-table-img-item
+                    [img]="'/assets/user/user-3.png'"
+                    [title]="'Richard'"
+                  ></app-table-img-item>
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                >
+                  1234 56789 2345
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td
+                  [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
+                  *ngIf="activeSummary !== 'total'"
+                >
+                  AED,12,000
+                </td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn type="history"></app-table-action-btn>
+                </td>
+              </tr>
+              <tr>
+                <td>04</td>
+                <td>VC5921</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-2.png'"
+                    [title]="'property C'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower B</td>
+                <td>505</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/user/user-4.png'"
+                    [title]="'Akshay'"
+                  ></app-table-img-item>
+                </td>
+                <td>1234 56789 2345</td>
+                <td
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td *ngIf="activeSummary !== 'total'">AED,12,000</td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn type="history"></app-table-action-btn>
+                </td>
+              </tr>
+
+              <tr>
+                <td>05</td>
+                <td>VC6021</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/property/property-list-2.png'"
+                    [title]="'Rithi Tower B'"
+                  >
+                  </app-table-img-item>
+                </td>
+                <td>Tower B</td>
+                <td>606</td>
+                <td>
+                  <app-table-img-item
+                    [img]="'/assets/user/user-5.png'"
+                    [title]="'Avanashi'"
+                  ></app-table-img-item>
+                </td>
+                <td>1234 56789 2345</td>
+                <td
+                  *ngIf="
+                    activeSummary !== 'total' && activeSummary !== 'balance'
+                  "
+                >
+                  REF-29876
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  EIB
+                </td>
+                <td
+                  *ngIf="
+                    activeSummary === 'credited' ||
+                    (activeSummary !== 'total' &&
+                      activeSummary !== 'bounce' &&
+                      activeSummary !== 'realized' &&
+                      activeSummary !== 'balance')
+                  "
+                >
+                  1224567787
+                </td>
+                <td *ngIf="activeSummary !== 'total'">AED,12,000</td>
+                <td *ngIf="activeSummary == 'bounce'">
+                  <app-table-action-btn type="history"></app-table-action-btn>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="cmmnTblFtr">
+        <app-table-select
+          [componentName]="componentName"
+          [rowsPerPage]="rowsPerPage"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          (rowsPerPageChange)="onPageSizeChange($event)"
+        />
+        <app-table-pagination
+          [componentName]="componentName"
+          [currentPage]="currentPage"
+          [totalRecords]="totalRecords"
+          [rowsPerPage]="rowsPerPage"
+          (pageChange)="onPageChange($event)"
+        />
+      </div>
+    </div>
+  </app-white-card>
+</ng-container>
+
+<!----------------------------------------------------------Activity history from------------------------------------------------------------------------------>
+<ng-template #activityHistoryContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "Activity History" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-cheque-bounce-history-modal #chequeBounceHistoryModel />
+  </div>
+</ng-template>

@@ -31,6 +31,10 @@ import {
   PageChange,
   PageSizeChange,
 } from '../../../shared/model/shared.model';
+import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BackIconComponent } from '../../component/icons/back-icon/back-icon.component';
 @Component({
   selector: 'app-approval',
   standalone: true,
@@ -49,6 +53,13 @@ import {
     DocumentTypeItemComponent,
     TranslateModule,
     NoDataComponent,
+    RefreshIconComponent,
+    CustomSelectComponent,
+    ReactiveFormsModule,
+    TranslateModule,
+    CommonModule,
+    FormsModule,
+    BackIconComponent,
   ],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.css',
@@ -90,22 +101,112 @@ export class ApprovalComponent {
   currentLanguage = 'en';
   showDetailView: boolean = false;
 
-  constructor(private router: Router) {
-    const key = this.route.snapshot.data['titleKey'];
-    this.sharedService.setTitle(key);
-    this.initOwnerSearchLisner();
+  // constructor(private router: Router) {
+  //   const key = this.route.snapshot.data['titleKey'];
+  //   this.sharedService.setTitle(key);
+  //   this.initOwnerSearchLisner();
 
-    const id = this.route.snapshot.paramMap.get('tenant_id');
+  //   const id = this.route.snapshot.paramMap.get('tenant_id');
 
-    if (id) {
-      this.showDetailView = true;
-      this.getApprovalDetails(+id);
-    } else {
-      this.showDetailView = false;
-      this.loadApprovalList();
-    }
-  }
+  //   if (id) {
+  //     this.showDetailView = true;
+  //     this.getApprovalDetails(+id);
+  //   } else {
+  //     this.showDetailView = false;
+  //     this.loadApprovalList();
+  //   }
+  // }
 
+  charges = [
+    {
+      label: 'Admin Fee',
+      amount: 32.71,
+      tax: 'VAT @5%',
+      vat: 1.64,
+      total: 34.35,
+      checked: true,
+    },
+    {
+      label: 'Ejari Charge Disbursement',
+      amount: 175.65,
+      tax: 'VAT @Nil',
+      vat: 0,
+      total: 175.65,
+      checked: true,
+    },
+    {
+      label: 'Gas Charges',
+      amount: 1000,
+      tax: 'VAT @5%',
+      vat: 50,
+      total: 1050,
+      checked: true,
+    },
+    {
+      label: 'COMMISSION- DUBAI',
+      amount: 1200,
+      tax: 'VAT @5%',
+      vat: 60,
+      total: 1260,
+      checked: true,
+    },
+    {
+      label: 'Security Deposit',
+      amount: 2400,
+      tax: 'VAT @Nil',
+      vat: 0,
+      total: 2400,
+      checked: true,
+    },
+    {
+      label: 'CAR PARKING',
+      amount: 1000,
+      tax: 'VAT @5%',
+      vat: 50,
+      total: 1050,
+      checked: true,
+    },
+    {
+      label: 'TAWTHEEQ REGISTRATION A/C...',
+      amount: 1000,
+      tax: 'VAT @5%',
+      vat: 50,
+      total: 1050,
+      checked: true,
+    },
+    {
+      label: 'RENEWAL COMMISSION (DUBAI)',
+      amount: 1000,
+      tax: 'VAT @5%',
+      vat: 50,
+      total: 1050,
+      checked: false,
+    },
+    {
+      label: 'RENEWAL COMMISSION (SHARJ...)',
+      amount: 1000,
+      tax: 'VAT @5%',
+      vat: 50,
+      total: 1050,
+      checked: false,
+    },
+    {
+      label: 'R COMMISSION- ABU DHABI BL...',
+      amount: 1000,
+      tax: 'VAT @5%',
+      vat: 50,
+      total: 1050,
+      checked: false,
+    },
+    {
+      label: 'TAWTHEEQ SERVICE INCOME- A...',
+      amount: 1000,
+      tax: 'VAT @5%',
+      vat: 50,
+      total: 1050,
+      checked: false,
+    },
+  ];
   ngOnInit() {
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
@@ -144,48 +245,48 @@ export class ApprovalComponent {
     // }
   }
 
-  loadApprovalList(): void {
-    this.approvalData = {
-      ...this.approvalData,
-      limit: this.rowsPerPage,
-      page_number: this.currentPage,
-      tenant_status: this.currentStatus,
-    };
+  // loadApprovalList(): void {
+  //   this.approvalData = {
+  //     ...this.approvalData,
+  //     limit: this.rowsPerPage,
+  //     page_number: this.currentPage,
+  //     tenant_status: this.currentStatus,
+  //   };
 
-    if (this.currentStatus !== 'PENDING') {
-      this.approvalData['tenant_status'] = this.currentStatus;
-    } else {
-      delete this.approvalData['tenant_status'];
-    }
-    this.approvalService
-      .getApprovalList(this.approvalData)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp: any) => {
-          this.tenantList = resp?.content.tenants ?? [];
-          this.totalRecords = resp?.pagination?.total_records ?? 0;
-          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
-        },
-      });
-  }
+  //   if (this.currentStatus !== 'PENDING') {
+  //     this.approvalData['tenant_status'] = this.currentStatus;
+  //   } else {
+  //     delete this.approvalData['tenant_status'];
+  //   }
+  //   this.approvalService
+  //     .getApprovalList(this.approvalData)
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe({
+  //       next: (resp: any) => {
+  //         this.tenantList = resp?.content.tenants ?? [];
+  //         this.totalRecords = resp?.pagination?.total_records ?? 0;
+  //         this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+  //       },
+  //     });
+  // }
 
   changeStatus(status: 'APPROVED' | 'REJECTED' | 'PENDING') {
     this.currentStatus = status;
     this.currentPage = 1;
-    this.loadApprovalList();
+    // this.loadApprovalList();
   }
 
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
-    this.loadApprovalList();
+    // this.loadApprovalList();
   }
 
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
-    this.loadApprovalList();
+    // this.loadApprovalList();
   }
 
   initOwnerSearchLisner() {
@@ -196,7 +297,7 @@ export class ApprovalComponent {
         else delete this.approvalData['search'];
 
         this.currentPage = 1;
-        this.loadApprovalList();
+        // this.loadApprovalList();
       });
   }
 
@@ -249,25 +350,25 @@ export class ApprovalComponent {
       });
   }
 
-  getApprovalTenant(tenantId: number) {
-    const params = {
-      tenant_id: tenantId,
-    };
+  // getApprovalTenant(tenantId: number) {
+  //   const params = {
+  //     tenant_id: tenantId,
+  //   };
 
-    this.approvalService
-      .getApprovalList(params)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp) => {
-          console.log('TENANTS:', resp?.content?.tenants);
-          this.selectedTenant = resp.content.tenants;
+  //   this.approvalService
+  //     .getApprovalList(params)
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe({
+  //       next: (resp) => {
+  //         console.log('TENANTS:', resp?.content?.tenants);
+  //         this.selectedTenant = resp.content.tenants;
 
-          this.leaseDocuments = resp.content?.lease_documents || [];
+  //         this.leaseDocuments = resp.content?.lease_documents || [];
 
-          this.mapDocumentsByType();
-        },
-      });
-  }
+  //         this.mapDocumentsByType();
+  //       },
+  //     });
+  // }
 
   mapDocumentsByType() {
     Object.keys(this.documentsByType).forEach((key) => {
@@ -281,12 +382,18 @@ export class ApprovalComponent {
     });
   }
 
-  handleViewClick(tenantId: number): void {
-    this.router.navigate(['/dashboard/approval/detail/', tenantId]);
-  }
+  // handleViewClick(tenantId: number): void {
+  //   this.router.navigate(['/dashboard/approval/detail/', tenantId]);
+  // }
+  handleViewClick(id: number) {
+    this.selectedTenant = this.tenantList.find(
+      (tenant: any) => tenant.tenant_id === id,
+    );
 
+    this.showDetailView = true;
+  }
   handleBackClick(): void {
-    this.router.navigate(['/dashboard/approval']);
+    // this.router.navigate(['/dashboard/approval']);
     this.showDetailView = false;
     this.selectedTenant = null;
   }

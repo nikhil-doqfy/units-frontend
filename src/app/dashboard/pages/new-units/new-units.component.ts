@@ -1,0 +1,360 @@
+import { Component, DestroyRef, inject } from '@angular/core';
+import {
+  BreadCrumb,
+  OptionsParams,
+  UploadFileModel,
+} from '../../../shared/model/shared.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SharedService } from '../../../shared.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
+import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
+import { PropertyFormService } from '../../services/property-form.service';
+import { PropertyService } from '../../services/property.service';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { FormService } from '../../../shared/services/form.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ThemeService, UserRole } from '../../../theme.service';
+import { StepEngine } from '../../model/step-engine/step-engine';
+import { StepSchema } from '../../model/step-engine/step-schema';
+import { CommonModule } from '@angular/common';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
+import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+
+type FormKey = 'images' | 'documents';
+
+interface UplodTypeModal {
+  typeKey: string;
+  typeLabel: string;
+  formKey: FormKey;
+}
+
+interface UploadConfig {
+  form: FormGroup;
+  formKey: FormKey;
+}
+@Component({
+  selector: 'app-new-units',
+  standalone: true,
+  imports: [
+    StepFormLayoutComponent,
+    StepPaneComponent,
+    CommonModule,
+    CustomSelectComponent,
+    UploadDocumentComponent,
+    ReactiveFormsModule,
+    FileUploadItemComponent,
+    TranslateModule,
+  ],
+  templateUrl: './new-units.component.html',
+  styleUrl: './new-units.component.css',
+})
+export class NewUnitsComponent {
+  showDetailView: boolean = false;
+
+  breadcrumbData: BreadCrumb[] = [];
+
+  private propertyFormService = inject(PropertyFormService);
+  private propertyService = inject(PropertyService);
+  private sharedAPIService = inject(SharedApiService);
+  private formService = inject(FormService);
+  private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
+  private destroyRef = inject(DestroyRef);
+  private translate = inject(TranslateService);
+
+  currentRole: UserRole = 'owner';
+  isInvalid = this.formService.isInvalid;
+  propertyList: any[] = [];
+  propertyType: any[] = [];
+  PMC_List: any[] = [];
+  ownerList: any[] = [];
+  country: any[] = [];
+  state: any[] = [];
+  city: any[] = [];
+
+  basicDetailsForm = this.propertyFormService.propertyBasicDetailsForm;
+  commercialsForm = this.propertyFormService.propertyCommercialsForm;
+  imagesForm = this.propertyFormService.propertyImagesForm;
+  documentationForm = this.propertyFormService.propertyDocumentationForm;
+
+  engine!: StepEngine;
+  steps: StepSchema[] = [];
+
+  imageUploadTypes: UplodTypeModal[] = [];
+  documetUploadTypes: UplodTypeModal[] = [];
+  activeImageTab!: string;
+  activeDocTab!: string;
+  uploadIdCounter = {
+    images: 1,
+    documents: 1,
+  };
+
+  constructor(
+    private router: Router,
+    private themeService: ThemeService,
+  ) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+
+    this.steps = this.propertyFormService.buildPropertySteps();
+    this.engine = new StepEngine(this.steps);
+    this.propertyFormService.setEngine(this.engine);
+
+    const formId = this.route.snapshot.paramMap.get('id');
+    if (formId) {
+      this.engine.setFormId(+formId);
+      this.engine.loadStep(0);
+    }
+  }
+
+  ngOnInit() {
+    this.loadBreadcrumb();
+    let options: OptionsParams[] = [];
+    this.currentRole = this.themeService.getRole();
+
+    if (this.currentRole === 'owner') {
+      options.push({
+        param: 'OWNER_COMPANY_USER',
+        key: 'company_user',
+        setter: (v) => {
+          this.PMC_List = v;
+        },
+      });
+    }
+
+    if (this.currentRole === 'property-manager') {
+      options.push({
+        param: 'OWNER_DETAILS',
+        key: 'owners',
+        setter: (v) => {
+          this.ownerList = v;
+        },
+      });
+    }
+
+    options.push(
+      {
+        param: 'PARENT_PROPERTY',
+        key: 'property',
+        setter: (v) => {
+          this.propertyList = v;
+        },
+      },
+      {
+        param: 'PROPERTY_TYPE',
+        key: 'property_type',
+        setter: (v) => {
+          this.propertyType = v;
+        },
+      },
+      {
+        param: 'COUNTRY',
+        key: 'country',
+        setter: (v) => {
+          this.country = v;
+        },
+      },
+      {
+        param: 'PROPERTY_DOCUMENT_CHOICE',
+        key: 'Property_Document',
+        setter: (v) => {
+          this.documetUploadTypes = this.getProcessUploadTypes(v, 'documents');
+          this.activeDocTab = v[0]?.key;
+        },
+      },
+      {
+        param: 'PROPERTY_IMAGE_CHOICE',
+        key: 'Property_Image',
+        setter: (v) => {
+          this.imageUploadTypes = this.getProcessUploadTypes(v, 'images');
+          this.activeImageTab = v[0]?.key;
+        },
+      },
+    );
+
+    this.getOptionsTypes(options);
+  }
+
+  getProcessUploadTypes(data: any, formKey: FormKey): UplodTypeModal[] {
+    const types = data.map((item: any) => ({
+      typeKey: item.key,
+      typeLabel: item.value,
+      formKey,
+    }));
+    return types;
+  }
+
+  initCurrentRoleListener() {
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
+  }
+
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
+
+  // loadBreadcrumb() {
+  //   this.setBreadCrumb([
+  //     { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+  //     { label: 'ADD_PROPERTY', link: '' },
+  //   ]);
+  // }
+
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/new-units' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.NEW_UNITS', link: '' },
+      ]);
+    }
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
+  getOptionsTypes(option: OptionsParams[]) {
+    this.sharedAPIService.getOptionsType(option);
+  }
+
+  onPropertySelect(data: any) {
+    if (typeof data?.key !== 'number') return;
+
+    this.propertyService.getParentPropertyData({ id: data.key }).subscribe({
+      next: (response: any) => {
+        let content = response?.content;
+        this.basicDetailsForm.patchValue({
+          NoOfFloors: content?.total_floors,
+          addressLine2: content?.addressLine2,
+          locality: content?.locality,
+          postalCode: content?.postal_code,
+          propertyType: content?.property_type,
+          country: content?.country,
+          state: content?.state,
+          city: content?.city,
+        });
+      },
+    });
+  }
+
+  onCountrySelect(data: any) {
+    this.getOptionsTypes([
+      {
+        param: 'STATE',
+        params: { country_id: data.key },
+        key: 'state',
+        setter: (v) => {
+          this.state = v;
+        },
+      },
+    ]);
+  }
+
+  onStateSelect(data: any) {
+    this.getOptionsTypes([
+      {
+        param: 'CITY',
+        params: { state_id: data.key },
+        key: 'city',
+        setter: (v) => {
+          this.city = v;
+        },
+      },
+    ]);
+  }
+
+  submitProperty(): void {
+    this.router.navigate(['dashboard/properties']);
+  }
+
+  getUploadConfig(type: string): UploadConfig {
+    const combineTypeModal: UplodTypeModal[] = [
+      ...this.imageUploadTypes,
+      ...this.documetUploadTypes,
+    ];
+    const cfg = combineTypeModal.find((modal) => modal.typeKey === type);
+
+    if (!cfg) throw new Error('Invalid Type');
+
+    return {
+      form:
+        cfg.formKey === 'documents' ? this.documentationForm : this.imagesForm,
+      formKey: cfg.formKey,
+    };
+  }
+
+  onUpload(type: string, event: UploadFileModel) {
+    this.handleUploadEvent(type, event);
+  }
+
+  private handleUploadEvent(type: string, event: UploadFileModel) {
+    const { form, formKey } = this.getUploadConfig(type);
+    const items = [...(form.value[formKey] || [])];
+
+    const index = items.findIndex((x) => x.tempId === event.tempId);
+    const counterKey = formKey === 'images' ? 'images' : 'documents';
+
+    const payload = {
+      id: index === -1 ? this.uploadIdCounter[counterKey]++ : items[index].id,
+
+      tempId: event.tempId,
+      file_name: event.file.name,
+      file: event.file,
+      base64: event.base64,
+      status: event.status ?? 'uploading',
+      progress: event.progress ?? 0,
+      type,
+    };
+
+    if (index === -1) items.push(payload);
+    else items[index] = { ...items[index], ...payload };
+
+    form.patchValue({ [formKey]: items });
+  }
+
+  remove(type: string, item: any) {
+    if (item?.backendId) {
+      this.removeItem(type, item?.backendId, true);
+    } else {
+      this.removeItem(type, item.id);
+    }
+  }
+
+  removeItem(type: string, id: number, isBackend = false) {
+    const cfg = this.getUploadConfig(type);
+    const form = cfg.form;
+    const key = cfg.formKey;
+
+    console.log(form.value[key]);
+
+    const filtered = isBackend
+      ? (form.value[key] || []).filter((x: any) => x.backendId !== id)
+      : (form.value[key] || []).filter((x: any) => x.id !== id);
+
+    form.patchValue({ [key]: filtered });
+  }
+
+  getItems(type: string) {
+    const cfg = this.getUploadConfig(type);
+    const form = cfg.form;
+    const key = cfg.formKey;
+
+    return (form.value[key] || []).filter((x: any) => x.type === type);
+  }
+}

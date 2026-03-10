@@ -68,7 +68,7 @@
 
   "MOST_REVENUE_PROPERTIES": "Most Revenue Generating Properties",
   "REVENUE": "Revenue",
-  "SUBTITLE": "Monthly recurring revenue - AED 54,352",
+  "SUBTITLE": "Monthly recurring revenue",
   "FILTER": "Filter",
 
   "NUMBER": "#",
@@ -374,5 +374,8 @@
   "ADD_LEAD": "Add Lead",
   "UPLOAD_FILE": "Upload",
   "UPDATE_LEAD": "Update Lead",
-  "EDIT_LEAD": "Edit Lead"
+  "EDIT_LEAD": "Edit Lead",
+  "TOTAL_REVENUE_RECEIVED": "Total Revenue Received",
+  "PROPERTY_COMPRISON": "Property Comprison",
+  "OTHER_CHARGESE": "Other Charges"
 }

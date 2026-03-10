@@ -28,6 +28,11 @@ import { PrivacyPolicyIconComponent } from '../component/icons/privacy-policy-ic
 import { SidebarSupportComponent } from './sidebar-support/sidebar-support.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RentalIconComponent } from '../component/icons/rental-icon/rental-icon.component';
+import { RentalPortfolioIconComponent } from '../../icons/rental-portfolio-icon/rental-portfolio-icon.component';
+import { ChequesIconComponent } from '../../icons/cheques-icon/cheques-icon.component';
+import { AnnouncementsComponent } from '../../dashboard/pages/announcements/announcements.component';
+import { AnnouncementsIconComponent } from '../../icons/announcements-icon/announcements-icon.component';
+import { LeadIconComponent } from '../../icon/lead-icon/lead-icon.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -55,6 +60,11 @@ import { RentalIconComponent } from '../component/icons/rental-icon/rental-icon.
     SidebarSupportComponent,
     TranslateModule,
     RentalIconComponent,
+    RentalPortfolioIconComponent,
+    ChequesIconComponent,
+    AnnouncementsComponent,
+    AnnouncementsIconComponent,
+    LeadIconComponent,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
@@ -72,14 +82,14 @@ export class SidebarComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private themeService: ThemeService,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {
     this.router.events
       .pipe(
         filter(
-          (event): event is NavigationEnd => event instanceof NavigationEnd
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
         ),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.urlAfterRedirects;

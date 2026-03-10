@@ -26,6 +26,14 @@ import { ComplaintsComponent } from './pages/complaints/complaints.component';
 import { authGuard } from '../auth.guard';
 import { PropertyLeadsComponent } from './component/property-leads.component';
 import { InvoiceTemplateComponent } from '../shared/invoice-template/invoice-template.component';
+import { ChequesComponent } from './pages/cheques/cheques.component';
+import { AnnouncementsComponent } from './pages/announcements/announcements.component';
+import { LeadsComponent } from './pages/leads/leads.component';
+import { NewTenantComponent } from './pages/new-tenant/new-tenant.component';
+import { UnitsComponent } from './pages/units/units.component';
+import { NewUnitsComponent } from './pages/new-units/new-units.component';
+import { BasicpersonalComponent } from '../newtenant/component/basicpersonal/basicpersonal.component';
+import { SearchContactComponent } from '../shared/search-contact/search-contact.component';
 export const routes: Routes = [
   {
     path: '',
@@ -50,14 +58,24 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.PROPERTIES' },
       },
       {
-        path: 'property-leads',
-        component: PropertyLeadsComponent,
-        data: { titleKey: 'PAGE_TITLE.PROPERTY_LEADS' },
+        path: 'leads',
+        component: LeadsComponent,
+        data: { titleKey: 'PAGE_TITLE.LEADS' },
+      },
+      {
+        path: 'search-tenant',
+        component: SearchContactComponent,
+        data: { titlekey: 'PAGE_TITLE.PROPERTIES' },
       },
       {
         path: 'add-property',
         component: AddPropertyComponent,
         data: { titleKey: 'PAGE_TITLE.ADD_PROPERTY' },
+      },
+      {
+        path: 'new-units',
+        component: NewUnitsComponent,
+        data: { titleKey: 'PAGE_TITLE.NEW_UNITS' },
       },
       {
         path: 'edit-property/:id',
@@ -85,9 +103,20 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
       },
       {
+        path: 'new-tenant',
+        component: NewTenantComponent,
+        data: { titleKey: 'PAGE_TITLE.NEW_TENANT' },
+      },
+
+      {
         path: 'tenants/detail/:id',
         component: TenantsComponent,
         data: { titleKey: 'PAGE_TITLE.TENANTS' },
+      },
+      {
+        path: 'cheques',
+        component: ChequesComponent,
+        data: { titleKey: 'PAGE_TITLE.CHEQUES' },
       },
       {
         path: 'lease-tenancy',
@@ -107,7 +136,7 @@ export const routes: Routes = [
       {
         path: 'rental',
         component: RentalComponent,
-        data: { titleKey: 'PAGE_TITLE.RENTAL_AMOUNT' },
+        data: { titleKey: 'PAGE_TITLE.RENTAL_PORTFOLIO' },
       },
       {
         path: 'add-rentalaccount',
@@ -129,6 +158,11 @@ export const routes: Routes = [
         path: 'complaints/detail/:ticket_id',
         component: ComplaintsComponent,
         data: { titleKey: 'PAGE_TITLE.COMPLAINTS' },
+      },
+      {
+        path: 'announcements',
+        component: AnnouncementsComponent,
+        data: { titleKey: 'PAGE_TITLE.BROADCAST' },
       },
       {
         path: 'owners',
@@ -153,7 +187,7 @@ export const routes: Routes = [
       {
         path: 'staff',
         component: StaffComponent,
-        data: { titleKey: 'PAGE_TITLE.STAFF' },
+        data: { titleKey: 'PAGE_TITLE.TEAM' },
       },
       {
         path: 'staff/detail/:staff_id',

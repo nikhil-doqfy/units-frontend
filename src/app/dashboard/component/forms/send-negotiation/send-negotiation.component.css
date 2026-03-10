@@ -1,0 +1,23 @@
+.approvalBody {
+  padding: 20px;
+}
+
+.recipientLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #2c2c2c;
+}
+
+.inputBox {
+  width: 100%;
+  min-height: 110px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background-color: #fafafa;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}

@@ -3,19 +3,16 @@
 }
 
 .cell {
-  padding: 10px;
   text-align: center;
 }
 
 .badge {
   display: inline-block;
-  padding: 6px 10px;
   border-radius: 4px;
   font-size: 13px;
   font-weight: 500;
 }
 
-/* Colors exactly like screenshot feel */
 .success {
   background-color: #e6f4ea;
   color: #1e7f3f;

@@ -1,9 +1,9 @@
-.cmmnTblBody .table-responsive {
+.cmmnTbl .table-responsive {
   overflow-y: auto;
   position: relative;
 }
 
-.cmmnTblBody table.header-stickey thead th {
+.cmmnTbl table.header-stickey thead th {
   position: sticky;
   top: 0;
 }

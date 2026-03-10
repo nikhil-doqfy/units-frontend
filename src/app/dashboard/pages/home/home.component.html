@@ -88,7 +88,7 @@
     <div class="col-lg-7">
       <app-white-card
         title="{{ 'REVENUE' | translate }}"
-        subtitle="{{ 'SUBTITLE' | translate }}"
+        subtitle="{{ 'SUBTITLE' | translate }} - AED {{ totalRevenue }}"
         [showActions]="true"
         customClass="pb-0"
       >
@@ -132,7 +132,7 @@
                       type="year"
                       name="year"
                       [(ngModel)]="selectedYear"
-                      [placeholder]="'please Enter a year' | translate"
+                      [placeholder]="'PLEASE_ENTER_YEAR' | translate"
                     />
                   </div>
                   <!-- <div class="col-md-6">
@@ -223,7 +223,7 @@
     <div class="col-lg-7">
       <app-white-card
         title="{{ 'DUES' | translate }}"
-        subtitle="{{ 'TOTAL_DUE_AMOUNT' | translate }}"
+        subtitle="{{ 'TOTAL_DUE_AMOUNT' | translate }} : {{ totalAmount }}"
         [showActions]="true"
         customClass="pb-0"
       >
@@ -262,7 +262,7 @@
                     <input
                       type="number"
                       class="form-control"
-                      placeholder="Enter year"
+                      [placeholder]="'ENTER_YEAR' | translate"
                       [(ngModel)]="selectedYear"
                       name="year"
                     />
@@ -397,7 +397,7 @@
                           <input
                             type="number"
                             class="form-control"
-                            placeholder="Enter year"
+                            [placeholder]="'ENTER_YEAR' | translate"
                             [(ngModel)]="selectedYear"
                             name="year"
                           />
@@ -419,49 +419,58 @@
             </div>
           </div>
         </div>
-        <div class="cmmnTblBody">
+        <div class="cmmnTbl">
           <div class="table-responsive" [style.max-height]="tableMaxHeight">
             <!-- [style]="{
               'max-height': computHeight(),
             }" -->
-            <table class="header-stickey table-bordered">
+            <table class="header-stickey table-bordered table">
               <thead>
                 <tr>
                   <th>{{ "SI.No" | translate }}</th>
-                  <th>{{ "PROPERETY" | translate }}</th>
+                  <th>{{ "PROPERTY" | translate }}</th>
                   <th>{{ "NAME" | translate }}</th>
                   <th>{{ "CHEQUE NUMBER" | translate }}</th>
                   <th>{{ "STATUS" | translate }}</th>
                   <th width="200">{{ "AMOUNT" | translate }}</th>
                 </tr>
               </thead>
-              <tbody *ngIf="chequeList.length; else noData">
-                <tr *ngFor="let c of chequeList; let i = index">
-                  <!-- <td>{{ i + 1 }}</td> -->
-                  <td>{{ c.lease_number || "N/A" }}</td>
-                  <td>{{ c.property_unit_name }}</td>
-                  <td>{{ c.tenant_name }}</td>
-                  <td>{{ c.cheque_number || "N/A" }}</td>
-                  <td>
-                    <ng-container
-                      *ngIf="c?.status; else noStatus"
-                    ></ng-container>
-                    <app-badge
-                      [title]="c.status"
-                      [status]="
-                        c.status === 'Payment Successful'
-                          ? 'light-green'
-                          : c.status === 'Payment Bounced'
-                            ? 'red'
-                            : 'yellow'
-                      "
-                    />
-                    <ng-template #noStatus>
-                      <span>No Status</span>
-                    </ng-template>
-                  </td>
-                  <td>AED {{ c.amount | number }}</td>
-                </tr>
+              <tbody>
+                <!-- *ngIf="chequeList.length; else noData" -->
+                @for (approval of chequeList; track $index) {
+                  <tr *ngFor="let c of chequeList; let i = index">
+                    <!-- <td>{{ i + 1 }}</td> -->
+                    <td>{{ c.lease_number || "N/A" }}</td>
+                    <td>{{ c.property_unit_name }}</td>
+                    <td>{{ c.tenant_name }}</td>
+                    <td>{{ c.cheque_number || "N/A" }}</td>
+                    <td>
+                      <!-- <ng-container
+                        *ngIf="c?.status; else noStatus"
+                      ></ng-container> -->
+                      <app-badge
+                        [title]="c.status"
+                        [status]="
+                          c.status === 'Payment Successful'
+                            ? 'light-green'
+                            : c.status === 'Payment Bounced'
+                              ? 'red'
+                              : 'yellow'
+                        "
+                      />
+                      <!-- <ng-template #noStatus>
+                        <span><app-no-data></app-no-data></span>
+                      </ng-template> -->
+                    </td>
+                    <td>AED {{ c.amount | number }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="20" align="center">
+                      <app-no-data></app-no-data>
+                    </td>
+                  </tr>
+                }
               </tbody>
               <ng-template #noData>
                 <tr>
@@ -571,7 +580,7 @@
                     <input
                       type="number"
                       class="form-control"
-                      placeholder="Enter year"
+                      [placeholder]="'ENTER_YEAR' | translate"
                       [(ngModel)]="selectedYear"
                       name="year"
                     />

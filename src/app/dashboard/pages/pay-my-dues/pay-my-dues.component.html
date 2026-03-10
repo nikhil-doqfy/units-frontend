@@ -1,111 +1,161 @@
 <div class="row g-4">
-    <div class="col-md-6 col-xxl-7">
-        <app-white-card title="Details" size="md">
-            <div class="pymntMthdOuter">
-                <div class="pymntMthdOptns">
-                    <label>
-                        <input type="radio" name="paymentMethod" value="credit-Debit-card"
-                            [(ngModel)]="paymentMethodView" />
-                        <span>Credit/Debit Card</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="paymentMethod" value="NEFT-bank-transfer"
-                            [(ngModel)]="paymentMethodView" />
-                        <span>NEFT/Bank Transfer</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="paymentMethod" value="PayPal" [(ngModel)]="paymentMethodView" />
-                        <span><app-paypal-icon /></span>
-                    </label>
-                </div>
-                <div class="pymntMthdCol" *ngIf="paymentMethodView === 'credit-Debit-card'">
-                    <div class="commonForm pymntMthdForm">
-                        <app-dash-form>
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <div class="mb-0">
-                                            <input class="form-control" type="text" name="cardholderName"
-                                                placeholder="Cardholder Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="mb-0 iconGroup">
-                                            <input class="form-control" type="number" name="carNumber"
-                                                placeholder="Card Number">
-                                            <!-- <i><app-card-icon /></i> -->
-                                        </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="mb-0">
-                                            <input class="form-control" type="text" name="expiryDate"
-                                                placeholder="Expiry date">
-                                        </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="mb-0">
-                                            <input class="form-control" type="text" name="cvv" placeholder="CVV">
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </app-dash-form>
+  <div class="col-md-6 col-xxl-7">
+    <app-white-card [title]="'DETAILS' | translate" size="md">
+      <div class="pymntMthdOuter">
+        <div class="pymntMthdOptns">
+          <label>
+            <input
+              type="radio"
+              name="paymentMethod"
+              value="credit-Debit-card"
+              [(ngModel)]="paymentMethodView"
+            />
+            <span>Credit/Debit Card </span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="paymentMethod"
+              value="NEFT-bank-transfer"
+              [(ngModel)]="paymentMethodView"
+            />
+            <span> NEFT/Bank Transfer </span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="paymentMethod"
+              value="PayPal"
+              [(ngModel)]="paymentMethodView"
+            />
+            <span><app-paypal-icon /></span>
+          </label>
+        </div>
+        <div
+          class="pymntMthdCol"
+          *ngIf="paymentMethodView === 'credit-Debit-card'"
+        >
+          <div class="commonForm pymntMthdForm">
+            <app-dash-form>
+              <form>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <div class="mb-0">
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="cardholderName"
+                        [placeholder]="'CARDHOLDER_NAME' | translate"
+                      />
                     </div>
-                    <p>Secure payment with SSL Encryptioninfo</p>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-0 iconGroup">
+                      <input
+                        class="form-control"
+                        type="number"
+                        name="carNumber"
+                        [placeholder]="'CARD_NUMBER' | translate"
+                      />
+                      <!-- <i><app-card-icon /></i> -->
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="mb-0">
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="expiryDate"
+                        [placeholder]="'Expiry date' | translate"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="mb-0">
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="cvv"
+                        placeholder="CVV"
+                      />
+                    </div>
+                  </div>
                 </div>
+              </form>
+            </app-dash-form>
+          </div>
+          <p>{{ "SECURE SSL PAYMENT" | translate }}</p>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+  <div class="col-md-6 col-xxl-5">
+    <app-white-card title="Plan info" size="md">
+      <div class="pmntPlanOuter">
+        <div class="pmntPlanHdr">
+          <ul>
+            <li><span>Rent:</span> AED32,99</li>
+            <li><span>Maintenance:</span> AED120</li>
+            <li><span></span>Others: --</li>
+          </ul>
+        </div>
+        <div class="pmntPlanBdy">
+          <div>
+            <p>No of Tenants</p>
+            <div class="pmntPlanQty">
+              <button type="button" (click)="decreaseQty()">
+                <app-minus-icon />
+              </button>
+              <input
+                class="form-control"
+                type="text"
+                name="quantity"
+                [(ngModel)]="quantity"
+              />
+              <button type="button" (click)="increaseQty()">
+                <app-plus-icon />
+              </button>
             </div>
-        </app-white-card>
-    </div>
-    <div class="col-md-6 col-xxl-5">
-        <app-white-card title="Plan info" size="md">
-            <div class="pmntPlanOuter">
-                <div class="pmntPlanHdr">
-                    <ul>
-                        <li><span>Rent:</span> AED32,99</li>
-                        <li><span>Maintenance:</span> AED120</li>
-                        <li><span></span>Others: --</li>
-                    </ul>
-                </div>
-                <div class="pmntPlanBdy">
-                    <div>
-                        <p>No of Tenants</p>
-                        <div class="pmntPlanQty">
-                            <button type="button" (click)="decreaseQty()">
-                                <app-minus-icon />
-                            </button>
-                            <input class="form-control" type="text" name="quantity" [(ngModel)]="quantity" />
-                            <button type="button" (click)="increaseQty()">
-                                <app-plus-icon />
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <p><b>Billing</b></p>
-                            <p>Monthly Yearly</p>
-                        </div>
-                        <h5>AED13.89 / Year</h5>
-                    </div>
-                    <div class="commonForm">
-                        <div class="w-100">
-                            <input class="form-control" type="text" name="promoCode" placeholder=" Have Promo Code" />
-                        </div>
-                        <button type="button" class="btn btnCommon btnBorder">Apply</button>
-                    </div>
-                    <div>
-                        <div>
-                            <p><b>Charged today</b></p>
-                            <p><small>Taxes included (18%): 3,645.00 AED/year</small></p>
-                        </div>
-                        <h4>AED123.89 / Year</h4>
-                    </div>
-                </div>
-                <div class="pmntPlanFtr">
-                    <button type="button" class="btn btnCommon btnBorder"
-                        (click)="goToPaymentsAndInvoice()">Cancel</button>
-                    <button type="button" class="btn btnCommon w-100">Confirm & Pay</button>
-                </div>
+          </div>
+          <div>
+            <div>
+              <p><b>Billing</b></p>
+              <p>Monthly Yearly</p>
             </div>
-        </app-white-card>
-    </div>
+            <h5>AED13.89 / Year</h5>
+          </div>
+          <div class="commonForm">
+            <div class="w-100">
+              <input
+                class="form-control"
+                type="text"
+                name="promoCode"
+                placeholder=" Have Promo Code"
+              />
+            </div>
+            <button type="button" class="btn btnCommon btnBorder">Apply</button>
+          </div>
+          <div>
+            <div>
+              <p><b>Charged today</b></p>
+              <p><small>Taxes included (18%): 3,645.00 AED/year</small></p>
+            </div>
+            <h4>AED123.89 / Year</h4>
+          </div>
+        </div>
+        <div class="pmntPlanFtr">
+          <button
+            type="button"
+            class="btn btnCommon btnBorder"
+            (click)="goToPaymentsAndInvoice()"
+          >
+            Cancel
+          </button>
+          <button type="button" class="btn btnCommon w-100">
+            Confirm & Pay
+          </button>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
 </div>

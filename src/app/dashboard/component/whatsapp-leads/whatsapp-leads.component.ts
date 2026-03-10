@@ -10,6 +10,7 @@ import { UnicodeIconComponent } from '../../../icons/unicode-icon/unicode-icon.c
 import { AngleIconComponent } from '../../../icons/angle-icon/angle-icon.component';
 import { QrCodeComponent } from '../../../shared/qr-code/qr-code.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { WhatsappQrCodeComponent } from '../../../whatsapp-qr-code/whatsapp-qr-code.component';
 
 @Component({
   selector: 'app-whatsapp-leads',
@@ -26,6 +27,7 @@ import { TranslateModule } from '@ngx-translate/core';
     AngleIconComponent,
     QrCodeComponent,
     TranslateModule,
+    WhatsappQrCodeComponent,
   ],
   templateUrl: './whatsapp-leads.component.html',
   styleUrl: './whatsapp-leads.component.css',

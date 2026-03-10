@@ -1,4 +1,4 @@
-<ng-container *ngIf="!showDetailView">
+<!-- <ng-container *ngIf="!showDetailView">
   <div
     class="mb-3"
     *ngIf="currentRole === 'owner' || currentRole === 'property-manager'"
@@ -31,9 +31,7 @@
     </app-white-card>
   </div>
 
-  <!-- <router-outlet></router-outlet> -->
-
-  <!-- PropertiesComponent.html -->
+  PropertiesComponent.html
   <ng-container *ngIf="activeTab === 'properties'">
     <div
       *ngIf="currentRole === 'owner' || currentRole === 'property-manager'"
@@ -99,21 +97,6 @@
           <div class="col-md-auto">
             <div class="d-flex align-items-center gap-2 gap-md-3">
               <ng-container *ngIf="propertyView === 'my-properties'">
-                <!-- <app-custom-select
-                [options]="[
-                  'Falcom city',
-                  'Novatis AG...',
-                  'Agriculture',
-                  'Honda',
-                  'TVS',
-                  'Samsung'
-                ]"
-                [placeholder]="selected"
-                [selectedOption]="selected"
-                (optionSelected)="onOptionSelected($event)"
-                [isFilter]="true"
-              >
-              </app-custom-select> -->
               </ng-container>
               <ng-container *ngIf="propertyView === 'all-properties'">
                 <app-table-search
@@ -178,7 +161,7 @@
         </div>
       </div>
       <div class="cmmnTblBody">
-        <!-- My Properties -->
+         My Properties 
         <app-white-card
           *ngIf="propertyView === 'my-properties'"
           class="myProprtyCard"
@@ -263,7 +246,7 @@
           </div>
         </app-white-card>
 
-        <!-- All Properties -->
+        All Properties
         <div *ngIf="propertyView === 'all-properties'" class="table-responsive">
           <table class="table table-bordered">
             <thead>
@@ -417,10 +400,10 @@
                         type="edit"
                         (clicked)="handleEditClick(property.property_unit_id)"
                       />
-                      <!-- <app-table-action-btn
+                      <app-table-action-btn
                     type="delete"
                     (clicked)="handleDeleteClick()"
-                  /> -->
+                  />
                       <app-table-action-dropdown
                         [dropdownItems]="documentActions"
                         (actionClicked)="handleDropdownAction($event)"
@@ -536,4 +519,83 @@
       </div>
     </app-white-card>
   </div>
-</ng-container>
+</ng-container> -->
+<div
+  class="mb-3"
+  class="mb-3"
+  *ngIf="currentRole === 'property-manager' && !isUnitDetailView"
+>
+  <app-white-card>
+    <div class="row align-items-center justify-content-between g-3">
+      <div class="col-md">
+        <div class="commonBoxTabs">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="allUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#allUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="allUsers-tab-pane"
+                aria-selected="true"
+                [class.active]="activeLeadTab === 'properties'"
+                (click)="activeLeadTab = 'properties'"
+              >
+                {{ "PROPERTIES" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="newUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#newUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="newUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeLeadTab === 'units'"
+                (click)="activeLeadTab = 'units'"
+              >
+                {{ "UNITS" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="deletedUsers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#deletedUsers-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="deletedUsers-tab-pane"
+                aria-selected="false"
+                [class.active]="activeLeadTab === 'tenancy-ledger'"
+                (click)="activeLeadTab = 'tenancy-ledger'"
+              >
+                {{ "TENANCY_LEDGER" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </app-white-card>
+</div>
+<!-- Dynamic content below tabs -->
+<div class="mt-3">
+  <ng-container [ngSwitch]="activeLeadTab">
+    <app-all-properties *ngSwitchCase="'properties'"></app-all-properties>
+    <app-units
+      *ngSwitchCase="'units'"
+      (detailViewChanges)="onUnitDetailChanges($event)"
+    ></app-units>
+
+    <app-tenancy-ledger
+      *ngSwitchCase="'tenancy-ledger'"
+      (detailViewChanges)="onUnitDetailChanges($event)"
+    ></app-tenancy-ledger>
+  </ng-container>
+</div>

@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './call-icon.component.html',
-  styleUrl: './call-icon.component.css'
+  styleUrl: './call-icon.component.css',
 })
-export class CallIconComponent {
-
-}
+export class CallIconComponent {}

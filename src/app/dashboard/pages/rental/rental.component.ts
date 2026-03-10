@@ -1,6 +1,13 @@
-import { Component, DestroyRef, Input, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ɵEmptyOutletComponent } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../../shared.service';
@@ -22,6 +29,15 @@ import { BreadCrumb } from '../../../shared/model/shared.model';
 import { RentalAccountService } from '../../rental-account.service';
 import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
 import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
+import { PropertyAnalyticsComponent } from '../../component/property-analytics/property-analytics.component';
+import { InvoiceIconComponent } from '../../../icons/invoice-icon/invoice-icon.component';
+import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
+import { TermsconditionIconComponent } from '../../../icons/termscondition-icon/termscondition-icon.component';
+import { BadgeComponent } from '../../component/badge/badge.component';
+import { StatusDropdownComponent } from '../../component/status-dropdown/status-dropdown.component';
+import { AreaGraphComponent } from '../../component/charts/area-graph/area-graph.component';
+import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.component';
+import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 
 @Component({
   selector: 'app-rental',
@@ -44,6 +60,16 @@ import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh
     TableFilterButtonComponent,
     DisableIconComponent,
     RefreshIconComponent,
+    PropertyAnalyticsComponent,
+    InvoiceIconComponent,
+    DocumentTypeItemComponent,
+    TermsconditionIconComponent,
+    BadgeComponent,
+    StatusDropdownComponent,
+    AreaGraphComponent,
+    ɵEmptyOutletComponent,
+    ReceiptIconComponent,
+    ArrowDownIconComponent,
   ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',
@@ -53,6 +79,7 @@ export class RentalComponent {
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private rentalAccountService = inject(RentalAccountService);
+  showNavBar: boolean = true;
 
   constructor(
     private router: Router,
@@ -76,7 +103,7 @@ export class RentalComponent {
   selected: string = 'property:All';
   selectedLease: any = null;
   showMenu = false;
-
+  activeTab: string = 'properties';
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Rental', link: '' },
@@ -87,95 +114,6 @@ export class RentalComponent {
   rowsPerPageOptions = [10, 25, 50, 100];
   rowsPerPage = 10;
   currentPage = 1;
-
-  // leases = [
-  //   {
-  //     title: 'Abhram | Khaleejia Building | 302',
-  //     leaseNo: 'LV-24-0908',
-  //     status: 'Active',
-  //     tenantNo: '98909897',
-  //     from: '28/02/24',
-  //     to: '28/02/25',
-  //     unitType: 'Residential',
-  //     yearRent: '67,000',
-  //     otherCharges: '13,000',
-  //     vat: '--',
-  //     total: '1,00,000',
-  //   },
-  //   {
-  //     title: 'Al Najah | Platinum Tower | 1201',
-  //     leaseNo: 'LK-24-1011',
-  //     status: 'Inactive',
-  //     tenantNo: '87654321',
-  //     from: '01/03/24',
-  //     to: '28/02/25',
-  //     unitType: 'Commercial',
-  //     yearRent: '83,000',
-  //     otherCharges: '17,000',
-  //     vat: '4,000 @ 5%',
-  //     total: '1,04,000',
-  //   },
-  //   {
-  //     title: 'Basil | Emerald Heights | 507',
-  //     leaseNo: 'LM-24-1112',
-  //     status: 'Active',
-  //     tenantNo: '23456789',
-  //     from: '15/01/24',
-  //     to: '14/01/25',
-  //     unitType: 'Mixed-Use',
-  //     yearRent: '75,000',
-  //     otherCharges: '10,000',
-  //     vat: '--',
-  //     total: '85,000',
-  //   },
-  //   {
-  //     title: 'Zara | Sapphire Tower | 805',
-  //     leaseNo: 'LN-24-2022',
-  //     status: 'Active',
-  //     tenantNo: '12345678',
-  //     from: '01/04/24',
-  //     to: '31/03/25',
-  //     unitType: 'Office',
-  //     yearRent: '90,000',
-  //     otherCharges: '15,000',
-  //     vat: '5,000',
-  //     total: '1,10,000',
-  //   },
-  // ];
-  chequeStatusList = [
-    { status: 'Credited', amount: 9000 },
-    { status: 'InProgress', amount: 9000 },
-    { status: 'Bounce', amount: 9000 },
-  ];
-
-  otherChargesList = [
-    { label: 'Admin Fee', base: 32.71, vat: 1.64, total: 34.35 },
-    { label: 'Ejari Charge Disb...', base: 175.65, vat: 1.64, total: 175.65 },
-    { label: 'Gas Charges', base: 1000.0, vat: 50.0, total: 1050.0 },
-    { label: 'Commission - Dubai', base: 1200.0, vat: 60.0, total: 1260.0 },
-    { label: 'Security Deposit', base: 2400.0, vat: 0.0, total: 2400.0 },
-  ];
-
-  summaryData = [
-    {
-      title: 'Total Amount Received',
-      amount: 'AED 1,20,573',
-      badge: '12% ↑ last month',
-      badgeType: 'success',
-    },
-    {
-      title: 'Cheques Approved',
-      amount: 'AED 2,20,789',
-      badge: '5678 Cheques',
-      badgeType: 'success',
-    },
-    {
-      title: 'Cheques Deposited',
-      amount: 'AED 20,573',
-      badge: '1124 Cheques',
-      badgeType: 'warning',
-    },
-  ];
 
   chartData = [
     380000, 350000, 310000, 380000, 300000, 350000, 370000, 420000, 280000,
@@ -193,7 +131,12 @@ export class RentalComponent {
     this.initLanguageListener();
     this.getLeases();
   }
-
+  onPropertyDetailToggle(flag: boolean) {
+    this.showNavBar = flag;
+    // this.showDetailView = flag;
+    console.log('flag', flag);
+    // this.showDetailView = false;
+  }
   getLabel(key: string): string {
     return this.translate.instant(key);
   }
@@ -228,6 +171,9 @@ export class RentalComponent {
 
   leases: any[] = [];
 
+  totalAmount = 'AED 2,000.00';
+  receivedAmount = 'AED 1,200.00';
+  pendingAmount = 'AED 800.00';
   getLeases() {
     const params = {
       page: this.currentPage,
@@ -258,6 +204,7 @@ export class RentalComponent {
   onLeaseClick(lease: any) {
     this.selectedLease = lease;
     this.showDetailView = true;
+    this.showInvoiceDetails = false;
   }
 
   toggleMenu() {
@@ -300,5 +247,49 @@ export class RentalComponent {
 
   handlePreviewDocumentClick(): void {
     console.log('Preview Document button clicked');
+  }
+
+  showInvoiceDetails = false;
+  onViewInvoiceClick(lease: any, event: Event) {
+    event.preventDefault();
+    this.selectedLease = lease;
+    this.showInvoiceDetails = true;
+    console.log('Invoice Details for:', lease);
+  }
+  handleDownload(type: string) {
+    console.log('Download:', type);
+    // API call / file generate logic
+  }
+  handleShare(type: string) {
+    console.log('Share:', type);
+  }
+  showDropdown = false;
+
+  selectedq: any = {
+    label: 'Amount Credited',
+    status: 'green',
+  };
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  onStatusSelect(item: any) {
+    this.selected = item;
+    this.showDropdown = false;
+  }
+
+  showReceiptDropdown = false;
+  showMonthDropdown = false;
+  selectedReceiptType = '';
+
+  toggleReceipt() {
+    this.showReceiptDropdown = !this.showReceiptDropdown;
+    this.showMonthDropdown = false;
+  }
+
+  selectReceiptType(type: string) {
+    this.selectedReceiptType = type;
+    this.showMonthDropdown = true;
   }
 }

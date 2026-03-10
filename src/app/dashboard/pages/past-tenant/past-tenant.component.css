@@ -1,0 +1,42 @@
+.summary-card {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 14px 26px;
+  box-shadow: 0 1px 10px rgba(66, 66, 66, 0.2);
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-right: 38px;
+  min-width: 160px;
+}
+
+.amount {
+  font-size: 15px;
+  font-weight: 600;
+  color: #030507;
+  line-height: 1.2;
+}
+
+.label {
+  font-size: 14px;
+  color: #545659;
+  line-height: 1.2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .summary-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+  }
+
+  .summary-item {
+    min-width: auto;
+  }
+}

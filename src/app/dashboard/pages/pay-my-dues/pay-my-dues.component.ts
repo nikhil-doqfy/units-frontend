@@ -9,6 +9,7 @@ import { DashFormComponent } from '../../../shared/component/dash-form/dash-form
 import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
 import { MinusIconComponent } from '../../component/icons/minus-icon/minus-icon.component';
 import { SharedService } from '../../../shared.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pay-my-dues',
@@ -21,6 +22,7 @@ import { SharedService } from '../../../shared.service';
     DashFormComponent,
     PlusIconComponent,
     MinusIconComponent,
+    TranslateModule,
   ],
   templateUrl: './pay-my-dues.component.html',
   styleUrl: './pay-my-dues.component.css',

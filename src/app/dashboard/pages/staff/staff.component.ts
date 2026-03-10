@@ -144,7 +144,7 @@ export class StaffComponent {
   async loadBreadcrumb() {
     this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { label: 'PAGE_TITLE.STAFF', link: '' },
+      { label: 'PAGE_TITLE.TEAM', link: '' },
     ]);
   }
 

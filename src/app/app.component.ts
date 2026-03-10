@@ -5,6 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from './shared.service';
 import { InvoiceTemplateComponent } from './shared/invoice-template/invoice-template.component';
+import { ToastService } from './core/toast.service';
+import { CommonModule } from '@angular/common';
+import { WhatsappQrCodeComponent } from './whatsapp-qr-code/whatsapp-qr-code.component';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +17,8 @@ import { InvoiceTemplateComponent } from './shared/invoice-template/invoice-temp
     NgxSpinnerComponent,
     HttpClientModule,
     TranslateModule,
-    InvoiceTemplateComponent,
+    CommonModule,
+    WhatsappQrCodeComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -22,4 +26,15 @@ import { InvoiceTemplateComponent } from './shared/invoice-template/invoice-temp
 export class AppComponent {
   title = 'Doqfy';
   private sharedService = inject(SharedService);
+  globalMessage: string | null = null;
+
+  constructor(private toastService: ToastService) {
+    this.toastService.message$.subscribe((msg) => {
+      this.globalMessage = msg;
+
+      setTimeout(() => {
+        this.globalMessage = null;
+      }, 3000);
+    });
+  }
 }

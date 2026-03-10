@@ -1,0 +1,216 @@
+<form [formGroup]="form">
+  <app-white-card>
+    <div class="lease-wrapper">
+      <div class="lease-card">
+        <!-- Header -->
+        <div class="lease-header">
+          <h6>Leased Unit</h6>
+          <span class="badge">01</span>
+        </div>
+
+        <div class="form-grid row g-3">
+          <div class="col-md-6">
+            <label class="form-label">{{ "Start Date" }}</label>
+            <app-custom-select
+              [width]="'300px'"
+              [iconType]="'custom'"
+            ></app-custom-select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">{{ "End Date" }}</label>
+            <app-custom-select
+              [width]="'300px'"
+              [iconType]="'custom'"
+            ></app-custom-select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">{{ "Grace Start Date" }}</label>
+            <app-custom-select
+              [width]="'300px'"
+              [iconType]="'custom'"
+            ></app-custom-select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">{{ "Grace End Date" }}</label>
+            <app-custom-select
+              [width]="'300px'"
+              [iconType]="'custom'"
+            ></app-custom-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-white-card>
+
+  <div class="mt-3">
+    <app-white-card>
+      <div class="lease-wrapper">
+        <div class="lease-card">
+          <!-- Header -->
+          <div class="lease-header">
+            <h6>Amount/Rent Details</h6>
+            <span class="badge">02</span>
+          </div>
+
+          <!-- Form Grid -->
+          <div class="form-grid row g-3">
+            <div class="col-md-6">
+              <label class="form-label">{{ "Annual Amount" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Actual Annual  Amount " }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Security/Booking Amount" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ "Maintenance Charges" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Rent " }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ "Security Deposit" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ "Commission in %" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Notice-Period" }}</label>
+              <app-custom-select [width]="'300px'"></app-custom-select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Contract Amount" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Discount (Optional)" }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Shell & Core " }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'Enter here'"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "Payment Count" }}</label>
+              <app-custom-select [width]="'300px'"></app-custom-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+  <div class="mt-3">
+    <app-white-card>
+      <div class="lease-header">
+        <h6>Other Charges</h6>
+        <span style="color: #bec1c2"> Total:</span> <span>AED 18,000.00</span>
+        <span class="badge">03</span>
+      </div>
+      <div class="cmmnTblBody">
+        <div class="table-responsive">
+          <table class="charges-table">
+            <thead>
+              <tr>
+                <th>{{ "DESCRIPTION" | translate }}</th>
+                <th>
+                  {{ "AMOUNT" | translate }}
+                </th>
+                <th>{{ "TAX_CODE" | translate }}</th>
+                <th>{{ "VAT" | translate }}</th>
+                <th>{{ "TOTAL_AMOUNT" | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let c of charges">
+                <td>
+                  <label class="checkbox">
+                    <input
+                      type="checkbox"
+                      [(ngModel)]="c.checked"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <span class="desc-cell"></span>
+                    {{ c.label }}
+                  </label>
+                </td>
+                <td>{{ c.amount | number: "1.2-2" }}</td>
+                <td>{{ c.tax }}</td>
+                <td>{{ c.vat | number: "1.2-2" }}</td>
+                <td>{{ c.total | number: "1.2-2" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-white-card>
+  </div>
+</form>
