@@ -495,5 +495,6 @@
   "AGREMENT": "اتفاقية",
   "SELECT_STAFF_ROLE": "حدد دور الموظفين",
   "ASIGNED_STAFF": "الموظفين المعينين",
-  "NEW_COMPLAINT": "شكوى جديدة"
+  "NEW_COMPLAINT": "شكوى جديدة",
+  "TICKET_AGING": "شيخوخة التذاكر"
 }

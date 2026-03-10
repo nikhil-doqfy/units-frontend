@@ -182,6 +182,7 @@
               <th>{{ "RAISED_BY" | translate }}</th>
               <th>{{ "RAISED_DATE" | translate }}</th>
               <th width="300">{{ "DESCRIPTION" | translate }}</th>
+              <th>{{ "TICKET_AGING" | translate }}</th>
               <th>{{ "PHOTOS" | translate }}</th>
               <th>{{ "STATUS" | translate }}</th>
               <th width="120">{{ "ACTIONS" | translate }}</th>
@@ -216,6 +217,15 @@
                 <td>{{ item.raised_date | date: "dd/mm/yyyy" : "-" }}</td>
                 <td>
                   {{ item.description || "N/A" }}
+                </td>
+                <td>
+                  <app-ticket-aging
+                    [duration]="'3d, 6hr:30sec'"
+                    status="success"
+                  >
+                  </app-ticket-aging>
+                  <!-- <app-ticket-aging [duration]="null" status="empty">
+                  </app-ticket-aging> -->
                 </td>
                 <td>
                   <app-table-multi-img-item

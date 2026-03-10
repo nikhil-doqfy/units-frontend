@@ -10,11 +10,12 @@ import { StorageService } from '../shared/services/storage.service';
 })
 export class ComplaintsService {
   private http = inject(HttpClient);
+  private sharedService = inject(SharedService);
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
 
   constructor() {}
 
-  getComplanints(params?: { [key: string]: any }): Observable<any> {
+  getTickets(params?: { [key: string]: any }): Observable<any> {
     let httpParams = new HttpParams();
 
     if (params) {
@@ -30,5 +31,11 @@ export class ComplaintsService {
     }
 
     return this.http.get(`${this.SERVER_ADDRESS}/complaint`, { params });
+  }
+  getTicketsDetails(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/admin/tickets/detail/${queryString}`,
+    );
   }
 }
