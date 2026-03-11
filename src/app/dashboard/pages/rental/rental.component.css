@@ -998,3 +998,8 @@ app-plus-icon {
 .arrow {
   margin-left: 0.5rem !important;
 }
+.status-grey {
+  background-color: green;
+  padding: 10px;
+  border-radius: 10px;
+}

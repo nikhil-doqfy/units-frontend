@@ -18,11 +18,31 @@ export class AreaGraphComponent {
           380000, 390000, 420000, 480000,
         ],
       },
+      {
+        name: 'Cheque Bounce',
+        data: [
+          20000, 15000, 18000, 17000, 16000, 14000, 15000, 12000, 13000, 11000,
+          10000, 9000,
+        ],
+      },
+      // {
+      //   name: 'Total Amount',
+      //   data: [
+      //     400000, 405000, 388000, 377000, 366000, 384000, 375000, 362000,
+      //     393000, 401000, 430000, 489000,
+      //   ],
+      // },
     ],
 
     chart: {
       type: 'area',
       height: 300,
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
     },
     legend: {
       position: 'top',
@@ -53,8 +73,7 @@ export class AreaGraphComponent {
         stops: [0, 100, 100],
       },
     },
-
-    colors: ['#16a34a'],
+    colors: ['#16a34a', '#ef4444', '#2563eb'],
 
     markers: {
       shape: 'square',
@@ -102,24 +121,24 @@ export class AreaGraphComponent {
       // strokeDashArray: 4,
     },
 
-    // tooltip: {
-    //   custom: ({ series, seriesIndex, dataPointIndex }: any) => `
-    //     <div style="
-    //       padding:12px;
-    //       background:#fff;
-    //       border-radius:12px;
-    //       box-shadow:0 6px 18px rgba(0,0,0,.15);
-    //     ">
-    //       <div style="font-size:12px;color:#6b7280">JAN – DEC 2025</div>
-    //       <strong style="font-size:16px">
-    //         AED ${series[seriesIndex][dataPointIndex].toLocaleString()}
-    //       </strong>
-    //       <div style="font-size:12px;color:#6b7280;margin-top:4px">
-    //         Amount Received
-    //       </div>
-    //     </div>
-    //   `,
-    // },
+    tooltip: {
+      custom: ({ series, seriesIndex, dataPointIndex }: any) => `
+        <div style="
+          padding:12px;
+          background:#fff;
+          border-radius:12px;
+          box-shadow:0 6px 18px rgba(0,0,0,.15);
+        ">
+          <div style="font-size:12px;color:#6b7280">JAN – DEC 2025</div>
+          <strong style="font-size:16px">
+            AED ${series[seriesIndex][dataPointIndex].toLocaleString()}
+          </strong>
+          <div style="font-size:12px;color:#6b7280;margin-top:4px">
+            Amount Received
+          </div>
+        </div>
+      `,
+    },
 
     responsive: [
       {

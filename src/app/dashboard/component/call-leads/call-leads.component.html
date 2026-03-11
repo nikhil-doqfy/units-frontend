@@ -38,7 +38,7 @@
               <th>{{ "PROPERTY_NAME" | translate }}</th>
               <th>{{ "UNIT" | translate }}</th>
               <th>{{ "RENT(AED)" | translate }}</th>
-              <th>{{ "CALL_SUMMARY" | translate }}</th>
+              <th class="call-summary-col">{{ "CALL_SUMMARY" | translate }}</th>
               <th>{{ "CALLER_NAME" | translate }}</th>
               <th>{{ "PLATFROM" | translate }}</th>
 
@@ -59,7 +59,7 @@
               </td>
               <td>Evergreen (B) 204</td>
               <td>1,800.00</td>
-              <td></td>
+              <td><app-audio-player></app-audio-player></td>
               <td>jensi</td>
               <td>
                 <app-platfrom-badge
@@ -91,13 +91,7 @@
               <td>Harmony (C) 302</td>
               <td>1,450.00</td>
               <td>
-                <app-call-voice-summary
-                  audioUrl="
-                  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
-                "
-                  summary="'This is a test call summary.'"
-                >
-                </app-call-voice-summary>
+                <app-audio-player></app-audio-player>
               </td>
 
               <td>Richard</td>
@@ -131,11 +125,7 @@
               <td>Sunrise (D) 101</td>
               <td>1,350.00</td>
               <td>
-                <!-- <audio
-                  src="../assets/song/sample.mp3"
-                  controls
-                  preload="metadata"
-                ></audio> -->
+                <app-audio-player></app-audio-player>
               </td>
 
               <td>Thaomas</td>
@@ -167,7 +157,7 @@
               </td>
               <td>Majestic (E) 505</td>
               <td>1,600.00</td>
-              <td></td>
+              <td><app-audio-player></app-audio-player></td>
               <td>Akshay</td>
 
               <td>
@@ -198,7 +188,7 @@
               </td>
               <td>Pinnacle (F) 606</td>
               <td>2,000.00</td>
-              <td></td>
+              <td><app-audio-player></app-audio-player></td>
               <td>Avanshi</td>
 
               <td>

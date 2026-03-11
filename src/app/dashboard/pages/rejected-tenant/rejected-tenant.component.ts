@@ -93,7 +93,9 @@ export class RejectedTenantComponent {
   ngOnChanges() {
     this.applyFilter();
   }
-
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
   applyFilter() {
     console.log(this.selectedFilter);
   }

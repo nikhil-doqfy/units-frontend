@@ -1,0 +1,35 @@
+<div class="voice-summary">
+  <!-- AUDIO PLAYER -->
+  <div class="audio-bar" *ngIf="showPlayer">
+    <span class="pause"><app-pause-icons></app-pause-icons></span>
+
+    <span class="close" (click)="closePlayer()">✕</span>
+
+    <span class="time">00:00</span>
+
+    <input
+      type="range"
+      class="progress"
+      [value]="progress"
+      (input)="seekAudio($event)"
+    />
+
+    <span class="duration">-01:23</span>
+
+    <audio #audio (timeupdate)="updateProgress()">
+      <source src="assets/audio/sample.mp3" type="audio/mpeg" />
+    </audio>
+  </div>
+
+  <!-- SUMMARY TEXT -->
+  <div class="summary-row" *ngIf="!showPlayer">
+    <span class="play" (click)="playAudio()"
+      ><app-play-icons></app-play-icons
+    ></span>
+
+    <p>
+      The standard chunk of Lorem Ipsum used since the 1500s is reproduced below
+      for those interested...
+    </p>
+  </div>
+</div>

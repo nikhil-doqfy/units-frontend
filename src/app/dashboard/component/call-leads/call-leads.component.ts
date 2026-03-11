@@ -16,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { PlatfromBadgeComponent } from '../platfrom-badge/platfrom-badge.component';
 import { CallVoiceSummaryComponent } from '../call-voice-summary/call-voice-summary.component';
+import { AudioPlayerComponent } from '../../../shared/audio-player/audio-player.component';
 
 @Component({
   selector: 'app-call-leads',
@@ -36,6 +37,7 @@ import { CallVoiceSummaryComponent } from '../call-voice-summary/call-voice-summ
     CommonModule,
     PlatfromBadgeComponent,
     CallVoiceSummaryComponent,
+    AudioPlayerComponent,
   ],
   templateUrl: './call-leads.component.html',
   styleUrl: './call-leads.component.css',

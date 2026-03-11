@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { SharePlatfromIconComponent } from '../../icons/share-platfrom-icon/share-platfrom-icon.component';
 import { CommonModule } from '@angular/common';
+import { UploadBlueIconComponent } from '../../icons/upload-blue-icon/upload-blue-icon.component';
 
 @Component({
   selector: 'app-property-share-platfrom',
   standalone: true,
-  imports: [SharePlatfromIconComponent, CommonModule],
+  imports: [SharePlatfromIconComponent, CommonModule,UploadBlueIconComponent],
   templateUrl: './property-share-platfrom.component.html',
   styleUrl: './property-share-platfrom.component.css',
 })

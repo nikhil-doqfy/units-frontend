@@ -275,11 +275,12 @@
       { label: getLabel('PERIOD_TO'), value: '28/02/25' },
       { label: getLabel('UNIT_TYPE'), value: 'Residential' },
       { label: getLabel('YEAR_RENT'), value: '67,000' },
-      { label: getLabel('OTHER_CHARGESE'), value: '13,000' },
+      { label: getLabel('OTHER_CHARGE'), value: '13,000' },
       { label: getLabel('VAT'), value: '--' },
       { label: getLabel('TOTAL_RENT'), value: '1,00,000' },
     ]"
     [showEdit]="true"
+    [showCloseBtn]="false"
     (edit)="handleEditClick()"
     (back)="handleBackClick()"
   >
@@ -376,7 +377,7 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
             <button
-              class="nav-link"
+              class="nav-link active"
               id="tenantDocument-tab"
               data-bs-toggle="tab"
               data-bs-target="#tenantDocument-tab-pane"
@@ -476,6 +477,7 @@
       <app-area-graph></app-area-graph>
     </app-white-card>
   </div>
+
   <div class="cmmnTblOuter mt-3">
     <div class="cmmnTblHdr">
       <div class="row align-items-center">
@@ -556,7 +558,12 @@
                     <label for="apr">Apr 2025</label>
                   </div>
 
-                  <button class="btn generate-btn w-100">Generate</button>
+                  <button
+                    class="btn generate-btn w-100"
+                    (click)="onViewInvoiceClick(selectedLease, $event)"
+                  >
+                    Generate
+                  </button>
                 </div>
               </div>
             </div>
@@ -564,14 +571,12 @@
             <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
-              (clicked)="handleExportClick()"
             >
               <app-filter-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
-              (clicked)="handleExportClick()"
             >
               <app-export-icon />
             </app-table-filter-btn>
@@ -579,19 +584,17 @@
         </div>
       </div>
     </div>
-    <div class="cmmnTblBody">
+    <div class="cmmnTbl">
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>{{ "TRANSACTION_ID" | translate }}</th>
               <th>
-                <button type="button">{{ "BANK_NAME" | translate }}</button>
+                {{ "BANK_NAME" | translate }}
               </th>
               <th>
-                <button type="button">
-                  {{ "BANK_ACCOUNT" | translate }}
-                </button>
+                {{ "BANK_ACCOUNT" | translate }}
               </th>
               <th>{{ "CHEQUE_NUMBER" | translate }}</th>
               <th>{{ "CHEQUE_DATE" | translate }}</th>
@@ -600,6 +603,7 @@
               <th>{{ "STATUS" | translate }}</th>
               <th>{{ "AMOUNT" | translate }}</th>
               <th>{{ "Additional Charges" }}</th>
+              <th>Total Amount</th>
               <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
@@ -614,33 +618,20 @@
               <td>Cheque</td>
               <td>Jan 2025 Rent</td>
 
-              <td class="status-cell">
-                <div class="status-wrapper">
-                  <app-badge
-                    [title]="selectedq?.label || 'Amount Credited'"
-                    [status]="selectedq?.status || 'green'"
-                    (click)="toggleDropdown()"
-                  >
-                  </app-badge>
-
-                  <app-status-dropdown
-                    [show]="showDropdown"
-                    (select)="onStatusSelect($event)"
-                  >
-                  </app-status-dropdown>
-                </div>
+              <td class="status-green">
+                <app-status-action-dropdown
+                  status="Amount Credited"
+                ></app-status-action-dropdown>
               </td>
 
               <td>9,000</td>
               <td>---</td>
+              <td>9,000.00</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn type="preview" />
                   <app-table-action-btn type="download" />
                   <!-- (clicked)="handleDownloadClick()" -->
-                  <app-table-action-btn
-                    type="preview"
-                    (clicked)="handlePreviewClick()"
-                  />
                 </div>
               </td>
             </tr>
@@ -653,28 +644,44 @@
               <td>11/01/2024</td>
               <td>Cheque</td>
               <td>Feb 2025 Rent</td>
-              <td class="status-cell">
-                <div class="status-wrapper">
-                  <app-badge
-                    [title]="selectedq?.label || 'Amount Credited'"
-                    [status]="selectedq?.status || 'green'"
-                    (click)="toggleDropdown()"
-                  >
-                  </app-badge>
 
-                  <app-status-dropdown
-                    [show]="showDropdown"
-                    (select)="onStatusSelect($event)"
-                  >
-                  </app-status-dropdown>
-                </div>
+              <td class="status-black">
+                <app-status-action-dropdown
+                  status="Check Bounce"
+                ></app-status-action-dropdown>
               </td>
 
               <td>9,000</td>
               <td>
                 300.00
-                <i><app-termscondition-icon></app-termscondition-icon></i>
+                <i
+                  [ngbPopover]="chargesPopover"
+                  triggers="click"
+                  placement="top"
+                  container="body"
+                  class="charges-info"
+                >
+                  <app-termscondition-icon></app-termscondition-icon>
+                </i>
 
+                <ng-template #chargesPopover>
+                  <div class="chargesTooltip">
+                    <div class="chargesRow">
+                      <span>Cheque Bounce</span>
+                      <span class="value">240</span>
+                    </div>
+
+                    <div class="chargesRow">
+                      <span>Tax</span>
+                      <span class="value">60</span>
+                    </div>
+
+                    <div class="chargesRow">
+                      <span>Total</span>
+                      <span class="value">300</span>
+                    </div>
+                  </div>
+                </ng-template>
                 <div class="badge-wrapper">
                   <div class="additional cheque">
                     <span>Cheque bounce</span>
@@ -685,6 +692,7 @@
                   </div>
                 </div>
               </td>
+              <td>9,000.00</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
@@ -704,24 +712,14 @@
               <td>11/15/2024</td>
               <td>Cheque</td>
               <td>Mar 2025 Rent</td>
-              <td class="status-cell">
-                <div class="status-wrapper">
-                  <app-badge
-                    [title]="selectedq?.label || 'Amount Credited'"
-                    [status]="selectedq?.status || 'green'"
-                    (click)="toggleDropdown()"
-                  >
-                  </app-badge>
-
-                  <app-status-dropdown
-                    [show]="showDropdown"
-                    (select)="onStatusSelect($event)"
-                  >
-                  </app-status-dropdown>
-                </div>
+              <td class="status-grey">
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
               </td>
               <td>9,000</td>
               <td>---</td>
+              <td>9,000.00</td>
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
@@ -742,34 +740,16 @@
               <td>Cheque</td>
               <td>Other Charges</td>
 
-              <td class="status-cell">
-                <div class="status-wrapper">
-                  <app-badge
-                    [title]="selectedq?.label || 'Amount Credited'"
-                    [status]="selectedq?.status || 'green'"
-                    (click)="toggleDropdown()"
-                  >
-                  </app-badge>
-
-                  <app-status-dropdown
-                    [show]="showDropdown"
-                    (select)="onStatusSelect($event)"
-                  >
-                  </app-status-dropdown>
-                </div>
+              <td class="status-grey">
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
               </td>
 
               <td>9,000</td>
               <td>---</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn type="download" />
-                  <!-- (clicked)="handleDownloadClick()" -->
-                  <app-table-action-btn type="preview" />
-
-                  <!-- (clicked)="handlePreviewClick()" -->
-                </div>
-              </td>
+              <td>9,000.00</td>
+              <td align="center">--</td>
             </tr>
 
             <tr>
@@ -780,35 +760,16 @@
               <td>12/15/2024</td>
               <td>Cheque</td>
               <td>Apr 2025 Rent</td>
-              <td class="status-cell">
-                <div class="status-wrapper">
-                  <app-badge
-                    [title]="selectedq?.label || 'Amount Credited'"
-                    [status]="selectedq?.status || 'green'"
-                    (click)="toggleDropdown()"
-                    [enableBg]="true"
-                  >
-                  </app-badge>
-
-                  <app-status-dropdown
-                    [show]="showDropdown"
-                    (select)="onStatusSelect($event)"
-                  >
-                  </app-status-dropdown>
-                </div>
+              <td class="status-grey">
+                <app-status-action-dropdown
+                  status="Invoice Generated"
+                ></app-status-action-dropdown>
               </td>
 
               <td>9,000</td>
               <td>---</td>
-              <td align="center">
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-btn type="download" />
-                  <!-- (clicked)="handleDownloadClick()" -->
-                  <app-table-action-btn type="preview" />
-
-                  <!-- (clicked)="handlePreviewClick()" -->
-                </div>
-              </td>
+              <td>9,000.00</td>
+              <td align="center">--</td>
             </tr>
           </tbody>
         </table>
@@ -831,6 +792,7 @@
       </app-table-pagination>
     </div>
   </div>
+
   <div class="mt-3">
     <app-white-card [title]="'ACTIVITY_HISTORY' | translate">
       <div class="activityWrapper">
