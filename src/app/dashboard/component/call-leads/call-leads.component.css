@@ -1,19 +1,9 @@
-.call-voice-note-summary {
-  max-width: 300px;
-  padding: 8px;
-  vertical-align: middle;
+.call-summary-col {
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
 }
-
-.voice-player {
-  width: 100%;
-  max-width: 280px;
-}
-
-.summary-text {
-  display: inline-block;
-  font-size: 14px;
-  color: #333;
-  white-space: nowrap;
+.call-summary-col,
+.call-summary-col td {
   overflow: hidden;
-  text-overflow: ellipsis;
 }

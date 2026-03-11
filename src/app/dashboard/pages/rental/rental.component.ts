@@ -38,6 +38,8 @@ import { StatusDropdownComponent } from '../../component/status-dropdown/status-
 import { AreaGraphComponent } from '../../component/charts/area-graph/area-graph.component';
 import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.component';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
+import { StatusActionDropdownComponent } from '../../../status-action-dropdown/status-action-dropdown.component';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-rental',
@@ -70,6 +72,8 @@ import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-do
     ɵEmptyOutletComponent,
     ReceiptIconComponent,
     ArrowDownIconComponent,
+    StatusActionDropdownComponent,
+    NgbPopoverModule,
   ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',
@@ -80,19 +84,6 @@ export class RentalComponent {
   private translate = inject(TranslateService);
   private rentalAccountService = inject(RentalAccountService);
   showNavBar: boolean = true;
-
-  constructor(
-    private router: Router,
-    private destroyRef: DestroyRef,
-    private themeService: ThemeService,
-  ) {
-    const key = this.route.snapshot.data['titleKey'];
-    this.sharedService.setTitle(key);
-
-    this.sharedService.showDetail$.subscribe((value) => {
-      this.showDetailView = value;
-    });
-  }
 
   @Input() data: any;
   @Input() selectedMonth: string = 'Nov 2025';
@@ -120,6 +111,33 @@ export class RentalComponent {
     340000, 410000, 230000,
   ];
 
+  leases = [
+    {
+      title: 'Lease Agreement - A Wing',
+      leaseNo: 'L-1001',
+      status: 'Active',
+      tenantNo: 'T-201',
+      period_from: '2025-01-01',
+      period_to: '2026-01-01',
+      unitType: '2 BHK',
+      year_rent: '500000',
+      other_charges: '20000',
+      vat: '5%',
+      total_rent: '520000',
+    },
+  ];
+  constructor(
+    private router: Router,
+    private destroyRef: DestroyRef,
+    private themeService: ThemeService,
+  ) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+
+    this.sharedService.showDetail$.subscribe((value) => {
+      this.showDetailView = value;
+    });
+  }
   ngOnInit() {
     this.loadBreadcrumb();
 
@@ -169,7 +187,7 @@ export class RentalComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  leases: any[] = [];
+  // leases: any[] = [];
 
   totalAmount = 'AED 2,000.00';
   receivedAmount = 'AED 1,200.00';
