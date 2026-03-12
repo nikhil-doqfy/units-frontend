@@ -58,7 +58,6 @@
 
   .form-control,
   .form-select {
-    /* width: 260.5px; */
     height: 38px;
     border-radius: 8px;
   }
@@ -118,48 +117,6 @@
       }
     }
   }
-}
-
-.infoBox {
-  background-color: #eef8ff;
-  border-radius: 8px;
-  padding: 14px 16px;
-  width: 509px;
-  border-radius: 6px;
-  padding: 16px;
-  gap: 10px;
-}
-
-.infoBox ul {
-  padding-left: 18px;
-  margin: 0;
-}
-
-.infoBox li {
-  color: #1677ff;
-  display: list-item;
-  font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 6px;
-}
-
-.infoBox li::marker {
-  color: #1677ff;
-  font-size: 14px;
-}
-
-.infoBox ul {
-  list-style: disc !important;
-  padding-left: 20px;
-  margin: 0;
-}
-
-.infoBox li {
-  display: list-item;
-  color: #1677ff;
-  font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 6px;
 }
 
 .infoBox {

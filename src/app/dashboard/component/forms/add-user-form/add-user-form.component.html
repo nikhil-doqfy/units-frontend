@@ -28,7 +28,6 @@
 
         <p>JPG, GIF or PNG. Max size of 800K</p>
 
-        <!-- image error -->
         @if (isInvalid(userForm, "imageBase64").status) {
           <small class="errorMsg">
             {{ isInvalid(userForm, "imageBase64").msg }}

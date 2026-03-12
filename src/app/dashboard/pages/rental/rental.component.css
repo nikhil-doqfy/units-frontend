@@ -931,11 +931,11 @@ Link .replace-link {
 }
 
 app-scannericon {
-  order: 2; /* Scan Cheque icon second */
+  order: 2;
 }
 
 app-plus-icon {
-  order: 1; /* Add Cheque icon first */
+  order: 1;
 }
 
 .filter-box {
@@ -961,10 +961,9 @@ app-plus-icon {
   display: inline-block;
 }
 
-/* table overflow fix */
-.table-responsive {
+/* .table-responsive {
   overflow: visible !important;
-}
+} */
 .status-cell {
   position: relative;
   overflow: visible !important;
@@ -975,11 +974,10 @@ app-plus-icon {
   display: inline-block;
 }
 
-/* VERY IMPORTANT */
-.table-responsive {
+/* .table-responsive {
   overflow-x: auto;
   overflow-y: visible !important;
-}
+} */
 
 .status-wrapper {
   position: relative;
@@ -991,15 +989,15 @@ app-plus-icon {
   overflow: visible !important;
 }
 
-.table-responsive {
+/* .table-responsive {
   overflow-x: auto;
   overflow-y: visible !important;
-}
+} */
 .arrow {
   margin-left: 0.5rem !important;
 }
-.status-grey {
-  background-color: green;
-  padding: 10px;
+:host ::ng-deep .status-green app-status-action-dropdown {
+  background: green;
   border-radius: 10px;
+  display: inline-block;
 }
