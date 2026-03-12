@@ -6,11 +6,7 @@ import { WhatsappShareIconComponent } from '../../../../icon/whatsapp-share-icon
 @Component({
   selector: 'app-receipt',
   standalone: true,
-  imports: [
-    DownloadIconComponent,
-    ShareIconComponent,
-    WhatsappShareIconComponent,
-  ],
+  imports: [DownloadIconComponent, WhatsappShareIconComponent],
   templateUrl: './receipt.component.html',
   styleUrl: './receipt.component.css',
 })

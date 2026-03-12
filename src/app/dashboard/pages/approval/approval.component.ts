@@ -101,21 +101,21 @@ export class ApprovalComponent {
   currentLanguage = 'en';
   showDetailView: boolean = false;
 
-  // constructor(private router: Router) {
-  //   const key = this.route.snapshot.data['titleKey'];
-  //   this.sharedService.setTitle(key);
-  //   this.initOwnerSearchLisner();
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+    this.initOwnerSearchLisner();
 
-  //   const id = this.route.snapshot.paramMap.get('tenant_id');
+    const id = this.route.snapshot.paramMap.get('tenant_id');
 
-  //   if (id) {
-  //     this.showDetailView = true;
-  //     this.getApprovalDetails(+id);
-  //   } else {
-  //     this.showDetailView = false;
-  //     this.loadApprovalList();
-  //   }
-  // }
+    if (id) {
+      this.showDetailView = true;
+      this.getApprovalDetails(+id);
+    } else {
+      this.showDetailView = false;
+      this.loadApprovalList();
+    }
+  }
 
   charges = [
     {
@@ -238,42 +238,42 @@ export class ApprovalComponent {
   }
 
   refreshDetailsView() {
-    // if (this.showDetailView && this.selectedTenant?.tenant_id) {
-    //   this.getApprovalDetails(this.selectedTenant.tenant_id);
-    // } else {
-    //   // this.loadApprovalList();
-    // }
+    if (this.showDetailView && this.selectedTenant?.tenant_id) {
+      this.getApprovalDetails(this.selectedTenant.tenant_id);
+    } else {
+      // this.loadApprovalList();
+    }
   }
 
-  // loadApprovalList(): void {
-  //   this.approvalData = {
-  //     ...this.approvalData,
-  //     limit: this.rowsPerPage,
-  //     page_number: this.currentPage,
-  //     tenant_status: this.currentStatus,
-  //   };
+  loadApprovalList(): void {
+    this.approvalData = {
+      ...this.approvalData,
+      limit: this.rowsPerPage,
+      page_number: this.currentPage,
+      tenant_status: this.currentStatus,
+    };
 
-  //   if (this.currentStatus !== 'PENDING') {
-  //     this.approvalData['tenant_status'] = this.currentStatus;
-  //   } else {
-  //     delete this.approvalData['tenant_status'];
-  //   }
-  //   this.approvalService
-  //     .getApprovalList(this.approvalData)
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe({
-  //       next: (resp: any) => {
-  //         this.tenantList = resp?.content.tenants ?? [];
-  //         this.totalRecords = resp?.pagination?.total_records ?? 0;
-  //         this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
-  //       },
-  //     });
-  // }
+    if (this.currentStatus !== 'PENDING') {
+      this.approvalData['tenant_status'] = this.currentStatus;
+    } else {
+      delete this.approvalData['tenant_status'];
+    }
+    this.approvalService
+      .getApprovalList(this.approvalData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.tenantList = resp?.content.tenants ?? [];
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+        },
+      });
+  }
 
   changeStatus(status: 'APPROVED' | 'REJECTED' | 'PENDING') {
     this.currentStatus = status;
     this.currentPage = 1;
-    // this.loadApprovalList();
+    this.loadApprovalList();
   }
 
   onPageSizeChange(event: PageSizeChange): void {
@@ -350,25 +350,25 @@ export class ApprovalComponent {
       });
   }
 
-  // getApprovalTenant(tenantId: number) {
-  //   const params = {
-  //     tenant_id: tenantId,
-  //   };
+  getApprovalTenant(tenantId: number) {
+    const params = {
+      tenant_id: tenantId,
+    };
 
-  //   this.approvalService
-  //     .getApprovalList(params)
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe({
-  //       next: (resp) => {
-  //         console.log('TENANTS:', resp?.content?.tenants);
-  //         this.selectedTenant = resp.content.tenants;
+    this.approvalService
+      .getApprovalList(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp) => {
+          console.log('TENANTS:', resp?.content?.tenants);
+          this.selectedTenant = resp.content.tenants;
 
-  //         this.leaseDocuments = resp.content?.lease_documents || [];
+          this.leaseDocuments = resp.content?.lease_documents || [];
 
-  //         this.mapDocumentsByType();
-  //       },
-  //     });
-  // }
+          this.mapDocumentsByType();
+        },
+      });
+  }
 
   mapDocumentsByType() {
     Object.keys(this.documentsByType).forEach((key) => {
@@ -393,7 +393,7 @@ export class ApprovalComponent {
     this.showDetailView = true;
   }
   handleBackClick(): void {
-    // this.router.navigate(['/dashboard/approval']);
+    this.router.navigate(['/dashboard/approval']);
     this.showDetailView = false;
     this.selectedTenant = null;
   }

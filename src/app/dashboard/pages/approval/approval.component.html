@@ -73,15 +73,22 @@
             <table class="table table-bordered">
               <thead>
                 <tr>
+                  <th>Date Requested</th>
+                  <th>Requested by</th>
+                  <th>Property Name</th>
+                  <th>
+                    Block/Tower<i><app-sorting-icon></app-sorting-icon></i>
+                  </th>
+                  <th>Unit</th>
+
                   <th>
                     {{ "TENANT_NAME" | translate }}
                     <i><app-sorting-icon /></i>
                   </th>
-                  <th>{{ "EMIRATES_ID" | translate }}</th>
-                  <th>{{ "DATE_REQUESTED" | translate }}</th>
-                  <th>{{ "CONTACT_NUMBER" | translate }}</th>
-                  <th>{{ "EMAIL_ADDRESS" | translate }}</th>
-                  <!-- <th width="200"></th> -->
+                  <th>Tenure</th>
+                  <th>Rent</th>
+                  <th>Actual Rent</th>
+                  <th width="200"></th>
                 </tr>
               </thead>
 
@@ -92,15 +99,40 @@
                       tenant_id: 1,
                       name: "John Doe",
                       profile_image: "",
-                      emirates_id: "784-1234-5678901-2",
                       date_request: "07-03-2026",
-                      contact_number: "+971987654321",
-                      email: "john@example.com",
+                      requested_by: "Aisha",
+                      property_name: "Novatis AG",
+                      tower: "Tower A",
+                      unit: "204",
+                      tenant_name: "Jensi",
+                      tenure: "--",
+                      rent: "AED 350.00",
+                      actual_rent: "AED 380.00",
                     },
                   ];
                   track $index
                 ) {
                   <tr>
+                    <td>
+                      {{
+                        approval?.date_request ? approval.date_request : "N/A"
+                      }}
+                    </td>
+                    <td>{{ approval?.name ? approval.name : "N/A" }}</td>
+                    <td>
+                      <!-- ? approval?.profile_image -->
+                      <app-table-img-item
+                        [img]="
+                          approval?.profile_image ||
+                          '../../../../assets/userDefaultProImg.png'
+                        "
+                        [clickable]="true"
+                        (clicked)="handleViewClick(approval.tenant_id)"
+                        [title]="approval.property_name"
+                      />
+                    </td>
+                    <td>{{ approval.tower }}</td>
+                    <td>{{ approval.unit }}</td>
                     <td>
                       <!-- ? approval?.profile_image -->
                       <app-table-img-item
@@ -113,35 +145,21 @@
                         [title]="approval.name"
                       />
                     </td>
-                    <td>
-                      {{ approval.emirates_id ? approval.emirates_id : "N/A" }}
-                    </td>
-                    <td>
-                      {{
-                        approval?.date_request ? approval.date_request : "N/A"
-                      }}
-                    </td>
-                    <td>
-                      {{
-                        approval.contact_number
-                          ? approval.contact_number
-                          : "N/A"
-                      }}
-                    </td>
-                    <td>{{ approval.email }}</td>
+                    <td>{{ approval.tenure }}</td>
 
-                    <!-- <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick(approval.lease_id)"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick(approval.lease_id)"
-                      />
-                    </div>
-                  </td> -->
+                    <td>{{ approval.rent }}</td>
+
+                    <td>{{ approval.actual_rent }}</td>
+
+                    <td align="center">
+                      <div class="cmmnTblActnBtnDiv">
+                        <app-table-action-btn type="reject" />
+                        <!-- (clicked)="handleRejectClick(approval.lease_id)" -->
+
+                        <app-table-action-btn type="approve" />
+                        <!-- (clicked)="handleApproveClick(approval.lease_id)" -->
+                      </div>
+                    </td>
                   </tr>
                 } @empty {
                   <tr>
@@ -686,14 +704,10 @@
 
   <app-table-view-card
     title="Requested :Ali Amar"
-    [showApprovalActions]="true"
-    [showBack]="false"
+    [showCloseBtn]="false"
+    (back)="handleBackClick()"
   >
     <div header-actions class="column">
-      <button type="button" class="btn btnWhite btnCommon">
-        <i><app-back-icon /></i>{{ "BACK" | translate }}
-      </button>
-
       <button type="button" class="btn btnWhite btnCommon rejectBtn">
         Reject
       </button>

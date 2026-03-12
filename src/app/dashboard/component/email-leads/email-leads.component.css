@@ -307,15 +307,6 @@
   font-size: 13px;
 }
 
-.date {
-  grid-column: -1;
-  justify-self: end;
-  text-align: right;
-  white-space: nowrap;
-  font-size: 13px;
-  color: #6b7280;
-}
-
 @media (max-width: 768px) {
   .date {
     grid-column: -1;

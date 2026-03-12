@@ -49,6 +49,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './add-user-form.component.css',
 })
 export class AddUserFormComponent {
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  @Input() editData: any = null;
+
+  @Output() formSubmitted: EventEmitter<any> = new EventEmitter();
   private formService = inject(FormService);
   private formBuilder = inject(FormBuilder);
   private sharedApiService = inject(SharedApiService);
@@ -68,10 +72,6 @@ export class AddUserFormComponent {
 
   isInvalid = this.formService.isInvalid;
 
-  @ViewChild('fileInput') fileInput!: ElementRef;
-  @Input() editData: any = null;
-
-  @Output() formSubmitted: EventEmitter<any> = new EventEmitter();
   // ------------------------- Build user management form  -------------------------
 
   constructor() {
