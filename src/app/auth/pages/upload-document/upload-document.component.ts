@@ -188,17 +188,16 @@ export class UploadDocumentComponent {
       contact_number: data['contact_number'],
       user_role: selctedUsertype,
       emirate_id: data['emirateId'],
-      uae_residence_visa: data['residenceVisa'],
-      trade_license_number: data['tradeLicense'],
+      visa_number: data['residenceVisa'],
       emirates_id_doc: getDocumentBase64('emiratesId'),
       uae_residence_visa_doc: getDocumentBase64('uaeVisa'),
       dld_certificate_doc: getDocumentBase64('dldCert'),
     };
 
     if (selctedUsertype === 'COMPANY_USER') {
-      paylod['company_name'] = data['company_name'];
+      paylod['company_id'] = data['company_id'];
     } else if (selctedUsertype === 'OWNER') {
-      paylod['manage_through'] = data['manageThrough'];
+      paylod['trade_license_number'] = data['tradeLicense'];
     }
 
     this.authService

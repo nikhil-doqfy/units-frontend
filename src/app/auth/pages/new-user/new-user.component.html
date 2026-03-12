@@ -36,22 +36,33 @@
       </ng-container>
       <ng-container *ngIf="selectedRole === 'property-manager'">
         <div class="mb-2 col-span-2">
-          <label for="companyName" class="form-label">Company Name</label>
-          <input
-            class="form-control"
-            type="text"
-            placeholder="Enter here"
-            formControlName="company_name"
-          />
-          @if (isInvalid(signupForm, 'company_name').status) {
-          <small class="errorMsg">
-            {{
-              isInvalid(signupForm, "company_name", {
-                pattern:
-                  "Use 2-50 characters. Letters, numbers, and common symbols are allowed."
-              }).msg
-            }}
-          </small>
+          <label class="form-label">Company Name</label>
+          <div class="customSelect" [class.show]="showCompanyDropdown">
+            <div class="customSelectInput">
+              <input
+                type="text"
+                class="customSelectSearchInput"
+                placeholder="Search company"
+                [(ngModel)]="companySearchText"
+                [ngModelOptions]="{ standalone: true }"
+                (input)="onCompanySearch()"
+                (focus)="showCompanyDropdown = true"
+                (blur)="showCompanyDropdown = false"
+                autocomplete="off"
+              />
+            </div>
+            <ul *ngIf="showCompanyDropdown && filteredCompanies.length > 0" class="customSelectDropdown">
+              <li
+                *ngFor="let company of filteredCompanies"
+                (mousedown)="selectCompany(company)"
+                [class.active]="signupForm.get('company_id')?.value === company.key"
+              >
+                {{ company.value }}
+              </li>
+            </ul>
+          </div>
+          @if (signupForm.get('company_id')?.invalid && signupForm.get('company_id')?.touched) {
+            <small class="errorMsg">Company is required</small>
           }
         </div>
       </ng-container>

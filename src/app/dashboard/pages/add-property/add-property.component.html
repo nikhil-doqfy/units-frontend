@@ -334,7 +334,7 @@
     >
       <div class="ownerCardWrapper">
         <span class="ownerCount">01</span>
-        <form class="row g-3" [formGroup]="commercialsForm">
+        <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
             <label class="form-label">{{
               "Property Owner Name" | translate
@@ -343,13 +343,8 @@
               type="text"
               class="form-control"
               [placeholder]="'Enter name here' | translate"
-              formControlName="rent"
+              formControlName="ownerName"
             />
-            @if (isInvalid(commercialsForm, "rent").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "rent").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Email" | translate }}</label>
@@ -357,13 +352,8 @@
               type="text"
               class="form-control"
               [placeholder]="'Enter email here' | translate"
-              formControlName="securityDeposit"
+              formControlName="ownerEmail"
             />
-            @if (isInvalid(commercialsForm, "securityDeposit").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "securityDeposit").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Contact Number" | translate }}</label>
@@ -371,13 +361,8 @@
               type="text"
               class="form-control"
               [placeholder]="'Enter number here' | translate"
-              formControlName="bookingAmount"
+              formControlName="ownerContact"
             />
-            @if (isInvalid(commercialsForm, "bookingAmount").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "bookingAmount").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Emirates ID" | translate }}</label>
@@ -385,13 +370,8 @@
               type="text"
               class="form-control"
               [placeholder]="'Enter ID here' | translate"
-              formControlName="maintenanceCharges"
+              formControlName="ownerEmiratesId"
             />
-            @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "maintenanceCharges").msg }}
-              </small>
-            }
           </div>
         </form>
       </div>
@@ -403,17 +383,18 @@
 
     <ng-container *ngIf="currentRole === 'property-manager'">
       <app-step-pane [title]="'Basic Details' | translate" [secondCard]="true">
-        <form class="row g-3" [formGroup]="commercialsForm">
+        <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
             <label class="form-label">{{ "Property Name" | translate }}</label>
             <input
               type="text"
               class="form-control"
               [placeholder]="'Enter name here' | translate"
+              formControlName="propertyName"
             />
-            @if (isInvalid(commercialsForm, "rent").status) {
+            @if (isInvalid(pmDetailsForm, "propertyName").status) {
               <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "rent").msg }}
+                {{ isInvalid(pmDetailsForm, "propertyName").msg }}
               </small>
             }
           </div>
@@ -425,11 +406,11 @@
               [options]="blocksCount"
               key="key"
               value="value"
-              formControlName="securityDeposit"
+              formControlName="noOfBlocks"
             ></app-custom-select>
-            @if (isInvalid(commercialsForm, "securityDeposit").status) {
+            @if (isInvalid(pmDetailsForm, "noOfBlocks").status) {
               <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "securityDeposit").msg }}
+                {{ isInvalid(pmDetailsForm, "noOfBlocks").msg }}
               </small>
             }
           </div>
@@ -439,11 +420,11 @@
               [options]="unitsCount"
               key="key"
               value="value"
-              formControlName="bookingAmount"
+              formControlName="noOfUnits"
             ></app-custom-select>
-            @if (isInvalid(commercialsForm, "bookingAmount").status) {
+            @if (isInvalid(pmDetailsForm, "noOfUnits").status) {
               <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "bookingAmount").msg }}
+                {{ isInvalid(pmDetailsForm, "noOfUnits").msg }}
               </small>
             }
           </div>
@@ -453,11 +434,11 @@
               [options]="propertyType"
               key="key"
               value="value"
-              formControlName="maintenanceCharges"
+              formControlName="propertyType"
             ></app-custom-select>
-            @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
+            @if (isInvalid(pmDetailsForm, "propertyType").status) {
               <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "maintenanceCharges").msg }}
+                {{ isInvalid(pmDetailsForm, "propertyType").msg }}
               </small>
             }
           </div>
@@ -468,78 +449,53 @@
                 type="number"
                 class="form-control"
                 [placeholder]="'ENTER_HERE' | translate"
-                formControlName="cycle"
+                formControlName="landArea"
               />
               <app-custom-select
                 [options]="areaUnit"
                 key="key"
                 value="value"
-                formControlName="noticePeriod"
+                formControlName="landAreaUnit"
               ></app-custom-select>
             </div>
-            @if (isInvalid(commercialsForm, "cycle").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "cycle").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{
               "Land DM No(Affection Plan)" | translate
             }}</label>
             <input
-              type="number"
+              type="text"
               class="form-control"
-              [placeholder]="'Enter Land DM N' | translate"
-              formControlName="cycle"
+              [placeholder]="'Enter Land DM No' | translate"
+              formControlName="landDmNo"
             />
-            @if (isInvalid(commercialsForm, "cycle").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "cycle").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Plot No" | translate }}</label>
             <input
-              type="number"
+              type="text"
               class="form-control"
               [placeholder]="'ENTER_HERE' | translate"
-              formControlName="cycle"
+              formControlName="plotNo"
             />
-            @if (isInvalid(commercialsForm, "cycle").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "cycle").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Makani No" | translate }}</label>
             <input
-              type="number"
+              type="text"
               class="form-control"
               [placeholder]="'ENTER_HERE' | translate"
-              formControlName="cycle"
+              formControlName="makaniNo"
             />
-            @if (isInvalid(commercialsForm, "cycle").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "cycle").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Dewa No" | translate }}</label>
             <input
-              type="number"
+              type="text"
               class="form-control"
               [placeholder]="'ENTER_HERE' | translate"
-              formControlName="cycle"
+              formControlName="dewaNo"
             />
-            @if (isInvalid(commercialsForm, "cycle").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "cycle").msg }}
-              </small>
-            }
           </div>
         </form>
       </app-step-pane>
@@ -550,7 +506,7 @@
         [title]="'Location / Address Details' | translate"
         [secondCard]="true"
       >
-        <form class="row g-3" [formGroup]="commercialsForm">
+        <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
             <label class="form-label">{{
               "Address  Lane 1" | translate
@@ -559,13 +515,8 @@
               type="text"
               class="form-control"
               [placeholder]="'ENTER_HERE' | translate"
-              formControlName="rent"
+              formControlName="addressLane1"
             />
-            @if (isInvalid(commercialsForm, "rent").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "rent").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Address Lane 2" | translate }}</label>
@@ -573,13 +524,8 @@
               type="text"
               class="form-control"
               [placeholder]="'ENTER_HERE' | translate"
-              formControlName="rent"
+              formControlName="addressLane2"
             />
-            @if (isInvalid(commercialsForm, "securityDeposit").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "securityDeposit").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Landmark" | translate }}</label>
@@ -587,13 +533,8 @@
               type="text"
               class="form-control"
               [placeholder]="'ENTER_HERE' | translate"
-              formControlName="rent"
+              formControlName="landmark"
             />
-            @if (isInvalid(commercialsForm, "bookingAmount").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "bookingAmount").msg }}
-              </small>
-            }
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Pincode" | translate }}</label>
@@ -601,13 +542,8 @@
               type="text"
               class="form-control"
               [placeholder]="'ENTER_HERE' | translate"
-              formControlName="rent"
+              formControlName="pincode"
             />
-            @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "maintenanceCharges").msg }}
-              </small>
-            }
           </div>
           <div class="col-12">
             <label class="form-label">{{
@@ -615,42 +551,36 @@
             }}</label>
             <div class="inputWithIcon">
               <img src="assets/location.svg" class="inputIcon" />
-
               <input
                 type="text"
                 class="form-control customInput"
                 [placeholder]="
                   'Locations comes here automatically form map' | translate
                 "
-                formControlName="rent"
               />
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121058.9318715537!2d73.78056599424929!3d18.524761374489145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf2e67461101%3A0x828d43bf9d9ee343!2sPune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1772708738056!5m2!1sen!2sin%22"
                 max-width="914"
                 width="100%"
                 height="286"
-              style="border:2px solid white; border-radius:10px; margin-top: 10px;"
+                style="border:2px solid white; border-radius:10px; margin-top: 10px;"
                 allowfullscreen=""
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
-            @if (isInvalid(commercialsForm, "cycle").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "cycle").msg }}
-              </small>
-            }
           </div>
         </form>
       </app-step-pane>
     </ng-container>
+
     <ng-container *ngIf="currentRole === 'property-manager'">
       <app-step-pane
         [title]="'ADD_PMC' | translate"
         [secondCard]="true"
         [showInvitePmcBtn]="true"
       >
-        <form class="row g-3" [formGroup]="commercialsForm">
+        <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-6">
             <label class="form-label">{{ "Property PMC" | translate }}</label>
             <app-custom-select
@@ -659,11 +589,6 @@
               value="value"
               formControlName="owner"
             ></app-custom-select>
-            @if (isInvalid(commercialsForm, "pmc").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "pmc").msg }}
-              </small>
-            }
           </div>
         </form>
       </app-step-pane>

@@ -88,6 +88,7 @@ export class AddPropertyComponent {
   commercialsForm = this.propertyFormService.propertyCommercialsForm;
   imagesForm = this.propertyFormService.propertyImagesForm;
   documentationForm = this.propertyFormService.propertyDocumentationForm;
+  pmDetailsForm = this.propertyFormService.propertyManagerDetailsForm;
 
   engine!: StepEngine;
   steps: StepSchema[] = [];
@@ -108,7 +109,7 @@ export class AddPropertyComponent {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
-    this.steps = this.propertyFormService.buildPropertySteps();
+    this.steps = this.propertyFormService.buildPropertySteps(this.themeService.getRole());
     this.engine = new StepEngine(this.steps);
     this.propertyFormService.setEngine(this.engine);
 

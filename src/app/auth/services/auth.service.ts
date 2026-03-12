@@ -61,4 +61,9 @@ export class AuthService {
   signUp(data: Record<string, any>) {
     return this.http.post(`${environment.SERVER_ADDRESS}/user/signup`, data);
   }
+
+  getCompanies(search: string = '') {
+    const params = search ? `?search=${encodeURIComponent(search)}` : '';
+    return this.http.get(`${environment.SERVER_ADDRESS}/companies${params}`);
+  }
 }
