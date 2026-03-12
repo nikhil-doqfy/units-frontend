@@ -22,8 +22,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PmcService } from '../../services/pmc.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Validators } from '@angular/forms';
-import { CustomSelectComponent } from '../../../auth/component/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-invite-pmc-btn',

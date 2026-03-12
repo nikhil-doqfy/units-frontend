@@ -9,14 +9,7 @@ import { DeleteIconComponent } from '../icons/delete-icon/delete-icon.component'
 @Component({
   selector: 'app-file-upload-item',
   standalone: true,
-  imports: [
-    NgSwitch,
-    NgSwitchCase,
-    PdfIconComponent,
-    PngIconComponent,
-    DeleteIconComponent,
-    NgIf,
-  ],
+  imports: [NgSwitch, NgSwitchCase, DeleteIconComponent, NgIf],
   templateUrl: './file-upload-item.component.html',
   styleUrl: './file-upload-item.component.css',
 })

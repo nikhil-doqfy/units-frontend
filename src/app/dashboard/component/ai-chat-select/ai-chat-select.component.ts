@@ -50,13 +50,12 @@ export class AIChatSelectComponent implements OnInit {
   constructor(private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
-    // Check if "GPT-4o-mini" exists in the options and set it as default
     const defaultOption = this.options.find(
-      (opt) => opt.value === 'GPT-4o-mini'
+      (opt) => opt.value === 'GPT-4o-mini',
     );
     if (defaultOption) {
       this.selectedOption = defaultOption.value;
-      this.optionSelected.emit(this.selectedOption); // Emit event for default selection
+      this.optionSelected.emit(this.selectedOption);
       this.cdRef.detectChanges();
     }
   }

@@ -1,6 +1,5 @@
 <form class="leadForm">
   <div class="row g-4">
-    <!-- Link Property -->
     <div class="col-md-6 col-12">
       <label class="form-label required">{{
         "LINK_PROPERTY" | translate
@@ -11,13 +10,11 @@
       ></app-custom-select>
     </div>
 
-    <!-- Tenant Name -->
     <div class="col-md-6 col-12">
       <label class="form-label required">{{ "TENANT_NAME" | translate }}</label>
       <input class="form-control" value="Jensi" formControlName="tenantName" />
     </div>
 
-    <!-- Email -->
     <div class="col-md-6 col-12">
       <label class="form-label required">{{ "EMAIL" | translate }}</label>
       <input
@@ -27,7 +24,6 @@
       />
     </div>
 
-    <!-- Contact -->
     <div class="col-md-6 col-12">
       <label class="form-label required">{{ "CONTACT" | translate }}</label>
       <input
@@ -37,7 +33,6 @@
       />
     </div>
 
-    <!-- Amount -->
     <div class="col-md-6 col-12">
       <label class="form-label required">{{
         "LEASE_AMOUNT_AED" | translate
@@ -45,19 +40,16 @@
       <input class="form-control" value="1,200.00" formControlName="amount" />
     </div>
 
-    <!-- Status -->
     <div class="col-md-6 col-12">
       <label class="form-label required">{{ "STATUS" | translate }}</label>
       <app-custom-select formControlName="status"></app-custom-select>
     </div>
 
-    <!-- Comment -->
     <div class="col-12">
       <label class="form-label required">{{ "COMMENT" | translate }}</label>
       <input class="form-control" value="Nill" formControlName="comment" />
     </div>
 
-    <!-- Source -->
     <div class="col-12">
       <label class="form-label required">{{ "LEAD_SOURCE" | translate }}</label>
 
@@ -79,7 +71,6 @@
       </div>
     </div>
 
-    <!-- App link -->
     <div class="col-12">
       <a class="sendLink">{{ "SEND_APP_LINK" | translate }}</a>
     </div>

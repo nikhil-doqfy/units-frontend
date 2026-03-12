@@ -1,5 +1,4 @@
 <form class="addLeadForm">
-  <!-- Tabs -->
   <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
       <button
@@ -8,8 +7,6 @@
         (click)="setTab('manual')"
         type="button"
       >
-        <!-- (click)="activeTab = 'manual'" -->
-
         {{ "MANUAL" | translate }}
       </button>
     </li>
@@ -20,29 +17,21 @@
         (click)="setTab('bulk')"
         type="button"
       >
-        <!-- (click)="activeTab = 'bulk'" -->
         {{ "BULK_IMPORT" | translate }}
       </button>
     </li>
   </ul>
 
   <div *ngIf="activeTab === 'manual'">
-    <!-- Manual form content -->
-
     <div class="row g-3">
-      <!-- Link Property -->
       <div class="col-md-6">
         <label class="form-label required">{{
           "LINK_PROPERTY" | translate
         }}</label>
-        <!-- <select class="form-select" formControlName="property">
-          <option value="">--Select--</option>
-        </select> -->
 
         <app-custom-select></app-custom-select>
       </div>
 
-      <!-- Tenant Name -->
       <div class="col-md-6">
         <label class="form-label required">{{
           "TENANT_NAME" | translate
@@ -55,7 +44,6 @@
         />
       </div>
 
-      <!-- Email -->
       <div class="col-md-6">
         <label class="form-label required">{{ "EMAIL" | translate }}</label>
         <input
@@ -66,7 +54,6 @@
         />
       </div>
 
-      <!-- Contact -->
       <div class="col-md-6">
         <label class="form-label required">{{ "CONTACT" | translate }}</label>
         <input
@@ -77,7 +64,6 @@
         />
       </div>
 
-      <!-- Amount -->
       <div class="col-md-6">
         <label class="form-label required">
           {{ "LEASE_AMOUNT_AED" | translate }}
@@ -90,16 +76,12 @@
         />
       </div>
 
-      <!-- Status -->
       <div class="col-md-6">
         <label class="form-label required">{{ "STATUS" | translate }}</label>
-        <!-- <select class="form-select" formControlName="status">
-          <option value="">--Select--</option>
-        </select> -->
+
         <app-custom-select></app-custom-select>
       </div>
 
-      <!-- Source of Lead -->
       <div class="col-12">
         <label class="form-label required">{{
           "LEAD_SOURCE" | translate
@@ -137,7 +119,6 @@
         </div>
       </div>
 
-      <!-- Referral Name -->
       <div class="col-md-6">
         <label class="form-label required">{{
           "REF_TENANT_ID_NAME" | translate
@@ -150,7 +131,6 @@
         />
       </div>
 
-      <!-- Referral Contact -->
       <div class="col-md-6">
         <label class="form-label required">{{
           "REFERRAL_CONTACT" | translate
@@ -163,7 +143,6 @@
         />
       </div>
 
-      <!-- Checkbox -->
       <div class="col-12">
         <div class="form-check">
           <input
@@ -179,7 +158,6 @@
     </div>
   </div>
   <div *ngIf="activeTab === 'bulk'" class="bulkImportWrapper">
-    <!-- Info Box -->
     <div class="infoBox mb-3">
       <ul class="mb-0">
         <li>
@@ -191,7 +169,6 @@
       </ul>
     </div>
 
-    <!-- Download CSV -->
     <div class="text-center mb-4">
       <button class="downloadbtn btn-transparent" (click)="sampleCsvDownload()">
         <img src="../../assets/XlsIcon.svg" alt="download" />
@@ -206,7 +183,6 @@
       (uploadProgress)="onBulkUpload($event)"
     ></app-upload-document>
 
-    <!-- Uploaded file preview -->
     <div class="uploadedFile mt-3" *ngIf="uploadedFile">
       <span>{{ uploadedFile.file.name }}</span>
       <span class="successText">{{ "UPLOADED" | translate }}</span>
