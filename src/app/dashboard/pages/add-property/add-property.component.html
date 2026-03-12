@@ -422,12 +422,10 @@
               "No of Blocks / Tower" | translate
             }}</label>
             <app-custom-select
-              [options]="propertyList"
+              [options]="blocksCount"
               key="key"
               value="value"
-              [showFilterInput]="true"
-              [allowAddOption]="true"
-              (optionSelected)="onPropertySelect($event)"
+              formControlName="securityDeposit"
             ></app-custom-select>
             @if (isInvalid(commercialsForm, "securityDeposit").status) {
               <small class="errorMsg">
@@ -438,12 +436,10 @@
           <div class="col-md-3">
             <label class="form-label">{{ "No of Units" | translate }}</label>
             <app-custom-select
-              [options]="propertyList"
+              [options]="unitsCount"
               key="key"
               value="value"
-              [showFilterInput]="true"
-              [allowAddOption]="true"
-              (optionSelected)="onPropertySelect($event)"
+              formControlName="bookingAmount"
             ></app-custom-select>
             @if (isInvalid(commercialsForm, "bookingAmount").status) {
               <small class="errorMsg">
@@ -454,12 +450,10 @@
           <div class="col-md-3">
             <label class="form-label">{{ "Property Type" | translate }}</label>
             <app-custom-select
-              [options]="propertyList"
+              [options]="propertyType"
               key="key"
               value="value"
-              [showFilterInput]="true"
-              [allowAddOption]="true"
-              (optionSelected)="onPropertySelect($event)"
+              formControlName="maintenanceCharges"
             ></app-custom-select>
             @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
               <small class="errorMsg">
@@ -469,15 +463,20 @@
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Land Area" | translate }}</label>
-            <app-custom-select
-              [options]="propertyList"
-              key="key"
-              value="value"
-              [showFilterInput]="true"
-              [allowAddOption]="true"
-              unitText="Sq-ft"
-              (optionSelected)="onPropertySelect($event)"
-            ></app-custom-select>
+            <div class="d-flex gap-2">
+              <input
+                type="number"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                formControlName="cycle"
+              />
+              <app-custom-select
+                [options]="areaUnit"
+                key="key"
+                value="value"
+                formControlName="noticePeriod"
+              ></app-custom-select>
+            </div>
             @if (isInvalid(commercialsForm, "cycle").status) {
               <small class="errorMsg">
                 {{ isInvalid(commercialsForm, "cycle").msg }}

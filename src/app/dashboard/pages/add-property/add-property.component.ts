@@ -80,6 +80,9 @@ export class AddPropertyComponent {
   country: any[] = [];
   state: any[] = [];
   city: any[] = [];
+  blocksCount: any[] = [];
+  unitsCount: any[] = [];
+  areaUnit: any[] = [];
 
   basicDetailsForm = this.propertyFormService.propertyBasicDetailsForm;
   commercialsForm = this.propertyFormService.propertyCommercialsForm;
@@ -160,6 +163,27 @@ export class AddPropertyComponent {
         key: 'country',
         setter: (v) => {
           this.country = v;
+        },
+      },
+      {
+        param: 'BLOCKS_COUNT',
+        key: 'blocks_count',
+        setter: (v) => {
+          this.blocksCount = v;
+        },
+      },
+      {
+        param: 'UNITS_COUNT',
+        key: 'units_count',
+        setter: (v) => {
+          this.unitsCount = v;
+        },
+      },
+      {
+        param: 'AREA_UNIT',
+        key: 'area_unit',
+        setter: (v) => {
+          this.areaUnit = v;
         },
       },
       {
