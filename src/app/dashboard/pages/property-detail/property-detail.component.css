@@ -1,0 +1,49 @@
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-responsive::-webkit-scrollbar { display: none; }
+
+.detail-table thead th {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: #f9fafb;
+  white-space: nowrap;
+}
+
+.detail-table tbody td {
+  font-size: 13px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  min-width: 140px;
+}
+
+.doc-item:hover {
+  background: #f0f0ff;
+  border-color: #c7d2fe;
+}
+
+.doc-name {
+  font-size: 13px;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}

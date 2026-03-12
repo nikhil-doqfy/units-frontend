@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PropertyService } from './property.service';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { StepSchema } from '../model/step-engine/step-schema';
@@ -21,6 +21,7 @@ export class PropertyFormService {
   propertyImagesForm!: FormGroup;
   propertyDocumentationForm!: FormGroup;
   propertyManagerDetailsForm!: FormGroup;
+  propertyBlocksForm!: FormGroup;
 
   constructor() {
     this.initPropertyBasicDetailsForm();
@@ -28,6 +29,7 @@ export class PropertyFormService {
     this.initPropertyImagesForm();
     this.initPropertyDocumentationForm();
     this.initPropertyManagerDetailsForm();
+    this.initPropertyBlocksForm();
   }
 
   setEngine(engine: StepEngine) {
@@ -81,13 +83,38 @@ export class PropertyFormService {
     // }
   }
 
-  initPropertyManagerDetailsForm() {
-    this.propertyManagerDetailsForm = this.formBuilder.group({
-      // Owner Details
+  initPropertyBlocksForm() {
+    this.propertyBlocksForm = this.formBuilder.group({
+      blocks: this.formBuilder.array([this.createBlockGroup()]),
+    });
+  }
+
+  createBlockGroup(): FormGroup {
+    return this.formBuilder.group({
+      blockName: [''],
+      noOfFloors: [''],
+      noOfParking: [''],
+      noOfUnits: [''],
+    });
+  }
+
+  get propertyBlocksArray(): FormArray {
+    return this.propertyBlocksForm.get('blocks') as FormArray;
+  }
+
+  createOwnerGroup(): FormGroup {
+    return this.formBuilder.group({
       ownerName: [''],
       ownerEmail: [''],
       ownerContact: [''],
       ownerEmiratesId: [''],
+    });
+  }
+
+  initPropertyManagerDetailsForm() {
+    this.propertyManagerDetailsForm = this.formBuilder.group({
+      // Owner Details (multiple)
+      propertyOwners: this.formBuilder.array([this.createOwnerGroup()]),
       // Basic Details
       propertyName: ['', [Validators.required]],
       noOfBlocks: ['', [Validators.required]],
@@ -104,9 +131,11 @@ export class PropertyFormService {
       addressLane2: [''],
       landmark: [''],
       pincode: [''],
-      // Owner / PMC assignment
-      owner: [''],
     });
+  }
+
+  get propertyOwnersArray(): FormArray {
+    return this.propertyManagerDetailsForm.get('propertyOwners') as FormArray;
   }
 
   initPropertyImagesForm() {
@@ -142,17 +171,28 @@ export class PropertyFormService {
       mapOut: (value) => this.mapOutDocumentsDetails(value),
     };
 
+    const blocksStep: StepSchema = {
+      id: 'BLOCKS_DETAILS',
+      title: 'Blocks / Tower Details',
+      formGroup: this.propertyBlocksForm,
+      load: (context) => this.getBlocksDetails(context),
+      save: (payload, context) => this.saveBlocksDetails(payload, context),
+      mapIn: (response) => this.patchBlocksDetails(response),
+      mapOut: (value) => this.mapOutBlocksDetails(value),
+    };
+
     if (role === 'property-manager') {
       return [
         {
           id: 'BASIC_DETAILS',
           title: 'Property Details',
           formGroup: this.propertyManagerDetailsForm,
-          load: (context) => this.getBasicDetails(context),
+          load: (context) => this.getPropertyForEdit(context),
           save: (payload, context) => this.savePMDetails(payload, context),
           mapIn: (response) => this.patchPMDetails(response),
           mapOut: (value) => this.mapOutPMDetails(value),
         },
+        blocksStep,
         imageStep,
         documentStep,
       ];
@@ -198,9 +238,13 @@ export class PropertyFormService {
     });
   }
 
+  getPropertyForEdit(context: any) {
+    return this.propertyService.getProperties({ property_id: context.formId });
+  }
+
   getBasicDetails(context: any) {
     return this.propertyService
-      .getProperty({
+      .getPropertyUnit({
         property_unit_id: context.formId,
       })
       .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_status)));
@@ -208,26 +252,18 @@ export class PropertyFormService {
 
   getCommercialDetails(context: any) {
     return this.propertyService
-      .getProperty({
+      .getPropertyUnit({
         property_unit_id: context.formId,
       })
       .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_status)));
   }
 
   getImageDetails(context: any) {
-    return this.propertyService
-      .getPropertyImages({
-        property_unit_id: context.formId,
-      })
-      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_status)));
+    return this.propertyService.getPropertyImages({ property_id: context.formId });
   }
 
   getDocumentDetails(context: any) {
-    return this.propertyService
-      .getPropertyDocuments({
-        property_unit_id: context.formId,
-      })
-      .pipe(tap((resp: any) => this.applyStepStatus(resp.content.step_status)));
+    return this.propertyService.getPropertyDocuments({ property_id: context.formId });
   }
 
   saveBasicDetails(
@@ -237,9 +273,9 @@ export class PropertyFormService {
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
       payload['property_unit_id'] = context.formId;
-      return this.propertyService.editProperty(payload);
+      return this.propertyService.editPropertyUnit(payload);
     } else {
-      return this.propertyService.addProperty(payload).pipe(
+      return this.propertyService.addPropertyUnit(payload).pipe(
         tap((resp: any) => {
           if (resp?.content?.id) {
             this.engine.value?.setFormId(resp.content.id);
@@ -252,7 +288,7 @@ export class PropertyFormService {
   savePMDetails(payload: Record<string, any>, context: any): Observable<any> {
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
-      payload['property_unit_id'] = context.formId;
+      payload['property_id'] = context.formId;
       return this.propertyService.editProperty(payload);
     } else {
       return this.propertyService.addProperty(payload).pipe(
@@ -265,30 +301,101 @@ export class PropertyFormService {
     }
   }
 
+  getBlocksDetails(context: any) {
+    return this.propertyService.getPropertyBlocks({ property_id: context.formId });
+  }
+
+  saveBlocksDetails(payload: Record<string, any>, context: any): Observable<any> {
+    payload['property_id'] = context.formId;
+    const mode = this.engine.value?.getCurrentStepFormMode();
+    if (mode === 'EDIT') {
+      return this.propertyService.editPropertyBlocks(payload);
+    } else {
+      return this.propertyService.addPropertyBlocks(payload);
+    }
+  }
+
+  patchBlocksDetails(response: any) {
+    const blocks: any[] = response.content || [];
+    while (this.propertyBlocksArray.length > 0) {
+      this.propertyBlocksArray.removeAt(0);
+    }
+    const count = blocks.length > 0 ? blocks.length : 1;
+    for (let i = 0; i < count; i++) {
+      this.propertyBlocksArray.push(this.createBlockGroup());
+    }
+    blocks.forEach((b: any, i: number) => {
+      this.propertyBlocksArray.at(i).patchValue({
+        blockName: b.block_name,
+        noOfFloors: { key: b.no_of_floors, value: String(b.no_of_floors) },
+        noOfParking: { key: b.no_of_parking, value: String(b.no_of_parking) },
+        noOfUnits: { key: b.no_of_units, value: String(b.no_of_units) },
+      });
+    });
+    return {};
+  }
+
+  mapOutBlocksDetails(value: any): Record<string, any> {
+    const blocks = (value.blocks || []).map((b: any) => ({
+      block_name: b.blockName,
+      no_of_floors: b.noOfFloors?.key ?? b.noOfFloors,
+      no_of_parking: b.noOfParking?.key ?? b.noOfParking,
+      no_of_units: b.noOfUnits?.key ?? b.noOfUnits,
+    }));
+    return { blocks };
+  }
+
   patchPMDetails(response: any) {
     const content: any = response.content;
+
+    // Rebuild owners FormArray
+    const owners: any[] = content?.property_owners || [];
+    while (this.propertyOwnersArray.length > 0) {
+      this.propertyOwnersArray.removeAt(0);
+    }
+    const count = owners.length > 0 ? owners.length : 1;
+    for (let i = 0; i < count; i++) {
+      this.propertyOwnersArray.push(this.createOwnerGroup());
+    }
+    owners.forEach((o: any, i: number) => {
+      this.propertyOwnersArray.at(i).patchValue({
+        ownerName: o.name,
+        ownerEmail: o.email,
+        ownerContact: o.contact_number,
+        ownerEmiratesId: o.emirates_id,
+      });
+    });
+
     return {
-      propertyName: content?.property?.property_name,
-      noOfBlocks: { key: content?.property?.no_of_blocks, value: String(content?.property?.no_of_blocks ?? '') },
-      noOfUnits: { key: content?.property?.no_of_units, value: String(content?.property?.no_of_units ?? '') },
-      propertyType: { key: content?.property?.property_type, value: content?.property?.property_type },
-      landArea: content?.property?.land_area,
-      landAreaUnit: { key: content?.property?.land_area_unit, value: content?.property?.land_area_unit },
+      propertyName: content?.property_name,
+      noOfBlocks: { key: content?.no_of_blocks, value: String(content?.no_of_blocks ?? '') },
+      noOfUnits: { key: content?.no_of_units, value: String(content?.no_of_units ?? '') },
+      propertyType: { key: content?.property_type, value: content?.property_type },
+      landArea: content?.land_area,
+      landAreaUnit: { key: content?.land_area_unit, value: content?.land_area_unit },
       landDmNo: content?.land_dm_no,
       plotNo: content?.plot_no,
       makaniNo: content?.makani_no,
       dewaNo: content?.dewa_no,
-      addressLane1: content?.address,
-      addressLane2: content?.property?.additional_address,
-      pincode: content?.property?.postal_code,
-      owner: { key: content?.owner?.key, value: content?.owner?.value },
+      addressLane1: content?.address_line_1,
+      addressLane2: content?.address_line_2,
+      landmark: content?.landmark,
+      pincode: content?.pincode,
     };
   }
 
   mapOutPMDetails(value: any): Record<string, any> {
+    const propertyOwners = (value.propertyOwners || [])
+      .filter((o: any) => o.ownerEmail)
+      .map((o: any) => ({
+        property_owner_name: o.ownerName,
+        email: o.ownerEmail,
+        contact_number: o.ownerContact,
+        emirates_id: o.ownerEmiratesId,
+      }));
+
     return {
-      parent_property_name: value.propertyName,
-      property_unit_name: value.propertyName,
+      property_name: value.propertyName,
       no_of_blocks: value.noOfBlocks?.key ?? value.noOfBlocks,
       no_of_units: value.noOfUnits?.key ?? value.noOfUnits,
       property_type: value.propertyType?.key ?? value.propertyType,
@@ -298,11 +405,11 @@ export class PropertyFormService {
       plot_no: value.plotNo,
       makani_no: value.makaniNo,
       dewa_no: value.dewaNo,
-      address: value.addressLane1,
-      additional_address: value.addressLane2,
+      address_line_1: value.addressLane1,
+      address_line_2: value.addressLane2,
       landmark: value.landmark,
-      postal_code: value.pincode,
-      owner_id: value.owner?.key,
+      pincode: value.pincode,
+      property_owners: propertyOwners,
     };
   }
 
@@ -310,30 +417,20 @@ export class PropertyFormService {
     payload['property_unit_id'] = context.formId;
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
-      return this.propertyService.editProperty(payload);
+      return this.propertyService.editPropertyUnit(payload);
     } else {
-      return this.propertyService.editProperty(payload);
+      return this.propertyService.editPropertyUnit(payload);
     }
   }
 
   saveImagesDetails(payload: Record<string, any>, context: any) {
-    payload['property_unit_id'] = context.formId;
-    const mode = this.engine.value?.getCurrentStepFormMode();
-    if (mode === 'EDIT') {
-      return this.propertyService.editPropertyImages(payload);
-    } else {
-      return this.propertyService.addPropertyImages(payload);
-    }
+    payload['property_id'] = context.formId;
+    return this.propertyService.addPropertyImages(payload);
   }
 
   saveDocumentsDetails(payload: Record<string, any>, context: any) {
-    payload['property_unit_id'] = context.formId;
-    const mode = this.engine.value?.getCurrentStepFormMode();
-    if (mode === 'EDIT') {
-      return this.propertyService.editPropertyDocuments(payload);
-    } else {
-      return this.propertyService.addPropertyDocuments(payload);
-    }
+    payload['property_id'] = context.formId;
+    return this.propertyService.addPropertyDocuments(payload);
   }
 
   patchBasicDetails(response: any) {
@@ -382,31 +479,31 @@ export class PropertyFormService {
   }
 
   patchImageDetails(response: any) {
-    const content: any = response.content;
+    const images: any[] = response.content || [];
     return {
-      images: content.images.map((i: any) => ({
+      images: images.map((i: any) => ({
         backendId: i.id,
         file_name: i.file_name,
         file: { name: i.file_name },
-        base64: i.data,
+        base64: i.url,
         status: 'done',
         progress: 100,
-        type: i.type,
+        type: i.image_type,
       })),
     };
   }
 
   patchDocumentDetails(response: any) {
-    const content: any = response.content;
+    const docs: any[] = response.content || [];
     return {
-      documents: content.documents.map((i: any) => ({
-        backendId: i.id,
-        file_name: i.file_name,
-        file: { name: i.file_name },
-        base64: i.data,
+      documents: docs.map((d: any) => ({
+        backendId: d.id,
+        file_name: d.file_name,
+        file: { name: d.file_name },
+        base64: d.url,
         status: 'done',
         progress: 100,
-        type: i.type,
+        type: d.document_type_id,
       })),
     };
   }
@@ -479,7 +576,7 @@ export class PropertyFormService {
       .map((i: any) => ({
         data: i.base64,
         file_name: i.file_name,
-        type: i.type,
+        document_type_id: i.type,
       }));
 
     return { documents };

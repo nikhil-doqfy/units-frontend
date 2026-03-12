@@ -11,7 +11,12 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class PropertyAccordianCardComponent {
   @Input() accordianData:
-    | { title: string; items: { label: string; value: string }[] }[]
+    | {
+        title: string;
+        items: { label: string; value: string }[];
+        tableColumns?: { key: string; label: string }[];
+        tableRows?: Record<string, string>[];
+      }[]
     | undefined;
   @Output() accordionIndexChange = new EventEmitter<number>();
   @Output() accordionOpened = new EventEmitter<number>();

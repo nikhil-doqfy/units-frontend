@@ -1,3 +1,34 @@
+/* ── Scrollable table with hidden scrollbar ───────────────────────────────── */
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari */
+}
+
+/* ── Sticky action column ─────────────────────────────────────────────────── */
+.table thead tr th:last-child,
+.table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 100px;
+}
+
+.table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg);
+  box-shadow: none;
+}
+
+.table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Action icons ─────────────────────────────────────────────────────────── */
 .tbl-action-inline {
   display: flex;
   align-items: center;

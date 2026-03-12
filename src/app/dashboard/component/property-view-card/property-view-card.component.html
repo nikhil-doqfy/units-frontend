@@ -1,8 +1,9 @@
 <div class="cmmnPrprtyViewCol">
-  <div class="cmmnPrprtyViewSldr">
+  <div class="cmmnPrprtyViewSldr" *ngIf="propertyImages.length > 0; else noImages">
     <div class="thumbSwiperOuter">
       <swiper-container
         #thumbSwiper
+        init="false"
         slides-per-view="4"
         space-between="6"
         watch-slides-progress="true"
@@ -16,7 +17,7 @@
     </div>
     <swiper-container
       #mainSwiper
-      [thumbs]="{ swiper: thumbsSwiper }"
+      init="false"
       navigation="false"
       effect="fade"
       pagination="false"
@@ -30,11 +31,16 @@
       </swiper-slide>
     </swiper-container>
   </div>
+  <ng-template #noImages>
+    <div class="cmmnPrprtyViewSldr no-img-placeholder">
+      <div class="no-img-box">No Images</div>
+    </div>
+  </ng-template>
   <div class="cmmnPrprtyViewCntnt">
     <div class="cmmnPrprtyViewTop">
       <p>{{ "PROPERTY_INFORMATION" | translate }}</p>
       <div>
-        <div class="statusIcons">
+        <div class="statusIcons" *ngIf="showPlatformIcons">
           <img src="assets/platfrom/property-finder.svg" />
           <img src="assets/platfrom/buyut.svg" />
           <div class="shareIconWrapper">
