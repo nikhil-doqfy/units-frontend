@@ -1,7 +1,7 @@
 import {
   Component,
   inject,
-  Input,
+  OnInit,
   signal,
   TemplateRef,
   WritableSignal,
@@ -13,9 +13,11 @@ import { TableSearchComponent } from '../table-search/table-search.component';
 import { TableFilterButtonComponent } from '../table-filter-btn/table-filter-btn.component';
 import { ExportIconComponent } from '../icons/export-icon/export-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CommonModule } from '@angular/common';
+import { LeadsService } from '../../services/leads.service';
+import { CustomSelectComponent } from '../custom-select/custom-select.component';
 import { FilterPopupButtonComponent } from '../filter-popup-btn/filter-popup-btn.component';
 import { FilterIconComponent } from '../icons/filter-icon/filter-icon.component';
 import { TableActionButtonComponent } from '../table-action-btn/table-action-btn.component';
@@ -58,7 +60,6 @@ import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenen
     TableActionButtonComponent,
     PlatfromBadgeComponent,
     EditLeadsFormComponent,
-    EditLeadsFormComponent,
     ActivityHistoryFormComponent,
     ActivityHistroyIconsComponent,
     NgbDatepickerModule,
@@ -67,38 +68,135 @@ import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenen
     SortingIconComponent,
     CheckIconComponent,
     ConvertLeadToTenentFromComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './all-leads.component.html',
   styleUrl: './all-leads.component.css',
 })
-export class AllLeadsComponent {
-  private onLeadsSearch$ = new Subject<string>();
+export class AllLeadsComponent implements OnInit {
+  private leadsService = inject(LeadsService);
+  private search$ = new Subject<string>();
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
+
+  leads: any[] = [];
   totalRecords: number = 0;
   rowsPerPage: number = 10;
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   currentPage: number = 1;
+  searchText: string = '';
   selectedLead: any = null;
   showDetailView: boolean = false;
-
   componentName = 'allLeadsComponent';
 
-  onRefresh() {}
-  searchTextChange(search: string): void {
-    this.onLeadsSearch$.next(search);
+  // Filter values
+  filterStatus: string = '';
+  filterPlatform: string = '';
+  filterLeadType: string = '';
+
+  // Filter options
+  statusOptions = [
+    { key: 'INTERESTED', value: 'Interested' },
+    { key: 'NOT_INTERESTED', value: 'Not Interested' },
+    { key: 'LEASE_TENANCY', value: 'Lease/Tenancy' },
+  ];
+  platformOptions = [
+    { key: 'PROPERTY_FINDER', value: 'Property Finder' },
+    { key: 'BAYUT', value: 'Bayut' },
+    { key: 'DIRECT', value: 'Direct' },
+    { key: 'REFERRAL', value: 'Referral' },
+  ];
+  leadTypeOptions = [
+    { key: 'EMAIL', value: 'Email' },
+    { key: 'WHATSAPP', value: 'WhatsApp' },
+    { key: 'CALL', value: 'Call' },
+  ];
+
+  isEditMode: boolean = false;
+
+  ngOnInit(): void {
+    this.search$.pipe(debounceTime(400)).subscribe((text) => {
+      this.searchText = text;
+      this.currentPage = 1;
+      this.loadLeads();
+    });
+    this.loadLeads();
   }
+
+  buildParams(): Record<string, any> {
+    const params: Record<string, any> = { page: this.currentPage, page_size: this.rowsPerPage };
+    if (this.searchText) params['search'] = this.searchText;
+    if (this.filterStatus) params['status'] = this.filterStatus;
+    if (this.filterPlatform) params['platform'] = this.filterPlatform;
+    if (this.filterLeadType) params['lead_type'] = this.filterLeadType;
+    return params;
+  }
+
+  loadLeads(): void {
+    this.leadsService.getLeads(this.buildParams()).subscribe({
+      next: (resp: any) => {
+        this.leads = resp?.content || [];
+        this.totalRecords = resp?.pagination?.total_records ?? this.leads.length;
+      },
+    });
+  }
+
+  onRefresh(): void {
+    this.loadLeads();
+  }
+
+  searchTextChange(text: string): void {
+    this.search$.next(text);
+  }
+
+  applyFilter(): void {
+    this.currentPage = 1;
+    this.loadLeads();
+  }
+
+  removeFilter(): void {
+    this.filterStatus = '';
+    this.filterPlatform = '';
+    this.filterLeadType = '';
+    this.currentPage = 1;
+    this.loadLeads();
+  }
+
+  handleExportClick(): void {
+    this.leadsService.exportLeads(this.buildParams());
+  }
+
+  getPlatformType(platform: string): 'propertyFinder' | 'bayut' | 'direct' | 'referral' {
+    const map: Record<string, any> = {
+      PROPERTY_FINDER: 'propertyFinder',
+      BAYUT: 'bayut',
+      DIRECT: 'direct',
+      REFERRAL: 'referral',
+    };
+    return map[platform] || 'direct';
+  }
+
+  getStatusBadge(status: string): { title: string; color: string } {
+    const map: Record<string, any> = {
+      INTERESTED: { title: 'Interested', color: 'green' },
+      NOT_INTERESTED: { title: 'Not Interested', color: 'red' },
+      LEASE_TENANCY: { title: 'Lease/Tenancy', color: 'black' },
+    };
+    return map[status] || { title: status, color: 'grey' };
+  }
+
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
+    this.loadLeads();
   }
+
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+    this.loadLeads();
   }
-  handleExportClick() {}
-  isEditMode: boolean = false;
 
   openEditLeadModal(
     editLeadContent: TemplateRef<any>,

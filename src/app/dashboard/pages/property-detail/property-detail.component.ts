@@ -29,6 +29,7 @@ export class PropertyDetailComponent implements OnInit {
   propertyLocation = '';
   propertyStatus = '';
   propertyCode = '';
+  propertyRent = '';
   propertySections: {
     title: string;
     items: { label: string; value: string }[];
@@ -67,11 +68,13 @@ export class PropertyDetailComponent implements OnInit {
           this.propertyCode = prop.code || '';
           this.propertyLocation = [prop.address_line_1, prop.address_line_2, prop.landmark]
             .filter(Boolean).join(', ') || '';
-          this.propertyStatus = prop.pmc?.value || '';
+          this.propertyStatus = prop.status === 'PUBLIC' ? 'Public' : 'Draft';
+          this.propertyRent = prop.approx_rent
+            ? `AED${Number(prop.approx_rent).toLocaleString('en-US', { maximumFractionDigits: 0 })}`
+            : '';
 
           this.propertyImages = (images?.content || []).map((img: any) => ({ imgSrc: img.url }));
           const blockList: any[] = blocks?.content || [];
-          const ownerList: any[] = prop.property_owners || [];
 
           this.propertySections = [
             {
@@ -95,23 +98,12 @@ export class PropertyDetailComponent implements OnInit {
               title: 'Block Details',
               items: blockList.length
                 ? blockList.flatMap((b: any, i: number) => [
-                    { label: `Block ${i + 1} Name`, value: b.block_name || '--' },
+                    { label: `Block ${i + 1}`, value: b.block_name || '--' },
                     { label: 'No of Floors', value: String(b.no_of_floors ?? '--') },
                     { label: 'No of Parking', value: String(b.no_of_parking ?? '--') },
                     { label: 'No of Units', value: String(b.no_of_units ?? '--') },
                   ])
                 : [{ label: 'Blocks', value: 'No blocks added' }],
-            },
-            {
-              title: 'Owner Details',
-              items: ownerList.length
-                ? ownerList.flatMap((o: any, i: number) => [
-                    { label: `Owner ${i + 1} Name`, value: o.name || '--' },
-                    { label: 'Email', value: o.email || '--' },
-                    { label: 'Contact Number', value: o.contact_number || '--' },
-                    { label: 'Emirates ID', value: o.emirates_id || '--' },
-                  ])
-                : [{ label: 'Owners', value: 'No owners assigned' }],
             },
           ];
         }

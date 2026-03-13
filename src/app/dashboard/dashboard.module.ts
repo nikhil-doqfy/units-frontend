@@ -33,6 +33,7 @@ import { PropertyDetailComponent } from './pages/property-detail/property-detail
 import { NewTenantComponent } from './pages/new-tenant/new-tenant.component';
 import { UnitsComponent } from './pages/units/units.component';
 import { NewUnitsComponent } from './pages/new-units/new-units.component';
+import { UnitDetailComponent } from './pages/unit-detail/unit-detail.component';
 import { BasicpersonalComponent } from '../newtenant/component/basicpersonal/basicpersonal.component';
 import { SearchContactComponent } from '../shared/search-contact/search-contact.component';
 export const routes: Routes = [
@@ -74,8 +75,23 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.ADD_PROPERTY' },
       },
       {
+        path: 'units',
+        component: UnitsComponent,
+        data: { titleKey: 'PAGE_TITLE.UNITS' },
+      },
+      {
         path: 'new-units',
         component: NewUnitsComponent,
+        data: { titleKey: 'PAGE_TITLE.NEW_UNITS' },
+      },
+      {
+        path: 'new-units/:id',
+        component: NewUnitsComponent,
+        data: { titleKey: 'PAGE_TITLE.NEW_UNITS' },
+      },
+      {
+        path: 'units/:id',
+        component: UnitDetailComponent,
         data: { titleKey: 'PAGE_TITLE.NEW_UNITS' },
       },
       {

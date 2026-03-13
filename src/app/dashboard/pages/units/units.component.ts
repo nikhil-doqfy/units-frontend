@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
@@ -15,31 +15,12 @@ import { ResetIconComponent } from '../../component/icons/reset-icon/reset-icon.
 import { ShareIconComponent } from '../../component/icons/share-icon/share-icon.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CommonModule } from '@angular/common';
-import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
-import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
-import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { Router } from '@angular/router';
-import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
-type PropertyImages = Record<'imgSrc', string>;
-interface SectionItems {
-  label: string;
-  value: string;
-}
-interface Section {
-  title: string;
-  items: SectionItems[];
-}
-interface PropertyDetails {
-  property_unit_id: number;
-  name: string;
-  location: string;
-  status: string;
-  rent: string;
-  bhk: string;
-  sqft: string;
-  propertyImages: PropertyImages[];
-  sections: Section[];
-}
+import { PropertyService } from '../../services/property.service';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { debounceTime, Subject } from 'rxjs';
+
 @Component({
   selector: 'app-units',
   standalone: true,
@@ -57,35 +38,111 @@ interface PropertyDetails {
     TableTitleComponent,
     TranslateModule,
     CommonModule,
-    WhiteCardComponent,
-    PropertyViewCardComponent,
-    DocumentTypeItemComponent,
-    PropertySharePlatfromComponent,
+    FilterPopupButtonComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './units.component.html',
   styleUrl: './units.component.css',
 })
-export class UnitsComponent {
+export class UnitsComponent implements OnInit {
+  private propertyService = inject(PropertyService);
+
+  units: any[] = [];
   totalRecords: number = 0;
-  showDetailView: boolean = false;
-  componentName: string = 'all-properties-component';
+  componentName: string = 'all-units-component';
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  searchText: string = '';
+  private search$ = new Subject<string>();
+
+  // Filter values
+  filterPropertyId: string = '';
+  filterBedrooms: string = '';
+  filterFloor: string = '';
+  filterAreaUnit: string = '';
+
+  // Filter options
+  propertyOptions: { key: string; value: string }[] = [];
+  bedroomOptions = Array.from({ length: 10 }, (_, i) => ({ key: String(i + 1), value: String(i + 1) }));
+  floorOptions = Array.from({ length: 51 }, (_, i) => ({ key: String(i), value: String(i) }));
+  areaUnitOptions = [
+    { key: 'SQ_FT', value: 'Sq-ft' },
+    { key: 'SQ_MT', value: 'Sq-mt' },
+    { key: 'SQ_YD', value: 'Sq-yd' },
+  ];
+
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
-  rowsPerPage: number = 10;
-  currentPage: number = 1;
-  documentsByType: any = {
-    EMIRATES_ID: [],
-    PASSPORT_SELF: [],
-    PASSPORT_FAMILY: [],
-    EMPLOYMENT_PROOF: [],
-    VISA_SELF: [],
-    VISA_FAMILY: [],
-    BANK_STATEMENT: [],
-  };
-  onRefresh() {}
+
+  @Output() detailViewChanges = new EventEmitter<boolean>();
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.search$.pipe(debounceTime(400)).subscribe((text) => {
+      this.searchText = text;
+      this.currentPage = 1;
+      this.loadUnits();
+    });
+    this.loadPropertyOptions();
+    this.loadUnits();
+  }
+
+  loadPropertyOptions(): void {
+    this.propertyService.getProperties({ page: 1, page_size: 200 }).subscribe({
+      next: (resp: any) => {
+        this.propertyOptions = (resp?.content || []).map((p: any) => ({ key: String(p.id), value: p.property_name }));
+      },
+    });
+  }
+
+  buildParams(): Record<string, any> {
+    const params: Record<string, any> = { page: this.currentPage, page_size: this.rowsPerPage };
+    if (this.searchText) params['search'] = this.searchText;
+    if (this.filterPropertyId) params['property_id'] = this.filterPropertyId;
+    if (this.filterBedrooms) params['no_of_bedrooms'] = this.filterBedrooms;
+    if (this.filterFloor) params['floor_no'] = this.filterFloor;
+    if (this.filterAreaUnit) params['land_area_unit'] = this.filterAreaUnit;
+    return params;
+  }
+
+  loadUnits(): void {
+    this.propertyService.getUnits(this.buildParams()).subscribe({
+      next: (resp: any) => {
+        this.units = resp?.content || [];
+        this.totalRecords = resp?.pagination?.total_records ?? this.units.length;
+      },
+    });
+  }
+
+  onRefresh() {
+    this.loadUnits();
+  }
+
+  searchTextChange(text: string): void {
+    this.search$.next(text);
+  }
+
+  applyFilter(): void {
+    this.currentPage = 1;
+    this.loadUnits();
+  }
+
+  removeFilter(): void {
+    this.filterPropertyId = '';
+    this.filterBedrooms = '';
+    this.filterFloor = '';
+    this.filterAreaUnit = '';
+    this.currentPage = 1;
+    this.loadUnits();
+  }
+
+  handleExport(): void {
+    this.propertyService.exportUnits(this.buildParams());
+  }
 
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
@@ -95,97 +152,20 @@ export class UnitsComponent {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
+    this.loadUnits();
   }
+
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+    this.loadUnits();
   }
 
-  /*--------property details view section-----------------------------------------------------------*/
-  @Output() detailViewChanges = new EventEmitter<boolean>();
+  onEditClick(id: number) {
+    this.router.navigate(['/dashboard/new-units', id]);
+  }
 
-  constructor(private router: Router) {}
-  propertyDetails: Record<string, any> = {};
-  property: PropertyDetails = {
-    property_unit_id: 1,
-    name: '--',
-    location: '--',
-    status: '--',
-    rent: '--',
-    bhk: '--',
-    sqft: '--',
-    propertyImages: [
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-    ],
-    sections: [
-      {
-        title: 'Property details',
-        items: [
-          { label: 'Phone Number', value: '--' },
-          { label: 'Property Code', value: '--' },
-          { label: 'City', value: '--' },
-          { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '--' },
-          { label: 'Address Line 1', value: '--' },
-          { label: 'Address Line 2 ', value: '--' },
-        ],
-      },
-      {
-        title: 'Property Costing',
-        items: [{ label: 'Rent Cost', value: '--' }],
-      },
-      {
-        title: 'Tenant details',
-        items: [
-          { label: 'Name', value: '--' },
-          { label: 'Email', value: '--' },
-          { label: 'Phone Number', value: '--' },
-          { label: 'Emirates ID', value: '--' },
-          { label: 'City', value: '--' },
-          { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '--' },
-          { label: 'Address Line 1', value: '--' },
-          { label: 'Address Line 2', value: '--' },
-        ],
-      },
-      {
-        title: 'Owner details',
-        items: [
-          { label: 'Name', value: '--' },
-          { label: 'Emirates ID', value: '--' },
-          { label: 'Residence Visa', value: '--' },
-          { label: 'Trade License', value: '--' },
-          { label: 'Owner Code', value: '--' },
-        ],
-      },
-    ],
-  };
-  handleViewClick(property_unit_id: number) {
-    this.property.property_unit_id = property_unit_id;
-    console.log('clicked id:', property_unit_id);
-    this.showDetailView = true;
-    this.detailViewChanges.emit(true);
-  }
-  handleBackClick(): void {
-    this.showDetailView = false;
-    this.router.navigate(['/dashboard/properties']);
-    this.detailViewChanges.emit(false);
-  }
-  onEditClick() {
-    this.router.navigate(['/dashboard/new-units']);
+  onViewClick(id: number) {
+    this.router.navigate(['/dashboard/units', id]);
   }
 }

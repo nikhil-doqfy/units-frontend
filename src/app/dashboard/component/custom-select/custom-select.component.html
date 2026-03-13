@@ -40,7 +40,7 @@
       <li *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
         <input
           type="text"
-          [placeholder]="allowAddOption ? 'Search or Add...' : 'Add option...'"
+          [placeholder]="allowAddOption ? 'Search or add...' : 'Search...'"
           [(ngModel)]="filterText"
           (ngModelChange)="onInputChange($event)"
           (click)="$event.stopPropagation()"

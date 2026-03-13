@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
 import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { FormSelectFieldComponent } from '../../../shared/component/form-select-field/form-select-field.component';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { PropertyFormService } from '../../services/property-form.service';
 import { PropertyService } from '../../services/property.service';
@@ -18,6 +19,7 @@ import { FileUploadItemComponent } from '../../component/file-upload-item/file-u
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { StepEngine } from '../../model/step-engine/step-engine';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
+import { MapPickerComponent, MapLocation } from '../../component/map-picker/map-picker.component';
 
 type FormKey = 'images' | 'documents';
 
@@ -40,11 +42,13 @@ interface UploadConfig {
     StepFormLayoutComponent,
     StepPaneComponent,
     CustomSelectComponent,
+    FormSelectFieldComponent,
     UploadDocumentComponent,
     ReactiveFormsModule,
     FileUploadItemComponent,
     TranslateModule,
     WhiteCardComponent,
+    MapPickerComponent,
   ],
   templateUrl: './add-property.component.html',
   styleUrl: './add-property.component.css',
@@ -179,20 +183,6 @@ export class AddPropertyComponent {
     }));
   }
 
-  get ownerForms(): FormArray {
-    return this.pmDetailsForm.get('propertyOwners') as FormArray;
-  }
-
-  addOwner(): void {
-    this.ownerForms.push(this.propertyFormService.createOwnerGroup());
-  }
-
-  removeOwner(index: number): void {
-    if (this.ownerForms.length > 1) {
-      this.ownerForms.removeAt(index);
-    }
-  }
-
   get blockForms(): FormArray {
     return this.blocksForm.get('blocks') as FormArray;
   }
@@ -222,14 +212,6 @@ export class AddPropertyComponent {
   }
 
   fillDummyData(): void {
-    while (this.ownerForms.length > 1) this.ownerForms.removeAt(1);
-    this.ownerForms.at(0).patchValue({
-      ownerName: 'John Doe',
-      ownerEmail: 'john.doe@example.com',
-      ownerContact: '0501234567',
-      ownerEmiratesId: '784-1990-1234567-8',
-    });
-
     this.pmDetailsForm.patchValue({
       propertyName: 'Sunrise Tower',
       noOfBlocks: { key: 1, value: '1' },
@@ -245,6 +227,14 @@ export class AddPropertyComponent {
       addressLane2: 'Business Bay',
       landmark: 'Near Dubai Mall',
       pincode: '500001',
+    });
+  }
+
+  onMapLocationSelected(location: MapLocation): void {
+    this.pmDetailsForm.patchValue({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      mapAddress: location.address,
     });
   }
 

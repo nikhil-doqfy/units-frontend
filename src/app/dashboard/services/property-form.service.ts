@@ -102,19 +102,8 @@ export class PropertyFormService {
     return this.propertyBlocksForm.get('blocks') as FormArray;
   }
 
-  createOwnerGroup(): FormGroup {
-    return this.formBuilder.group({
-      ownerName: [''],
-      ownerEmail: [''],
-      ownerContact: [''],
-      ownerEmiratesId: [''],
-    });
-  }
-
   initPropertyManagerDetailsForm() {
     this.propertyManagerDetailsForm = this.formBuilder.group({
-      // Owner Details (multiple)
-      propertyOwners: this.formBuilder.array([this.createOwnerGroup()]),
       // Basic Details
       propertyName: ['', [Validators.required]],
       noOfBlocks: ['', [Validators.required]],
@@ -126,16 +115,16 @@ export class PropertyFormService {
       plotNo: [''],
       makaniNo: [''],
       dewaNo: [''],
+      approxRent: [''],
       // Location / Address
       addressLane1: [''],
       addressLane2: [''],
       landmark: [''],
       pincode: [''],
+      latitude: [''],
+      longitude: [''],
+      mapAddress: [''],
     });
-  }
-
-  get propertyOwnersArray(): FormArray {
-    return this.propertyManagerDetailsForm.get('propertyOwners') as FormArray;
   }
 
   initPropertyImagesForm() {
@@ -348,24 +337,6 @@ export class PropertyFormService {
   patchPMDetails(response: any) {
     const content: any = response.content;
 
-    // Rebuild owners FormArray
-    const owners: any[] = content?.property_owners || [];
-    while (this.propertyOwnersArray.length > 0) {
-      this.propertyOwnersArray.removeAt(0);
-    }
-    const count = owners.length > 0 ? owners.length : 1;
-    for (let i = 0; i < count; i++) {
-      this.propertyOwnersArray.push(this.createOwnerGroup());
-    }
-    owners.forEach((o: any, i: number) => {
-      this.propertyOwnersArray.at(i).patchValue({
-        ownerName: o.name,
-        ownerEmail: o.email,
-        ownerContact: o.contact_number,
-        ownerEmiratesId: o.emirates_id,
-      });
-    });
-
     return {
       propertyName: content?.property_name,
       noOfBlocks: { key: content?.no_of_blocks, value: String(content?.no_of_blocks ?? '') },
@@ -377,23 +348,18 @@ export class PropertyFormService {
       plotNo: content?.plot_no,
       makaniNo: content?.makani_no,
       dewaNo: content?.dewa_no,
+      approxRent: content?.approx_rent,
       addressLane1: content?.address_line_1,
       addressLane2: content?.address_line_2,
       landmark: content?.landmark,
       pincode: content?.pincode,
+      latitude: content?.latitude,
+      longitude: content?.longitude,
+      mapAddress: content?.map_address,
     };
   }
 
   mapOutPMDetails(value: any): Record<string, any> {
-    const propertyOwners = (value.propertyOwners || [])
-      .filter((o: any) => o.ownerEmail)
-      .map((o: any) => ({
-        property_owner_name: o.ownerName,
-        email: o.ownerEmail,
-        contact_number: o.ownerContact,
-        emirates_id: o.ownerEmiratesId,
-      }));
-
     return {
       property_name: value.propertyName,
       no_of_blocks: value.noOfBlocks?.key ?? value.noOfBlocks,
@@ -405,11 +371,14 @@ export class PropertyFormService {
       plot_no: value.plotNo,
       makani_no: value.makaniNo,
       dewa_no: value.dewaNo,
+      approx_rent: value.approxRent || null,
       address_line_1: value.addressLane1,
       address_line_2: value.addressLane2,
       landmark: value.landmark,
       pincode: value.pincode,
-      property_owners: propertyOwners,
+      latitude: value.latitude || null,
+      longitude: value.longitude || null,
+      map_address: value.mapAddress || null,
     };
   }
 

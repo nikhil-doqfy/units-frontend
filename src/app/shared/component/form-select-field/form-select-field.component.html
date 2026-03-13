@@ -1,0 +1,33 @@
+<div>
+  <label class="form-label" *ngIf="label">
+    {{ label }}<span *ngIf="required">*</span>
+  </label>
+
+  <!-- CVA mode: formControlName bound to inner select -->
+  <app-custom-select
+    *ngIf="bindToControl && controlName; else eventMode"
+    [options]="options"
+    [key]="key"
+    [value]="value"
+    [placeholder]="placeholder"
+    [showFilterInput]="showFilterInput"
+    [formControlName]="controlName"
+    (optionSelected)="optionSelected.emit($event)"
+  ></app-custom-select>
+
+  <!-- Event mode: no formControlName, parent handles patchValue -->
+  <ng-template #eventMode>
+    <app-custom-select
+      [options]="options"
+      [key]="key"
+      [value]="value"
+      [placeholder]="placeholder"
+      [showFilterInput]="showFilterInput"
+      (optionSelected)="optionSelected.emit($event)"
+    ></app-custom-select>
+  </ng-template>
+
+  @if (errorState.status) {
+    <small class="errorMsg">{{ errorState.msg }}</small>
+  }
+</div>

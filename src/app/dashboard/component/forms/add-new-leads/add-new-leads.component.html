@@ -1,178 +1,174 @@
-<form class="addLeadForm">
+<form class="addLeadForm commonForm" [formGroup]="leadForm">
   <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
-      <button
-        class="nav-link"
-        [class.active]="activeTab === 'manual'"
-        (click)="setTab('manual')"
-        type="button"
-      >
+      <button class="nav-link" [class.active]="activeTab === 'manual'" (click)="setTab('manual')" type="button">
         {{ "MANUAL" | translate }}
       </button>
     </li>
     <li class="nav-item">
-      <button
-        class="nav-link"
-        [class.active]="activeTab === 'bulk'"
-        (click)="setTab('bulk')"
-        type="button"
-      >
+      <button class="nav-link" [class.active]="activeTab === 'bulk'" (click)="setTab('bulk')" type="button">
         {{ "BULK_IMPORT" | translate }}
       </button>
     </li>
   </ul>
 
   <div *ngIf="activeTab === 'manual'">
+    <div style="text-align:right; margin-bottom:8px;">
+      <a href="javascript:void(0)" (click)="fillDummyData()"
+        style="font-size:12px; color:#aaa; text-decoration:underline; cursor:pointer;">Fill dummy data</a>
+    </div>
     <div class="row g-3">
-      <div class="col-md-6">
-        <label class="form-label required">{{
-          "LINK_PROPERTY" | translate
-        }}</label>
 
-        <app-custom-select
-          [options]="unitOptions"
-          key="key"
-          value="value"
+      <!-- Link Property + Unit -->
+      <div class="col-md-6">
+        <app-form-select-field
+          [label]="'LINK_PROPERTY' | translate"
+          [required]="true"
+          [options]="propertyOptions"
           [showFilterInput]="true"
           [placeholder]="'SELECT_OPTION' | translate"
-          (optionSelected)="onUnitSelect($event)"
-        ></app-custom-select>
+          (optionSelected)="onPropertySelect($event)"
+        ></app-form-select-field>
       </div>
 
       <div class="col-md-6">
-        <label class="form-label required">{{
-          "TENANT_NAME" | translate
-        }}</label>
+        <app-form-select-field
+          [label]="'UNIT' | translate"
+          [required]="true"
+          [options]="unitOptions"
+          [showFilterInput]="true"
+          [placeholder]="'SELECT_OPTION' | translate"
+          [form]="leadForm"
+          controlName="unit_id"
+          (optionSelected)="onUnitSelect($event)"
+        ></app-form-select-field>
+      </div>
+
+      <!-- Tenant Name + Rental/Lease Amount -->
+      <div class="col-md-6">
+        <label class="form-label">{{ "TENANT_NAME" | translate }}<span>*</span></label>
         <input
           type="text"
           class="form-control"
           [placeholder]="'ENTER_NAME_HERE' | translate"
-          formControlName="tenantName"
+          formControlName="name"
         />
+        @if (isInvalid(leadForm, 'name').status) {
+          <small class="errorMsg">{{ isInvalid(leadForm, 'name').msg }}</small>
+        }
       </div>
 
       <div class="col-md-6">
-        <label class="form-label required">{{ "EMAIL" | translate }}</label>
+        <label class="form-label">{{ "LEASE_AMOUNT_AED" | translate }}</label>
+        <input
+          type="number"
+          class="form-control"
+          [placeholder]="'ENTER_AMOUNT' | translate"
+          formControlName="amount"
+          readonly
+        />
+      </div>
+
+      <!-- Email + Contact -->
+      <div class="col-md-6">
+        <label class="form-label">{{ "EMAIL" | translate }}<span>*</span></label>
         <input
           type="email"
           class="form-control"
           [placeholder]="'ENTER_EMAIL_HERE' | translate"
           formControlName="email"
         />
+        @if (isInvalid(leadForm, 'email').status) {
+          <small class="errorMsg">{{ isInvalid(leadForm, 'email').msg }}</small>
+        }
       </div>
 
       <div class="col-md-6">
-        <label class="form-label required">{{ "CONTACT" | translate }}</label>
-        <input
-          type="text"
-          class="form-control"
-          [placeholder]="'ENTER_NAME_HERE' | translate"
-          formControlName="contact"
-        />
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label required">
-          {{ "LEASE_AMOUNT_AED" | translate }}
-        </label>
-        <input
-          type="number"
-          class="form-control"
-          [placeholder]="'ENTER_AMOUNT' | translate"
-          formControlName="amount"
-        />
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label required">{{ "STATUS" | translate }}</label>
-
-        <app-custom-select></app-custom-select>
-      </div>
-
-      <div class="col-12">
-        <label class="form-label required">{{
-          "LEAD_SOURCE" | translate
-        }}</label>
-        <div class="d-flex gap-4">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="direct"
-              formControlName="source"
-            />
-            <label class="form-check-label">{{ "DIRECT" | translate }}</label>
-          </div>
-
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="referral"
-              formControlName="source"
-            />
-            <label class="form-check-label">{{ "REFERRAL" | translate }}</label>
-          </div>
-
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="platform"
-              formControlName="source"
-            />
-            <label class="form-check-label">{{ "PLATFROM" | translate }}</label>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label required">{{
-          "REF_TENANT_ID_NAME" | translate
-        }}</label>
+        <label class="form-label">{{ "CONTACT" | translate }}<span>*</span></label>
         <input
           type="text"
           class="form-control"
           [placeholder]="'ENTER_HERE' | translate"
-          formControlName="referralName"
+          formControlName="contact_number"
         />
+        @if (isInvalid(leadForm, 'contact_number').status) {
+          <small class="errorMsg">{{ isInvalid(leadForm, 'contact_number').msg }}</small>
+        }
+      </div>
+
+      <!-- Status + Comment -->
+      <div class="col-md-6">
+        <app-form-select-field
+          [label]="'STATUS' | translate"
+          [required]="true"
+          [options]="statusOptions"
+          [placeholder]="'SELECT_OPTION' | translate"
+          [form]="leadForm"
+          controlName="status"
+          (optionSelected)="leadForm.patchValue({ status: $event?.key })"
+        ></app-form-select-field>
       </div>
 
       <div class="col-md-6">
-        <label class="form-label required">{{
-          "REFERRAL_CONTACT" | translate
-        }}</label>
+        <label class="form-label">{{ "COMMENT" | translate }}</label>
         <input
           type="text"
           class="form-control"
-          [placeholder]="'ENTER_NUMBER_HERE' | translate"
-          formControlName="referralContact"
+          [placeholder]="'WRITE_HERE' | translate"
+          formControlName="comment"
         />
       </div>
 
+      <!-- Platform -->
+      <div class="col-md-6">
+        <app-form-select-field
+          [label]="'PLATFORM' | translate"
+          [required]="true"
+          [options]="platformOptions"
+          [placeholder]="'SELECT_OPTION' | translate"
+          [form]="leadForm"
+          controlName="platform"
+          (optionSelected)="leadForm.patchValue({ platform: $event?.key })"
+        ></app-form-select-field>
+      </div>
+
+      <!-- Source of Lead (radio) -->
+      <div class="col-12">
+        <label class="form-label">{{ "LEAD_SOURCE" | translate }}<span>*</span></label>
+        <div class="d-flex gap-4 mt-1">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" value="EMAIL" formControlName="lead_type" />
+            <label class="form-check-label">{{ "EMAIL" | translate }}</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" value="CALL" formControlName="lead_type" />
+            <label class="form-check-label">{{ "CALL" | translate }}</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" value="WHATSAPP" formControlName="lead_type" />
+            <label class="form-check-label">{{ "WHATSAPP" | translate }}</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Link Checkbox -->
       <div class="col-12">
         <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            formControlName="sendAppLink"
-          />
+          <input class="form-check-input" type="checkbox" formControlName="sendAppLink" />
           <label class="form-check-label small">
             {{ "APP_LINK_SENT_ON_LEAD_CREATE" | translate }}
           </label>
         </div>
       </div>
+
     </div>
   </div>
+
   <div *ngIf="activeTab === 'bulk'" class="bulkImportWrapper">
     <div class="infoBox mb-3">
       <ul class="mb-0">
-        <li>
-          {{ "IMPORT_CONTACTS_VIA_CSV" | translate }}
-        </li>
-        <li>
-          {{ "VERIFY_NAME_EMAIL_FIELDS" | translate }}
-        </li>
+        <li>{{ "IMPORT_CONTACTS_VIA_CSV" | translate }}</li>
+        <li>{{ "VERIFY_NAME_EMAIL_FIELDS" | translate }}</li>
       </ul>
     </div>
 
@@ -182,10 +178,11 @@
         {{ "DOWNLOAD_SAMPLE_CSV" | translate }}
       </button>
     </div>
+
     <app-upload-document
       [title]="'DROP_FILES_HERE' | translate"
       [isMultipleFiles]="false"
-      [fileTypes]="['pdf']"
+      [fileTypes]="['csv']"
       [maxSize]="20"
       (uploadProgress)="onBulkUpload($event)"
     ></app-upload-document>

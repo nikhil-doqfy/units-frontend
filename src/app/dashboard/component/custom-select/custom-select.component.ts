@@ -68,7 +68,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   @Input() showFilterInput: boolean = false;
   @Input() allowAddOption: boolean = false;
   @Input() iconType: 'default' | 'custom' = 'default';
-  @Output() optionSelected = new EventEmitter<string>();
+  @Output() optionSelected = new EventEmitter<any>();
   @Output() onOptionAdded = new EventEmitter<any>();
 
   isDropdownOpen = false;

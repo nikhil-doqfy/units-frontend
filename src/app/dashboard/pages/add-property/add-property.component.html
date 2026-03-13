@@ -3,49 +3,15 @@
   [bulkColumns]="blocksBulkColumns"
   (bulkImported)="onBlocksBulkImport($event)"
   (finish)="submitProperty()"> <ng-container>
-    <app-step-pane [title]="'Basic Details' | translate" [pageTitle]="'Owner Details'"
-      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate" [showEditButton]="true">
-      <div style="text-align:right; margin-bottom:8px;">
-        <a href="javascript:void(0)" (click)="fillDummyData()"
-          style="font-size:12px; color:#aaa; text-decoration:underline; cursor:pointer;">Fill dummy data</a>
-      </div>
-      <form [formGroup]="pmDetailsForm">
-        <div formArrayName="propertyOwners">
-          <div *ngFor="let ownerForm of ownerForms.controls; let i = index" class="ownerCardWrapper mb-2">
-            <span class="ownerCount">{{ i + 1 | number: '2.0-0' }}</span>
-            <div class="row g-3" [formGroupName]="i">
-              <div class="col-md-3">
-                <label class="form-label">{{ "Property Owner Name" | translate }}</label>
-                <input type="text" class="form-control" [placeholder]="'Enter name here' | translate"
-                  formControlName="ownerName" />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">{{ "Email" | translate }}</label>
-                <input type="text" class="form-control" [placeholder]="'Enter email here' | translate"
-                  formControlName="ownerEmail" />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">{{ "Contact Number" | translate }}</label>
-                <input type="text" class="form-control" [placeholder]="'Enter number here' | translate"
-                  formControlName="ownerContact" />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">{{ "Emirates ID" | translate }}</label>
-                <input type="text" class="form-control" [placeholder]="'Enter ID here' | translate"
-                  formControlName="ownerEmiratesId" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-      <div class="ownerActionBtns">
-        <button type="button" class="circleBtn minusBtn" (click)="removeOwner(ownerForms.length - 1)">−</button>
-        <button type="button" class="circleBtn plusBtn" (click)="addOwner()">+</button>
-      </div>
-    </app-step-pane>
 
     <ng-container>
-      <app-step-pane [title]="'Basic Details' | translate" [secondCard]="true">
+      <app-step-pane [title]="'Basic Details' | translate"
+        [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
+        [showEditButton]="true">
+        <div style="text-align:right; margin-bottom:8px;">
+          <a href="javascript:void(0)" (click)="fillDummyData()"
+            style="font-size:12px; color:#aaa; text-decoration:underline; cursor:pointer;">Fill dummy data</a>
+        </div>
         <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
             <label class="form-label">{{ "Property Name" | translate }}</label>
@@ -58,36 +24,31 @@
             }
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{
-              "No of Blocks / Tower" | translate
-              }}</label>
-            <app-custom-select [options]="blocksCount" key="key" value="value"
-              formControlName="noOfBlocks"></app-custom-select>
-            @if (isInvalid(pmDetailsForm, "noOfBlocks").status) {
-            <small class="errorMsg">
-              {{ isInvalid(pmDetailsForm, "noOfBlocks").msg }}
-            </small>
-            }
+            <app-form-select-field
+              [label]="'No of Blocks / Tower' | translate"
+              [options]="blocksCount"
+              [bindToControl]="true"
+              [form]="pmDetailsForm"
+              controlName="noOfBlocks"
+            ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "No of Units" | translate }}</label>
-            <app-custom-select [options]="unitsCount" key="key" value="value"
-              formControlName="noOfUnits"></app-custom-select>
-            @if (isInvalid(pmDetailsForm, "noOfUnits").status) {
-            <small class="errorMsg">
-              {{ isInvalid(pmDetailsForm, "noOfUnits").msg }}
-            </small>
-            }
+            <app-form-select-field
+              [label]="'No of Units' | translate"
+              [options]="unitsCount"
+              [bindToControl]="true"
+              [form]="pmDetailsForm"
+              controlName="noOfUnits"
+            ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Property Type" | translate }}</label>
-            <app-custom-select [options]="propertyType" key="key" value="value"
-              formControlName="propertyType"></app-custom-select>
-            @if (isInvalid(pmDetailsForm, "propertyType").status) {
-            <small class="errorMsg">
-              {{ isInvalid(pmDetailsForm, "propertyType").msg }}
-            </small>
-            }
+            <app-form-select-field
+              [label]="'Property Type' | translate"
+              [options]="propertyType"
+              [bindToControl]="true"
+              [form]="pmDetailsForm"
+              controlName="propertyType"
+            ></app-form-select-field>
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Land Area" | translate }}</label>
@@ -117,6 +78,10 @@
           <div class="col-md-3">
             <label class="form-label">{{ "Dewa No" | translate }}</label>
             <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="dewaNo" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Approx Rent Cost" | translate }}</label>
+            <input type="number" class="form-control" [placeholder]="'Enter approx rent' | translate" formControlName="approxRent" />
           </div>
         </form>
       </app-step-pane>
@@ -148,20 +113,13 @@
               formControlName="pincode" />
           </div>
           <div class="col-12">
-            <label class="form-label">{{
-              "Select From Map" | translate
-              }}</label>
-            <div class="inputWithIcon">
-              <img src="assets/location.svg" class="inputIcon" />
-              <input type="text" class="form-control customInput" [placeholder]="
-                  'Locations comes here automatically form map' | translate
-                " />
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121058.9318715537!2d73.78056599424929!3d18.524761374489145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf2e67461101%3A0x828d43bf9d9ee343!2sPune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1772708738056!5m2!1sen!2sin%22"
-                max-width="914" width="100%" height="286"
-                style="border:2px solid white; border-radius:10px; margin-top: 10px;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
+            <label class="form-label">{{ "Select From Map" | translate }}</label>
+            <app-map-picker
+              [initialLat]="pmDetailsForm.get('latitude')?.value"
+              [initialLng]="pmDetailsForm.get('longitude')?.value"
+              [initialAddress]="pmDetailsForm.get('mapAddress')?.value"
+              (locationSelected)="onMapLocationSelected($event)"
+            />
           </div>
         </form>
       </app-step-pane>
@@ -347,19 +305,28 @@
                   formControlName="blockName" />
               </div>
               <div class="col-md-3">
-                <label class="form-label">{{ "No of Floors" | translate }}</label>
-                <app-custom-select [options]="floorsCount" key="key" value="value"
-                  formControlName="noOfFloors"></app-custom-select>
+                <app-form-select-field
+                  [label]="'No of Floors' | translate"
+                  [options]="floorsCount"
+                  [bindToControl]="true"
+                  controlName="noOfFloors"
+                ></app-form-select-field>
               </div>
               <div class="col-md-3">
-                <label class="form-label">{{ "No of Parking" | translate }}</label>
-                <app-custom-select [options]="parkingCount" key="key" value="value"
-                  formControlName="noOfParking"></app-custom-select>
+                <app-form-select-field
+                  [label]="'No of Parking' | translate"
+                  [options]="parkingCount"
+                  [bindToControl]="true"
+                  controlName="noOfParking"
+                ></app-form-select-field>
               </div>
               <div class="col-md-3">
-                <label class="form-label">{{ "No of Units" | translate }}</label>
-                <app-custom-select [options]="unitsCount" key="key" value="value"
-                  formControlName="noOfUnits"></app-custom-select>
+                <app-form-select-field
+                  [label]="'No of Units' | translate"
+                  [options]="unitsCount"
+                  [bindToControl]="true"
+                  controlName="noOfUnits"
+                ></app-form-select-field>
               </div>
             </div>
           </div>

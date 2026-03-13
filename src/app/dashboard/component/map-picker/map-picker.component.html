@@ -1,0 +1,16 @@
+<div class="map-picker-wrapper">
+  <div class="map-search-wrap">
+    <div class="map-search-input-wrap">
+      <img src="assets/location.svg" class="map-search-icon" />
+      <input type="text" class="form-control customInput" placeholder="Search location or click on map"
+        [(ngModel)]="searchQuery" (input)="onSearchInput()" autocomplete="off" />
+      <span class="map-searching-indicator" *ngIf="searching">...</span>
+    </div>
+    <ul class="map-search-results" *ngIf="searchResults.length > 0">
+      <li *ngFor="let r of searchResults" (click)="selectResult(r)">
+        {{ r.display_name }}
+      </li>
+    </ul>
+  </div>
+  <div id="mapContainer" class="map-container" style="width: 100%; height: 500px;"></div>
+</div>

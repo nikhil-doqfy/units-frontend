@@ -14,23 +14,29 @@ export class LeadsService {
 
   getLeads(params: Record<string, any> = {}): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/user/create_lead${queryString}`);
+    return this.http.get(`${this.SERVER_ADDRESS}/lead${queryString}`);
   }
 
   createLead(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/user/create_lead`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/lead`, data);
   }
 
   updateLead(leadId: string, data: Record<string, any>): Observable<any> {
-    return this.http.put(
-      `${this.SERVER_ADDRESS}/user/create_lead?lead_id=${leadId}`,
-      data,
-    );
+    return this.http.put(`${this.SERVER_ADDRESS}/lead`, { ...data, lead_id: leadId });
   }
 
   deleteLead(leadId: string): Observable<any> {
-    return this.http.delete(
-      `${this.SERVER_ADDRESS}/user/create_lead?lead_id=${leadId}`,
-    );
+    return this.http.delete(`${this.SERVER_ADDRESS}/lead?lead_id=${leadId}`);
+  }
+
+  exportLeads(params: Record<string, any> = {}): void {
+    const queryString = this.sharedService.getQueryString({ ...params, export: 'csv' });
+    this.http.get(`${this.SERVER_ADDRESS}/lead${queryString}`, { responseType: 'blob' }).subscribe((blob) => {
+      this.sharedService.downloadBlob(blob, 'leads.csv');
+    });
+  }
+
+  bulkImportLeads(fileBase64: string): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/lead/bulk-import`, { file: fileBase64 });
   }
 }
