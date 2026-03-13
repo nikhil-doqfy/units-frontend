@@ -133,17 +133,17 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-bulk-upload #BulkUploadComponent />
+    <app-bulk-upload [columns]="bulkColumns" (dataImported)="onBulkDataReady($event)" />
   </div>
   <div class="modal-footer">
     <button
       type="button"
       class="btn btnCommon btnTransparent"
-      (click)="modal.dismiss('Save click')"
+      (click)="modal.dismiss('Cancel click')"
     >
       {{ "CANCEL" | translate }}
     </button>
-    <button type="button" class="btn btnCommon">
+    <button type="button" class="btn btnCommon" (click)="onBulkUploadConfirm(modal)">
       {{ "Upload" | translate }}
     </button>
   </div>

@@ -14,31 +14,57 @@ export class PropertyService {
 
   constructor() {}
 
-  getProperties(params: Record<string, any>): Observable<any> {
+  // ── Properties (parent) ──────────────────────────────────────────────────
+  getProperties(params: Record<string, any> = {}): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/property/details${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/property${queryString}`);
   }
 
-  getProperty(params: Record<string, any>): Observable<any> {
+  addProperty(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/property`, data);
+  }
+
+  editProperty(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/property`, data);
+  }
+
+  // ── Property Units ────────────────────────────────────────────────────────
+  getPropertyUnits(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/property/details${queryString}`);
+  }
+
+  getPropertyUnit(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(`${this.SERVER_ADDRESS}/save/property${queryString}`);
   }
 
-  addProperty(data: Record<string, any>): Observable<any> {
+  addPropertyUnit(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/save/property`, data);
   }
 
-  editProperty(data: Record<string, any>): Observable<any> {
+  editPropertyUnit(data: Record<string, any>): Observable<any> {
     return this.http.put(`${this.SERVER_ADDRESS}/save/property`, data);
   }
 
+  // ── Property Blocks ───────────────────────────────────────────────────────
+  getPropertyBlocks(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/property/blocks${queryString}`);
+  }
+
+  addPropertyBlocks(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/property/blocks`, data);
+  }
+
+  editPropertyBlocks(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/property/blocks`, data);
+  }
+
+  // ── Images ────────────────────────────────────────────────────────────────
   getPropertyImages(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/property/images${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/property/images${queryString}`);
   }
 
   addPropertyImages(data: Record<string, any>) {
@@ -49,11 +75,18 @@ export class PropertyService {
     return this.http.put(`${this.SERVER_ADDRESS}/property/images`, data);
   }
 
+  deletePropertyImage(imageId: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_ADDRESS}/property/images?image_id=${imageId}`);
+  }
+
+  // ── Documents ─────────────────────────────────────────────────────────────
+  getPropertyDocumentTypes(): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/property/document-types`);
+  }
+
   getPropertyDocuments(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/property/documents${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/property/documents${queryString}`);
   }
 
   addPropertyDocuments(data: Record<string, any>) {
@@ -64,7 +97,12 @@ export class PropertyService {
     return this.http.put(`${this.SERVER_ADDRESS}/property/documents`, data);
   }
 
-  getExcelFileOfProperty(data: Record<string, any>) {
+  deletePropertyDocument(documentId: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_ADDRESS}/property/documents?document_id=${documentId}`);
+  }
+
+  // ── Misc ──────────────────────────────────────────────────────────────────
+  getExcelFileOfProperty(_data: Record<string, any>) {
     return this.http.get(`${this.SERVER_ADDRESS}/export/property`, {
       responseType: 'blob',
     });
@@ -72,15 +110,11 @@ export class PropertyService {
 
   getParentPropertyData(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/parent/property${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/parent/property${queryString}`);
   }
 
   getPropertyDetailsForLease(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/property_owner_compny_lease${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/property_owner_compny_lease${queryString}`);
   }
 }

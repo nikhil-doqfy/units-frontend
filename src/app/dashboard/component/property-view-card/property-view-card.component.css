@@ -3,6 +3,17 @@
   gap: 16px;
 }
 
+.no-img-placeholder {
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+.no-img-box {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
 .cmmnPrprtyViewSldr {
   display: flex;
   gap: 6px;

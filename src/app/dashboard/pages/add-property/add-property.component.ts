@@ -1,28 +1,22 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ThemeService, UserRole } from '../../../theme.service';
 
 import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
 import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { PropertyFormService } from '../../services/property-form.service';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { PropertyService } from '../../services/property.service';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
-import {
-  BreadCrumb,
-  OptionsParams,
-  UploadFileModel,
-} from '../../../shared/model/shared.model';
+import { OptionsParams, UploadFileModel } from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { StepEngine } from '../../model/step-engine/step-engine';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PropertyService } from '../../services/property.service';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 
 type FormKey = 'images' | 'documents';
@@ -62,8 +56,6 @@ export class AddPropertyComponent {
   private formService = inject(FormService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
-  private destroyRef = inject(DestroyRef);
-  private translate = inject(TranslateService);
 
   breadcrumbData = [
     { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
@@ -71,23 +63,29 @@ export class AddPropertyComponent {
     { label: 'ADD_PROPERTY', link: '' },
   ];
 
-  currentRole: UserRole = 'owner';
   isInvalid = this.formService.isInvalid;
-  propertyList: any[] = [];
   propertyType: any[] = [];
-  PMC_List: any[] = [];
-  ownerList: any[] = [];
-  country: any[] = [];
-  state: any[] = [];
-  city: any[] = [];
+  blocksCount: any[] = [];
+  unitsCount: any[] = [];
+  areaUnit: any[] = [];
+  floorsCount: any[] = [];
+  parkingCount: any[] = [];
 
-  basicDetailsForm = this.propertyFormService.propertyBasicDetailsForm;
   commercialsForm = this.propertyFormService.propertyCommercialsForm;
   imagesForm = this.propertyFormService.propertyImagesForm;
   documentationForm = this.propertyFormService.propertyDocumentationForm;
+  pmDetailsForm = this.propertyFormService.propertyManagerDetailsForm;
+  blocksForm = this.propertyFormService.propertyBlocksForm;
 
   engine!: StepEngine;
   steps: StepSchema[] = [];
+
+  blocksBulkColumns = [
+    { key: 'block_name', label: 'Block/Tower Name' },
+    { key: 'no_of_floors', label: 'No of Floors' },
+    { key: 'no_of_parking', label: 'No of Parking' },
+    { key: 'no_of_units', label: 'No of Units' },
+  ];
 
   imageUploadTypes: UplodTypeModal[] = [];
   documetUploadTypes: UplodTypeModal[] = [];
@@ -98,77 +96,57 @@ export class AddPropertyComponent {
     documents: 1,
   };
 
-  constructor(
-    private router: Router,
-    private themeService: ThemeService,
-  ) {
+  constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
-    this.steps = this.propertyFormService.buildPropertySteps();
+    this.steps = this.propertyFormService.buildPropertySteps('property-manager');
     this.engine = new StepEngine(this.steps);
     this.propertyFormService.setEngine(this.engine);
 
     const formId = this.route.snapshot.paramMap.get('id');
     if (formId) {
       this.engine.setFormId(+formId);
+      // Mark all steps EDIT + ONGOING so data loads when each step is visited
+      this.steps.forEach((step) => {
+        this.engine.setStepFormMode(step.id, 'EDIT');
+        this.engine.setStepStatus(step.id, 'ONGOING');
+      });
       this.engine.loadStep(0);
     }
   }
 
   ngOnInit() {
-    let options: OptionsParams[] = [];
-    this.currentRole = this.themeService.getRole();
-
-    if (this.currentRole === 'owner') {
-      options.push({
-        param: 'OWNER_COMPANY_USER',
-        key: 'company_user',
-        setter: (v) => {
-          this.PMC_List = v;
-        },
-      });
-    }
-
-    if (this.currentRole === 'property-manager') {
-      options.push({
-        param: 'OWNER_DETAILS',
-        key: 'owners',
-        setter: (v) => {
-          this.ownerList = v;
-        },
-      });
-    }
-
-    options.push(
-      {
-        param: 'PARENT_PROPERTY',
-        key: 'property',
-        setter: (v) => {
-          this.propertyList = v;
-        },
-      },
+    const options: OptionsParams[] = [
       {
         param: 'PROPERTY_TYPE',
         key: 'property_type',
-        setter: (v) => {
-          this.propertyType = v;
-        },
+        setter: (v) => { this.propertyType = v; },
       },
       {
-        param: 'COUNTRY',
-        key: 'country',
-        setter: (v) => {
-          this.country = v;
-        },
+        param: 'BLOCKS_COUNT',
+        key: 'blocks_count',
+        setter: (v) => { this.blocksCount = v; },
       },
       {
-        param: 'PROPERTY_DOCUMENT_CHOICE',
-        key: 'Property_Document',
-        setter: (v) => {
-          this.documetUploadTypes = this.getProcessUploadTypes(v, 'documents');
-          this.activeDocTab = v[0]?.key;
-        },
+        param: 'UNITS_COUNT',
+        key: 'units_count',
+        setter: (v) => { this.unitsCount = v; },
+      },
+      {
+        param: 'AREA_UNIT',
+        key: 'area_unit',
+        setter: (v) => { this.areaUnit = v; },
+      },
+      {
+        param: 'FLOOR_COUNT',
+        key: 'floor_count',
+        setter: (v) => { this.floorsCount = v; },
+      },
+      {
+        param: 'PARKING_COUNT',
+        key: 'parking_count',
+        setter: (v) => { this.parkingCount = v; },
       },
       {
         param: 'PROPERTY_IMAGE_CHOICE',
@@ -178,111 +156,96 @@ export class AddPropertyComponent {
           this.activeImageTab = v[0]?.key;
         },
       },
-    );
+    ];
 
-    this.getOptionsTypes(options);
+    this.sharedAPIService.getOptionsType(options);
+
+    this.propertyService.getPropertyDocumentTypes().subscribe((resp: any) => {
+      const types = resp?.content || [];
+      this.documetUploadTypes = types.map((dt: any) => ({
+        typeKey: dt.id,
+        typeLabel: dt.name,
+        formKey: 'documents' as FormKey,
+      }));
+      this.activeDocTab = types[0]?.id;
+    });
   }
 
   getProcessUploadTypes(data: any, formKey: FormKey): UplodTypeModal[] {
-    const types = data.map((item: any) => ({
+    return data.map((item: any) => ({
       typeKey: item.key,
       typeLabel: item.value,
       formKey,
     }));
-    return types;
   }
 
-  initCurrentRoleListener() {
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
-      });
+  get ownerForms(): FormArray {
+    return this.pmDetailsForm.get('propertyOwners') as FormArray;
   }
 
-  initLanguageListener() {
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.loadBreadcrumb();
-      });
+  addOwner(): void {
+    this.ownerForms.push(this.propertyFormService.createOwnerGroup());
   }
 
-  // loadBreadcrumb() {
-  //   this.setBreadCrumb([
-  //     { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-  //     { label: 'ADD_PROPERTY', link: '' },
-  //   ]);
-  // }
-  showDetailView: boolean = false;
-
-  loadBreadcrumb() {
-    if (this.showDetailView) {
-      this.setBreadCrumb([
-        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/Add-property' },
-        { label: 'PROPERTY_DETAILS', link: '' },
-      ]);
-    } else {
-      this.setBreadCrumb([
-        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-        { label: 'PAGE_TITLE.ADD_PROPERTY', link: '' },
-      ]);
+  removeOwner(index: number): void {
+    if (this.ownerForms.length > 1) {
+      this.ownerForms.removeAt(index);
     }
   }
-  setBreadCrumb(breadCrumb: BreadCrumb[]) {
-    this.sharedService
-      .getBreadcrumbs(breadCrumb)
-      .subscribe((data) => (this.breadcrumbData = data));
-  }
-  getOptionsTypes(option: OptionsParams[]) {
-    this.sharedAPIService.getOptionsType(option);
+
+  get blockForms(): FormArray {
+    return this.blocksForm.get('blocks') as FormArray;
   }
 
-  onPropertySelect(data: any) {
-    if (typeof data?.key !== 'number') return;
+  addBlock(): void {
+    this.blockForms.push(this.propertyFormService.createBlockGroup());
+  }
 
-    this.propertyService.getParentPropertyData({ id: data.key }).subscribe({
-      next: (response: any) => {
-        let content = response?.content;
-        this.basicDetailsForm.patchValue({
-          NoOfFloors: content?.total_floors,
-          addressLine2: content?.addressLine2,
-          locality: content?.locality,
-          postalCode: content?.postal_code,
-          propertyType: content?.property_type,
-          country: content?.country,
-          state: content?.state,
-          city: content?.city,
-        });
-      },
+  removeBlock(index: number): void {
+    if (this.blockForms.length > 1) {
+      this.blockForms.removeAt(index);
+    }
+  }
+
+  onBlocksBulkImport(rows: any[]): void {
+    while (this.blockForms.length > 0) this.blockForms.removeAt(0);
+    rows.forEach((row) => {
+      const group = this.propertyFormService.createBlockGroup();
+      group.patchValue({
+        blockName: row['block_name'] ?? '',
+        noOfFloors: row['no_of_floors'] != null ? { key: +row['no_of_floors'], value: String(row['no_of_floors']) } : '',
+        noOfParking: row['no_of_parking'] != null ? { key: +row['no_of_parking'], value: String(row['no_of_parking']) } : '',
+        noOfUnits: row['no_of_units'] != null ? { key: +row['no_of_units'], value: String(row['no_of_units']) } : '',
+      });
+      this.blockForms.push(group);
     });
   }
 
-  onCountrySelect(data: any) {
-    this.getOptionsTypes([
-      {
-        param: 'STATE',
-        params: { country_id: data.key },
-        key: 'state',
-        setter: (v) => {
-          this.state = v;
-        },
-      },
-    ]);
-  }
+  fillDummyData(): void {
+    while (this.ownerForms.length > 1) this.ownerForms.removeAt(1);
+    this.ownerForms.at(0).patchValue({
+      ownerName: 'John Doe',
+      ownerEmail: 'john.doe@example.com',
+      ownerContact: '0501234567',
+      ownerEmiratesId: '784-1990-1234567-8',
+    });
 
-  onStateSelect(data: any) {
-    this.getOptionsTypes([
-      {
-        param: 'CITY',
-        params: { state_id: data.key },
-        key: 'city',
-        setter: (v) => {
-          this.city = v;
-        },
-      },
-    ]);
+    this.pmDetailsForm.patchValue({
+      propertyName: 'Sunrise Tower',
+      noOfBlocks: { key: 1, value: '1' },
+      noOfUnits: { key: 10, value: '10' },
+      propertyType: { key: 'APARTMENT', value: 'Apartment' },
+      landArea: 5000,
+      landAreaUnit: { key: 'SQ_FT', value: 'Sq Ft' },
+      landDmNo: 'DM-2024-001',
+      plotNo: 'PLT-101',
+      makaniNo: '21345678',
+      dewaNo: 'DEWA-9876543',
+      addressLane1: '15 Sheikh Zayed Road',
+      addressLane2: 'Business Bay',
+      landmark: 'Near Dubai Mall',
+      pincode: '500001',
+    });
   }
 
   submitProperty(): void {
@@ -295,12 +258,9 @@ export class AddPropertyComponent {
       ...this.documetUploadTypes,
     ];
     const cfg = combineTypeModal.find((modal) => modal.typeKey === type);
-
     if (!cfg) throw new Error('Invalid Type');
-
     return {
-      form:
-        cfg.formKey === 'documents' ? this.documentationForm : this.imagesForm,
+      form: cfg.formKey === 'documents' ? this.documentationForm : this.imagesForm,
       formKey: cfg.formKey,
     };
   }
@@ -318,7 +278,6 @@ export class AddPropertyComponent {
 
     const payload = {
       id: index === -1 ? this.uploadIdCounter[counterKey]++ : items[index].id,
-
       tempId: event.tempId,
       file_name: event.file.name,
       file: event.file,
@@ -336,7 +295,13 @@ export class AddPropertyComponent {
 
   remove(type: string, item: any) {
     if (item?.backendId) {
-      this.removeItem(type, item?.backendId, true);
+      const cfg = this.getUploadConfig(type);
+      if (cfg.formKey === 'documents') {
+        this.propertyService.deletePropertyDocument(item.backendId).subscribe();
+      } else {
+        this.propertyService.deletePropertyImage(item.backendId).subscribe();
+      }
+      this.removeItem(type, item.backendId, true);
     } else {
       this.removeItem(type, item.id);
     }
@@ -347,8 +312,6 @@ export class AddPropertyComponent {
     const form = cfg.form;
     const key = cfg.formKey;
 
-    console.log(form.value[key]);
-
     const filtered = isBackend
       ? (form.value[key] || []).filter((x: any) => x.backendId !== id)
       : (form.value[key] || []).filter((x: any) => x.id !== id);
@@ -358,9 +321,6 @@ export class AddPropertyComponent {
 
   getItems(type: string) {
     const cfg = this.getUploadConfig(type);
-    const form = cfg.form;
-    const key = cfg.formKey;
-
-    return (form.value[key] || []).filter((x: any) => x.type === type);
+    return (cfg.form.value[cfg.formKey] || []).filter((x: any) => x.type === type);
   }
 }

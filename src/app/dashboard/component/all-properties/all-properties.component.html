@@ -3,27 +3,18 @@
     <div class="cmmnTblHdr">
       <div class="row g-3 align-items-center">
         <div class="col-md">
-          <app-table-title
-            [title]="'ALL_PROPERTIES' | translate"
-            [subtitle]="'(' + totalRecords + ')'"
-            (onRefresh)="onRefresh()"
-          ></app-table-title>
+          <app-table-title [title]="'ALL_PROPERTIES' | translate" [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
 
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-            >
+            <app-table-filter-btn [title]="'FILTER' | translate" [hasIcon]="true">
               <app-filter-icon />
             </app-table-filter-btn>
 
-            <app-table-filter-btn
-              [title]="'EXPORT' | translate"
-              [hasIcon]="true"
-            >
+            <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true">
               <app-export-icon />
             </app-table-filter-btn>
           </div>
@@ -54,173 +45,39 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Novastis AG'"
-                />
+            <tr *ngFor="let prop of properties">
+              <td>{{ prop.code }}</td>
+              <td style="cursor:pointer" (click)="onViewClick(prop.id)">
+                <app-table-img-item [img]="prop.thumbnail || 'assets/property/property-img-1.png'" [title]="prop.property_name" />
               </td>
-              <td>Al Wasl,Dubai</td>
-              <td>Owner1,Owner2</td>
-              <td>10</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>123</td>
-              <td>12345</td>
-              <td>2043***7733</td>
-              <td>2043***7733</td>
+              <td>{{ prop.address_line_1 || '--' }}</td>
+              <td>
+                <span *ngFor="let o of prop.property_owners; let last = last">
+                  {{ o.name || o.email }}<span *ngIf="!last">, </span>
+                </span>
+                <span *ngIf="!prop.property_owners?.length">--</span>
+              </td>
+              <td>{{ prop.no_of_blocks }}</td>
+              <td>{{ prop.no_of_units }}</td>
+              <td>{{ prop.pmc?.value || '--' }}</td>
+              <td>{{ prop.plot_no || '--' }}</td>
+              <td>{{ prop.land_area ? (prop.land_area + ' ' + prop.land_area_unit) : '--' }}</td>
+              <td>{{ prop.makani_no || '--' }}</td>
+              <td>{{ prop.dewa_no || '--' }}</td>
               <td>--</td>
               <td align="center">
                 <div class="tbl-action-inline">
-                  <app-edit-icon (click)="onEditClick()"></app-edit-icon>
-
+                  <app-edit-icon (click)="onEditClick(prop.id)"></app-edit-icon>
                   <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
+                    <app-table-action-dropdown [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)">
                     </app-table-action-dropdown>
                   </div>
                 </div>
               </td>
             </tr>
-            <tr>
-              <td>12333</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-2.png'"
-                  [title]="'Siliechi tower'"
-                />
-              </td>
-              <td>Bur Dubai,Dubai</td>
-              <td>Owner1</td>
-              <td>11</td>
-              <td>234</td>
-              <td>3g real estate</td>
-              <td>455</td>
-              <td>234554</td>
-              <td>2043***7733</td>
-              <td>2043***7755</td>
-              <td>--</td>
-              <td align="center">
-                <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>1233</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-3.png'"
-                  [title]="'Jainhailia'"
-                />
-              </td>
-              <td>Al Barshi,Dubai</td>
-              <td>Owner1</td>
-              <td>24</td>
-              <td>112</td>
-              <td>3g real estate</td>
-              <td>234</td>
-              <td>234567</td>
-              <td>2043***7733</td>
-              <td>2043***7766</td>
-              <td>--</td>
-              <td align="center">
-                <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>123</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-4.png'"
-                  [title]="'Property C'"
-                />
-              </td>
-              <td>jumeriah,Dubai</td>
-              <td>Owner1</td>
-              <td>05</td>
-              <td>222</td>
-              <td>3g real estate</td>
-              <td>125</td>
-              <td>3456</td>
-              <td>2043***7733</td>
-              <td>2043***7788</td>
-              <td>
-                <app-property-share-platfrom
-                  type="icons"
-                ></app-property-share-platfrom>
-              </td>
-              <td align="center">
-                <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>134</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-5.png'"
-                  [title]="'Rithi Tower B'"
-                />
-              </td>
-              <td>Deira,Dubai</td>
-              <td>Owner1</td>
-              <td>11</td>
-              <td>234</td>
-              <td>3g real estate</td>
-              <td>678</td>
-              <td>1200</td>
-              <td>2043***7733</td>
-              <td>2043***7799</td>
-              <td>
-                <app-property-share-platfrom
-                  type="list"
-                ></app-property-share-platfrom>
-              </td>
-              <td align="center">
-                <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </div>
-              </td>
+            <tr *ngIf="properties.length === 0">
+              <td colspan="13" style="text-align:center; padding: 24px; color: #aaa;">No properties found</td>
             </tr>
           </tbody>
         </table>
@@ -228,19 +85,10 @@
     </div>
 
     <div class="cmmnTblFtr">
-      <app-table-select
-        [componentName]="componentName"
-        [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-        (rowsPerPageChange)="onPageSizeChange($event)"
-      />
-      <app-table-pagination
-        [componentName]="componentName"
-        [currentPage]="currentPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage"
-        (pageChange)="onPageChange($event)"
-      />
+      <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
+      <app-table-pagination [componentName]="componentName" [currentPage]="currentPage" [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
     </div>
   </div>
 </ng-container>

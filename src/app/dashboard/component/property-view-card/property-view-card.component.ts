@@ -40,6 +40,7 @@ export class PropertyViewCardComponent {
   @Input() priceLabel: string = '';
   @Input() priceValue: string = '';
   @Input() showBack: boolean = false;
+  @Input() showPlatformIcons: boolean = true;
   @Input() propertyImages: { imgSrc: string }[] = [];
   @Input() status!: string;
   @Input() name!: string;
@@ -93,9 +94,9 @@ export class PropertyViewCardComponent {
   }
 
   initSwipersSafely() {
-    requestAnimationFrame(() => {
+    setTimeout(() => {
       this.initSwipers();
-    });
+    }, 0);
   }
 
   initSwipers() {
@@ -104,28 +105,22 @@ export class PropertyViewCardComponent {
 
     if (!mainEl || !thumbEl) return;
 
-    if (mainEl.swiper || thumbEl.swiper) return;
-
+    // Initialize thumb swiper first
     Object.assign(thumbEl, {
-      navigation: true,
       breakpoints: {
         0: { direction: 'horizontal', slidesPerView: 4 },
         768: { direction: 'vertical', slidesPerView: 4 },
       },
     });
-
     thumbEl.initialize();
     this.thumbsSwiper = thumbEl.swiper;
 
+    // Initialize main swiper with thumbs linked
     Object.assign(mainEl, {
       thumbs: { swiper: this.thumbsSwiper },
-      navigation: false,
       effect: 'fade',
       fadeEffect: { crossFade: true },
-      pagination: false,
-      autoplay: false,
     });
-
     mainEl.initialize();
   }
 }

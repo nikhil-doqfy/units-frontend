@@ -18,7 +18,6 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { CardTitleComponent } from '../../../shared/component/card-title/card-title.component';
 import { DashFormComponent } from '../../../shared/component/dash-form/dash-form.component';
 import { InvitePMCButtonComponent } from '../invite-pmc-btn/invite-pmc-btn.component';
-import { FormStaus, PropertyFormStep } from '../../model/property.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { StepEngine } from '../../model/step-engine/step-engine';
@@ -27,7 +26,7 @@ import { Subscription } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
 import { InviteOwnerBtnComponent } from '../invite-owner-btn/invite-owner-btn.component';
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
-import { BulkUploadComponent } from '../../../from/bulk-upload/bulk-upload.component';
+import { BulkColumn, BulkUploadComponent } from '../../../from/bulk-upload/bulk-upload.component';
 import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -64,8 +63,12 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
   @Input() engine!: StepEngine;
   @Input() stepSchema: StepSchema[] = [];
+  @Input() bulkColumns: BulkColumn[] = [];
 
   @Output() finish = new EventEmitter<void>();
+  @Output() bulkImported = new EventEmitter<any[]>();
+
+  pendingBulkData: any[] = [];
 
   stepGroups: StepGroup[] = [];
   filteredSteps: StepPaneComponent[] = [];
@@ -99,10 +102,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
 
-  openBulkUploadModal(
-    addLeadContent: TemplateRef<any>,
-    editMode: boolean = false,
-  ) {
+  openBulkUploadModal(addLeadContent: TemplateRef<any>) {
     this.modalService
       .open(addLeadContent, {
         ariaLabelledBy: 'modal-title',
@@ -117,6 +117,18 @@ export class StepFormLayoutComponent implements AfterContentInit {
           this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
         },
       );
+  }
+
+  onBulkDataReady(data: any[]) {
+    this.pendingBulkData = data;
+  }
+
+  onBulkUploadConfirm(modal: any) {
+    if (this.pendingBulkData.length > 0) {
+      this.bulkImported.emit(this.pendingBulkData);
+      this.pendingBulkData = [];
+    }
+    modal.close('Upload click');
   }
   private getDismissReason(reason: any): string {
     switch (reason) {
@@ -196,7 +208,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
     const step = this.engine.getSteps()[index];
     if (!step) return;
-    const status = this.engine.getStepStatus(step.id);
+    // const status = this.engine.getStepStatus(step.id);
     // if (status === 'LOCKED' || status === 'READY') return;
 
     let mode = this.engine.getStepFormMode(step.id);

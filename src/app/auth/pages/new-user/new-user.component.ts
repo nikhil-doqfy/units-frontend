@@ -75,6 +75,11 @@ export class NewUserComponent implements OnInit {
   password: string = '';
   isOtpVerificationModalOpen = false;
 
+  companies: { key: number; value: string; code: string }[] = [];
+  filteredCompanies: { key: number; value: string; code: string }[] = [];
+  companySearchText = '';
+  showCompanyDropdown = false;
+
   @ViewChild('otpVerifyContent') otpVerifyContent!: TemplateRef<any>;
 
   constructor(
@@ -104,15 +109,7 @@ export class NewUserComponent implements OnInit {
     this.signupForm = this.fb.group({
       first_name: ['', this.nameValidators],
       last_name: ['', this.nameValidators],
-      company_name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(50),
-          Validators.pattern(/^[A-Za-z0-9][A-Za-z0-9 '&.,-]*[A-Za-z0-9]$/),
-        ],
-      ],
+      company_id: [null],
       contact_number: [
         '',
         [
@@ -144,6 +141,30 @@ export class NewUserComponent implements OnInit {
       });
     this.addConfirmPasswordListener();
 
+    this.loadCompanies();
+
+    const saved = this.auth.signupData;
+    if (saved && Object.keys(saved).length > 0) {
+      this.signupForm.patchValue({
+        first_name: saved['first_name'],
+        last_name: saved['last_name'],
+        company_id: saved['company_id'],
+        contact_number: saved['contact_number'],
+        email: saved['email'],
+        password: saved['password'],
+        confirmPassword: saved['confirmPassword'],
+        role: saved['role'] || this.selectedRole,
+      });
+      if (saved['role']) {
+        this.selectedRole = saved['role'];
+        this.currentRole = saved['role'];
+        this.themeService.setRole(saved['role']);
+      }
+      if (saved['company_id'] && saved['companyName']) {
+        this.companySearchText = saved['companyName'];
+      }
+    }
+
     this.onUserTypeChange(this.currentRole);
   }
 
@@ -167,7 +188,7 @@ export class NewUserComponent implements OnInit {
       'confirmPassword',
     ],
     'property-manager': [
-      'company_name',
+      'company_id',
       'contact_number',
       'email',
       'password',
@@ -299,6 +320,13 @@ export class NewUserComponent implements OnInit {
       return;
     }
 
+    this.auth.signupData = {
+      ...this.auth.signupData,
+      ...this.signupForm.value,
+      role: this.currentRole,
+      companyName: this.companySearchText,
+    };
+
     const payload = { email: this.signupForm.value.email, purpose: 'signup' };
 
     this.auth
@@ -330,6 +358,7 @@ export class NewUserComponent implements OnInit {
     let payload = {
       email: this.signupForm.value.email,
       otp: Number(this.otp),
+      purpose: 'signup',
     };
     let data = { ...this.signupForm.value, userType: this.currentRole };
     this.auth.signupData = data;
@@ -348,6 +377,30 @@ export class NewUserComponent implements OnInit {
           this.alert.error(err?.error?.message || 'Invalid OTP');
         },
       });
+  }
+
+  loadCompanies(): void {
+    this.auth.getCompanies().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (resp: any) => {
+        this.companies = resp?.content || [];
+        this.filteredCompanies = this.companies;
+      },
+    });
+  }
+
+  onCompanySearch(): void {
+    const text = this.companySearchText.toLowerCase();
+    this.filteredCompanies = this.companies.filter((c) =>
+      c.value.toLowerCase().includes(text)
+    );
+    this.showCompanyDropdown = true;
+  }
+
+  selectCompany(company: { key: number; value: string; code: string }): void {
+    this.signupForm.get('company_id')?.setValue(company.key);
+    this.companySearchText = company.value;
+    this.showCompanyDropdown = false;
+    this.auth.signupData = { ...this.auth.signupData, company_id: company.key, companyName: company.value };
   }
 
   goToLogin(): void {

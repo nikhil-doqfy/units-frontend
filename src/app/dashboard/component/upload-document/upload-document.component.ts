@@ -21,6 +21,7 @@ export class UploadDocumentComponent {
   isDragging = false;
 
   get acceptTypes(): string {
+    if (!this.fileTypes.length) return '*';
     return this.fileTypes.map((ft) => '.' + ft).join(', ');
   }
 
@@ -54,7 +55,7 @@ export class UploadDocumentComponent {
   ): File[] {
     const ext = file.name.split('.').pop()?.toLowerCase() || '';
 
-    if (!allowed.includes(ext)) {
+    if (allowed.length && !allowed.includes(ext)) {
       this.emitError(file, `Invalid file type: .${ext}`);
       return [];
     }
@@ -78,7 +79,7 @@ export class UploadDocumentComponent {
     for (const file of files) {
       const ext = file.name.split('.').pop()?.toLowerCase() || '';
 
-      if (!allowed.includes(ext)) {
+      if (allowed.length && !allowed.includes(ext)) {
         this.emitError(file, `Invalid file type: .${ext}`);
         continue;
       }

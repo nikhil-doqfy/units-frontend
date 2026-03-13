@@ -29,7 +29,14 @@
           "LINK_PROPERTY" | translate
         }}</label>
 
-        <app-custom-select></app-custom-select>
+        <app-custom-select
+          [options]="unitOptions"
+          key="key"
+          value="value"
+          [showFilterInput]="true"
+          [placeholder]="'SELECT_OPTION' | translate"
+          (optionSelected)="onUnitSelect($event)"
+        ></app-custom-select>
       </div>
 
       <div class="col-md-6">

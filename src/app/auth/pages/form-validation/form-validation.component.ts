@@ -56,18 +56,19 @@ export class FormValidationComponent {
   }
 
   initDetailsForm() {
+    const saved = this.authService.signupData;
     this.detailForm = this.formBuilder.group({
-      manageThrough: ['MYSELF'],
+      manageThrough: [saved['manageThrough'] || 'MYSELF'],
       emirateId: [
-        '',
+        saved['emirateId'] || '',
         [Validators.required, Validators.pattern(/^784-?\d{4}-?\d{7}-?\d$/)],
       ],
       residenceVisa: [
-        '',
+        saved['residenceVisa'] || '',
         [Validators.required, Validators.pattern(/^\d{3}\/?\d{7}\/?\d{6}$/)],
       ],
       tradeLicense: [
-        '',
+        saved['tradeLicense'] || '',
         [Validators.required, Validators.pattern(/^[0-9\/-]{5,15}$/)],
       ],
     });

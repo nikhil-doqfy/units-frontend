@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { TableTitleComponent } from '../table-title/table-title.component';
@@ -17,6 +17,7 @@ import { ResetIconComponent } from '../icons/reset-icon/reset-icon.component';
 import { ShareIconComponent } from '../icons/share-icon/share-icon.component';
 import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
 import { Router } from '@angular/router';
+import { PropertyService } from '../../services/property.service';
 
 @Component({
   selector: 'app-all-properties',
@@ -40,15 +41,36 @@ import { Router } from '@angular/router';
   templateUrl: './all-properties.component.html',
   styleUrl: './all-properties.component.css',
 })
-export class AllPropertiesComponent {
+export class AllPropertiesComponent implements OnInit {
+  private propertyService = inject(PropertyService);
+
   showDetailView: boolean = false;
+  properties: any[] = [];
   totalRecords: number = 0;
   componentName: string = 'all-properties-component';
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
+
   constructor(private router: Router) {}
-  onRefresh() {}
+
+  ngOnInit(): void {
+    this.loadProperties();
+  }
+
+  loadProperties(): void {
+    this.propertyService.getProperties().subscribe({
+      next: (resp: any) => {
+        this.properties = resp?.content || [];
+        this.totalRecords = this.properties.length;
+      },
+    });
+  }
+
+  onRefresh() {
+    this.loadProperties();
+  }
+
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
@@ -59,14 +81,21 @@ export class AllPropertiesComponent {
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
+
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
+
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
   }
-  onEditClick() {
-    this.router.navigate(['/dashboard/add-property']);
+
+  onViewClick(id: number) {
+    this.router.navigate(['/dashboard/properties', id]);
+  }
+
+  onEditClick(id: number) {
+    this.router.navigate(['/dashboard/edit-property', id]);
   }
 }
