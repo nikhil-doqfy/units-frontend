@@ -43,6 +43,7 @@ export class LeaseFormService {
   initPropertyDetailForm() {
     this.propertyDetailsForm = this.formBuilder.group({
       property: ['', [Validators.required]],
+      block: ['', [Validators.required]],
       unit: ['', [Validators.required]],
     });
   }

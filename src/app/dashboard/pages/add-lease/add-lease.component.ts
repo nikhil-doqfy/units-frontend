@@ -99,6 +99,7 @@ export class AddLeaseComponent {
   documentsForm = this.leaseFormService.leaseDocumentsForm;
 
   propertyList: any[] = [];
+  blockList: any[] = [];
   propertyUnitList: any[] = [];
   selectedPropertyDetails: any = null;
   selectedTenantDetails: any = null;
@@ -175,11 +176,29 @@ export class AddLeaseComponent {
 
   onPropertySelect(property: any) {
     if (!property) return;
+    this.blockList = [];
+    this.propertyUnitList = [];
+    this.propertyDetailForm.patchValue({ block: '', unit: '' });
 
     this.getOptionsTypes([
       {
-        param: 'PROPERTY_UNIT_BY_PROPERTY',
+        param: 'PROPERTY_BLOCK_BY_PROPERTY',
         params: { property_id: property.key },
+        key: 'property_block',
+        setter: (v) => (this.blockList = v),
+      },
+    ]);
+  }
+
+  onBlockSelect(block: any) {
+    if (!block) return;
+    this.propertyUnitList = [];
+    this.propertyDetailForm.patchValue({ unit: '' });
+
+    this.getOptionsTypes([
+      {
+        param: 'PROPERTY_UNIT_BY_BLOCK',
+        params: { block_id: block.key },
         key: 'property_unit',
         setter: (v) => (this.propertyUnitList = v),
       },

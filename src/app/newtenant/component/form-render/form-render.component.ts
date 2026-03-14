@@ -73,7 +73,8 @@ export class FormRenderComponent {
     private ejariModelService: EjarimodelService,
     private formService: NewTenantFromService,
     private alertService: AlertService,
-  ) {}
+  ) { }
+
   get currentStep() {
     return this.steps()[this.activeIndex()];
   }
@@ -81,11 +82,13 @@ export class FormRenderComponent {
   onClick() {
     this.negotiationClick.emit();
   }
+
   nextStepAction() {
     if (this.isChequeStep) {
     } else {
     }
   }
+
   sendNegotiation() {
     this.showNegotiationMsg = true;
 
@@ -95,8 +98,13 @@ export class FormRenderComponent {
 
     this.goToNextStep();
   }
+
   get currentSubStep() {
     return this.currentStep?.subSteps?.[this.subIndex()];
+  }
+
+  getComponentInputs(subStep: any): Record<string, any> {
+    return { form: subStep.formGroup, ...(subStep.inputs ?? {}) };
   }
 
   getNextBtnLabel() {
@@ -128,6 +136,8 @@ export class FormRenderComponent {
 
     return 'Save & Next';
   }
+
+
   next() {
     if (
       this.currentSubStep?.component === EjariDocSignatureComponent &&

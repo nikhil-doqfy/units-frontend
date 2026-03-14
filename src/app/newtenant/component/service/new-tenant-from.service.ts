@@ -1,6 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { NewTenant } from '../modules/new-tenant';
@@ -25,7 +24,7 @@ export class NewTenantFromService {
     private router: Router,
   ) {}
 
-  PropertySteps() {
+  PropertySteps(leadData?: any) {
     return signal<NewTenant[]>([
       {
         id: '1',
@@ -36,7 +35,8 @@ export class NewTenantFromService {
             title: 'Property details',
             description: 'Fill all the fields to add create your lease',
             component: BasicpersonalComponent,
-            formGroup: this.createBasicForm(),
+            formGroup: this.createBasicForm(leadData),
+            inputs: { leadData: leadData ?? null },
             saveButtonDetails: {
               title: 'Save & Next',
               buttonType: 'SIMPLE',
@@ -129,12 +129,57 @@ export class NewTenantFromService {
   getActiveSubIndex() {
     return this.activeSubIndex;
   }
-  private createBasicForm(): FormGroup {
+  private createBasicForm(leadData?: any): FormGroup {
     return this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      email: [''],
-      phone: [''],
+      // Platform
+      platform: [leadData?.platform ?? ''],
+
+      // Section 01 — Leased Unit
+      property:  [leadData?.property_id ? { key: leadData.property_id, value: leadData.property_name } : ''],
+      block:     [leadData?.block_id    ? { key: leadData.block_id,    value: leadData.block_name    } : ''],
+      unitName:  [leadData?.unit_name   ?? ''],
+      unitSize:  [leadData?.unit_size   ?? ''],
+      landNo:    [leadData?.land_no     ?? ''],
+      dmNo:      [leadData?.dm_no       ?? ''],
+      unitUsage: [leadData?.unit_usage  ?? ''],
+      unitType:  [leadData?.unit_type   ?? ''],
+      subType:   [leadData?.sub_type    ?? ''],
+      makaniNo:  [leadData?.makani_no   ?? ''],
+      floorNo:   [leadData?.floor_no    ?? ''],
+
+      // Section 02 — Tenant
+      tenantName:   [leadData?.name ?? ''],
+      nationality:  [''],
+      passportNo:   [''],
+      emiratesId:   [''],
+      visaNo:       [''],
+      telNo:        [leadData?.contact_number ?? ''],
+      email:        [leadData?.email ?? ''],
+      address:      [''],
+
+      // Section 03 — Owner Details (FormArray)
+      unitOwners: this.fb.array(
+        leadData?.unit_owners?.length
+          ? leadData.unit_owners.map((o: any) => this.createOwnerGroup(o))
+          : [this.createOwnerGroup()],
+      ),
+    });
+  }
+
+  createOwnerGroup(o?: any): FormGroup {
+    return this.fb.group({
+      ownerName:      [o?.name                 ?? ''],
+      ownerEmail:     [o?.email                ?? ''],
+      ownerContact:   [o?.contact_number       ?? ''],
+      ownerEmiratesId:[o?.emirates_id          ?? ''],
+      ownerNumber:    [o?.owner_number         ?? ''],
+      tradeLicenseNo: [o?.trade_license_number ?? ''],
+      licenseNumber:  [o?.license_number       ?? ''],
+      licenseExpiry:  [o?.license_expiry_date  ?? ''],
+      licenseIssuer:  [o?.license_issuer       ?? ''],
+      faxNo:          [o?.fax_number           ?? ''],
+      poBox:          [o?.po_box_number        ?? ''],
+      ownerAddress:   [''],
     });
   }
 

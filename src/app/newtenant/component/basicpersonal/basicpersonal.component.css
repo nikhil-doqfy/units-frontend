@@ -1,20 +1,119 @@
-.custom-img {
-  width: 95px;
-  height: 30px;
-  object-fit: contain;
-}
-.card-body .from-label {
-  text-decoration: underline;
+/* ── Platform section ──────────────────────────────── */
+.platformSection {
+  padding: 4px 0;
 }
 
-.form {
+.platformLabel {
   display: inline-block;
-  padding-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
   text-decoration: underline;
+  padding-bottom: 2px;
+  margin-bottom: 0;
 }
-.lease-header h6 {
+
+.custom-img {
+  width: 95px;
+  height: 25px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* ── Section card ──────────────────────────────────── */
+.sectionCard {
+  position: relative;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: var(--whiteBg);
+  border: 1px solid #e2e8f0;
+}
+
+/* Owner Details — blue border */
+.sectionCardOwner {
+  border: 1px solid #3b82f6;
+  background-color: #f5f7f8;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Badge number (top-right) ──────────────────────── */
+.sectionBadge {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: #d6dee1;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  color: #374151;
+}
+
+/* ── Section title ─────────────────────────────────── */
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
   text-decoration: underline;
+  margin-bottom: 16px;
+  color: #111827;
 }
+
+/* ── Form labels ───────────────────────────────────── */
 .form-label {
   white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+/* ── Owner cards ───────────────────────────────────── */
+.ownerCardWrapper {
+  position: relative;
+  border: 1px solid #3b82f6;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #f5f7f8;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+}
+
+.ownerCount {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: #d6dee1;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+.ownerActionBtns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.circleBtn {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #cbd5e1;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.plusBtn {
+  color: #0c6ce9;
+  border: 1px solid #0c6ce9;
+}
+
+.minusBtn {
+  border: 1px solid #536c76;
+  color: #536c76;
 }

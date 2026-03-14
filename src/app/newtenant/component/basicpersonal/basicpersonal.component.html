@@ -1,381 +1,221 @@
-<form [formGroup]="form">
+<form [formGroup]="form" class="commonForm">
+
   <!-- Platform -->
   <app-white-card>
-    <div class="card-body">
-      <label class="form fw-semibold">Platform</label>
-      <div class="d-flex gap-4 mt-2 flex-wrap">
+    <div class="platformSection">
+      <label class="platformLabel">Platform</label>
+      <div class="d-flex gap-4 mt-2 flex-wrap align-items-center">
         <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="platform"
-            checked
-          />
-          <label class="form-check-label text-danger fw-semibold">
-            <img src="assets/platfrom/platfrom-1.png" class="custom-img" />
+          <input class="form-check-input" type="radio" formControlName="platform" value="PROPERTY_FINDER" />
+          <label class="form-check-label">
+            <img src="assets/platfrom/property-finder.svg" class="custom-img" />
           </label>
         </div>
-
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="platform" />
-          <label class="form-check-label text-success fw-semibold">
-            <img src="assets/platfrom/platfrom-2.png" class="custom-img" />
+          <input class="form-check-input" type="radio" formControlName="platform" value="BAYUT" />
+          <label class="form-check-label">
+            <img src="assets/platfrom/buyut.svg" class="custom-img" />
           </label>
         </div>
-
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="platform" />
-          <label class="form-check-label"> Direct </label>
+          <input class="form-check-input" type="radio" formControlName="platform" value="DIRECT" />
+          <label class="form-check-label">Direct</label>
         </div>
       </div>
     </div>
   </app-white-card>
-  <div class="mt-3">
-    <app-white-card>
-      <div class="lease-wrapper">
-        <div class="lease-card">
-          <!-- Header -->
-          <div class="lease-header">
-            <h6>Leased Unit</h6>
-            <span class="badge">01</span>
-          </div>
 
-          <!-- Form Grid -->
-          <div class="form-grid row g-3">
-            <div class="col-md-6">
-              <label class="form-label">{{ "Area" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "property/Building Name" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Block/Tower" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Unit No" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Unit Size(Sq ft)" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Land No" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "DM No" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "property/Unit Usage" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "property/Unit Type" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Sub Type/BHK" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Makani No" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Floor No" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-          </div>
-        </div>
+  <!-- 01 Leased Unit -->
+  <div class="sectionCard mt-3">
+    <span class="sectionBadge">01</span>
+    <h6 class="sectionTitle">Leased Unit</h6>
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Property / Building Name</label>
+        <app-custom-select
+          [options]="propertyList"
+          key="key"
+          value="value"
+          [selectedOption]="preSelectedProperty"
+          (optionSelected)="onPropertySelect($event)"
+        ></app-custom-select>
       </div>
-    </app-white-card>
+      <div class="col-md-3">
+        <label class="form-label">Block / Tower</label>
+        <app-custom-select
+          [options]="blockList"
+          key="key"
+          value="value"
+          [selectedOption]="preSelectedBlock"
+          (optionSelected)="onBlockSelect($event)"
+        ></app-custom-select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Unit Name</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="unitName" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Unit Size (Sq ft)</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="unitSize" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Land No</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="landNo" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">DM No (Affection Plan)</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="dmNo" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Property / Unit Usage</label>
+        <app-custom-select
+          [options]="unitUsageList"
+          key="key"
+          value="value"
+          [selectedOption]="selectedUnitUsage"
+          (optionSelected)="onUnitUsageSelect($event)"
+        ></app-custom-select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Property / Unit Type</label>
+        <app-custom-select
+          [options]="unitTypeList"
+          key="key"
+          value="value"
+          [selectedOption]="selectedUnitType"
+          (optionSelected)="onUnitTypeSelect($event)"
+        ></app-custom-select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Sub Type / BHK</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="subType" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Makani No</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="makaniNo" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Floor No</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="floorNo" />
+      </div>
+    </div>
   </div>
 
-  <div class="mt-3">
-    <app-white-card>
-      <div class="lease-wrapper">
-        <div class="lease-card">
-          <!-- Header -->
-          <div class="lease-header">
-            <h6>Tenant</h6>
-            <span class="badge">02</span>
+  <!-- 02 Tenant -->
+  <div class="sectionCard mt-3">
+    <span class="sectionBadge">02</span>
+    <h6 class="sectionTitle">Tenant</h6>
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Tenant ID</label>
+        <app-custom-select></app-custom-select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Tenant Name</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="tenantName" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Nationality</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="nationality" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Passport No</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="passportNo" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Passport Expiry Date</label>
+        <app-custom-select [iconType]="'custom'"></app-custom-select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Emirates ID</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="emiratesId" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Visa No</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="visaNo" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Visa Expiry Date</label>
+        <app-custom-select [iconType]="'custom'"></app-custom-select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Tel No</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="telNo" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Email</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="email" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Address</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="address" />
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 Owner Details -->
+  <div class="sectionCard sectionCardOwner mt-3">
+    <span class="sectionBadge">03</span>
+    <h6 class="sectionTitle">Owner Details</h6>
+    <div formArrayName="unitOwners">
+      <ng-container *ngFor="let ownerForm of ownerForms.controls; let i = index; let last = last">
+        <hr *ngIf="i > 0" class="ownerDivider" />
+        <div class="row g-3" [formGroupName]="i">
+          <div class="col-md-3">
+            <label class="form-label">Owner Name</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerName" />
           </div>
-
-          <!-- Form Grid -->
-          <div class="form-grid row g-3">
-            <div class="col-md-6">
-              <label class="form-label">{{ "Tenant ID" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Tenant Name" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Nationality" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Passport No" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Passport Expiry Date" }}</label>
-              <app-custom-select
-                [width]="'300px'"
-                [iconType]="'custom'"
-              ></app-custom-select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Emirates ID" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Visa No" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Visa Expiry Date " }}</label>
-              <app-custom-select
-                [width]="'300px'"
-                [iconType]="'custom'"
-              ></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Tel No" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Email" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Address" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
+          <div class="col-md-3">
+            <label class="form-label">Email</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerEmail" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Contact No</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerContact" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Emirates ID</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerEmiratesId" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Owner Number</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerNumber" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Trade License No</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="tradeLicenseNo" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">License Number</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="licenseNumber" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">License Expiry</label>
+            <input type="date" class="form-control" formControlName="licenseExpiry" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">License Issuer</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="licenseIssuer" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Fax No</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="faxNo" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">P.O. Box</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="poBox" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerAddress" />
           </div>
         </div>
-      </div>
-    </app-white-card>
+      </ng-container>
+    </div>
+    <div class="ownerActionBtns">
+      <button type="button" class="circleBtn minusBtn" (click)="removeOwner(ownerForms.length - 1)">−</button>
+      <button type="button" class="circleBtn plusBtn" (click)="addOwner()">+</button>
+    </div>
   </div>
-  <div
-    class="mt-3"
-    style="
-      border: 1px solid rgb(0, 166, 255);
-      box-shadow: 0 0 4px rgb(7, 7, 7);
-      border-radius: 10px;
-    "
-  >
-    <app-white-card>
-      <div class="lease-wrapper">
-        <div class="lease-card">
-          <!-- Header -->
-          <div class="lease-header">
-            <h6>Owner Details</h6>
-            <span class="badge">03</span>
-          </div>
 
-          <!-- Form Grid -->
-          <div class="form-grid row g-3">
-            <div class="col-md-6">
-              <label class="form-label">{{ "Owner Number ID" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Trade License No" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Owner Name" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Emirates ID" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </app-white-card>
-  </div>
-  <div class="mt-3">
-    <app-white-card>
-      <div class="lease-wrapper">
-        <div class="lease-card">
-          <!-- Header -->
-          <div class="lease-header">
-            <h6>Lessor</h6>
-            <span class="badge">04</span>
-          </div>
-
-          <!-- Form Grid -->
-          <div class="form-grid row g-3">
-            <div class="col-md-6">
-              <label class="form-label">{{ "License No" }}</label>
-              <app-custom-select [width]="'300px'"></app-custom-select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "License Expiry" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "License issuer" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Tel No" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Email" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Fax No" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "P.o Box" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Address " }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </app-white-card>
-  </div>
 </form>

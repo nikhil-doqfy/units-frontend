@@ -6,6 +6,7 @@ import {
   TemplateRef,
   WritableSignal,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { TableSelectComponent } from '../table-select/table-select.component';
 import { TablePaginationComponent } from '../table-pagination/table-pagination.component';
 import { TableTitleComponent } from '../table-title/table-title.component';
@@ -79,6 +80,7 @@ export class AllLeadsComponent implements OnInit {
   private alertService = inject(AlertService);
   private search$ = new Subject<string>();
   private modalService = inject(NgbModal);
+  private router = inject(Router);
   closeResult: WritableSignal<string> = signal('');
 
   leads: any[] = [];
@@ -241,7 +243,8 @@ export class AllLeadsComponent implements OnInit {
         },
       );
   }
-  openLeadToTenantModel(convertLeadToTenentContent: TemplateRef<any>) {
+  openLeadToTenantModel(convertLeadToTenentContent: TemplateRef<any>, lead: any = null) {
+    this.selectedLead = lead;
     this.modalService
       .open(convertLeadToTenentContent, {
         ariaLabelledBy: 'modal-title',
@@ -269,6 +272,13 @@ export class AllLeadsComponent implements OnInit {
         return `with: ${reason}`;
     }
   }
+  convertToTenancy(modal: NgbActiveModal): void {
+    modal.close();
+    this.router.navigate(['/dashboard/new-tenant'], {
+      queryParams: { lead_id: this.selectedLead?.id },
+    });
+  }
+
   onUserSave(success: boolean, modal: NgbActiveModal) {
     if (success) {
       this.alertService.success('Lead saved successfully');

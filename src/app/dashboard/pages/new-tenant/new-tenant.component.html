@@ -1,1 +1,1 @@
-<app-form-render [steps]="steps" [activeIndex]="activeIndex"></app-form-render>
+<app-form-render *ngIf="!loading()" [steps]="steps" [activeIndex]="activeIndex"></app-form-render>

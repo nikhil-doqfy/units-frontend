@@ -23,6 +23,16 @@
           <div *ngFor="let ownerForm of ownerForms.controls; let i = index" class="ownerCardWrapper mb-2">
             <span class="ownerCount">{{ i + 1 | number: '2.0-0' }}</span>
             <div class="row g-3" [formGroupName]="i">
+              <!-- Owner Code dropdown — auto-fills all fields -->
+              <div class="col-md-3">
+                <label class="form-label">{{ "Owner Code" | translate }}</label>
+                <app-custom-select
+                  [options]="ownerList"
+                  key="key"
+                  value="value"
+                  (optionSelected)="onOwnerCodeSelect($event, i)"
+                ></app-custom-select>
+              </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "Owner Name" | translate }}</label>
                 <input type="text" class="form-control" [placeholder]="'Enter name here' | translate"
@@ -42,6 +52,41 @@
                 <label class="form-label">{{ "Emirates ID" | translate }}</label>
                 <input type="text" class="form-control" [placeholder]="'Enter ID here' | translate"
                   formControlName="ownerEmiratesId" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ "Owner Number" | translate }}</label>
+                <input type="text" class="form-control" placeholder="Enter here"
+                  formControlName="ownerNumber" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ "Trade License No" | translate }}</label>
+                <input type="text" class="form-control" placeholder="Enter here"
+                  formControlName="tradeLicenseNumber" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ "License Number" | translate }}</label>
+                <input type="text" class="form-control" placeholder="Enter here"
+                  formControlName="licenseNumber" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ "License Expiry Date" | translate }}</label>
+                <input type="date" class="form-control"
+                  formControlName="licenseExpiryDate" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ "License Issuer" | translate }}</label>
+                <input type="text" class="form-control" placeholder="Enter here"
+                  formControlName="licenseIssuer" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ "Fax Number" | translate }}</label>
+                <input type="text" class="form-control" placeholder="Enter here"
+                  formControlName="faxNumber" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ "P.O. Box Number" | translate }}</label>
+                <input type="text" class="form-control" placeholder="Enter here"
+                  formControlName="poBoxNumber" />
               </div>
             </div>
           </div>
@@ -94,22 +139,19 @@
             ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Area of Unit" | translate }}</label>
-            <div class="d-flex gap-2">
-              <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-                formControlName="landArea" />
-              <app-custom-select
-                [options]="areaUnitList"
-                key="key"
-                value="value"
-                formControlName="landAreaUnit"
-              ></app-custom-select>
-            </div>
+            <label class="form-label">{{ "Unit Size (Sq ft)" | translate }}</label>
+            <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate"
+              formControlName="unitSize" />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Land DM No (Affection Plan)" | translate }}</label>
+            <label class="form-label">{{ "Area of Unit" | translate }}</label>
             <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="landDmNo" />
+              formControlName="area" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "DM No (Affection Plan)" | translate }}</label>
+            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
+              formControlName="dmNo" />
           </div>
           <div class="col-md-3">
             <app-form-select-field
@@ -135,9 +177,32 @@
             ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Plot No" | translate }}</label>
+            <label class="form-label">{{ "Land No" | translate }}</label>
             <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="plotNo" />
+              formControlName="landNo" />
+          </div>
+          <div class="col-md-3">
+            <app-form-select-field
+              [label]="'Unit Usage' | translate"
+              [options]="unitUsageList"
+              [bindToControl]="true"
+              [form]="basicDetailsForm"
+              controlName="unitUsage"
+            ></app-form-select-field>
+          </div>
+          <div class="col-md-3">
+            <app-form-select-field
+              [label]="'Unit Type' | translate"
+              [options]="unitTypeList"
+              [bindToControl]="true"
+              [form]="basicDetailsForm"
+              controlName="unitType"
+            ></app-form-select-field>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "Sub Type / BHK" | translate }}</label>
+            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
+              formControlName="subType" />
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Makani No" | translate }}</label>

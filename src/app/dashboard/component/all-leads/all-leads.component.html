@@ -121,7 +121,7 @@
               <td>
                 <div class="cmmnTblActnBtnDiv">
                   <app-check-icon
-                    (click)="openLeadToTenantModel(convertLeadToTenentContent)">
+                    (click)="openLeadToTenantModel(convertLeadToTenentContent, lead)">
                   </app-check-icon>
                   <app-table-action-btn
                     type="edit"
@@ -234,7 +234,7 @@
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
       {{ "Convert Lead to Tenant" | translate }}
-      <span class="lead-id">#LP9021</span>
+      <span class="lead-id" *ngIf="selectedLead">#{{ selectedLead.code }}</span>
     </h4>
     <button
       type="button"
@@ -244,7 +244,7 @@
     ></button>
   </div>
   <div class="modal-body" style="padding: 0">
-    <app-convert-lead-to-tenent-from #convertLeadToTenantForm />
+    <app-convert-lead-to-tenent-from #convertLeadToTenantForm [leadData]="selectedLead" />
   </div>
   <div class="modal-footer">
     <button
@@ -254,8 +254,8 @@
     >
       {{ "CANCEL" | translate }}
     </button>
-    <button type="button" class="btn btnCommon">
-      {{ "Convert to  tenancy" | translate }}
+    <button type="button" class="btn btnCommon" (click)="convertToTenancy(modal)">
+      {{ "Convert to tenancy" | translate }}
     </button>
   </div>
 </ng-template>

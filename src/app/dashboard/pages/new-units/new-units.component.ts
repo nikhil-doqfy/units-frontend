@@ -16,6 +16,8 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
 import { FormSelectFieldComponent } from '../../../shared/component/form-select-field/form-select-field.component';
 import { UnitFormService } from '../../services/unit-form.service';
 import { PropertyService } from '../../services/property.service';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { filter, take } from 'rxjs';
 
 type FormKey = 'images' | 'documents';
 
@@ -50,6 +52,7 @@ interface UploadConfig {
 export class NewUnitsComponent implements OnInit {
   private unitFormService = inject(UnitFormService);
   private propertyService = inject(PropertyService);
+  private sharedApiService = inject(SharedApiService);
   private formService = inject(FormService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
@@ -58,12 +61,17 @@ export class NewUnitsComponent implements OnInit {
 
   propertyList: any[] = [];
   blockList: any[] = [];
+  ownerList: any[] = [];
 
   // Hardcoded dropdown options
-  areaUnitList = [
-    { key: 'SQ_FT', value: 'Sq-ft' },
-    { key: 'SQ_MT', value: 'Sq-mt' },
-    { key: 'SQ_YD', value: 'Sq-yd' },
+  unitUsageList = [
+    { key: 'RESIDENTIAL', value: 'Residential' },
+    { key: 'COMMERCIAL', value: 'Commercial' },
+  ];
+  unitTypeList = [
+    { key: 'FLAT', value: 'Flat' },
+    { key: 'APARTMENT', value: 'Apartment' },
+    { key: 'VILLA', value: 'Villa' },
   ];
   bedroomList = Array.from({ length: 10 }, (_, i) => ({ key: i + 1, value: String(i + 1) }));
   floorList = Array.from({ length: 51 }, (_, i) => ({ key: i, value: String(i) }));
@@ -108,6 +116,25 @@ export class NewUnitsComponent implements OnInit {
   ngOnInit() {
     this.loadProperties();
     this.loadDocumentTypes();
+    this.sharedApiService.getOptionsType([
+      { param: 'PMC_OWNERS', key: 'pmc_owners', setter: (v) => (this.ownerList = v) },
+    ]);
+
+    // In edit mode, auto-load blocks when property is pre-populated via patchValue
+    if (this.route.snapshot.paramMap.get('id')) {
+      this.basicDetailsForm.get('property')?.valueChanges
+        .pipe(filter((v) => !!v?.key), take(1))
+        .subscribe((prop) => {
+          this.propertyService.getPropertyBlocks({ property_id: prop.key }).subscribe({
+            next: (resp: any) => {
+              this.blockList = (resp?.content || []).map((b: any) => ({
+                key: b.id,
+                value: b.block_name,
+              }));
+            },
+          });
+        });
+    }
   }
 
   loadDocumentTypes() {
@@ -164,17 +191,37 @@ export class NewUnitsComponent implements OnInit {
     }
   }
 
+  onOwnerCodeSelect(owner: any, index: number): void {
+    if (!owner) return;
+    this.ownerForms.at(index).patchValue({
+      ownerName: owner.name ?? '',
+      ownerEmail: owner.email ?? '',
+      ownerContact: owner.contact_number ?? '',
+      ownerEmiratesId: owner.emirates_id ?? '',
+      ownerNumber: owner.owner_number ?? '',
+      tradeLicenseNumber: owner.trade_license_number ?? '',
+      licenseNumber: owner.license_number ?? '',
+      licenseExpiryDate: owner.license_expiry_date ?? '',
+      licenseIssuer: owner.license_issuer ?? '',
+      faxNumber: owner.fax_number ?? '',
+      poBoxNumber: owner.po_box_number ?? '',
+    });
+  }
+
   fillDummyData(): void {
     this.basicDetailsForm.patchValue({
       unitName: 'Unit A-101',
-      landArea: 1200,
-      landAreaUnit: { key: 'SQ_FT', value: 'Sq-ft' },
-      landDmNo: 'DM-12345',
+      unitSize: 1200,
+      area: '120',
+      dmNo: 'DM-12345',
       noOfBedrooms: { key: 2, value: '2' },
       floorNo: { key: 5, value: '5' },
       parkingNo: 'P-02',
       noOfBalcony: { key: 1, value: '1' },
-      plotNo: 'PLT-001',
+      landNo: 'PLT-001',
+      unitUsage: { key: 'RESIDENTIAL', value: 'Residential' },
+      unitType: { key: 'APARTMENT', value: 'Apartment' },
+      subType: '2BHK',
       makaniNo: '20437733',
       dewaNo: '9988776655',
     });

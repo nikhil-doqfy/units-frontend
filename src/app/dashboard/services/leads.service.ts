@@ -17,6 +17,10 @@ export class LeadsService {
     return this.http.get(`${this.SERVER_ADDRESS}/lead${queryString}`);
   }
 
+  getLeadById(leadId: number | string): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/lead?lead_id=${leadId}`);
+  }
+
   createLead(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/lead`, data);
   }

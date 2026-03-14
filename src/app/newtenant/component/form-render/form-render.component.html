@@ -147,7 +147,7 @@
     <ng-container
       *ngComponentOutlet="
         currentSubStep.component;
-        inputs: { form: currentSubStep.formGroup }
+        inputs: getComponentInputs(currentSubStep)
       "
     ></ng-container>
   </ng-container>

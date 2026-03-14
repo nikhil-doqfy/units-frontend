@@ -29,6 +29,22 @@
         </div>
 
         <div class="col-md-6">
+          <label class="form-label">{{ "BLOCK_TOWER" | translate }}</label>
+          <app-custom-select
+            [options]="blockList"
+            key="key"
+            value="value"
+            formControlName="block"
+            (optionSelected)="onBlockSelect($event)"
+          ></app-custom-select>
+          @if (isInvalid(propertyDetailForm, "block").status) {
+            <small class="errorMsg">
+              {{ isInvalid(propertyDetailForm, "block").msg }}
+            </small>
+          }
+        </div>
+
+        <div class="col-md-6">
           <label class="form-label">{{ "PROPERTY_UNIT" | translate }}</label>
           <app-custom-select
             [options]="propertyUnitList"
@@ -65,46 +81,55 @@
           </div>
           <div class="col-md-6">
             <label for="" class="form-label">{{
+              "BLOCK_TOWER" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.block?.block_name"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
               "PROPERTY_UNIT_NAME" | translate
             }}</label>
             <input
               type="text"
               class="form-control"
               disabled
-              [value]="
-                selectedPropertyDetails?.property_unit?.property_unit_name
-              "
+              [value]="selectedPropertyDetails?.property_unit?.unit_name"
             />
           </div>
           <div class="col-md-6">
             <label for="" class="form-label">{{
-              "LAND_AREA" | translate
+              "UNIT_SIZE_SQFT" | translate
             }}</label>
             <input
               type="text"
               class="form-control"
               disabled
-              [value]="selectedPropertyDetails?.property_unit?.land_area"
+              [value]="selectedPropertyDetails?.property_unit?.unit_size"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "LAND_NO" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.land_no"
             />
           </div>
           <div class="col-md-6">
             <label for="" class="form-label">{{
-              "AREA_OF_PROPERTY" | translate
+              "DM_NO_AFFECTION_PLAN" | translate
             }}</label>
             <input
               type="text"
               class="form-control"
               disabled
-              [value]="selectedPropertyDetails?.property_unit?.area_of_property"
-            />
-          </div>
-          <div class="col-md-6">
-            <label for="" class="form-label">{{ "PLOT_NO" | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              disabled
-              [value]="selectedPropertyDetails?.property_unit?.plot_no"
+              [value]="selectedPropertyDetails?.property_unit?.dm_no"
             />
           </div>
           <div class="col-md-6">
@@ -115,18 +140,29 @@
               type="text"
               class="form-control"
               disabled
-              [value]="selectedPropertyDetails?.parent_property?.property_type"
+              [value]="selectedPropertyDetails?.property_unit?.unit_usage"
             />
           </div>
           <div class="col-md-6">
             <label for="" class="form-label">{{
-              "LAND_DM_NO(AFFECTION PLAN)" | translate
+              "UNIT_TYPE" | translate
             }}</label>
             <input
               type="text"
               class="form-control"
               disabled
-              [value]="selectedPropertyDetails?.property_unit?.land_dm_no"
+              [value]="selectedPropertyDetails?.property_unit?.unit_type"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{
+              "SUB_TYPE_BHK" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.sub_type"
             />
           </div>
           <div class="col-md-6">
@@ -141,35 +177,6 @@
             />
           </div>
           <div class="col-md-6">
-            <label for="" class="form-label">{{ "DEWA_NO" | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              disabled
-              [value]="selectedPropertyDetails?.property_unit?.dewa_no"
-            />
-          </div>
-          <div class="col-md-6">
-            <label for="" class="form-label">{{
-              "PROPERTY_TYPE" | translate
-            }}</label>
-            <input
-              type="text"
-              class="form-control"
-              disabled
-              [value]="selectedPropertyDetails?.parent_property?.property_type"
-            />
-          </div>
-          <div class="col-md-6">
-            <label for="" class="form-label">{{ "SUBTYPE" | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              disabled
-              [value]="selectedPropertyDetails?.parent_property?.property_type"
-            />
-          </div>
-          <div class="col-md-6">
             <label for="" class="form-label">{{
               "FLOOR_NO" | translate
             }}</label>
@@ -178,6 +185,15 @@
               class="form-control"
               disabled
               [value]="selectedPropertyDetails?.property_unit?.floor_no"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">{{ "DEWA_NO" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="selectedPropertyDetails?.property_unit?.dewa_no"
             />
           </div>
           <div class="col-12">

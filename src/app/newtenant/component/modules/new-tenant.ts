@@ -13,6 +13,7 @@ export interface SubStepSchema {
   description?: string;
   component: any;
   formGroup: FormGroup;
+  inputs?: Record<string, any>;
   saveButtonDetails?: {
     title: string;
     buttonType: 'SIMPLE' | 'SIMPLE+DROPDOWN';

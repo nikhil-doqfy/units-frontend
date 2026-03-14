@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './agreement.component.css',
 })
 export class AgreementComponent {
-  constructor(private formService: NewTenantFromService) {}
+  constructor(private formService: NewTenantFromService) { }
   showMsg$ = this.formService.getShowMsg();
   msgText$ = this.formService.getMsgText();
   ngOnInit(): void {
