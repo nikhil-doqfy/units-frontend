@@ -16,8 +16,11 @@ import { TableActionDropdownComponent } from '../table-action-dropdown/table-act
 import { ResetIconComponent } from '../icons/reset-icon/reset-icon.component';
 import { ShareIconComponent } from '../icons/share-icon/share-icon.component';
 import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
+import { FilterPopupButtonComponent } from '../filter-popup-btn/filter-popup-btn.component';
+import { CustomSelectComponent } from '../custom-select/custom-select.component';
 import { Router } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-all-properties',
@@ -36,6 +39,9 @@ import { PropertyService } from '../../services/property.service';
     TableImgItemComponent,
     EditIconComponent,
     TableActionDropdownComponent,
+    PropertySharePlatfromComponent,
+    FilterPopupButtonComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './all-properties.component.html',
   styleUrl: './all-properties.component.css',
@@ -50,18 +56,63 @@ export class AllPropertiesComponent implements OnInit {
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
+  searchText: string = '';
+  private search$ = new Subject<string>();
+
+  // Active filters
+  filterPropertyType: string = '';
+  filterStatus: string = '';
+
+  propertyTypeOptions = [
+    { key: 'APARTMENT', value: 'Apartment' },
+    { key: 'VILLA', value: 'Villa' },
+    { key: 'TOWNHOUSE', value: 'Townhouse' },
+    { key: 'PENTHOUSE', value: 'Penthouse' },
+    { key: 'STUDIO', value: 'Studio' },
+    { key: 'OFFICE', value: 'Office' },
+    { key: 'SHOP', value: 'Shop' },
+    { key: 'WAREHOUSE', value: 'Warehouse' },
+  ];
+
+  statusOptions = [
+    { key: 'PUBLIC', value: 'Public' },
+    { key: 'DRAFT', value: 'Draft' },
+  ];
+
+  documentActions = [
+    { label: 'Share', icon: ShareIconComponent, action: 'share' },
+    { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
+  ];
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
+    this.search$.pipe(debounceTime(400)).subscribe((text) => {
+      this.searchText = text;
+      this.currentPage = 1;
+      this.loadProperties();
+    });
     this.loadProperties();
   }
 
+  buildParams(): Record<string, any> {
+    const params: Record<string, any> = {
+      page: this.currentPage,
+      page_size: this.rowsPerPage,
+    };
+    if (this.searchText) params['search'] = this.searchText;
+    if (this.filterPropertyType)
+      params['property_type'] = this.filterPropertyType;
+    if (this.filterStatus) params['status'] = this.filterStatus;
+    return params;
+  }
+
   loadProperties(): void {
-    this.propertyService.getProperties().subscribe({
+    this.propertyService.getProperties(this.buildParams()).subscribe({
       next: (resp: any) => {
         this.properties = resp?.content || [];
-        this.totalRecords = this.properties.length;
+        this.totalRecords =
+          resp?.pagination?.total_records ?? this.properties.length;
       },
     });
   }
@@ -70,24 +121,41 @@ export class AllPropertiesComponent implements OnInit {
     this.loadProperties();
   }
 
-  onPageSizeChange(event: PageSizeChange): void {
-    if (event.componentName !== this.componentName) return;
-    this.rowsPerPage = event.pageSize;
-    this.currentPage = 1;
+  searchTextChange(text: string): void {
+    this.search$.next(text);
   }
 
-  documentActions = [
-    { label: 'Share', icon: ShareIconComponent, action: 'share' },
-    { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
-  ];
+  applyFilter(): void {
+    this.currentPage = 1;
+    this.loadProperties();
+  }
+
+  removeFilter(): void {
+    this.filterPropertyType = '';
+    this.filterStatus = '';
+    this.currentPage = 1;
+    this.loadProperties();
+  }
+
+  handleExport(): void {
+    this.propertyService.exportProperties(this.buildParams());
+  }
 
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
 
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.loadProperties();
+  }
+
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+    this.loadProperties();
   }
 
   onViewClick(id: number) {

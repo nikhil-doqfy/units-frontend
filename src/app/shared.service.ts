@@ -124,6 +124,15 @@ export class SharedService {
     return `?${query}`;
   }
 
+  downloadBlob(blob: Blob, filename: string): void {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   setTitle(key: string) {
     this.translate.stream(key).subscribe((translated: string) => {
       this.title.setTitle(`${translated} | Doqfy`);

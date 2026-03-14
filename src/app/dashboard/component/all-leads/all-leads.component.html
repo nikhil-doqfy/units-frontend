@@ -5,7 +5,7 @@
         <div class="col-md">
           <app-table-title
             [title]="'ALL_LEADS' | translate"
-            subtitle="(240)"
+            [subtitle]="'(' + totalRecords + ')'"
             (onRefresh)="onRefresh()"
           ></app-table-title>
         </div>
@@ -16,12 +16,35 @@
               (onValueChange)="searchTextChange($event)"
             />
             <app-filter-popup-btn #filterPopup>
-              <app-table-filter-btn
-                [title]="'FILTER' | translate"
-                [hasIcon]="true"
-              >
-                <app-filter-icon />
-              </app-table-filter-btn>
+              <ng-container form>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label">Status</label>
+                    <app-custom-select [options]="statusOptions" key="key" value="value"
+                      placeholder="Select status"
+                      (optionSelected)="filterStatus = $event?.key">
+                    </app-custom-select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Platform</label>
+                    <app-custom-select [options]="platformOptions" key="key" value="value"
+                      placeholder="Select platform"
+                      (optionSelected)="filterPlatform = $event?.key">
+                    </app-custom-select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Lead Type</label>
+                    <app-custom-select [options]="leadTypeOptions" key="key" value="value"
+                      placeholder="Select type"
+                      (optionSelected)="filterLeadType = $event?.key">
+                    </app-custom-select>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container action>
+                <button type="button" class="btn btnCommon" (click)="removeFilter(); filterPopup.closePopup()">Remove All</button>
+                <button type="button" class="btn btnCommon" (click)="applyFilter(); filterPopup.closePopup()">Apply</button>
+              </ng-container>
             </app-filter-popup-btn>
 
             <app-table-filter-btn
@@ -37,7 +60,7 @@
     </div>
     <div class="cmmnTbl">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered leads-table">
           <thead>
             <tr>
               <th>{{ "LEAD_ID" | translate }}</th>
@@ -64,234 +87,49 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>LP9021</td>
-              <td>1/2/2025 10:00</td>
+            <tr *ngIf="leads.length === 0">
+              <td colspan="12" class="text-center text-muted py-4">No leads found</td>
+            </tr>
+            <tr *ngFor="let lead of leads">
+              <td>{{ lead.code }}</td>
+              <td>{{ lead.created_at || '--' }}</td>
               <td>
                 <app-table-img-item
-                  img="../../../../assets/property/property-list-1.png"
-                  title="Novatis AG"
+                  [img]="lead.property_thumbnail || 'assets/property/property-img-default.svg'"
+                  [title]="lead.property_name"
                 />
               </td>
-              <td>Evergreen (B) 204</td>
-              <td>1,800.00</td>
+              <td>{{ lead.unit_name }}</td>
+              <td>{{ lead.rent || '--' }}</td>
+              <td>{{ lead.name }}</td>
+              <td>{{ lead.contact_number }}</td>
+              <td>{{ lead.email }}</td>
               <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/user/user-1.png"
-                    title="Jensi"
-                  />
-                </div>
-              </td>
-              <td>+91-70******23</td>
-              <td>jensi&#64;***kmail.com</td>
-              <td>
-                <app-badge title="Interested" status="green" [showIcon]="true">
+                <app-badge
+                  [title]="getStatusBadge(lead.status).title"
+                  [status]="getStatusBadge(lead.status).color"
+                  [showIcon]="true">
                 </app-badge>
               </td>
               <td>
                 <app-platfrom-badge
-                  [platform]="{ type: 'propertyFinder' }"
-                  logo="assets/platfrom/platfrom-1.png"
-                ></app-platfrom-badge>
+                  [platform]="{ type: getPlatformType(lead.platform) }">
+                </app-platfrom-badge>
               </td>
-              <td>Email</td>
+              <td>{{ lead.lead_type }}</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
                   <app-check-icon
-                    (click)="openLeadToTenantModel(convertLeadToTenentContent)"
-                  ></app-check-icon>
+                    (click)="openLeadToTenantModel(convertLeadToTenentContent)">
+                  </app-check-icon>
                   <app-table-action-btn
                     type="edit"
-                    (clicked)="openEditLeadModal(editLeadContent)"
-                  ></app-table-action-btn>
+                    (clicked)="openEditLeadModal(editLeadContent)">
+                  </app-table-action-btn>
                   <app-table-action-btn
                     type="file"
-                    (clicked)="openActivityHistroyModal(activityHistroyContent)"
-                  ></app-table-action-btn>
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>LP8021</td>
-              <td>3/7/2025 16:00</td>
-              <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/property/property-list-2.png"
-                    title="Sliechi Tower"
-                  />
-                </div>
-              </td>
-              <td>Harmony (C) 302</td>
-              <td>1,450.00</td>
-              <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/user/user-2.png"
-                    title="Richard"
-                  />
-                </div>
-              </td>
-              <td>+91-99******76</td>
-              <td>richard&#64;***kmail.com</td>
-              <td>
-                <app-badge
-                  title="Not Interested"
-                  status="red"
-                  [showIcon]="true"
-                >
-                </app-badge>
-              </td>
-              <td>
-                <app-platfrom-badge
-                  [platform]="{ type: 'bayut' }"
-                  logo="assets/platfrom/platfrom-2.png"
-                ></app-platfrom-badge>
-              </td>
-              <td>Whatsapp</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-check-icon></app-check-icon>
-                  <app-table-action-btn type="edit"></app-table-action-btn>
-                  <app-table-action-btn type="file"></app-table-action-btn>
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>VC79021</td>
-              <td>4/12/2025 09:00</td>
-              <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/property/property-list-2.png"
-                    title="Jainhalilla"
-                  />
-                </div>
-              </td>
-              <td>Sunrise (D) 101</td>
-              <td>1,350.00</td>
-              <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/user/user-3.png"
-                    title="Thaomas"
-                  />
-                </div>
-              </td>
-              <td>+91-89******12</td>
-              <td>thomas&#64;***kmail.com</td>
-              <td>
-                <app-badge
-                  title="Lease/Tenancy"
-                  status="black"
-                  [showIcon]="true"
-                >
-                </app-badge>
-              </td>
-              <td>
-                <app-platfrom-badge
-                  [platform]="{ type: 'direct' }"
-                ></app-platfrom-badge>
-              </td>
-              <td>Call</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-check-icon></app-check-icon>
-                  <app-table-action-btn type="edit"></app-table-action-btn>
-                  <app-table-action-btn type="file"></app-table-action-btn>
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>VC69021</td>
-              <td>5/17/2025 11:00</td>
-              <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/property/property-list-2.png"
-                    title="Property C"
-                  />
-                </div>
-              </td>
-              <td>Majestic (E) 505</td>
-              <td>1,600.00</td>
-              <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/user/user-4.png"
-                    title="Akshay"
-                  />
-                </div>
-              </td>
-              <td>+91-90******45</td>
-              <td>thomas&#64;***kmail.com</td>
-              <td>
-                <app-badge
-                  title="Lease/Tenancy"
-                  status="black"
-                  [showIcon]="true"
-                >
-                </app-badge>
-              </td>
-              <td>
-                <app-platfrom-badge
-                  [platform]="{ type: 'referral' }"
-                ></app-platfrom-badge>
-              </td>
-              <td>Call</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-check-icon></app-check-icon>
-                  <app-table-action-btn type="edit"></app-table-action-btn>
-                  <app-table-action-btn type="file"></app-table-action-btn>
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>VC59021</td>
-              <td>6/22/2025 13:00</td>
-              <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/property/property-list-2.png"
-                    title="Rithi Tower B"
-                  />
-                </div>
-              </td>
-              <td>Pinnacle (F) 606</td>
-              <td>2,000.00</td>
-              <td>
-                <div class="d-flex align-items-center gap-2">
-                  <app-table-img-item
-                    img="../../../../assets/user/user-5.png"
-                    title=" Avanshi"
-                  />
-                </div>
-              </td>
-              <td>+91-78******90</td>
-              <td>akshay&#64;***kmail.com</td>
-              <td>
-                <app-badge title="Interested" status="green" [showIcon]="true">
-                </app-badge>
-              </td>
-              <td>
-                <app-platfrom-badge
-                  [platform]="{ type: 'bayut' }"
-                  logo="assets/platfrom/platfrom-2.png"
-                ></app-platfrom-badge>
-              </td>
-
-              <td>Email</td>
-              <td>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-check-icon></app-check-icon>
-                  <app-table-action-btn type="edit"></app-table-action-btn>
-                  <app-table-action-btn type="file"></app-table-action-btn>
+                    (clicked)="openActivityHistroyModal(activityHistroyContent)">
+                  </app-table-action-btn>
                 </div>
               </td>
             </tr>

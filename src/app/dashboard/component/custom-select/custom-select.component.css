@@ -24,6 +24,10 @@
   z-index: 1;
 }
 
+.customSelect.show {
+  z-index: 100;
+}
+
 .customSelect.show .customSelectInput,
 .customSelect .customSelectInput:hover {
   border-color: var(--greyBorder);
@@ -98,7 +102,7 @@
   border-radius: 6px;
   box-shadow: 4px 4px 15px 0 #00000026;
   min-width: 180px;
-  max-height: 167px;
+  max-height: 220px;
   overflow: auto;
   z-index: 2;
 }
@@ -149,25 +153,64 @@
 .customSelectSearch {
   display: flex;
   gap: 6px;
-  padding: 6px;
+  padding: 8px 8px 6px;
+  border-bottom: 1px solid var(--formBorder);
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.customSelectSearch::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2368868f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  pointer-events: none;
 }
 
 .customSelectSearch input {
   flex: 1;
-  height: 30px;
-  padding: 4px 8px;
+  height: 32px;
+  padding: 4px 10px 4px 28px;
   border: 1px solid var(--formBorder);
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 13px;
+  color: var(--greyText);
+  background-color: var(--muteBg);
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.customSelectSearch input::placeholder {
+  color: var(--lightText);
+  font-size: 12px;
+}
+
+.customSelectSearch input:focus {
+  border-color: var(--greyBorder, #c9d3d7);
+  background-color: var(--whiteBg);
 }
 
 .customSelectSearch .addBtn {
-  padding: 0 10px;
+  height: 32px;
+  padding: 0 12px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 6px;
   background: var(--activeExtraLightBg);
   color: var(--blackText);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.customSelectSearch .addBtn:hover {
+  background: #d6edfb;
 }
 
 .highlight {

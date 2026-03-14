@@ -3,11 +3,11 @@
 </div>
 
 <ng-container *ngIf="!loading">
-  <!-- Property card: image gallery + property info accordion -->
+  <!-- Unit card: image gallery + unit info accordion -->
   <app-white-card class="mb-3">
-    <app-property-view-card [propertyImages]="propertyImages" [name]="propertyName" [location]="propertyLocation"
-      [status]="propertyStatus" [price]="propertyRent" [priceLabel]="'Property Code'" [priceValue]="propertyCode"
-      [sections]="propertySections" [showBack]="true" [showPlatformIcons]="false" (back)="goBack()" />
+    <app-property-view-card [propertyImages]="unitImages" [name]="unitName" [location]="unitLocation" [price]="unitRent"
+      [priceLabel]="'Unit ID'" [priceValue]="unitCode" [sections]="unitSections" [showBack]="true" [status]="status"
+      [showPlatformIcons]="false" [infoLabel]="'UNIT_INFORMATION'" (back)="goBack()" />
   </app-white-card>
 
   <!-- Documents -->
@@ -20,8 +20,9 @@
       <div class="commonTabs">
         <ul class="nav nav-tabs">
           <li class="nav-item" *ngFor="let typeId of docTabKeys">
-            <button class="nav-link" [class.active]="activeDocTab === typeId" (click)="activeDocTab = typeId">{{
-              docTypeNames[typeId] || typeId }}</button>
+            <button class="nav-link" [class.active]="activeDocTab === typeId" (click)="activeDocTab = typeId">
+              {{ docTypeNames[typeId] || typeId }}
+            </button>
           </li>
         </ul>
       </div>

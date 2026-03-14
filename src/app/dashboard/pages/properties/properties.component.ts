@@ -131,7 +131,7 @@ export class PropertiesComponent {
   // private propertyService = inject(PropertyService);
   // private sharedApiService = inject(SharedApiService);
   // private alertService = inject(AlertService);
-  // private route = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
   // private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
@@ -176,6 +176,8 @@ export class PropertiesComponent {
   // }
   ngOnInit() {
     this.loadBreadcrumb();
+    const tab = this.route.snapshot.queryParamMap.get('tab');
+    if (tab) this.activeLeadTab = tab;
     //   this.sharedService.initLanguage();
     //   this.initLanguageListener();
     //   this.initPropertySearchListener();

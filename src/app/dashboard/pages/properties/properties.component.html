@@ -279,14 +279,6 @@
                 </th>
                 <th
                   *ngIf="
-                    currentRole === 'tenant' ||
-                    currentRole === 'property-manager'
-                  "
-                >
-                  {{ "OWNER_NAME" | translate }}
-                </th>
-                <th
-                  *ngIf="
                     currentRole === 'property-manager' ||
                     currentRole === 'tenant'
                   "
@@ -354,14 +346,6 @@
                         )
                       "
                     />
-                  </td>
-                  <td
-                    *ngIf="
-                      currentRole === 'tenant' ||
-                      currentRole === 'property-manager'
-                    "
-                  >
-                    {{ property?.owner_name || "N/A" }}
                   </td>
                   <td
                     *ngIf="

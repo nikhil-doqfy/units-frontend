@@ -8,13 +8,34 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+            <app-table-search [placeholder]="'SEARCH_HERE' | translate" (onValueChange)="searchTextChange($event)" />
 
-            <app-table-filter-btn [title]="'FILTER' | translate" [hasIcon]="true">
-              <app-filter-icon />
-            </app-table-filter-btn>
+            <app-filter-popup-btn #filterPopup>
+              <ng-container form>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label">Property Type</label>
+                    <app-custom-select [options]="propertyTypeOptions" key="key" value="value"
+                      placeholder="Select type"
+                      (optionSelected)="filterPropertyType = $event?.key">
+                    </app-custom-select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Status</label>
+                    <app-custom-select [options]="statusOptions" key="key" value="value"
+                      placeholder="Select status"
+                      (optionSelected)="filterStatus = $event?.key">
+                    </app-custom-select>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container action>
+                <button type="button" class="btn btnCommon" (click)="removeFilter(); filterPopup.closePopup()">Remove All</button>
+                <button type="button" class="btn btnCommon" (click)="applyFilter(); filterPopup.closePopup()">Apply</button>
+              </ng-container>
+            </app-filter-popup-btn>
 
-            <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true">
+            <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true" (clicked)="handleExport()">
               <app-export-icon />
             </app-table-filter-btn>
           </div>
@@ -32,7 +53,6 @@
                 Property Name <i><app-sorting-icon></app-sorting-icon></i>
               </th>
               <th>Location</th>
-              <th>Owner</th>
               <th>Total Blocks /Tower</th>
               <th>Total No of Units</th>
               <th>PMC</th>
@@ -40,6 +60,7 @@
               <th>Plot Area(Sqft)</th>
               <th>Makani No</th>
               <th>Dewa No</th>
+              <th>Status</th>
               <th>Platform</th>
               <th>Action</th>
             </tr>
@@ -51,12 +72,6 @@
                 <app-table-img-item [img]="prop.thumbnail || 'assets/property/property-img-1.png'" [title]="prop.property_name" />
               </td>
               <td>{{ prop.address_line_1 || '--' }}</td>
-              <td>
-                <span *ngFor="let o of prop.property_owners; let last = last">
-                  {{ o.name || o.email }}<span *ngIf="!last">, </span>
-                </span>
-                <span *ngIf="!prop.property_owners?.length">--</span>
-              </td>
               <td>{{ prop.no_of_blocks }}</td>
               <td>{{ prop.no_of_units }}</td>
               <td>{{ prop.pmc?.value || '--' }}</td>
@@ -64,6 +79,11 @@
               <td>{{ prop.land_area ? (prop.land_area + ' ' + prop.land_area_unit) : '--' }}</td>
               <td>{{ prop.makani_no || '--' }}</td>
               <td>{{ prop.dewa_no || '--' }}</td>
+              <td>
+                <span class="badge text-white" [ngClass]="prop.status === 'PUBLIC' ? 'bg-success' : 'bg-secondary'">
+                  {{ prop.status === 'PUBLIC' ? 'Public' : 'Draft' }}
+                </span>
+              </td>
               <td>--</td>
               <td align="center">
                 <div class="tbl-action-inline">
