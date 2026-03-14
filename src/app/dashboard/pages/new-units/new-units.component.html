@@ -318,56 +318,6 @@
         </div>
       </form>
     </app-step-pane>
-
-    <!-- <ng-container *ngIf="currentRole === 'owner'">
-      <app-step-pane
-        [title]="'ADD_PMC' | translate"
-        [secondCard]="true"
-        [showInvitePmcBtn]="true"
-      >
-        <form class="row g-3" [formGroup]="commercialsForm">
-          <div class="col-md-6">
-            <label class="form-label">{{ "PROPERTY_PMC" | translate }}</label>
-            <app-custom-select
-              [options]="PMC_List"
-              key="key"
-              value="value"
-              formControlName="pmc"
-            ></app-custom-select>
-            @if (isInvalid(commercialsForm, "pmc").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "pmc").msg }}
-              </small>
-            }
-          </div>
-        </form>
-      </app-step-pane>
-    </ng-container>
-
-    <ng-container *ngIf="currentRole === 'property-manager'">
-      <app-step-pane
-        [title]="'ADD_PMC' | translate"
-        [secondCard]="true"
-        [showInviteOwnerBtn]="true"
-      >
-        <form class="row g-3" [formGroup]="commercialsForm">
-          <div class="col-md-6">
-            <label class="form-label">{{ "OWNER" | translate }}</label>
-            <app-custom-select
-              [options]="ownerList"
-              key="key"
-              value="value"
-              formControlName="owner"
-            ></app-custom-select>
-            @if (isInvalid(commercialsForm, "pmc").status) {
-              <small class="errorMsg">
-                {{ isInvalid(commercialsForm, "pmc").msg }}
-              </small>
-            }
-          </div>
-        </form>
-      </app-step-pane>
-    </ng-container> -->
   </ng-container>
 
   <!-- Step Property Images Content -->

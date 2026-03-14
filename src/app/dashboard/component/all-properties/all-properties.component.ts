@@ -36,7 +36,6 @@ import { PropertyService } from '../../services/property.service';
     TableImgItemComponent,
     EditIconComponent,
     TableActionDropdownComponent,
-    PropertySharePlatfromComponent,
   ],
   templateUrl: './all-properties.component.html',
   styleUrl: './all-properties.component.css',

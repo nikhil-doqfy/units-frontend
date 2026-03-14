@@ -10,9 +10,10 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './edit-leads-form.component.css',
 })
 export class EditLeadsFormComponent {
+  @Output() formSubmitted = new EventEmitter<any>();
+
   @Input() editData: any = null;
   selectedLead: any = null;
-  @Output() formSubmitted = new EventEmitter<any>();
 
   submitForm() {}
 }

@@ -66,15 +66,6 @@
   }
 }
 
-.photo-thumb {
-  width: 270.5px;
-  height: 195px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #f3f4f6;
-  flex-shrink: 0;
-}
-
 .photo-thumb img {
   width: 100%;
   height: 100%;
@@ -187,14 +178,6 @@
   border: 2px solid #d6dee1;
   justify-content: center;
   background-color: #f5f7f8;
-}
-
-.revenue-box {
-  background: #eef9ff;
-  border-radius: 14px;
-  padding: 12px 16px;
-  text-align: center;
-  width: 100%;
 }
 
 .amount {

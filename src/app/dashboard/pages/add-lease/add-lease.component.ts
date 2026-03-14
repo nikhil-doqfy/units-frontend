@@ -22,9 +22,7 @@ import { StepFormLayoutComponent } from '../../component/step-form-layout/step-f
 import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { DateIconComponent } from '../../component/icons/date-icon/date-icon.component';
-import { UploadIconComponent } from '../../component/icons/upload-icon/upload-icon.component';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
-import { CrossIconComponent } from '../../component/icons/cross-icon/cross-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
@@ -66,9 +64,7 @@ interface UploadConfig {
     CustomSelectComponent,
     NgbDatepickerModule,
     DateIconComponent,
-    UploadIconComponent,
     UploadDocumentComponent,
-    CrossIconComponent,
     ReactiveFormsModule,
     FileUploadItemComponent,
   ],

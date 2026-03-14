@@ -15,13 +15,7 @@
               [placeholder]="'SEARCH_HERE' | translate"
               (onValueChange)="searchTextChange($event)"
             />
-            <!-- <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-              (clicked)="handleFilterClick()"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn> -->
+
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
@@ -151,13 +145,6 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="Search here..." />
-            <!-- <app-table-filter-btn
-              title="Filter"
-              [hasIcon]="true"
-              (clicked)="handleFilterClick()"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn> -->
 
             <app-filter-popup-btn>
               <app-table-filter-btn
@@ -263,14 +250,6 @@
                 </td>
                 <td align="center">
                   <div class="cmmnTblActnBtnDiv">
-                    <!-- <app-table-action-btn
-                    type="edit"
-                    (clicked)="handleEditClick()"
-                  />
-                  <app-table-action-btn
-                    type="delete"
-                    (clicked)="handleDeleteClick()"
-                  /> -->
                     <app-table-action-dropdown
                       [dropdownItems]="documentActions"
                       (actionClicked)="handleDropdownAction($event)"

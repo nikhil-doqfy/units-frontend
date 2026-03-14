@@ -26,12 +26,9 @@
     </div>
   </div>
 
-  <!-- RIGHT SIDE -->
   <div class="cmnStepLayoutRght">
     <ng-container *ngFor="let group of stepGroups; let i = index">
       <ng-container *ngIf="i === currentStep">
-        <!-- MAIN CARD -->
-
         <app-white-card>
           <div class="cmnStepFrmHdr mb-4">
             <app-card-title
@@ -89,7 +86,6 @@
           </div>
         </app-white-card>
 
-        <!-- SUB CARDS -->
         <ng-container *ngFor="let sub of group.sub">
           <div class="mt-3">
             <app-white-card>
@@ -133,7 +129,10 @@
     ></button>
   </div>
   <div class="modal-body">
-    <app-bulk-upload [columns]="bulkColumns" (dataImported)="onBulkDataReady($event)" />
+    <app-bulk-upload
+      [columns]="bulkColumns"
+      (dataImported)="onBulkDataReady($event)"
+    />
   </div>
   <div class="modal-footer">
     <button
@@ -143,7 +142,11 @@
     >
       {{ "CANCEL" | translate }}
     </button>
-    <button type="button" class="btn btnCommon" (click)="onBulkUploadConfirm(modal)">
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="onBulkUploadConfirm(modal)"
+    >
       {{ "Upload" | translate }}
     </button>
   </div>

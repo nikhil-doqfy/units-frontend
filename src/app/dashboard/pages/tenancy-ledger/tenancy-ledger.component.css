@@ -28,16 +28,8 @@
   color: #2563eb;
 }
 
-/* 
-
-.totalCell {
-  text-align: center;
-  padding: 12px;
-} */
-
 .totalRow td {
-  background: #f3f4f6; /* grey background */
-  border: none !important; /* lines remove */
+  background: #f3f4f6;
   font-weight: 600;
   padding: 14px;
 }
@@ -72,7 +64,6 @@
   margin-left: 6px;
 }
 
-/* Popover Header */
 .popover-header {
   background: #1f6ed4;
   color: white;

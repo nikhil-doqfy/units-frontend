@@ -13,7 +13,10 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
-import { OptionsParams, UploadFileModel } from '../../../shared/model/shared.model';
+import {
+  OptionsParams,
+  UploadFileModel,
+} from '../../../shared/model/shared.model';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { StepEngine } from '../../model/step-engine/step-engine';
@@ -44,7 +47,6 @@ interface UploadConfig {
     ReactiveFormsModule,
     FileUploadItemComponent,
     TranslateModule,
-    WhiteCardComponent,
   ],
   templateUrl: './add-property.component.html',
   styleUrl: './add-property.component.css',
@@ -100,7 +102,8 @@ export class AddPropertyComponent {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
-    this.steps = this.propertyFormService.buildPropertySteps('property-manager');
+    this.steps =
+      this.propertyFormService.buildPropertySteps('property-manager');
     this.engine = new StepEngine(this.steps);
     this.propertyFormService.setEngine(this.engine);
 
@@ -121,32 +124,44 @@ export class AddPropertyComponent {
       {
         param: 'PROPERTY_TYPE',
         key: 'property_type',
-        setter: (v) => { this.propertyType = v; },
+        setter: (v) => {
+          this.propertyType = v;
+        },
       },
       {
         param: 'BLOCKS_COUNT',
         key: 'blocks_count',
-        setter: (v) => { this.blocksCount = v; },
+        setter: (v) => {
+          this.blocksCount = v;
+        },
       },
       {
         param: 'UNITS_COUNT',
         key: 'units_count',
-        setter: (v) => { this.unitsCount = v; },
+        setter: (v) => {
+          this.unitsCount = v;
+        },
       },
       {
         param: 'AREA_UNIT',
         key: 'area_unit',
-        setter: (v) => { this.areaUnit = v; },
+        setter: (v) => {
+          this.areaUnit = v;
+        },
       },
       {
         param: 'FLOOR_COUNT',
         key: 'floor_count',
-        setter: (v) => { this.floorsCount = v; },
+        setter: (v) => {
+          this.floorsCount = v;
+        },
       },
       {
         param: 'PARKING_COUNT',
         key: 'parking_count',
-        setter: (v) => { this.parkingCount = v; },
+        setter: (v) => {
+          this.parkingCount = v;
+        },
       },
       {
         param: 'PROPERTY_IMAGE_CHOICE',
@@ -213,9 +228,21 @@ export class AddPropertyComponent {
       const group = this.propertyFormService.createBlockGroup();
       group.patchValue({
         blockName: row['block_name'] ?? '',
-        noOfFloors: row['no_of_floors'] != null ? { key: +row['no_of_floors'], value: String(row['no_of_floors']) } : '',
-        noOfParking: row['no_of_parking'] != null ? { key: +row['no_of_parking'], value: String(row['no_of_parking']) } : '',
-        noOfUnits: row['no_of_units'] != null ? { key: +row['no_of_units'], value: String(row['no_of_units']) } : '',
+        noOfFloors:
+          row['no_of_floors'] != null
+            ? { key: +row['no_of_floors'], value: String(row['no_of_floors']) }
+            : '',
+        noOfParking:
+          row['no_of_parking'] != null
+            ? {
+                key: +row['no_of_parking'],
+                value: String(row['no_of_parking']),
+              }
+            : '',
+        noOfUnits:
+          row['no_of_units'] != null
+            ? { key: +row['no_of_units'], value: String(row['no_of_units']) }
+            : '',
       });
       this.blockForms.push(group);
     });
@@ -260,7 +287,8 @@ export class AddPropertyComponent {
     const cfg = combineTypeModal.find((modal) => modal.typeKey === type);
     if (!cfg) throw new Error('Invalid Type');
     return {
-      form: cfg.formKey === 'documents' ? this.documentationForm : this.imagesForm,
+      form:
+        cfg.formKey === 'documents' ? this.documentationForm : this.imagesForm,
       formKey: cfg.formKey,
     };
   }
@@ -321,6 +349,8 @@ export class AddPropertyComponent {
 
   getItems(type: string) {
     const cfg = this.getUploadConfig(type);
-    return (cfg.form.value[cfg.formKey] || []).filter((x: any) => x.type === type);
+    return (cfg.form.value[cfg.formKey] || []).filter(
+      (x: any) => x.type === type,
+    );
   }
 }

@@ -203,13 +203,6 @@ export class NewUnitsComponent {
       });
   }
 
-  // loadBreadcrumb() {
-  //   this.setBreadCrumb([
-  //     { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-  //     { label: 'ADD_PROPERTY', link: '' },
-  //   ]);
-  // }
-
   loadBreadcrumb() {
     if (this.showDetailView) {
       this.setBreadCrumb([

@@ -86,40 +86,43 @@ interface PropertyDetails {
     RouterModule,
     CommonModule,
     FormsModule,
-    PlusIconComponent,
-    RefreshIconComponent,
-    TableTitleComponent,
-    TableImgItemComponent,
-    BadgeComponent,
-    TableSelectComponent,
-    TableSearchComponent,
-    TableFilterButtonComponent,
-    FilterIconComponent,
-    CustomSelectComponent,
-    ExportIconComponent,
-    TableActionButtonComponent,
-    TableActionDropdownComponent,
-    TablePaginationComponent,
-    SortingIconComponent,
-    WhiteCardComponent,
-    DocumentTypeItemComponent,
-    PropertyViewCardComponent,
-    CardTitleComponent,
-    DashTitleComponent,
-    TranslateModule,
-    NoDataComponent,
-    RouterLink,
-    FilterPopupButtonComponent,
-    PropertyLeadsComponent,
-    AllPropertiesComponent,
-    EmailIconComponent,
-    WhatsappIconComponent,
-    CallIconsNewComponent,
-    AllLeadsComponent,
-    EmailLeadsComponent,
-    WhatsappLeadsComponent,
+    // PlusIconComponent,
+    // RefreshIconComponent,
+    // TableTitleComponent,
+    // TableImgItemComponent,
+    // BadgeComponent,
+    // TableSelectComponent,
+    // TableSearchComponent,
+    // TableFilterButtonComponent,
+    // FilterIconComponent,
+    // CustomSelectComponent,
+    // ExportIconComponent,
+    // TableActionButtonComponent,
+    // TableActionDropdownComponent,
+    // TablePaginationComponent,
+    // SortingIconComponent,
+    // WhiteCardComponent,
+    // DocumentTypeItemComponent,
+    // PropertyViewCardComponent,
+    // CardTitleComponent,
+    // DashTitleComponent,
+    // TranslateModule,
+    // NoDataComponent,
+    // RouterLink,
+    // FilterPopupButtonComponent,
+    // PropertyLeadsComponent,
+    // AllPropertiesComponent,
+    // EmailIconComponent,
+    // WhatsappIconComponent,
+    // CallIconsNewComponent,
+    // AllLeadsComponent,
+    // EmailLeadsComponent,
+    // WhatsappLeadsComponent,
     TenancyLedgerComponent,
     UnitsComponent,
+    TranslateModule,
+    WhiteCardComponent,
+    AllPropertiesComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.css',
@@ -584,6 +587,9 @@ export class PropertiesComponent {
   breadcrumbData: BreadCrumb[] = [];
   showNavbar: boolean = true;
   showDetailView: boolean = false;
+  activeLeadTab: string = 'properties';
+  currentRole: UserRole = 'property-manager';
+  isUnitDetailView: boolean = false;
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -610,9 +616,7 @@ export class PropertiesComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-  activeLeadTab: string = 'properties';
-  currentRole: UserRole = 'property-manager';
-  isUnitDetailView: boolean = false;
+
   onUnitDetailChanges(event: boolean) {
     this.isUnitDetailView = event;
   }
