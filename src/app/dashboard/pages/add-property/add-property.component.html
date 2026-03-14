@@ -1,6 +1,6 @@
 <app-step-form-layout
   [leftCardTitle]="'PROPERTY_DETAILS' | translate"
-  finishButtonText="{{ 'ADD_PROPERTY' | translate }}"
+  finishButtonText="{{ 'PAGE_TITLE.ADD_PROPERTY' | translate }}"
   [engine]="engine"
   [stepSchema]="steps"
   [bulkColumns]="blocksBulkColumns"
@@ -367,6 +367,7 @@
       [title]="'BLOCKS / TOWER' | translate"
       [pageTitle]="'Total Blocks/Tower Total units'"
       [showBulkUpload]="true"
+      [blockCount]="10"
     >
       <form [formGroup]="blocksForm">
         <div formArrayName="blocks">
@@ -434,6 +435,7 @@
   <ng-container>
     <app-step-pane
       [title]="'PROPERTY_IMAGES' | translate"
+      [pageTitle]="'PROPERTY_IMAGES' | translate"
       [description]="'UPLOAD_PROPERTY_IMAGES' | translate"
     >
       <div class="commonTabs">
@@ -512,6 +514,7 @@
   <ng-container>
     <app-step-pane
       [title]="'DOCUMENTATION' | translate"
+      [pageTitle]="'Documentation' | translate"
       [description]="'UPLOAD_DOCUMENTS_OF_THE_PROPERTY' | translate"
     >
       <div class="commonTabs">

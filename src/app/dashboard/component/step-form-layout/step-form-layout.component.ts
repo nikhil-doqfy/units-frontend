@@ -77,7 +77,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
   stepGroups: StepGroup[] = [];
   filteredSteps: StepPaneComponent[] = [];
-
+  totalBlocks = 10;
   currentStep: number = 0;
   private subs = new Subscription();
 

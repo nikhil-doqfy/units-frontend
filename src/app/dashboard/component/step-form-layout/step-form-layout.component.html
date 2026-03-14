@@ -34,8 +34,12 @@
             <app-card-title
               [title]="group.main.pageTitle"
               [description]="group.main.description"
+              [blockCount]="group.main.blockCount"
             >
             </app-card-title>
+            <span class="blockCount" *ngIf="i === 1">
+              {{ totalBlocks }}
+            </span>
             <div class="stepActionBtns">
               <button
                 type="button"
@@ -64,9 +68,7 @@
               >
                 {{ "SAVE_&_NEXT" | translate }}
               </button>
-              <button class="closeBtn">
-                <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
-              </button>
+
               <button
                 type="button"
                 class="btn btnCommon"
@@ -74,6 +76,9 @@
                 (click)="nextStep()"
               >
                 {{ finishButtonText }}
+              </button>
+              <button class="closeBtn">
+                <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
               </button>
             </div>
           </div>

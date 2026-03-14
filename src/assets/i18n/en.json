@@ -34,7 +34,8 @@
     "NEW_UNITS": "New Units",
     "NEW_TENANT": "New Tenant",
     "TEAM": "Team",
-    "BROADCAST": "Broadcast"
+    "BROADCAST": "Broadcast",
+    "ADD_UNIT": "Add Unit"
   },
 
   "NEW_LEASE": "New Lease",
@@ -47,7 +48,7 @@
   "CANCEL": "Cancel",
   "SEARCH_HERE": "Search here...",
   "MENU": "Menu",
-
+  "UNIT_DETAILS": "Unit Details",
   "DASHBOARD": "Dashboard",
   "SEND_INVITATION": "Send Invitation",
   "PROPERTIES": "Properties",
