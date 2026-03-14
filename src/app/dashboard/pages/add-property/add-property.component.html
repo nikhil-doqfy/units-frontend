@@ -1,26 +1,46 @@
-<app-step-form-layout [leftCardTitle]="'PROPERTY_DETAILS' | translate"
-  finishButtonText="{{ 'ADD_PROPERTY' | translate }}" [engine]="engine" [stepSchema]="steps"
+<app-step-form-layout
+  [leftCardTitle]="'PROPERTY_DETAILS' | translate"
+  finishButtonText="{{ 'ADD_PROPERTY' | translate }}"
+  [engine]="engine"
+  [stepSchema]="steps"
   [bulkColumns]="blocksBulkColumns"
   (bulkImported)="onBlocksBulkImport($event)"
-  (finish)="submitProperty()"> <ng-container>
-
+  (finish)="submitProperty()"
+>
+  <ng-container>
     <ng-container>
-      <app-step-pane [title]="'Basic Details' | translate"
+      <app-step-pane
+        [title]="'Basic Details' | translate"
+        [pageTitle]="'Basic Details' | translate"
         [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
-        [showEditButton]="true">
-        <div style="text-align:right; margin-bottom:8px;">
-          <a href="javascript:void(0)" (click)="fillDummyData()"
-            style="font-size:12px; color:#aaa; text-decoration:underline; cursor:pointer;">Fill dummy data</a>
+        [showEditButton]="true"
+      >
+        <div style="text-align: right; margin-bottom: 8px">
+          <a
+            href="javascript:void(0)"
+            (click)="fillDummyData()"
+            style="
+              font-size: 12px;
+              color: #aaa;
+              text-decoration: underline;
+              cursor: pointer;
+            "
+            >Fill dummy data</a
+          >
         </div>
         <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
             <label class="form-label">{{ "Property Name" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'Enter name here' | translate"
-              formControlName="propertyName" />
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'Enter name here' | translate"
+              formControlName="propertyName"
+            />
             @if (isInvalid(pmDetailsForm, "propertyName").status) {
-            <small class="errorMsg">
-              {{ isInvalid(pmDetailsForm, "propertyName").msg }}
-            </small>
+              <small class="errorMsg">
+                {{ isInvalid(pmDetailsForm, "propertyName").msg }}
+              </small>
             }
           </div>
           <div class="col-md-3">
@@ -53,67 +73,119 @@
           <div class="col-md-3">
             <label class="form-label">{{ "Land Area" | translate }}</label>
             <div class="d-flex gap-2">
-              <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-                formControlName="landArea" />
-              <app-custom-select [options]="areaUnit" key="key" value="value"
-                formControlName="landAreaUnit"></app-custom-select>
+              <input
+                type="number"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                formControlName="landArea"
+              />
+              <app-custom-select
+                [options]="areaUnit"
+                key="key"
+                value="value"
+                formControlName="landAreaUnit"
+              ></app-custom-select>
             </div>
           </div>
           <div class="col-md-3">
             <label class="form-label">{{
               "Land DM No(Affection Plan)" | translate
-              }}</label>
-            <input type="text" class="form-control" [placeholder]="'Enter Land DM No' | translate"
-              formControlName="landDmNo" />
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'Enter Land DM No' | translate"
+              formControlName="landDmNo"
+            />
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Plot No" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="plotNo" />
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="plotNo"
+            />
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Makani No" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="makaniNo" />
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="makaniNo"
+            />
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Dewa No" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="dewaNo" />
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="dewaNo"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Approx Rent Cost" | translate }}</label>
-            <input type="number" class="form-control" [placeholder]="'Enter approx rent' | translate" formControlName="approxRent" />
+            <label class="form-label">{{
+              "Approx Rent Cost" | translate
+            }}</label>
+            <input
+              type="number"
+              class="form-control"
+              [placeholder]="'Enter approx rent' | translate"
+              formControlName="approxRent"
+            />
           </div>
         </form>
       </app-step-pane>
     </ng-container>
 
     <ng-container>
-      <app-step-pane [title]="'Location / Address Details' | translate" [secondCard]="true">
+      <app-step-pane
+        [title]="'Location / Address Details' | translate"
+        [secondCard]="true"
+      >
         <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
-            <label class="form-label">{{
-              "Address Lane 1" | translate
-              }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="addressLane1" />
+            <label class="form-label">{{ "Address Lane 1" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="addressLane1"
+            />
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Address Lane 2" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="addressLane2" />
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="addressLane2"
+            />
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Landmark" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="landmark" />
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="landmark"
+            />
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Pincode" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="pincode" />
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="pincode"
+            />
           </div>
           <div class="col-12">
-            <label class="form-label">{{ "Select From Map" | translate }}</label>
+            <label class="form-label">{{
+              "Select From Map" | translate
+            }}</label>
             <app-map-picker
               [initialLat]="pmDetailsForm.get('latitude')?.value"
               [initialLng]="pmDetailsForm.get('longitude')?.value"
@@ -124,7 +196,6 @@
         </form>
       </app-step-pane>
     </ng-container>
-
   </ng-container>
   <!-- Step Commercials Content -->
   <!-- <ng-container>
@@ -292,17 +363,29 @@
   </ng-container> -->
 
   <ng-container>
-    <app-step-pane [title]="'BLOCKS / TOWER' | translate" [pageTitle]="'Total Blocks/Tower Total units'"
-      [showBulkUpload]="true">
+    <app-step-pane
+      [title]="'BLOCKS / TOWER' | translate"
+      [pageTitle]="'Total Blocks/Tower Total units'"
+      [showBulkUpload]="true"
+    >
       <form [formGroup]="blocksForm">
         <div formArrayName="blocks">
-          <div *ngFor="let blockForm of blockForms.controls; let i = index" class="ownerCardWrapper mb-2">
-            <span class="ownerCount">{{ i + 1 | number: '2.0-0' }}</span>
+          <div
+            *ngFor="let blockForm of blockForms.controls; let i = index"
+            class="ownerCardWrapper mb-2"
+          >
+            <span class="ownerCount">{{ i + 1 | number: "2.0-0" }}</span>
             <div class="row g-3" [formGroupName]="i">
               <div class="col-md-3">
-                <label class="form-label">{{ "Block / Tower Name" | translate }}</label>
-                <input type="text" class="form-control" [placeholder]="'Enter name here' | translate"
-                  formControlName="blockName" />
+                <label class="form-label">{{
+                  "Block / Tower Name" | translate
+                }}</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [placeholder]="'Enter name here' | translate"
+                  formControlName="blockName"
+                />
               </div>
               <div class="col-md-3">
                 <app-form-select-field
@@ -333,48 +416,92 @@
         </div>
       </form>
       <div class="ownerActionBtns">
-        <button type="button" class="circleBtn minusBtn" (click)="removeBlock(blockForms.length - 1)">−</button>
-        <button type="button" class="circleBtn plusBtn" (click)="addBlock()">+</button>
+        <button
+          type="button"
+          class="circleBtn minusBtn"
+          (click)="removeBlock(blockForms.length - 1)"
+        >
+          −
+        </button>
+        <button type="button" class="circleBtn plusBtn" (click)="addBlock()">
+          +
+        </button>
       </div>
     </app-step-pane>
   </ng-container>
 
   <!-- Step Property Images Content -->
   <ng-container>
-    <app-step-pane [title]="'PROPERTY_IMAGES' | translate" [description]="'UPLOAD_PROPERTY_IMAGES' | translate">
+    <app-step-pane
+      [title]="'PROPERTY_IMAGES' | translate"
+      [description]="'UPLOAD_PROPERTY_IMAGES' | translate"
+    >
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="propertyImagesTab" role="tablist">
           @for (type of imageUploadTypes; track $index) {
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" [class.active]="type.typeKey === activeImageTab" [id]="type.typeKey + '-tab'"
-              data-bs-toggle="tab" [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'" type="button" role="tab"
-              [attr.aria-controls]="type.typeKey + '-tab-pane'" [attr.aria-selected]="type.typeKey === activeImageTab">
-              {{ type.typeLabel }}
-            </button>
-          </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                [class.active]="type.typeKey === activeImageTab"
+                [id]="type.typeKey + '-tab'"
+                data-bs-toggle="tab"
+                [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
+                type="button"
+                role="tab"
+                [attr.aria-controls]="type.typeKey + '-tab-pane'"
+                [attr.aria-selected]="type.typeKey === activeImageTab"
+              >
+                {{ type.typeLabel }}
+              </button>
+            </li>
           }
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="propertyImagesTabContent">
           @for (type of imageUploadTypes; track $index) {
-          <div [ngClass]="{
+            <div
+              [ngClass]="{
                 'tab-pane': true,
                 fade: true,
                 show: type.typeKey === activeImageTab,
                 active: type.typeKey === activeImageTab,
-              }" [id]="type.typeKey + '-tab-pane'" role="tabpanel" [attr.aria-labelledby]="type.typeKey + '-tab'"
-            [tabindex]="$index">
-            <app-upload-document [isMultipleFiles]="true" [fileTypes]="['jpg', 'jpeg', 'png']" [maxSize]="20"
-              (uploadProgress)="onUpload(type.typeKey, $event)"></app-upload-document>
+              }"
+              [id]="type.typeKey + '-tab-pane'"
+              role="tabpanel"
+              [attr.aria-labelledby]="type.typeKey + '-tab'"
+              [tabindex]="$index"
+            >
+              <app-upload-document
+                [isMultipleFiles]="true"
+                [fileTypes]="['jpg', 'jpeg', 'png']"
+                [maxSize]="20"
+                (uploadProgress)="onUpload(type.typeKey, $event)"
+              ></app-upload-document>
 
-            <div class="img-preview-grid" *ngIf="getItems(type.typeKey).length">
-              <div class="img-preview-item" *ngFor="let image of getItems(type.typeKey)">
-                <img [src]="image.base64" [alt]="image.file_name" class="img-thumb" />
-                <button type="button" class="img-remove-btn" (click)="remove(type.typeKey, image)">×</button>
+              <div
+                class="img-preview-grid"
+                *ngIf="getItems(type.typeKey).length"
+              >
+                <div
+                  class="img-preview-item"
+                  *ngFor="let image of getItems(type.typeKey)"
+                >
+                  <img
+                    [src]="image.base64"
+                    [alt]="image.file_name"
+                    class="img-thumb"
+                  />
+                  <button
+                    type="button"
+                    class="img-remove-btn"
+                    (click)="remove(type.typeKey, image)"
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
           }
         </div>
       </div>
@@ -383,38 +510,61 @@
 
   <!-- Step Documentation Content -->
   <ng-container>
-    <app-step-pane [title]="'DOCUMENTATION' | translate" [description]="'UPLOAD_DOCUMENTS_OF_THE_PROPERTY' | translate">
+    <app-step-pane
+      [title]="'DOCUMENTATION' | translate"
+      [description]="'UPLOAD_DOCUMENTS_OF_THE_PROPERTY' | translate"
+    >
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="documentsTab" role="tablist">
           @for (type of documetUploadTypes; track $index) {
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" [class.active]="type.typeKey === activeDocTab" [id]="type.typeKey + '-tab'"
-              data-bs-toggle="tab" [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'" type="button" role="tab"
-              [attr.aria-controls]="type.typeKey + '-tab-pane'" [attr.aria-selected]="type.typeKey === activeDocTab">
-              {{ type.typeLabel }}
-            </button>
-          </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                [class.active]="type.typeKey === activeDocTab"
+                [id]="type.typeKey + '-tab'"
+                data-bs-toggle="tab"
+                [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'"
+                type="button"
+                role="tab"
+                [attr.aria-controls]="type.typeKey + '-tab-pane'"
+                [attr.aria-selected]="type.typeKey === activeDocTab"
+              >
+                {{ type.typeLabel }}
+              </button>
+            </li>
           }
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="documentsTabContent">
           @for (type of documetUploadTypes; track $index) {
-          <div [ngClass]="{
+            <div
+              [ngClass]="{
                 'tab-pane': true,
                 fade: true,
                 show: type.typeKey === activeDocTab,
                 active: type.typeKey === activeDocTab,
-              }" [id]="type.typeKey + '-tab-pane'" role="tabpanel" [attr.aria-labelledby]="type.typeKey + '-tab'"
-            [tabindex]="$index">
-            <app-upload-document [isMultipleFiles]="true" [fileTypes]="[]" [maxSize]="20"
-              (uploadProgress)="onUpload(type.typeKey, $event)" />
+              }"
+              [id]="type.typeKey + '-tab-pane'"
+              role="tabpanel"
+              [attr.aria-labelledby]="type.typeKey + '-tab'"
+              [tabindex]="$index"
+            >
+              <app-upload-document
+                [isMultipleFiles]="true"
+                [fileTypes]="[]"
+                [maxSize]="20"
+                (uploadProgress)="onUpload(type.typeKey, $event)"
+              />
 
-            <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
-              <app-file-upload-item *ngFor="let image of getItems(type.typeKey)" [item]="image"
-                (remove)="remove(type.typeKey, image)" />
+              <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
+                <app-file-upload-item
+                  *ngFor="let image of getItems(type.typeKey)"
+                  [item]="image"
+                  (remove)="remove(type.typeKey, image)"
+                />
+              </div>
             </div>
-          </div>
           }
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UploadFileModel } from '../../../shared/model/shared.model';
 import { SharedService } from '../../../shared.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
 import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
 import { FormService } from '../../../shared/services/form.service';
@@ -78,6 +78,17 @@ export class NewUnitsComponent implements OnInit {
     value: String(i),
   }));
 
+  breadcrumbData = [
+    {
+      label: this.translate.instant('PAGE_TITLE.DASHBOARD'),
+      link: '/dashboard/home',
+    },
+    {
+      label: this.translate.instant('PAGE_TITLE.PROPERTIES'),
+      link: '/dashboard/properties',
+    },
+    { label: this.translate.instant('PAGE_TITLE.NEW_UNITS'), link: '' },
+  ];
   basicDetailsForm = this.unitFormService.unitBasicDetailsForm;
   commercialsForm = this.unitFormService.unitCommercialsForm;
   imagesForm = this.unitFormService.unitImagesForm;
@@ -95,7 +106,10 @@ export class NewUnitsComponent implements OnInit {
   activeDocTab: any = null;
   uploadIdCounter = { images: 1, documents: 1 };
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private translate: TranslateService,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 

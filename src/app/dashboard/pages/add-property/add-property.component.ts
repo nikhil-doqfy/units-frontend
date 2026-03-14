@@ -12,7 +12,7 @@ import { PropertyService } from '../../services/property.service';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import {
   OptionsParams,
@@ -66,11 +66,16 @@ export class AddPropertyComponent {
   private formService = inject(FormService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
-
   breadcrumbData = [
-    { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-    { label: 'PAGE_TITLE.PROPERTIES', link: '/dashboard/properties' },
-    { label: 'ADD_PROPERTY', link: '' },
+    {
+      label: this.translate.instant('PAGE_TITLE.DASHBOARD'),
+      link: '/dashboard/home',
+    },
+    {
+      label: this.translate.instant('PAGE_TITLE.PROPERTIES'),
+      link: '/dashboard/properties',
+    },
+    { label: this.translate.instant('PAGE_TITLE.ADD_PROPERTY'), link: '' },
   ];
 
   isInvalid = this.formService.isInvalid;
@@ -106,7 +111,10 @@ export class AddPropertyComponent {
     documents: 1,
   };
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private translate: TranslateService,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
