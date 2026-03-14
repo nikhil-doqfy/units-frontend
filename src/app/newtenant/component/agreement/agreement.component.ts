@@ -5,6 +5,7 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.component';
 import { CommonModule } from '@angular/common';
+import { SignedSuccessfullyIconComponent } from '../../../icons/signed-successfully-icon/signed-successfully-icon.component';
 
 @Component({
   selector: 'app-agreement',
@@ -15,6 +16,7 @@ import { CommonModule } from '@angular/common';
     AcceptIconComponent,
     WhiteCardComponent,
     WarningIconComponent,
+    SignedSuccessfullyIconComponent,
   ],
   templateUrl: './agreement.component.html',
   styleUrl: './agreement.component.css',

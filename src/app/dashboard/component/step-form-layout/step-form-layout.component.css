@@ -142,3 +142,16 @@
   gap: 6px;
   cursor: pointer;
 }
+
+.stepTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.blockCount {
+  background: #e9ecef;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}

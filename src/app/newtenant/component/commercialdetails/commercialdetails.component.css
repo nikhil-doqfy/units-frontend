@@ -5,3 +5,23 @@
 .lease-header h1 {
   text-decoration: none;
 }
+
+.lease-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.lease-header span {
+  font-size: 14px;
+}
+
+.badge {
+  background: #f1f3f5;
+  color: #333;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: auto;
+}

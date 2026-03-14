@@ -31,7 +31,6 @@ import { BreadCrumb } from '../../../shared/model/shared.model';
     TableActionButtonComponent,
     TablePaginationComponent,
     TranslateModule,
-    NoDataComponent,
   ],
   templateUrl: './documentations.component.html',
   styleUrl: './documentations.component.css',
@@ -48,6 +47,17 @@ export class DocumentationsComponent {
     { label: 'Documentations', link: '' },
   ];
 
+  constructor(private router: Router) {
+    const key = this.route.snapshot.data['titleKey'];
+    this.sharedService.setTitle(key);
+  }
+  ngOnInit() {
+    this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+
+    this.initLanguageListener();
+  }
+
   loadBreadcrumb() {
     this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
@@ -60,18 +70,6 @@ export class DocumentationsComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
-
-  constructor(private router: Router) {
-    const key = this.route.snapshot.data['titleKey'];
-    this.sharedService.setTitle(key);
-  }
-  ngOnInit() {
-    this.loadBreadcrumb();
-    this.sharedService.initLanguage();
-
-    this.initLanguageListener();
-  }
-
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))

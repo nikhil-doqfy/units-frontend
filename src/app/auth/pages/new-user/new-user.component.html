@@ -5,17 +5,17 @@
     <div class="grid-2">
       <ng-container>
         <div class="mb-2">
-          <label for="companyName" class="form-label">Frist Name</label>
+          <label for="companyName" class="form-label">First Name</label>
           <input
             class="form-control"
             formControlName="first_name"
             type="text"
             placeholder="Enter here"
           />
-          @if (isInvalid(signupForm, 'first_name').status) {
-          <small class="errorMsg">
-            {{ isInvalid(signupForm, "first_name").msg }}
-          </small>
+          @if (isInvalid(signupForm, "first_name").status) {
+            <small class="errorMsg">
+              {{ isInvalid(signupForm, "first_name").msg }}
+            </small>
           }
         </div>
 
@@ -27,10 +27,10 @@
             type="text"
             placeholder="Enter here"
           />
-          @if (isInvalid(signupForm, 'last_name').status) {
-          <small class="errorMsg">
-            {{ isInvalid(signupForm, "last_name").msg }}
-          </small>
+          @if (isInvalid(signupForm, "last_name").status) {
+            <small class="errorMsg">
+              {{ isInvalid(signupForm, "last_name").msg }}
+            </small>
           }
         </div>
       </ng-container>
@@ -51,17 +51,25 @@
                 autocomplete="off"
               />
             </div>
-            <ul *ngIf="showCompanyDropdown && filteredCompanies.length > 0" class="customSelectDropdown">
+            <ul
+              *ngIf="showCompanyDropdown && filteredCompanies.length > 0"
+              class="customSelectDropdown"
+            >
               <li
                 *ngFor="let company of filteredCompanies"
                 (mousedown)="selectCompany(company)"
-                [class.active]="signupForm.get('company_id')?.value === company.key"
+                [class.active]="
+                  signupForm.get('company_id')?.value === company.key
+                "
               >
                 {{ company.value }}
               </li>
             </ul>
           </div>
-          @if (signupForm.get('company_id')?.invalid && signupForm.get('company_id')?.touched) {
+          @if (
+            signupForm.get("company_id")?.invalid &&
+            signupForm.get("company_id")?.touched
+          ) {
             <small class="errorMsg">Company is required</small>
           }
         </div>
@@ -77,10 +85,10 @@
             formControlName="email"
             placeholder="Enter your email"
           />
-          @if (isInvalid(signupForm, 'email').status) {
-          <small class="errorMsg">
-            {{ isInvalid(signupForm, "email").msg }}
-          </small>
+          @if (isInvalid(signupForm, "email").status) {
+            <small class="errorMsg">
+              {{ isInvalid(signupForm, "email").msg }}
+            </small>
           }
         </div>
       </div>
@@ -96,10 +104,10 @@
             placeholder="Enter your number"
           />
 
-          @if (isInvalid(signupForm, 'contact_number').status) {
-          <small class="errorMsg">
-            {{ isInvalid(signupForm, "contact_number").msg }}
-          </small>
+          @if (isInvalid(signupForm, "contact_number").status) {
+            <small class="errorMsg">
+              {{ isInvalid(signupForm, "contact_number").msg }}
+            </small>
           }
         </div>
       </div>
@@ -237,7 +245,7 @@
                 placeholder: '',
 
                 disableAutoFocus: true,
-                allowNumbersOnly: true
+                allowNumbersOnly: true,
               }"
             ></ng-otp-input>
           </div>

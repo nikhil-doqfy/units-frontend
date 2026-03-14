@@ -1,4 +1,7 @@
-<app-auth-title [title]="authTitle" description="Pls enter your info to sign in to doqfy.in" />
+<app-auth-title
+  [title]="authTitle"
+  description="Pls enter your info to sign in to doqfy.in"
+/>
 
 <app-auth-form>
   <form *ngIf="loginMode === 'password'" class="mb-4" [formGroup]="loginForm">
@@ -8,12 +11,17 @@
       <label for="email" class="form-label">Email Address</label>
       <div class="iconInput">
         <i><app-email-icon /></i>
-        <input class="form-control" type="email" formControlName="email" placeholder="Enter your email"
-          autocomplete="email" />
+        <input
+          class="form-control"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+          autocomplete="email"
+        />
         @if (isInvalid(loginForm, "email").status) {
-        <small class="errorMsg">
-          {{ isInvalid(loginForm, "email").msg }}
-        </small>
+          <small class="errorMsg">
+            {{ isInvalid(loginForm, "email").msg }}
+          </small>
         }
       </div>
     </div>
@@ -21,10 +29,17 @@
       <label for="password" class="form-label">Password</label>
       <div class="iconInput password">
         <i><app-password-icon /></i>
-        <input class="form-control" [type]="showPassword ? 'text' : 'password'" formControlName="password"
-          placeholder="Enter your password" autocomplete="username" />
+        <input
+          class="form-control"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="username"
+        />
         <i class="right" (click)="togglePasswordVisibility()">
-          <app-password-show-icon *ngIf="!showPassword"></app-password-show-icon>
+          <app-password-show-icon
+            *ngIf="!showPassword"
+          ></app-password-show-icon>
           <app-password-hide-icon *ngIf="showPassword"></app-password-hide-icon>
         </i>
       </div>
@@ -38,44 +53,79 @@
     <div class="loginRoleSelection mb-4">
       <div class="loginRoleOptions">
         <label>
-          <input type="radio" formControlName="role" value="owner" (change)="onRoleChange()" />
+          <input
+            type="radio"
+            formControlName="role"
+            value="owner"
+            (change)="onRoleChange()"
+          />
           <span>Owner</span>
         </label>
         <label>
-          <input type="radio" formControlName="role" value="property-manager" (change)="onRoleChange()" />
+          <input
+            type="radio"
+            formControlName="role"
+            value="property-manager"
+            (change)="onRoleChange()"
+          />
           <span>Property Manager</span>
         </label>
         <label>
-          <input type="radio" formControlName="role" value="tenant" (change)="onRoleChange()" />
+          <input
+            type="radio"
+            formControlName="role"
+            value="tenant"
+            (change)="onRoleChange()"
+          />
           <span>Tenant</span>
         </label>
       </div>
     </div>
 
     <div class="frmBtns">
-      <button type="submit" class="btn btnCommon btnMinWidth" (click)="signIn()">
+      <button
+        type="submit"
+        class="btn btnCommon btnMinWidth"
+        (click)="goToDashboard()"
+      >
+        <!-- (click)="signIn()" -->
         Sign In
       </button>
     </div>
   </form>
   <!--signin with otp-->
 
-  <form *ngIf="loginMode === 'otp'" class="mb-4" [formGroup]="otpForm" (ngSubmit)="signInWithOtp()">
+  <form
+    *ngIf="loginMode === 'otp'"
+    class="mb-4"
+    [formGroup]="otpForm"
+    (ngSubmit)="signInWithOtp()"
+  >
     <div class="mb-4">
       <label for="email" class="form-label">
         Email Address
-        <button class="link" type="button" *ngIf="otpSent" (click)="changeEmail()">
+        <button
+          class="link"
+          type="button"
+          *ngIf="otpSent"
+          (click)="changeEmail()"
+        >
           Change
         </button>
       </label>
       <div class="iconInput" [class.emailOtpInput]="!otpSent">
         <i><app-email-icon /></i>
-        <input class="form-control" type="email" placeholder="Enter your email" formControlName="email"
-          [readonly]="emailLocked" />
+        <input
+          class="form-control"
+          type="email"
+          placeholder="Enter your email"
+          formControlName="email"
+          [readonly]="emailLocked"
+        />
         @if (isInvalid(loginForm, "email").status) {
-        <small class="errorMsg">
-          {{ isInvalid(loginForm, "email").msg }}
-        </small>
+          <small class="errorMsg">
+            {{ isInvalid(loginForm, "email").msg }}
+          </small>
         }
         <button type="button" *ngIf="!otpSent" (click)="sendOtp()">
           Send OTP
@@ -85,39 +135,69 @@
 
     <div class="mb-2">
       <label for="otp" class="form-label">Enter OTP</label>
-      <ng-otp-input class="formOtpInput" (onInputChange)="onOtpChange($event)" [config]="{
+      <ng-otp-input
+        class="formOtpInput"
+        (onInputChange)="onOtpChange($event)"
+        [config]="{
           length: 6,
           placeholder: '',
 
           disableAutoFocus: true,
           allowNumbersOnly: true,
-        }"></ng-otp-input>
+        }"
+      ></ng-otp-input>
     </div>
 
     <div class="d-flex align-items-center justify-content-between mb-4">
-      <app-field-link title="Sign In using Password" (click)="switchToPassword()" />
+      <app-field-link
+        title="Sign In using Password"
+        (click)="switchToPassword()"
+      />
       <app-timer-text *ngIf="otpSent && otpTimer > 0" [time]="timerDisplay" />
-      <app-field-link *ngIf="otpSent && otpTimer === 0" title="Resend Link" (click)="onResendOtp()" />
+      <app-field-link
+        *ngIf="otpSent && otpTimer === 0"
+        title="Resend Link"
+        (click)="onResendOtp()"
+      />
     </div>
 
     <div class="loginRoleSelection mb-4">
       <div class="loginRoleOptions">
         <label>
-          <input type="radio" formControlName="role" value="owner" (change)="onRoleChange()" />
+          <input
+            type="radio"
+            formControlName="role"
+            value="owner"
+            (change)="onRoleChange()"
+          />
           <span>Owner</span>
         </label>
         <label>
-          <input type="radio" formControlName="role" value="property-manager" (change)="onRoleChange()" />
+          <input
+            type="radio"
+            formControlName="role"
+            value="property-manager"
+            (change)="onRoleChange()"
+          />
           <span>Property Manager</span>
         </label>
         <label>
-          <input type="radio" formControlName="role" value="tenant" (change)="onRoleChange()" />
+          <input
+            type="radio"
+            formControlName="role"
+            value="tenant"
+            (change)="onRoleChange()"
+          />
           <span>Tenant</span>
         </label>
       </div>
     </div>
     <div class="frmBtns">
-      <button type="submit" [class.disabled]="!otpSent" class="btn btnCommon btnMinWidth">
+      <button
+        type="submit"
+        [class.disabled]="!otpSent"
+        class="btn btnCommon btnMinWidth"
+      >
         {{ isOTPVerified ? "Sign In" : "Verify" }}
       </button>
     </div>

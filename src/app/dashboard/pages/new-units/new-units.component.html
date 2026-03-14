@@ -1,37 +1,28 @@
-<app-step-form-layout
-  [leftCardTitle]="'UNIT_DETAILS' | translate"
-  finishButtonText="{{ 'ADD_UNIT' | translate }}"
-  [engine]="engine"
-  [stepSchema]="steps"
-  (finish)="submitUnit()"
->
+<app-step-form-layout [leftCardTitle]="'Unit Details'" finishButtonText="{{ 'PAGE_TITLE.ADD_UNIT' | translate }}"
+  [engine]="engine" [stepSchema]="steps" (finish)="submitUnit()">
   <!-- Step 1: Basic Details -->
   <ng-container>
-
     <!-- Owner Details Card -->
-    <app-step-pane
-      [title]="'Basic Details' | translate"
-      [pageTitle]="'Owner Details'"
-      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
-    >
-      <div style="text-align:right; margin-bottom:8px;">
-        <a href="javascript:void(0)" (click)="fillDummyData()"
-          style="font-size:12px; color:#aaa; text-decoration:underline; cursor:pointer;">Fill dummy data</a>
+    <app-step-pane [title]="'Basic Details' | translate" [pageTitle]="'Owner Details'"
+      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate">
+      <div style="text-align: right; margin-bottom: 8px">
+        <a href="javascript:void(0)" (click)="fillDummyData()" style="
+            font-size: 12px;
+            color: #aaa;
+            text-decoration: underline;
+            cursor: pointer;
+          ">Fill dummy data</a>
       </div>
       <form [formGroup]="basicDetailsForm">
         <div formArrayName="unitOwners">
           <div *ngFor="let ownerForm of ownerForms.controls; let i = index" class="ownerCardWrapper mb-2">
-            <span class="ownerCount">{{ i + 1 | number: '2.0-0' }}</span>
+            <span class="ownerCount">{{ i + 1 | number: "2.0-0" }}</span>
             <div class="row g-3" [formGroupName]="i">
               <!-- Owner Code dropdown — auto-fills all fields -->
               <div class="col-md-3">
                 <label class="form-label">{{ "Owner Code" | translate }}</label>
-                <app-custom-select
-                  [options]="ownerList"
-                  key="key"
-                  value="value"
-                  (optionSelected)="onOwnerCodeSelect($event, i)"
-                ></app-custom-select>
+                <app-custom-select [options]="ownerList" key="key" value="value"
+                  (optionSelected)="onOwnerCodeSelect($event, i)"></app-custom-select>
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "Owner Name" | translate }}</label>
@@ -44,57 +35,58 @@
                   formControlName="ownerEmail" />
               </div>
               <div class="col-md-3">
-                <label class="form-label">{{ "Contact Number" | translate }}</label>
+                <label class="form-label">{{
+                  "Contact Number" | translate
+                  }}</label>
                 <input type="text" class="form-control" [placeholder]="'Enter number here' | translate"
                   formControlName="ownerContact" />
               </div>
               <div class="col-md-3">
-                <label class="form-label">{{ "Emirates ID" | translate }}</label>
+                <label class="form-label">{{
+                  "Emirates ID" | translate
+                  }}</label>
                 <input type="text" class="form-control" [placeholder]="'Enter ID here' | translate"
                   formControlName="ownerEmiratesId" />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "Owner Number" | translate }}</label>
-                <input type="text" class="form-control" placeholder="Enter here"
-                  formControlName="ownerNumber" />
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerNumber" />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "Trade License No" | translate }}</label>
-                <input type="text" class="form-control" placeholder="Enter here"
-                  formControlName="tradeLicenseNumber" />
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="tradeLicenseNumber" />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "License Number" | translate }}</label>
-                <input type="text" class="form-control" placeholder="Enter here"
-                  formControlName="licenseNumber" />
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="licenseNumber" />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "License Expiry Date" | translate }}</label>
-                <input type="date" class="form-control"
-                  formControlName="licenseExpiryDate" />
+                <input type="date" class="form-control" formControlName="licenseExpiryDate" />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "License Issuer" | translate }}</label>
-                <input type="text" class="form-control" placeholder="Enter here"
-                  formControlName="licenseIssuer" />
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="licenseIssuer" />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "Fax Number" | translate }}</label>
-                <input type="text" class="form-control" placeholder="Enter here"
-                  formControlName="faxNumber" />
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="faxNumber" />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{ "P.O. Box Number" | translate }}</label>
-                <input type="text" class="form-control" placeholder="Enter here"
-                  formControlName="poBoxNumber" />
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="poBoxNumber" />
               </div>
             </div>
           </div>
         </div>
       </form>
       <div class="ownerActionBtns">
-        <button type="button" class="circleBtn minusBtn" (click)="removeOwner(ownerForms.length - 1)">−</button>
-        <button type="button" class="circleBtn plusBtn" (click)="addOwner()">+</button>
+        <button type="button" class="circleBtn minusBtn" (click)="removeOwner(ownerForms.length - 1)">
+          −
+        </button>
+        <button type="button" class="circleBtn plusBtn" (click)="addOwner()">
+          +
+        </button>
       </div>
     </app-step-pane>
 
@@ -103,40 +95,27 @@
       <app-step-pane [title]="'Basic Details' | translate" [secondCard]="true">
         <form class="row g-3" [formGroup]="basicDetailsForm">
           <div class="col-md-3">
-            <app-form-select-field
-              [label]="'Property' | translate"
-              [options]="propertyList"
-              [bindToControl]="true"
-              [form]="basicDetailsForm"
-              controlName="property"
-              (optionSelected)="onPropertySelect($event)"
-            ></app-form-select-field>
+            <app-form-select-field [label]="'Property' | translate" [options]="propertyList" [bindToControl]="true"
+              [form]="basicDetailsForm" controlName="property"
+              (optionSelected)="onPropertySelect($event)"></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <app-form-select-field
-              [label]="'Property Block / Tower' | translate"
-              [options]="blockList"
-              [bindToControl]="true"
-              [form]="basicDetailsForm"
-              controlName="blockId"
-            ></app-form-select-field>
+            <app-form-select-field [label]="'Property Block / Tower' | translate" [options]="blockList"
+              [bindToControl]="true" [form]="basicDetailsForm" controlName="blockId"></app-form-select-field>
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Unit Name" | translate }}</label>
             <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
               formControlName="unitName" />
             @if (isInvalid(basicDetailsForm, "unitName").status) {
-              <small class="errorMsg">{{ isInvalid(basicDetailsForm, "unitName").msg }}</small>
+            <small class="errorMsg">{{
+              isInvalid(basicDetailsForm, "unitName").msg
+              }}</small>
             }
           </div>
           <div class="col-md-3">
-            <app-form-select-field
-              [label]="'No of Bedrooms' | translate"
-              [options]="bedroomList"
-              [bindToControl]="true"
-              [form]="basicDetailsForm"
-              controlName="noOfBedrooms"
-            ></app-form-select-field>
+            <app-form-select-field [label]="'No of Bedrooms' | translate" [options]="bedroomList" [bindToControl]="true"
+              [form]="basicDetailsForm" controlName="noOfBedrooms"></app-form-select-field>
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Unit Size (Sq ft)" | translate }}</label>
@@ -145,22 +124,15 @@
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Area of Unit" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="area" />
+            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="area" />
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "DM No (Affection Plan)" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="dmNo" />
+            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="dmNo" />
           </div>
           <div class="col-md-3">
-            <app-form-select-field
-              [label]="'Floor No' | translate"
-              [options]="floorList"
-              [bindToControl]="true"
-              [form]="basicDetailsForm"
-              controlName="floorNo"
-            ></app-form-select-field>
+            <app-form-select-field [label]="'Floor No' | translate" [options]="floorList" [bindToControl]="true"
+              [form]="basicDetailsForm" controlName="floorNo"></app-form-select-field>
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Parking No" | translate }}</label>
@@ -168,36 +140,20 @@
               formControlName="parkingNo" />
           </div>
           <div class="col-md-3">
-            <app-form-select-field
-              [label]="'No of Balcony' | translate"
-              [options]="balconyList"
-              [bindToControl]="true"
-              [form]="basicDetailsForm"
-              controlName="noOfBalcony"
-            ></app-form-select-field>
+            <app-form-select-field [label]="'No of Balcony' | translate" [options]="balconyList" [bindToControl]="true"
+              [form]="basicDetailsForm" controlName="noOfBalcony"></app-form-select-field>
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Land No" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="landNo" />
+            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="landNo" />
           </div>
           <div class="col-md-3">
-            <app-form-select-field
-              [label]="'Unit Usage' | translate"
-              [options]="unitUsageList"
-              [bindToControl]="true"
-              [form]="basicDetailsForm"
-              controlName="unitUsage"
-            ></app-form-select-field>
+            <app-form-select-field [label]="'Unit Usage' | translate" [options]="unitUsageList" [bindToControl]="true"
+              [form]="basicDetailsForm" controlName="unitUsage"></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <app-form-select-field
-              [label]="'Unit Type' | translate"
-              [options]="unitTypeList"
-              [bindToControl]="true"
-              [form]="basicDetailsForm"
-              controlName="unitType"
-            ></app-form-select-field>
+            <app-form-select-field [label]="'Unit Type' | translate" [options]="unitTypeList" [bindToControl]="true"
+              [form]="basicDetailsForm" controlName="unitType"></app-form-select-field>
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Sub Type / BHK" | translate }}</label>
@@ -211,69 +167,90 @@
           </div>
           <div class="col-md-3">
             <label class="form-label">{{ "Dewa No" | translate }}</label>
-            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate"
-              formControlName="dewaNo" />
+            <input type="text" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="dewaNo" />
           </div>
         </form>
       </app-step-pane>
     </ng-container>
-
   </ng-container>
 
   <!-- Step 2: Commercials -->
   <ng-container>
-    <app-step-pane
-      [title]="'COMMERCIALS' | translate"
-      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
-    >
+    <app-step-pane [title]="'COMMERCIALS' | translate" [pageTitle]="'Commercials In AED'"
+      [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate">
       <form class="row g-3" [formGroup]="commercialsForm">
         <div class="col-md-3">
           <label class="form-label">{{ "RENT" | translate }}</label>
           <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="rent" />
           @if (isInvalid(commercialsForm, "rent").status) {
-            <small class="errorMsg">{{ isInvalid(commercialsForm, "rent").msg }}</small>
+          <small class="errorMsg">{{
+            isInvalid(commercialsForm, "rent").msg
+            }}</small>
           }
         </div>
         <div class="col-md-3">
           <label class="form-label">{{ "SECURITY_DEPOSIT" | translate }}</label>
-          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="securityDeposit" />
+          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate"
+            formControlName="securityDeposit" />
           @if (isInvalid(commercialsForm, "securityDeposit").status) {
-            <small class="errorMsg">{{ isInvalid(commercialsForm, "securityDeposit").msg }}</small>
+          <small class="errorMsg">{{
+            isInvalid(commercialsForm, "securityDeposit").msg
+            }}</small>
           }
         </div>
         <div class="col-md-3">
           <label class="form-label">{{ "BOOKING_AMOUNT" | translate }}</label>
-          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="bookingAmount" />
+          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate"
+            formControlName="bookingAmount" />
           @if (isInvalid(commercialsForm, "bookingAmount").status) {
-            <small class="errorMsg">{{ isInvalid(commercialsForm, "bookingAmount").msg }}</small>
+          <small class="errorMsg">{{
+            isInvalid(commercialsForm, "bookingAmount").msg
+            }}</small>
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{ "MAINTENCE_CHARGES" | translate }}</label>
-          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="maintenanceCharges" />
+          <label class="form-label">{{
+            "MAINTENCE_CHARGES" | translate
+            }}</label>
+          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate"
+            formControlName="maintenanceCharges" />
           @if (isInvalid(commercialsForm, "maintenanceCharges").status) {
-            <small class="errorMsg">{{ isInvalid(commercialsForm, "maintenanceCharges").msg }}</small>
+          <small class="errorMsg">{{
+            isInvalid(commercialsForm, "maintenanceCharges").msg
+            }}</small>
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{ "CYCLE_(IN MONTHS)" | translate }}</label>
+          <label class="form-label">{{
+            "CYCLE_(IN MONTHS)" | translate
+            }}</label>
           <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="cycle" />
           @if (isInvalid(commercialsForm, "cycle").status) {
-            <small class="errorMsg">{{ isInvalid(commercialsForm, "cycle").msg }}</small>
+          <small class="errorMsg">{{
+            isInvalid(commercialsForm, "cycle").msg
+            }}</small>
           }
         </div>
         <div class="col-md-3">
-          <label class="form-label">{{ "NOTICE_PERIOD(IN_MONTHS)" | translate }}</label>
-          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="noticePeriod" />
+          <label class="form-label">{{
+            "NOTICE_PERIOD(IN_MONTHS)" | translate
+            }}</label>
+          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate"
+            formControlName="noticePeriod" />
           @if (isInvalid(commercialsForm, "noticePeriod").status) {
-            <small class="errorMsg">{{ isInvalid(commercialsForm, "noticePeriod").msg }}</small>
+          <small class="errorMsg">{{
+            isInvalid(commercialsForm, "noticePeriod").msg
+            }}</small>
           }
         </div>
         <div class="col-md-3">
           <label class="form-label">{{ "COMMISION_IN %" | translate }}</label>
-          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate" formControlName="commissionPercent" />
+          <input type="number" class="form-control" [placeholder]="'ENTER_HERE' | translate"
+            formControlName="commissionPercent" />
           @if (isInvalid(commercialsForm, "commissionPercent").status) {
-            <small class="errorMsg">{{ isInvalid(commercialsForm, "commissionPercent").msg }}</small>
+          <small class="errorMsg">{{
+            isInvalid(commercialsForm, "commissionPercent").msg
+            }}</small>
           }
         </div>
       </form>
@@ -282,38 +259,40 @@
 
   <!-- Step 3: Unit Images -->
   <ng-container>
-    <app-step-pane
-      [title]="'PROPERTY_IMAGES' | translate"
-      [description]="'UPLOAD_PROPERTY_IMAGES' | translate"
-    >
+    <app-step-pane [title]="'PROPERTY_IMAGES' | translate" [pageTitle]="'Property Details'"
+      [description]="'UPLOAD_PROPERTY_IMAGES' | translate">
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="unitImagesTab" role="tablist">
           @for (type of imageUploadTypes; track $index) {
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" [class.active]="type.typeKey === activeImageTab"
-                [id]="type.typeKey + '-tab'" data-bs-toggle="tab"
-                [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'" type="button" role="tab">
-                {{ type.typeLabel }}
-              </button>
-            </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" [class.active]="type.typeKey === activeImageTab" [id]="type.typeKey + '-tab'"
+              data-bs-toggle="tab" [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'" type="button" role="tab">
+              {{ type.typeLabel }}
+            </button>
+          </li>
           }
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="unitImagesTabContent">
           @for (type of imageUploadTypes; track $index) {
-            <div
-              [ngClass]="{ 'tab-pane': true, fade: true, show: type.typeKey === activeImageTab, active: type.typeKey === activeImageTab }"
-              [id]="type.typeKey + '-tab-pane'" role="tabpanel">
-              <app-upload-document [isMultipleFiles]="true" [fileTypes]="['jpg', 'jpeg', 'png']"
-                [maxSize]="20" (uploadProgress)="onUpload(type.typeKey, $event)"></app-upload-document>
-              <div class="img-preview-grid" *ngIf="getItems(type.typeKey).length">
-                <div class="img-preview-item" *ngFor="let image of getItems(type.typeKey)">
-                  <img [src]="image.base64" [alt]="image.file_name" class="img-thumb" />
-                  <button type="button" class="img-remove-btn" (click)="remove(type.typeKey, image)">×</button>
-                </div>
+          <div [ngClass]="{
+                'tab-pane': true,
+                fade: true,
+                show: type.typeKey === activeImageTab,
+                active: type.typeKey === activeImageTab,
+              }" [id]="type.typeKey + '-tab-pane'" role="tabpanel">
+            <app-upload-document [isMultipleFiles]="true" [fileTypes]="['jpg', 'jpeg', 'png']" [maxSize]="20"
+              (uploadProgress)="onUpload(type.typeKey, $event)"></app-upload-document>
+            <div class="img-preview-grid" *ngIf="getItems(type.typeKey).length">
+              <div class="img-preview-item" *ngFor="let image of getItems(type.typeKey)">
+                <img [src]="image.base64" [alt]="image.file_name" class="img-thumb" />
+                <button type="button" class="img-remove-btn" (click)="remove(type.typeKey, image)">
+                  ×
+                </button>
               </div>
             </div>
+          </div>
           }
         </div>
       </div>
@@ -322,40 +301,39 @@
 
   <!-- Step 4: Documentation -->
   <ng-container>
-    <app-step-pane
-      [title]="'DOCUMENTATION' | translate"
-      [description]="'UPLOAD_DOCUMENTS_OF_THE_PROPERTY' | translate"
-    >
+    <app-step-pane [title]="'DOCUMENTATION' | translate" [pageTitle]="'Documentation'"
+      [description]="'UPLOAD_DOCUMENTS_OF_THE_PROPERTY' | translate">
       <div class="commonTabs">
         <ul class="nav nav-tabs" id="unitDocsTab" role="tablist">
           @for (type of documetUploadTypes; track $index) {
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" [class.active]="type.typeKey === activeDocTab"
-                [id]="type.typeKey + '-tab'" data-bs-toggle="tab"
-                [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'" type="button" role="tab">
-                {{ type.typeLabel }}
-              </button>
-            </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" [class.active]="type.typeKey === activeDocTab" [id]="type.typeKey + '-tab'"
+              data-bs-toggle="tab" [attr.data-bs-target]="'#' + type.typeKey + '-tab-pane'" type="button" role="tab">
+              {{ type.typeLabel }}
+            </button>
+          </li>
           }
         </ul>
       </div>
       <div class="commonTabsContent">
         <div class="tab-content" id="unitDocsTabContent">
           @for (type of documetUploadTypes; track $index) {
-            <div
-              [ngClass]="{ 'tab-pane': true, fade: true, show: type.typeKey === activeDocTab, active: type.typeKey === activeDocTab }"
-              [id]="type.typeKey + '-tab-pane'" role="tabpanel">
-              <app-upload-document [isMultipleFiles]="true" [fileTypes]="['jpg', 'jpeg', 'png', 'pdf']"
-                [maxSize]="20" (uploadProgress)="onUpload(type.typeKey, $event)" />
-              <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
-                <app-file-upload-item *ngFor="let doc of getItems(type.typeKey)"
-                  [item]="doc" (remove)="remove(type.typeKey, doc)" />
-              </div>
+          <div [ngClass]="{
+                'tab-pane': true,
+                fade: true,
+                show: type.typeKey === activeDocTab,
+                active: type.typeKey === activeDocTab,
+              }" [id]="type.typeKey + '-tab-pane'" role="tabpanel">
+            <app-upload-document [isMultipleFiles]="true" [fileTypes]="['jpg', 'jpeg', 'png', 'pdf']" [maxSize]="20"
+              (uploadProgress)="onUpload(type.typeKey, $event)" />
+            <div class="uploads-list" *ngIf="getItems(type.typeKey).length">
+              <app-file-upload-item *ngFor="let doc of getItems(type.typeKey)" [item]="doc"
+                (remove)="remove(type.typeKey, doc)" />
             </div>
+          </div>
           }
         </div>
       </div>
     </app-step-pane>
   </ng-container>
-
 </app-step-form-layout>

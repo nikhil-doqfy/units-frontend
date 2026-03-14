@@ -48,9 +48,7 @@ import { Router } from '@angular/router';
   imports: [
     TablePaginationComponent,
     TableSelectComponent,
-    TableActionDropdownComponent,
     BadgeComponent,
-    PlatfromBadgeComponent,
     TableImgItemComponent,
     TableTitleComponent,
     TableSearchComponent,

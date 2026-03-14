@@ -68,8 +68,6 @@ import { InviteOwnerBtnComponent } from '../../component/invite-owner-btn/invite
     TableActionDropdownComponent,
     TablePaginationComponent,
     SortingIconComponent,
-    InviteOwnerFormComponent,
-    SendIconComponent,
     TableViewCardComponent,
     TranslateModule,
     MaskPhonePipe,

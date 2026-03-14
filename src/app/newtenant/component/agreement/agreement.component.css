@@ -1,1 +1,19 @@
+.top-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
 
+.waiting-alert {
+  background-color: #fff4e5;
+  color: #ff6500;
+}
+
+.success-alert {
+  background-color: #e6f7ec;
+  color: #1f8f4c;
+}

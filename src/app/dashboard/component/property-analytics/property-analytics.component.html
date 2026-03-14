@@ -1,7 +1,6 @@
 <ng-container *ngIf="!showDetailView">
   <app-white-card>
     <div class="revenue-summary-card">
-      <!-- Left info -->
       <div class="revenue-left1">
         <div class="amount-row">
           <span class="amount">AED 1,20,573</span>
@@ -15,7 +14,6 @@
         <div class="label">{{ "TOTAL_REVENUE_RECEIVED" | translate }}</div>
       </div>
 
-      <!-- Right filters -->
       <div class="revenue-filters">
         <app-custom-select
           [options]="[
@@ -79,20 +77,10 @@
   </app-white-card>
   <div class="mt-3">
     <app-white-card [title]="'PROPERTY_COMPRISON' | translate">
-      <!-- <div class="photos-row">
-      <div class="photo-thumb" *ngFor="let img of photos">
-        <img [src]="img" alt="photo" />
-      </div>
-    </div> -->
-
-      <!-- <div class="comparison-wrapper">
-      <h2 class="title">Property Comparison</h2> -->
-
       <div class="cards-container">
         <div class="property-card" *ngFor="let p of properties">
           <div class="image-wrapper">
             <img [src]="p.image" alt="property" />
-            <!-- <span class="close-btn">✕</span> -->
           </div>
 
           <select class="property-select">
@@ -145,15 +133,12 @@
           </div>
         </div>
         <div class="property-card">
-          <div class="image-wrapper empty-card">
-            <!-- <span class="close-btn">✕</span> -->
-          </div>
+          <div class="image-wrapper empty-card"></div>
           <select class="property-select">
             <option>Select Property</option>
           </select>
         </div>
       </div>
-      <!-- </div> -->
     </app-white-card>
   </div>
 </ng-container>
@@ -168,7 +153,7 @@
         { label: 'property', value: 'AI Sahab, Dubai' },
       ]"
       [items]="[
-        { label: getLabel('PLOt_AREA'), value: '13,000.00' },
+        { label: getLabel('PLOT_AREA'), value: '13,000.00' },
         { label: getLabel('BUID_UP_AREA'), value: '8,000.00' },
         { label: getLabel('TOTAL_UNITS'), value: '445' },
         { label: getLabel('OCCUPIED_UNITS'), value: '200' },
@@ -215,7 +200,6 @@
             [title]="'UNITS_DETAILS' | translate"
             (onRefresh)="onRefresh()"
           ></app-table-title>
-          <!-- subtitle="(5)" -->
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">

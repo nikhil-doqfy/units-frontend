@@ -142,7 +142,6 @@ export class PropertyAnalyticsComponent implements OnInit {
     const englishText = this.translate.instant('TOTAL_REVENUE_RECEIVED');
     console.log('English:', englishText);
 
-    // Arabic
     this.translate.use('ar');
     const arabicText = this.translate.instant('TOTAL_REVENUE_RECEIVED');
     console.log('Arabic:', arabicText);

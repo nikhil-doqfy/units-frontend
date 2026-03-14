@@ -6,13 +6,8 @@
 .platform-logo {
   width: 60px;
   height: 22px;
+  cursor: pointer;
   object-fit: contain;
-}
-
-.platform-text {
-  font-size: 14px;
-  color: #2d2d2d;
-  white-space: nowrap;
 }
 
 .platform-wrapper {

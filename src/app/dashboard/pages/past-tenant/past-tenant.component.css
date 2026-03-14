@@ -27,7 +27,6 @@
   line-height: 1.2;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .summary-card {
     flex-direction: column;

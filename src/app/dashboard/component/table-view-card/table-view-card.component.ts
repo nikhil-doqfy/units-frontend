@@ -16,7 +16,6 @@ import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-
 import { TableActionButtonComponent } from '../table-action-btn/table-action-btn.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
-import { ShareIconComponent } from '../icons/share-icon/share-icon.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
@@ -31,7 +30,6 @@ import { WhatsappShareIconComponent } from '../../../icon/whatsapp-share-icon/wh
     EditIconComponent,
     TranslateModule,
     DownloadIconComponent,
-    ShareIconComponent,
     FormsModule,
     ReactiveFormsModule,
     CircularCrossBtnIconComponent,
@@ -64,9 +62,14 @@ export class TableViewCardComponent {
   @ContentChild('[rental]', { static: false }) rentalContent!: any;
   @ContentChild('extraSection', { read: ElementRef })
   extraSection!: ElementRef;
-
+  openShare = false;
   hasExtraSection = false;
-
+  showMenu = false;
+  shareOptions = {
+    whatsapp: true,
+    mail: true,
+    sms: false,
+  };
   ngAfterContentInit() {
     this.hasProjectedContent = this.projectedButtons.length > 0;
     return !!this.rentalContent;
@@ -85,7 +88,6 @@ export class TableViewCardComponent {
   onBackClick() {
     this.back.emit();
   }
-  showMenu = false;
 
   toggleMenu() {
     this.showMenu = !this.showMenu;
@@ -102,13 +104,6 @@ export class TableViewCardComponent {
   }
   handleRejectClick() {}
   handleApproveClick() {}
-  openShare = false;
-
-  shareOptions = {
-    whatsapp: true,
-    mail: true,
-    sms: false,
-  };
 
   toggleShare() {
     this.openShare = !this.openShare;

@@ -24,6 +24,9 @@ import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { SubStepSchema } from '../modules/new-tenant';
 import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.component';
 import { ErrorOutlineIconComponent } from '../../../icons/error-outline-icon/error-outline-icon.component';
+import { TableSelectComponent } from '../../../dashboard/component/table-select/table-select.component';
+import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
+import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-onboarding',
@@ -42,6 +45,8 @@ import { ErrorOutlineIconComponent } from '../../../icons/error-outline-icon/err
     AditionaldocumentComponent,
     WarningIconComponent,
     ErrorOutlineIconComponent,
+    TableSelectComponent,
+    TablePaginationComponent,
   ],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',
@@ -53,6 +58,12 @@ export class OnboardingComponent {
   closeResult: WritableSignal<string> = signal('');
   // currentSubStep: number = 0;
   showDropdown = false;
+  componentName: string = 'onboardingComponent';
+  totalRecords: number = 0;
+  rowsPerPageOptions: number[] = [10, 25, 50, 100];
+  rowsPerPage: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 1;
   ngOnInit() {
     this.formService.resetFlow();
   }
@@ -101,6 +112,16 @@ export class OnboardingComponent {
         this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
       },
     );
+  }
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+  }
+
+  onPageChange(event: PageChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
   }
   /*------------------------------------------msg -----------------------------*/
   btnTitle$ = this.formService.getBtnTitle();

@@ -73,7 +73,8 @@ export class BulkUploadComponent {
         .map((row) => {
           const obj: any = {};
           this.columns.forEach((col) => {
-            obj[col.key] = colMap[col.key] !== undefined ? row[colMap[col.key]] ?? '' : '';
+            obj[col.key] =
+              colMap[col.key] !== undefined ? (row[colMap[col.key]] ?? '') : '';
           });
           return obj;
         });

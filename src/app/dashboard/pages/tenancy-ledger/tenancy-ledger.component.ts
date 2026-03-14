@@ -72,7 +72,6 @@ interface PropertyDetails {
     DocumentTypeItemComponent,
     WhiteCardComponent,
     PropertyViewCardComponent,
-    TableActionButtonComponent,
     TermsconditionIconComponent,
     ArrowDownIconComponent,
     ReceiptIconComponent,
@@ -84,6 +83,10 @@ interface PropertyDetails {
   styleUrl: './tenancy-ledger.component.css',
 })
 export class TenancyLedgerComponent {
+  @Output() detailViewChanges = new EventEmitter<boolean>();
+  showReceiptDropdown = false;
+  showMonthDropdown = false;
+  selectedReceiptType = '';
   showDetailView: boolean = false;
   totalRecords: number = 0;
   componentName: string = 'all-properties-component';
@@ -99,6 +102,16 @@ export class TenancyLedgerComponent {
     VISA_FAMILY: [],
     BANK_STATEMENT: [],
   };
+  selectedq: any = {
+    label: 'Amount Credited',
+    status: 'green',
+  };
+  documentActions = [
+    { label: 'Share', icon: ShareIconComponent, action: 'share' },
+    { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
+  ];
+  constructor(private router: Router) {}
+
   onRefresh() {}
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
@@ -106,25 +119,15 @@ export class TenancyLedgerComponent {
     this.currentPage = 1;
   }
 
-  documentActions = [
-    { label: 'Share', icon: ShareIconComponent, action: 'share' },
-    { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
-  ];
   handleDropdownAction(action: string) {
     console.log(`${action} action clicked`);
   }
-  selectedq: any = {
-    label: 'Amount Credited',
-    status: 'green',
-  };
 
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
   }
-  @Output() detailViewChanges = new EventEmitter<boolean>();
 
-  constructor(private router: Router) {}
   propertyDetails: Record<string, any> = {};
   property: PropertyDetails = {
     property_unit_id: 1,
@@ -205,9 +208,7 @@ export class TenancyLedgerComponent {
     this.router.navigate(['/dashboard/properties']);
     this.detailViewChanges.emit(false);
   }
-  showReceiptDropdown = false;
-  showMonthDropdown = false;
-  selectedReceiptType = '';
+
   toggleReceipt() {
     this.showReceiptDropdown = !this.showReceiptDropdown;
     this.showMonthDropdown = false;
