@@ -26,6 +26,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-leads',
@@ -60,6 +62,8 @@ export class LeadsComponent {
     this.loadBreadcrumb();
   }
   private sharedService = inject(SharedService);
+  private router = inject(Router);
+  private alertService = inject(AlertService);
   breadcrumbData: BreadCrumb[] = [];
 
   showDetailView: boolean = false;
@@ -120,10 +124,12 @@ export class LeadsComponent {
     }
   }
   onUserSave(success: boolean, modal: NgbActiveModal) {
-    // component.submitUserForm();
-
     if (success) {
+      this.alertService.success('Lead saved successfully');
       modal.close();
+      this.router.navigate(['/dashboard/leads']);
+    } else {
+      this.alertService.error('Failed to save lead');
     }
   }
 }

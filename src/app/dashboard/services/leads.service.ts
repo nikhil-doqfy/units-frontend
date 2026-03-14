@@ -39,4 +39,20 @@ export class LeadsService {
   bulkImportLeads(fileBase64: string): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/lead/bulk-import`, { file: fileBase64 });
   }
+
+  getActivityLogs(leadId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/lead/activity-log?lead_id=${leadId}`);
+  }
+
+  createActivityLog(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/lead/activity-log`, data);
+  }
+
+  updateActivityLog(logId: number, data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/lead/activity-log`, { ...data, log_id: logId });
+  }
+
+  deleteActivityLog(logId: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_ADDRESS}/lead/activity-log?log_id=${logId}`);
+  }
 }

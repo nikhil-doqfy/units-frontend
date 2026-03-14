@@ -17,6 +17,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CommonModule } from '@angular/common';
 import { LeadsService } from '../../services/leads.service';
+import { AlertService } from '../../../shared/services/alert.service';
 import { CustomSelectComponent } from '../custom-select/custom-select.component';
 import { FilterPopupButtonComponent } from '../filter-popup-btn/filter-popup-btn.component';
 import { FilterIconComponent } from '../icons/filter-icon/filter-icon.component';
@@ -75,6 +76,7 @@ import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenen
 })
 export class AllLeadsComponent implements OnInit {
   private leadsService = inject(LeadsService);
+  private alertService = inject(AlertService);
   private search$ = new Subject<string>();
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
@@ -180,7 +182,7 @@ export class AllLeadsComponent implements OnInit {
     const map: Record<string, any> = {
       INTERESTED: { title: 'Interested', color: 'green' },
       NOT_INTERESTED: { title: 'Not Interested', color: 'red' },
-      LEASE_TENANCY: { title: 'Lease/Tenancy', color: 'black' },
+      LEASE_TENANCY: { title: 'Lease/Tenancy', color: 'blue' },
     };
     return map[status] || { title: status, color: 'grey' };
   }
@@ -200,9 +202,9 @@ export class AllLeadsComponent implements OnInit {
 
   openEditLeadModal(
     editLeadContent: TemplateRef<any>,
-    editMode: boolean = false,
+    lead: any = null,
   ) {
-    this.isEditMode = editMode;
+    this.selectedLead = lead;
     this.modalService
       .open(editLeadContent, {
         ariaLabelledBy: 'modal-title',
@@ -221,9 +223,9 @@ export class AllLeadsComponent implements OnInit {
 
   openActivityHistroyModal(
     activityHistroyContent: TemplateRef<any>,
-    editMode: boolean = false,
+    lead: any = null,
   ) {
-    this.isEditMode = editMode;
+    this.selectedLead = lead;
     this.modalService
       .open(activityHistroyContent, {
         ariaLabelledBy: 'modal-title',
@@ -268,10 +270,12 @@ export class AllLeadsComponent implements OnInit {
     }
   }
   onUserSave(success: boolean, modal: NgbActiveModal) {
-    // component.submitUserForm();
-
     if (success) {
+      this.alertService.success('Lead saved successfully');
       modal.close();
+      this.loadLeads();
+    } else {
+      this.alertService.error('Failed to save lead');
     }
   }
 }

@@ -1,28 +1,62 @@
 <div class="activityWrapper">
-  <div class="year">2025</div>
 
-  <div class="weekLabel">This week</div>
+  <!-- Empty State -->
+  <div class="emptyState" *ngIf="activityLogs.length === 0">
+    <i class="ri-history-line emptyIcon"></i>
+    <p>No activity recorded yet</p>
+  </div>
 
-  <div class="activityItem">
-    <div class="icon orange">H</div>
+  <!-- Timeline grouped by date -->
+  <div class="timelineOuter" *ngIf="activityLogs.length > 0">
 
-    <div class="content">
-      <div class="title"><strong>Hajji</strong> added notes</div>
+    <div class="logGroup" *ngFor="let group of groupedLogs">
 
-      <div class="noteCard">Note Name comes here</div>
+      <!-- Year header -->
+      <div class="yearHeader">{{ group.year }}</div>
+
+      <!-- Group label row -->
+      <div class="groupLabelRow">
+        <span class="groupBadge">{{ group.label }}</span>
+        <div class="groupLine"></div>
+      </div>
+
+      <!-- Timeline items -->
+      <div class="timeline">
+        <div class="activityItem" *ngFor="let log of group.logs; let last = last">
+
+          <div class="iconCol">
+            <div class="connector" *ngIf="!last"></div>
+          </div>
+
+          <div class="content">
+            <div class="logHeader">
+              <div class="avatarName">
+                <div class="avatar">{{ getInitials(log.created_by_name) }}</div>
+                <div class="logBody">
+                  <div class="logTitle">
+                    <span class="actorName">{{ log.created_by_name }}</span>
+                    {{ log.title }}
+                  </div>
+                  <div class="logDate">{{ log.created_at }}</div>
+                </div>
+              </div>
+              <button class="deleteBtn" type="button" (click)="deleteLog(log.id)" title="Delete">
+                <i class="ri-delete-bin-6-line"></i>
+              </button>
+            </div>
+
+            <div class="noteCard" *ngIf="log.description">{{ log.description }}</div>
+
+            <div class="scheduledDate" *ngIf="log.scheduled_date">
+              <i class="ri-calendar-line"></i>
+              Scheduled: {{ log.scheduled_date | date: 'dd MMM yyyy, HH:mm' }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="activityItem">
-    <div class="icon orange">H</div>
-    <div class="content simple"><strong>Hajji</strong> added attributes</div>
-  </div>
-
-  <div class="activityItem">
-    <div class="icon blue">P</div>
-
-    <div class="content simple">
-      <strong>Prnjitha</strong> account was created by <strong>Hajji</strong>
-    </div>
-  </div>
 </div>
