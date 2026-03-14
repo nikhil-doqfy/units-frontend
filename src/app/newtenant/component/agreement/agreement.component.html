@@ -1,5 +1,21 @@
-<div class="top-alert" *ngIf="showMsg$()">
-  <span class="icon"><app-warning-icon></app-warning-icon></span>
+<div
+  class="top-alert"
+  *ngIf="showMsg$()"
+  [ngClass]="{
+    'waiting-alert': msgText$() === 'Waiting for Signature',
+    'success-alert': msgText$() === 'Signed Successfully',
+  }"
+>
+  <span class="icon">
+    <app-warning-icon
+      *ngIf="msgText$() === 'Waiting for Signature'"
+    ></app-warning-icon>
+
+    <!-- Success icon -->
+    <app-signed-successfully-icon
+      *ngIf="msgText$() === 'Signed Successfully'"
+    ></app-signed-successfully-icon>
+  </span>
   <span class="text">{{ msgText$() }}</span>
 </div>
 

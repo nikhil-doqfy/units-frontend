@@ -52,7 +52,6 @@ import { DownloadIconComponent } from '../../../icons/download-icon/download-ico
     ReportIconComponent,
     ResendIconComponent,
     ArrowDownIconComponent,
-    UploadDocIconComponent,
     CustomSelectComponent,
     DownloadIconComponent,
   ],

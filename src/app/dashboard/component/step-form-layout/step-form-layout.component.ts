@@ -26,7 +26,10 @@ import { Subscription } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
 import { InviteOwnerBtnComponent } from '../invite-owner-btn/invite-owner-btn.component';
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
-import { BulkColumn, BulkUploadComponent } from '../../../from/bulk-upload/bulk-upload.component';
+import {
+  BulkColumn,
+  BulkUploadComponent,
+} from '../../../from/bulk-upload/bulk-upload.component';
 import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -61,6 +64,8 @@ export class StepFormLayoutComponent implements AfterContentInit {
   @Input() leftCardTitle: string = 'Property Details';
   @Input() finishButtonText: string = 'Finish';
 
+  private modalService = inject(NgbModal);
+  closeResult: WritableSignal<string> = signal('');
   @Input() engine!: StepEngine;
   @Input() stepSchema: StepSchema[] = [];
   @Input() bulkColumns: BulkColumn[] = [];
@@ -72,7 +77,7 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
   stepGroups: StepGroup[] = [];
   filteredSteps: StepPaneComponent[] = [];
-
+  totalBlocks = 10;
   currentStep: number = 0;
   private subs = new Subscription();
 
@@ -99,8 +104,6 @@ export class StepFormLayoutComponent implements AfterContentInit {
       this.subs.add(this.engine.loading.subscribe(() => {}));
     }
   }
-  private modalService = inject(NgbModal);
-  closeResult: WritableSignal<string> = signal('');
 
   openBulkUploadModal(addLeadContent: TemplateRef<any>) {
     this.modalService

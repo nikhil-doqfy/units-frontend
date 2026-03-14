@@ -18,25 +18,21 @@
   gap: 4px;
 }
 
-/* 0.2% */
 .badge-green {
   background: #e6f4ea;
   color: #2e7d32;
 }
 
-/* 12% light green */
 .badge-light-green {
   background: #eaf7ee;
   color: #3aa655;
 }
 
-/* orange */
 .badge-orange {
   background: #fff4e5;
   color: #f59e0b;
 }
 
-/* red */
 .badge-red {
   background: #fde8e8;
   color: #ef4444;

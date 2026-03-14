@@ -60,17 +60,6 @@
   background: #e5e7eb;
 }
 
-/* .status-cell {
-  padding: 10px;
-}
-
-.status-cell app-status-action-dropdown {
-  background: green;
-  color: white;
-  border-radius: 10px;
-  padding: 6px 12px;
-} */
-
 :host ::ng-deep .status-black app-status-action-dropdown {
   background: orange;
   border-radius: 10px;
@@ -146,7 +135,6 @@
 }
 
 .modal .btn-close {
-  /* position: absolute; */
   font-size: 12px;
   right: 20px;
   top: 22px;
@@ -204,8 +192,8 @@
 
 .renewal-alert {
   display: flex;
-  justify-content: center; /* horizontal center */
-  align-items: center; /* vertical center */
+  justify-content: center;
+  align-items: center;
   text-align: center;
   gap: 6px;
 

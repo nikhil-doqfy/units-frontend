@@ -216,8 +216,6 @@
     (back)="handleBackClick()"
     [showCloseBtn]="false"
   >
-    <!-- (edit)="handleEditClick()"
-    (back)="handleBackClick()" -->
     <div class="threeDotWrap" rental-btn>
       <button class="threeDotBtn" (click)="toggleMenu()">⋮</button>
 
@@ -225,9 +223,7 @@
         <button class="dropItem">
           <app-refresh-icon></app-refresh-icon>{{ "RENEW_ACCOUNT" | translate }}
         </button>
-        <!-- (click)="onRenew()" -->
         <button class="dropItem danger">
-          <!-- (click)="onTerminate()" -->
           <app-disable-icon></app-disable-icon>
           {{ "TERMINATE_ACCOUNT" | translate }}
         </button>
@@ -462,7 +458,6 @@
                 </div>
               </div>
 
-              <!-- Month Dropdown (Side by Side) -->
               <div
                 class="custom-dropdown position-relative"
                 *ngIf="showMonthDropdown"
@@ -574,7 +569,6 @@
                     (clicked)="openReceiptModal(receiptContent)"
                   />
                   <app-table-action-btn type="download" />
-                  <!-- (clicked)="handleDownloadClick()" -->
                 </div>
               </td>
             </tr>
@@ -644,13 +638,10 @@
                       openChangePayementModeModal(changePaymentModeContent)
                     "
                   />
-                  <!-- (clicked)="handleDownloadClick()" -->
                   <app-table-action-btn
                     type="preview"
                     (clicked)="openreplaceChequeModal(replaceChequeContent)"
                   />
-
-                  <!-- (clicked)="handlePreviewClick()" -->
                 </div>
               </td>
             </tr>
@@ -674,10 +665,7 @@
               <td align="center">
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn type="download" />
-                  <!-- (clicked)="handleDownloadClick()" -->
                   <app-table-action-btn type="preview" />
-
-                  <!-- (clicked)="handlePreviewClick()" -->
                 </div>
               </td>
             </tr>
@@ -753,7 +741,6 @@
           <span class="line"></span>
         </div>
 
-        <!-- Item 1 -->
         <div class="activityItem">
           <div class="icon orange">H</div>
 
@@ -764,13 +751,11 @@
           </div>
         </div>
 
-        <!-- Item 2 -->
         <div class="activityItem mt-3">
           <div class="icon orange">H</div>
           <div class="content simple"><strong>Hajji</strong> added Account</div>
         </div>
 
-        <!-- Item 3 -->
         <div class="activityItem">
           <div class="icon blue">P</div>
           <div class="content simple">
@@ -793,10 +778,6 @@
     [showBack]="false"
     (close)="handleCloseClick()"
   >
-    <!-- (download)="handleDownload($event)" -->
-
-    <!-- (share)="handleShare($event)" -->
-
     <div rental class="other-charges-box mt-3">
       <div class="invoice-info">
         <div class="info-col">

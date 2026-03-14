@@ -96,9 +96,13 @@ export class AllPropertiesComponent implements OnInit {
   }
 
   buildParams(): Record<string, any> {
-    const params: Record<string, any> = { page: this.currentPage, page_size: this.rowsPerPage };
+    const params: Record<string, any> = {
+      page: this.currentPage,
+      page_size: this.rowsPerPage,
+    };
     if (this.searchText) params['search'] = this.searchText;
-    if (this.filterPropertyType) params['property_type'] = this.filterPropertyType;
+    if (this.filterPropertyType)
+      params['property_type'] = this.filterPropertyType;
     if (this.filterStatus) params['status'] = this.filterStatus;
     return params;
   }
@@ -107,7 +111,8 @@ export class AllPropertiesComponent implements OnInit {
     this.propertyService.getProperties(this.buildParams()).subscribe({
       next: (resp: any) => {
         this.properties = resp?.content || [];
-        this.totalRecords = resp?.pagination?.total_records ?? this.properties.length;
+        this.totalRecords =
+          resp?.pagination?.total_records ?? this.properties.length;
       },
     });
   }

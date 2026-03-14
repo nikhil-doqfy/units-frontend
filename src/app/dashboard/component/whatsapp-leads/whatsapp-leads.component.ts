@@ -8,7 +8,6 @@ import { ThreeDotsIconsComponent } from '../../../icons/three-dots-icons/three-d
 import { SettingIconComponent } from '../../../icons/setting-icon/setting-icon.component';
 import { UnicodeIconComponent } from '../../../icons/unicode-icon/unicode-icon.component';
 import { AngleIconComponent } from '../../../icons/angle-icon/angle-icon.component';
-import { QrCodeComponent } from '../../../shared/qr-code/qr-code.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { WhatsappQrCodeComponent } from '../../../whatsapp-qr-code/whatsapp-qr-code.component';
 
@@ -25,7 +24,6 @@ import { WhatsappQrCodeComponent } from '../../../whatsapp-qr-code/whatsapp-qr-c
     SettingIconComponent,
     UnicodeIconComponent,
     AngleIconComponent,
-    QrCodeComponent,
     TranslateModule,
     WhatsappQrCodeComponent,
   ],

@@ -18,5 +18,6 @@ export class StepPaneComponent {
   @Input() secondCard: boolean = false;
   @Input() showInvitePmcBtn: boolean = false;
   @Input() showInviteOwnerBtn: boolean = false;
+  @Input() blockCount!: number;
   @ViewChild('paneContent', { static: true }) content!: TemplateRef<any>;
 }

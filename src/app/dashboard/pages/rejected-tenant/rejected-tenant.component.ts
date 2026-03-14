@@ -57,7 +57,6 @@ import { Router } from '@angular/router';
     ArrowDownIconComponent,
     FilterIconComponent,
     BadgeComponent,
-    StatusDropdownComponent,
     TermsconditionIconComponent,
     CustomSelectComponent,
     CommonModule,

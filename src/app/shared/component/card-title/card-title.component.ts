@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -14,4 +14,5 @@ export class CardTitleComponent {
   @Input() description: string | undefined;
   @Input() size: string | undefined;
   @Input() center: boolean | undefined;
+  @Input() blockCount: any;
 }

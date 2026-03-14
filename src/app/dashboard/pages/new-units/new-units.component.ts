@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UploadFileModel } from '../../../shared/model/shared.model';
 import { SharedService } from '../../../shared.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { StepFormLayoutComponent } from '../../component/step-form-layout/step-form-layout.component';
 import { StepPaneComponent } from '../../component/step-form-layout/step-pane.component';
 import { FormService } from '../../../shared/services/form.service';
@@ -65,10 +65,30 @@ export class NewUnitsComponent implements OnInit {
     { key: 'SQ_MT', value: 'Sq-mt' },
     { key: 'SQ_YD', value: 'Sq-yd' },
   ];
-  bedroomList = Array.from({ length: 10 }, (_, i) => ({ key: i + 1, value: String(i + 1) }));
-  floorList = Array.from({ length: 51 }, (_, i) => ({ key: i, value: String(i) }));
-  balconyList = Array.from({ length: 11 }, (_, i) => ({ key: i, value: String(i) }));
+  bedroomList = Array.from({ length: 10 }, (_, i) => ({
+    key: i + 1,
+    value: String(i + 1),
+  }));
+  floorList = Array.from({ length: 51 }, (_, i) => ({
+    key: i,
+    value: String(i),
+  }));
+  balconyList = Array.from({ length: 11 }, (_, i) => ({
+    key: i,
+    value: String(i),
+  }));
 
+  breadcrumbData = [
+    {
+      label: this.translate.instant('PAGE_TITLE.DASHBOARD'),
+      link: '/dashboard/home',
+    },
+    {
+      label: this.translate.instant('PAGE_TITLE.PROPERTIES'),
+      link: '/dashboard/properties',
+    },
+    { label: this.translate.instant('PAGE_TITLE.NEW_UNITS'), link: '' },
+  ];
   basicDetailsForm = this.unitFormService.unitBasicDetailsForm;
   commercialsForm = this.unitFormService.unitCommercialsForm;
   imagesForm = this.unitFormService.unitImagesForm;
@@ -86,7 +106,10 @@ export class NewUnitsComponent implements OnInit {
   activeDocTab: any = null;
   uploadIdCounter = { images: 1, documents: 1 };
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private translate: TranslateService,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
 
@@ -139,14 +162,16 @@ export class NewUnitsComponent implements OnInit {
     if (typeof data?.key !== 'number') return;
     this.blockList = [];
     this.basicDetailsForm.patchValue({ blockId: '' });
-    this.propertyService.getPropertyBlocks({ property_id: data.key }).subscribe({
-      next: (resp: any) => {
-        this.blockList = (resp?.content || []).map((b: any) => ({
-          key: b.id,
-          value: b.block_name,
-        }));
-      },
-    });
+    this.propertyService
+      .getPropertyBlocks({ property_id: data.key })
+      .subscribe({
+        next: (resp: any) => {
+          this.blockList = (resp?.content || []).map((b: any) => ({
+            key: b.id,
+            value: b.block_name,
+          }));
+        },
+      });
   }
 
   // Owner management
@@ -196,15 +221,21 @@ export class NewUnitsComponent implements OnInit {
   }
 
   submitUnit(): void {
-    this.router.navigate(['/dashboard/properties'], { queryParams: { tab: 'units' } });
+    this.router.navigate(['/dashboard/properties'], {
+      queryParams: { tab: 'units' },
+    });
   }
 
   getUploadConfig(type: string): UploadConfig {
-    const all: UplodTypeModal[] = [...this.imageUploadTypes, ...this.documetUploadTypes];
+    const all: UplodTypeModal[] = [
+      ...this.imageUploadTypes,
+      ...this.documetUploadTypes,
+    ];
     const cfg = all.find((m) => m.typeKey === type);
     if (!cfg) throw new Error('Invalid type');
     return {
-      form: cfg.formKey === 'documents' ? this.documentationForm : this.imagesForm,
+      form:
+        cfg.formKey === 'documents' ? this.documentationForm : this.imagesForm,
       formKey: cfg.formKey,
     };
   }

@@ -1,6 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { CustomSelectComponent } from '../../custom-select/custom-select.component';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
@@ -10,7 +22,12 @@ import { FormService } from '../../../../shared/services/form.service';
 @Component({
   selector: 'app-edit-leads-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, CustomSelectComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    CustomSelectComponent,
+  ],
   templateUrl: './edit-leads-form.component.html',
   styleUrl: './edit-leads-form.component.css',
 })
@@ -55,19 +72,30 @@ export class EditLeadsFormComponent implements OnInit {
   }
 
   get preSelectedStatus() {
-    return this.statusOptions.find((o) => o.key === this.editData?.status) ?? null;
+    return (
+      this.statusOptions.find((o) => o.key === this.editData?.status) ?? null
+    );
   }
 
   get preSelectedPlatform() {
-    return this.platformOptions.find((o) => o.key === this.editData?.platform) ?? null;
+    return (
+      this.platformOptions.find((o) => o.key === this.editData?.platform) ??
+      null
+    );
   }
 
   ngOnInit() {
     this.leadForm = this.fb.group({
       unit_id: [this.editData?.unit_id ?? null, Validators.required],
       name: [this.editData?.name ?? '', Validators.required],
-      email: [this.editData?.email ?? '', [Validators.required, Validators.email]],
-      contact_number: [this.editData?.contact_number ?? '', Validators.required],
+      email: [
+        this.editData?.email ?? '',
+        [Validators.required, Validators.email],
+      ],
+      contact_number: [
+        this.editData?.contact_number ?? '',
+        Validators.required,
+      ],
       amount: [this.editData?.rent ?? null],
       status: [this.editData?.status ?? 'INTERESTED', Validators.required],
       comment: [''],
@@ -76,7 +104,11 @@ export class EditLeadsFormComponent implements OnInit {
     });
 
     this.sharedApiService.getOptionsType([
-      { param: 'PARENT_PROPERTY', key: 'property', setter: (v) => (this.propertyOptions = v) },
+      {
+        param: 'PARENT_PROPERTY',
+        key: 'property',
+        setter: (v) => (this.propertyOptions = v),
+      },
     ]);
 
     if (this.editData?.property_id) {

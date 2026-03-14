@@ -207,8 +207,6 @@
     [showCloseBtn]="false"
     (back)="handleBackClick()"
   >
-    <!-- (edit)="handleEditClick()"
-    (back)="handleBackClick()" -->
     <div class="threeDotWrap" rental-btn>
       <button class="threeDotBtn" (click)="toggleMenu()">⋮</button>
 
@@ -216,9 +214,7 @@
         <button class="dropItem">
           <app-refresh-icon></app-refresh-icon>{{ "RENEW_ACCOUNT" | translate }}
         </button>
-        <!-- (click)="onRenew()" -->
         <button class="dropItem danger">
-          <!-- (click)="onTerminate()" -->
           <app-disable-icon></app-disable-icon>
           {{ "TERMINATE_ACCOUNT" | translate }}
         </button>
