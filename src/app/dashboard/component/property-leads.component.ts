@@ -23,6 +23,8 @@ import {
   NgbActiveModal,
   NgbModal,
 } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'app-property-leads',
@@ -46,6 +48,8 @@ import {
 })
 export class PropertyLeadsComponent {
   private modalService = inject(NgbModal);
+  private router = inject(Router);
+  private alertService = inject(AlertService);
   closeResult: WritableSignal<string> = signal('');
 
   selectedLead: any = null;
@@ -83,10 +87,12 @@ export class PropertyLeadsComponent {
     }
   }
   onUserSave(success: boolean, modal: NgbActiveModal) {
-    // component.submitUserForm();
-
     if (success) {
+      this.alertService.success('Lead saved successfully');
       modal.close();
+      this.router.navigate(['/dashboard/leads']);
+    } else {
+      this.alertService.error('Failed to save lead');
     }
   }
 }

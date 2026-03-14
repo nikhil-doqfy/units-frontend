@@ -29,6 +29,37 @@
   color: var(--yellowText);
 }
 
+/* Pill/chip style when enableBg=true */
+.badgeText.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.badgeText.pill.green {
+  background-color: #e8f5e9;
+  color: var(--greenText);
+}
+.badgeText.pill.red {
+  background-color: #ffebee;
+  color: var(--redText);
+}
+.badgeText.pill.blue {
+  background-color: #e3f2fd;
+  color: var(--blueText);
+}
+.badgeText.pill.orange {
+  background-color: #fff3e0;
+  color: var(--orangeText);
+}
+.badgeText.pill.yellow {
+  background-color: #fffde7;
+  color: var(--yellowText);
+}
+
 .status-badge {
   font-size: 14px;
   font-weight: 500;

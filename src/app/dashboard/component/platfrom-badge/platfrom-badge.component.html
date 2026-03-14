@@ -1,10 +1,7 @@
 <div class="platform-wrapper">
   <div class="platform-badge">
-    <img *ngIf="logo" [src]="logo" [alt]="label" class="platform-logo" />
-
-    <span *ngIf="!logo" class="platform-text">
-      {{ label }}
-    </span>
+    <img *ngIf="logoSrc" [src]="logoSrc" [alt]="label" class="platform-logo" />
+    <span *ngIf="!logoSrc" class="platform-text">{{ label }}</span>
   </div>
   <div class="platform-hover-card">
     <div class="card-header">

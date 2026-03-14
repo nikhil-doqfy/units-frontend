@@ -1,62 +1,18 @@
-.leadForm {
-  padding: 4px 2px;
-}
-
-.form-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1f2937;
-}
-
-.form-label.required::after {
-  content: " *";
+.editLeadForm .form-label span {
   color: #ef4444;
+  margin-left: 2px;
 }
 
-.form-control {
-  height: 42px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+.errorMsg {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.form-check .form-check-label {
+  font-style: normal;
+  font-weight: 500;
   font-size: 14px;
-}
-
-.form-control:focus {
-  border-color: #3b82f6;
-  box-shadow: none;
-}
-
-.sourceWrap {
-  display: flex;
-  gap: 24px;
-  margin-top: 6px;
-  flex-wrap: wrap;
-}
-
-.radioItem {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.radioItem input {
-  accent-color: #2563eb;
-}
-
-.sendLink {
-  font-size: 13px;
-  color: #2563eb;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-  .form-control {
-    height: 40px;
-  }
-
-  .sourceWrap {
-    gap: 16px;
-  }
+  color: var(--greyDarkText1);
 }

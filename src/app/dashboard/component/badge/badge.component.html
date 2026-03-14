@@ -6,7 +6,7 @@
   [class.blue]="status === 'blue'"
   [class.red]="status === 'red'"
   [class.yellow]="status === 'yellow'"
-  [ngClass]="enableBg ? status : ''"
+  [class.pill]="enableBg"
 >
   <i *ngIf="showIcon && status === 'green'">
     <span style="color: green">&#x2713;</span>

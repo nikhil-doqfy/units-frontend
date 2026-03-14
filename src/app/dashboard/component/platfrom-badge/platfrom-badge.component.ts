@@ -21,16 +21,19 @@ export class PlatfromBadgeComponent {
 
   get label(): string {
     switch (this.platform.type) {
-      case 'propertyFinder':
-        return 'Property Finder';
-      case 'bayut':
-        return 'Bayut';
-      case 'direct':
-        return 'Direct';
-      case 'referral':
-        return 'Referral';
-      default:
-        return '';
+      case 'propertyFinder': return 'Property Finder';
+      case 'bayut': return 'Bayut';
+      case 'direct': return 'Direct';
+      case 'referral': return 'Referral';
+      default: return '';
+    }
+  }
+
+  get logoSrc(): string | null {
+    switch (this.platform.type) {
+      case 'propertyFinder': return 'assets/platfrom/property-finder.svg';
+      case 'bayut': return 'assets/platfrom/buyut.svg';
+      default: return null;
     }
   }
 }

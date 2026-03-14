@@ -1,78 +1,144 @@
-<form class="leadForm">
-  <div class="row g-4">
-    <div class="col-md-6 col-12">
-      <label class="form-label required">{{
-        "LINK_PROPERTY" | translate
-      }}</label>
+<form class="editLeadForm commonForm" [formGroup]="leadForm">
+  <div class="row g-3">
+
+    <!-- Link Property -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "LINK_PROPERTY" | translate }}<span>*</span></label>
       <app-custom-select
-        formControlName="property"
-        value="Silchi Tower"
-      ></app-custom-select>
+        [options]="propertyOptions"
+        [selectedOption]="preSelectedProperty"
+        [showFilterInput]="true"
+        [placeholder]="'SELECT_OPTION' | translate"
+        (optionSelected)="onPropertySelect($event)">
+      </app-custom-select>
     </div>
 
-    <div class="col-md-6 col-12">
-      <label class="form-label required">{{ "TENANT_NAME" | translate }}</label>
-      <input class="form-control" value="Jensi" formControlName="tenantName" />
+    <!-- Unit -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "UNIT" | translate }}<span>*</span></label>
+      <app-custom-select
+        [options]="unitOptions"
+        [selectedOption]="preSelectedUnit"
+        [showFilterInput]="true"
+        [placeholder]="'SELECT_OPTION' | translate"
+        (optionSelected)="onUnitSelect($event)">
+      </app-custom-select>
+      @if (isInvalid(leadForm, 'unit_id').status) {
+        <small class="errorMsg">{{ isInvalid(leadForm, 'unit_id').msg }}</small>
+      }
     </div>
 
-    <div class="col-md-6 col-12">
-      <label class="form-label required">{{ "EMAIL" | translate }}</label>
+    <!-- Tenant Name -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "TENANT_NAME" | translate }}<span>*</span></label>
       <input
+        type="text"
         class="form-control"
-        value="Jensi@gmail.com"
+        [placeholder]="'ENTER_NAME_HERE' | translate"
+        formControlName="name"
+      />
+      @if (isInvalid(leadForm, 'name').status) {
+        <small class="errorMsg">{{ isInvalid(leadForm, 'name').msg }}</small>
+      }
+    </div>
+
+    <!-- Lease Amount (auto-populated, readonly) -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "LEASE_AMOUNT_AED" | translate }}</label>
+      <input
+        type="number"
+        class="form-control"
+        [placeholder]="'ENTER_AMOUNT' | translate"
+        formControlName="amount"
+        readonly
+      />
+    </div>
+
+    <!-- Email -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "EMAIL" | translate }}<span>*</span></label>
+      <input
+        type="email"
+        class="form-control"
+        [placeholder]="'ENTER_EMAIL_HERE' | translate"
         formControlName="email"
       />
+      @if (isInvalid(leadForm, 'email').status) {
+        <small class="errorMsg">{{ isInvalid(leadForm, 'email').msg }}</small>
+      }
     </div>
 
-    <div class="col-md-6 col-12">
-      <label class="form-label required">{{ "CONTACT" | translate }}</label>
+    <!-- Contact -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "CONTACT" | translate }}<span>*</span></label>
       <input
+        type="text"
         class="form-control"
-        value="+41-9383822829"
-        formControlName="contact"
+        [placeholder]="'ENTER_HERE' | translate"
+        formControlName="contact_number"
+      />
+      @if (isInvalid(leadForm, 'contact_number').status) {
+        <small class="errorMsg">{{ isInvalid(leadForm, 'contact_number').msg }}</small>
+      }
+    </div>
+
+    <!-- Status -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "STATUS" | translate }}<span>*</span></label>
+      <app-custom-select
+        [options]="statusOptions"
+        [selectedOption]="preSelectedStatus"
+        [placeholder]="'SELECT_OPTION' | translate"
+        (optionSelected)="leadForm.patchValue({ status: $event?.key })">
+      </app-custom-select>
+      @if (isInvalid(leadForm, 'status').status) {
+        <small class="errorMsg">{{ isInvalid(leadForm, 'status').msg }}</small>
+      }
+    </div>
+
+    <!-- Comment -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "COMMENT" | translate }}</label>
+      <input
+        type="text"
+        class="form-control"
+        [placeholder]="'WRITE_HERE' | translate"
+        formControlName="comment"
       />
     </div>
 
-    <div class="col-md-6 col-12">
-      <label class="form-label required">{{
-        "LEASE_AMOUNT_AED" | translate
-      }}</label>
-      <input class="form-control" value="1,200.00" formControlName="amount" />
+    <!-- Platform -->
+    <div class="col-md-6">
+      <label class="form-label">{{ "PLATFORM" | translate }}<span>*</span></label>
+      <app-custom-select
+        [options]="platformOptions"
+        [selectedOption]="preSelectedPlatform"
+        [placeholder]="'SELECT_OPTION' | translate"
+        (optionSelected)="leadForm.patchValue({ platform: $event?.key })">
+      </app-custom-select>
+      @if (isInvalid(leadForm, 'platform').status) {
+        <small class="errorMsg">{{ isInvalid(leadForm, 'platform').msg }}</small>
+      }
     </div>
 
-    <div class="col-md-6 col-12">
-      <label class="form-label required">{{ "STATUS" | translate }}</label>
-      <app-custom-select formControlName="status"></app-custom-select>
-    </div>
-
+    <!-- Source of Lead (radio) -->
     <div class="col-12">
-      <label class="form-label required">{{ "COMMENT" | translate }}</label>
-      <input class="form-control" value="Nill" formControlName="comment" />
-    </div>
-
-    <div class="col-12">
-      <label class="form-label required">{{ "LEAD_SOURCE" | translate }}</label>
-
-      <div class="sourceWrap">
-        <label class="radioItem">
-          <input type="radio" value="email" formControlName="source" />
-          <span></span>{{ "EMAIL" | translate }}
-        </label>
-
-        <label class="radioItem">
-          <input type="radio" value="call" formControlName="source" />
-          <span></span> {{ "CALL" | translate }}
-        </label>
-
-        <label class="radioItem">
-          <input type="radio" value="whatsapp" formControlName="source" />
-          <span></span> {{ "WHATSAPP" | translate }}
-        </label>
+      <label class="form-label">{{ "LEAD_SOURCE" | translate }}<span>*</span></label>
+      <div class="d-flex gap-4 mt-1">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" value="EMAIL" formControlName="lead_type" />
+          <label class="form-check-label">{{ "EMAIL" | translate }}</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" value="CALL" formControlName="lead_type" />
+          <label class="form-check-label">{{ "CALL" | translate }}</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" value="WHATSAPP" formControlName="lead_type" />
+          <label class="form-check-label">{{ "WHATSAPP" | translate }}</label>
+        </div>
       </div>
     </div>
 
-    <div class="col-12">
-      <a class="sendLink">{{ "SEND_APP_LINK" | translate }}</a>
-    </div>
   </div>
 </form>

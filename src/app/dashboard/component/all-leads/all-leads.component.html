@@ -138,6 +138,7 @@
                   [title]="getStatusBadge(lead.status).title"
                   [status]="getStatusBadge(lead.status).color"
                   [showIcon]="true"
+                  [enableBg]="true"
                 >
                 </app-badge>
               </td>
@@ -156,12 +157,14 @@
                   </app-check-icon>
                   <app-table-action-btn
                     type="edit"
-                    (clicked)="openEditLeadModal(editLeadContent)"
+                    (clicked)="openEditLeadModal(editLeadContent, lead)"
                   >
                   </app-table-action-btn>
                   <app-table-action-btn
                     type="file"
-                    (clicked)="openActivityHistroyModal(activityHistroyContent)"
+                    (clicked)="
+                      openActivityHistroyModal(activityHistroyContent, lead)
+                    "
                   >
                   </app-table-action-btn>
                 </div>
