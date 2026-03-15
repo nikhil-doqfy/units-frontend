@@ -1,63 +1,37 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  signal,
-  TemplateRef,
-  WritableSignal,
-} from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ThemeService, UserRole } from '../../../theme.service';
+import { debounceTime, Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslateModule } from '@ngx-translate/core';
 
-import {
-  ModalDismissReasons,
-  NgbActiveModal,
-  NgbModal,
-} from '@ng-bootstrap/ng-bootstrap';
-
-import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
-import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
+import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
-import { TableFilterButtonComponent } from '../../../dashboard/component/table-filter-btn/table-filter-btn.component';
-import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
+import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
-import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plus-icon.component';
-import { InviteIconComponent } from '../../component/icons/invite-icon/invite-icon.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
-import { TableActionDropdownComponent } from '../../component/table-action-dropdown/table-action-dropdown.component';
-import { ShareIconComponent } from '../../component/icons/share-icon/share-icon.component';
-import { ResetIconComponent } from '../../component/icons/reset-icon/reset-icon.component';
-import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
+import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
-import { AddTenantFormComponent } from '../../component/forms/add-tenant-form/add-tenant-form.component';
-import { InviteTenantFormComponent } from '../../component/forms/invite-tenant-form/invite-tenant-form.component';
-import { SendIconComponent } from '../../component/icons/send-icon/send-icon.component';
-import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
-import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
-import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
-import { TenantsService } from '../../services/tenants.service';
-import { debounceTime, Subject } from 'rxjs';
-import {
-  BreadCrumb,
-  PageChange,
-  PageSizeChange,
-} from '../../../shared/model/shared.model';
-import { AlertService } from '../../../shared/services/alert.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
-import { MaskPhonePipe } from '../../../shared/pipes/mask-phone.pipe';
+import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
+import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component';
+
+import { TenantsService } from '../../services/tenants.service';
+import { AlertService } from '../../../shared/services/alert.service';
 import { SharedService } from '../../../shared.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
-import { SharedApiService } from '../../../shared/services/shared-api.service';
-import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
-import { PlatfromBadgeComponent } from '../../component/platfrom-badge/platfrom-badge.component';
-import { BadgeComponent } from '../../component/badge/badge.component';
-import { ActiveTenantTabComponent } from '../active-tenant-tab/active-tenant-tab.component';
-import { CancelIconComponent } from '../../../icons/cancel-icon/cancel-icon.component';
-import { NewTenantFromService } from '../../../newtenant/component/service/new-tenant-from.service';
+import { BreadCrumb, PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+
+type MainTab = 'onboarding' | 'active';
+type SubTab  = 'current' | 'past' | 'rejected';
+
+const TAB_MAP: Record<MainTab | SubTab, string> = {
+  onboarding: 'onboarding',
+  active:     'active',
+  current:    'active',
+  past:       'past',
+  rejected:   'rejected',
+};
 
 @Component({
   selector: 'app-tenants',
@@ -65,378 +39,184 @@ import { NewTenantFromService } from '../../../newtenant/component/service/new-t
   imports: [
     CommonModule,
     TableTitleComponent,
-    TableImgItemComponent,
     TableSelectComponent,
     TableSearchComponent,
     TableFilterButtonComponent,
     ExportIconComponent,
-    PlusIconComponent,
-    InviteIconComponent,
-    TableActionDropdownComponent,
+    TableActionButtonComponent,
     TablePaginationComponent,
     SortingIconComponent,
-    AddTenantFormComponent,
-    InviteTenantFormComponent,
-    SendIconComponent,
-    TableViewCardComponent,
-    WhiteCardComponent,
-    DocumentTypeItemComponent,
-    TranslateModule,
     NoDataComponent,
-    MaskPhonePipe,
-    EditIconComponent,
-    PlatfromBadgeComponent,
-    BadgeComponent,
-    ActiveTenantTabComponent,
+    TableImgItemComponent,
+    TenantDetailComponent,
+    TranslateModule,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
 })
 export class TenantsComponent {
   private tenantsService = inject(TenantsService);
-  private modalService = inject(NgbModal);
-  private alertService = inject(AlertService);
-  private route = inject(ActivatedRoute);
-  private sharedService = inject(SharedService);
-  private destroyRef = inject(DestroyRef);
-  private translate = inject(TranslateService);
-  private sharedApiService = inject(SharedApiService);
-  tennatDocuments: Record<string, any[]> = {};
-  componentName: string = 'TenantsComponent';
+  private alertService   = inject(AlertService);
+  private sharedService  = inject(SharedService);
+  private route          = inject(ActivatedRoute);
+  private router         = inject(Router);
+  private destroyRef     = inject(DestroyRef);
+
   breadcrumbData: BreadCrumb[] = [];
-  currentRole: UserRole = 'owner';
-  closeResult: WritableSignal<string> = signal('');
-  showDetailView: boolean = false;
-  totalPages: number = 1;
-  activeDocTypeKey!: string;
-  documentActions = [
-    {
-      label: 'Reject / Cancel Tenancy',
-      icon: CancelIconComponent,
-      action: 'rejectTenancy',
-      type: 'danger',
-    },
+
+  // ── Top-level tabs ───────────────────────────────
+  mainTab: MainTab = 'onboarding';
+
+  // ── Sub-tabs (shown only under Active) ──────────
+  subTab: SubTab = 'current';
+
+  subTabs: { key: SubTab; label: string }[] = [
+    { key: 'current',  label: 'Current Tenants'  },
+    { key: 'past',     label: 'Past Tenants'      },
+    { key: 'rejected', label: 'Rejected Tenants'  },
   ];
+
+  // ── Detail view ──────────────────────────────────
+  showDetailView = false;
   selectedTenant: any = null;
-  tenantsList: any[] = [];
-  tenantsFilter: Record<string, any> = {};
-  totalRecords: number = 0;
-  rowsPerPageOptions: number[] = [10, 25, 50, 100];
-  rowsPerPage: number = 10;
-  currentPage: number = 1;
-  private onTenantsSearch$ = new Subject<string>();
-  currentLanguage = 'en';
-  constructor(
-    private tenantService: NewTenantFromService,
-    private router: Router,
-    private themeService: ThemeService,
-  ) {
+
+  onTenantClick(tenant: any) {
+    this.selectedTenant = tenant;
+    this.showDetailView = true;
+  }
+
+  onDetailBack() {
+    this.showDetailView = false;
+    this.selectedTenant = null;
+  }
+
+  // ── Table state ──────────────────────────────────
+  tenants: any[]     = [];
+  totalRecords       = 0;
+  rowsPerPage        = 10;
+  currentPage        = 1;
+  totalPages         = 1;
+  rowsPerPageOptions = [10, 25, 50, 100];
+  componentName      = 'TenantsComponent';
+
+  private searchSubject$ = new Subject<string>();
+  private searchText     = '';
+
+  constructor() {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
-    this.initTenantSearchListener();
-
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.showDetailView = true;
-      this.getTenantDetails(+id);
-    } else {
-      this.showDetailView = false;
-      this.getTenants();
-    }
+    this.initSearchListener();
+    this.loadTenants();
   }
 
   ngOnInit() {
-    this.loadBreadcrumb();
-    this.initCurrentRoleListener();
-    this.sharedService.initLanguage();
-    this.initLanguageListener();
-    this.sharedService.lang$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((lang) => {
-        this.currentLanguage = lang;
-        this.loadBreadcrumb();
-      });
-  }
-  getLabel(key: string): string {
-    return this.translate.instant(key);
-  }
-  initCurrentRoleListener() {
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
-      });
-  }
-
-  initLanguageListener() {
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.loadBreadcrumb();
-      });
-  }
-
-  loadBreadcrumb() {
-    this.setBreadCrumb([
+    this.sharedService.getBreadcrumbs([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { label: 'PAGE_TITLE.TENANTS', link: '' },
-    ]);
+      { label: 'PAGE_TITLE.TENANTS',   link: ''               },
+    ]).subscribe((data) => (this.breadcrumbData = data));
   }
 
-  setBreadCrumb(breadCrumb: BreadCrumb[]) {
-    this.sharedService
-      .getBreadcrumbs(breadCrumb)
-      .subscribe((data) => (this.breadcrumbData = data));
+  private initSearchListener() {
+    this.searchSubject$
+      .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
+      .subscribe((text) => {
+        this.searchText  = text.trim();
+        this.currentPage = 1;
+        this.loadTenants();
+      });
   }
 
-  private getTenants() {
-    this.tenantsFilter = {
-      ...this.tenantsFilter,
-      limit: this.rowsPerPage,
-      page: this.currentPage,
+  // ── Tab switching ─────────────────────────────────
+  selectMainTab(tab: MainTab) {
+    this.mainTab     = tab;
+    this.subTab      = 'current';
+    this.currentPage = 1;
+    this.searchText  = '';
+    this.loadTenants();
+  }
+
+  selectSubTab(tab: SubTab) {
+    this.subTab      = tab;
+    this.currentPage = 1;
+    this.searchText  = '';
+    this.loadTenants();
+  }
+
+  private get backendTab(): string {
+    return this.mainTab === 'onboarding' ? 'onboarding' : TAB_MAP[this.subTab];
+  }
+
+  get activeTableTitle(): string {
+    if (this.mainTab === 'onboarding') return 'Onboarding Tenants';
+    return this.subTabs.find((s) => s.key === this.subTab)?.label ?? 'Active Tenants';
+  }
+
+  // ── Data loading ──────────────────────────────────
+  loadTenants() {
+    const params: Record<string, any> = {
+      tab:       this.backendTab,
+      page:      this.currentPage,
+      page_size: this.rowsPerPage,
     };
+    if (this.searchText) params['search'] = this.searchText;
 
-    this.tenantsService
-      .getTenants(this.tenantsFilter)
+    this.tenantsService.getTenantsByTab(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.tenantsList = resp?.content ?? [];
+          this.tenants      = resp?.content ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
-          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+          this.totalPages   = resp?.pagination?.total_pages   ?? 1;
         },
-        error: (err) => {},
       });
   }
 
-  onDocTabClick(type: any) {
-    this.activeDocTypeKey = type.key;
-  }
-  onRefresh() {
-    this.getTenants();
+  onRefresh() { this.loadTenants(); }
+
+  searchTextChange(text: string) { this.searchSubject$.next(text); }
+
+  onPageChange(event: PageChange) {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.loadTenants();
   }
 
-  goToInvitationStep() {
-    // Go to step 1, sub-step 1 (Property details)
-    this.tenantService.goToStep('2', '2-1');
-  }
-  searchTextChange(search: string): void {
-    this.onTenantsSearch$.next(search);
-  }
-  tenantDocumentType: any[] = [];
-  getOptionTypes() {
-    if (this.showDetailView) {
-      this.sharedApiService.getOptionsType([
-        {
-          param: 'PROPERTY_DOCUMENT_CHOICE',
-          key: 'Property_Document',
-          setter: (v) => {
-            ((this.tenantDocumentType = v), this.getTenants());
-          },
-        },
-      ]);
-    }
-  }
-
-  initTenantSearchListener() {
-    this.onTenantsSearch$
-      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => {
-        if (value?.trim()) this.tenantsFilter['search'] = value.trim();
-        else delete this.tenantsFilter['search'];
-
-        this.currentPage = 1;
-        this.getTenants();
-      });
-  }
-
-  onPageSizeChange(event: PageSizeChange): void {
+  onPageSizeChange(event: PageSizeChange) {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
-    this.getTenants();
+    this.loadTenants();
   }
 
-  onPageChange(event: PageChange): void {
-    if (event.componentName !== this.componentName) return;
-    this.currentPage = event.currentPage;
-    this.getTenants();
-  }
-  isUnitDetailView = false;
-  addTenant() {
-    this.router.navigate(['/dashboard/new-tenant']);
-  }
-  onDetailViewChange(event: boolean) {
-    this.isUnitDetailView = event;
-  }
-  handleDropdownAction(action: string) {
-    console.log(`${action} action clicked`);
+  handleExportClick() {
+    const params: Record<string, any> = { tab: this.backendTab };
+    if (this.searchText) params['search'] = this.searchText;
+
+    this.tenantsService.exportTenantsByTab(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a   = document.createElement('a');
+        a.href     = url;
+        a.download = `tenants_${this.backendTab}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.alertService.success('Exported successfully');
+      });
   }
 
-  handleFilterClick(): void {
-    console.log('Filter button clicked');
+  goToProperty(propertyId: number | null) {
+    if (propertyId) this.router.navigate(['/dashboard/properties', propertyId]);
   }
 
-  handleViewPdf(leaseId: any): void {
-    if (!leaseId) {
-      this.alertService.error('Lease ID not found.');
-      return;
+  statusBadgeClass(leaseStatus: string): string {
+    switch (leaseStatus) {
+      case 'ACTIVE':   return 'badge-active';
+      case 'DRAFT':    return 'badge-draft';
+      case 'INACTIVE': return 'badge-inactive';
+      case 'EXPIRED':  return 'badge-expired';
+      case 'REJECTED': return 'badge-rejected';
+      default:         return 'badge-draft';
     }
-    // const lease_id = Number(this.route.snapshot.paramMap.get('lease_id'));
-    this.tenantsService
-      .getLeasePdf(leaseId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp: any) => {
-          const pdfUrl = resp?.content?.pdf_url;
-
-          if (pdfUrl) {
-            window.open(pdfUrl, '_blank');
-          } else {
-            this.alertService.error('PDF URL not found.');
-          }
-        },
-        error: () => {
-          this.alertService.error('Failed to open PDF preview.');
-        },
-      });
-  }
-
-  handleExportClick(): void {
-    this.tenantsService
-      .getExcelFileOfTenant({})
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp) => {
-          const url = window.URL.createObjectURL(resp);
-
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'tenant_export.csv';
-          a.click();
-
-          window.URL.revokeObjectURL(url);
-
-          this.alertService.success('File downloaded successfully!');
-        },
-        error: (err) => {
-          this.alertService.error(
-            err?.error?.message || 'Failed to download tenant file',
-          );
-        },
-      });
-  }
-
-  applyFilter() {
-    this.currentPage = 1;
-  }
-  openAddTenantModal(addTenantContent: TemplateRef<any>) {
-    const modalRef = this.modalService.open(addTenantContent, {
-      ariaLabelledBy: 'modal-title',
-      windowClass: 'mdlCommon',
-      centered: true,
-    });
-
-    modalRef.result.then(
-      (result) => {
-        this.closeResult.set(`Closed with: ${result}`);
-      },
-      (reason) => {
-        this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-      },
-    );
-  }
-
-  openInviteTenantModal(inviteTenantContent: TemplateRef<any>) {
-    const modalRef = this.modalService.open(inviteTenantContent, {
-      ariaLabelledBy: 'modal-title',
-      windowClass: 'mdlCommon mdlSmall',
-      centered: true,
-    });
-
-    modalRef.result.then(
-      (result) => {
-        this.closeResult.set(`Closed with: ${result}`);
-      },
-      (reason) => {
-        this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-      },
-    );
-  }
-
-  private getDismissReason(reason: any): string {
-    switch (reason) {
-      case ModalDismissReasons.ESC:
-        return 'by pressing ESC';
-      case ModalDismissReasons.BACKDROP_CLICK:
-        return 'by clicking on a backdrop';
-      default:
-        return `with: ${reason}`;
-    }
-  }
-
-  sendInvite(
-    inviteFormRef: InviteTenantFormComponent,
-    modal?: NgbActiveModal | any,
-  ) {
-    const form = inviteFormRef.tenantForm;
-    if (form.invalid) {
-      form.markAllAsTouched();
-      return;
-    }
-
-    let payload = {
-      email: form.value.email,
-      invitation_type: form.value.invitation_type,
-      property_unit_id: form.value.property_unit_id,
-    };
-    this.tenantsService
-      .addTenantToInvite(payload)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp: any) => {
-          this.alertService.success(resp.message);
-          modal?.close('Save click');
-        },
-      });
-  }
-
-  handleEditClick(): void {
-    console.log('Edit button clicked');
-  }
-
-  handleDeleteClick(): void {
-    console.log('Delete button clicked');
-  }
-
-  handleViewClick(tenantID: number): void {
-    // this.showDetailView = true;
-    this.router.navigate(['/dashboard/tenants/detail/', tenantID]);
-  }
-
-  handleBackClick(): void {
-    this.showDetailView = false;
-    this.router.navigate(['/dashboard/tenants']);
-  }
-
-  // ------------------------- Access tenant form data -------------------------
-
-  onTenantSave(component: AddTenantFormComponent, modal: NgbActiveModal) {
-    component.submitTenantForm();
-
-    modal.close();
-    this.getTenants();
-  }
-
-  getTenantDetails(tenantID: number): void {
-    this.tenantsService
-      .getTenantDetails({ tenant_id: tenantID })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp: any) => {
-          this.selectedTenant = resp.content;
-        },
-        error: (err) => console.error('Detail API Error:', err),
-      });
   }
 }

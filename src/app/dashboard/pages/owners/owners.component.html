@@ -1,286 +1,172 @@
-<ng-container *ngIf="!showDetailView">
-  <div class="cmmnTblOuter">
-    <div class="cmmnTblHdr">
-      <div class="row g-3 align-items-center">
-        <div class="col-md">
-          <app-table-title
-            [title]="'ALL_OWNERS' | translate"
-            [subtitle]="'(' + totalRecords + ')'"
-            (onRefresh)="onRefresh()"
-          ></app-table-title>
-        </div>
-        <div class="col-md-auto">
-          <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search
-              [placeholder]="'SEARCH_HERE' | translate"
-              (onValueChange)="searchTextChange($event)"
-            />
-
-            <app-table-filter-btn
-              [title]="'EXPORT' | translate"
-              [hasIcon]="true"
-              (clicked)="handleExportClick()"
-            >
-              <app-export-icon />
-            </app-table-filter-btn>
-            <app-invite-owner-btn />
-          </div>
+<div class="cmmnTblOuter">
+  <div class="cmmnTblHdr">
+    <div class="row g-3 align-items-center">
+      <div class="col-md">
+        <app-table-title [title]="'ALL_OWNERS' | translate" [subtitle]="'(' + totalRecords + ')'"
+          (onRefresh)="onRefresh()"></app-table-title>
+      </div>
+      <div class="col-md-auto">
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+          <app-table-search [placeholder]="'SEARCH_HERE' | translate" (onValueChange)="searchTextChange($event)" />
+          <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true" (clicked)="handleExportClick()">
+            <app-export-icon />
+          </app-table-filter-btn>
         </div>
       </div>
-    </div>
-    <div class="cmmnTbl">
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>
-                {{ "OWNER_NAME" | translate }} <i><app-sorting-icon /></i>
-              </th>
-              <th>{{ "CODE" | translate }}</th>
-              <th>{{ "CONTACT_NUMBER" | translate }}</th>
-              <th>
-                {{ "PROPERTIES" | translate }} <i><app-sorting-icon /></i>
-              </th>
-              <th>{{ "EMAIL_ADDRESS" | translate }}</th>
-              <th width="200"></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (owner of owners; track $index) {
-              <tr>
-                <td>
-                  <app-table-img-item
-                    [img]="
-                      owner?.profile_image
-                        ? owner?.profile_image
-                        : '../../../../assets/userDefaultProImg.png'
-                    "
-                    [clickable]="true"
-                    (clicked)="handleViewClick(owner.owner_id)"
-                    [title]="owner.first_name + '' + ' ' + owner.last_name"
-                  />
-                </td>
-                <td>{{ owner.owner_number || "N/A" }}</td>
-                <td>{{ owner.contact_number | maskPhone }}</td>
-                <td>
-                  <app-table-multi-img-item
-                    [images]="owner.propertyImages || 'N/A'"
-                    size="md"
-                  ></app-table-multi-img-item>
-                </td>
-                <td>{{ owner.email }}</td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    ></app-table-action-dropdown>
-                  </div>
-                </td>
-              </tr>
-            } @empty {
-              <tr>
-                <td colspan="20" align="center"><app-no-data></app-no-data></td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="cmmnTblFtr">
-      <app-table-select
-        [componentName]="componentName"
-        [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-        (rowsPerPageChange)="onPageSizeChange($event)"
-      />
-      <app-table-pagination
-        [componentName]="componentName"
-        [currentPage]="currentPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage"
-        (pageChange)="onPageChange($event)"
-      />
     </div>
   </div>
-</ng-container>
 
-<ng-container *ngIf="showDetailView && selectedOwner">
-  <app-table-view-card
-    [title]="selectedOwner.full_name"
-    [imgSrc]="selectedOwner?.profile_image || ''"
-    [headerItems]="[
-      {
-        label: getLabel('CONTACT'),
-        value: '+91-' + selectedOwner?.contact_number,
-      },
-      { label: getLabel('EMAIL'), value: selectedOwner.email },
-    ]"
-    [items]="[
-      { label: getLabel('EMIRATES_ID'), value: selectedOwner.emirate_id },
-      {
-        label: getLabel('RESIDENSE_VISA'),
-        value: selectedOwner.uae_residence_visa,
-      },
-      {
-        label: getLabel('TRADE_LICENSE'),
-        value: selectedOwner.trade_license_number,
-      },
-      { label: getLabel('OWNER_CODE'), value: selectedOwner.owner_code },
-      { label: getLabel('ROLE'), value: selectedOwner.role },
-    ]"
-    (back)="handleBackClick()"
-  ></app-table-view-card>
-
-  <div class="cmmnTblOuter mt-3">
-    <div class="cmmnTblHdr">
-      <div class="row g-3 align-items-center">
-        <div class="col-md">
-          <app-table-title
-            [title]="'OWNER_PROPERTIES' | translate"
-            [subtitle]="'(' + (selectedOwner?.properties?.length || 0) + ')'"
-            (onRefresh)="refreshDetailsView()"
-          ></app-table-title>
-        </div>
-        <div class="col-md-auto">
-          <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="Search here..." />
-
-            <app-filter-popup-btn>
-              <app-table-filter-btn
-                [title]="'FILTER' | translate"
-                [hasIcon]="true"
-              >
-                <app-filter-icon />
-              </app-table-filter-btn>
-
-              <ng-container form>
-                <form>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label class="form-label">{{
-                        "RENTAL_STATUS" | translate
-                      }}</label>
-                      <app-custom-select
-                        [options]="rentalStatus"
-                        key="key"
-                        value="value"
-                        [placeholder]="'SELECT_RENTAL_STATUS' | translate"
-                        (optionSelected)="selectedrentalstatus = $event"
-                      >
-                      </app-custom-select>
-                    </div>
-                  </div>
-                </form>
-              </ng-container>
-              <ng-container action>
-                <button
-                  type="button"
-                  class="btn btnCommon"
-                  (click)="removeFilter()"
-                >
-                  {{ "REMOVE_ALL" | translate }}
-                </button>
-                <button
-                  type="button"
-                  class="btn btnCommon"
-                  (click)="applyFilter()"
-                >
-                  {{ "APPLY" | translate }}
-                </button>
-              </ng-container>
-            </app-filter-popup-btn>
-
-            <app-table-filter-btn
-              [title]="'EXPORT' | translate"
-              [hasIcon]="true"
-              (clicked)="handleInternalTableExport()"
-            >
-              <app-export-icon />
-            </app-table-filter-btn>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="cmmnTblBody">
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>{{ "CODE" | translate }}</th>
-              <th>
-                <button type="button">
-                  {{ "PROPERTY_NAME" | translate }} <i><app-sorting-icon /></i>
-                </button>
-              </th>
-              <th>
-                <button type="button">
-                  {{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i>
-                </button>
-              </th>
-              <th>{{ "TENANCY_STATUS" | translate }}</th>
-              <th>{{ "AGREMENT" | translate }}</th>
-              <th width="200"></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (property of selectedOwner?.table; track $index) {
-              <tr>
-                <td>{{ property?.property_code || "N/A" }}</td>
-                <td>
-                  <app-table-img-item
-                    img="../../assets/property/property-img-default.svg"
-                    size="md"
-                    [title]="property?.property_name"
-                  />
-                </td>
-                <td>{{ property?.tenant_name || "N/A" }}</td>
-                <td>{{ property?.tenancy_status || "N/A" }}</td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="download"
-                      (clicked)="handleDownloadPdf(property?.lease_id)"
-                    />
-                    <app-table-action-btn
-                      type="preview"
-                      (clicked)="handleViewPdf(property?.lease_id)"
-                    />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </td>
-              </tr>
-            } @empty {
-              <tr>
-                <td colspan="20" align="center"><app-no-data></app-no-data></td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="cmmnTblFtr">
-      <app-table-select
-        [componentName]="componentName"
-        [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-        (rowsPerPageChange)="onPageSizeChange($event)"
-      />
-      <app-table-pagination
-        [componentName]="componentName"
-        [currentPage]="currentPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage"
-        (pageChange)="onPageChange($event)"
-      />
+  <div class="cmmnTbl">
+    <div class="table-responsive">
+      <table class="table table-bordered owners-table">
+        <thead>
+          <tr>
+            <th>Owner Name <i><app-sorting-icon /></i></th>
+            <th>Code</th>
+            <th>Owner No.</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Emirates ID</th>
+            <th>Trade License No</th>
+            <th>License No</th>
+            <th>License Expiry</th>
+            <th>License Issuer</th>
+            <th>Fax No</th>
+            <th>P.O. Box</th>
+            <th width="100">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (owner of owners; track $index) {
+          <tr>
+            <td>{{ owner.name || 'N/A' }}</td>
+            <td>{{ owner.code || 'N/A' }}</td>
+            <td>{{ owner.owner_number || 'N/A' }}</td>
+            <td>{{ owner.contact_number || 'N/A' }}</td>
+            <td>{{ owner.email || 'N/A' }}</td>
+            <td>{{ owner.emirates_id || 'N/A' }}</td>
+            <td>{{ owner.trade_license_number || 'N/A' }}</td>
+            <td>{{ owner.license_number || 'N/A' }}</td>
+            <td>{{ owner.license_expiry_date || 'N/A' }}</td>
+            <td>{{ owner.license_issuer || 'N/A' }}</td>
+            <td>{{ owner.fax_number || 'N/A' }}</td>
+            <td>{{ owner.po_box_number || 'N/A' }}</td>
+            <td align="center">
+              <div class="cmmnTblActnBtnDiv">
+                <app-table-action-btn type="edit" (clicked)="openEditModal(ownerModal, owner)" />
+                <app-table-action-btn type="delete" (clicked)="deleteOwner(owner)" />
+              </div>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="13" align="center"><app-no-data></app-no-data></td>
+          </tr>
+          }
+        </tbody>
+      </table>
     </div>
   </div>
-</ng-container>
+
+  <div class="cmmnTblFtr">
+    <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
+    <app-table-pagination [componentName]="componentName" [currentPage]="currentPage" [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
+  </div>
+</div>
+
+<!-- Add / Edit Owner Modal -->
+<ng-template #ownerModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ editingOwnerId ? 'Edit Owner' : 'Add Owner' }}</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="ownerForm" class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">First Name</label>
+        <input type="text" class="form-control" formControlName="first_name" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Last Name</label>
+        <input type="text" class="form-control" formControlName="last_name" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" formControlName="email" placeholder="Enter here"
+          [attr.readonly]="editingOwnerId ? true : null" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Contact Number</label>
+        <input type="text" class="form-control" formControlName="contact_number" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Emirates ID</label>
+        <input type="text" class="form-control" formControlName="emirates_id" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Address Line 1</label>
+        <input type="text" class="form-control" formControlName="address_line_1" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Address Line 2</label>
+        <input type="text" class="form-control" formControlName="address_line_2" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Pin Code</label>
+        <input type="text" class="form-control" formControlName="pin_code" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Passport Number</label>
+        <input type="text" class="form-control" formControlName="passport_number" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Passport Expiry Date</label>
+        <input type="date" class="form-control" formControlName="passport_expiry_date" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Visa Number</label>
+        <input type="text" class="form-control" formControlName="visa_number" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Visa Expiry Date</label>
+        <input type="date" class="form-control" formControlName="visa_expiry_date" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Owner Number</label>
+        <input type="text" class="form-control" formControlName="owner_number" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Trade License No</label>
+        <input type="text" class="form-control" formControlName="trade_license_number" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">License Number</label>
+        <input type="text" class="form-control" formControlName="license_number" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">License Expiry Date</label>
+        <input type="date" class="form-control" formControlName="license_expiry_date" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">License Issuer</label>
+        <input type="text" class="form-control" formControlName="license_issuer" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Fax Number</label>
+        <input type="text" class="form-control" formControlName="fax_number" placeholder="Enter here" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">P.O. Box Number</label>
+        <input type="text" class="form-control" formControlName="po_box_number" placeholder="Enter here" />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btnCommon" (click)="saveOwner(modal)" [disabled]="formLoading">
+      {{ formLoading ? 'Saving...' : 'Save' }}
+    </button>
+  </div>
+</ng-template>

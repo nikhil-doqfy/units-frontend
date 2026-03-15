@@ -1,27 +1,61 @@
-.cmmnTblBody table.charges-table thead tr th {
-  background-color: var(--muteBorder1);
-  color: black;
-}
-.lease-header h1 {
-  text-decoration: none;
+/* ── Section card ──────────────────────────────────── */
+.sectionCard {
+  position: relative;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: var(--whiteBg);
+  border: 1px solid #e2e8f0;
 }
 
-.lease-header {
+/* ── Badge number (top-right) ──────────────────────── */
+.sectionBadge {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: #d6dee1;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  color: #374151;
+}
+
+/* ── Section title ─────────────────────────────────── */
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-bottom: 16px;
+  color: #111827;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+}
+
+.totalLabel {
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: none;
+  color: #536c76;
+}
+
+/* ── Form labels ───────────────────────────────────── */
+.form-label {
+  white-space: nowrap;
+  font-size: 13px;
   font-weight: 500;
+  margin-bottom: 6px;
 }
 
-.lease-header span {
-  font-size: 14px;
+/* ── Charges table ─────────────────────────────────── */
+.charges-table th {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #f8fafc;
 }
 
-.badge {
-  background: #f1f3f5;
-  color: #333;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  margin-left: auto;
+.charges-table td {
+  font-size: 13px;
+  vertical-align: middle;
 }

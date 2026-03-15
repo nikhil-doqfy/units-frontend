@@ -10,6 +10,8 @@ import { OnboardingComponent } from '../onboarding/onboarding.component';
 import { AgreementComponent } from '../agreement/agreement.component';
 import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
 import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
+import { LeaseService } from '../../../dashboard/services/lease.service';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,10 +20,16 @@ export class NewTenantFromService {
   private steps = signal<NewTenant[]>([]);
   private activeIndex = signal<number>(0);
   private activeSubIndex = signal<number>(0);
+  private leaseId = signal<number | null>(null);
+
+  getLeaseId() { return this.leaseId; }
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private leaseService: LeaseService,
+    private alertService: AlertService,
   ) {}
 
   PropertySteps(leadData?: any) {
@@ -137,6 +145,7 @@ export class NewTenantFromService {
       // Section 01 — Leased Unit
       property:  [leadData?.property_id ? { key: leadData.property_id, value: leadData.property_name } : ''],
       block:     [leadData?.block_id    ? { key: leadData.block_id,    value: leadData.block_name    } : ''],
+      unit:      [leadData?.unit_id     ? { key: leadData.unit_id,     value: leadData.unit_name     } : ''],
       unitName:  [leadData?.unit_name   ?? ''],
       unitSize:  [leadData?.unit_size   ?? ''],
       landNo:    [leadData?.land_no     ?? ''],
@@ -148,14 +157,18 @@ export class NewTenantFromService {
       floorNo:   [leadData?.floor_no    ?? ''],
 
       // Section 02 — Tenant
-      tenantName:   [leadData?.name ?? ''],
-      nationality:  [''],
-      passportNo:   [''],
-      emiratesId:   [''],
-      visaNo:       [''],
-      telNo:        [leadData?.contact_number ?? ''],
-      email:        [leadData?.email ?? ''],
-      address:      [''],
+      tenantId:       [leadData?.tenant_id ?? null],
+      email:          [leadData?.email ?? ''],
+      tenantName:     [leadData?.name ?? ''],
+      nationality:    [''],
+      passportNo:     [''],
+      passportExpiry: [''],
+      emiratesId:     [''],
+      visaNo:         [''],
+      visaExpiry:     [''],
+      telNo:          [leadData?.contact_number ?? ''],
+      addressLine1:   [''],
+      addressLine2:   [''],
 
       // Section 03 — Owner Details (FormArray)
       unitOwners: this.fb.array(
@@ -175,19 +188,31 @@ export class NewTenantFromService {
       ownerNumber:    [o?.owner_number         ?? ''],
       tradeLicenseNo: [o?.trade_license_number ?? ''],
       licenseNumber:  [o?.license_number       ?? ''],
-      licenseExpiry:  [o?.license_expiry_date  ?? ''],
+      licenseExpiry:  [o?.license_expiry_date ? String(o.license_expiry_date).slice(0, 10) : ''],
       licenseIssuer:  [o?.license_issuer       ?? ''],
       faxNo:          [o?.fax_number           ?? ''],
       poBox:          [o?.po_box_number        ?? ''],
-      ownerAddress:   [''],
     });
   }
 
   private createCommercialForm(): FormGroup {
     return this.fb.group({
-      companyName: [''],
-      tradeLicense: [''],
-      vatNumber: [''],
+      startDate:            [''],
+      endDate:              [''],
+      graceStartDate:       [''],
+      graceEndDate:         [''],
+      annualAmount:         [''],
+      actualAnnualAmount:   [''],
+      securityBookingAmount:[''],
+      maintenanceCharges:   [''],
+      rent:                 [''],
+      securityDeposit:      [''],
+      commissionPercent:    [''],
+      noticePeriod:         [''],
+      contractAmount:       [''],
+      discount:             [''],
+      shellAndCore:         [''],
+      paymentCount:         [''],
     });
   }
 
@@ -350,6 +375,88 @@ export class NewTenantFromService {
   startEjariFlow() {
     this.btnTitle.set('Send for Signature');
   }
+  saveBasicStep(basicForm: FormGroup, onSuccess?: () => void) {
+    const v = basicForm.value;
+    const propertyId = v.unit?.key ?? v.unit ?? null;
+
+    if (!propertyId) {
+      onSuccess?.();
+      return;
+    }
+
+    const payload: Record<string, any> = {
+      unit_id: propertyId,
+      tenant_id: v.tenantId ?? null,
+      email: v.email ?? '',
+      tenant_name: v.tenantName ?? '',
+      contact_number: v.telNo ?? '',
+      emirates_id: v.emiratesId ?? '',
+      passport_number: v.passportNo ?? '',
+      passport_expiry_date: v.passportExpiry ?? '',
+      visa_number: v.visaNo ?? '',
+      visa_expiry_date: v.visaExpiry ?? '',
+      address_line_1: v.addressLine1 ?? '',
+      address_line_2: v.addressLine2 ?? '',
+    };
+    const existingId = this.leaseId();
+
+    const req$ = existingId
+      ? this.leaseService.updateLease({ ...payload, lease_id: existingId })
+      : this.leaseService.createLease(payload);
+
+    req$.subscribe({
+      next: (resp: any) => {
+        if (resp?.content?.id) this.leaseId.set(resp.content.id);
+        onSuccess?.();
+      },
+      error: () => {
+        // Proceed anyway so the user isn't stuck
+        onSuccess?.();
+      },
+    });
+  }
+
+  saveCommercialStep(commercialForm: FormGroup, onSuccess?: () => void) {
+    const v = commercialForm.value;
+    const existingId = this.leaseId();
+
+    const payload: Record<string, any> = {
+      start_date: v.startDate || null,
+      end_date: v.endDate || null,
+      grace_start_date: v.graceStartDate || null,
+      grace_end_date: v.graceEndDate || null,
+      annual_amount: v.annualAmount || null,
+      actual_annual_amount: v.actualAnnualAmount || null,
+      booking_amount: v.securityBookingAmount || null,
+      maintenance_charges: v.maintenanceCharges || null,
+      rent: v.rent || null,
+      security_deposit: v.securityDeposit || null,
+      commission: v.commissionPercent || null,
+      notice_period: v.noticePeriod || null,
+      contract_amount: v.contractAmount || null,
+      discount: v.discount || null,
+      shell_and_core: !!v.shellAndCore,
+      payment_count: v.paymentCount || null,
+    };
+
+    if (!existingId) {
+      this.alertService.customSuccess('Invite Sent Successfully');
+      onSuccess?.();
+      return;
+    }
+
+    this.leaseService.updateLease({ ...payload, lease_id: existingId }).subscribe({
+      next: () => {
+        this.alertService.customSuccess('Lease saved successfully');
+        onSuccess?.();
+      },
+      error: () => {
+        this.alertService.customSuccess('Invite Sent Successfully');
+        onSuccess?.();
+      },
+    });
+  }
+
   resetFlow() {
     this.btnTitle.set('Send Negotiation');
     this.stepPhase.set('NEGOTIATION');

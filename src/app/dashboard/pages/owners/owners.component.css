@@ -1,0 +1,27 @@
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+.owners-table thead tr th:last-child,
+.owners-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 100px;
+}
+
+.owners-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg);
+  box-shadow: none;
+}
+
+.owners-table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}

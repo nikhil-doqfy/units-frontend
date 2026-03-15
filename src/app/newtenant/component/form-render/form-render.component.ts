@@ -62,6 +62,16 @@ export class FormRenderComponent {
   AgreementComponent = AgreementComponent;
   EjariComponent = EjariDocComponent;
   EjariDocSignatureComponent = EjariDocSignatureComponent;
+  CommercialdetailsComponent = CommercialdetailsComponent;
+
+  get showDummyLink(): boolean {
+    const c = this.currentSubStep?.component;
+    return c !== this.ProfileComponent &&
+           c !== this.OnboardingComponent &&
+           c !== this.AgreementComponent &&
+           c !== this.EjariComponent &&
+           c !== this.EjariDocSignatureComponent;
+  }
   showWaitingMsg = true;
   showNegotiationMsg = false;
   isChequeStep = false;
@@ -181,16 +191,61 @@ export class FormRenderComponent {
       return;
     }
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
-      this.alertService.customSuccess('Invite Sent Successfully');
+      this.formService.saveCommercialStep(this.currentSubStep.formGroup, () => {
+        setTimeout(() => this.goToNextStep(), 1000);
+      });
+      return;
+    }
 
-      setTimeout(() => {
-        this.goToNextStep();
-      }, 3000);
-
+    // BasicPersonal step — save before advancing
+    if (this.currentSubStep?.formGroup) {
+      this.formService.saveBasicStep(this.currentSubStep.formGroup, () => this.goToNextStep());
       return;
     }
 
     this.goToNextStep();
+  }
+
+  fillDummyData() {
+    const form = this.currentSubStep?.formGroup;
+    if (!form) return;
+
+    if (this.currentSubStep?.component === CommercialdetailsComponent) {
+      form.patchValue({
+        startDate:            '2025-01-01',
+        endDate:              '2026-01-01',
+        graceStartDate:       '2025-01-01',
+        graceEndDate:         '2025-01-15',
+        annualAmount:         120000,
+        actualAnnualAmount:   110000,
+        securityBookingAmount: 10000,
+        maintenanceCharges:   2000,
+        rent:                 10000,
+        securityDeposit:      20000,
+        commissionPercent:    5,
+        noticePeriod:         3,
+        contractAmount:       115000,
+        discount:             5000,
+        shellAndCore:         false,
+        paymentCount:         12,
+      });
+      return;
+    }
+
+    // BasicPersonal
+    form.patchValue({
+      tenantName:     'Ahmed Al Mansoori',
+      email:          'ahmed.mansoori@example.com',
+      nationality:    'UAE',
+      passportNo:     'P1234567',
+      passportExpiry: '2028-06-30',
+      emiratesId:     '784-1990-1234567-1',
+      visaNo:         'V-9876543',
+      visaExpiry:     '2026-12-31',
+      telNo:          '+971501234567',
+      addressLine1:   'Villa 12, Al Barsha',
+      addressLine2:   'Dubai, UAE',
+    });
   }
 
   goToNextStep() {
