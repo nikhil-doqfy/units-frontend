@@ -376,4 +376,46 @@
       </div></app-white-card
     >
   </div>
+
+  <!-- 03 Other Charges -->
+  <div class="sectionCard mt-3">
+    <span class="sectionBadge">03</span>
+    <h6 class="sectionTitle">
+      Other Charges
+      <span class="totalLabel"
+        >Total: AED {{ totalAmount | number: "1.2-2" }}</span
+      >
+    </h6>
+    <div class="table-responsive">
+      <table class="table table-bordered charges-table">
+        <thead>
+          <tr>
+            <th>{{ "DESCRIPTION" | translate }}</th>
+            <th>{{ "AMOUNT" | translate }}</th>
+            <th>{{ "TAX_CODE" | translate }}</th>
+            <th>{{ "VAT" | translate }}</th>
+            <th>{{ "TOTAL_AMOUNT" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of charges">
+            <td>
+              <label class="d-flex align-items-center gap-2 mb-0">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="c.checked"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                {{ c.label }}
+              </label>
+            </td>
+            <td>{{ c.amount | number: "1.2-2" }}</td>
+            <td>{{ c.tax }}</td>
+            <td>{{ c.vat | number: "1.2-2" }}</td>
+            <td>{{ c.total | number: "1.2-2" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </form>

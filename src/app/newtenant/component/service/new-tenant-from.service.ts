@@ -155,6 +155,11 @@ export class NewTenantFromService {
           ? { key: leadData.block_id, value: leadData.block_name }
           : '',
       ],
+      unit: [
+        leadData?.unit_id
+          ? { key: leadData.unit_id, value: leadData.unit_name }
+          : '',
+      ],
       unitName: [leadData?.unit_name ?? ''],
       unitSize: [leadData?.unit_size ?? ''],
       landNo: [leadData?.land_no ?? ''],
@@ -166,14 +171,18 @@ export class NewTenantFromService {
       floorNo: [leadData?.floor_no ?? ''],
 
       // Section 02 — Tenant
+      tenantId: [leadData?.tenant_id ?? null],
+      email: [leadData?.email ?? ''],
       tenantName: [leadData?.name ?? ''],
       nationality: [''],
       passportNo: [''],
+      passportExpiry: [''],
       emiratesId: [''],
       visaNo: [''],
+      visaExpiry: [''],
       telNo: [leadData?.contact_number ?? ''],
-      email: [leadData?.email ?? ''],
-      address: [''],
+      addressLine1: [''],
+      addressLine2: [''],
 
       // Section 03 — Owner Details (FormArray)
       unitOwners: this.fb.array(
@@ -193,11 +202,14 @@ export class NewTenantFromService {
       ownerNumber: [o?.owner_number ?? ''],
       tradeLicenseNo: [o?.trade_license_number ?? ''],
       licenseNumber: [o?.license_number ?? ''],
-      licenseExpiry: [o?.license_expiry_date ?? ''],
+      licenseExpiry: [
+        o?.license_expiry_date
+          ? String(o.license_expiry_date).slice(0, 10)
+          : '',
+      ],
       licenseIssuer: [o?.license_issuer ?? ''],
       faxNo: [o?.fax_number ?? ''],
       poBox: [o?.po_box_number ?? ''],
-      ownerAddress: [''],
     });
   }
 
