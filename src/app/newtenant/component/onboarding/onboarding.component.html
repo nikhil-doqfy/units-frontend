@@ -11,13 +11,12 @@
         <input type="checkbox" />
         <span class="custom-checkbox"></span>
         <span class="confirm-text">
-          I confirm that the physical documents and cheques have been received
-          from the tenant.
+          {{ "TENANT_DOCUMENT_RECEIVED" | translate }}
         </span>
       </label>
     </div>
     <div class="mt-3">
-      <app-white-card title="Photos & Documents">
+      <app-white-card title="PHOTOS_&_DOCUMENTS">
         <div class="commonTabs">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -31,7 +30,7 @@
                 aria-controls="tenantDocument-tab-pane"
                 aria-selected="false"
               >
-                Tenants Documents
+                {{ "TENANTS_DOCUMENTS" | translate }}
               </button>
             </li>
           </ul>
@@ -62,7 +61,9 @@
                       title="Emirates ID.pdf"
                       size="1.2 MB"
                     />
-                    <span class="replace-text">Replace</span>
+                    <span class="replace-text">{{
+                      "REPLACE" | translate
+                    }}</span>
                     <span class="status-icon warn"
                       ><app-error-outline-icon></app-error-outline-icon
                     ></span>
@@ -88,7 +89,7 @@
                     <i class="upload-icon">
                       <app-download-icon></app-download-icon>
                     </i>
-                    Upload More
+                    {{ "UPLOAD_MORE" | translate }}
                     <span>|</span>
                     <i>
                       <app-arrow-down-icon></app-arrow-down-icon>
@@ -102,14 +103,16 @@
                       openAdditionalDocumentModal(additionalDocumentContent)
                     "
                   >
-                    Additional Document
+                    {{ "ADDITIONAL_DOCUMENT" | translate }}
                   </div>
                 </div>
 
                 <div
                   class="col ms-auto d-flex align-items-center justify-content-end gap-2 score-section"
                 >
-                  <a class="score-link">View Score Report</a>
+                  <a class="score-link">{{
+                    "VIEW_SCORE_REPORT" | translate
+                  }}</a>
 
                   <div class="progress-wrap">
                     <svg viewBox="0 0 120 120">
@@ -130,9 +133,9 @@
     <div class="mt-3" *ngIf="showCheckSection$()">
       <div class="cmmnTblOuter">
         <div class="rent-cheque-counter">
-          <span class="title">Rent Cheques</span>
+          <span class="title">{{ "RENT_CHEQUES" | translate }}</span>
           <div class="counter-wrapper">
-            <span class="text-btn">No of Cheques :</span>
+            <span class="text-btn">{{ "NO_OF_CHEQUES" | translate }} :</span>
             <button class="btn-circle minus-btn" (click)="decrement()">
               –
             </button>
@@ -159,15 +162,15 @@
                     </div>
                   </th>
                   <th>{{ "SI.No" | translate }}</th>
-                  <th>{{ "Reference ID" | translate }}</th>
+                  <th>{{ "REFERENCE_ID" | translate }}</th>
                   <th width="200px">
-                    {{ "Photo" | translate }}
+                    {{ "PHOTO" | translate }}
                   </th>
-                  <th>{{ "Rent Start & End Date" | translate }}</th>
+                  <th>{{ "RENT_START_END_DATE" | translate }}</th>
 
-                  <th width="200">{{ "Origin Bank" }}</th>
-                  <th>{{ "Origin Account No" }}</th>
-                  <th>{{ "Origin IFSC Code" }}</th>
+                  <th width="200">{{ "ORIGIN_BANK" | translate }}</th>
+                  <th>{{ "ORIGIN_ACCOUNT_NO" | translate }}</th>
+                  <th>{{ "ORIGIN_IFSC_CODE" | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -407,9 +410,9 @@
     <div class="mt-3" *ngIf="showCheckSection$()">
       <div class="cmmnTblOuter">
         <div class="rent-cheque-counter">
-          <span class="title">Additional Cheques </span>
+          <span class="title">{{ "ADDITIONAL_CHEQUES" | translate }} </span>
           <div class="counter-wrapper">
-            <span class="text-btn">No of Cheques :</span>
+            <span class="text-btn">{{ "NO_OF_CHEQUES" | translate }}:</span>
             <button class="btn-circle minus-btn" (click)="decrement()">
               –
             </button>
@@ -436,15 +439,15 @@
                     </div>
                   </th>
                   <th>{{ "SI.No" | translate }}</th>
-                  <th>{{ "Reference ID" | translate }}</th>
-                  <th>{{ "Payment Type" }}</th>
+                  <th>{{ "REFERENCE_ID" | translate }}</th>
+                  <th>{{ "PAYMENT_TYPE" | translate }}</th>
                   <th width="200px">
-                    {{ "Photo" | translate }}
+                    {{ "PHOTO" | translate }}
                   </th>
 
-                  <th width="200">{{ "Origin Bank" }}</th>
-                  <th>{{ "Origin Account No" }}</th>
-                  <th>{{ "Origin IFSC Code" }}</th>
+                  <th width="200">{{ "ORIGIN_BANK" | translate }}</th>
+                  <th>{{ "ORIGIN_ACCOUNT_NO" | translate }}</th>
+                  <th>{{ "ORIGIN_IFSC_CODE" | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -568,7 +571,7 @@
 <ng-template #additionalDocumentContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
-      {{ "Additional Document" | translate }}
+      {{ "ADDITIONAL_DOCUMENT" | translate }}
     </h4>
     <button
       type="button"
@@ -591,7 +594,7 @@
     <button type="button" class="btn btnCommon">
       <!-- (click)="onTenantSave(addTenantFormComponent, modal)" -->
 
-      {{ "Send" | translate }}
+      {{ "SEND" | translate }}
     </button>
   </div>
 </ng-template>

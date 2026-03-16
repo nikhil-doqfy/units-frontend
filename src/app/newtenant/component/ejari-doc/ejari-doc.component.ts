@@ -3,6 +3,7 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ejari-doc',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
     DownloadIconComponent,
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule,
   ],
   templateUrl: './ejari-doc.component.html',
   styleUrl: './ejari-doc.component.css',

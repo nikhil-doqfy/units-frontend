@@ -45,8 +45,8 @@ export class NewTenantFromService {
           },
           {
             id: '1-2',
-            title: 'Commercial Details',
-            description: 'Fill all the fields to add create your lease',
+            title: 'COMMERCIAL_DEATILS',
+            description: 'FILL_FIELDS_CREATE_LEASE',
             component: CommercialdetailsComponent,
             formGroup: this.createCommercialForm(),
           },
@@ -58,13 +58,13 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '2-1',
-            title: 'Profile',
+            title: 'PROFILE',
             component: ProfileComponent,
             formGroup: this.createProfileForm(),
           },
           {
             id: '2-2',
-            title: 'Profile',
+            title: 'PROFILE',
             component: OnboardingComponent,
             formGroup: this.createOnboardingForm(),
           },
@@ -76,7 +76,7 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '3-1',
-            title: 'Profile',
+            title: 'PROFILE',
             component: AgreementComponent,
             formGroup: this.createBasicForm(),
             saveButtonDetails: {
@@ -93,7 +93,7 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '4-1',
-            title: 'Profile',
+            title: 'PROFILE',
             component: EjariDocComponent,
             formGroup: this.createCommercialForm(),
             saveButtonDetails: {
@@ -104,7 +104,7 @@ export class NewTenantFromService {
           },
           {
             id: '4-2',
-            title: 'Profile',
+            title: 'PROFILE',
             component: EjariDocSignatureComponent,
             formGroup: this.createCommercialForm(),
             saveButtonDetails: {

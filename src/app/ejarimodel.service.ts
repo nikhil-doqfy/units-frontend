@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 @Injectable({
   providedIn: 'root',
 })
 export class EjarimodelService {
-  constructor() {}
+  constructor(private translate: TranslateService) {}
   customTenantSuccessModal(msg: string, onAction?: (action: string) => void) {
     Swal.fire({
       html: `
@@ -15,18 +16,17 @@ export class EjarimodelService {
           <div class="success-icon">
             <img src="assets/Verify.svg" />
           </div>
-  
-          <h6>Tenant Activated Successfully</h6>
+ 
+          <h6> ${this.translate.instant('TENANT_ACTIVATED_SUCCESSFULLY')}</h6>
   
           <span class="success-text">
-            The tenant has been activated and the invoice has been generated
-            successfully.
+          ${this.translate.instant('TENANT_ACTIVATION_SUCCESS')}
           </span>
   
           <div class="modal-actions">
-            <button id="invoiceBtn" class="btn btnCommonsx">Go to Invoice</button>
+            <button id="invoiceBtn" class="btn btnCommonsx">${this.translate.instant('GO_TO_INVOICE')}</button>
             <span class="mt-3">
-              <a href="#" id="profileBtn" class="secondary-link">View Tenant Profile</a>
+              <a href="#" id="profileBtn" class="secondary-link">${this.translate.instant('VIEW_TENANT_PROFILE')}</a>
             </span>
           </div>
           </div>

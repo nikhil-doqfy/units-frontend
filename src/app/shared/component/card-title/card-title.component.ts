@@ -15,4 +15,5 @@ export class CardTitleComponent {
   @Input() size: string | undefined;
   @Input() center: boolean | undefined;
   @Input() blockCount: any;
+  @Input() unitCount!: number;
 }

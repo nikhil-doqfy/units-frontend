@@ -4,13 +4,13 @@
       <div class="lease-card">
         <!-- Header -->
         <div class="lease-header">
-          <h6>Lessor period</h6>
+          <h6>{{ "LESSOR_PERIOD" | translate }}</h6>
           <span class="badge">01</span>
         </div>
 
         <div class="form-grid row g-3">
           <div class="col-md-6">
-            <label class="form-label">{{ "Start Date" }}</label>
+            <label class="form-label">{{ "START_DATE" | translate }}</label>
             <app-custom-select
               [width]="'300px'"
               [iconType]="'custom'"
@@ -18,7 +18,7 @@
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">{{ "End Date" }}</label>
+            <label class="form-label">{{ "END_DATE" | translate }}</label>
             <app-custom-select
               [width]="'300px'"
               [iconType]="'custom'"
@@ -26,14 +26,16 @@
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">{{ "Grace Start Date" }}</label>
+            <label class="form-label">{{
+              "GRACE_START_DATE" | translate
+            }}</label>
             <app-custom-select
               [width]="'300px'"
               [iconType]="'custom'"
             ></app-custom-select>
           </div>
           <div class="col-md-6">
-            <label class="form-label">{{ "Grace End Date" }}</label>
+            <label class="form-label">{{ "GRACE_END_DATE" | translate }}</label>
             <app-custom-select
               [width]="'300px'"
               [iconType]="'custom'"
@@ -50,116 +52,136 @@
         <div class="lease-card">
           <!-- Header -->
           <div class="lease-header">
-            <h6>Amount/Rent Details</h6>
+            <h6>{{ "AMOUNT_RENT_DETAILS" | translate }}</h6>
             <span class="badge">02</span>
           </div>
 
           <!-- Form Grid -->
           <div class="form-grid row g-3">
             <div class="col-md-6">
-              <label class="form-label">{{ "Annual Amount" }}</label>
+              <label class="form-label">{{
+                "ANNUAL_AMOUNT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Actual Annual  Amount " }}</label>
+              <label class="form-label">{{
+                "ACTUAL_ANNUAL_AMOUNT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Security/Booking Amount" }}</label>
+              <label class="form-label">{{
+                "SECURITY_BOOKING_AMOUNT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ "Maintenance Charges" }}</label>
+              <label class="form-label">{{
+                "MAINTENANCE_CHARGES" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">{{ "Rent " }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Security Deposit" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
-                style="width: 300px"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ "Commission in %" }}</label>
-              <input
-                type="text"
-                class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Notice-Period" }}</label>
+              <label class="form-label">{{ "RENT" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                style="width: 300px"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{
+                "SECURITY_DEPOSIT" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                style="width: 300px"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{
+                "COMMISSION_IN_%" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'ENTER_HERE' | translate"
+                style="width: 300px"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{
+                "NOTICE_PERIODS" | translate
+              }}</label>
               <app-custom-select [width]="'300px'"></app-custom-select>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Contract Amount" }}</label>
+              <label class="form-label">{{
+                "CONTRACT_AMOUNT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Discount (Optional)" }}</label>
+              <label class="form-label">{{
+                "DISCOUNT_OPTIONAL" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Shell & Core " }}</label>
+              <label class="form-label">{{ "SHELL_CORE" | translate }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Payment Count" }}</label>
+              <label class="form-label">{{
+                "PAYMENT_COUNT" | translate
+              }}</label>
               <app-custom-select [width]="'300px'"></app-custom-select>
             </div>
           </div>
@@ -170,8 +192,9 @@
   <div class="mt-3">
     <app-white-card>
       <div class="lease-header">
-        <h6>Other Charges</h6>
-        <span style="color: #bec1c2"> Total:</span> <span>AED 18,000.00</span>
+        <h6>{{ "OTHER_CHARGE" | translate }}</h6>
+        <span style="color: #bec1c2"> {{ "TOTAL" | translate }}:</span>
+        <span>AED 18,000.00</span>
         <span class="badge">03</span>
       </div>
       <div class="cmmnTblBody">

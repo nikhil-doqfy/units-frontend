@@ -4,8 +4,25 @@
   gap: 10px;
 }
 
+/* circle for icon */
+.listIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* if images are inside */
+.listIcon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 .listText {
   text-decoration: underline;
   font-weight: 500;
 }
-

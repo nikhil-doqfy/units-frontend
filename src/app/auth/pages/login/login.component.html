@@ -4,9 +4,12 @@
 />
 
 <app-auth-form>
-  <form *ngIf="loginMode === 'password'" class="mb-4" [formGroup]="loginForm">
-    <!-- (ngSubmit)="signIn()" -->
-
+  <form
+    *ngIf="loginMode === 'password'"
+    class="mb-4"
+    [formGroup]="loginForm"
+    (ngSubmit)="signIn()"
+  >
     <div class="mb-4">
       <label for="email" class="form-label">Email Address</label>
       <div class="iconInput">
@@ -86,9 +89,8 @@
       <button
         type="submit"
         class="btn btnCommon btnMinWidth"
-        (click)="goToDashboard()"
+        (click)="signIn()"
       >
-        <!-- (click)="signIn()" -->
         Sign In
       </button>
     </div>

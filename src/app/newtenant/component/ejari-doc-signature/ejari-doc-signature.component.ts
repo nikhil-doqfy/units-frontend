@@ -5,6 +5,7 @@ import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.component';
 import { CommonModule } from '@angular/common';
 import { SignedSuccessfullyIconComponent } from '../../../icons/signed-successfully-icon/signed-successfully-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ejari-doc-signature',
@@ -15,6 +16,7 @@ import { SignedSuccessfullyIconComponent } from '../../../icons/signed-successfu
     WarningIconComponent,
     CommonModule,
     SignedSuccessfullyIconComponent,
+    TranslateModule,
   ],
   templateUrl: './ejari-doc-signature.component.html',
   styleUrl: './ejari-doc-signature.component.css',

@@ -19,5 +19,6 @@ export class StepPaneComponent {
   @Input() showInvitePmcBtn: boolean = false;
   @Input() showInviteOwnerBtn: boolean = false;
   @Input() blockCount!: number;
+  @Input() unitCount!: number;
   @ViewChild('paneContent', { static: true }) content!: TemplateRef<any>;
 }

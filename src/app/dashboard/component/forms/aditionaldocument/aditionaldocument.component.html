@@ -1,21 +1,21 @@
 <div class="form-group">
-  <label>Documents <span class="required">*</span></label>
+  <label>{{ "DOCUMENTS" | translate }} <span class="required">*</span></label>
 
   <div class="multi-select">
     <span class="tag">
-      Emirates ID
+      {{ "EMIRATES_ID" | translate }}
       <i>
         <button type="button" class="btn-close" aria-label="Close"></button
       ></i>
     </span>
     <span class="tag">
-      Other document1
+      {{ "OTHER_DOCUMENT1" | translate }}
       <i>
         <button type="button" class="btn-close" aria-label="Close"></button
       ></i>
     </span>
     <span class="tag">
-      Other document1
+      {{ "OTHER_DOCUMENT1" | translate }}
       <i>
         <button type="button" class="btn-close" aria-label="Close"></button
       ></i>
@@ -25,6 +25,6 @@
 </div>
 
 <div class="form-group">
-  <label>Comment <span class="required">*</span></label>
-  <textarea placeholder="enter here"></textarea>
+  <label>{{ "COMMENT" | translate }} <span class="required">*</span></label>
+  <textarea [placeholder]="'ENTER_HERE' | translate"></textarea>
 </div>

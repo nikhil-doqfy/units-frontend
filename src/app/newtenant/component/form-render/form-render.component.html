@@ -119,20 +119,20 @@
         </button>
         <div class="approvalDropdown" *ngIf="isDropdownOpen">
           <div class="dropdownHeader">
-            <h4>Send for Approval</h4>
+            <h4>{{ "SEND_FOR_APPROVAL" | translate }}</h4>
             <button class="closeBtn" (click)="isDropdownOpen = false">✕</button>
           </div>
 
           <div class="dropdownBody">
-            <label>Select Recipient</label>
+            <label>{{ "SELECT_RECIPIENT" | translate }}</label>
 
             <div class="inputBox">
-              Type "&#64;" to search and add managers or users.
+              {{ "TYPE_TO_SEARCH_USERS" | translate }}
             </div>
           </div>
 
           <div class="dropdownFooter">
-            <button class="sendBtn">Send</button>
+            <button class="sendBtn">{{ "SEND" | translate }}</button>
           </div>
         </div>
       </div>
