@@ -2,9 +2,9 @@
   <div class="stepper-container">
     <div class="sub-stepper" *ngIf="currentSubStep">
       <div class="sub-step active">
-        {{ currentSubStep.title }}
+        {{ currentSubStep.title | translate }}
         <span class="sub-desc">
-          {{ currentSubStep.description || "" }}
+          {{ currentSubStep.description || "" | translate }}
         </span>
       </div>
     </div>
@@ -26,7 +26,7 @@
           </div>
         </ng-template>
 
-        <div class="label">{{ step.title }}</div>
+        <div class="label">{{ step.title | translate }}</div>
 
         <div class="line" *ngIf="i < steps().length - 1"></div>
       </div>
@@ -65,7 +65,7 @@
           )
         "
       >
-        Add / Edit Fields
+        {{ "ADD_EDIT_FIELDS" | translate }}
       </button>
 
       <button
@@ -99,7 +99,7 @@
         }"
         (click)="next()"
       >
-        {{ getNextBtnLabel() }}
+        {{ getNextBtnLabel() | translate }}
       </button>
 
       <div
@@ -107,7 +107,7 @@
         class="send-negotiation-wrap"
       >
         <button class="send-negotiation-btn" (click)="onMainClick()">
-          {{ btnTitle$() }}
+          {{ btnTitle$() | translate }}
 
           <span
             *ngIf="btnTitle$() === 'Send Negotiation'"

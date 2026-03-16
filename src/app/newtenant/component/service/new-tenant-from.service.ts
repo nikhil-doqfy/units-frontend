@@ -28,17 +28,17 @@ export class NewTenantFromService {
     return signal<NewTenant[]>([
       {
         id: '1',
-        title: 'Invite',
+        title: 'INVITE',
         subSteps: [
           {
             id: '1-1',
-            title: 'Property details',
-            description: 'Fill all the fields to add create your lease',
+            title: 'PROPERTY_DETAILS',
+            description: 'FILL_FIELDS_CREATE_LEASE',
             component: BasicpersonalComponent,
             formGroup: this.createBasicForm(leadData),
             inputs: { leadData: leadData ?? null },
             saveButtonDetails: {
-              title: 'Save & Next',
+              title: 'SAVE_NEXT',
               buttonType: 'SIMPLE',
               onClick: () => this.handleMainButtonClick(),
             },
@@ -54,7 +54,7 @@ export class NewTenantFromService {
       },
       {
         id: '2',
-        title: 'Onboarding',
+        title: 'ONBOARDING',
         subSteps: [
           {
             id: '2-1',
@@ -72,7 +72,7 @@ export class NewTenantFromService {
       },
       {
         id: '3',
-        title: 'Agreement',
+        title: 'AGREEMENT',
         subSteps: [
           {
             id: '3-1',
@@ -89,7 +89,7 @@ export class NewTenantFromService {
       },
       {
         id: '4',
-        title: 'Ejari',
+        title: 'EJARI',
         subSteps: [
           {
             id: '4-1',
@@ -117,7 +117,7 @@ export class NewTenantFromService {
       },
       {
         id: '5',
-        title: 'Activated',
+        title: 'ACTIVATED',
       },
     ]);
   }
@@ -135,27 +135,35 @@ export class NewTenantFromService {
       platform: [leadData?.platform ?? ''],
 
       // Section 01 — Leased Unit
-      property:  [leadData?.property_id ? { key: leadData.property_id, value: leadData.property_name } : ''],
-      block:     [leadData?.block_id    ? { key: leadData.block_id,    value: leadData.block_name    } : ''],
-      unitName:  [leadData?.unit_name   ?? ''],
-      unitSize:  [leadData?.unit_size   ?? ''],
-      landNo:    [leadData?.land_no     ?? ''],
-      dmNo:      [leadData?.dm_no       ?? ''],
-      unitUsage: [leadData?.unit_usage  ?? ''],
-      unitType:  [leadData?.unit_type   ?? ''],
-      subType:   [leadData?.sub_type    ?? ''],
-      makaniNo:  [leadData?.makani_no   ?? ''],
-      floorNo:   [leadData?.floor_no    ?? ''],
+      property: [
+        leadData?.property_id
+          ? { key: leadData.property_id, value: leadData.property_name }
+          : '',
+      ],
+      block: [
+        leadData?.block_id
+          ? { key: leadData.block_id, value: leadData.block_name }
+          : '',
+      ],
+      unitName: [leadData?.unit_name ?? ''],
+      unitSize: [leadData?.unit_size ?? ''],
+      landNo: [leadData?.land_no ?? ''],
+      dmNo: [leadData?.dm_no ?? ''],
+      unitUsage: [leadData?.unit_usage ?? ''],
+      unitType: [leadData?.unit_type ?? ''],
+      subType: [leadData?.sub_type ?? ''],
+      makaniNo: [leadData?.makani_no ?? ''],
+      floorNo: [leadData?.floor_no ?? ''],
 
       // Section 02 — Tenant
-      tenantName:   [leadData?.name ?? ''],
-      nationality:  [''],
-      passportNo:   [''],
-      emiratesId:   [''],
-      visaNo:       [''],
-      telNo:        [leadData?.contact_number ?? ''],
-      email:        [leadData?.email ?? ''],
-      address:      [''],
+      tenantName: [leadData?.name ?? ''],
+      nationality: [''],
+      passportNo: [''],
+      emiratesId: [''],
+      visaNo: [''],
+      telNo: [leadData?.contact_number ?? ''],
+      email: [leadData?.email ?? ''],
+      address: [''],
 
       // Section 03 — Owner Details (FormArray)
       unitOwners: this.fb.array(
@@ -168,18 +176,18 @@ export class NewTenantFromService {
 
   createOwnerGroup(o?: any): FormGroup {
     return this.fb.group({
-      ownerName:      [o?.name                 ?? ''],
-      ownerEmail:     [o?.email                ?? ''],
-      ownerContact:   [o?.contact_number       ?? ''],
-      ownerEmiratesId:[o?.emirates_id          ?? ''],
-      ownerNumber:    [o?.owner_number         ?? ''],
+      ownerName: [o?.name ?? ''],
+      ownerEmail: [o?.email ?? ''],
+      ownerContact: [o?.contact_number ?? ''],
+      ownerEmiratesId: [o?.emirates_id ?? ''],
+      ownerNumber: [o?.owner_number ?? ''],
       tradeLicenseNo: [o?.trade_license_number ?? ''],
-      licenseNumber:  [o?.license_number       ?? ''],
-      licenseExpiry:  [o?.license_expiry_date  ?? ''],
-      licenseIssuer:  [o?.license_issuer       ?? ''],
-      faxNo:          [o?.fax_number           ?? ''],
-      poBox:          [o?.po_box_number        ?? ''],
-      ownerAddress:   [''],
+      licenseNumber: [o?.license_number ?? ''],
+      licenseExpiry: [o?.license_expiry_date ?? ''],
+      licenseIssuer: [o?.license_issuer ?? ''],
+      faxNo: [o?.fax_number ?? ''],
+      poBox: [o?.po_box_number ?? ''],
+      ownerAddress: [''],
     });
   }
 
@@ -218,7 +226,7 @@ export class NewTenantFromService {
   private btnTitle = signal<
     | 'Send Negotiation'
     | 'Cheque Request'
-    | 'Save & Next'
+    | 'SAVE_NEXT'
     | 'Send for Signature'
     | 'Submit for Ejari'
     | 'Approval & Generate Invoice'
@@ -284,12 +292,12 @@ export class NewTenantFromService {
 
   private triggerChequeRequest() {
     this.msgText.set('Waiting for Cheque');
-    this.btnTitle.set('Save & Next');
+    this.btnTitle.set('SAVE_NEXT');
     this.showMsg.set(true);
 
     setTimeout(() => {
       this.showMsg.set(false);
-      this.btnTitle.set('Save & Next');
+      this.btnTitle.set('SAVE_NEXT');
       this.showCheckSection.set(true);
       this.stepPhase.set('FINAL');
     }, 3000);

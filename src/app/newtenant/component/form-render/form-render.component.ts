@@ -73,7 +73,7 @@ export class FormRenderComponent {
     private ejariModelService: EjarimodelService,
     private formService: NewTenantFromService,
     private alertService: AlertService,
-  ) { }
+  ) {}
 
   get currentStep() {
     return this.steps()[this.activeIndex()];
@@ -136,7 +136,6 @@ export class FormRenderComponent {
 
     return 'Save & Next';
   }
-
 
   next() {
     if (
@@ -238,7 +237,7 @@ export class FormRenderComponent {
   }
 
   onMainClick() {
-    if (this.btnTitle$() === 'Save & Next') {
+    if (this.btnTitle$() === 'SAVE_NEXT') {
       this.goToNextStep();
     } else {
       this.formService.handleMainButtonClick();

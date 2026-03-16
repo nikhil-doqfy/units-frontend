@@ -1,24 +1,38 @@
 <form [formGroup]="form" class="commonForm">
-
   <!-- Platform -->
   <app-white-card>
     <div class="platformSection">
-      <label class="platformLabel">Platform</label>
+      <label class="platformLabel">{{ "PLATFROM" | translate }}</label>
       <div class="d-flex gap-4 mt-2 flex-wrap align-items-center">
         <div class="form-check">
-          <input class="form-check-input" type="radio" formControlName="platform" value="PROPERTY_FINDER" />
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="platform"
+            value="PROPERTY_FINDER"
+          />
           <label class="form-check-label">
             <img src="assets/platfrom/property-finder.svg" class="custom-img" />
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" formControlName="platform" value="BAYUT" />
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="platform"
+            value="BAYUT"
+          />
           <label class="form-check-label">
             <img src="assets/platfrom/buyut.svg" class="custom-img" />
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" formControlName="platform" value="DIRECT" />
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="platform"
+            value="DIRECT"
+          />
           <label class="form-check-label">Direct</label>
         </div>
       </div>
@@ -28,10 +42,12 @@
   <!-- 01 Leased Unit -->
   <div class="sectionCard mt-3">
     <span class="sectionBadge">01</span>
-    <h6 class="sectionTitle">Leased Unit</h6>
+    <h6 class="sectionTitle">{{ "LEASED_UNIT" | translate }}</h6>
     <div class="row g-3">
       <div class="col-md-3">
-        <label class="form-label">Property / Building Name</label>
+        <label class="form-label">{{
+          "PROPERTY_BUILDING_NAME" | translate
+        }}</label>
         <app-custom-select
           [options]="propertyList"
           key="key"
@@ -41,7 +57,7 @@
         ></app-custom-select>
       </div>
       <div class="col-md-3">
-        <label class="form-label">Block / Tower</label>
+        <label class="form-label">{{ "BLOCK_TOWER" | translate }}</label>
         <app-custom-select
           [options]="blockList"
           key="key"
@@ -51,23 +67,45 @@
         ></app-custom-select>
       </div>
       <div class="col-md-3">
-        <label class="form-label">Unit Name</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="unitName" />
+        <label class="form-label">{{ "UNIT_NAME" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="unitName"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Unit Size (Sq ft)</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="unitSize" />
+        <label class="form-label">{{ "UNIT_SIZE" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="unitSize"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Land No</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="landNo" />
+        <label class="form-label">{{ "LAND_NO" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="landNo"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">DM No (Affection Plan)</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="dmNo" />
+        <label class="form-label">{{ "DM_NO" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="dmNo"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Property / Unit Usage</label>
+        <label class="form-label">{{
+          "PROPERTY_UNIT_USAGE" | translate
+        }}</label>
         <app-custom-select
           [options]="unitUsageList"
           key="key"
@@ -77,7 +115,7 @@
         ></app-custom-select>
       </div>
       <div class="col-md-3">
-        <label class="form-label">Property / Unit Type</label>
+        <label class="form-label">{{ "PROPERTY_UNIT_TYPE" | translate }}</label>
         <app-custom-select
           [options]="unitTypeList"
           key="key"
@@ -87,16 +125,31 @@
         ></app-custom-select>
       </div>
       <div class="col-md-3">
-        <label class="form-label">Sub Type / BHK</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="subType" />
+        <label class="form-label">{{ "SUB_TYPE_BHK" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="subType"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Makani No</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="makaniNo" />
+        <label class="form-label">{{ "MAKANI_NO" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="makaniNo"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Floor No</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="floorNo" />
+        <label class="form-label">{{ "FLOOR_NO" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="floorNo"
+        />
       </div>
     </div>
   </div>
@@ -104,51 +157,93 @@
   <!-- 02 Tenant -->
   <div class="sectionCard mt-3">
     <span class="sectionBadge">02</span>
-    <h6 class="sectionTitle">Tenant</h6>
+    <h6 class="sectionTitle">{{ "TENANT" | translate }}</h6>
     <div class="row g-3">
       <div class="col-md-3">
-        <label class="form-label">Tenant ID</label>
+        <label class="form-label">{{ "TENANT_ID" | translate }}</label>
         <app-custom-select></app-custom-select>
       </div>
       <div class="col-md-3">
-        <label class="form-label">Tenant Name</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="tenantName" />
+        <label class="form-label">{{ "TENANT_NAME" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="tenantName"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Nationality</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="nationality" />
+        <label class="form-label">{{ "NATIONALITY" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="nationality"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Passport No</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="passportNo" />
+        <label class="form-label">{{ "PASSPORT_NO" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="passportNo"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Passport Expiry Date</label>
+        <label class="form-label">{{
+          "PASSPORT_EXPIRY_DATE" | translate
+        }}</label>
         <app-custom-select [iconType]="'custom'"></app-custom-select>
       </div>
       <div class="col-md-3">
-        <label class="form-label">Emirates ID</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="emiratesId" />
+        <label class="form-label">{{ "EMIRATES_ID" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="emiratesId"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Visa No</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="visaNo" />
+        <label class="form-label">{{ "VISA_NO" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="visaNo"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Visa Expiry Date</label>
+        <label class="form-label">{{ "VISA_EXPIRY_DATE" | translate }}</label>
         <app-custom-select [iconType]="'custom'"></app-custom-select>
       </div>
       <div class="col-md-3">
-        <label class="form-label">Tel No</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="telNo" />
+        <label class="form-label">{{ "TEL_NO" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="telNo"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Email</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="email" />
+        <label class="form-label">{{ "EMAIL" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="email"
+        />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Address</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="address" />
+        <label class="form-label">{{ "ADDRESS" | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'ENTER_HERE' | translate"
+          formControlName="address"
+        />
       </div>
     </div>
   </div>
@@ -156,66 +251,140 @@
   <!-- 03 Owner Details -->
   <div class="sectionCard sectionCardOwner mt-3">
     <span class="sectionBadge">03</span>
-    <h6 class="sectionTitle">Owner Details</h6>
+    <h6 class="sectionTitle">{{ "OWNER_DETAILS" | translate }}</h6>
     <div formArrayName="unitOwners">
-      <ng-container *ngFor="let ownerForm of ownerForms.controls; let i = index; let last = last">
+      <ng-container
+        *ngFor="
+          let ownerForm of ownerForms.controls;
+          let i = index;
+          let last = last
+        "
+      >
         <hr *ngIf="i > 0" class="ownerDivider" />
         <div class="row g-3" [formGroupName]="i">
           <div class="col-md-3">
-            <label class="form-label">Owner Name</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerName" />
+            <label class="form-label">{{ "OWNER_NAME" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="ownerName"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">Email</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerEmail" />
+            <label class="form-label">{{ "EMAIL" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="ownerEmail"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">Contact No</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerContact" />
+            <label class="form-label">{{ "CONTACT_NO" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="ownerContact"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">Emirates ID</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerEmiratesId" />
+            <label class="form-label">{{ "EMIRATES_ID" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="ownerEmiratesId"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">Owner Number</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerNumber" />
+            <label class="form-label">{{ "OWNER_NUMBER" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="ownerNumber"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">Trade License No</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="tradeLicenseNo" />
+            <label class="form-label">{{
+              "TRADE_LICENSE_NO" | translate
+            }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="tradeLicenseNo"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">License Number</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="licenseNumber" />
+            <label class="form-label">{{ "LICENSE_NUMBER" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="licenseNumber"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">License Expiry</label>
-            <input type="date" class="form-control" formControlName="licenseExpiry" />
+            <label class="form-label">{{ "LICENSE_EXPIRY" | translate }}</label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="licenseExpiry"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">License Issuer</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="licenseIssuer" />
+            <label class="form-label">{{ "LICENSE_ISSUER" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="licenseIssuer"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">Fax No</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="faxNo" />
+            <label class="form-label">{{ "FAX_NO" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter here"
+              formControlName="faxNo"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">P.O. Box</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="poBox" />
+            <label class="form-label">{{ "P.O. Box" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter here"
+              formControlName="poBox"
+            />
           </div>
           <div class="col-md-3">
-            <label class="form-label">Address</label>
-            <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerAddress" />
+            <label class="form-label">{{ "Address" | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter here"
+              formControlName="ownerAddress"
+            />
           </div>
         </div>
       </ng-container>
     </div>
     <div class="ownerActionBtns">
-      <button type="button" class="circleBtn minusBtn" (click)="removeOwner(ownerForms.length - 1)">−</button>
-      <button type="button" class="circleBtn plusBtn" (click)="addOwner()">+</button>
+      <button
+        type="button"
+        class="circleBtn minusBtn"
+        (click)="removeOwner(ownerForms.length - 1)"
+      >
+        −
+      </button>
+      <button type="button" class="circleBtn plusBtn" (click)="addOwner()">
+        +
+      </button>
     </div>
   </div>
-
 </form>

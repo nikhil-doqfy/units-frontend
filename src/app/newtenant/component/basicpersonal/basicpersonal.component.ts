@@ -7,11 +7,18 @@ import { CustomSelectComponent } from '../../../dashboard/component/custom-selec
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { PropertyService } from '../../../dashboard/services/property.service';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-basicpersonal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, WhiteCardComponent, CustomSelectComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    WhiteCardComponent,
+    CustomSelectComponent,
+    TranslateModule,
+  ],
   templateUrl: './basicpersonal.component.html',
   styleUrl: './basicpersonal.component.css',
 })
@@ -43,7 +50,11 @@ export class BasicpersonalComponent implements OnInit {
 
   ngOnInit() {
     this.sharedAPIService.getOptionsType([
-      { param: 'PARENT_PROPERTY', key: 'property', setter: (v) => (this.propertyList = v) },
+      {
+        param: 'PARENT_PROPERTY',
+        key: 'property',
+        setter: (v) => (this.propertyList = v),
+      },
     ]);
 
     if (this.leadData?.property_id) {
@@ -60,15 +71,15 @@ export class BasicpersonalComponent implements OnInit {
           if (!u) return;
 
           this.form.patchValue({
-            unitName:  u.unit_name  ?? '',
-            unitSize:  u.unit_size  ?? '',
-            landNo:    u.land_no    ?? '',
-            dmNo:      u.dm_no      ?? '',
+            unitName: u.unit_name ?? '',
+            unitSize: u.unit_size ?? '',
+            landNo: u.land_no ?? '',
+            dmNo: u.dm_no ?? '',
             unitUsage: u.unit_usage ?? '',
-            unitType:  u.unit_type  ?? '',
-            subType:   u.sub_type   ?? '',
-            makaniNo:  u.makani_no  ?? '',
-            floorNo:   u.floor_no   ?? '',
+            unitType: u.unit_type ?? '',
+            subType: u.sub_type ?? '',
+            makaniNo: u.makani_no ?? '',
+            floorNo: u.floor_no ?? '',
           });
 
           this.patchOwners(owners);
@@ -79,7 +90,9 @@ export class BasicpersonalComponent implements OnInit {
   private patchOwners(owners: any[]) {
     while (this.ownerForms.length > 0) this.ownerForms.removeAt(0);
     const list = owners.length > 0 ? owners : [null];
-    list.forEach((o) => this.ownerForms.push(this.formService.createOwnerGroup(o ?? undefined)));
+    list.forEach((o) =>
+      this.ownerForms.push(this.formService.createOwnerGroup(o ?? undefined)),
+    );
   }
 
   private loadBlocks(propertyId: number) {
@@ -125,9 +138,14 @@ export class BasicpersonalComponent implements OnInit {
 
   private clearUnitFields() {
     this.form.patchValue({
-      unitSize: '', landNo: '', dmNo: '',
-      unitUsage: '', unitType: '', subType: '',
-      makaniNo: '', floorNo: '',
+      unitSize: '',
+      landNo: '',
+      dmNo: '',
+      unitUsage: '',
+      unitType: '',
+      subType: '',
+      makaniNo: '',
+      floorNo: '',
     });
     this.patchOwners([]);
   }
