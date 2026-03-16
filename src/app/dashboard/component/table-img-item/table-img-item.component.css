@@ -59,6 +59,43 @@
   height: 32px;
 }
 
+.cmmnTblImgItem i.initialsAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--ownerGradientBg, #536c76);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  font-style: normal;
+  flex-shrink: 0;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+}
+
+.cmmnTblImgItem.sm i.initialsAvatar {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  font-size: 11px;
+}
+
+.cmmnTblImgItem.md i.initialsAvatar {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  font-size: 11px;
+}
+
+.cmmnTblImgItem.lg i.initialsAvatar {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+
 .cmmnTblImgItem span {
   display: block;
 }

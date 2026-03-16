@@ -216,9 +216,15 @@ export class NewUnitsComponent implements OnInit {
     }
   }
 
+  getSelectedOwner(ownerId: any): any {
+    if (!ownerId) return null;
+    return this.ownerList.find((o) => o.key === ownerId) ?? null;
+  }
+
   onOwnerCodeSelect(owner: any, index: number): void {
     if (!owner) return;
     this.ownerForms.at(index).patchValue({
+      ownerId: owner.key ?? null,
       ownerName: owner.name ?? '',
       ownerEmail: owner.email ?? '',
       ownerContact: owner.contact_number ?? '',

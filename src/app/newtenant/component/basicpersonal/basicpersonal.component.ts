@@ -8,6 +8,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { PropertyService } from '../../../dashboard/services/property.service';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { TenantsService } from '../../../dashboard/services/tenants.service';
 
 @Component({
   selector: 'app-basicpersonal',
@@ -29,10 +30,14 @@ export class BasicpersonalComponent implements OnInit {
   private sharedAPIService = inject(SharedApiService);
   private propertyService = inject(PropertyService);
   private formService = inject(NewTenantFromService);
+  private tenantsService = inject(TenantsService);
   private destroyRef = inject(DestroyRef);
+
+  tenantLookupLoading = false;
 
   propertyList: any[] = [];
   blockList: any[] = [];
+  unitList: any[] = [];
 
   unitUsageList = [
     { key: 'RESIDENTIAL', value: 'Residential' },
@@ -61,15 +66,17 @@ export class BasicpersonalComponent implements OnInit {
       this.loadBlocks(this.leadData.property_id);
     }
 
+    if (this.leadData?.block_id) {
+      this.loadUnits(this.leadData.block_id);
+    }
+
     if (this.leadData?.unit_id) {
       this.propertyService
-        .getPropertyDetailsForLease({ property_unit_id: this.leadData.unit_id })
+        .getUnits({ unit_id: this.leadData.unit_id })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((resp: any) => {
-          const u = resp?.content?.property_unit;
-          const owners: any[] = resp?.content?.owners ?? [];
+          const u = resp?.content;
           if (!u) return;
-
           this.form.patchValue({
             unitName: u.unit_name ?? '',
             unitSize: u.unit_size ?? '',
@@ -81,8 +88,7 @@ export class BasicpersonalComponent implements OnInit {
             makaniNo: u.makani_no ?? '',
             floorNo: u.floor_no ?? '',
           });
-
-          this.patchOwners(owners);
+          this.patchOwners(u.unit_owners ?? []);
         });
     }
   }
@@ -124,8 +130,81 @@ export class BasicpersonalComponent implements OnInit {
 
   onBlockSelect(block: any) {
     if (!block?.key) return;
-    this.form.patchValue({ unitName: '' });
+    this.unitList = [];
+    this.form.patchValue({ unit: '' });
     this.clearUnitFields();
+    this.loadUnits(block.key);
+  }
+
+  private loadUnits(blockId: number) {
+    this.propertyService
+      .getUnits({ block_id: blockId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        this.unitList = (resp?.content || []).map((u: any) => ({
+          key: u.id,
+          value: `${u.code} (${u.unit_name})`,
+        }));
+      });
+  }
+
+  onUnitSelect(unit: any) {
+    if (!unit?.key) return;
+    this.propertyService
+      .getUnits({ unit_id: unit.key })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        const u = resp?.content;
+        if (!u) return;
+        this.form.patchValue({
+          unitName: u.unit_name ?? '',
+          unitSize: u.unit_size ?? '',
+          landNo: u.land_no ?? '',
+          dmNo: u.dm_no ?? '',
+          unitUsage: u.unit_usage ?? '',
+          unitType: u.unit_type ?? '',
+          subType: u.sub_type ?? '',
+          makaniNo: u.makani_no ?? '',
+          floorNo: u.floor_no ?? '',
+        });
+        this.patchOwners(u.unit_owners ?? []);
+      });
+  }
+
+  onEmailBlur() {
+    const email = (this.form.get('email')?.value || '').trim();
+    if (!email) return;
+
+    this.tenantLookupLoading = true;
+    this.tenantsService
+      .getTenantByEmail(email)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.tenantLookupLoading = false;
+          const t = resp?.content;
+          if (!t) return;
+          this.form.patchValue({
+            tenantId: t.id ?? null,
+            tenantName: t.name ?? '',
+            telNo: t.contact_number ?? '',
+            emiratesId: t.emirates_id ?? '',
+            passportNo: t.passport_number ?? '',
+            passportExpiry: t.passport_expiry_date
+              ? String(t.passport_expiry_date).slice(0, 10)
+              : '',
+            visaNo: t.visa_number ?? '',
+            visaExpiry: t.visa_expiry_date
+              ? String(t.visa_expiry_date).slice(0, 10)
+              : '',
+            addressLine1: t.address_line_1 ?? '',
+            addressLine2: t.address_line_2 ?? '',
+          });
+        },
+        error: () => {
+          this.tenantLookupLoading = false;
+        },
+      });
   }
 
   onUnitUsageSelect(opt: any) {
@@ -138,6 +217,7 @@ export class BasicpersonalComponent implements OnInit {
 
   private clearUnitFields() {
     this.form.patchValue({
+      unitName: '',
       unitSize: '',
       landNo: '',
       dmNo: '',
@@ -157,6 +237,11 @@ export class BasicpersonalComponent implements OnInit {
 
   get preSelectedBlock() {
     const v = this.form?.value?.block;
+    return v?.key ? v : null;
+  }
+
+  get preSelectedUnit() {
+    const v = this.form?.value?.unit;
     return v?.key ? v : null;
   }
 

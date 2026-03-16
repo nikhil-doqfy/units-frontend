@@ -67,6 +67,7 @@
         ></app-custom-select>
       </div>
       <div class="col-md-3">
+<<<<<<< HEAD
         <label class="form-label">{{ "UNIT_NAME" | translate }}</label>
         <input
           type="text"
@@ -74,6 +75,21 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="unitName"
         />
+=======
+        <label class="form-label">Unit</label>
+        <app-custom-select
+          [options]="unitList"
+          key="key"
+          value="value"
+          [selectedOption]="preSelectedUnit"
+          (optionSelected)="onUnitSelect($event)"
+          [showFilterInput]="true"
+        ></app-custom-select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Unit Name</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="unitName" />
+>>>>>>> a8cac59 (Added changes)
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "UNIT_SIZE" | translate }}</label>
@@ -160,8 +176,23 @@
     <h6 class="sectionTitle">{{ "TENANT" | translate }}</h6>
     <div class="row g-3">
       <div class="col-md-3">
+<<<<<<< HEAD
         <label class="form-label">{{ "TENANT_ID" | translate }}</label>
         <app-custom-select></app-custom-select>
+=======
+        <label class="form-label">Tenant ID</label>
+        <input type="text" class="form-control" placeholder="Auto-filled" formControlName="tenantId" readonly />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Email</label>
+        <div class="input-group">
+          <input type="email" class="form-control" placeholder="Enter email" formControlName="email"
+            (blur)="onEmailBlur()" />
+          <span class="input-group-text" *ngIf="tenantLookupLoading">
+            <span class="spinner-border spinner-border-sm"></span>
+          </span>
+        </div>
+>>>>>>> a8cac59 (Added changes)
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "TENANT_NAME" | translate }}</label>
@@ -191,10 +222,15 @@
         />
       </div>
       <div class="col-md-3">
+<<<<<<< HEAD
         <label class="form-label">{{
           "PASSPORT_EXPIRY_DATE" | translate
         }}</label>
         <app-custom-select [iconType]="'custom'"></app-custom-select>
+=======
+        <label class="form-label">Passport Expiry Date</label>
+        <input type="date" class="form-control" formControlName="passportExpiry" />
+>>>>>>> a8cac59 (Added changes)
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "EMIRATES_ID" | translate }}</label>
@@ -215,8 +251,13 @@
         />
       </div>
       <div class="col-md-3">
+<<<<<<< HEAD
         <label class="form-label">{{ "VISA_EXPIRY_DATE" | translate }}</label>
         <app-custom-select [iconType]="'custom'"></app-custom-select>
+=======
+        <label class="form-label">Visa Expiry Date</label>
+        <input type="date" class="form-control" formControlName="visaExpiry" />
+>>>>>>> a8cac59 (Added changes)
       </div>
       <div class="col-md-3">
         <label class="form-label">{{ "TEL_NO" | translate }}</label>
@@ -228,6 +269,7 @@
         />
       </div>
       <div class="col-md-3">
+<<<<<<< HEAD
         <label class="form-label">{{ "EMAIL" | translate }}</label>
         <input
           type="text"
@@ -244,6 +286,14 @@
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="address"
         />
+=======
+        <label class="form-label">Address Line 1</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="addressLine1" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Address Line 2</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="addressLine2" />
+>>>>>>> a8cac59 (Added changes)
       </div>
     </div>
   </div>
@@ -362,6 +412,7 @@
               formControlName="poBox"
             />
           </div>
+<<<<<<< HEAD
           <div class="col-md-3">
             <label class="form-label">{{ "ADDRESS" | translate }}</label>
             <input
@@ -371,6 +422,8 @@
               formControlName="ownerAddress"
             />
           </div>
+=======
+>>>>>>> a8cac59 (Added changes)
         </div>
       </ng-container>
     </div>

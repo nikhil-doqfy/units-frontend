@@ -1,35 +1,511 @@
-#activeTenants-tab.active {
-  position: relative;
-}
-
-#activeTenants-tab::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background-color: green;
-  border-radius: 50%;
-  margin-right: 5px;
-  vertical-align: middle;
-}
-
-.commonTabs {
+/* ── Tab bar ──────────────────────────────────────────────────── */
+.tenantTabs {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.commonTabs .nav-tabs {
+  gap: 4px;
+  padding: 0 0 0 4px;
+  border-bottom: 2px solid #e2e8f0;
   margin-bottom: 0;
 }
 
-.btn .btn-icon {
-  margin-right: 6px;
-  display: inline-flex;
-  align-items: center;
+.tenantTab {
+  all: unset;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  border-radius: 6px 6px 0 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
 }
-.status-row {
+
+.tenantTab:hover {
+  color: #111827;
+}
+
+.tenantTab.active {
+  color: #111827;
+  font-weight: 600;
+  border-bottom: 2px solid var(--ownerGradientBg, #536c76);
+}
+
+/* ── Sub-tab bar (pill style, under Active) ──────────────────── */
+.subTabBar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--whiteBg, #fff);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.subTab {
+  all: unset;
+  cursor: pointer;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  border-radius: 20px;
+  background: #f3f4f6;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.subTab:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.subTab.active {
+  background: var(--ownerGradientBg, #536c76);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Table scroll (same as owners) ───────────────────────────── */
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Sticky last column (same as owners) ─────────────────────── */
+.tenants-table thead tr th:last-child,
+.tenants-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 110px;
+}
+
+.tenants-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg);
+  box-shadow: none;
+}
+
+.tenants-table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Clickable property cell ─────────────────────────────────── */
+.propClickable,
+.tenantNameClickable {
+  cursor: pointer;
+}
+
+/* ── Tenant detail wrap ──────────────────────────────────────── */
+.tdPage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0 32px;
+}
+
+.tdLoading {
+  padding: 32px;
+  color: #aaa;
+  text-align: center;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.tdHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 8px;
+}
+
+.tdHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tdAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #536c76, #7a9baa);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.tdAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tdTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.tdTitleSep {
+  color: #9ca3af;
+  margin: 0 6px;
+  font-weight: 400;
+}
+
+.tdHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tdBackBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.tdBackBtn:hover { background: #f9fafb; }
+
+.tdBackArrow { font-size: 15px; }
+
+.tdMenuBtn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 18px;
+  color: #374151;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Info Strip ──────────────────────────────────────────────── */
+.tdInfoStrip {
+  display: flex;
+  align-items: stretch;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px 20px;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.tdInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 20px;
+  flex: 1;
+  min-width: 110px;
+}
+
+.tdInfoItem:first-child { padding-left: 0; }
+.tdInfoItemLast { padding-right: 0; }
+
+.tdInfoDivider {
+  width: 1px;
+  background: #e5e7eb;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.tdInfoLabel {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 500;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.tdInfoValue {
+  font-size: 13px;
+  color: #111827;
+  font-weight: 500;
+}
+
+.tdInfoValueBold {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ── Generic card ────────────────────────────────────────────── */
+.tdCard {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+
+.tdSectionLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+}
+
+.tdSectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 14px;
+}
+
+/* ── Charges grid ────────────────────────────────────────────── */
+.tdChargesGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.tdChargeItem {
+  flex: 1;
+  min-width: 140px;
+  padding: 14px 18px;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tdChargeItem:last-child { border-right: none; }
+
+.tdChargeName {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.tdChargeTotal {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+/* ── Charge meta row ─────────────────────────────────────────── */
+.tdChargeMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.tdChargeMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tdChargeMetaLabel {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.tdChargeMetaValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.tdRemarksRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.tdRemarksText {
+  font-size: 13px;
+  color: #374151;
+}
+
+/* ── Tenant info grid ────────────────────────────────────────── */
+.tdInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px 24px;
+}
+
+.tdInfoGridItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tdInfoGridLabel {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.tdInfoGridValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  word-break: break-word;
+}
+
+/* ── Document tabs ───────────────────────────────────────────── */
+.tdDocTabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.tdDocTab {
+  all: unset;
+  cursor: pointer;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tdDocTabActive {
+  color: #111827;
+  font-weight: 600;
+  border-bottom: 2px solid #536c76;
+}
+
+.tdDocEmpty {
+  font-size: 13px;
+  color: #aaa;
+  padding: 12px 0;
+}
+
+/* ── Financial summary ───────────────────────────────────────── */
+.tdFinSummary {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tdFinBox {
+  flex: 1;
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+
+.tdFinAmount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.tdFinLabel {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ── Transactions ────────────────────────────────────────────── */
+.tdTransHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.tdTransActions {
+  display: flex;
+  gap: 8px;
+}
+
+.tdTransBtn {
+  padding: 6px 14px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+}
+
+/* ── Activity history ────────────────────────────────────────── */
+.tdActivityCard .tdSectionTitle { margin-bottom: 0; }
+
+.tdActivityHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+/* ── Status badges ────────────────────────────────────────────── */
+.statusBadge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-draft {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge-inactive {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.badge-expired {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-rejected {
+  background: #ffe4e6;
+  color: #9f1239;
 }

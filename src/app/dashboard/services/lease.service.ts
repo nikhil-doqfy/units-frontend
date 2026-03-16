@@ -14,6 +14,26 @@ export class LeaseService {
 
   constructor() {}
 
+  // ── New Lease CRUD ────────────────────────────────────────────────────
+
+  createLease(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease`, data);
+  }
+
+  updateLease(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/api/lease`, data);
+  }
+
+  deleteLease(leaseId: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_ADDRESS}/api/lease?lease_id=${leaseId}`);
+  }
+
+  getLeaseById(leaseId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease?lease_id=${leaseId}`);
+  }
+
+  // ─────────────────────────────────────────────────────────────────────
+
   getLeasePropertyDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(`${this.SERVER_ADDRESS}/lease/tenancy${queryString}`);

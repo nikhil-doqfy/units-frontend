@@ -6,6 +6,9 @@
   <i *ngIf="img">
     <img [src]="img" [alt]="title" />
   </i>
+  <i *ngIf="!img && showInitialsFallback" class="initialsAvatar">
+    {{ initials }}
+  </i>
   <div>
     <span>{{ title }}</span>
     <em *ngIf="subtitle">{{ subtitle }}</em>

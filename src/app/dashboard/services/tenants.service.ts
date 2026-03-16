@@ -14,6 +14,20 @@ export class TenantsService {
 
   constructor() {}
 
+  getTenantByEmail(email: string): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/user/tenant?email=${encodeURIComponent(email)}`);
+  }
+
+  getTenantsByTab(params: Record<string, any>): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/api/tenant-leases${queryString}`);
+  }
+
+  exportTenantsByTab(params: Record<string, any>): Observable<Blob> {
+    const queryString = this.sharedService.getQueryString({ ...params, export: 'csv' });
+    return this.http.get(`${this.SERVER_ADDRESS}/api/tenant-leases${queryString}`, { responseType: 'blob' });
+  }
+
   getTenants(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(`${this.SERVER_ADDRESS}/tenant/table${queryString}`);

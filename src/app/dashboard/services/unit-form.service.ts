@@ -53,6 +53,7 @@ export class UnitFormService {
 
   createOwnerGroup(): FormGroup {
     return this.formBuilder.group({
+      ownerId: [null],
       ownerName: [''],
       ownerEmail: [''],
       ownerContact: [''],
@@ -189,6 +190,7 @@ export class UnitFormService {
     for (let i = 0; i < count; i++) this.unitOwnersArray.push(this.createOwnerGroup());
     owners.forEach((o: any, i: number) => {
       this.unitOwnersArray.at(i).patchValue({
+        ownerId: o.owner_id ?? null,
         ownerName: o.name,
         ownerEmail: o.email,
         ownerContact: o.contact_number,
@@ -196,7 +198,7 @@ export class UnitFormService {
         ownerNumber: o.owner_number,
         tradeLicenseNumber: o.trade_license_number,
         licenseNumber: o.license_number,
-        licenseExpiryDate: o.license_expiry_date,
+        licenseExpiryDate: o.license_expiry_date ? String(o.license_expiry_date).slice(0, 10) : '',
         licenseIssuer: o.license_issuer,
         faxNumber: o.fax_number,
         poBoxNumber: o.po_box_number,
@@ -268,8 +270,9 @@ export class UnitFormService {
 
   mapOutUnitBasicDetails(value: any): Record<string, any> {
     const unitOwners = (value.unitOwners || [])
-      .filter((o: any) => o.ownerEmail)
+      .filter((o: any) => o.ownerId || o.ownerEmail || o.ownerName)
       .map((o: any) => ({
+        owner_id: o.ownerId || null,
         owner_name: o.ownerName,
         email: o.ownerEmail,
         contact_number: o.ownerContact,

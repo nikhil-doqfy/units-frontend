@@ -16,7 +16,16 @@ export class TableImgItemComponent {
   @Input() title!: string;
   @Input() subtitle?: string;
   @Input() clickable: boolean = false;
+  @Input() showInitialsFallback: boolean = false;
   @Output() clicked = new EventEmitter<void>();
+
+  get initials(): string {
+    if (!this.title) return '?';
+    const parts = this.title.trim().split(/\s+/);
+    return parts.length >= 2
+      ? (parts[0][0] + parts[1][0]).toUpperCase()
+      : parts[0][0].toUpperCase();
+  }
 
   onClick() {
     if (this.clickable) {

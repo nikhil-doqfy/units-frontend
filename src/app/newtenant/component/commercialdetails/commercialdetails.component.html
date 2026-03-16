@@ -212,28 +212,168 @@
               </tr>
             </thead>
 
-            <tbody>
-              <tr *ngFor="let c of charges">
-                <td>
-                  <label class="checkbox">
-                    <input
-                      type="checkbox"
-                      [(ngModel)]="c.checked"
-                      [ngModelOptions]="{ standalone: true }"
-                    />
-                    <span class="desc-cell"></span>
-                    {{ c.label }}
-                  </label>
-                </td>
-                <td>{{ c.amount | number: "1.2-2" }}</td>
-                <td>{{ c.tax }}</td>
-                <td>{{ c.vat | number: "1.2-2" }}</td>
-                <td>{{ c.total | number: "1.2-2" }}</td>
-              </tr>
-            </tbody>
+            <!-- 02 Amount / Rent Details -->
+            <div class="sectionCard mt-3">
+              <span class="sectionBadge">02</span>
+              <h6 class="sectionTitle">Amount / Rent Details</h6>
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label">Annual Amount</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="annualAmount"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Actual Annual Amount</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="actualAnnualAmount"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Security / Booking Amount</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="securityBookingAmount"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Maintenance Charges</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="maintenanceCharges"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Rent</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="rent"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Security Deposit</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="securityDeposit"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Commission in %</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="commissionPercent"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Notice Period (in months)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="noticePeriod"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Contract Amount</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="contractAmount"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Discount (Optional)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="discount"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Shell & Core</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="shellAndCore"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Payment Count</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter here"
+                    formControlName="paymentCount"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- 03 Other Charges -->
+            <div class="sectionCard mt-3">
+              <span class="sectionBadge">03</span>
+              <h6 class="sectionTitle">
+                Other Charges
+                <span class="totalLabel"
+                  >Total: AED {{ totalAmount | number: "1.2-2" }}</span
+                >
+              </h6>
+              <div class="table-responsive">
+                <table class="table table-bordered charges-table">
+                  <thead>
+                    <tr>
+                      <th>{{ "DESCRIPTION" | translate }}</th>
+                      <th>{{ "AMOUNT" | translate }}</th>
+                      <th>{{ "TAX_CODE" | translate }}</th>
+                      <th>{{ "VAT" | translate }}</th>
+                      <th>{{ "TOTAL_AMOUNT" | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let c of charges">
+                      <td>
+                        <label class="d-flex align-items-center gap-2 mb-0">
+                          <input
+                            type="checkbox"
+                            [(ngModel)]="c.checked"
+                            [ngModelOptions]="{ standalone: true }"
+                          />
+                          {{ c.label }}
+                        </label>
+                      </td>
+                      <td>{{ c.amount | number: "1.2-2" }}</td>
+                      <td>{{ c.tax }}</td>
+                      <td>{{ c.vat | number: "1.2-2" }}</td>
+                      <td>{{ c.total | number: "1.2-2" }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- </form> -->
           </table>
         </div>
-      </div>
-    </app-white-card>
+      </div></app-white-card
+    >
   </div>
 </form>
