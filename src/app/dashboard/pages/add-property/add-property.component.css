@@ -111,3 +111,31 @@
   padding: 0;
   z-index: 2;
 }
+
+/*-----------------BLOCKCOUNT & UNITCOUNT --------------------------------------*/
+::ng-deep .blockCount {
+  width: 35px;
+  height: 30px;
+  background-color: #ecf0f2;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  color: #333;
+}
+
+::ng-deep .unitCount {
+  width: 54px;
+  height: 30px;
+  background-color: #ecf0f2;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin: 0 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  color: black;
+}

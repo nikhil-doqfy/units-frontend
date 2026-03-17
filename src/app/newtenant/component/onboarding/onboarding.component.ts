@@ -27,6 +27,7 @@ import { ErrorOutlineIconComponent } from '../../../icons/error-outline-icon/err
 import { TableSelectComponent } from '../../../dashboard/component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { AditionalDocumentDownloadIconComponent } from '../../../aditional-document-download-icon/aditional-document-download-icon.component';
 
 @Component({
   selector: 'app-onboarding',
@@ -47,6 +48,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
     ErrorOutlineIconComponent,
     TableSelectComponent,
     TablePaginationComponent,
+    AditionalDocumentDownloadIconComponent,
   ],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',

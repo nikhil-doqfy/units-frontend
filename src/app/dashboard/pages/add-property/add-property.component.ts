@@ -355,13 +355,16 @@ export class AddPropertyComponent {
       (x: any) => x.type === type,
     );
   }
-  // /*-----totalUnit and block-------------*/
-  // get pageTitleHtml() {
-  //   return `
-  //   Total Blocks / Tower
-  //   <span class="badge">${this.blockCount}</span>
-  //   Total Units
-  //   <span class="badge">${this.unitCount}</span>
-  // `;
-  // }
+  /*-----totalUnit and block-------------*/
+  blockCount = 10;
+  unitCount = 456;
+
+  getPageTitle() {
+    return `
+    Total Blocks / Tower 
+    <span class="blockCount">${this.blockCount}</span>
+    Total Units 
+    <span class="unitCount">${this.unitCount}/</span>
+  `;
+  }
 }

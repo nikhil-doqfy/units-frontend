@@ -5,7 +5,7 @@
 .upload-more-btn {
   background: rgba(13, 110, 253, 0.05);
   border: 1px dashed #0d6efd;
-  padding: 5px 12px;
+  /* paddi  ng: 5px 12px; */
   border-radius: 10px;
   font-size: 13px;
   font-weight: 500;
@@ -328,6 +328,13 @@ circle {
   overflow: visible !important;
 }
 
+/* vertical divider */
+.divider {
+  width: 1.5px;
+  height: 28px; /* 👈 control height */
+  background-color: #344046;
+}
+
 .dropdown-wrapper {
   position: relative;
   overflow: visible !important;
@@ -360,19 +367,6 @@ circle {
   z-index: 999999999 !important;
 }
 
-.global-dropdown {
-  position: fixed;
-  top: 200px;
-  right: 40px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  min-width: 200px;
-  padding: 10px 14px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  z-index: 999999999;
-}
-
 .dropdown-wrapper {
   position: relative;
   overflow: visible !important;
@@ -402,7 +396,7 @@ circle {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  min-width: 200px;
+  min-width: 177px;
   padding: 10px 14px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 999999;
@@ -442,7 +436,7 @@ circle {
   min-width: 119px;
   max-height: 38px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   width: fit-content;
   min-height: 50px;
 }

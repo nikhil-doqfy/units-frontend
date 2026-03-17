@@ -156,7 +156,6 @@ img {
   max-width: 100%;
 }
 
-
 button:disabled {
   cursor: not-allowed;
 }
@@ -1287,9 +1286,6 @@ linearGradient .authBgPatt stop:last-child {
   color: var(--greyDarkText);
   font-family: var(--primaryFont) !important;
   font-weight: 600;
-}
-
-.apexcharts-pie {
 }
 
 /***Apex Charts Css End***/
@@ -2455,7 +2451,6 @@ a .simple {
   border-radius: 12px;
   text-align: center;
 }
-/* Top Alert Bar */
 .top-alert {
   background: #fff3cd;
   color: #ff6b00;
@@ -2468,14 +2463,15 @@ a .simple {
   margin-bottom: 16px;
   margin: auto;
 }
-
+.invite-text {
+  color: #32693f;
+}
 .top-alert .icon {
   font-size: 18px;
 }
 
-/* Blur Effect */
 .blur {
-  filter: blur(0.5px); /* 🔽 softer blur */
+  filter: blur(0.5px);
   pointer-events: none;
   user-select: none;
   opacity: 0.75;
@@ -2489,32 +2485,40 @@ a .simple {
   padding: 12px 16px;
 
   display: flex;
-  align-items: center; /* ✅ vertical center */
-  justify-content: center; /* ✅ horizontal center */
+  align-items: center;
+  justify-content: center;
   gap: 10px;
 
   font-weight: 600;
-  text-align: center; /* ensures text inside spans is centered */
+  text-align: center;
 }
 
 .top-alert .icon {
   font-size: 18px;
   display: flex;
-  align-items: center; /* icon vertical alignment */
+  align-items: center;
 }
 
 .top-alert .text {
   display: flex;
-  align-items: center; /* text vertical alignment */
+  align-items: center;
 }
 
-/* Blur Effect */
 .blur {
-  filter: blur(0.5px); /* 🔽 softer blur */
+  filter: blur(0.5px);
   pointer-events: none;
   user-select: none;
   opacity: 0.75;
   transition: all 0.3s ease;
+}
+.invite-toast {
+  background-color: #f1f8f2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.invite-icon {
+  margin-right: 5px;
 }
 /*------------------------------------------------------transction table dropdown receipt --------------------------------------------------*/
 

@@ -3,8 +3,8 @@
   [class.dashFrmLrgTtl]="size === 'lg'"
   [class.dashFrmCntrTtl]="center"
 >
-  <h4>
-    {{ title }} <i><ng-content></ng-content></i>
+  <h4 [innerHTML]="title">
+    <i><ng-content></ng-content></i>
   </h4>
   <p *ngIf="description">
     {{ description }} <i><ng-content></ng-content></i>

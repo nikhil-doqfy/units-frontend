@@ -50,10 +50,13 @@ export class AlertService {
       timer: 3000,
       timerProgressBar: false,
       html: `
-        <div class="invite-toast">
-          <span class="invite-icon"><img src="assets/verify-icon.gif" style="height:20px; width:20px;></span>
-          <span class="invite-text">${msg}</span>
-        </div>
+       
+         <div class="invite-toast">
+    <span class="invite-icon">
+      <img src="assets/verify-icon.gif" style="height:20px; width:20px;">
+    </span>
+    <span class="invite-text">${msg}</span>
+  </div>
       `,
 
       customClass: {

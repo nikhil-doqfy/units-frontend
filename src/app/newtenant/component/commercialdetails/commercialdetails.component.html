@@ -1,5 +1,4 @@
 <form [formGroup]="form" class="commonForm">
-
   <!-- 01 Lessor Period -->
   <div class="sectionCard mt-3">
     <span class="sectionBadge">01</span>
@@ -15,11 +14,19 @@
       </div>
       <div class="col-md-3">
         <label class="form-label">Grace Start Date</label>
-        <input type="date" class="form-control" formControlName="graceStartDate" />
+        <input
+          type="date"
+          class="form-control"
+          formControlName="graceStartDate"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Grace End Date</label>
-        <input type="date" class="form-control" formControlName="graceEndDate" />
+        <input
+          type="date"
+          class="form-control"
+          formControlName="graceEndDate"
+        />
       </div>
     </div>
   </div>
@@ -31,64 +38,127 @@
     <div class="row g-3">
       <div class="col-md-3">
         <label class="form-label">Annual Amount</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="annualAmount" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="annualAmount"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Actual Annual Amount</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="actualAnnualAmount" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="actualAnnualAmount"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Security / Booking Amount</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="securityBookingAmount" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="securityBookingAmount"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Maintenance Charges</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="maintenanceCharges" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="maintenanceCharges"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Rent</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="rent" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="rent"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Security Deposit</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="securityDeposit" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="securityDeposit"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Commission in %</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="commissionPercent" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="commissionPercent"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Notice Period (in months)</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="noticePeriod" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="noticePeriod"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Contract Amount</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="contractAmount" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="contractAmount"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Discount (Optional)</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="discount" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="discount"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Shell & Core</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="shellAndCore" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="shellAndCore"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label">Payment Count</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="paymentCount" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="paymentCount"
+        />
       </div>
     </div>
   </div>
 
   <!-- 03 Other Charges -->
-  <div class="sectionCard mt-3">
+  <div class="sectionCardThree mt-3">
     <span class="sectionBadge">03</span>
-    <h6 class="sectionTitle">
+    <h6 class="otherChargesTitle">
       Other Charges
-      <span class="totalLabel">Total: AED {{ totalAmount | number: '1.2-2' }}</span>
+      <span class="totalLabel">
+        <span class="totalText">Total:</span>
+        <span class="currency">AED {{ totalAmount | number: "1.2-2" }}</span>
+      </span>
     </h6>
     <div class="table-responsive">
-      <table class="table table-bordered charges-table">
+      <table class="table charges-table">
         <thead>
           <tr>
             <th>{{ "DESCRIPTION" | translate }}</th>
@@ -99,21 +169,57 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let c of charges">
+          <tr
+            *ngFor="let c of charges"
+            class="tableRow"
+            [ngClass]="{ editMode: c.isEdit }"
+          >
             <td>
               <label class="d-flex align-items-center gap-2 mb-0">
-                <input type="checkbox" [(ngModel)]="c.checked" [ngModelOptions]="{ standalone: true }" />
+                <input
+                  type="checkbox"
+                  [(ngModel)]="c.checked"
+                  [ngModelOptions]="{ standalone: true }"
+                />
                 {{ c.label }}
               </label>
             </td>
-            <td>{{ c.amount | number: '1.2-2' }}</td>
+            <td>
+              <span
+                class="amountText"
+                [class.editUnderline]="c.isEdit"
+                (click)="editRow(c)"
+              >
+                {{ c.amount | number: "1.2-2" }}
+              </span>
+            </td>
             <td>{{ c.tax }}</td>
-            <td>{{ c.vat | number: '1.2-2' }}</td>
-            <td>{{ c.total | number: '1.2-2' }}</td>
+            <td>{{ c.vat | number: "1.2-2" }}</td>
+
+            <!--  Action Column -->
+            <td class="totalCell">
+              <span class="totalValue">
+                {{ c.total | number: "1.2-2" }}
+              </span>
+
+              <span class="editIcon" (click)="editRow(c)">
+                <ng-container *ngIf="!c.isEdit; else saveBtn">
+                  <app-edit-icon></app-edit-icon>
+                </ng-container>
+
+                <ng-template #saveBtn>
+                  <button
+                    class="saveBtn"
+                    (click)="saveRow(c); $event.stopPropagation()"
+                  >
+                    Save
+                  </button>
+                </ng-template>
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
 </form>
