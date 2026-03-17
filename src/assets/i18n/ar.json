@@ -537,5 +537,7 @@
   "EDIT_USER": "تحرير المستخدم",
   "TOTAL_REVENUE_RECEIVED": "إجمالي الإيرادات المحصلة",
   "PROPERTY_COMPRISON": "ملكية الملكية",
-  "LOGIN_SIGNUP": "تسجيل الدخول / الاشتراك"
+  "LOGIN_SIGNUP": "تسجيل الدخول / الاشتراك",
+  "WAITING_FOR_TENANT_TO_SIGNUP": "في انتظار تسجيل المستأجر/",
+  "UPDATE_THEIR_PROFILE": "تحديث الملف الشخصي هناك"
 }

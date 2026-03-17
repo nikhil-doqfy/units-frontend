@@ -549,5 +549,7 @@
   "EDIT_USER": "Edit User",
   "TOTAL_REVENUE_RECEIVED": "Total Revenue Received",
   "PROPERTY_COMPRISON": "Property Comprison",
-  "LOGIN_SIGNUP": "Login / Signup"
+  "LOGIN_SIGNUP": "Login / Signup",
+  "WAITING_FOR_TENANT_TO_SIGNUP": "Waiting for Tenant to Signup/",
+  "UPDATE_THEIR_PROFILE": "Update there Profile"
 }

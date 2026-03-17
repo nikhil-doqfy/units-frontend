@@ -365,10 +365,10 @@
   <ng-container>
     <app-step-pane
       [title]="'BLOCKS / TOWER' | translate"
-      [pageTitle]="'Total Blocks/Tower Total units'"
       [showBulkUpload]="true"
       [blockCount]="10"
     >
+      <!-- [pageTitle]=`Total Blocks/Tower <span>10</span> Total Units <span>456/</span>` -->
       <form [formGroup]="blocksForm">
         <div formArrayName="blocks">
           <div
