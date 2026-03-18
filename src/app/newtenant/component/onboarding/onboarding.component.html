@@ -634,6 +634,11 @@
                 (click)="saveTemplateData()">
                 {{ savingTemplate ? 'Saving…' : 'Save Template' }}
               </button>
+              <button type="button" class="btn btnCommon btn-sm btn-download-pdf"
+                *ngIf="lastPdfUrl"
+                (click)="downloadPdf()">
+                Download PDF
+              </button>
             </div>
           </div>
         </div>

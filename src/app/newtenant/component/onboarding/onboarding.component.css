@@ -438,6 +438,15 @@ circle {
   padding: 12px 16px;
   border-top: 1px solid #e5e9f0;
   background: #fff;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-download-pdf {
+  background: #2fa51a;
+  color: #fff;
+  border-color: #2fa51a;
 }
 
 /* ── Additional terms ────────────────────────────────────────── */

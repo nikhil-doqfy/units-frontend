@@ -363,6 +363,10 @@ export class OnboardingComponent {
           this.additionalTerms.pop();
         }
 
+        if (c.pdf_url) {
+          this.lastPdfUrl = c.pdf_url;
+        }
+
         this.rebuildPreview();
         this.templateLoading = false;
         this.templateLoaded  = true;
@@ -515,14 +519,29 @@ export class OnboardingComponent {
       lease_id: this.leaseId,
       values: this.templateValues,
     }).subscribe({
-      next: () => {
+      next: (resp) => {
         this.alertService.success('Template saved successfully');
         this.savingTemplate = false;
+        const pdfUrl = resp?.content?.pdf_url;
+        if (pdfUrl) {
+          this.lastPdfUrl = pdfUrl;
+        }
       },
       error: () => {
         this.alertService.error('Failed to save template');
         this.savingTemplate = false;
       },
     });
+  }
+
+  lastPdfUrl: string | null = null;
+
+  downloadPdf() {
+    if (!this.lastPdfUrl) return;
+    const a = document.createElement('a');
+    a.href = this.lastPdfUrl;
+    a.download = `lease_contract.pdf`;
+    a.target = '_blank';
+    a.click();
   }
 }
