@@ -296,15 +296,29 @@ export class NewTenantFromService {
   }
 
   private triggerNegotiation() {
-    this.msgText.set('Waiting for Negotiation');
-    this.btnTitle.set('Cheque Request');
+    const id = this.leaseId();
+    if (!id) {
+      this.alertService.error('Lease not found. Please complete the previous steps first.');
+      return;
+    }
+    this.msgText.set('Sending negotiation document…');
     this.showMsg.set(true);
 
-    setTimeout(() => {
-      this.showMsg.set(false);
-      this.btnTitle.set('Cheque Request');
-      this.stepPhase.set('CHEQUE');
-    }, 3000);
+    this.leaseService.sendNegotiation(id).subscribe({
+      next: (resp: any) => {
+        const sent = resp?.content?.sent ?? [];
+        this.msgText.set(`Negotiation sent to ${sent.join(', ') || 'recipients'}`);
+        setTimeout(() => {
+          this.showMsg.set(false);
+          this.btnTitle.set('Cheque Request');
+          this.stepPhase.set('CHEQUE');
+        }, 3000);
+      },
+      error: () => {
+        this.msgText.set('Failed to send negotiation. Please try again.');
+        setTimeout(() => this.showMsg.set(false), 3000);
+      },
+    });
   }
 
   private triggerChequeRequest() {
@@ -440,21 +454,28 @@ export class NewTenantFromService {
     };
 
     if (!existingId) {
-      this.alertService.customSuccess('Invite Sent Successfully');
+      this.alertService.success('Invite Sent Successfully');
       onSuccess?.();
       return;
     }
 
-    this.leaseService.updateLease({ ...payload, lease_id: existingId }).subscribe({
+    this.leaseService.updateLease({ ...payload, lease_id: existingId, lease_stage: 'ONBOARDING' }).subscribe({
       next: () => {
-        this.alertService.customSuccess('Lease saved successfully');
+        this.alertService.success('Lease saved successfully');
         onSuccess?.();
       },
       error: () => {
-        this.alertService.customSuccess('Invite Sent Successfully');
+        this.alertService.success('Invite Sent Successfully');
         onSuccess?.();
       },
     });
+  }
+
+  /** Called by FormRenderComponent when the user advances to a new main step. */
+  updateLeaseStage(stage: string) {
+    const id = this.leaseId();
+    if (!id) return;
+    this.leaseService.updateLease({ lease_id: id, lease_stage: stage }).subscribe();
   }
 
   resetFlow() {

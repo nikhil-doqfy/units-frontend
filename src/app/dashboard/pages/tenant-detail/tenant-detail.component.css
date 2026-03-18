@@ -1,3 +1,13 @@
+/* ══════════════════════════════════════════════════════════════════
+   INFO STRIP  — force all items on one line
+   ══════════════════════════════════════════════════════════════════ */
+:host ::ng-deep .cmmnTblViewBdy ul {
+  grid-template-columns: repeat(8, 1fr) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FINANCIAL SUMMARY CARD
+   ══════════════════════════════════════════════════════════════════ */
 .summary-card {
   display: flex;
   align-items: center;
@@ -39,33 +49,48 @@
   }
 }
 
-.weekLabel .line {
-  flex: 1;
-  height: 1px;
-  background: #e5e7eb;
-}
+/* ══════════════════════════════════════════════════════════════════
+   ACTIVITY HISTORY
+   ══════════════════════════════════════════════════════════════════ */
+.weekLabel .line,
 .line {
   flex: 1;
   height: 1px;
   background: #e5e7eb;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   STATUS BADGE COLORS (transactions table)
+   ══════════════════════════════════════════════════════════════════ */
 :host ::ng-deep .status-black app-status-action-dropdown {
-  background: orange;
-  border-radius: 10px;
+  background: #f97316;
+  border-radius: 8px;
   display: inline-block;
 }
 :host ::ng-deep .status-green app-status-action-dropdown {
-  background: green;
-  border-radius: 10px;
+  background: #16a34a;
+  border-radius: 8px;
   display: inline-block;
 }
 :host ::ng-deep .status-grey app-status-action-dropdown {
-  background: #6c757d;
-  border-radius: 10px;
+  background: #6b7280;
+  border-radius: 8px;
   display: inline-block;
 }
 
+/* White text inside status badges */
+:host ::ng-deep .status-black app-status-action-dropdown .statusText,
+:host ::ng-deep .status-green app-status-action-dropdown .statusText,
+:host ::ng-deep .status-grey  app-status-action-dropdown .statusText {
+  color: #fff !important;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MODAL UTILITIES
+   ══════════════════════════════════════════════════════════════════ */
 .payment-link-btn {
   color: blue !important;
   text-decoration: underline !important;
@@ -83,6 +108,9 @@
   border-radius: 6px;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   DUES CARD & PAYMENT LINK
+   ══════════════════════════════════════════════════════════════════ */
 .dues-card {
   width: 210px;
   background: #f3f3f3;
@@ -107,6 +135,9 @@
   cursor: pointer;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   RENEWAL ALERT
+   ══════════════════════════════════════════════════════════════════ */
 .renewal-alert {
   display: flex;
   justify-content: center;
@@ -118,4 +149,133 @@
   border-radius: 4px;
   font-size: 15px;
   margin-bottom: 10px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RENT-TRANSACTIONS TABLE  — matches owner table pattern
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Scrollable without visible scrollbar */
+.cmmnTblOuter .table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.cmmnTblOuter .table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+/* Header — inherits global .cmmnTbl table thead tr th (var(--activeBg)) */
+.transactions-table thead tr th {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Sticky last column (Actions) — same as owner table */
+.transactions-table thead tr th:last-child,
+.transactions-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 100px;
+}
+
+.transactions-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg);
+  box-shadow: none;
+}
+
+.transactions-table tbody tr td:last-child {
+  background-color: var(--whiteBg, #fff);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Receipt / filter toolbar ── */
+.report-top-bar {
+  position: relative;
+}
+
+.custom-dropdown {
+  position: relative;
+}
+
+.custom-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  min-width: 160px;
+  padding: 6px 0;
+}
+
+.custom-menu .dropdown-item {
+  padding: 9px 16px;
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+}
+.custom-menu .dropdown-item:hover {
+  background: #f9fafb;
+}
+
+.filter-box {
+  padding: 14px 16px;
+  min-width: 180px;
+}
+
+.generate-btn {
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Additional charges popover badges ── */
+.charges-info {
+  cursor: pointer;
+  margin-left: 6px;
+}
+.chargesTooltip {
+  min-width: 150px;
+  font-size: 13px;
+}
+.chargesRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+.chargesRow .value {
+  font-weight: 600;
+}
+
+.badge-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+.additional {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.additional.cheque {
+  background: #fff7ed;
+  color: #c2410c;
+}
+.additional.tax {
+  background: #eff6ff;
+  color: #1d4ed8;
 }

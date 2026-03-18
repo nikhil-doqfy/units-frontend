@@ -88,6 +88,7 @@
             <th>End Date</th>
             <th>Rent (AED)</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -123,10 +124,20 @@
                 {{ t.lease_status }}
               </span>
             </td>
+            <td align="center">
+              <div class="cmmnTblActnBtnDiv">
+                @if (mainTab === 'onboarding') {
+                  <app-table-action-btn
+                    type="up-arrow"
+                    (clicked)="continueOnboarding(t)"
+                  />
+                }
+              </div>
+            </td>
           </tr>
           } @empty {
           <tr>
-            <td colspan="12" align="center">
+            <td colspan="13" align="center">
               <app-no-data></app-no-data>
             </td>
           </tr>

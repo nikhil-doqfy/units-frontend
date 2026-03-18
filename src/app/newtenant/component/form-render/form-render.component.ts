@@ -248,12 +248,25 @@ export class FormRenderComponent {
     });
   }
 
+  private readonly STAGE_MAP: Record<number, string> = {
+    2: 'AGREEMENT',
+    3: 'EJARI',
+    4: 'ACTIVATED',
+  };
+
   goToNextStep() {
     if (this.subIndex() < this.currentStep.subSteps.length - 1) {
       this.subIndex.set(this.subIndex() + 1);
     } else if (this.activeIndex() < this.steps().length - 1) {
+      const newIndex = this.activeIndex() + 1;
       this.subIndex.set(0);
-      this.activeIndex.set(this.activeIndex() + 1);
+      this.activeIndex.set(newIndex);
+      // Persist the stage for steps 2 (Agreement), 3 (Ejari), 4 (Activated).
+      // ONBOARDING is already saved by saveCommercialStep when leaving step 0.
+      const stage = this.STAGE_MAP[newIndex];
+      if (stage) {
+        this.formService.updateLeaseStage(stage);
+      }
     }
   }
   prev() {

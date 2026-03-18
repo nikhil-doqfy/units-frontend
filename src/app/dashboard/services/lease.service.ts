@@ -101,10 +101,20 @@ export class LeaseService {
     );
   }
 
+  getTemplates(): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/templates`);
+  }
+
+  getTemplateFields(templateId: number, leaseId?: number | null): Observable<any> {
+    let url = `${this.SERVER_ADDRESS}/api/lease/template-fields?template_id=${templateId}`;
+    if (leaseId) url += `&lease_id=${leaseId}`;
+    return this.http.get(url);
+  }
+
   getTemplateData(params: Record<string, any>) {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/get_template_fields${queryString}`
+      `${this.SERVER_ADDRESS}/api/lease/template-fields${queryString}`
     );
   }
 
@@ -117,14 +127,36 @@ export class LeaseService {
   }
 
   addTemplateData(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/generate/contract`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/generate-contract`, data);
+  }
+
+  sendNegotiation(leaseId: number): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/send-negotiation`, { lease_id: leaseId });
   }
 
   editTemplateData(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/generate/contract`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/generate-contract`, data);
   }
 
   addEjariDocuments(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/lease_documents`, data);
+  }
+
+  // ── Onboarding Documents ──────────────────────────────────────────────────
+
+  getOnboardingDocuments(leaseId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/onboarding-documents?lease_id=${leaseId}`);
+  }
+
+  uploadOnboardingDocuments(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/onboarding-documents`, data);
+  }
+
+  deleteOnboardingDocument(documentId: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_ADDRESS}/api/lease/onboarding-documents?document_id=${documentId}`);
+  }
+
+  getTenantDocumentTypes(): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/options?option_type=TENANT_DOCUMENT_TYPE`);
   }
 }

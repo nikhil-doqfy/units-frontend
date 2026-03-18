@@ -209,6 +209,28 @@ export class TenantsComponent {
     if (propertyId) this.router.navigate(['/dashboard/properties', propertyId]);
   }
 
+  continueOnboarding(tenant: any) {
+    const leadData = {
+      property_id:    tenant.property_id,
+      property_name:  tenant.property_name,
+      block_id:       tenant.property_block_id,
+      block_name:     tenant.property_block_name,
+      tenant_id:      tenant.tenant_id,
+      email:          tenant.email,
+      name:           tenant.tenant_name,
+      contact_number: tenant.contact_number,
+    };
+
+    this.router.navigate(['/dashboard/new-tenant'], {
+      state: {
+        leaseId:     tenant.lease_id,
+        leadData,
+        leaseStatus: tenant.lease_status,
+        leaseStage:  tenant.lease_stage,
+      },
+    });
+  }
+
   statusBadgeClass(leaseStatus: string): string {
     switch (leaseStatus) {
       case 'ACTIVE':   return 'badge-active';

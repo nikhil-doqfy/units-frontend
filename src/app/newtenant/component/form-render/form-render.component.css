@@ -244,10 +244,13 @@
   display: inline-block;
 }
 
-.send-negotiation-btn .arrow-down {
+.send-negotiation-btn .arrow-divider {
   display: flex;
   align-items: center;
-  gap: 4px;
+  padding-left: 10px;
+  margin-left: 4px;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.45);
+  height: 18px;
 }
 
 .approvalDropdown {

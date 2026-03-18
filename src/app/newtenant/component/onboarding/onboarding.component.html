@@ -46,81 +46,74 @@
               tabindex="0"
             >
               <div class="row g-2 align-items-center docs-row">
-                <div class="col-auto">
-                  <div class="doc-wrap success">
-                    <app-document-type-item
-                      title="Bank Account.pdf"
-                      size="1.2 MB"
-                    />
-                    <span class="status-icon check">✔</span>
+
+                <!-- Dynamic document cards -->
+                <div class="col-auto" *ngFor="let doc of allDocs">
+                  <div class="doc-wrap" [class.success]="isLeaseDoc(doc)" [class.warning]="!isLeaseDoc(doc)">
+                    <a [href]="doc.url" target="_blank" class="doc-link">
+                      <app-document-type-item
+                        [title]="doc.file_name"
+                        [size]="doc.document_type_name"
+                      />
+                    </a>
+                    <span *ngIf="isLeaseDoc(doc)" class="status-icon check" (click)="deleteDoc(doc)" title="Remove">✔</span>
+                    <ng-container *ngIf="!isLeaseDoc(doc)">
+                      <span class="replace-text">Tenant Doc</span>
+                      <span class="status-icon warn"><app-error-outline-icon></app-error-outline-icon></span>
+                    </ng-container>
                   </div>
                 </div>
 
-                <div class="col-auto">
-                  <div class="doc-wrap warning">
-                    <app-document-type-item
-                      title="Emirates ID.pdf"
-                      size="1.2 MB"
-                    />
-                    <span class="replace-text">Replace</span>
-                    <span class="status-icon warn"
-                      ><app-error-outline-icon></app-error-outline-icon
-                    ></span>
-                  </div>
+                <!-- Empty state -->
+                <div class="col-auto" *ngIf="allDocs.length === 0 && !uploading">
+                  <span class="text-muted small">No documents yet.</span>
                 </div>
 
-                <div class="col-auto">
-                  <div class="doc-wrap success">
-                    <app-document-type-item
-                      title="Other ID.pdf"
-                      size="1.2 MB"
-                    />
-                    <span class="status-icon check">✔</span>
-                  </div>
-                </div>
+                <!-- Hidden file input for Upload More -->
+                <input
+                  id="uploadMoreInput"
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                  style="display:none"
+                  (change)="onUploadMoreFileSelected($event)"
+                />
 
-                <div class="col-auto">
+                <!-- Upload More button + dropdown -->
+                <div class="col-auto" style="position:relative">
                   <button
                     type="button"
                     class="upload-more-btn"
+                    [disabled]="uploading"
                     (click)="toggleDropdown()"
                   >
-                    <i class="upload-icon">
-                      <app-download-icon></app-download-icon>
-                    </i>
-                    Upload More
+                    <i class="upload-icon"><app-download-icon></app-download-icon></i>
+                    {{ uploading ? 'Uploading…' : 'Upload More' }}
                     <span>|</span>
-                    <i>
-                      <app-arrow-down-icon></app-arrow-down-icon>
-                    </i>
+                    <i><app-arrow-down-icon></app-arrow-down-icon></i>
                   </button>
 
-                  <div
-                    class="global-dropdown"
-                    *ngIf="showDropdown"
-                    (click)="
-                      openAdditionalDocumentModal(additionalDocumentContent)
-                    "
-                  >
-                    Additional Document
+                  <div class="global-dropdown" *ngIf="showDropdown">
+                    <div
+                      class="dropdown-item"
+                      *ngFor="let dt of docTypes"
+                      (click)="selectUploadType(dt.key)"
+                    >
+                      {{ dt.value }}
+                    </div>
                   </div>
                 </div>
 
-                <div
-                  class="col ms-auto d-flex align-items-center justify-content-end gap-2 score-section"
-                >
+                <div class="col ms-auto d-flex align-items-center justify-content-end gap-2 score-section">
                   <a class="score-link">View Score Report</a>
-
                   <div class="progress-wrap">
                     <svg viewBox="0 0 120 120">
                       <circle cx="60" cy="60" r="54" class="bg"></circle>
-
                       <circle cx="60" cy="60" r="54" class="progress"></circle>
                     </svg>
-
-                    <div class="percent-text">97%</div>
+                    <div class="percent-text">{{ allDocs.length > 0 ? ((leaseDocs.length / allDocs.length) * 100 | number:'1.0-0') : 0 }}%</div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -553,12 +546,96 @@
         </div>
       </div>
     </div>
-    <div class="mt-3">
-      <app-white-card>
-        <div class="template-header">
-          <app-custom-select
-            placeholder="Temaplate: Lease Agreement"
-          ></app-custom-select>
+    <!-- Template split-view -->
+    <div class="mt-3" *ngIf="templates.length > 0">
+      <app-white-card title="Lease Template">
+        <!-- Template selector -->
+        <div class="template-selector mb-3" *ngIf="templates.length > 1">
+          <select class="form-select form-select-sm" style="max-width:280px"
+            (change)="selectTemplate(+$any($event.target).value)">
+            <option *ngFor="let t of templates" [value]="t.id">{{ t.name }}</option>
+          </select>
+        </div>
+
+        <!-- Loading state -->
+        <div *ngIf="templateLoading" class="template-loading">
+          <span class="spinner-border spinner-border-sm me-2"></span> Loading template…
+        </div>
+
+        <div class="template-split-wrap" *ngIf="!templateLoading && templateLoaded">
+          <!-- Left: rendered preview -->
+          <div class="template-preview-pane">
+            <div *ngIf="rawTemplateHtml" class="template-preview-inner" [innerHTML]="safeTemplateHtml"></div>
+            <div *ngIf="!rawTemplateHtml" class="template-empty-msg">
+              <span>No template file linked. Fill in the fields and save.</span>
+            </div>
+          </div>
+
+          <!-- Right: field inputs -->
+          <div class="template-fields-pane">
+            <div class="template-fields-header">Edit Template</div>
+            <div class="template-fields-body">
+
+              <!-- Regular fields -->
+              <div class="template-field-row" *ngFor="let field of regularFields">
+                <label class="template-field-label">{{ field.label }}</label>
+                <input
+                  class="template-field-input"
+                  [type]="field.html_tag === 'date' ? 'date' : field.html_tag === 'number' ? 'number' : 'text'"
+                  [(ngModel)]="templateValues[field.name_attribute]"
+                  [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="onFieldChange(field.name_attribute)"
+                  [placeholder]="field.label"
+                />
+              </div>
+
+              <!-- Additional Terms -->
+              <div class="additional-terms-section" *ngIf="templateLoaded">
+                <div class="additional-terms-header">
+                  <span class="additional-terms-title">Additional Terms</span>
+                  <button
+                    type="button"
+                    class="add-term-btn"
+                    (click)="addTerm()"
+                    [disabled]="additionalTerms.length >= MAX_TERMS"
+                  >
+                    + Add Term
+                  </button>
+                </div>
+
+                <div class="template-field-row term-row" *ngFor="let term of additionalTerms; let i = index; trackBy: trackByIndex">
+                  <label class="template-field-label">Term {{ i + 1 }}</label>
+                  <div class="term-input-wrap">
+                    <input
+                      class="template-field-input term-field-input"
+                      type="text"
+                      [(ngModel)]="additionalTerms[i]"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="onTermChange(i)"
+                      [placeholder]="'Enter additional term ' + (i + 1)"
+                    />
+                    <button type="button" class="remove-term-btn" (click)="removeTerm(i)" title="Remove">×</button>
+                  </div>
+                </div>
+
+                <div *ngIf="additionalTerms.length === 0" class="no-terms-hint">
+                  Click "Add Term" to include additional contract terms.
+                </div>
+              </div>
+
+              <div *ngIf="templateLoaded && templateFields.length === 0" class="text-muted small">
+                No editable fields for this template.
+              </div>
+            </div>
+
+            <div class="template-fields-footer" *ngIf="templateFields.length > 0">
+              <button type="button" class="btn btnCommon btn-sm"
+                [disabled]="savingTemplate"
+                (click)="saveTemplateData()">
+                {{ savingTemplate ? 'Saving…' : 'Save Template' }}
+              </button>
+            </div>
+          </div>
         </div>
       </app-white-card>
     </div>
@@ -567,31 +644,28 @@
 
 <ng-template #additionalDocumentContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">
-      {{ "Additional Document" | translate }}
-    </h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
+    <h4 class="modal-title" id="modal-title">{{ "Additional Document" | translate }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
-    <app-aditionaldocument #additionalDocumentComponent></app-aditionaldocument>
+    <div class="mb-3">
+      <label class="form-label">Document Type</label>
+      <select class="form-select" [(ngModel)]="additionalDocTypeId">
+        <option [ngValue]="null" disabled>Select document type</option>
+        <option *ngFor="let dt of docTypes" [ngValue]="dt.key">{{ dt.value }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">File</label>
+      <input type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" (change)="onAdditionalFileSelected($event)" />
+    </div>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btnCommon btnTransparent"
-      (click)="modal.dismiss('Save click')"
-    >
+    <button type="button" class="btn btnCommon btnTransparent" (click)="modal.dismiss('cancel')">
       {{ "CANCEL" | translate }}
     </button>
-    <button type="button" class="btn btnCommon">
-      <!-- (click)="onTenantSave(addTenantFormComponent, modal)" -->
-
-      {{ "Send" | translate }}
+    <button type="button" class="btn btnCommon" [disabled]="uploading" (click)="saveAdditionalDocument(modal)">
+      {{ uploading ? 'Uploading…' : 'Upload' }}
     </button>
   </div>
 </ng-template>
