@@ -2522,15 +2522,6 @@ a .simple {
 }
 /*------------------------------------------------------transction table dropdown receipt --------------------------------------------------*/
 
-.custom-btn {
-  background: #f3f4f6;
-  border: 1px solid #e2e2e2;
-  border-radius: 10px;
-  padding: 6px 16px;
-  font-weight: 500;
-  color: #333;
-}
-
 .custom-btn:hover {
   background: #e9ecef;
 }
@@ -2572,14 +2563,6 @@ a .simple {
 
 .report-top-bar {
   padding: 10px 0;
-}
-
-.custom-btn {
-  background: #f3f4f6;
-  border: 1px solid #e2e2e2;
-  border-radius: 12px;
-  padding: 6px 16px;
-  font-weight: 500;
 }
 
 .custom-dropdown {
@@ -2667,11 +2650,11 @@ a .simple {
 }
 
 app-scannericon {
-  order: 2; /* Scan Cheque icon second */
+  order: 2;
 }
 
 app-plus-icon {
-  order: 1; /* Add Cheque icon first */
+  order: 1;
 }
 
 .filter-box {
@@ -2687,6 +2670,7 @@ app-plus-icon {
 .filter-box .form-check {
   margin-bottom: 6px;
 }
+
 /*---property-share-platfrom css-------------------------------------*/
 
 .statusIcons {

@@ -25,7 +25,7 @@ export class EjarimodelService {
   
           <div class="modal-actions">
             <button id="invoiceBtn" class="btn btnCommonsx">Go to Invoice</button>
-            <span class="mt-3">
+            <span >
               <a href="#" id="profileBtn" class="secondary-link">View Tenant Profile</a>
             </span>
           </div>

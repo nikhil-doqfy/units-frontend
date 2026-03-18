@@ -328,10 +328,9 @@ circle {
   overflow: visible !important;
 }
 
-/* vertical divider */
 .divider {
   width: 1.5px;
-  height: 28px; /* 👈 control height */
+  height: 28px;
   background-color: #344046;
 }
 
@@ -340,6 +339,9 @@ circle {
   overflow: visible !important;
 }
 
+.plus-btn {
+  border: 1px solid #3b4a51;
+}
 .dropdown-menu {
   position: absolute;
   top: 42px;
@@ -426,6 +428,8 @@ circle {
 .minus-btn {
   border: 2px solid #b1c2c8;
   color: #b1c2c8;
+  align-items: center;
+  justify-content: center;
 }
 
 .counter-wrapper {
@@ -456,7 +460,6 @@ circle {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -466,4 +469,27 @@ circle {
 
 .count {
   text-align: center;
+}
+
+thead input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid white;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+thead input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: 1px solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
