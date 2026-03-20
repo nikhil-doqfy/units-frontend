@@ -18,7 +18,9 @@
   border-radius: 6px 6px 0 0;
   border-bottom: 2px solid transparent;
   margin-bottom: -2px;
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
   white-space: nowrap;
 }
 
@@ -51,7 +53,9 @@
   color: #6b7280;
   border-radius: 20px;
   background: #f3f4f6;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
   white-space: nowrap;
 }
 
@@ -185,9 +189,13 @@
   transition: background 0.15s;
 }
 
-.tdBackBtn:hover { background: #f9fafb; }
+.tdBackBtn:hover {
+  background: #f9fafb;
+}
 
-.tdBackArrow { font-size: 15px; }
+.tdBackArrow {
+  font-size: 15px;
+}
 
 .tdMenuBtn {
   width: 34px;
@@ -224,8 +232,12 @@
   min-width: 110px;
 }
 
-.tdInfoItem:first-child { padding-left: 0; }
-.tdInfoItemLast { padding-right: 0; }
+.tdInfoItem:first-child {
+  padding-left: 0;
+}
+.tdInfoItemLast {
+  padding-right: 0;
+}
 
 .tdInfoDivider {
   width: 1px;
@@ -298,7 +310,9 @@
   gap: 6px;
 }
 
-.tdChargeItem:last-child { border-right: none; }
+.tdChargeItem:last-child {
+  border-right: none;
+}
 
 .tdChargeName {
   font-size: 11px;
@@ -397,7 +411,9 @@
   color: #6b7280;
   border-bottom: 2px solid transparent;
   margin-bottom: -2px;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .tdDocTabActive {
@@ -466,7 +482,9 @@
 }
 
 /* ── Activity history ────────────────────────────────────────── */
-.tdActivityCard .tdSectionTitle { margin-bottom: 0; }
+.tdActivityCard .tdSectionTitle {
+  margin-bottom: 0;
+}
 
 .tdActivityHeader {
   display: flex;
@@ -508,4 +526,22 @@
 .badge-rejected {
   background: #ffe4e6;
   color: #9f1239;
+}
+
+.table td:last-child::before,
+.table th:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.05),
+    transparent
+  );
 }

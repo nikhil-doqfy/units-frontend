@@ -1,11 +1,11 @@
 /* ── Scrollable table with hidden scrollbar ───────────────────────────────── */
 .table-responsive {
   overflow-x: auto;
-  scrollbar-width: none;       /* Firefox */
-  -ms-overflow-style: none;    /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 .table-responsive::-webkit-scrollbar {
-  display: none;               /* Chrome/Safari */
+  display: none; /* Chrome/Safari */
 }
 
 /* ── Sticky action column ─────────────────────────────────────────────────── */
@@ -57,4 +57,22 @@
 .tbl-action-inline app-edit-icon:hover,
 .tbl-action-inline .cmmnTblActnBtnDiv:hover {
   color: #2563eb;
+}
+
+.table td:last-child::before,
+.table th:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.05),
+    transparent
+  );
 }

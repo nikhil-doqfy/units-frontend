@@ -20,17 +20,22 @@ import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component'
 import { TenantsService } from '../../services/tenants.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { SharedService } from '../../../shared.service';
-import { BreadCrumb, PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
+import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 
 type MainTab = 'onboarding' | 'active';
-type SubTab  = 'current' | 'past' | 'rejected';
+type SubTab = 'current' | 'past' | 'rejected';
 
 const TAB_MAP: Record<MainTab | SubTab, string> = {
   onboarding: 'onboarding',
-  active:     'active',
-  current:    'active',
-  past:       'past',
-  rejected:   'rejected',
+  active: 'active',
+  current: 'active',
+  past: 'past',
+  rejected: 'rejected',
 };
 
 @Component({
@@ -50,17 +55,18 @@ const TAB_MAP: Record<MainTab | SubTab, string> = {
     TableImgItemComponent,
     TenantDetailComponent,
     TranslateModule,
+    WhiteCardComponent,
   ],
   templateUrl: './tenants.component.html',
   styleUrl: './tenants.component.css',
 })
 export class TenantsComponent {
   private tenantsService = inject(TenantsService);
-  private alertService   = inject(AlertService);
-  private sharedService  = inject(SharedService);
-  private route          = inject(ActivatedRoute);
-  private router         = inject(Router);
-  private destroyRef     = inject(DestroyRef);
+  private alertService = inject(AlertService);
+  private sharedService = inject(SharedService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   breadcrumbData: BreadCrumb[] = [];
 
@@ -71,9 +77,9 @@ export class TenantsComponent {
   subTab: SubTab = 'current';
 
   subTabs: { key: SubTab; label: string }[] = [
-    { key: 'current',  label: 'Current Tenants'  },
-    { key: 'past',     label: 'Past Tenants'      },
-    { key: 'rejected', label: 'Rejected Tenants'  },
+    { key: 'current', label: 'Current Tenants' },
+    { key: 'past', label: 'Past Tenants' },
+    { key: 'rejected', label: 'Rejected Tenants' },
   ];
 
   // ── Detail view ──────────────────────────────────
@@ -91,16 +97,16 @@ export class TenantsComponent {
   }
 
   // ── Table state ──────────────────────────────────
-  tenants: any[]     = [];
-  totalRecords       = 0;
-  rowsPerPage        = 10;
-  currentPage        = 1;
-  totalPages         = 1;
+  tenants: any[] = [];
+  totalRecords = 0;
+  rowsPerPage = 10;
+  currentPage = 1;
+  totalPages = 1;
   rowsPerPageOptions = [10, 25, 50, 100];
-  componentName      = 'TenantsComponent';
+  componentName = 'TenantsComponent';
 
   private searchSubject$ = new Subject<string>();
-  private searchText     = '';
+  private searchText = '';
 
   constructor() {
     const key = this.route.snapshot.data['titleKey'];
@@ -110,17 +116,19 @@ export class TenantsComponent {
   }
 
   ngOnInit() {
-    this.sharedService.getBreadcrumbs([
-      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { label: 'PAGE_TITLE.TENANTS',   link: ''               },
-    ]).subscribe((data) => (this.breadcrumbData = data));
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.TENANTS', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private initSearchListener() {
     this.searchSubject$
       .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
       .subscribe((text) => {
-        this.searchText  = text.trim();
+        this.searchText = text.trim();
         this.currentPage = 1;
         this.loadTenants();
       });
@@ -128,17 +136,17 @@ export class TenantsComponent {
 
   // ── Tab switching ─────────────────────────────────
   selectMainTab(tab: MainTab) {
-    this.mainTab     = tab;
-    this.subTab      = 'current';
+    this.mainTab = tab;
+    this.subTab = 'current';
     this.currentPage = 1;
-    this.searchText  = '';
+    this.searchText = '';
     this.loadTenants();
   }
 
   selectSubTab(tab: SubTab) {
-    this.subTab      = tab;
+    this.subTab = tab;
     this.currentPage = 1;
-    this.searchText  = '';
+    this.searchText = '';
     this.loadTenants();
   }
 
@@ -148,32 +156,39 @@ export class TenantsComponent {
 
   get activeTableTitle(): string {
     if (this.mainTab === 'onboarding') return 'Onboarding Tenants';
-    return this.subTabs.find((s) => s.key === this.subTab)?.label ?? 'Active Tenants';
+    return (
+      this.subTabs.find((s) => s.key === this.subTab)?.label ?? 'Active Tenants'
+    );
   }
 
   // ── Data loading ──────────────────────────────────
   loadTenants() {
     const params: Record<string, any> = {
-      tab:       this.backendTab,
-      page:      this.currentPage,
+      tab: this.backendTab,
+      page: this.currentPage,
       page_size: this.rowsPerPage,
     };
     if (this.searchText) params['search'] = this.searchText;
 
-    this.tenantsService.getTenantsByTab(params)
+    this.tenantsService
+      .getTenantsByTab(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.tenants      = resp?.content ?? [];
+          this.tenants = resp?.content ?? [];
           this.totalRecords = resp?.pagination?.total_records ?? 0;
-          this.totalPages   = resp?.pagination?.total_pages   ?? 1;
+          this.totalPages = resp?.pagination?.total_pages ?? 1;
         },
       });
   }
 
-  onRefresh() { this.loadTenants(); }
+  onRefresh() {
+    this.loadTenants();
+  }
 
-  searchTextChange(text: string) { this.searchSubject$.next(text); }
+  searchTextChange(text: string) {
+    this.searchSubject$.next(text);
+  }
 
   onPageChange(event: PageChange) {
     if (event.componentName !== this.componentName) return;
@@ -192,12 +207,13 @@ export class TenantsComponent {
     const params: Record<string, any> = { tab: this.backendTab };
     if (this.searchText) params['search'] = this.searchText;
 
-    this.tenantsService.exportTenantsByTab(params)
+    this.tenantsService
+      .exportTenantsByTab(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((blob) => {
         const url = window.URL.createObjectURL(blob);
-        const a   = document.createElement('a');
-        a.href     = url;
+        const a = document.createElement('a');
+        a.href = url;
         a.download = `tenants_${this.backendTab}.csv`;
         a.click();
         window.URL.revokeObjectURL(url);
@@ -211,34 +227,40 @@ export class TenantsComponent {
 
   continueOnboarding(tenant: any) {
     const leadData = {
-      property_id:    tenant.property_id,
-      property_name:  tenant.property_name,
-      block_id:       tenant.property_block_id,
-      block_name:     tenant.property_block_name,
-      tenant_id:      tenant.tenant_id,
-      email:          tenant.email,
-      name:           tenant.tenant_name,
+      property_id: tenant.property_id,
+      property_name: tenant.property_name,
+      block_id: tenant.property_block_id,
+      block_name: tenant.property_block_name,
+      tenant_id: tenant.tenant_id,
+      email: tenant.email,
+      name: tenant.tenant_name,
       contact_number: tenant.contact_number,
     };
 
     this.router.navigate(['/dashboard/new-tenant'], {
       state: {
-        leaseId:     tenant.lease_id,
+        leaseId: tenant.lease_id,
         leadData,
         leaseStatus: tenant.lease_status,
-        leaseStage:  tenant.lease_stage,
+        leaseStage: tenant.lease_stage,
       },
     });
   }
 
   statusBadgeClass(leaseStatus: string): string {
     switch (leaseStatus) {
-      case 'ACTIVE':   return 'badge-active';
-      case 'DRAFT':    return 'badge-draft';
-      case 'INACTIVE': return 'badge-inactive';
-      case 'EXPIRED':  return 'badge-expired';
-      case 'REJECTED': return 'badge-rejected';
-      default:         return 'badge-draft';
+      case 'ACTIVE':
+        return 'badge-active';
+      case 'DRAFT':
+        return 'badge-draft';
+      case 'INACTIVE':
+        return 'badge-inactive';
+      case 'EXPIRED':
+        return 'badge-expired';
+      case 'REJECTED':
+        return 'badge-rejected';
+      default:
+        return 'badge-draft';
     }
   }
 }
