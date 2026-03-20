@@ -8,6 +8,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { PropertyService } from '../../../dashboard/services/property.service';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { TenantsService } from '../../../dashboard/services/tenants.service';
+import { FormService } from '../../../shared/services/form.service';
 
 @Component({
   selector: 'app-basicpersonal',
@@ -25,6 +26,9 @@ export class BasicpersonalComponent implements OnInit {
   private formService = inject(NewTenantFromService);
   private tenantsService = inject(TenantsService);
   private destroyRef = inject(DestroyRef);
+  private sharedFormService = inject(FormService);
+
+  isInvalid = this.sharedFormService.isInvalid.bind(this.sharedFormService);
 
   tenantLookupLoading = false;
 
@@ -44,6 +48,10 @@ export class BasicpersonalComponent implements OnInit {
 
   get ownerForms(): FormArray {
     return this.form.get('unitOwners') as FormArray;
+  }
+
+  ownerFormAt(i: number): FormGroup {
+    return this.ownerForms.at(i) as FormGroup;
   }
 
   ngOnInit() {
@@ -174,6 +182,7 @@ export class BasicpersonalComponent implements OnInit {
             tenantName:     t.name ?? '',
             telNo:          t.contact_number ?? '',
             emiratesId:     t.emirates_id ?? '',
+            nationality:    t.nationality ?? '',
             passportNo:     t.passport_number ?? '',
             passportExpiry: t.passport_expiry_date ? String(t.passport_expiry_date).slice(0, 10) : '',
             visaNo:         t.visa_number ?? '',

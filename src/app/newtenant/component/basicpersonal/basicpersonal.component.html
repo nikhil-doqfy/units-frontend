@@ -30,6 +30,7 @@
     <span class="sectionBadge">01</span>
     <h6 class="sectionTitle">Leased Unit</h6>
     <div class="row g-3">
+
       <div class="col-md-3">
         <label class="form-label">Property / Building Name</label>
         <app-custom-select
@@ -40,6 +41,7 @@
           (optionSelected)="onPropertySelect($event)"
         ></app-custom-select>
       </div>
+
       <div class="col-md-3">
         <label class="form-label">Block / Tower</label>
         <app-custom-select
@@ -50,8 +52,9 @@
           (optionSelected)="onBlockSelect($event)"
         ></app-custom-select>
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Unit</label>
+        <label class="form-label">Unit <span class="text-danger">*</span></label>
         <app-custom-select
           [options]="unitList"
           key="key"
@@ -60,25 +63,45 @@
           (optionSelected)="onUnitSelect($event)"
           [showFilterInput]="true"
         ></app-custom-select>
+        @if (isInvalid(form, 'unit').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'unit').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Unit Name</label>
+        <label class="form-label">Unit Name <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="unitName" />
+        @if (isInvalid(form, 'unitName').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'unitName').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Unit Size (Sq ft)</label>
+        <label class="form-label">Unit Size (Sq ft) <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="unitSize" />
+        @if (isInvalid(form, 'unitSize').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'unitSize').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Land No</label>
+        <label class="form-label">Land No <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="landNo" />
+        @if (isInvalid(form, 'landNo').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'landNo').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">DM No (Affection Plan)</label>
+        <label class="form-label">DM No (Affection Plan) <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="dmNo" />
+        @if (isInvalid(form, 'dmNo').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'dmNo').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Property / Unit Usage</label>
+        <label class="form-label">Property / Unit Usage <span class="text-danger">*</span></label>
         <app-custom-select
           [options]="unitUsageList"
           key="key"
@@ -86,9 +109,13 @@
           [selectedOption]="selectedUnitUsage"
           (optionSelected)="onUnitUsageSelect($event)"
         ></app-custom-select>
+        @if (isInvalid(form, 'unitUsage').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'unitUsage').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Property / Unit Type</label>
+        <label class="form-label">Property / Unit Type <span class="text-danger">*</span></label>
         <app-custom-select
           [options]="unitTypeList"
           key="key"
@@ -96,19 +123,35 @@
           [selectedOption]="selectedUnitType"
           (optionSelected)="onUnitTypeSelect($event)"
         ></app-custom-select>
+        @if (isInvalid(form, 'unitType').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'unitType').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Sub Type / BHK</label>
+        <label class="form-label">Sub Type / BHK <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="subType" />
+        @if (isInvalid(form, 'subType').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'subType').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Makani No</label>
+        <label class="form-label">Makani No <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="makaniNo" />
+        @if (isInvalid(form, 'makaniNo').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'makaniNo').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Floor No</label>
+        <label class="form-label">Floor No <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="floorNo" />
+        @if (isInvalid(form, 'floorNo').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'floorNo').msg }}</small>
+        }
       </div>
+
     </div>
   </div>
 
@@ -117,12 +160,14 @@
     <span class="sectionBadge">02</span>
     <h6 class="sectionTitle">Tenant</h6>
     <div class="row g-3">
+
       <div class="col-md-3">
         <label class="form-label">Tenant ID</label>
         <input type="text" class="form-control" placeholder="Auto-filled" formControlName="tenantId" readonly />
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Email</label>
+        <label class="form-label">Email <span class="text-danger">*</span></label>
         <div class="input-group">
           <input type="email" class="form-control" placeholder="Enter email" formControlName="email"
             (blur)="onEmailBlur()" />
@@ -130,47 +175,88 @@
             <span class="spinner-border spinner-border-sm"></span>
           </span>
         </div>
+        @if (isInvalid(form, 'email').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'email').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Tenant Name</label>
+        <label class="form-label">Tenant Name <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="tenantName" />
+        @if (isInvalid(form, 'tenantName').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'tenantName').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Nationality</label>
+        <label class="form-label">Nationality <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="nationality" />
+        @if (isInvalid(form, 'nationality').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'nationality').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Passport No</label>
+        <label class="form-label">Passport No <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="passportNo" />
+        @if (isInvalid(form, 'passportNo').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'passportNo').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Passport Expiry Date</label>
+        <label class="form-label">Passport Expiry Date <span class="text-danger">*</span></label>
         <input type="date" class="form-control" formControlName="passportExpiry" />
+        @if (isInvalid(form, 'passportExpiry').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'passportExpiry').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Emirates ID</label>
+        <label class="form-label">Emirates ID <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="emiratesId" />
+        @if (isInvalid(form, 'emiratesId').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'emiratesId').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Visa No</label>
+        <label class="form-label">Visa No <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="visaNo" />
+        @if (isInvalid(form, 'visaNo').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'visaNo').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Visa Expiry Date</label>
+        <label class="form-label">Visa Expiry Date <span class="text-danger">*</span></label>
         <input type="date" class="form-control" formControlName="visaExpiry" />
+        @if (isInvalid(form, 'visaExpiry').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'visaExpiry').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Tel No</label>
+        <label class="form-label">Tel No <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="telNo" />
+        @if (isInvalid(form, 'telNo').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'telNo').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
-        <label class="form-label">Address Line 1</label>
+        <label class="form-label">Address Line 1 <span class="text-danger">*</span></label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="addressLine1" />
+        @if (isInvalid(form, 'addressLine1').status) {
+          <small class="errorMsg">{{ isInvalid(form, 'addressLine1').msg }}</small>
+        }
       </div>
+
       <div class="col-md-3">
         <label class="form-label">Address Line 2</label>
         <input type="text" class="form-control" placeholder="Enter here" formControlName="addressLine2" />
       </div>
+
     </div>
   </div>
 
@@ -179,53 +265,92 @@
     <span class="sectionBadge">03</span>
     <h6 class="sectionTitle">Owner Details</h6>
     <div formArrayName="unitOwners">
-      <ng-container *ngFor="let ownerForm of ownerForms.controls; let i = index; let last = last">
+      <ng-container *ngFor="let ownerForm of ownerForms.controls; let i = index">
         <hr *ngIf="i > 0" class="ownerDivider" />
         <div class="row g-3" [formGroupName]="i">
+
           <div class="col-md-3">
-            <label class="form-label">Owner Name</label>
+            <label class="form-label">Owner Name <span class="text-danger">*</span></label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerName" />
+            @if (isInvalid(ownerFormAt(i), 'ownerName').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'ownerName').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
-            <label class="form-label">Email</label>
+            <label class="form-label">Email <span class="text-danger">*</span></label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerEmail" />
+            @if (isInvalid(ownerFormAt(i), 'ownerEmail').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'ownerEmail').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
-            <label class="form-label">Contact No</label>
+            <label class="form-label">Contact No <span class="text-danger">*</span></label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerContact" />
+            @if (isInvalid(ownerFormAt(i), 'ownerContact').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'ownerContact').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
-            <label class="form-label">Emirates ID</label>
+            <label class="form-label">Emirates ID <span class="text-danger">*</span></label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerEmiratesId" />
+            @if (isInvalid(ownerFormAt(i), 'ownerEmiratesId').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'ownerEmiratesId').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
-            <label class="form-label">Owner Number</label>
+            <label class="form-label">Owner Number <span class="text-danger">*</span></label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="ownerNumber" />
+            @if (isInvalid(ownerFormAt(i), 'ownerNumber').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'ownerNumber').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
-            <label class="form-label">Trade License No</label>
+            <label class="form-label">Trade License No <span class="text-danger">*</span></label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="tradeLicenseNo" />
+            @if (isInvalid(ownerFormAt(i), 'tradeLicenseNo').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'tradeLicenseNo').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
-            <label class="form-label">License Number</label>
+            <label class="form-label">License Number <span class="text-danger">*</span></label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="licenseNumber" />
+            @if (isInvalid(ownerFormAt(i), 'licenseNumber').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'licenseNumber').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
-            <label class="form-label">License Expiry</label>
+            <label class="form-label">License Expiry <span class="text-danger">*</span></label>
             <input type="date" class="form-control" formControlName="licenseExpiry" />
+            @if (isInvalid(ownerFormAt(i), 'licenseExpiry').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'licenseExpiry').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
-            <label class="form-label">License Issuer</label>
+            <label class="form-label">License Issuer <span class="text-danger">*</span></label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="licenseIssuer" />
+            @if (isInvalid(ownerFormAt(i), 'licenseIssuer').status) {
+              <small class="errorMsg">{{ isInvalid(ownerFormAt(i), 'licenseIssuer').msg }}</small>
+            }
           </div>
+
           <div class="col-md-3">
             <label class="form-label">Fax No</label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="faxNo" />
           </div>
+
           <div class="col-md-3">
             <label class="form-label">P.O. Box</label>
             <input type="text" class="form-control" placeholder="Enter here" formControlName="poBox" />
           </div>
+
         </div>
       </ng-container>
     </div>

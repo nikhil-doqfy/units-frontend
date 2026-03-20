@@ -134,6 +134,10 @@ export class LeaseService {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/send-negotiation`, { lease_id: leaseId });
   }
 
+  sendLeaseInvite(leaseId: number): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/send-invite`, { lease_id: leaseId });
+  }
+
   editTemplateData(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/generate-contract`, data);
   }

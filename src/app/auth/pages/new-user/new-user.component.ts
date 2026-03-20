@@ -6,7 +6,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgOtpInputModule } from 'ng-otp-input';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -84,6 +84,7 @@ export class NewUserComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private themeService: ThemeService,
     private fb: FormBuilder,
     private auth: AuthService,
@@ -106,6 +107,21 @@ export class NewUserComponent implements OnInit {
     Validators.maxLength(30),
   ];
   ngOnInit() {
+    const qp = this.route.snapshot.queryParamMap;
+    const roleParam = qp.get('role') as UserRole | null;
+    if (roleParam && ['owner', 'property-manager', 'tenant'].includes(roleParam)) {
+      this.currentRole = roleParam;
+      this.selectedRole = roleParam;
+      this.themeService.setRole(roleParam);
+    }
+
+    const prefill = {
+      email:          qp.get('email')          ?? '',
+      first_name:     qp.get('first_name')     ?? '',
+      last_name:      qp.get('last_name')      ?? '',
+      contact_number: qp.get('contact_number') ?? '',
+    };
+
     this.signupForm = this.fb.group({
       first_name: ['', this.nameValidators],
       last_name: ['', this.nameValidators],
@@ -132,6 +148,12 @@ export class NewUserComponent implements OnInit {
       confirmPassword: ['', Validators.required],
       role: [this.selectedRole],
     });
+
+    // Pre-fill from invite link query params
+    if (prefill.email || prefill.first_name || prefill.last_name || prefill.contact_number) {
+      this.signupForm.patchValue(prefill);
+    }
+
     this.signupForm
       .get('role')
       ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
@@ -334,6 +356,12 @@ export class NewUserComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
+          // Tenant already exists — redirect to login
+          if (resp?.content?.already_registered) {
+            this.alert.success('Account already exists. Redirecting to login…');
+            setTimeout(() => this.router.navigate(['/auth/login']), 1500);
+            return;
+          }
           if (!this.isOtpVerificationModalOpen) {
             this.openOtpVerifyModal();
           }

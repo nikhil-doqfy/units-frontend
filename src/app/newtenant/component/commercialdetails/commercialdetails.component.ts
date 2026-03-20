@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { CustomSelectComponent } from '../../../dashboard/component/custom-select/custom-select.component';
 import { ToastService } from '../../../core/toast.service';
 import { AlertService } from '../../../shared/services/alert.service';
+import { FormService } from '../../../shared/services/form.service';
 
 @Component({
   selector: 'app-commercialdetails',
@@ -23,10 +24,16 @@ import { AlertService } from '../../../shared/services/alert.service';
 })
 export class CommercialdetailsComponent {
   @Input() form!: FormGroup;
+
+  isInvalid: FormService['isInvalid'];
+
   constructor(
     private toastService: ToastService,
     private alertService: AlertService,
-  ) {}
+    private formService: FormService,
+  ) {
+    this.isInvalid = this.formService.isInvalid.bind(this.formService);
+  }
   charges = [
     {
       label: 'Admin Fee',

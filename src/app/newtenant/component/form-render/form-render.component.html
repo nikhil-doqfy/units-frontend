@@ -85,6 +85,7 @@
             getNextBtnLabel() === 'Approval & Generate Invoice'
           )
         "
+        [disabled]="isSaveDisabled"
         [ngClass]="{
           'profile-save-btn':
             currentSubStep?.component === ProfileComponent && subIndex() === 0,
@@ -96,6 +97,7 @@
           'submit-for-ejari': getNextBtnLabel() === 'Submit for Ejari',
           'Approval-Generate-invoice ':
             getNextBtnLabel() === 'Approval & Generate Invoice',
+          'btn-disabled': isSaveDisabled,
         }"
         (click)="next()"
       >

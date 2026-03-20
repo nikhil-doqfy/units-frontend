@@ -96,29 +96,29 @@
           <tr>
             <td class="tenantNameClickable" (click)="onTenantClick(t)">
               <app-table-img-item
-                [img]="t.tenant_photo"
-                [title]="t.tenant_name || 'N/A'"
+                [img]="t.tenant?.photo"
+                [title]="t.tenant?.name || 'N/A'"
                 size="md"
                 [showInitialsFallback]="true"
               />
             </td>
-            <td>{{ t.tenant_code         || 'N/A' }}</td>
-            <td>{{ t.lease_code          || 'N/A' }}</td>
-            <td>{{ t.email               || 'N/A' }}</td>
-            <td>{{ t.contact_number      || 'N/A' }}</td>
-            <td>{{ t.emirates_id         || 'N/A' }}</td>
-            <td class="propClickable" (click)="goToProperty(t.property_id)">
+            <td>{{ t.tenant?.code              || 'N/A' }}</td>
+            <td>{{ t.code                      || 'N/A' }}</td>
+            <td>{{ t.tenant?.email             || 'N/A' }}</td>
+            <td>{{ t.tenant?.contact_number    || 'N/A' }}</td>
+            <td>{{ t.tenant?.emirates_id       || 'N/A' }}</td>
+            <td class="propClickable" (click)="goToProperty(t.property?.id)">
               <app-table-img-item
-                [img]="t.property_thumbnail || '../../../../assets/property/property-img-default.svg'"
-                [title]="t.property_name || 'N/A'"
+                [img]="t.property?.thumbnail || '../../../../assets/property/property-img-default.svg'"
+                [title]="t.property?.name || 'N/A'"
                 size="md"
-                [clickable]="!!t.property_id"
+                [clickable]="!!t.property?.id"
               />
             </td>
-            <td>{{ t.property_block_name || 'N/A' }}</td>
-            <td>{{ t.start_date          || '—'   }}</td>
-            <td>{{ t.end_date            || '—'   }}</td>
-            <td>{{ t.rent != null ? (t.rent | number:'1.2-2') : 'N/A' }}</td>
+            <td>{{ t.property?.block_name      || 'N/A' }}</td>
+            <td>{{ t.dates?.start_date         || '—'   }}</td>
+            <td>{{ t.dates?.end_date           || '—'   }}</td>
+            <td>{{ t.financials?.rent != null ? (t.financials.rent | number:'1.2-2') : 'N/A' }}</td>
             <td>
               <span class="statusBadge" [ngClass]="statusBadgeClass(t.lease_status)">
                 {{ t.lease_status }}
