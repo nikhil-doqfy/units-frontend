@@ -54,71 +54,80 @@ export class NewTenantComponent {
             if (lease) {
               this.newTenantService.getLeaseId().set(lease.id);
 
-              // Map _serialize_lease fields → createBasicForm leadData shape
+              const p = lease.property ?? {};
+              const u = lease.unit     ?? {};
+              const t = lease.tenant   ?? {};
+              const d = lease.dates    ?? {};
+              const f = lease.financials ?? {};
+
               const leadData = {
-                property_id:    lease.property_id,
-                property_name:  lease.property_name,
-                block_id:       lease.property_block_id,
-                block_name:     lease.property_block_name,
-                unit_id:        lease.unit_id,
-                unit_name:      lease.unit_name,
-                unit_size:      lease.unit_size,
-                land_no:        lease.land_no,
-                dm_no:          lease.dm_no,
-                unit_usage:     lease.unit_usage,
-                unit_type:      lease.unit_type,
-                sub_type:       lease.sub_type,
-                makani_no:      lease.makani_no,
-                floor_no:       lease.floor_no,
-                tenant_id:      lease.tenant_id,
-                email:          lease.tenant_email,
-                name:           lease.tenant_name,
-                contact_number: lease.tenant_contact,
-                unit_owners:    lease.unit_owners ?? [],
+                property_id:    p.id,
+                property_name:  p.name,
+                block_id:       p.block_id,
+                block_name:     p.block_name,
+                unit_id:        u.id,
+                unit_name:      u.name,
+                unit_size:      u.size,
+                land_no:        u.land_no,
+                dm_no:          u.dm_no,
+                unit_usage:     u.unit_usage,
+                unit_type:      u.unit_type,
+                sub_type:       u.sub_type,
+                makani_no:      u.makani_no,
+                floor_no:       u.floor_no,
+                tenant_id:      t.id,
+                email:          t.email,
+                name:           t.name,
+                contact_number: t.contact,
+                unit_owners:    u.owners ?? [],
+                platform:       lease.platform ?? '',
               };
 
               this.steps = this.newTenantService.PropertySteps(leadData);
 
-              // Patch tenant personal / document fields not in createBasicForm mapping
               const basicFormGroup = this.steps()?.[0]?.subSteps?.[0]?.formGroup;
               if (basicFormGroup) {
                 basicFormGroup.patchValue({
-                  emiratesId:     lease.emirates_id      ?? '',
-                  passportNo:     lease.passport_number  ?? '',
-                  passportExpiry: lease.passport_expiry  ?? '',
-                  visaNo:         lease.visa_number      ?? '',
-                  visaExpiry:     lease.visa_expiry      ?? '',
-                  addressLine1:   lease.address_line_1   ?? '',
-                  addressLine2:   lease.address_line_2   ?? '',
+                  emiratesId:     t.emirates_id      ?? '',
+                  passportNo:     t.passport_number  ?? '',
+                  passportExpiry: t.passport_expiry  ?? '',
+                  visaNo:         t.visa_number      ?? '',
+                  visaExpiry:     t.visa_expiry      ?? '',
+                  addressLine1:   t.address_line_1   ?? '',
+                  addressLine2:   t.address_line_2   ?? '',
                 });
               }
 
-              // Patch commercial form fields
               const commercialFormGroup = this.steps()?.[0]?.subSteps?.[1]?.formGroup;
               if (commercialFormGroup) {
                 commercialFormGroup.patchValue({
-                  startDate:             lease.start_date             ?? '',
-                  endDate:               lease.end_date               ?? '',
-                  graceStartDate:        lease.grace_start_date       ?? '',
-                  graceEndDate:          lease.grace_end_date         ?? '',
-                  annualAmount:          lease.annual_amount          ?? '',
-                  actualAnnualAmount:    lease.actual_annual_amount   ?? '',
-                  securityBookingAmount: lease.booking_amount         ?? '',
-                  maintenanceCharges:    lease.maintenance_charges    ?? '',
-                  rent:                  lease.rent                   ?? '',
-                  securityDeposit:       lease.security_deposit       ?? '',
-                  commissionPercent:     lease.commission             ?? '',
-                  noticePeriod:          lease.notice_period          ?? '',
-                  contractAmount:        lease.contract_amount        ?? '',
-                  discount:              lease.discount               ?? '',
-                  shellAndCore:          lease.shell_and_core         ?? false,
-                  paymentCount:          lease.payment_count          ?? '',
+                  startDate:             d.start_date             ?? '',
+                  endDate:               d.end_date               ?? '',
+                  graceStartDate:        d.grace_start_date       ?? '',
+                  graceEndDate:          d.grace_end_date         ?? '',
+                  annualAmount:          f.annual_amount          ?? '',
+                  actualAnnualAmount:    f.actual_annual_amount   ?? '',
+                  securityBookingAmount: f.booking_amount         ?? '',
+                  maintenanceCharges:    f.maintenance_charges    ?? '',
+                  rent:                  f.rent                   ?? '',
+                  securityDeposit:       f.security_deposit       ?? '',
+                  commissionPercent:     f.commission             ?? '',
+                  noticePeriod:          f.notice_period          ?? '',
+                  contractAmount:        f.contract_amount        ?? '',
+                  discount:              f.discount               ?? '',
+                  shellAndCore:          lease.shell_and_core     ?? false,
+                  paymentCount:          f.payment_count          ?? '',
                 });
               }
 
-              this.newTenantService.getActiveIndex().set(
-                this.leaseStageToStepIndex(lease.lease_stage ?? stateLeaseStage),
-              );
+              if (t.is_onboarding) {
+                this.newTenantService.getActiveIndex().set(1);
+                this.newTenantService.getActiveSubIndex().set(1);
+              } else {
+                this.newTenantService.getActiveIndex().set(
+                  this.leaseStageToStepIndex(lease.lease_stage ?? stateLeaseStage),
+                );
+              }
             }
             this.loading.set(false);
           },

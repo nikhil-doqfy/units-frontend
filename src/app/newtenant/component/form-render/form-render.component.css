@@ -179,6 +179,14 @@
   transition: all 0.3s ease 0s;
 }
 
+/* Disabled state for save/next buttons */
+.btn-disabled,
+.btn-disabled:hover {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Save & Next style buttons — purple gradient matching screenshot */
 .profile-save-btn,
 .save-btn,

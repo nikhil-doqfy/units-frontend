@@ -7,6 +7,7 @@ import { CustomSelectComponent } from '../../../dashboard/component/custom-selec
 import { ToastService } from '../../../core/toast.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
+import { FormService } from '../../../shared/services/form.service';
 
 @Component({
   selector: 'app-commercialdetails',
@@ -25,10 +26,16 @@ import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-
 })
 export class CommercialdetailsComponent {
   @Input() form!: FormGroup;
+
+  isInvalid: FormService['isInvalid'];
+
   constructor(
     private toastService: ToastService,
     private alertService: AlertService,
-  ) {}
+    private formService: FormService,
+  ) {
+    this.isInvalid = this.formService.isInvalid.bind(this.formService);
+  }
   charges = [
     {
       label: 'Admin Fee',

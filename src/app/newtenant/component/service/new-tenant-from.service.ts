@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { NewTenant } from '../modules/new-tenant';
@@ -145,29 +145,29 @@ export class NewTenantFromService {
       // Section 01 — Leased Unit
       property:  [leadData?.property_id ? { key: leadData.property_id, value: leadData.property_name } : ''],
       block:     [leadData?.block_id    ? { key: leadData.block_id,    value: leadData.block_name    } : ''],
-      unit:      [leadData?.unit_id     ? { key: leadData.unit_id,     value: leadData.unit_name     } : ''],
-      unitName:  [leadData?.unit_name   ?? ''],
-      unitSize:  [leadData?.unit_size   ?? ''],
-      landNo:    [leadData?.land_no     ?? ''],
-      dmNo:      [leadData?.dm_no       ?? ''],
-      unitUsage: [leadData?.unit_usage  ?? ''],
-      unitType:  [leadData?.unit_type   ?? ''],
-      subType:   [leadData?.sub_type    ?? ''],
-      makaniNo:  [leadData?.makani_no   ?? ''],
-      floorNo:   [leadData?.floor_no    ?? ''],
+      unit:      [leadData?.unit_id     ? { key: leadData.unit_id,     value: leadData.unit_name     } : '', Validators.required],
+      unitName:  [leadData?.unit_name   ?? '', Validators.required],
+      unitSize:  [leadData?.unit_size   ?? '', Validators.required],
+      landNo:    [leadData?.land_no     ?? '', Validators.required],
+      dmNo:      [leadData?.dm_no       ?? '', Validators.required],
+      unitUsage: [leadData?.unit_usage  ?? '', Validators.required],
+      unitType:  [leadData?.unit_type   ?? '', Validators.required],
+      subType:   [leadData?.sub_type    ?? '', Validators.required],
+      makaniNo:  [leadData?.makani_no   ?? '', Validators.required],
+      floorNo:   [leadData?.floor_no    ?? '', Validators.required],
 
       // Section 02 — Tenant
       tenantId:       [leadData?.tenant_id ?? null],
-      email:          [leadData?.email ?? ''],
-      tenantName:     [leadData?.name ?? ''],
-      nationality:    [''],
-      passportNo:     [''],
-      passportExpiry: [''],
-      emiratesId:     [''],
-      visaNo:         [''],
-      visaExpiry:     [''],
-      telNo:          [leadData?.contact_number ?? ''],
-      addressLine1:   [''],
+      email:          [leadData?.email ?? '', [Validators.required, Validators.email]],
+      tenantName:     [leadData?.name ?? '', Validators.required],
+      nationality:    ['', Validators.required],
+      passportNo:     ['', Validators.required],
+      passportExpiry: ['', Validators.required],
+      emiratesId:     ['', Validators.required],
+      visaNo:         ['', Validators.required],
+      visaExpiry:     ['', Validators.required],
+      telNo:          [leadData?.contact_number ?? '', Validators.required],
+      addressLine1:   ['', Validators.required],
       addressLine2:   [''],
 
       // Section 03 — Owner Details (FormArray)
@@ -181,15 +181,15 @@ export class NewTenantFromService {
 
   createOwnerGroup(o?: any): FormGroup {
     return this.fb.group({
-      ownerName:      [o?.name                 ?? ''],
-      ownerEmail:     [o?.email                ?? ''],
-      ownerContact:   [o?.contact_number       ?? ''],
-      ownerEmiratesId:[o?.emirates_id          ?? ''],
-      ownerNumber:    [o?.owner_number         ?? ''],
-      tradeLicenseNo: [o?.trade_license_number ?? ''],
-      licenseNumber:  [o?.license_number       ?? ''],
-      licenseExpiry:  [o?.license_expiry_date ? String(o.license_expiry_date).slice(0, 10) : ''],
-      licenseIssuer:  [o?.license_issuer       ?? ''],
+      ownerName:      [o?.name                 ?? '', Validators.required],
+      ownerEmail:     [o?.email                ?? '', [Validators.required, Validators.email]],
+      ownerContact:   [o?.contact_number       ?? '', Validators.required],
+      ownerEmiratesId:[o?.emirates_id          ?? '', Validators.required],
+      ownerNumber:    [o?.owner_number         ?? '', Validators.required],
+      tradeLicenseNo: [o?.trade_license_number ?? '', Validators.required],
+      licenseNumber:  [o?.license_number       ?? '', Validators.required],
+      licenseExpiry:  [o?.license_expiry_date ? String(o.license_expiry_date).slice(0, 10) : '', Validators.required],
+      licenseIssuer:  [o?.license_issuer       ?? '', Validators.required],
       faxNo:          [o?.fax_number           ?? ''],
       poBox:          [o?.po_box_number        ?? ''],
     });
@@ -197,22 +197,22 @@ export class NewTenantFromService {
 
   private createCommercialForm(): FormGroup {
     return this.fb.group({
-      startDate:            [''],
-      endDate:              [''],
-      graceStartDate:       [''],
-      graceEndDate:         [''],
-      annualAmount:         [''],
-      actualAnnualAmount:   [''],
-      securityBookingAmount:[''],
-      maintenanceCharges:   [''],
-      rent:                 [''],
-      securityDeposit:      [''],
-      commissionPercent:    [''],
-      noticePeriod:         [''],
-      contractAmount:       [''],
+      startDate:            ['', Validators.required],
+      endDate:              ['', Validators.required],
+      graceStartDate:       ['', Validators.required],
+      graceEndDate:         ['', Validators.required],
+      annualAmount:         ['', Validators.required],
+      actualAnnualAmount:   ['', Validators.required],
+      securityBookingAmount:['', Validators.required],
+      maintenanceCharges:   ['', Validators.required],
+      rent:                 ['', Validators.required],
+      securityDeposit:      ['', Validators.required],
+      commissionPercent:    ['', Validators.required],
+      noticePeriod:         ['', Validators.required],
+      contractAmount:       ['', Validators.required],
       discount:             [''],
       shellAndCore:         [''],
-      paymentCount:         [''],
+      paymentCount:         ['', Validators.required],
     });
   }
 
@@ -405,12 +405,14 @@ export class NewTenantFromService {
       tenant_name: v.tenantName ?? '',
       contact_number: v.telNo ?? '',
       emirates_id: v.emiratesId ?? '',
+      nationality: v.nationality ?? '',
       passport_number: v.passportNo ?? '',
       passport_expiry_date: v.passportExpiry ?? '',
       visa_number: v.visaNo ?? '',
       visa_expiry_date: v.visaExpiry ?? '',
       address_line_1: v.addressLine1 ?? '',
       address_line_2: v.addressLine2 ?? '',
+      platform: v.platform ?? '',
     };
     const existingId = this.leaseId();
 
@@ -421,10 +423,11 @@ export class NewTenantFromService {
     req$.subscribe({
       next: (resp: any) => {
         if (resp?.content?.id) this.leaseId.set(resp.content.id);
+        this.alertService.success('Lease saved successfully');
         onSuccess?.();
       },
       error: () => {
-        // Proceed anyway so the user isn't stuck
+        this.alertService.error('Failed to save lease. Please try again.');
         onSuccess?.();
       },
     });
@@ -461,7 +464,10 @@ export class NewTenantFromService {
 
     this.leaseService.updateLease({ ...payload, lease_id: existingId, lease_stage: 'ONBOARDING' }).subscribe({
       next: () => {
-        this.alertService.success('Lease saved successfully');
+        this.leaseService.sendLeaseInvite(existingId).subscribe({
+          next: () => this.alertService.success('Invite sent successfully to tenant'),
+          error: () => this.alertService.error('Lease saved but failed to send invite email'),
+        });
         onSuccess?.();
       },
       error: () => {

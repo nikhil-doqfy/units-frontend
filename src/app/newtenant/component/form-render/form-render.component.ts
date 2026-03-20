@@ -56,7 +56,7 @@ export class FormRenderComponent {
   agreementPhase = signal<string>('');
   isDropdownOpen = false;
   showInviteMsg = false;
-  subIndex = signal(0);
+  subIndex = this.formService.getActiveSubIndex();
   ProfileComponent = ProfileComponent;
   OnboardingComponent = OnboardingComponent;
   AgreementComponent = AgreementComponent;
@@ -111,6 +111,18 @@ export class FormRenderComponent {
 
   get currentSubStep() {
     return this.currentStep?.subSteps?.[this.subIndex()];
+  }
+
+  get isSaveDisabled(): boolean {
+    const c = this.currentSubStep?.component;
+    if (
+      c === this.ProfileComponent ||
+      c === this.OnboardingComponent ||
+      c === this.AgreementComponent ||
+      c === this.EjariComponent ||
+      c === this.EjariDocSignatureComponent
+    ) return false;
+    return !!this.currentSubStep?.formGroup?.invalid;
   }
 
   getComponentInputs(subStep: any): Record<string, any> {
@@ -191,6 +203,11 @@ export class FormRenderComponent {
       return;
     }
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
+      if (this.currentSubStep.formGroup.invalid) {
+        this.currentSubStep.formGroup.markAllAsTouched();
+        this.alertService.error('Please fill all required fields before proceeding.');
+        return;
+      }
       this.formService.saveCommercialStep(this.currentSubStep.formGroup, () => {
         setTimeout(() => this.goToNextStep(), 1000);
       });
@@ -199,6 +216,11 @@ export class FormRenderComponent {
 
     // BasicPersonal step — save before advancing
     if (this.currentSubStep?.formGroup) {
+      if (this.currentSubStep.formGroup.invalid) {
+        this.currentSubStep.formGroup.markAllAsTouched();
+        this.alertService.error('Please fill all required fields before proceeding.');
+        return;
+      }
       this.formService.saveBasicStep(this.currentSubStep.formGroup, () => this.goToNextStep());
       return;
     }

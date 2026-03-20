@@ -367,6 +367,15 @@ input[type="number"] {
 .errorMsg {
   color: var(--redText);
   font-weight: 400;
+  font-size: 12px;
+  display: block;
+  margin-top: 4px;
+}
+
+.form-control.ng-invalid.ng-touched,
+.form-select.ng-invalid.ng-touched {
+  border-color: var(--redText);
+  box-shadow: 0 0 0 0.15rem rgba(235, 23, 44, 0.15);
 }
 
 .commonForm .form-control,
