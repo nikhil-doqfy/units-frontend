@@ -247,3 +247,9 @@ table {
   background: #fff1e6;
   font-weight: 500;
 }
+
+.table-wrapper {
+  border-radius: 12px;
+
+  overflow: hidden;
+}
