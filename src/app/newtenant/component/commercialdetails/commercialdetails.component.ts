@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { CustomSelectComponent } from '../../../dashboard/component/custom-select/custom-select.component';
 import { ToastService } from '../../../core/toast.service';
 import { AlertService } from '../../../shared/services/alert.service';
+import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
 
 @Component({
   selector: 'app-commercialdetails',
@@ -17,6 +18,7 @@ import { AlertService } from '../../../shared/services/alert.service';
     CommonModule,
     FormsModule,
     CustomSelectComponent,
+    EditIconComponent,
   ],
   templateUrl: './commercialdetails.component.html',
   styleUrl: './commercialdetails.component.css',
@@ -35,6 +37,7 @@ export class CommercialdetailsComponent {
       vat: 1.64,
       total: 34.35,
       checked: true,
+      isEdit: false,
     },
     {
       label: 'Ejari Charge Disbursement',
@@ -43,6 +46,7 @@ export class CommercialdetailsComponent {
       vat: 0,
       total: 175.65,
       checked: true,
+      isEdit: false,
     },
     {
       label: 'Gas Charges',
@@ -51,6 +55,7 @@ export class CommercialdetailsComponent {
       vat: 50,
       total: 1050,
       checked: true,
+      isEdit: false,
     },
     {
       label: 'COMMISSION- DUBAI',
@@ -59,6 +64,7 @@ export class CommercialdetailsComponent {
       vat: 60,
       total: 1260,
       checked: true,
+      isEdit: false,
     },
     {
       label: 'Security Deposit',
@@ -67,6 +73,7 @@ export class CommercialdetailsComponent {
       vat: 0,
       total: 2400,
       checked: true,
+      isEdit: false,
     },
     {
       label: 'CAR PARKING',
@@ -75,6 +82,7 @@ export class CommercialdetailsComponent {
       vat: 50,
       total: 1050,
       checked: true,
+      isEdit: false,
     },
     {
       label: 'TAWTHEEQ REGISTRATION A/C...',
@@ -83,6 +91,7 @@ export class CommercialdetailsComponent {
       vat: 50,
       total: 1050,
       checked: true,
+      isEdit: false,
     },
     {
       label: 'RENEWAL COMMISSION (DUBAI)',
@@ -91,6 +100,7 @@ export class CommercialdetailsComponent {
       vat: 50,
       total: 1050,
       checked: false,
+      isEdit: false,
     },
     {
       label: 'RENEWAL COMMISSION (SHARJ...)',
@@ -99,6 +109,7 @@ export class CommercialdetailsComponent {
       vat: 50,
       total: 1050,
       checked: false,
+      isEdit: false,
     },
     {
       label: 'R COMMISSION- ABU DHABI BL...',
@@ -107,6 +118,7 @@ export class CommercialdetailsComponent {
       vat: 50,
       total: 1050,
       checked: false,
+      isEdit: false,
     },
     {
       label: 'TAWTHEEQ SERVICE INCOME- A...',
@@ -115,6 +127,7 @@ export class CommercialdetailsComponent {
       vat: 50,
       total: 1050,
       checked: false,
+      isEdit: false,
     },
   ];
   get totalAmount(): number {
@@ -124,5 +137,15 @@ export class CommercialdetailsComponent {
   }
   sendInvite() {
     this.alertService.customSuccess('Invite Sent Successfully');
+  }
+  /*-------OTHER CHARGES ACTION  COLUMN------------------------*/
+  editRow(row: any) {
+    console.log('clicked', row);
+    row.isEdit = true;
+  }
+
+  saveRow(row: any) {
+    console.log('saved', row);
+    row.isEdit = false;
   }
 }
