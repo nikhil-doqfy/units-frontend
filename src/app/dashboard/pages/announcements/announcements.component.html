@@ -175,24 +175,36 @@
                         [placeholder]="'SEARCH_HERE' | translate"
                         (onValueChange)="searchTextChange($event)"
                       />
-                      <app-custom-select
-                        placeholder="Property:All"
-                        key="key"
-                        value="value"
-                      >
-                      </app-custom-select>
-                      <app-custom-select
-                        placeholder="Block/Tower:All"
-                        key="key"
-                        value="value"
-                      >
-                      </app-custom-select>
-                      <app-custom-select
-                        placeholder="Unit:All"
-                        key="key"
-                        value="value"
-                      >
-                      </app-custom-select>
+                      <div class="custom-select-wrapper">
+                        <span class="cmmnTblFltrBtn">
+                          <app-custom-select
+                            placeholder="Property:All"
+                            key="key"
+                            value="value"
+                          >
+                          </app-custom-select>
+                        </span>
+                      </div>
+                      <div class="custom-select-wrapper">
+                        <span class="cmmnTblFltrBtn">
+                          <app-custom-select
+                            placeholder="Block/Tower:All"
+                            key="key"
+                            value="value"
+                          >
+                          </app-custom-select>
+                        </span>
+                      </div>
+                      <div class="custom-select-wrapper">
+                        <span class="cmmnTblFltrBtn">
+                          <app-custom-select
+                            placeholder="Unit:All"
+                            key="key"
+                            value="value"
+                          >
+                          </app-custom-select>
+                        </span>
+                      </div>
 
                       <app-table-filter-btn
                         [title]="'EXPORT' | translate"
@@ -206,7 +218,7 @@
               </div>
               <div class="cmmnTblBody">
                 <div class="table-responsive">
-                  <table class="table-bordered table">
+                  <table class="table-bordered table broadcast-table">
                     <thead>
                       <tr>
                         <th>Sl.No</th>
