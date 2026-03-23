@@ -30,6 +30,7 @@ import { PropertySharePlatfromComponent } from '../../property-share-platfrom/pr
 import { StatusActionDropdownComponent } from '../../../status-action-dropdown/status-action-dropdown.component';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
+import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
 type PropertyImages = Record<'imgSrc', string>;
 interface SectionItems {
   label: string;
@@ -78,6 +79,7 @@ interface PropertyDetails {
     StatusActionDropdownComponent,
     NgbPopoverModule,
     EditIconComponent,
+    CustomDropdownComponent,
   ],
   templateUrl: './tenancy-ledger.component.html',
   styleUrl: './tenancy-ledger.component.css',

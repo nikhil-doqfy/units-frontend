@@ -156,7 +156,6 @@ img {
   max-width: 100%;
 }
 
-
 button:disabled {
   cursor: not-allowed;
 }
@@ -1296,9 +1295,6 @@ linearGradient .authBgPatt stop:last-child {
   color: var(--greyDarkText);
   font-family: var(--primaryFont) !important;
   font-weight: 600;
-}
-
-.apexcharts-pie {
 }
 
 /***Apex Charts Css End***/

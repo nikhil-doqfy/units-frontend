@@ -43,16 +43,8 @@
 }
 
 .chargesTooltip {
-  min-width: 163px;
+  min-width: 119px;
   padding: 5px 0;
-}
-
-.chargesRow {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 12px;
-  font-size: 13px;
-  color: #5f6b7a;
 }
 
 .chargesRow .value {
@@ -119,4 +111,26 @@
     rgba(0, 0, 0, 0.05),
     transparent
   );
+}
+
+.custom-popover .popover-header {
+  padding: 6px 10px !important;
+  font-size: 12px;
+}
+
+.custom-popover .popover-body {
+  padding: 6px 8px !important;
+}
+
+.chargesRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 4px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+::ng-deep .custom-popover .popover-body {
+  width: 200px !important; /* 🔥 कमी width */
+  max-width: 130px !important;
+  padding: 6px 8px !important; /* height control */
 }

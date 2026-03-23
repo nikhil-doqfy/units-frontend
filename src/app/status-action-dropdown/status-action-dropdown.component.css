@@ -7,31 +7,17 @@
   cursor: pointer;
   padding: 10px;
   transition: 0.2s;
-}
 
+  width: 158px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .statusText:hover {
   color: white;
   font-weight: 500;
   background-color: #1f6ed4;
   border-radius: 10px;
-}
-
-.dropdownMenu {
-  position: absolute;
-  top: 35px;
-  left: 0;
-  width: 180px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  z-index: 10;
-}
-
-.dropdownItem {
-  padding: 12px 14px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
 }
 
 .dropdownItem:hover {
@@ -45,4 +31,36 @@
 
 .statusText:hover .arrowIcon {
   opacity: 1;
+}
+.report-top-bar {
+  gap: 12px;
+}
+.dropdownMenu {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  width: 180px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+
+  display: flex; /* 👈 add */
+  flex-direction: column; /* 👈 add */
+  gap: 6px; /* 👈 THIS gives space */
+  padding: 6px; /* 👈 outer spacing */
+}
+
+.report-top-bar {
+  gap: 12px;
+}
+.dropdownItem {
+  display: flex; /* 🔥 add */
+  align-items: center; /* 🔥 center align */
+  gap: 8px; /* 🔥 icon-text gap */
+
+  padding: 10px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
 }
