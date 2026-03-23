@@ -429,3 +429,54 @@
 .radio input {
   margin: 0;
 }
+
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+.broadcast-table thead tr th:last-child,
+.broadcast-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 100px;
+}
+
+.broadcast-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg);
+  box-shadow: none;
+}
+
+.broadcast-table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+.table td:last-child::before,
+.table th:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.05),
+    transparent
+  );
+}
+:host ::ng-deep .custom-select-wrapper .customSelectInput {
+  padding: 0 !important;
+  border: none !important;
+  height: 0 !important;
+}

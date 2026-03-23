@@ -6,6 +6,7 @@
   placement="top"
   [ngbTooltip]="getTooltip(type)"
   tooltipClass="tltpCommon"
+  container="body"
 >
   <ng-container [ngSwitch]="type">
     <i *ngSwitchCase="'up-arrow'">

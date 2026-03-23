@@ -4,34 +4,37 @@
       <div class="left-controls">
         <div class="custom-select">
           <div class="custom-select-wrapper">
-            <span class="select-icon"> </span>
-            <app-custom-select
-              class="with-left-icon"
-              [placeholder]="'Year:2025'"
-            ></app-custom-select>
+            <span class="cmmnTblFltrBtn">
+              <app-custom-select
+                class="with-left-icon"
+                [placeholder]="'Year: 2025'"
+              ></app-custom-select>
+            </span>
           </div>
 
           <div class="custom-select-wrapper">
-            <span class=".cmmnTblFltrBtn">
+            <span class="cmmnTblFltrBtn">
               <app-custom-select
                 class="with-left-icon"
-                [placeholder]="'Property All'"
+                [placeholder]="'Property: All'"
               ></app-custom-select>
             </span>
           </div>
           <div class="custom-select-wrapper">
-            <span class="select-icon"> </span>
-            <app-custom-select
-              class="with-left-icon"
-              [placeholder]="'Block/Tower:All'"
-            ></app-custom-select>
+            <span class="cmmnTblFltrBtn">
+              <app-custom-select
+                class="with-left-icon"
+                [placeholder]="'Block/Tower: All'"
+              ></app-custom-select>
+            </span>
           </div>
           <div class="custom-select-wrapper">
-            <span class="select-icon"> </span>
-            <app-custom-select
-              class="with-left-icon"
-              [placeholder]="'Unit:All'"
-            ></app-custom-select>
+            <span class="cmmnTblFltrBtn">
+              <app-custom-select
+                class="with-left-icon"
+                [placeholder]="'Unit: All'"
+              ></app-custom-select>
+            </span>
           </div>
         </div>
       </div>
@@ -191,8 +194,10 @@
                 <td
                   [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
                   *ngIf="activeSummary !== 'total'"
+                  class="amount-cell"
                 >
                   AED,12,000
+                  <span><img src="assets/check.svg" /></span>
                 </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn
@@ -261,8 +266,10 @@
                 <td
                   [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
                   *ngIf="activeSummary !== 'total'"
+                  class="amount-cell"
                 >
                   AED,12,000
+                  <span><img src="assets/check.svg" /></span>
                 </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn type="history"></app-table-action-btn>
@@ -326,8 +333,10 @@
                 <td
                   [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
                   *ngIf="activeSummary !== 'total'"
+                  class="amount-cell"
                 >
                   AED,12,000
+                  <span><img src="assets/warning.svg" /></span>
                 </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn type="history"></app-table-action-btn>
@@ -381,7 +390,9 @@
                 >
                   1224567787
                 </td>
-                <td *ngIf="activeSummary !== 'total'">AED,12,000</td>
+                <td *ngIf="activeSummary !== 'total'" class="amount-cell">
+                  AED,12,000 <span><img src="assets/check.svg" /></span>
+                </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn type="history"></app-table-action-btn>
                 </td>
@@ -435,7 +446,9 @@
                 >
                   1224567787
                 </td>
-                <td *ngIf="activeSummary !== 'total'">AED,12,000</td>
+                <td *ngIf="activeSummary !== 'total'" class="amount-cell">
+                  AED,12,000 <span><img src="assets/warning.svg" /></span>
+                </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn type="history"></app-table-action-btn>
                 </td>

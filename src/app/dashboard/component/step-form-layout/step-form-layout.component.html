@@ -34,12 +34,9 @@
             <app-card-title
               [title]="group.main.pageTitle"
               [description]="group.main.description"
-              [blockCount]="group.main.blockCount"
             >
             </app-card-title>
-            <span class="blockCount" *ngIf="i === 1">
-              {{ totalBlocks }}
-            </span>
+
             <div class="stepActionBtns">
               <button
                 type="button"

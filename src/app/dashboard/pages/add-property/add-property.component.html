@@ -365,9 +365,8 @@
   <ng-container>
     <app-step-pane
       [title]="'BLOCKS / TOWER' | translate"
-      [pageTitle]="'Total Blocks/Tower Total units'"
+      [pageTitle]="getPageTitle()"
       [showBulkUpload]="true"
-      [blockCount]="10"
     >
       <form [formGroup]="blocksForm">
         <div formArrayName="blocks">
