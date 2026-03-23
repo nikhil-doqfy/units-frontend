@@ -2,53 +2,91 @@
   <div class="cmmnTblHdr">
     <div class="row g-3 align-items-center">
       <div class="col-md">
-        <app-table-title [title]="'All Units' | translate" [subtitle]="'(' + totalRecords + ')'"
-          (onRefresh)="onRefresh()"></app-table-title>
+        <app-table-title
+          [title]="'All Units' | translate"
+          [subtitle]="'(' + totalRecords + ')'"
+          (onRefresh)="onRefresh()"
+        ></app-table-title>
       </div>
       <div class="col-md-auto">
         <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-table-search [placeholder]="'SEARCH_HERE' | translate" (onValueChange)="searchTextChange($event)" />
+          <app-table-search
+            [placeholder]="'SEARCH_HERE' | translate"
+            (onValueChange)="searchTextChange($event)"
+          />
 
           <app-filter-popup-btn #filterPopup>
             <ng-container form>
               <div class="row g-3">
                 <div class="col-12">
                   <label class="form-label">Property</label>
-                  <app-custom-select [options]="propertyOptions" key="key" value="value"
+                  <app-custom-select
+                    [options]="propertyOptions"
+                    key="key"
+                    value="value"
                     placeholder="Select property"
-                    (optionSelected)="filterPropertyId = $event?.key">
+                    (optionSelected)="filterPropertyId = $event?.key"
+                  >
                   </app-custom-select>
                 </div>
                 <div class="col-12">
                   <label class="form-label">No of Bedrooms</label>
-                  <app-custom-select [options]="bedroomOptions" key="key" value="value"
+                  <app-custom-select
+                    [options]="bedroomOptions"
+                    key="key"
+                    value="value"
                     placeholder="Select bedrooms"
-                    (optionSelected)="filterBedrooms = $event?.key">
+                    (optionSelected)="filterBedrooms = $event?.key"
+                  >
                   </app-custom-select>
                 </div>
                 <div class="col-12">
                   <label class="form-label">Floor No</label>
-                  <app-custom-select [options]="floorOptions" key="key" value="value"
+                  <app-custom-select
+                    [options]="floorOptions"
+                    key="key"
+                    value="value"
                     placeholder="Select floor"
-                    (optionSelected)="filterFloor = $event?.key">
+                    (optionSelected)="filterFloor = $event?.key"
+                  >
                   </app-custom-select>
                 </div>
                 <div class="col-12">
                   <label class="form-label">Area Unit</label>
-                  <app-custom-select [options]="areaUnitOptions" key="key" value="value"
+                  <app-custom-select
+                    [options]="areaUnitOptions"
+                    key="key"
+                    value="value"
                     placeholder="Select area unit"
-                    (optionSelected)="filterAreaUnit = $event?.key">
+                    (optionSelected)="filterAreaUnit = $event?.key"
+                  >
                   </app-custom-select>
                 </div>
               </div>
             </ng-container>
             <ng-container action>
-              <button type="button" class="btn btnCommon" (click)="removeFilter(); filterPopup.closePopup()">Remove All</button>
-              <button type="button" class="btn btnCommon" (click)="applyFilter(); filterPopup.closePopup()">Apply</button>
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="removeFilter(); filterPopup.closePopup()"
+              >
+                Remove All
+              </button>
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="applyFilter(); filterPopup.closePopup()"
+              >
+                Apply
+              </button>
             </ng-container>
           </app-filter-popup-btn>
 
-          <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true" (clicked)="handleExport()">
+          <app-table-filter-btn
+            [title]="'EXPORT' | translate"
+            [hasIcon]="true"
+            (clicked)="handleExport()"
+          >
             <app-export-icon />
           </app-table-filter-btn>
         </div>
@@ -61,7 +99,9 @@
         <thead>
           <tr>
             <th>Unit ID</th>
-            <th>Unit Name <i><app-sorting-icon></app-sorting-icon></i></th>
+            <th>
+              Unit Name <i><app-sorting-icon></app-sorting-icon></i>
+            </th>
             <th>Property Name</th>
             <th>Block / Tower</th>
             <th>Floor No</th>
@@ -70,49 +110,67 @@
             <th>Makani No</th>
             <th>Dewa No</th>
             <th>Rent (AED)</th>
-            <th>Action</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           @if (units.length === 0) {
-          <tr>
-            <td colspan="11" class="text-center text-muted py-4">No units found</td>
-          </tr>
+            <tr>
+              <td colspan="11" class="text-center text-muted py-4">
+                No units found
+              </td>
+            </tr>
           }
           @for (unit of units; track unit.id) {
-          <tr>
-            <td>{{ unit.code }}</td>
-            <td style="cursor:pointer" (click)="onViewClick(unit.id)">
-              <app-table-img-item [img]="unit.thumbnail || 'assets/property/property-img-default.svg'"
-                [title]="unit.unit_name" [clickable]="true" />
-            </td>
-            <td>{{ unit.property_name }}</td>
-            <td>{{ unit.block_name || '--' }}</td>
-            <td>{{ unit.floor_no ?? '--' }}</td>
-            <td>{{ unit.dm_no || '--' }}</td>
-            <td>{{ unit.unit_size || '--' }}</td>
-            <td>{{ unit.makani_no || '--' }}</td>
-            <td>{{ unit.dewa_no || '--' }}</td>
-            <td>{{ unit.rent || '--' }}</td>
-            <td align="center">
-              <div class="tbl-action-inline">
-                <app-edit-icon (click)="onEditClick(unit.id)"></app-edit-icon>
-                <div class="cmmnTblActnBtnDiv">
-                  <app-table-action-dropdown [dropdownItems]="documentActions"
-                    (actionClicked)="handleDropdownAction($event)"></app-table-action-dropdown>
+            <tr>
+              <td>{{ unit.code }}</td>
+              <td style="cursor: pointer" (click)="onViewClick(unit.id)">
+                <app-table-img-item
+                  [img]="
+                    unit.thumbnail || 'assets/property/property-img-default.svg'
+                  "
+                  [title]="unit.unit_name"
+                  [clickable]="true"
+                />
+              </td>
+              <td>{{ unit.property_name }}</td>
+              <td>{{ unit.block_name || "--" }}</td>
+              <td>{{ unit.floor_no ?? "--" }}</td>
+              <td>{{ unit.dm_no || "--" }}</td>
+              <td>{{ unit.unit_size || "--" }}</td>
+              <td>{{ unit.makani_no || "--" }}</td>
+              <td>{{ unit.dewa_no || "--" }}</td>
+              <td>{{ unit.rent || "--" }}</td>
+              <td align="center">
+                <div class="tbl-action-inline">
+                  <app-edit-icon (click)="onEditClick(unit.id)"></app-edit-icon>
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    ></app-table-action-dropdown>
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
+              </td>
+            </tr>
           }
         </tbody>
       </table>
     </div>
   </div>
   <div class="cmmnTblFtr">
-    <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage"
-      [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
-    <app-table-pagination [componentName]="componentName" [currentPage]="currentPage" [totalRecords]="totalRecords"
-      [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
+    <app-table-select
+      [componentName]="componentName"
+      [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (rowsPerPageChange)="onPageSizeChange($event)"
+    />
+    <app-table-pagination
+      [componentName]="componentName"
+      [currentPage]="currentPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage"
+      (pageChange)="onPageChange($event)"
+    />
   </div>
 </div>

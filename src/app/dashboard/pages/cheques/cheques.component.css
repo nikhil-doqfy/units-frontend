@@ -243,7 +243,25 @@ table {
   border-radius: 10px;
 }
 
+.table-wrapper {
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+:host ::ng-deep .custom-select-wrapper .customSelectInput {
+  padding: 0 !important;
+  border: none !important;
+  height: 0 !important;
+}
+
+/*----------------------------*/
 .bounce-highlight {
-  background: #fff1e6;
-  font-weight: 500;
+  background: linear-gradient(to bottom, transparent 6px, #fff8ec 6px);
+  border: 1px solid #ecf0f2;
+}
+.amount-cell {
+  display: flex;
+  align-items: center;
+  gap: 40px;
 }

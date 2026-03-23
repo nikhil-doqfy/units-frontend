@@ -6,7 +6,6 @@ import { FilterIconComponent } from '../../component/icons/filter-icon/filter-ic
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
-import { EditIconComponent } from '../../../shared/component/icons/edit-icon1/edit-icon.component';
 import { TableActionDropdownComponent } from '../../component/table-action-dropdown/table-action-dropdown.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
@@ -30,6 +29,8 @@ import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.c
 import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
 import { StatusActionDropdownComponent } from '../../../status-action-dropdown/status-action-dropdown.component';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
+import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
 type PropertyImages = Record<'imgSrc', string>;
 interface SectionItems {
   label: string;
@@ -61,7 +62,6 @@ interface PropertyDetails {
     ExportIconComponent,
     SortingIconComponent,
     TableImgItemComponent,
-    EditIconComponent,
     TableActionDropdownComponent,
     TableSelectComponent,
     TablePaginationComponent,
@@ -78,6 +78,8 @@ interface PropertyDetails {
     PropertySharePlatfromComponent,
     StatusActionDropdownComponent,
     NgbPopoverModule,
+    EditIconComponent,
+    CustomDropdownComponent,
   ],
   templateUrl: './tenancy-ledger.component.html',
   styleUrl: './tenancy-ledger.component.css',

@@ -1,43 +1,60 @@
 <form [formGroup]="form" class="commonForm">
-
   <!-- 01 Lessor Period -->
   <div class="sectionCard mt-3">
     <span class="sectionBadge">01</span>
     <h6 class="sectionTitle">Lessor Period</h6>
     <div class="row g-3">
-
       <div class="col-md-3">
-        <label class="form-label">Start Date <span class="text-danger">*</span></label>
+        <label class="form-label"
+          >Start Date <span class="text-danger">*</span></label
+        >
         <input type="date" class="form-control" formControlName="startDate" />
-        @if (isInvalid(form, 'startDate').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'startDate').msg }}</small>
+        @if (isInvalid(form, "startDate").status) {
+          <small class="errorMsg">{{ isInvalid(form, "startDate").msg }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">End Date <span class="text-danger">*</span></label>
+        <label class="form-label"
+          >End Date <span class="text-danger">*</span></label
+        >
         <input type="date" class="form-control" formControlName="endDate" />
-        @if (isInvalid(form, 'endDate').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'endDate').msg }}</small>
+        @if (isInvalid(form, "endDate").status) {
+          <small class="errorMsg">{{ isInvalid(form, "endDate").msg }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Grace Start Date <span class="text-danger">*</span></label>
-        <input type="date" class="form-control" formControlName="graceStartDate" />
-        @if (isInvalid(form, 'graceStartDate').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'graceStartDate').msg }}</small>
+        <label class="form-label"
+          >Grace Start Date <span class="text-danger">*</span></label
+        >
+        <input
+          type="date"
+          class="form-control"
+          formControlName="graceStartDate"
+        />
+        @if (isInvalid(form, "graceStartDate").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "graceStartDate").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Grace End Date <span class="text-danger">*</span></label>
-        <input type="date" class="form-control" formControlName="graceEndDate" />
-        @if (isInvalid(form, 'graceEndDate').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'graceEndDate').msg }}</small>
+        <label class="form-label"
+          >Grace End Date <span class="text-danger">*</span></label
+        >
+        <input
+          type="date"
+          class="form-control"
+          formControlName="graceEndDate"
+        />
+        @if (isInvalid(form, "graceEndDate").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "graceEndDate").msg
+          }}</small>
         }
       </div>
-
     </div>
   </div>
 
@@ -46,109 +63,210 @@
     <span class="sectionBadge">02</span>
     <h6 class="sectionTitle">Amount / Rent Details</h6>
     <div class="row g-3">
-
       <div class="col-md-3">
-        <label class="form-label">Annual Amount <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="annualAmount" />
-        @if (isInvalid(form, 'annualAmount').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'annualAmount').msg }}</small>
+        <label class="form-label"
+          >Annual Amount <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="annualAmount"
+        />
+        @if (isInvalid(form, "annualAmount").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "annualAmount").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Actual Annual Amount <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="actualAnnualAmount" />
-        @if (isInvalid(form, 'actualAnnualAmount').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'actualAnnualAmount').msg }}</small>
+        <label class="form-label"
+          >Actual Annual Amount <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="actualAnnualAmount"
+        />
+        @if (isInvalid(form, "actualAnnualAmount").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "actualAnnualAmount").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Security / Booking Amount <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="securityBookingAmount" />
-        @if (isInvalid(form, 'securityBookingAmount').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'securityBookingAmount').msg }}</small>
+        <label class="form-label"
+          >Security / Booking Amount <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="securityBookingAmount"
+        />
+        @if (isInvalid(form, "securityBookingAmount").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "securityBookingAmount").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Maintenance Charges <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="maintenanceCharges" />
-        @if (isInvalid(form, 'maintenanceCharges').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'maintenanceCharges').msg }}</small>
+        <label class="form-label"
+          >Maintenance Charges <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="maintenanceCharges"
+        />
+        @if (isInvalid(form, "maintenanceCharges").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "maintenanceCharges").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Rent <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="rent" />
-        @if (isInvalid(form, 'rent').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'rent').msg }}</small>
+        <label class="form-label"
+          >Rent <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="rent"
+        />
+        @if (isInvalid(form, "rent").status) {
+          <small class="errorMsg">{{ isInvalid(form, "rent").msg }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Security Deposit <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="securityDeposit" />
-        @if (isInvalid(form, 'securityDeposit').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'securityDeposit').msg }}</small>
+        <label class="form-label"
+          >Security Deposit <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="securityDeposit"
+        />
+        @if (isInvalid(form, "securityDeposit").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "securityDeposit").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Commission in % <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="commissionPercent" />
-        @if (isInvalid(form, 'commissionPercent').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'commissionPercent').msg }}</small>
+        <label class="form-label"
+          >Commission in % <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="commissionPercent"
+        />
+        @if (isInvalid(form, "commissionPercent").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "commissionPercent").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Notice Period (in months) <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="noticePeriod" />
-        @if (isInvalid(form, 'noticePeriod').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'noticePeriod').msg }}</small>
+        <label class="form-label"
+          >Notice Period (in months) <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="noticePeriod"
+        />
+        @if (isInvalid(form, "noticePeriod").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "noticePeriod").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Contract Amount <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="contractAmount" />
-        @if (isInvalid(form, 'contractAmount').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'contractAmount').msg }}</small>
+        <label class="form-label"
+          >Contract Amount <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="contractAmount"
+        />
+        @if (isInvalid(form, "contractAmount").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "contractAmount").msg
+          }}</small>
         }
       </div>
 
       <div class="col-md-3">
         <label class="form-label">Discount (Optional)</label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="discount" />
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="discount"
+        />
       </div>
 
       <div class="col-md-3">
         <label class="form-label">Shell &amp; Core</label>
-        <input type="text" class="form-control" placeholder="Enter here" formControlName="shellAndCore" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="shellAndCore"
+        />
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Payment Count <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Enter here" formControlName="paymentCount" />
-        @if (isInvalid(form, 'paymentCount').status) {
-          <small class="errorMsg">{{ isInvalid(form, 'paymentCount').msg }}</small>
+        <label class="form-label"
+          >Payment Count <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter here"
+          formControlName="paymentCount"
+        />
+        @if (isInvalid(form, "paymentCount").status) {
+          <small class="errorMsg">{{
+            isInvalid(form, "paymentCount").msg
+          }}</small>
         }
       </div>
-
     </div>
   </div>
 
   <!-- 03 Other Charges -->
-  <div class="sectionCard mt-3">
+  <div class="sectionCardThree mt-3">
     <span class="sectionBadge">03</span>
-    <h6 class="sectionTitle">
+    <h6 class="otherChargesTitle">
       Other Charges
-      <span class="totalLabel">Total: AED {{ totalAmount | number: '1.2-2' }}</span>
+      <span class="totalLabel">
+        <span class="totalText">Total:</span>
+        <span class="currency"
+          >AED {{ totalAmount | number: "1.2-2" }}</span
+        ></span
+      >
     </h6>
     <div class="table-responsive">
-      <table class="table table-bordered charges-table">
+      <table class="table charges-table">
         <thead>
           <tr>
             <th>{{ "DESCRIPTION" | translate }}</th>
@@ -159,21 +277,55 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let c of charges">
+          <tr
+            *ngFor="let c of charges"
+            class="tableRow"
+            [ngClass]="{ editMode: c.isEdit }"
+          >
             <td>
               <label class="d-flex align-items-center gap-2 mb-0">
-                <input type="checkbox" [(ngModel)]="c.checked" [ngModelOptions]="{ standalone: true }" />
+                <input
+                  type="checkbox"
+                  [(ngModel)]="c.checked"
+                  [ngModelOptions]="{ standalone: true }"
+                />
                 {{ c.label }}
               </label>
             </td>
-            <td>{{ c.amount | number: '1.2-2' }}</td>
+            <td>
+              <span
+                class="amountText"
+                [class.editUnderline]="c.isEdit"
+                (click)="editRow(c)"
+                >{{ c.amount | number: "1.2-2" }}</span
+              >
+            </td>
             <td>{{ c.tax }}</td>
-            <td>{{ c.vat | number: '1.2-2' }}</td>
-            <td>{{ c.total | number: '1.2-2' }}</td>
+            <td>{{ c.vat | number: "1.2-2" }}</td>
+            <!-- Action Column  -->
+            <td class="totalCell">
+              <span class="totalValue">
+                {{ c.total | number: "1.2-2" }}
+              </span>
+
+              <span class="editIcon" (click)="editRow(c)">
+                <ng-container *ngIf="!c.isEdit; else saveBtn">
+                  <app-edit-icon></app-edit-icon>
+                </ng-container>
+
+                <ng-template #saveBtn>
+                  <button
+                    class="saveBtn"
+                    (click)="saveRow(c); $event.stopPropagation()"
+                  >
+                    Save
+                  </button>
+                </ng-template>
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
 </form>

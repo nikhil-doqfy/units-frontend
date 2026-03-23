@@ -1,158 +1,232 @@
-import { Component } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { Component, ViewChild } from '@angular/core';
 
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexYAxis,
+  ApexLegend,
+  ApexFill,
+} from 'ng-apexcharts';
+import { CommonModule } from '@angular/common';
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  dataLabels: ApexDataLabels;
+  yaxis: ApexYAxis;
+  colors: string[];
+  legend: ApexLegend;
+  fill: ApexFill;
+  stroke?: any;
+  markers?: any;
+};
 @Component({
   selector: 'app-area-graph',
   standalone: true,
-  imports: [NgApexchartsModule],
+  imports: [NgApexchartsModule, CommonModule],
   templateUrl: './area-graph.component.html',
   styleUrl: './area-graph.component.css',
 })
 export class AreaGraphComponent {
-  chartOptions: any = {
-    series: [
-      {
-        name: 'Amount Received',
-        data: [
-          380000, 390000, 370000, 360000, 350000, 370000, 360000, 350000,
-          380000, 390000, 420000, 480000,
-        ],
-      },
-      {
-        name: 'Cheque Bounce',
-        data: [
-          20000, 15000, 18000, 17000, 16000, 14000, 15000, 12000, 13000, 11000,
-          10000, 9000,
-        ],
-      },
-      // {
-      //   name: 'Total Amount',
-      //   data: [
-      //     400000, 405000, 388000, 377000, 366000, 384000, 375000, 362000,
-      //     393000, 401000, 430000, 489000,
-      //   ],
-      // },
-    ],
+  // @ViewChild('chart') chart!: ChartComponent;
+  // public chartOptions: ChartOptions = {} as ChartOptions;
 
-    chart: {
-      type: 'area',
-      height: 300,
-      toolbar: {
-        show: false,
+  // constructor() {
+  //   const baseDate = new Date('01 Jan 2024');
+
+  //   this.chartOptions = {
+  //     series: [
+  //       {
+  //         name: 'Amount Received',
+  //         data: this.generateMonthlyData(12, {
+  //           min: 500000,
+  //           max: 1000000,
+  //         }),
+  //       },
+  //       {
+  //         name: 'Cheque Bounce',
+  //         data: this.generateMonthlyData(12, {
+  //           min: 50000,
+  //           max: 200000,
+  //         }),
+  //       },
+  //       {
+  //         name: 'Total Amount',
+  //         data: this.generateMonthlyData(12, {
+  //           min: 600000,
+  //           max: 1200000,
+  //         }),
+  //       },
+  //     ],
+
+  //     chart: {
+  //       type: 'area',
+  //       height: 350,
+  //       stacked: false,
+  //     },
+  //     colors: ['#00E396', '#FF4560', '#008FFB'],
+  //     dataLabels: {
+  //       enabled: false,
+  //     },
+  //     fill: {
+  //       type: 'gradient',
+  //       gradient: {
+  //         shadeIntensity: 1,
+  //         opacityFrom: 0.7,
+  //         opacityTo: 0.1,
+  //         stops: [0, 90, 100],
+  //       },
+  //     },
+  //     stroke: {
+  //       curve: 'smooth',
+  //       width: 3,
+  //     },
+  //     legend: {
+  //       position: 'top',
+  //       horizontalAlign: 'center',
+  //       markers: {
+  //         shape: 'square',
+  //       },
+  //     },
+  //     xaxis: {
+  //       categories: [
+  //         'Jan',
+  //         'Feb',
+  //         'Mar',
+  //         'Apr',
+  //         'May',
+  //         'Jun',
+  //         'Jul',
+  //         'Aug',
+  //         'Sep',
+  //         'Oct',
+  //         'Nov',
+  //         'Dec',
+  //       ],
+  //     },
+  //     yaxis: {
+  //       min: 0,
+  //       labels: {
+  //         formatter: (val: number) => {
+  //           if (val === undefined || val === null) return '';
+  //           return `AED ${val.toLocaleString('en-IN')}`;
+  //         },
+  //       },
+  //     },
+  //   };
+  // }
+
+  // generateMonthlyData(
+  //   count: number,
+  //   yrange: { min: number; max: number },
+  // ): number[] {
+  //   let series: number[] = [];
+
+  //   for (let i = 0; i < count; i++) {
+  //     let y =
+  //       Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+
+  //     series.push(y);
+  //   }
+
+  //   return series;
+  // }
+  @ViewChild('chart') chart!: ChartComponent;
+  public chartOptions: ChartOptions = {} as ChartOptions;
+
+  constructor() {
+    this.chartOptions = {
+      series: [
+        {
+          name: 'Amount Received',
+          data: this.generateData(12, 500000, 1000000),
+        },
+        {
+          name: 'Cheque Bounce',
+          data: this.generateData(12, 50000, 200000),
+        },
+        {
+          name: 'Total Amount',
+          data: this.generateData(12, 600000, 1200000),
+        },
+      ],
+
+      chart: {
+        type: 'area',
+        height: 350,
+        stacked: false,
       },
-      zoom: {
+
+      colors: ['#00E396', '#FF4560', '#008FFB'],
+
+      dataLabels: {
         enabled: false,
       },
-    },
-    legend: {
-      position: 'top',
-      horizontalAlign: 'center',
-      floating: true,
-      offsetY: -5,
+
+      stroke: {
+        curve: 'smooth',
+        width: 3,
+      },
+
       markers: {
-        width: 10,
-        height: 10,
-        radius: 0,
+        size: 4,
       },
-    },
 
-    stroke: {
-      curve: 'smooth',
-      width: 0,
-    },
-
-    fill: {
-      type: ['gradient', 'solid'],
-      gradient: {
-        shade: 'light',
-        type: 'horizontal',
-        shadeIntensity: 0.6,
-        gradientToColors: ['#fb923c', '#22c55e'],
-        opacityFrom: 0.6,
-        opacityTo: 0.6,
-        stops: [0, 100, 100],
-      },
-    },
-    colors: ['#16a34a', '#ef4444', '#2563eb'],
-
-    markers: {
-      shape: 'square',
-      size: 0,
-      hover: { size: 6 },
-    },
-
-    dataLabels: { enabled: false },
-
-    xaxis: {
-      categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ],
-      labels: {
-        style: {
-          colors: '#6b7280',
-          fontSize: '11px',
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.3,
+          opacityTo: 0.05,
+          stops: [0, 90, 100],
         },
       },
-    },
 
-    yaxis: {
-      min: 100000,
-      labels: {
-        formatter: (val: number) => {
-          if (val === undefined || val === null) return '';
-          return `AED ${val.toLocaleString('en-IN')}`;
+      legend: {
+        position: 'top',
+        horizontalAlign: 'center',
+      },
+
+      xaxis: {
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+      },
+
+      yaxis: {
+        min: 100000,
+        forceNiceScale: true,
+        floating: false,
+        labels: {
+          formatter: (val: number) => {
+            return `AED ${val.toLocaleString('en-IN')}`;
+          },
         },
       },
-    },
+    };
+  }
 
-    grid: {
-      borderColor: '#f1f5f9',
-      // strokeDashArray: 4,
-    },
-
-    tooltip: {
-      custom: ({ series, seriesIndex, dataPointIndex }: any) => `
-        <div style="
-          padding:12px;
-          background:#fff;
-          border-radius:12px;
-          box-shadow:0 6px 18px rgba(0,0,0,.15);
-        ">
-          <div style="font-size:12px;color:#6b7280">JAN – DEC 2025</div>
-          <strong style="font-size:16px">
-            AED ${series[seriesIndex][dataPointIndex].toLocaleString()}
-          </strong>
-          <div style="font-size:12px;color:#6b7280;margin-top:4px">
-            Amount Received
-          </div>
-        </div>
-      `,
-    },
-
-    responsive: [
-      {
-        breakpoint: 768,
-        options: {
-          chart: { height: 260 },
-        },
-      },
-      {
-        breakpoint: 480,
-        options: {
-          chart: { height: 240 },
-        },
-      },
-    ],
-  };
+  generateData(count: number, min: number, max: number): number[] {
+    let arr: number[] = [];
+    for (let i = 0; i < count; i++) {
+      arr.push(Math.floor(Math.random() * (max - min + 1)) + min);
+    }
+    return arr;
+  }
 }

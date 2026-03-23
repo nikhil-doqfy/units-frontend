@@ -43,16 +43,8 @@
 }
 
 .chargesTooltip {
-  min-width: 163px;
+  min-width: 119px;
   padding: 5px 0;
-}
-
-.chargesRow {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 12px;
-  font-size: 13px;
-  color: #5f6b7a;
 }
 
 .chargesRow .value {
@@ -73,4 +65,72 @@
 
 ::ng-deep .popover .popover-body {
   padding: 4px 8px !important;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+.tenancy-table thead tr th:last-child,
+.tenancy-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 100px;
+}
+
+.tenancy-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg);
+  box-shadow: none;
+}
+
+.tenancy-table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+.table td:last-child::before,
+.table th:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.05),
+    transparent
+  );
+}
+
+.custom-popover .popover-header {
+  padding: 6px 10px !important;
+  font-size: 12px;
+}
+
+.custom-popover .popover-body {
+  padding: 6px 8px !important;
+}
+
+.chargesRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 4px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+::ng-deep .custom-popover .popover-body {
+  width: 200px !important; /* 🔥 कमी width */
+  max-width: 130px !important;
+  padding: 6px 8px !important; /* height control */
 }

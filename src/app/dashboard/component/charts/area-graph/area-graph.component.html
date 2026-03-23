@@ -1,17 +1,26 @@
-<div class="graph-wrapper">
-  <apx-chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [stroke]="chartOptions.stroke"
-    [fill]="chartOptions.fill"
-    [colors]="chartOptions.colors"
-    [markers]="chartOptions.markers"
-    [dataLabels]="chartOptions.dataLabels"
-    [xaxis]="chartOptions.xaxis"
-    [yaxis]="chartOptions.yaxis"
-    [grid]="chartOptions.grid"
-    [tooltip]="chartOptions.tooltip"
-    [responsive]="chartOptions.responsive"
-  >
-  </apx-chart>
-</div>
+<!-- <apx-chart
+  *ngIf="chartOptions"
+  #chart
+  [series]="chartOptions.series!"
+  [chart]="chartOptions.chart!"
+  [xaxis]="chartOptions.xaxis!"
+  [dataLabels]="chartOptions.dataLabels!"
+  [colors]="chartOptions.colors!"
+  [legend]="chartOptions.legend!"
+  [fill]="chartOptions.fill!"
+>
+</apx-chart> -->
+<apx-chart
+  *ngIf="chartOptions"
+  #chart
+  [series]="chartOptions.series"
+  [chart]="chartOptions.chart"
+  [xaxis]="chartOptions.xaxis"
+  [dataLabels]="chartOptions.dataLabels"
+  [colors]="chartOptions.colors"
+  [legend]="chartOptions.legend"
+  [fill]="chartOptions.fill"
+  [stroke]="chartOptions.stroke"
+  [markers]="chartOptions.markers"
+>
+</apx-chart>

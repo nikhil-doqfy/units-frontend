@@ -32,7 +32,7 @@
     </div>
     <div class="cmmnTbl">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered tenancy-table">
           <thead>
             <tr>
               <th>Property ID</th>
@@ -590,78 +590,10 @@
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="Search here..." />
-            <div class="report-top-bar d-flex align-items-start gap-2">
-              <!-- Receipt Dropdown -->
-              <div class="custom-dropdown position-relative">
-                <button class="btn cmmnTblFltrBtn" (click)="toggleReceipt()">
-                  <i><app-receipt-icon></app-receipt-icon></i>
-                  Receipt
-                  <i><app-arrow-down-icon></app-arrow-down-icon></i>
-                </button>
 
-                <div class="custom-menu" *ngIf="showReceiptDropdown">
-                  <div
-                    class="dropdown-item"
-                    (click)="selectReceiptType('rental')"
-                  >
-                    Rental
-                  </div>
-                  <div
-                    class="dropdown-item"
-                    (click)="selectReceiptType('charges')"
-                  >
-                    Other Charges
-                  </div>
-                  <div
-                    class="dropdown-item"
-                    (click)="selectReceiptType('combined')"
-                  >
-                    Combined
-                  </div>
-                </div>
-              </div>
-
-              <!-- Month Dropdown (Side by Side) -->
-              <div
-                class="custom-dropdown position-relative"
-                *ngIf="showMonthDropdown"
-              >
-                <div class="custom-menu filter-box">
-                  <div class="form-check mb-2">
-                    <input type="checkbox" class="form-check-input" id="jan" />
-                    <label for="jan">Jan 2025</label>
-                  </div>
-
-                  <div class="form-check mb-2">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="feb"
-                      checked
-                    />
-                    <label for="feb">Feb 2025</label>
-                  </div>
-
-                  <div class="form-check mb-2">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="mar"
-                      checked
-                    />
-                    <label for="mar">Mar 2025</label>
-                  </div>
-
-                  <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="apr" />
-                    <label for="apr">Apr 2025</label>
-                  </div>
-
-                  <button class="btn generate-btn w-100">Generate</button>
-                </div>
-              </div>
-            </div>
-
+            <app-custom-dropdown [title]="'Receipt'" [hasIcon]="true">
+              <app-receipt-icon></app-receipt-icon>
+            </app-custom-dropdown>
             <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
@@ -745,6 +677,7 @@
                   triggers="click"
                   placement="top"
                   container="body"
+                  popoverClass="custom-popover"
                   class="charges-info"
                 >
                   <app-termscondition-icon></app-termscondition-icon>
