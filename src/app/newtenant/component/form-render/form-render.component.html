@@ -105,7 +105,7 @@
       </button>
 
       <div
-        *ngIf="currentSubStep?.component === OnboardingComponent"
+        *ngIf="currentSubStep?.component === OnboardingComponent && !showMsg$()"
         class="send-negotiation-wrap"
       >
         <button class="send-negotiation-btn" (click)="onMainClick()">

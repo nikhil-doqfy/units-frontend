@@ -120,14 +120,23 @@ export class NewTenantComponent {
                 });
               }
 
-              if (t.is_onboarding) {
+              const stage = lease.lease_stage ?? stateLeaseStage;
+              const s = stage?.toUpperCase();
+
+              if (t.is_onboarding ||
+                  s === 'NEGOTIATION_SENT' || s === 'PENDING_APPROVAL' ||
+                  s === 'OWNER_APPROVED'   || s === 'TENANT_APPROVED'  ||
+                  s === 'WAITING_CHEQUE'   || s === 'CHEQUE_REQUESTED' ||
+                  s === 'CHEQUE_COLLECTED') {
                 this.newTenantService.getActiveIndex().set(1);
                 this.newTenantService.getActiveSubIndex().set(1);
               } else {
                 this.newTenantService.getActiveIndex().set(
-                  this.leaseStageToStepIndex(lease.lease_stage ?? stateLeaseStage),
+                  this.leaseStageToStepIndex(stage),
                 );
+                this.newTenantService.getActiveSubIndex().set(0);
               }
+              this.newTenantService.restoreStepFromStage(stage);
             }
             this.loading.set(false);
           },
@@ -160,11 +169,26 @@ export class NewTenantComponent {
 
   private leaseStageToStepIndex(stage: string): number {
     switch (stage?.toUpperCase()) {
-      case 'ONBOARDING': return 1;
-      case 'AGREEMENT':  return 2;
-      case 'EJARI':      return 3;
-      case 'ACTIVATED':  return 4;
-      default:           return 0;  // INVITE or unknown → start at step 0
+      case 'ONBOARDING':
+        return 1;
+      case 'NEGOTIATION_SENT':
+      case 'PENDING_APPROVAL':
+      case 'OWNER_APPROVED':
+      case 'TENANT_APPROVED':
+      case 'WAITING_CHEQUE':
+      case 'CHEQUE_REQUESTED':
+      case 'CHEQUE_COLLECTED':
+        return 1;
+      case 'AGREEMENT':
+      case 'AGREEMENT_SIGNING':
+      case 'AGREEMENT_SIGNED':
+        return 2;
+      case 'EJARI':
+      case 'EJARI_SIGNING':
+      case 'ACTIVATED':
+        return 3;
+      default:
+        return 0; // INVITE or unknown
     }
   }
 

@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
-import { NewTenant } from '../modules/new-tenant';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 import { LeftArrowIconComponent } from '../../../icons/left-arrow-icon/left-arrow-icon.component';
@@ -23,7 +22,6 @@ import { OnboardingComponent } from '../onboarding/onboarding.component';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SendNegotiationComponent } from '../../../dashboard/component/forms/send-negotiation/send-negotiation.component';
 import { AgreementComponent } from '../agreement/agreement.component';
 import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
 import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
@@ -75,10 +73,10 @@ export class FormRenderComponent {
   showWaitingMsg = true;
   showNegotiationMsg = false;
   isChequeStep = false;
-  btnTitle$ = this.formService.getBtnTitle();
-  showMsg$ = this.formService.getShowMsg();
-  msgText$ = this.formService.getMsgText();
-  showRefresh$ = this.formService.showRefresh$;
+  btnTitle$         = this.formService.getBtnTitle();
+  showMsg$          = this.formService.getShowMsg();
+  msgText$          = this.formService.getMsgText();
+  showRefresh$      = this.formService.showRefresh$;
   constructor(
     private ejariModelService: EjarimodelService,
     private formService: NewTenantFromService,
@@ -165,9 +163,6 @@ export class FormRenderComponent {
       this.currentSubStep?.component === EjariDocSignatureComponent &&
       this.getNextBtnLabel() === 'Approval & Generate Invoice'
     ) {
-      const button = document.querySelector(
-        '.Approval-Generate-invoice',
-      ) as HTMLElement;
       // Call your alert service modal
       this.ejariModelService.customTenantSuccessModal(
         'The tenant has been activated and the invoice has been generated successfully.',

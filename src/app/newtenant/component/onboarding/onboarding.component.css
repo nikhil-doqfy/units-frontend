@@ -544,6 +544,21 @@ circle {
   text-align: center;
 }
 
+.cheque-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: #0d6efd;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  margin-left: 8px;
+}
+
 .rent-cheque-counter .title {
   padding-left: 15px;
   padding-top: 15px;
@@ -593,4 +608,55 @@ circle {
 
 .count {
   text-align: center;
+}
+
+/* ── Waiting for Cheque Screen ─────────────────────── */
+.waiting-cheque-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 40px 20px;
+}
+
+.waiting-cheque-card {
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 48px 40px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.waiting-icon {
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.waiting-cheque-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 12px;
+}
+
+.waiting-cheque-card p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.7;
+  margin: 0 0 24px;
+}
+
+.waiting-badge {
+  display: inline-block;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #fde68a;
 }

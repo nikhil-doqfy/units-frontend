@@ -138,6 +138,28 @@ export class LeaseService {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/send-invite`, { lease_id: leaseId });
   }
 
+  getChequeStatus(leaseId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/cheque-status?lease_id=${leaseId}`);
+  }
+
+  // ── LeaseCheque CRUD ──────────────────────────────────────────────────────
+
+  getLeaseCheques(leaseId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/cheques?lease_id=${leaseId}`);
+  }
+
+  createLeaseCheque(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/cheques`, data);
+  }
+
+  updateLeaseCheque(data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/api/lease/cheques`, data);
+  }
+
+  deleteLeaseCheque(chequeId: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_ADDRESS}/api/lease/cheques?cheque_id=${chequeId}`);
+  }
+
   editTemplateData(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/generate-contract`, data);
   }
@@ -162,5 +184,17 @@ export class LeaseService {
 
   getTenantDocumentTypes(): Observable<any> {
     return this.http.get(`${this.SERVER_ADDRESS}/options?option_type=TENANT_DOCUMENT_TYPE`);
+  }
+
+  sendApprovalOtp(leaseId: number, role: string, email: string): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/approval-otp`, { lease_id: leaseId, role, email });
+  }
+
+  verifyApprovalOtp(leaseId: number, role: string, email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/approval-otp-verify`, { lease_id: leaseId, role, email, otp });
+  }
+
+  approveLease(leaseId: number, role: string, email: string): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/approve`, { lease_id: leaseId, role, email });
   }
 }

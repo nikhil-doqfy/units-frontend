@@ -1,0 +1,118 @@
+<div class="approval-page">
+
+  <!-- STEP: OTP -->
+  @if (step === 'otp') {
+    <div class="otp-card">
+      <div class="card-logo">
+        <img src="assets/mainLogo.svg" alt="Doqfy" />
+      </div>
+      <h2>Lease Approval – OTP Verification</h2>
+
+      @if (!otpSent) {
+        <p class="subtitle">
+          Click the button below to receive a one-time password on
+          <strong>{{ email }}</strong>.
+        </p>
+        <button class="btn-primary" [disabled]="otpSending" (click)="sendOtp()">
+          {{ otpSending ? 'Sending OTP...' : 'Send OTP' }}
+        </button>
+      } @else {
+        <p class="subtitle">
+          Enter the 6-digit OTP sent to <strong>{{ email }}</strong>.
+        </p>
+        <div class="otp-input-wrap">
+          <ng-otp-input
+            (onInputChange)="onOtpChange($event)"
+            [config]="{ length: 6, allowNumbersOnly: true }"
+          />
+        </div>
+        <button
+          class="btn-primary"
+          [disabled]="otpLoading || otp.length < 6"
+          (click)="verifyOtp()"
+        >
+          {{ otpLoading ? 'Verifying...' : 'Verify OTP' }}
+        </button>
+        <button class="btn-link" [disabled]="otpLoading || otpSending" (click)="sendOtp()">
+          {{ otpSending ? 'Sending...' : 'Resend OTP' }}
+        </button>
+      }
+    </div>
+  }
+
+  <!-- STEP: APPROVE -->
+  @if (step === 'approve') {
+    <div class="approval-layout">
+
+      <!-- Left 70%: PDF preview -->
+      <div class="pdf-panel">
+        @if (pdfUrl) {
+          <iframe [src]="pdfUrl" class="pdf-object" title="Lease Agreement"></iframe>
+        } @else {
+          <div class="no-pdf">
+            <p>No document available.</p>
+          </div>
+        }
+      </div>
+
+      <!-- Right 30%: Consent + Details -->
+      <div class="consent-panel">
+
+        <div class="consent-header">
+          <img src="assets/mainLogo.svg" alt="Doqfy" class="panel-logo" />
+          <h2>Review &amp; Approve</h2>
+          <span class="role-badge">{{ roleLabel }}</span>
+        </div>
+
+        <div class="lease-details">
+          <div class="detail-row">
+            <span class="detail-label">Lease Code</span>
+            <strong>{{ leaseCode }}</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Tenant</span>
+            <strong>{{ tenantName }}</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Property</span>
+            <strong>{{ propertyName }}</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Unit</span>
+            <strong>{{ unitName }}</strong>
+          </div>
+        </div>
+
+        <div class="consent-block">
+          <label class="consent-label">
+            <input type="checkbox" [(ngModel)]="consentChecked" />
+            <span>I have read and fully agree to the terms and conditions of this lease agreement.</span>
+          </label>
+        </div>
+
+        <button
+          class="btn-approve"
+          [disabled]="!consentChecked || approveLoading"
+          (click)="approveLease()"
+        >
+          {{ approveLoading ? 'Approving...' : 'Approve Lease Agreement' }}
+        </button>
+
+      </div>
+
+    </div>
+  }
+
+  <!-- STEP: SUCCESS -->
+  @if (step === 'success') {
+    <div class="success-card">
+      <div class="success-icon">✓</div>
+      <h2>Lease Approved!</h2>
+      <p>You have successfully approved the lease agreement <strong>{{ leaseCode }}</strong>.</p>
+      <p class="sub-note">
+        Once both the owner and tenant have approved, the lease will move to the next stage.
+      </p>
+    </div>
+  }
+
+</div>

@@ -94,6 +94,10 @@ export class OnboardingComponent {
   uploading     = false;
   componentName = 'onboardingComponent';
 
+  // Cheque data
+  rentCheques:       any[] = [];
+  additionalCheques: any[] = [];
+
   // Pagination (cheque table)
   totalRecords       = 0;
   rowsPerPageOptions = [10, 25, 50, 100];
@@ -113,9 +117,9 @@ export class OnboardingComponent {
   additionalDocTypeId: number | null = null;
 
   /*-- msg / btn --*/
-  btnTitle$  = this.formService.getBtnTitle();
-  showMsg$   = this.formService.getShowMsg();
-  msgText$   = this.formService.getMsgText();
+  btnTitle$        = this.formService.getBtnTitle();
+  showMsg$         = this.formService.getShowMsg();
+  msgText$         = this.formService.getMsgText();
   currentSubStep!: SubStepSchema;
 
   // Template split-view
@@ -135,8 +139,12 @@ export class OnboardingComponent {
 
   ngOnInit() {
     this.formService.resetFlow();
+    this.formService.restoreStepFromStage(this.formService.getCurrentLeaseStage());
     this.loadDocuments();
     this.loadTemplates();
+    if (this.isChequeCollected) {
+      this.loadCheques();
+    }
   }
 
   private get leaseId(): number | null {
@@ -279,9 +287,26 @@ export class OnboardingComponent {
     }
   }
 
+  get isChequeCollected(): boolean {
+    return this.formService.getCurrentLeaseStage()?.toUpperCase() === 'CHEQUE_COLLECTED';
+  }
+
+  loadCheques() {
+    const id = this.leaseId;
+    if (!id) return;
+    this.leaseService.getLeaseCheques(id).subscribe({
+      next: (resp: any) => {
+        const c = resp?.content ?? {};
+        this.rentCheques       = c.rent_cheques       ?? [];
+        this.additionalCheques = c.additional_cheques ?? [];
+      },
+    });
+  }
+
   onSaveClick() {
     this.formService.handleMainButtonClick();
   }
+
 
   // ── Cheque counter ────────────────────────────────────────────────────────
 

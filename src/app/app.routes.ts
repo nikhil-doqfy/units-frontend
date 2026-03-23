@@ -1,8 +1,14 @@
 import { Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { LeaseApprovalComponent } from './auth/pages/lease-approval/lease-approval.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
+  {
+    path: 'lease-approval',
+    title: 'Lease Approval | Doqfy',
+    component: LeaseApprovalComponent,
+  },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
