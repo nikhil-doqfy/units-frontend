@@ -1,7 +1,7 @@
-const HOSTNAME = 'units-api.doqfy.in';
+const HOSTNAME = 'localhost:8000';
 export const environment = {
   production: false,
   enableLogging: true,
   HOSTNAME: HOSTNAME,
-  SERVER_ADDRESS: `https://${HOSTNAME}`,
+  SERVER_ADDRESS: `http://${HOSTNAME}`,
 };
