@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, signal, TemplateRef, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +14,7 @@ import { TableFilterButtonComponent } from '../../../dashboard/component/table-f
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
+import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
@@ -44,6 +45,7 @@ import { BreadCrumb, PageChange, PageSizeChange } from '../../../shared/model/sh
     NoDataComponent,
     InviteOwnerBtnComponent,
     TranslateModule,
+    TableImgItemComponent,
   ],
   templateUrl: './owners.component.html',
   styleUrl: './owners.component.css',
@@ -52,6 +54,7 @@ export class OwnersComponent {
   private ownerService = inject(OwnerService);
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
   private modalService = inject(NgbModal);
@@ -219,6 +222,10 @@ export class OwnersComponent {
         this.formLoading = false;
       },
     });
+  }
+
+  goToDetail(owner: any) {
+    this.router.navigate(['/dashboard/owners/detail', owner.id]);
   }
 
   deleteOwner(owner: any) {

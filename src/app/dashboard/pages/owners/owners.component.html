@@ -39,7 +39,13 @@
         <tbody>
           @for (owner of owners; track $index) {
           <tr>
-            <td>{{ owner.name || 'N/A' }}</td>
+            <td class="ownerNameClickable" (click)="goToDetail(owner)">
+              <app-table-img-item
+                [img]="owner.profile_image || ''"
+                [title]="owner.name || 'N/A'"
+                size="md"
+                [showInitialsFallback]="true" />
+            </td>
             <td>{{ owner.code || 'N/A' }}</td>
             <td>{{ owner.owner_number || 'N/A' }}</td>
             <td>{{ owner.contact_number || 'N/A' }}</td>

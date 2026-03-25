@@ -26,6 +26,20 @@
   box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
 }
 
+.owner-name-link {
+  color: #4f6ef7;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+.owner-name-link:hover {
+  text-decoration: underline;
+}
+
+.ownerNameClickable {
+  cursor: pointer;
+}
+
 .table td:last-child::before,
 .table th:last-child::before {
   content: "";

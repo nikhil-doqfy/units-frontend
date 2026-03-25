@@ -1,0 +1,180 @@
+<!-- Loading -->
+<div *ngIf="loading()" class="text-center py-5">
+  <div class="spinner-border text-primary" role="status"></div>
+</div>
+
+<ng-container *ngIf="!loading()">
+
+  <!-- ── Owner Profile Card ─────────────────────────────── -->
+  <app-white-card class="mb-3">
+    <div class="owner-profile">
+
+      <!-- Back button -->
+      <button class="tdBackBtn" (click)="goBack()">
+        <span class="tdBackArrow">←</span> Back
+      </button>
+
+      <!-- Avatar + name -->
+      <div class="profile-top">
+        <div class="tdAvatar">
+          <img *ngIf="owner?.profile_image" [src]="owner.profile_image" [alt]="owner?.name" />
+          <span *ngIf="!owner?.profile_image">{{ initial }}</span>
+        </div>
+        <div class="profile-info">
+          <h4 class="tdTitle">{{ owner?.name || (owner?.first_name + ' ' + owner?.last_name) }}</h4>
+          <p class="profile-meta" *ngIf="owner?.contact_number">
+            Contact: <strong>{{ owner?.contact_number }}</strong>
+          </p>
+          <p class="profile-meta" *ngIf="owner?.email">
+            Email: <strong>{{ owner?.email }}</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- Info strip -->
+      <div class="tdInfoStrip">
+        <div class="tdInfoItem">
+          <span class="tdInfoLabel">Emirates ID</span>
+          <span class="tdInfoValue">{{ owner?.emirates_id || '—' }}</span>
+        </div>
+        <div class="tdInfoDivider"></div>
+        <div class="tdInfoItem">
+          <span class="tdInfoLabel">Residence Visa</span>
+          <span class="tdInfoValue">{{ owner?.visa_number || '—' }}</span>
+        </div>
+        <div class="tdInfoDivider"></div>
+        <div class="tdInfoItem">
+          <span class="tdInfoLabel">Trade License</span>
+          <span class="tdInfoValue">{{ owner?.trade_license_number || '—' }}</span>
+        </div>
+        <div class="tdInfoDivider"></div>
+        <div class="tdInfoItem">
+          <span class="tdInfoLabel">Owner Code</span>
+          <span class="tdInfoValue tdInfoValueBold">{{ owner?.code || owner?.owner_number || '—' }}</span>
+        </div>
+        <div class="tdInfoDivider"></div>
+        <div class="tdInfoItem tdInfoItemLast">
+          <span class="tdInfoLabel">Role</span>
+          <span class="tdInfoValue"><span class="role-badge">Owner</span></span>
+        </div>
+      </div>
+
+    </div>
+  </app-white-card>
+
+  <!-- ── Owner Properties Table ────────────────────────── -->
+  <div class="cmmnTblOuter mt-3">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'Owner Properties'"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()" />
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2">
+            <app-table-search placeholder="Search..." (onValueChange)="searchTextChange($event)" />
+            <app-table-filter-btn title="Export" [hasIcon]="true">
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered owner-props-table">
+          <thead>
+            <tr>
+              <th>Code <i><app-sorting-icon /></i></th>
+              <th>Property Name <i><app-sorting-icon /></i></th>
+              <th>Tenant Name <i><app-sorting-icon /></i></th>
+              <th>Tenancy Status</th>
+              <th>Agreement</th>
+              <th width="80">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="propsLoading()">
+              <tr>
+                <td colspan="6" class="text-center py-4">
+                  <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                </td>
+              </tr>
+            </ng-container>
+
+            <ng-container *ngIf="!propsLoading()">
+              @for (prop of properties; track $index) {
+              <tr>
+                <td class="fw-500">{{ prop.code || prop.property_unit_id || '—' }}</td>
+                <td>
+                  <app-table-img-item
+                    [img]="prop.property_image || prop.thumbnail || '../../../../assets/property/property-img-default.svg'"
+                    [title]="prop.property_name || prop.name || '—'"
+                    size="md"
+                    [showInitialsFallback]="true" />
+                </td>
+                <td>
+                  <ng-container *ngIf="prop.tenant_name; else noTenant">
+                    <app-table-img-item
+                      [img]="prop.tenant_profile_image || ''"
+                      [title]="prop.tenant_name"
+                      size="md"
+                      [showInitialsFallback]="true" />
+                  </ng-container>
+                  <ng-template #noTenant>
+                    <span class="text-muted">N/A</span>
+                  </ng-template>
+                </td>
+                <td>
+                  <span class="statusBadge" [ngClass]="statusClass(prop.tenancy_status)">
+                    {{ prop.tenancy_status || '—' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-btn
+                      type="download"
+                      [class.disabled-btn]="!prop.pdf_download_url"
+                      (clicked)="downloadContract(prop)" />
+                    <app-table-action-btn
+                      type="view"
+                      [class.disabled-btn]="!prop.pdf_url"
+                      (clicked)="viewContract(prop)" />
+                  </div>
+                </td>
+                <td align="center">
+                  <div class="cmmnTblActnBtnDiv">
+                    <app-table-action-btn type="edit" (clicked)="editUnit(prop)" />
+                  </div>
+                </td>
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="6" class="text-center"><app-no-data /></td>
+              </tr>
+              }
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)" />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)" />
+    </div>
+  </div>
+
+</ng-container>

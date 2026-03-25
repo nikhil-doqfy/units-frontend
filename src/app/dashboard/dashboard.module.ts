@@ -11,6 +11,7 @@ import { TenantsComponent } from './pages/tenants/tenants.component';
 import { LeaseTenancyComponent } from './pages/lease-tenancy/lease-tenancy.component';
 import { AddLeaseComponent } from './pages/add-lease/add-lease.component';
 import { OwnersComponent } from './pages/owners/owners.component';
+import { OwnerDetailComponent } from './pages/owner-detail/owner-detail.component';
 import { ApprovalComponent } from './pages/approval/approval.component';
 import { UsersComponent } from './pages/users/users.component';
 import { StaffComponent } from './pages/staff/staff.component';
@@ -193,7 +194,7 @@ export const routes: Routes = [
       },
       {
         path: 'owners/detail/:owner_id',
-        component: OwnersComponent,
+        component: OwnerDetailComponent,
         data: { titleKey: 'PAGE_TITLE.OWNERS' },
       },
       {
