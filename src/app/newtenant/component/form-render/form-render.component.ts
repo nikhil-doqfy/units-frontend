@@ -77,6 +77,7 @@ export class FormRenderComponent {
   showMsg$          = this.formService.getShowMsg();
   msgText$          = this.formService.getMsgText();
   showRefresh$      = this.formService.showRefresh$;
+  chequeConfirmed$  = this.formService.getChequeConfirmed();
   constructor(
     private ejariModelService: EjarimodelService,
     private formService: NewTenantFromService,
@@ -113,6 +114,8 @@ export class FormRenderComponent {
 
   get isSaveDisabled(): boolean {
     const c = this.currentSubStep?.component;
+    if (c === this.EjariComponent &&
+        this.formService.getCurrentLeaseStage()?.toUpperCase() === 'EJARI') return true;
     if (
       c === this.ProfileComponent ||
       c === this.OnboardingComponent ||
@@ -147,11 +150,8 @@ export class FormRenderComponent {
       return 'Send Invite';
     }
 
-    if (
-      this.currentSubStep?.component === ProfileComponent &&
-      this.subIndex() === 0
-    ) {
-      return 'Save & Next';
+    if (this.currentSubStep?.component === ProfileComponent) {
+      return 'Continue';
     }
 
     return 'Save & Next';
@@ -249,11 +249,22 @@ export class FormRenderComponent {
       return;
     }
 
-    // BasicPersonal
+    // BasicPersonal — fill all required fields
     form.patchValue({
+      // Unit
+      unitName:  'Unit 101',
+      unitSize:  '1200',
+      landNo:    'LAND-001',
+      dmNo:      'DM-001',
+      unitUsage: 'Residential',
+      unitType:  'Apartment',
+      subType:   'Studio',
+      makaniNo:  '12345678',
+      floorNo:   '1',
+      // Tenant
       tenantName:     'Ahmed Al Mansoori',
       email:          'ahmed.mansoori@example.com',
-      nationality:    'UAE',
+      nationality:    'United Arab Emirates',
       passportNo:     'P1234567',
       passportExpiry: '2028-06-30',
       emiratesId:     '784-1990-1234567-1',
@@ -263,6 +274,16 @@ export class FormRenderComponent {
       addressLine1:   'Villa 12, Al Barsha',
       addressLine2:   'Dubai, UAE',
     });
+    // Fill first owner group if present
+    const owners = form.get('unitOwners') as any;
+    if (owners?.controls?.length) {
+      owners.controls[0].patchValue({
+        ownerName:       'Mohammed Al Rashidi',
+        ownerEmail:      'owner@example.com',
+        contactNumber:   '+971551234567',
+        emiratesId:      '784-1980-9876543-1',
+      });
+    }
   }
 
   private readonly STAGE_MAP: Record<number, string> = {

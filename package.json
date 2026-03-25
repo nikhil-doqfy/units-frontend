@@ -33,6 +33,7 @@
     "ng-apexcharts": "^1.8.0",
     "ng-otp-input": "^1.9.3",
     "ng-zorro-antd": "^17.3.0",
+    "ng2-pdf-viewer": "^10.4.0",
     "ngx-spinner": "^17.0.0",
     "ol": "^10.8.0",
     "rxjs": "~7.8.0",

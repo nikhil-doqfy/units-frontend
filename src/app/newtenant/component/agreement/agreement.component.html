@@ -7,24 +7,27 @@
   }"
 >
   <span class="icon">
-    <app-warning-icon
-      *ngIf="msgText$() === 'Waiting for Signature'"
-    ></app-warning-icon>
-
-    <!-- Success icon -->
-    <app-signed-successfully-icon
-      *ngIf="msgText$() === 'Signed Successfully'"
-    ></app-signed-successfully-icon>
+    <app-warning-icon *ngIf="msgText$() === 'Waiting for Signature'"></app-warning-icon>
+    <app-signed-successfully-icon *ngIf="msgText$() === 'Signed Successfully'"></app-signed-successfully-icon>
   </span>
   <span class="text">{{ msgText$() }}</span>
 </div>
 
-<div class="page-wrapper mt-3" [class.blur]="showMsg$()">
-  <app-white-card>
-    <div class="template-header">
-      <app-custom-select
-        placeholder="Temaplate: Lease Agreement"
-      ></app-custom-select>
+<div class="pdf-viewer-wrapper mt-3" [class.blur]="showMsg$()">
+  <div class="pdf-panel">
+
+    <div *ngIf="pdfLoading" class="no-pdf">
+      <div class="spinner"></div>
+      <span>Loading agreement…</span>
     </div>
-  </app-white-card>
+
+    @if (!pdfLoading && pdfUrl) {
+      <iframe [src]="pdfUrl" class="pdf-object" title="Lease Agreement"></iframe>
+    }
+
+    <div *ngIf="!pdfLoading && !pdfUrl" class="no-pdf">
+      <p>No document available.</p>
+    </div>
+
+  </div>
 </div>

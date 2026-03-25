@@ -36,6 +36,7 @@
   display: flex;
   align-items: flex-start;
   flex: 1;
+  padding: 0 12px;
 }
 
 .step-item {
@@ -44,16 +45,17 @@
   flex-direction: column;
   align-items: center;
   flex: 1;
+  padding: 0 4px;
 }
 
 /* Circle */
 .circle {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1px solid #9db3bd;
+  border: 1.5px solid #d1d5db;
   background: #fff;
-  color: #9db3bd;
+  color: #9ca3af;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,31 +63,33 @@
   font-weight: 600;
   z-index: 2;
   position: relative;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
 }
 
 /* Label below circle */
 .label {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #9db3bd;
-  font-weight: 300;
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: #9ca3af;
+  font-weight: 400;
   text-align: center;
   white-space: nowrap;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  line-height: 1.3;
 }
 
-/* Connector line: starts at right edge of circle, ends at left edge of next */
+/* Connector line */
 .line {
   position: absolute;
-  top: 13px;
-  left: calc(50% + 14px);
-  width: calc(100% - 28px);
-  height: 1px;
+  top: 14px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 1.5px;
   background: repeating-linear-gradient(
     to right,
-    #9db3bd,
-    #9db3bd 5px,
+    #d1d5db,
+    #d1d5db 5px,
     transparent 5px,
     transparent 10px
   );
@@ -101,11 +105,13 @@
   background: #2fa51a;
   border-color: #2fa51a;
   color: #fff;
+  box-shadow: 0 0 0 4px rgba(47, 165, 26, 0.12);
 }
 
 .step-item.active .label {
   color: #111827;
   font-weight: 700;
+  font-size: 12px;
 }
 
 /* Completed step */
@@ -122,6 +128,7 @@
 
 .step-item.completed .line {
   background: #2fa51a;
+  background-image: none;
 }
 
 .completeStepICon {
@@ -135,8 +142,8 @@
 }
 
 ::ng-deep .completeStepICon svg {
-  height: 26px;
-  width: 26px;
+  height: 22px;
+  width: 22px;
 }
 
 /* ── Right: action buttons ───────────────────────── */

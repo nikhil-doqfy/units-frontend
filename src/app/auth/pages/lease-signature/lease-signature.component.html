@@ -1,0 +1,213 @@
+<!-- Google Fonts for typed signature -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Pacifico&display=swap" rel="stylesheet">
+
+<div class="sig-page">
+
+  <!-- ═══════════════════════  STEP: OTP  ══════════════════════════════ -->
+  @if (step === 'otp') {
+    <div class="otp-card">
+      <div class="card-logo">
+        <img src="assets/mainLogo.svg" alt="Doqfy" />
+      </div>
+      <h2>Lease Signature – OTP Verification</h2>
+
+      @if (!otpSent) {
+        <p class="subtitle">
+          Click the button below to receive a one-time password on
+          <strong>{{ email }}</strong>.
+        </p>
+        <button class="btn-primary" [disabled]="otpSending" (click)="sendOtp()">
+          {{ otpSending ? 'Sending OTP...' : 'Send OTP' }}
+        </button>
+      } @else {
+        <p class="subtitle">
+          Enter the 6-digit OTP sent to <strong>{{ email }}</strong>.
+        </p>
+        <div class="otp-input-wrap">
+          <ng-otp-input
+            (onInputChange)="onOtpChange($event)"
+            [config]="{ length: 6, allowNumbersOnly: true }"
+          />
+        </div>
+        <button
+          class="btn-primary"
+          [disabled]="otpLoading || otp.length < 6"
+          (click)="verifyOtp()"
+        >
+          {{ otpLoading ? 'Verifying...' : 'Verify OTP' }}
+        </button>
+        <button class="btn-link" [disabled]="otpLoading || otpSending" (click)="sendOtp()">
+          {{ otpSending ? 'Sending...' : 'Resend OTP' }}
+        </button>
+      }
+    </div>
+  }
+
+  <!-- ═══════════════════════  STEP: SIGN  ══════════════════════════════ -->
+  @if (step === 'sign') {
+    <div class="sign-layout">
+
+      <!-- Left 65%: PDF -->
+      <div class="pdf-panel">
+        @if (pdfUrl) {
+          <iframe [src]="pdfUrl" class="pdf-iframe" title="Lease Agreement"></iframe>
+        } @else {
+          <div class="no-pdf">
+            <span class="no-pdf-icon">📄</span>
+            <p>Document not available for preview.</p>
+          </div>
+        }
+      </div>
+
+      <!-- Right 35%: Signature panel -->
+      <div class="sig-panel">
+
+        <!-- Header -->
+        <div class="sig-header">
+          <img src="assets/mainLogo.svg" alt="Doqfy" class="panel-logo" />
+          <h2>Sign Agreement</h2>
+          <span class="role-badge">{{ roleLabel }}</span>
+        </div>
+
+        <!-- Lease details -->
+        <div class="lease-details">
+          <div class="detail-row">
+            <span class="detail-label">Lease Code</span>
+            <strong>{{ leaseCode }}</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Tenant</span>
+            <strong>{{ tenantName }}</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Property</span>
+            <strong>{{ propertyName }}</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Unit</span>
+            <strong>{{ unitName }}</strong>
+          </div>
+        </div>
+
+        <!-- Signature area -->
+        <div class="sig-area">
+          <p class="sig-area-title">Add Your Signature</p>
+
+          <!-- Tabs -->
+          <div class="sig-tabs">
+            <button
+              class="sig-tab"
+              [class.active]="activeTab === 'DRAW'"
+              (click)="setTab('DRAW')"
+            >Draw</button>
+            <button
+              class="sig-tab"
+              [class.active]="activeTab === 'TYPE'"
+              (click)="setTab('TYPE')"
+            >Type</button>
+            <button
+              class="sig-tab"
+              [class.active]="activeTab === 'UPLOAD'"
+              (click)="setTab('UPLOAD')"
+            >Upload</button>
+          </div>
+
+          <!-- DRAW tab -->
+          @if (activeTab === 'DRAW') {
+            <div class="tab-content draw-tab">
+              <p class="tab-hint">Draw your signature below</p>
+              <div class="canvas-wrap">
+                <canvas
+                  #sigCanvas
+                  width="420"
+                  height="140"
+                  class="sig-canvas"
+                  (mousedown)="onCanvasMouseDown($event)"
+                  (mousemove)="onCanvasMouseMove($event)"
+                  (mouseup)="onCanvasMouseUp()"
+                  (mouseleave)="onCanvasMouseLeave()"
+                  (touchstart)="onCanvasTouchStart($event)"
+                  (touchmove)="onCanvasTouchMove($event)"
+                  (touchend)="onCanvasTouchEnd()"
+                ></canvas>
+              </div>
+              <button class="btn-clear" (click)="clearCanvas()">Clear</button>
+            </div>
+          }
+
+          <!-- TYPE tab -->
+          @if (activeTab === 'TYPE') {
+            <div class="tab-content type-tab">
+              <p class="tab-hint">Type your name and pick a style</p>
+              <input
+                type="text"
+                class="type-input"
+                placeholder="Your full name"
+                [(ngModel)]="typedName"
+              />
+              <div class="font-options">
+                @for (font of fonts; track font) {
+                  <button
+                    class="font-option"
+                    [class.selected]="selectedFont === font"
+                    [style.font-family]="font"
+                    (click)="selectedFont = font"
+                  >
+                    {{ typedName || 'Your Name' }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- UPLOAD tab -->
+          @if (activeTab === 'UPLOAD') {
+            <div class="tab-content upload-tab">
+              <p class="tab-hint">Upload a signature image (PNG or JPG)</p>
+              <label class="upload-label">
+                <span>Choose File</span>
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg"
+                  class="hidden-file-input"
+                  (change)="onFileUpload($event)"
+                />
+              </label>
+              @if (uploadedImageSrc) {
+                <div class="upload-preview">
+                  <img [src]="uploadedImageSrc" alt="Uploaded signature" />
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Actions -->
+        <div class="sig-actions">
+          <button
+            class="btn-confirm"
+            [disabled]="!canConfirm || submitLoading"
+            (click)="confirmSignature()"
+          >
+            {{ submitLoading ? 'Submitting…' : 'Confirm Signature' }}
+          </button>
+        </div>
+
+      </div><!-- /sig-panel -->
+    </div><!-- /sign-layout -->
+  }
+
+  <!-- ═══════════════════════  STEP: SUCCESS  ══════════════════════════ -->
+  @if (step === 'success') {
+    <div class="success-card">
+      <div class="success-icon">✓</div>
+      <h2>Signature Submitted!</h2>
+      <p>Your signature has been submitted successfully for lease <strong>{{ leaseCode }}</strong>.</p>
+      <p class="sub-note">
+        All parties will be notified once everyone has signed the agreement.
+      </p>
+    </div>
+  }
+
+</div>

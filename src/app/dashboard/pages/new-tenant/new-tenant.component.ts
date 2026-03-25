@@ -88,6 +88,7 @@ export class NewTenantComponent {
               const basicFormGroup = this.steps()?.[0]?.subSteps?.[0]?.formGroup;
               if (basicFormGroup) {
                 basicFormGroup.patchValue({
+                  nationality:    t.nationality      ?? '',
                   emiratesId:     t.emirates_id      ?? '',
                   passportNo:     t.passport_number  ?? '',
                   passportExpiry: t.passport_expiry  ?? '',
@@ -123,11 +124,22 @@ export class NewTenantComponent {
               const stage = lease.lease_stage ?? stateLeaseStage;
               const s = stage?.toUpperCase();
 
-              if (t.is_onboarding ||
+              const isAgreementOrLater =
+                s === 'AGREEMENT'        || s === 'AGREEMENT_SIGNING' ||
+                s === 'AGREEMENT_SIGNED' || s === 'EJARI'             ||
+                s === 'EJARI_SIGNING'    || s === 'ACTIVATED';
+
+              if (s === 'WAITING_FOR_SIGNUP') {
+                // Always show the "Waiting for Tenant" page (sub-step 0)
+                // regardless of is_onboarding flag
+                this.newTenantService.getActiveIndex().set(1);
+                this.newTenantService.getActiveSubIndex().set(0);
+              } else if (!isAgreementOrLater && (
+                  t.is_onboarding          ||
                   s === 'NEGOTIATION_SENT' || s === 'PENDING_APPROVAL' ||
                   s === 'OWNER_APPROVED'   || s === 'TENANT_APPROVED'  ||
                   s === 'WAITING_CHEQUE'   || s === 'CHEQUE_REQUESTED' ||
-                  s === 'CHEQUE_COLLECTED') {
+                  s === 'CHEQUE_COLLECTED')) {
                 this.newTenantService.getActiveIndex().set(1);
                 this.newTenantService.getActiveSubIndex().set(1);
               } else {
@@ -169,8 +181,9 @@ export class NewTenantComponent {
 
   private leaseStageToStepIndex(stage: string): number {
     switch (stage?.toUpperCase()) {
+      case 'WAITING_FOR_SIGNUP': // invite sent, waiting for tenant to register
       case 'ONBOARDING':
-        return 1;
+        return 1; // → Onboarding step, sub-step 0 (waiting page)
       case 'NEGOTIATION_SENT':
       case 'PENDING_APPROVAL':
       case 'OWNER_APPROVED':
