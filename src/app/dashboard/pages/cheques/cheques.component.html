@@ -197,7 +197,9 @@
                   class="amount-cell"
                 >
                   AED,12,000
-                  <span><img src="assets/check.svg" /></span>
+                  <span *ngIf="activeSummary == 'bounce'"
+                    ><img src="assets/check.svg"
+                  /></span>
                 </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn
@@ -269,7 +271,9 @@
                   class="amount-cell"
                 >
                   AED,12,000
-                  <span><img src="assets/check.svg" /></span>
+                  <span *ngIf="activeSummary == 'bounce'"
+                    ><img src="assets/check.svg"
+                  /></span>
                 </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn type="history"></app-table-action-btn>
@@ -336,7 +340,9 @@
                   class="amount-cell"
                 >
                   AED,12,000
-                  <span><img src="assets/warning.svg" /></span>
+                  <span *ngIf="activeSummary == 'bounce'"
+                    ><img src="assets/warning.svg"
+                  /></span>
                 </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn type="history"></app-table-action-btn>
@@ -391,7 +397,10 @@
                   1224567787
                 </td>
                 <td *ngIf="activeSummary !== 'total'" class="amount-cell">
-                  AED,12,000 <span><img src="assets/check.svg" /></span>
+                  AED,12,000
+                  <span *ngIf="activeSummary == 'bounce'"
+                    ><img src="assets/check.svg"
+                  /></span>
                 </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn type="history"></app-table-action-btn>
@@ -447,7 +456,10 @@
                   1224567787
                 </td>
                 <td *ngIf="activeSummary !== 'total'" class="amount-cell">
-                  AED,12,000 <span><img src="assets/warning.svg" /></span>
+                  AED,12,000
+                  <span *ngIf="activeSummary == 'bounce'"
+                    ><img src="assets/warning.svg"
+                  /></span>
                 </td>
                 <td *ngIf="activeSummary == 'bounce'">
                   <app-table-action-btn type="history"></app-table-action-btn>

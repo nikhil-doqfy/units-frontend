@@ -33,7 +33,7 @@ export class PmcService {
       `${this.SERVER_ADDRESS}/owner_compnay_csv${queryString}`,
       {
         responseType: 'blob',
-      }
+      },
     );
   }
   addPmcToInvite(data: Record<string, any>): Observable<any> {

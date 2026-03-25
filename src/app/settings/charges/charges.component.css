@@ -4,7 +4,10 @@
   border-radius: 10px;
   padding: 6px 14px;
 }
-
+.mt-3 {
+  background: #ffffff;
+  border-radius: 10px;
+}
 .cmmnTblBody table thead tr th {
   background-color: #f2f5f9;
   color: #000;
@@ -69,4 +72,37 @@
 .form-switch .form-check-input:checked {
   background-color: #0d6efd !important;
   border-color: #0d6efd !important;
+}
+/* underline clickable text */
+.edit-text {
+  border-bottom: 2px solid #3b82f6;
+  cursor: pointer;
+  padding-bottom: 2px;
+}
+
+/* edit input */
+.edit-input {
+  border: none;
+  border-bottom: 2px solid #3b82f6;
+  outline: none;
+  background: transparent;
+  width: 100%;
+}
+
+.editMode {
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+
+.saveBtn {
+  background: #2f6f44;
+  color: #fff;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-left: 10px;
+}
+
+.edit-underline {
+  border-bottom: 2px solid #3b82f6;
 }
