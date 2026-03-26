@@ -48,3 +48,143 @@
   background-color: green;
   color: white;
 }
+
+/* ── Charges table ─────────────────────────────────── */
+.charges-table th {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #f8fafc;
+}
+
+.charges-table td {
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+/*───────── CHARGES TABLE ───────── */
+
+.charges-table th {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #eef2f5;
+  color: #374151;
+  padding: 10px;
+  border: none;
+}
+.sectionCardThree {
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: var(--whiteBg);
+  border: 1px solid #e2e8f0;
+}
+
+.otherChargesTitle {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 20px;
+  text-decoration: underline;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.totalText {
+  color: #536c76;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.currency {
+  color: #232b2e;
+  font-weight: 600;
+  margin-left: 4px;
+  font-size: 14px;
+}
+
+/* ───────── Row Hover Effect ───────── */
+
+.totalCell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.editIcon {
+  opacity: 0;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  margin-left: auto;
+  padding-right: 16px;
+}
+
+.tableRow:hover .editIcon {
+  opacity: 1;
+}
+
+::ng-deep .tableRow:hover td {
+  background-color: #f5f7f8 !important;
+  color: black;
+}
+
+.saveBtn {
+  background-color: #458453;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tableRow.editMode td {
+  border-bottom: none !important;
+}
+
+.amountText {
+  display: inline-block;
+  color: black;
+}
+
+.editUnderline {
+  border-bottom: 2px solid #007bff;
+  padding: 0 12px;
+}
+
+.tableRow.editMode {
+  position: relative;
+  z-index: 1;
+}
+
+.tableRow.editMode::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: -1;
+
+  box-shadow:
+    0 -4px 8px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.charges-table td,
+.charges-table th {
+  border-bottom: none !important;
+}
+.sectionBadge {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: #d6dee1;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  color: #374151;
+}

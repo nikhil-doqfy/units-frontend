@@ -35,6 +35,7 @@ import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackIconComponent } from '../../component/icons/back-icon/back-icon.component';
+import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
 @Component({
   selector: 'app-approval',
   standalone: true,
@@ -60,6 +61,7 @@ import { BackIconComponent } from '../../component/icons/back-icon/back-icon.com
     CommonModule,
     FormsModule,
     BackIconComponent,
+    EditIconComponent,
   ],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.css',
@@ -125,6 +127,7 @@ export class ApprovalComponent {
       vat: 1.64,
       total: 34.35,
       checked: true,
+      isEdit: false,
     },
     {
       label: 'Ejari Charge Disbursement',
@@ -207,6 +210,7 @@ export class ApprovalComponent {
       checked: false,
     },
   ];
+
   ngOnInit() {
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
@@ -216,6 +220,11 @@ export class ApprovalComponent {
     this.initLanguageListener();
   }
 
+  get totalAmount(): number {
+    return this.charges
+      .filter((c) => c.checked)
+      .reduce((sum, c) => sum + c.total, 0);
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -408,5 +417,14 @@ export class ApprovalComponent {
           this.mapDocumentsByType();
         },
       });
+  } /*-------OTHER CHARGES ACTION  COLUMN------------------------*/
+  editRow(row: any) {
+    console.log('clicked', row);
+    row.isEdit = true;
+  }
+
+  saveRow(row: any) {
+    console.log('saved', row);
+    row.isEdit = false;
   }
 }
