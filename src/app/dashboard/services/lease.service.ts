@@ -186,6 +186,10 @@ export class LeaseService {
     return this.http.get(`${this.SERVER_ADDRESS}/options?option_type=TENANT_DOCUMENT_TYPE`);
   }
 
+  getBanks(): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/options?option_type=BANK_WITH_BRANCH`);
+  }
+
   sendApprovalOtp(leaseId: number, role: string, email: string): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/approval-otp`, { lease_id: leaseId, role, email });
   }
@@ -196,5 +200,13 @@ export class LeaseService {
 
   approveLease(leaseId: number, role: string, email: string): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/approve`, { lease_id: leaseId, role, email });
+  }
+
+  sendForSignature(leaseId: number): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/send-for-signature`, { lease_id: leaseId });
+  }
+
+  submitLeaseSignature(payload: any): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/submit-signature`, payload);
   }
 }

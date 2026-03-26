@@ -20,12 +20,12 @@ export class TenantsService {
 
   getTenantsByTab(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/api/tenant-leases${queryString}`);
+    return this.http.get(`${this.SERVER_ADDRESS}/user/tenant${queryString}`);
   }
 
   exportTenantsByTab(params: Record<string, any>): Observable<Blob> {
     const queryString = this.sharedService.getQueryString({ ...params, export: 'csv' });
-    return this.http.get(`${this.SERVER_ADDRESS}/api/tenant-leases${queryString}`, { responseType: 'blob' });
+    return this.http.get(`${this.SERVER_ADDRESS}/user/tenant${queryString}`, { responseType: 'blob' });
   }
 
   getTenants(params: Record<string, any>): Observable<any> {
@@ -43,7 +43,7 @@ export class TenantsService {
 
   getTenantDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/tenant/table${queryString}`);
+    return this.http.get(`${this.SERVER_ADDRESS}/user/tenant${queryString}`);
   }
 
   addTenantToInvite(data: Record<'email', string>): Observable<any> {

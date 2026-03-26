@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LeaseApprovalComponent } from './auth/pages/lease-approval/lease-approval.component';
+import { LeaseSignatureComponent } from './auth/pages/lease-signature/lease-signature.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -8,6 +9,11 @@ export const routes: Routes = [
     path: 'lease-approval',
     title: 'Lease Approval | Doqfy',
     component: LeaseApprovalComponent,
+  },
+  {
+    path: 'lease-sign',
+    title: 'Sign Lease Agreement | Doqfy',
+    component: LeaseSignatureComponent,
   },
   {
     path: 'auth',

@@ -80,7 +80,8 @@ export interface TemplateField {
   styleUrl: './onboarding.component.css',
 })
 export class OnboardingComponent {
-  showCheckSection$ = this.formService.getShowCheckSection();
+  showCheckSection$  = this.formService.getShowCheckSection();
+  chequeConfirmed$   = this.formService.getChequeConfirmed();
   @Input() form!: FormGroup;
 
   private modalService  = inject(NgbModal);
@@ -97,6 +98,28 @@ export class OnboardingComponent {
   // Cheque data
   rentCheques:       any[] = [];
   additionalCheques: any[] = [];
+
+  // Banks list for cheque form
+  banks: { key: number; value: string; ifsc_code: string }[] = [];
+
+  // Add cheque modal
+  addingChequeType: 'RENT_CHEQUE' | 'ADDITIONAL_CHEQUE' = 'RENT_CHEQUE';
+  savingCheque = false;
+  chequeForm = {
+    payment_type:             'CHEQUE',
+    cheque_number:            '',
+    cheque_date:              '',
+    start_date:               '',
+    end_date:                 '',
+    origin_bank_id:           null as number | null,
+    origin_account_number:    '',
+    origin_ifsc_code:         '',
+    settlement_bank_id:       null as number | null,
+    settlement_account_number:'',
+    settlement_ifsc_code:     '',
+    amount:                   null as number | null,
+  };
+  chequeFile: File | null = null;
 
   // Pagination (cheque table)
   totalRecords       = 0;
@@ -144,6 +167,7 @@ export class OnboardingComponent {
     this.loadTemplates();
     if (this.isChequeCollected) {
       this.loadCheques();
+      this.loadBanks();
     }
   }
 
@@ -303,6 +327,99 @@ export class OnboardingComponent {
     });
   }
 
+  loadBanks() {
+    this.leaseService.getBanks().subscribe({
+      next: (resp: any) => {
+        this.banks = resp?.content?.bank ?? [];
+      },
+    });
+  }
+
+  openAddChequeModal(content: TemplateRef<any>, type: 'RENT_CHEQUE' | 'ADDITIONAL_CHEQUE') {
+    this.addingChequeType = type;
+    this.chequeForm = {
+      payment_type:              'CHEQUE',
+      cheque_number:             '',
+      cheque_date:               '',
+      start_date:                '',
+      end_date:                  '',
+      origin_bank_id:            null,
+      origin_account_number:     '',
+      origin_ifsc_code:          '',
+      settlement_bank_id:        null,
+      settlement_account_number: '',
+      settlement_ifsc_code:      '',
+      amount:                    null,
+    };
+    this.chequeFile = null;
+    this.modalService.open(content, { ariaLabelledBy: 'add-cheque-title', windowClass: 'mdlCommon', centered: true, size: 'lg' });
+  }
+
+  onOriginBankChange() {
+    const bank = this.banks.find(b => b.key === this.chequeForm.origin_bank_id);
+    this.chequeForm.origin_ifsc_code = bank?.ifsc_code ?? '';
+  }
+
+  onSettlementBankChange() {
+    const bank = this.banks.find(b => b.key === this.chequeForm.settlement_bank_id);
+    this.chequeForm.settlement_ifsc_code = bank?.ifsc_code ?? '';
+  }
+
+  onChequeFileSelected(event: Event) {
+    this.chequeFile = (event.target as HTMLInputElement).files?.[0] ?? null;
+  }
+
+  saveNewCheque(modal: any) {
+    const id = this.leaseId;
+    if (!id) return;
+    this.savingCheque = true;
+
+    const payload: Record<string, any> = {
+      lease_id:                  id,
+      cheque_type:               this.addingChequeType,
+      payment_type:              this.chequeForm.payment_type,
+      cheque_number:             this.chequeForm.cheque_number,
+      cheque_date:               this.chequeForm.cheque_date,
+      start_date:                this.chequeForm.start_date,
+      end_date:                  this.chequeForm.end_date,
+      origin_bank_id:            this.chequeForm.origin_bank_id,
+      origin_account_number:     this.chequeForm.origin_account_number,
+      settlement_bank_id:        this.chequeForm.settlement_bank_id,
+      settlement_account_number: this.chequeForm.settlement_account_number,
+      amount:                    this.chequeForm.amount,
+    };
+
+    const doSave = (fileData?: { data: string; file_name: string }) => {
+      if (fileData) {
+        payload['file_data']  = fileData.data;
+        payload['file_name']  = fileData.file_name;
+      }
+      this.leaseService.createLeaseCheque(payload).subscribe({
+        next: () => {
+          this.alertService.customSuccess('Cheque added successfully');
+          this.savingCheque = false;
+          modal.close();
+          this.loadCheques();
+        },
+        error: () => {
+          this.alertService.error('Failed to add cheque');
+          this.savingCheque = false;
+        },
+      });
+    };
+
+    if (this.chequeFile) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        doSave({ data: base64, file_name: this.chequeFile!.name });
+      };
+      reader.readAsDataURL(this.chequeFile);
+    } else {
+      doSave();
+    }
+  }
+
   onSaveClick() {
     this.formService.handleMainButtonClick();
   }
@@ -390,6 +507,7 @@ export class OnboardingComponent {
 
         if (c.pdf_url) {
           this.lastPdfUrl = c.pdf_url;
+          this.formService.setAgreementPdfUrl(c.pdf_url);
         }
 
         this.rebuildPreview();
@@ -550,6 +668,7 @@ export class OnboardingComponent {
         const pdfUrl = resp?.content?.pdf_url;
         if (pdfUrl) {
           this.lastPdfUrl = pdfUrl;
+          this.formService.setAgreementPdfUrl(pdfUrl);
         }
       },
       error: () => {

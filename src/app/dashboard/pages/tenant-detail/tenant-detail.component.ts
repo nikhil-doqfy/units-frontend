@@ -1,14 +1,19 @@
 import {
   Component,
+  DestroyRef,
   EventEmitter,
   inject,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   TemplateRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgbModal, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TenantsService } from '../../services/tenants.service';
 
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
@@ -71,13 +76,33 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
   templateUrl: './tenant-detail.component.html',
   styleUrl: './tenant-detail.component.css',
 })
-export class TenantDetailComponent {
+export class TenantDetailComponent implements OnChanges {
   @Input() selectedLease: any = null;
   @Output() back  = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
-  private translate    = inject(TranslateService);
-  private modalService = inject(NgbModal);
+  private translate       = inject(TranslateService);
+  private modalService    = inject(NgbModal);
+  private tenantsService  = inject(TenantsService);
+  private destroyRef      = inject(DestroyRef);
+
+  tenantData: any = null;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedLease'] && this.selectedLease?.tenant?.id) {
+      this.loadTenantData(this.selectedLease.tenant.id);
+    }
+  }
+
+  private loadTenantData(tenantId: number): void {
+    this.tenantsService
+      .getTenantDetails({ tenant_id: tenantId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => { this.tenantData = resp?.content ?? null; },
+        error: () => { this.tenantData = null; },
+      });
+  }
 
   // ── view state ──────────────────────────────────────────────────
   showInvoiceDetails   = false;

@@ -64,13 +64,15 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '2-1',
-            title: 'Profile',
+            title: 'Waiting for Tenant',
+            description: 'Invite sent — waiting for the tenant to complete their signup',
             component: ProfileComponent,
             formGroup: this.createProfileForm(),
           },
           {
             id: '2-2',
-            title: 'Profile',
+            title: 'Onboarding',
+            description: 'Review cheques and send negotiation',
             component: OnboardingComponent,
             formGroup: this.createOnboardingForm(),
           },
@@ -158,7 +160,7 @@ export class NewTenantFromService {
       tenantId:       [leadData?.tenant_id ?? null],
       email:          [leadData?.email ?? '', [Validators.required, Validators.email]],
       tenantName:     [leadData?.name ?? '', Validators.required],
-      nationality:    ['', Validators.required],
+      nationality:    [leadData?.nationality ?? '', Validators.required],
       passportNo:     ['', Validators.required],
       passportExpiry: ['', Validators.required],
       emiratesId:     ['', Validators.required],
@@ -234,10 +236,12 @@ export class NewTenantFromService {
   private showCheckSection  = signal(false);
   private showChequeWaiting = signal(false);
   private approvalStage     = signal<'NEGOTIATION_SENT' | 'OWNER_APPROVED' | 'TENANT_APPROVED' | null>(null);
+  private chequeConfirmed   = signal(false);
 
   getShowCheckSection()  { return this.showCheckSection; }
   getShowChequeWaiting() { return this.showChequeWaiting; }
   getApprovalStage()     { return this.approvalStage; }
+  getChequeConfirmed()   { return this.chequeConfirmed; }
   private showMsg = signal(false);
   private msgText = signal('');
   private btnTitle = signal<
@@ -255,6 +259,10 @@ export class NewTenantFromService {
   private stepPhase = signal<'NEGOTIATION' | 'CHEQUE' | 'COLLECTED' | 'FINAL'>('NEGOTIATION');
   private agreementPhase = signal<'INIT' | 'SIGNING' | 'SIGNED'>('INIT');
   private ejariPhase = signal<'INIT' | 'SIGNING' | 'SIGNED'>('INIT');
+  private agreementPdfUrl = signal<string | null>(null);
+
+  getAgreementPdfUrl() { return this.agreementPdfUrl; }
+  setAgreementPdfUrl(url: string | null) { this.agreementPdfUrl.set(url); }
   getShowMsg() {
     return this.showMsg;
   }
@@ -333,9 +341,14 @@ export class NewTenantFromService {
     this.updateLeaseStage('CHEQUE_REQUESTED');
     this.showChequeWaiting.set(true);
     this.stepPhase.set('CHEQUE');
+    this.msgText.set('A cheque request has been sent to the tenant. This page will update once the tenant uploads their cheque documents.');
+    this.showMsg.set(true);
   }
 
   startAgreementFlow() {
+    const s = this.currentLeaseStage()?.toUpperCase();
+    // If restoreStepFromStage already handled a known stage, don't overwrite it
+    if (s === 'AGREEMENT_SIGNING' || s === 'AGREEMENT_SIGNED') return;
     this.btnTitle.set('Send for Signature');
     this.agreementPhase.set('INIT');
     this.showMsg.set(false);
@@ -344,21 +357,26 @@ export class NewTenantFromService {
 
   triggerAgreementSignature(goNext: () => void) {
     if (this.agreementPhase() === 'INIT') {
-      this.updateLeaseStage('AGREEMENT_SIGNING');
-      this.msgText.set('Waiting for Signature');
+      const id = this.leaseId();
+      if (!id) {
+        this.alertService.error('Lease not found. Please complete the previous steps first.');
+        return;
+      }
+      this.msgText.set('Sending signature requests…');
       this.showMsg.set(true);
-      this.btnTitle.set('Submit for Ejari');
-      this.agreementPhase.set('SIGNING');
 
-      setTimeout(() => {
-        this.updateLeaseStage('AGREEMENT_SIGNED');
-        this.msgText.set('Signed Successfully');
-        this.agreementPhase.set('SIGNED');
-
-        setTimeout(() => {
-          this.showMsg.set(false);
-        }, 2000);
-      }, 3000);
+      this.leaseService.sendForSignature(id).subscribe({
+        next: () => {
+          this.updateLeaseStage('AGREEMENT_SIGNING');
+          this.msgText.set('Signature requests sent. Waiting for signatures…');
+          this.btnTitle.set('Submit for Ejari');
+          this.agreementPhase.set('SIGNING');
+        },
+        error: () => {
+          this.msgText.set('Failed to send signature requests. Please try again.');
+          setTimeout(() => this.showMsg.set(false), 3000);
+        },
+      });
     } else if (this.agreementPhase() === 'SIGNED') {
       goNext();
     }
@@ -467,7 +485,7 @@ export class NewTenantFromService {
       return;
     }
 
-    this.leaseService.updateLease({ ...payload, lease_id: existingId, lease_stage: 'ONBOARDING' }).subscribe({
+    this.leaseService.updateLease({ ...payload, lease_id: existingId, lease_stage: 'WAITING_FOR_SIGNUP' }).subscribe({
       next: () => {
         this.leaseService.sendLeaseInvite(existingId).subscribe({
           next: () => this.alertService.success('Invite sent successfully to tenant'),
@@ -495,12 +513,21 @@ export class NewTenantFromService {
     this.showMsg.set(false);
     this.msgText.set('');
     this.showCheckSection.set(false);
+    this.chequeConfirmed.set(false);
   }
 
   /** Restores button state when loading an existing lease with a known stage. */
   restoreStepFromStage(stage: string): void {
     this.currentLeaseStage.set(stage ?? '');
     const s = stage?.toUpperCase();
+
+    // Invite sent — waiting for tenant to sign up (ProfileComponent shown as sub-step 0)
+    if (s === 'WAITING_FOR_SIGNUP' || s === 'ONBOARDING') {
+      // No special button state needed; default is fine.
+      // Navigation to step 1, sub-step 0 is handled by leaseStageToStepIndex in new-tenant.component.
+      return;
+    }
+
     // Negotiation sent — waiting for both approvals
     if (s === 'NEGOTIATION_SENT' || s === 'PENDING_APPROVAL') {
       this.msgText.set('Negotiation sent  |  Waiting for approval from Owner and Tenant…');

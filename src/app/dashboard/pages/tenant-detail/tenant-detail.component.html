@@ -9,17 +9,19 @@
   <app-table-view-card
     (click)="showMsg()"
     (dblclick)="hideMsg()"
-    title="Abhram|Khaleeja Building|302"
-    [imgSrc]="''"
+    [title]="(tenantData?.first_name || tenantData?.last_name)
+      ? ((tenantData.first_name + ' ' + tenantData.last_name).trim())
+      : (selectedLease?.tenant?.name || 'Abhram|Khaleeja Building|302')"
+    [imgSrc]="tenantData?.profile_image || selectedLease?.tenant?.photo || ''"
     [items]="[
-      { label: getLabel('TENANT_NO'), value: '98909897' },
-      { label: getLabel('PERIOD_FROM'), value: '28/02/24' },
-      { label: getLabel('PERIOD_TO'), value: '28/02/25' },
-      { label: getLabel('UNIT_TYPE'), value: 'Residential' },
-      { label: getLabel('YEAR_RENT'), value: '67,000' },
+      { label: getLabel('TENANT_NO'), value: selectedLease?.tenant?.code || '98909897' },
+      { label: getLabel('PERIOD_FROM'), value: selectedLease?.dates?.start_date || '28/02/24' },
+      { label: getLabel('PERIOD_TO'), value: selectedLease?.dates?.end_date || '28/02/25' },
+      { label: getLabel('UNIT_TYPE'), value: selectedLease?.unit?.name || 'Residential' },
+      { label: getLabel('YEAR_RENT'), value: selectedLease?.financials?.rent || '67,000' },
       { label: getLabel('OTHER_CHARGESE'), value: '13,000' },
       { label: getLabel('VAT'), value: '--' },
-      { label: getLabel('TOTAL_RENT'), value: '1,00,000' }
+      { label: getLabel('TOTAL_RENT'), value: selectedLease?.financials?.annual_amount || '1,00,000' }
     ]"
     (back)="handleBackClick()"
     [showCloseBtn]="false"
