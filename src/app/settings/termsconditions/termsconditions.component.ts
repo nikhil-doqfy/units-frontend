@@ -6,6 +6,7 @@ import { EditIconComponent } from '../../user/component/icons/edit-icon/edit-ico
 import { BreadCrumb } from '../../shared/model/shared.model';
 import { SharedService } from '../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TermsConditionService } from '../../terms-condition.service';
 
 @Component({
   selector: 'app-termsconditions',
@@ -20,13 +21,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './termsconditions.component.css',
 })
 export class TermsconditionsComponent {
-  currentLanguage = 'en';
-  activeTab: string = 'login';
-
+  private termsCondition = inject(TermsConditionService);
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
+  currentLanguage = 'en';
+  activeTab: string = 'login';
+  terms: any;
   ngOnInit() {
     this.loadBreadcrumb();
+    this.getTerms();
   }
   showDetailView: boolean = false;
 
@@ -61,5 +64,13 @@ export class TermsconditionsComponent {
     this.sharedService
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
+  }
+
+  /*-----------TERMS & CONDITIONS----------------------------*/
+  getTerms() {
+    this.termsCondition.getTerms().subscribe((res: any) => {
+      console.log('Terms API:', res);
+      this.terms = res;
+    });
   }
 }

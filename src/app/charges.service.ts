@@ -28,11 +28,10 @@ export class ChargesService {
     );
   }
   /*----------------------Edit Charges---------------*/
-  editCharge(params: any): Observable<any> {
-    const queryString = this.sharedService.getQueryString(params);
+  editCharge(payload: any): Observable<any> {
     return this.http.put(
-      `${this.SERVER_ADDRESS}/charges/manage_charges/${queryString}`,
-      params,
+      `${this.SERVER_ADDRESS}/charges/manage_charges/${payload.charge_id}`,
+      payload,
     );
   }
   /*-----------Delete Charges------*/

@@ -1,7 +1,6 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
 import { CommonModule } from '@angular/common';
-import { TableTitleComponent } from '../../dashboard/component/table-title/table-title.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   FormArray,
@@ -16,7 +15,6 @@ import { DeleteIconComponent } from '../../dashboard/component/icons/delete-icon
 import { SaveIconComponent } from '../../icons/save-icon/save-icon.component';
 import { BreadCrumb } from '../../shared/model/shared.model';
 import { SharedService } from '../../shared.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChargesService } from '../../charges.service';
 export interface Charge {
   id?: number;
@@ -37,7 +35,6 @@ export interface Charge {
     WhiteCardComponent,
     CommonModule,
     TranslateModule,
-    CommonModule,
     FormsModule,
     PlusIconComponent,
     EditIconComponent,
@@ -49,8 +46,6 @@ export interface Charge {
   styleUrl: './charges.component.css',
 })
 export class ChargesComponent {
-  private destroyRef = inject(DestroyRef);
-  private translate = inject(TranslateService);
   private sharedService = inject(SharedService);
   private fb = inject(FormBuilder);
   private chargesService = inject(ChargesService);
@@ -68,13 +63,6 @@ export class ChargesComponent {
     this.getCharges();
   }
 
-  initLanguageListener() {
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.loadBreadcrumb();
-      });
-  }
   loadBreadcrumb() {
     if (this.showDetailView) {
       this.setBreadCrumb([
@@ -121,7 +109,6 @@ export class ChargesComponent {
       this.chargesArray.clear();
 
       data.forEach((c: any) => {
-        console.log(c.amount, c.tax_code);
         const mapped = {
           id: c.id,
           description: c.description,
@@ -159,9 +146,7 @@ export class ChargesComponent {
 
   saveRow(index?: number) {
     const formValue = this.chargesArray.value;
-    console.log(formValue);
     const newIndex = formValue.findIndex((c: any) => c.isNew);
-    console.log(newIndex);
     if (newIndex !== -1) {
       const payload = {
         description: formValue[newIndex]?.description,
@@ -169,7 +154,6 @@ export class ChargesComponent {
         tax_code: formValue[newIndex]?.tax_code,
       };
       this.showSave = false;
-      console.log(payload);
       this.chargesService.addCharge(payload).subscribe(() => {
         this.getCharges();
       });
@@ -179,6 +163,9 @@ export class ChargesComponent {
       const rowForm = this.chargesArray.at(index);
       const payload = {
         charge_id: rowForm.value.charge_id,
+        description: rowForm.value.description,
+        amount: rowForm.value.amount,
+        tax_code: rowForm.value.tax_code,
       };
 
       this.chargesService.editCharge(payload).subscribe(() => {
@@ -194,8 +181,6 @@ export class ChargesComponent {
       const payload = {
         charge_id: row.charge_id,
       };
-
-      console.log('Delete Payload:', payload);
 
       this.chargesService.deleteCharge(payload).subscribe(() => {
         this.getCharges();

@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Subject } from 'rxjs';
 
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
+import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -19,6 +20,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 
 import { OwnerService } from '../../services/owner.service';
 import { SharedService } from '../../../shared.service';
+import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component';
 
 @Component({
   selector: 'app-owner-detail',
@@ -26,6 +28,7 @@ import { SharedService } from '../../../shared.service';
   imports: [
     CommonModule,
     WhiteCardComponent,
+    TableViewCardComponent,
     TableTitleComponent,
     TableSearchComponent,
     TableFilterButtonComponent,
@@ -36,6 +39,7 @@ import { SharedService } from '../../../shared.service';
     TablePaginationComponent,
     TableSelectComponent,
     TableActionButtonComponent,
+    TenantDetailComponent,
   ],
   templateUrl: './owner-detail.component.html',
   styleUrl: './owner-detail.component.css',
@@ -58,6 +62,10 @@ export class OwnerDetailComponent implements OnInit {
   totalPages   = 1;
   rowsPerPageOptions = [10, 25, 50];
   componentName = 'OwnerDetailComponent';
+
+  // ── Tenant detail view ───────────────────────────
+  showTenantDetail = false;
+  selectedTenantLease: any = null;
 
   private searchSubject$ = new Subject<string>();
   private searchText = '';
@@ -139,6 +147,23 @@ export class OwnerDetailComponent implements OnInit {
   }
 
   goBack() { this.router.navigate(['/dashboard/owners']); }
+
+  viewProperty(prop: any) {
+    const id = prop.property_id || prop.id;
+    if (id) this.router.navigate(['/dashboard/properties', id]);
+  }
+
+  viewTenant(prop: any) {
+    const tenantId = prop.tenant_id;
+    if (!tenantId) return;
+    this.selectedTenantLease = { tenant: { id: tenantId } };
+    this.showTenantDetail = true;
+  }
+
+  onTenantDetailBack() {
+    this.showTenantDetail = false;
+    this.selectedTenantLease = null;
+  }
 
   viewContract(prop: any) {
     const url = prop.pdf_url;

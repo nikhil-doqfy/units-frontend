@@ -108,6 +108,7 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
     }
   }
   private updateChart() {
+    if (!this.chart) return;
     const values = this.data.map((d) => d.value);
     const categories = this.data.map((d) => d.name);
 
