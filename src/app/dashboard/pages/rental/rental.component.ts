@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, ɵEmptyOutletComponent } from '@angular/router';
+import { ActivatedRoute, ɵEmptyOutletComponent } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../../shared.service';
@@ -25,8 +25,11 @@ import { TableActionButtonComponent } from '../../component/table-action-btn/tab
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
-import { BreadCrumb } from '../../../shared/model/shared.model';
-import { RentalAccountService } from '../../rental-account.service';
+import { BreadCrumb, PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { LeaseService } from '../../services/lease.service';
+import { TenantsService } from '../../services/tenants.service';
+import { PropertyService } from '../../services/property.service';
+import { Subject, debounceTime } from 'rxjs';
 import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
 import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
 import { PropertyAnalyticsComponent } from '../../component/property-analytics/property-analytics.component';
@@ -40,6 +43,7 @@ import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.c
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { StatusActionDropdownComponent } from '../../../status-action-dropdown/status-action-dropdown.component';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component';
 
 @Component({
   selector: 'app-rental',
@@ -74,6 +78,7 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
     ArrowDownIconComponent,
     StatusActionDropdownComponent,
     NgbPopoverModule,
+    TenantDetailComponent,
   ],
   templateUrl: './rental.component.html',
   styleUrl: './rental.component.css',
@@ -82,7 +87,9 @@ export class RentalComponent {
   private sharedService = inject(SharedService);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
-  private rentalAccountService = inject(RentalAccountService);
+  private leaseService         = inject(LeaseService);
+  private tenantsService       = inject(TenantsService);
+  private propertyService      = inject(PropertyService);
   showNavBar: boolean = true;
 
   @Input() data: any;
@@ -106,12 +113,35 @@ export class RentalComponent {
   rowsPerPage = 10;
   currentPage = 1;
 
-  chartData = [
-    380000, 350000, 310000, 380000, 300000, 350000, 370000, 420000, 280000,
-    340000, 410000, 230000,
-  ];
+  // ── Cheque chart & summary ────────────────────────────────────────
+  selectedYear = String(new Date().getFullYear());
+  yearOptions  = Array.from({ length: 6 }, (_, i) => {
+    const y = String(new Date().getFullYear() - i);
+    return { key: y, value: y };
+  });
 
-  leases = [
+  private static readonly MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  chartData: { name: string; value: number }[] = RentalComponent.MONTHS.map(m => ({ name: m, value: 0 }));
+
+  summaryAmountReceived  = '—';
+  summaryChequesApproved = '—';
+  summaryChequesDeposited = '—';
+  summaryCountApproved   = '—';
+  summaryCountDeposited  = '—';
+
+  // ── Rent Amounts filters ──────────────────────────────────────────
+  rentalPropertyOptions: { key: string; value: string }[] = [];
+  rentalBlockOptions:    { key: string; value: string }[] = [];
+  rentalUnitOptions:     { key: string; value: string }[] = [];
+
+  rentalFilterPropertyId = '';
+  rentalFilterBlockId    = '';
+  rentalFilterUnitId     = '';
+
+  private rentalSearchSubject$ = new Subject<string>();
+  private rentalSearchText     = '';
+
+  leases: any[] = [
     {
       title: 'Lease Agreement - A Wing',
       leaseNo: 'L-1001',
@@ -127,7 +157,6 @@ export class RentalComponent {
     },
   ];
   constructor(
-    private router: Router,
     private destroyRef: DestroyRef,
     private themeService: ThemeService,
   ) {
@@ -140,14 +169,22 @@ export class RentalComponent {
   }
   ngOnInit() {
     this.loadBreadcrumb();
-
     this.sharedService.initLanguage();
-
     this.initLanguageListener();
     this.initCurrentRoleListener();
     this.sharedService.initLanguage();
     this.initLanguageListener();
+    this.loadRentalFilterOptions();
     this.getLeases();
+    this.loadChequeSummary();
+    this.loadChequeMonthly();
+    this.rentalSearchSubject$
+      .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
+      .subscribe(text => {
+        this.rentalSearchText = text.trim();
+        this.currentPage = 1;
+        this.getLeases();
+      });
   }
   onPropertyDetailToggle(flag: boolean) {
     this.showNavBar = flag;
@@ -187,127 +224,175 @@ export class RentalComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  // leases: any[] = [];
-
-  totalAmount = 'AED 2,000.00';
+  totalAmount    = 'AED 2,000.00';
   receivedAmount = 'AED 1,200.00';
-  pendingAmount = 'AED 800.00';
+  pendingAmount  = 'AED 800.00';
+
   getLeases() {
-    const params = {
-      page: this.currentPage,
-      limit: this.rowsPerPage,
+    const params: Record<string, any> = {
+      tab:       'all',
+      page:      this.currentPage,
+      page_size: this.rowsPerPage,
     };
+    if (this.rentalSearchText)      params['search']      = this.rentalSearchText;
+    if (this.rentalFilterPropertyId) params['property_id'] = this.rentalFilterPropertyId;
+    if (this.rentalFilterBlockId)    params['block_id']    = this.rentalFilterBlockId;
+    if (this.rentalFilterUnitId)     params['unit_id']     = this.rentalFilterUnitId;
 
-    this.rentalAccountService.getOwnerRentAmounts(params).subscribe({
-      next: (res) => {
-        this.leases = res.content.map((item: any) => ({
-          title: `${item.property_name} - ${item.room_no}`,
-          leaseNo: item.lease_no,
-          status: item.lease_status,
-          tenantNo: item.tenant_no ?? '-',
-          // from: this.formatDate(item.period_from),
-          // to: this.formatDate(item.period_to),
-          unitType: item.unit_type,
-          yearRent: item.year_rent,
-          otherCharges: item.other_charges,
-          vat: item.vat,
-          total: item.total_rent,
-        }));
+    this.tenantsService.getTenantsByTab(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          this.leases       = res?.content ?? [];
+          this.totalRecords = res?.pagination?.total_records ?? this.leases.length;
+        },
+      });
+  }
 
-        this.totalRecords = res.total_records ?? this.leases.length;
-      },
-    });
+  loadRentalFilterOptions() {
+    this.propertyService.getProperties({ page: 1, page_size: 200 })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.rentalPropertyOptions = (resp?.content || []).map((p: any) => ({
+            key: String(p.id), value: p.property_name,
+          }));
+        },
+      });
+  }
+
+  onRentalPropertySelected(option: any) {
+    this.rentalFilterPropertyId = option?.key ?? '';
+    this.rentalFilterBlockId    = '';
+    this.rentalFilterUnitId     = '';
+    this.rentalBlockOptions     = [];
+    this.rentalUnitOptions      = [];
+    this.currentPage            = 1;
+    this.getLeases();
+
+    if (this.rentalFilterPropertyId) {
+      this.propertyService.getPropertyBlocks({ property_id: this.rentalFilterPropertyId })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (resp: any) => {
+            this.rentalBlockOptions = (resp?.content || []).map((b: any) => ({
+              key: String(b.id), value: b.block_name,
+            }));
+          },
+        });
+    }
+  }
+
+  onRentalBlockSelected(option: any) {
+    this.rentalFilterBlockId = option?.key ?? '';
+    this.rentalFilterUnitId  = '';
+    this.rentalUnitOptions   = [];
+    this.currentPage         = 1;
+    this.getLeases();
+
+    if (this.rentalFilterBlockId) {
+      this.propertyService.getUnits({ property_block_tower_id: this.rentalFilterBlockId, page: 1, page_size: 200 })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (resp: any) => {
+            this.rentalUnitOptions = (resp?.content || []).map((u: any) => ({
+              key: String(u.id), value: u.unit_name || u.code,
+            }));
+          },
+        });
+    }
+  }
+
+  onRentalUnitSelected(option: any) {
+    this.rentalFilterUnitId = option?.key ?? '';
+    this.currentPage        = 1;
+    this.getLeases();
+  }
+
+  get hasRentalFilter(): boolean {
+    return !!(this.rentalFilterPropertyId || this.rentalFilterBlockId || this.rentalFilterUnitId || this.rentalSearchText);
+  }
+
+  clearRentalFilters() {
+    this.rentalFilterPropertyId = '';
+    this.rentalFilterBlockId    = '';
+    this.rentalFilterUnitId     = '';
+    this.rentalSearchText       = '';
+    this.rentalBlockOptions     = [];
+    this.rentalUnitOptions      = [];
+    this.currentPage            = 1;
+    this.getLeases();
+  }
+
+  onRentalSearch(text: string) {
+    this.rentalSearchSubject$.next(text);
+  }
+
+  onRefresh() {
+    this.currentPage = 1;
+    this.getLeases();
+  }
+
+  onPageSizeChange(event: PageSizeChange) {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.getLeases();
+  }
+
+  onPageChange(event: PageChange) {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.getLeases();
+  }
+
+  loadChequeSummary() {
+    this.leaseService.getChequeSummary({ year: this.selectedYear })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const s = resp?.content;
+          if (!s) return;
+          const fmt = (n: number) => `AED ${n.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+          this.summaryAmountReceived   = fmt(s['total']?.amount    ?? 0);
+          this.summaryChequesApproved  = fmt(s['credited']?.amount ?? 0);
+          this.summaryChequesDeposited = fmt(s['realized']?.amount ?? 0);
+          this.summaryCountApproved    = String(s['credited']?.count ?? 0);
+          this.summaryCountDeposited   = String(s['realized']?.count ?? 0);
+        },
+      });
+  }
+
+  loadChequeMonthly() {
+    this.leaseService.getChequeMonthly({ year: this.selectedYear })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const rows: { month: string; amount: number }[] = resp?.content ?? [];
+          this.chartData = RentalComponent.MONTHS.map(m => {
+            const found = rows.find(r => r.month === m);
+            return { name: m, value: found ? found.amount : 0 };
+          });
+        },
+      });
+  }
+
+  onYearSelected(option: any) {
+    this.selectedYear = option?.key ?? String(new Date().getFullYear());
+    this.loadChequeSummary();
+    this.loadChequeMonthly();
   }
 
   onLeaseClick(lease: any) {
     this.selectedLease = lease;
     this.showDetailView = true;
-    this.showInvoiceDetails = false;
   }
 
-  toggleMenu() {
-    this.showMenu = !this.showMenu;
+  searchTextChange(text: string) {
+    this.rentalSearchSubject$.next(text);
   }
-  toAddRenatlAcc() {
-    this.router.navigate(['/dashboard/add-rentalaccount']);
-  }
-
-  onMonthChange(month: string) {
-    this.selectedMonth = month;
-  }
-  handlePreviewClick() {
-    this.router.navigate(['/dashboard/invoice-template']);
-  }
-  onOptionSelected(option: string) {
-    this.selected = option;
-  }
-
-  searchTextChange(event: string) {
-    throw new Error('Method not implemented.');
-  }
-  handleEditClick(): void {
-    console.log('Edit button clicked');
-  }
-
-  handleExportClick(): void {}
 
   handleBackClick(): void {
     this.showDetailView = false;
-    this.router.navigate(['/dashboard/rental']);
-  }
-
-  onRefresh() {
-    throw new Error('Method not implemented.');
-  }
-  handleDownloadDocumentClick(): void {
-    console.log('Download Document button clicked');
-  }
-
-  handlePreviewDocumentClick(): void {
-    console.log('Preview Document button clicked');
-  }
-
-  showInvoiceDetails = false;
-  onViewInvoiceClick(lease: any, event: Event) {
-    event.preventDefault();
-    this.selectedLease = lease;
-    this.showInvoiceDetails = true;
-    console.log('Invoice Details for:', lease);
-  }
-  handleDownload(type: string) {
-    console.log('Download:', type);
-    // API call / file generate logic
-  }
-  handleShare(type: string) {
-    console.log('Share:', type);
-  }
-  showDropdown = false;
-
-  selectedq: any = {
-    label: 'Amount Credited',
-    status: 'green',
-  };
-
-  toggleDropdown() {
-    this.showDropdown = !this.showDropdown;
-  }
-
-  onStatusSelect(item: any) {
-    this.selected = item;
-    this.showDropdown = false;
-  }
-
-  showReceiptDropdown = false;
-  showMonthDropdown = false;
-  selectedReceiptType = '';
-
-  toggleReceipt() {
-    this.showReceiptDropdown = !this.showReceiptDropdown;
-    this.showMonthDropdown = false;
-  }
-
-  selectReceiptType(type: string) {
-    this.selectedReceiptType = type;
-    this.showMonthDropdown = true;
   }
 }

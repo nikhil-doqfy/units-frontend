@@ -4,12 +4,26 @@
   border-radius: 12px;
   padding: 16px;
   height: 84px;
+  overflow: visible;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
   cursor: pointer;
   transition:
     box-shadow 0.3s ease,
     transform 0.3s ease;
+}
+
+.metrics-header {
+  position: relative;
+  z-index: 1000;
+}
+
+:host ::ng-deep .metrics-header .customSelect.show {
+  z-index: 1001;
+}
+
+:host ::ng-deep .metrics-header .customSelect.show .customSelectDropdown {
+  z-index: 1002;
 }
 
 .rent-card:hover {

@@ -1,3 +1,14 @@
+<!-- Tenant Detail View -->
+@if (showTenantDetail) {
+  <app-tenant-detail
+    [selectedLease]="selectedTenantLease"
+    (back)="onTenantDetailBack()"
+    (close)="onTenantDetailBack()"
+  />
+}
+
+@if (!showTenantDetail) {
+
 <!-- Loading -->
 <div *ngIf="loading()" class="text-center py-5">
   <div class="spinner-border text-primary" role="status"></div>
@@ -6,61 +17,24 @@
 <ng-container *ngIf="!loading()">
 
   <!-- ── Owner Profile Card ─────────────────────────────── -->
-  <app-white-card class="mb-3">
-    <div class="owner-profile">
-
-      <!-- Back button -->
-      <button class="tdBackBtn" (click)="goBack()">
-        <span class="tdBackArrow">←</span> Back
-      </button>
-
-      <!-- Avatar + name -->
-      <div class="profile-top">
-        <div class="tdAvatar">
-          <img *ngIf="owner?.profile_image" [src]="owner.profile_image" [alt]="owner?.name" />
-          <span *ngIf="!owner?.profile_image">{{ initial }}</span>
-        </div>
-        <div class="profile-info">
-          <h4 class="tdTitle">{{ owner?.name || (owner?.first_name + ' ' + owner?.last_name) }}</h4>
-          <p class="profile-meta" *ngIf="owner?.contact_number">
-            Contact: <strong>{{ owner?.contact_number }}</strong>
-          </p>
-          <p class="profile-meta" *ngIf="owner?.email">
-            Email: <strong>{{ owner?.email }}</strong>
-          </p>
-        </div>
-      </div>
-
-      <!-- Info strip -->
-      <div class="tdInfoStrip">
-        <div class="tdInfoItem">
-          <span class="tdInfoLabel">Emirates ID</span>
-          <span class="tdInfoValue">{{ owner?.emirates_id || '—' }}</span>
-        </div>
-        <div class="tdInfoDivider"></div>
-        <div class="tdInfoItem">
-          <span class="tdInfoLabel">Residence Visa</span>
-          <span class="tdInfoValue">{{ owner?.visa_number || '—' }}</span>
-        </div>
-        <div class="tdInfoDivider"></div>
-        <div class="tdInfoItem">
-          <span class="tdInfoLabel">Trade License</span>
-          <span class="tdInfoValue">{{ owner?.trade_license_number || '—' }}</span>
-        </div>
-        <div class="tdInfoDivider"></div>
-        <div class="tdInfoItem">
-          <span class="tdInfoLabel">Owner Code</span>
-          <span class="tdInfoValue tdInfoValueBold">{{ owner?.code || owner?.owner_number || '—' }}</span>
-        </div>
-        <div class="tdInfoDivider"></div>
-        <div class="tdInfoItem tdInfoItemLast">
-          <span class="tdInfoLabel">Role</span>
-          <span class="tdInfoValue"><span class="role-badge">Owner</span></span>
-        </div>
-      </div>
-
-    </div>
-  </app-white-card>
+  <app-table-view-card
+    class="mb-3"
+    [title]="owner?.name || ((owner?.first_name || '') + ' ' + (owner?.last_name || '')).trim()"
+    [imgSrc]="owner?.profile_image || ''"
+    [headerItems]="[
+      { label: 'Contact', value: owner?.contact_number || '' },
+      { label: 'Email',   value: owner?.email || '' }
+    ]"
+    [items]="[
+      { label: 'Emirates ID',    value: owner?.emirates_id || '—' },
+      { label: 'Residence Visa', value: owner?.visa_number || '—' },
+      { label: 'Trade License',  value: owner?.trade_license_number || '—' },
+      { label: 'Owner Code',     value: owner?.code || owner?.owner_number || '—' },
+      { label: 'Role',           value: 'Owner' }
+    ]"
+    [showCloseBtn]="false"
+    (back)="goBack()"
+  />
 
   <!-- ── Owner Properties Table ────────────────────────── -->
   <div class="cmmnTblOuter mt-3">
@@ -109,7 +83,7 @@
               @for (prop of properties; track $index) {
               <tr>
                 <td class="fw-500">{{ prop.code || prop.property_unit_id || '—' }}</td>
-                <td>
+                <td style="cursor:pointer" (click)="viewProperty(prop)">
                   <app-table-img-item
                     [img]="prop.property_image || prop.thumbnail || '../../../../assets/property/property-img-default.svg'"
                     [title]="prop.property_name || prop.name || '—'"
@@ -118,11 +92,13 @@
                 </td>
                 <td>
                   <ng-container *ngIf="prop.tenant_name; else noTenant">
-                    <app-table-img-item
-                      [img]="prop.tenant_profile_image || ''"
-                      [title]="prop.tenant_name"
-                      size="md"
-                      [showInitialsFallback]="true" />
+                    <span style="cursor:pointer" (click)="viewTenant(prop)">
+                      <app-table-img-item
+                        [img]="prop.tenant_profile_image || ''"
+                        [title]="prop.tenant_name"
+                        size="md"
+                        [showInitialsFallback]="true" />
+                    </span>
                   </ng-container>
                   <ng-template #noTenant>
                     <span class="text-muted">N/A</span>
@@ -178,3 +154,5 @@
   </div>
 
 </ng-container>
+
+} <!-- end @if (!showTenantDetail) -->
