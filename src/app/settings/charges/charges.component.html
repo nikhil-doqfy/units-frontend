@@ -58,36 +58,31 @@
                     {{ c.value.description }}
                   </span>
                 </td>
-
                 <td>
-                  <ng-container>
-                    <input
-                      *ngIf="c.value.isEdit || c.value.isNew"
-                      class="inline-input"
-                      type="number"
-                      placeholder="Enter here"
-                      formControlName="amount"
-                      (input)="calculateTotal(i)"
-                    />
-                  </ng-container>
+                  <input
+                    *ngIf="c.value.isEdit || c.value.isNew"
+                    class="inline-input"
+                    type="number"
+                    placeholder="Enter here"
+                    formControlName="amount"
+                  />
 
-                  <ng-template *ngIf="!c.value.isEdit && !c.value.isNew">
+                  <span *ngIf="!c.value.isEdit && !c.value.isNew">
                     {{ c.value.amount | number: "1.2-2" }}
-                  </ng-template>
+                  </span>
                 </td>
 
                 <td>
                   <input
                     *ngIf="c.value.isEdit || c.value.isNew"
-                    formControlName="tax"
                     class="inline-input"
                     placeholder="Enter here"
                     formControlName="tax_code"
                   />
 
-                  <ng-template *ngIf="!c.value.isEdit && !c.value.isNew">
+                  <span *ngIf="!c.value.isEdit && !c.value.isNew">
                     {{ c.value.tax_code }}
-                  </ng-template>
+                  </span>
                 </td>
 
                 <td>
@@ -97,7 +92,6 @@
                     type="number"
                     placeholder="Enter here"
                     formControlName="vat"
-                    (input)="calculateTotal(i)"
                   />
 
                   <span *ngIf="!c.value.isEdit && !c.value.isNew">
@@ -110,7 +104,7 @@
                     <input
                       class="form-check-input"
                       type="checkbox"
-                      formControlName="editable"
+                      formControlName="is_editable"
                     />
                   </div>
                 </td>

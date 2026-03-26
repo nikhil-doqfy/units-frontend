@@ -32,13 +32,16 @@ export class ChargesService {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.put(
       `${this.SERVER_ADDRESS}/charges/manage_charges/${queryString}`,
-      { params: params },
+      params,
     );
   }
   /*-----------Delete Charges------*/
-  deleteCharge(id: number): Observable<any> {
+  deleteCharge(params: any): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+
     return this.http.delete(
-      `${this.SERVER_ADDRESS}/charges/manage_charges/${id}`,
+      `${this.SERVER_ADDRESS}/charges/manage_charges/${queryString}`,
+      params,
     );
   }
 }

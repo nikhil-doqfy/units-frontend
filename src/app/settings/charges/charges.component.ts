@@ -65,6 +65,7 @@ export class ChargesComponent {
       charges: this.fb.array([]),
     });
     this.loadBreadcrumb();
+    this.getCharges();
   }
 
   initLanguageListener() {
@@ -103,10 +104,10 @@ export class ChargesComponent {
   createChargeForm(c?: any): FormGroup {
     return this.fb.group({
       charge_id: [c?.charge_id || c?.id || null],
-      description: [c?.label || ''],
+      description: [c?.description || ''],
       amount: [c?.amount || 0],
-      tax_code: [c?.tax || ''],
-      vat: [c?.vat || 0],
+      tax_code: [c?.tax_code || ''],
+      vat: [c?.vat_amount || 0],
       is_editable: [c?.editable || false],
       total: [c?.total || 0],
       isNew: [c?.isNew || false],
@@ -120,11 +121,21 @@ export class ChargesComponent {
       this.chargesArray.clear();
 
       data.forEach((c: any) => {
-        this.chargesArray.push(this.createChargeForm(c));
+        console.log(c.amount, c.tax_code);
+        const mapped = {
+          id: c.id,
+          description: c.description,
+          amount: c.amount,
+          tax_code: c.tax_code,
+          vat_amount: c.vat,
+          total: c.total_amount,
+          editable: c.is_editable,
+        };
+
+        this.chargesArray.push(this.createChargeForm(mapped));
       });
     });
   }
-
   addNewRow() {
     const hasNew = this.chargesArray.value.some((c: any) => c.isNew);
 
@@ -146,17 +157,6 @@ export class ChargesComponent {
     this.showSave = false;
   }
 
-  calculateTotal(index: number) {
-    const group = this.chargesArray.at(index);
-
-    const amount = group.get('amount')?.value || 0;
-    const vat = group.get('vat')?.value || 0;
-
-    group.patchValue({
-      total: amount + vat,
-    });
-  }
-
   saveRow(index?: number) {
     const formValue = this.chargesArray.value;
     console.log(formValue);
@@ -176,19 +176,28 @@ export class ChargesComponent {
     }
 
     if (index !== undefined) {
-      const row = this.chargesArray.at(index).value;
+      const rowForm = this.chargesArray.at(index);
+      const payload = {
+        charge_id: rowForm.value.charge_id,
+      };
 
-      this.chargesService.editCharge(row.charge_id).subscribe(() => {
-        this.chargesArray.at(index).patchValue({ isEdit: false });
+      this.chargesService.editCharge(payload).subscribe(() => {
+        rowForm.patchValue({ isEdit: false });
+        this.getCharges();
       });
     }
   }
-
   deleteRow(index: number) {
-    const row = this.chargesArray.at(index).value;
+    const row = this.chargesArray.at(index)?.value;
 
-    if (row.id) {
-      this.chargesService.deleteCharge(row.id).subscribe(() => {
+    if (row?.charge_id) {
+      const payload = {
+        charge_id: row.charge_id,
+      };
+
+      console.log('Delete Payload:', payload);
+
+      this.chargesService.deleteCharge(payload).subscribe(() => {
         this.getCharges();
       });
     } else {
