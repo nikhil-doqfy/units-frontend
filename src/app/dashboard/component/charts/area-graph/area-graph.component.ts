@@ -1,6 +1,12 @@
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { Component, ViewChild } from '@angular/core';
-
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -25,6 +31,14 @@ export type ChartOptions = {
   stroke?: any;
   markers?: any;
 };
+
+export interface AreaGraphData {
+  month: string;
+  amount_received: number;
+  cheque_bounce: number;
+  total_amount: number;
+}
+
 @Component({
   selector: 'app-area-graph',
   standalone: true,
@@ -32,201 +46,75 @@ export type ChartOptions = {
   templateUrl: './area-graph.component.html',
   styleUrl: './area-graph.component.css',
 })
-export class AreaGraphComponent {
-  // @ViewChild('chart') chart!: ChartComponent;
-  // public chartOptions: ChartOptions = {} as ChartOptions;
+export class AreaGraphComponent implements OnChanges, AfterViewInit {
+  @Input() data: AreaGraphData[] = [];
 
-  // constructor() {
-  //   const baseDate = new Date('01 Jan 2024');
-
-  //   this.chartOptions = {
-  //     series: [
-  //       {
-  //         name: 'Amount Received',
-  //         data: this.generateMonthlyData(12, {
-  //           min: 500000,
-  //           max: 1000000,
-  //         }),
-  //       },
-  //       {
-  //         name: 'Cheque Bounce',
-  //         data: this.generateMonthlyData(12, {
-  //           min: 50000,
-  //           max: 200000,
-  //         }),
-  //       },
-  //       {
-  //         name: 'Total Amount',
-  //         data: this.generateMonthlyData(12, {
-  //           min: 600000,
-  //           max: 1200000,
-  //         }),
-  //       },
-  //     ],
-
-  //     chart: {
-  //       type: 'area',
-  //       height: 350,
-  //       stacked: false,
-  //     },
-  //     colors: ['#00E396', '#FF4560', '#008FFB'],
-  //     dataLabels: {
-  //       enabled: false,
-  //     },
-  //     fill: {
-  //       type: 'gradient',
-  //       gradient: {
-  //         shadeIntensity: 1,
-  //         opacityFrom: 0.7,
-  //         opacityTo: 0.1,
-  //         stops: [0, 90, 100],
-  //       },
-  //     },
-  //     stroke: {
-  //       curve: 'smooth',
-  //       width: 3,
-  //     },
-  //     legend: {
-  //       position: 'top',
-  //       horizontalAlign: 'center',
-  //       markers: {
-  //         shape: 'square',
-  //       },
-  //     },
-  //     xaxis: {
-  //       categories: [
-  //         'Jan',
-  //         'Feb',
-  //         'Mar',
-  //         'Apr',
-  //         'May',
-  //         'Jun',
-  //         'Jul',
-  //         'Aug',
-  //         'Sep',
-  //         'Oct',
-  //         'Nov',
-  //         'Dec',
-  //       ],
-  //     },
-  //     yaxis: {
-  //       min: 0,
-  //       labels: {
-  //         formatter: (val: number) => {
-  //           if (val === undefined || val === null) return '';
-  //           return `AED ${val.toLocaleString('en-IN')}`;
-  //         },
-  //       },
-  //     },
-  //   };
-  // }
-
-  // generateMonthlyData(
-  //   count: number,
-  //   yrange: { min: number; max: number },
-  // ): number[] {
-  //   let series: number[] = [];
-
-  //   for (let i = 0; i < count; i++) {
-  //     let y =
-  //       Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-
-  //     series.push(y);
-  //   }
-
-  //   return series;
-  // }
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions: ChartOptions = {} as ChartOptions;
 
-  constructor() {
-    this.chartOptions = {
+  private viewReady = false;
+
+  private static readonly MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  public chartOptions: ChartOptions = this.buildOptions([], []);
+
+  ngAfterViewInit() {
+    this.viewReady = true;
+    if (this.data?.length) this.applyToChart();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data'] && this.data?.length) {
+      const received = this.data.map(d => d.amount_received);
+      const total    = this.data.map(d => d.total_amount);
+      this.chartOptions = this.buildOptions(received, total);
+      if (this.viewReady) this.applyToChart();
+    }
+  }
+
+  private applyToChart() {
+    if (!this.chart) return;
+    this.chart.updateSeries([
+      { name: 'Amount Received', data: this.data.map(d => d.amount_received) },
+      { name: 'Total Amount',    data: this.data.map(d => d.total_amount) },
+    ]);
+  }
+
+  private buildOptions(received: number[], total: number[]): ChartOptions {
+    return {
       series: [
-        {
-          name: 'Amount Received',
-          data: this.generateData(12, 500000, 1000000),
-        },
-        {
-          name: 'Cheque Bounce',
-          data: this.generateData(12, 50000, 200000),
-        },
-        {
-          name: 'Total Amount',
-          data: this.generateData(12, 600000, 1200000),
-        },
+        { name: 'Amount Received', data: received },
+        { name: 'Total Amount',    data: total },
       ],
-
-      chart: {
-        type: 'area',
-        height: 350,
-        stacked: false,
-      },
-
-      colors: ['#00E396', '#FF4560', '#008FFB'],
-
-      dataLabels: {
-        enabled: false,
-      },
-
-      stroke: {
-        curve: 'smooth',
-        width: 3,
-      },
-
-      markers: {
-        size: 4,
-      },
-
+      chart: { type: 'area', height: 350, stacked: false, toolbar: { show: false }, zoom: { enabled: false } },
+      colors: ['#43A047', '#FF7043'],
+      dataLabels: { enabled: false },
+      stroke: { curve: 'smooth', width: 2 },
+      markers: { size: 3 },
       fill: {
         type: 'gradient',
         gradient: {
           shadeIntensity: 1,
-          opacityFrom: 0.3,
-          opacityTo: 0.05,
-          stops: [0, 90, 100],
+          opacityFrom: 0.65,
+          opacityTo: 0.08,
+          stops: [0, 85, 100],
         },
       },
-
       legend: {
         position: 'top',
         horizontalAlign: 'center',
+        markers: { shape: 'square' } as any,
       },
-
-      xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-      },
-
+      xaxis: { categories: AreaGraphComponent.MONTHS },
       yaxis: {
-        min: 100000,
+        min: 0,
         forceNiceScale: true,
         floating: false,
         labels: {
-          formatter: (val: number) => {
-            return `AED ${val.toLocaleString('en-IN')}`;
-          },
+          formatter: (val: number) => 'AED ' + val.toLocaleString('en-IN'),
         },
+        axisBorder: { show: false },
+        axisTicks:  { show: false },
       },
     };
-  }
-
-  generateData(count: number, min: number, max: number): number[] {
-    let arr: number[] = [];
-    for (let i = 0; i < count; i++) {
-      arr.push(Math.floor(Math.random() * (max - min + 1)) + min);
-    }
-    return arr;
   }
 }

@@ -97,37 +97,41 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
   //     };
   //   }
 
+  private viewReady = false;
+
   ngAfterViewInit() {
+    this.viewReady = true;
     if (this.data?.length) {
-      this.updateChart();
+      this.applyToChart();
     }
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data?.length) {
-      this.updateChart();
+      const values     = this.data.map((d) => d.value);
+      const categories = this.data.map((d) => d.name);
+
+      // Always update bound options so the chart renders correctly on first paint
+      this.chartOptions = {
+        ...this.chartOptions,
+        series: [{ name: 'My-series', data: values }],
+        xaxis:  { ...this.chartOptions.xaxis, categories },
+      };
+
+      // Also call the imperative API if the chart instance is already mounted
+      if (this.viewReady) {
+        this.applyToChart();
+      }
     }
   }
-  private updateChart() {
+
+  private applyToChart() {
     if (!this.chart) return;
-    const values = this.data.map((d) => d.value);
+    const values     = this.data.map((d) => d.value);
     const categories = this.data.map((d) => d.name);
 
-    this.chart.updateSeries([
-      {
-        name: 'My-series',
-        data: values,
-      },
-    ]);
-
-    this.chart.updateOptions(
-      {
-        xaxis: {
-          categories,
-        },
-      },
-
-      true,
-    );
+    this.chart.updateSeries([{ name: 'My-series', data: values }]);
+    this.chart.updateOptions({ xaxis: { categories } }, true);
   }
 
   // ngOnChanges(changes: SimpleChanges): void {

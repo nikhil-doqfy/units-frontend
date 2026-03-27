@@ -60,23 +60,70 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   STATUS BADGE COLORS (transactions table)
+   TRANSACTIONS TABLE — matches tenants-table style
    ══════════════════════════════════════════════════════════════════ */
-:host ::ng-deep .status-black app-status-action-dropdown {
-  background: #f97316;
-  border-radius: 8px;
-  display: inline-block;
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-:host ::ng-deep .status-green app-status-action-dropdown {
-  background: #16a34a;
-  border-radius: 8px;
-  display: inline-block;
+.table-responsive::-webkit-scrollbar {
+  display: none;
 }
-:host ::ng-deep .status-grey app-status-action-dropdown {
-  background: #6b7280;
-  border-radius: 8px;
-  display: inline-block;
+
+.tenants-table thead tr th:last-child,
+.tenants-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 110px;
 }
+.tenants-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg);
+  box-shadow: none;
+}
+.tenants-table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+.tenants-table td:last-child,
+.tenants-table th:last-child {
+  position: relative;
+}
+
+.tenants-table td:last-child::before,
+.tenants-table th:last-child::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.05),
+    transparent
+  );
+}
+
+/* ── Status badges ───────────────────────────────────────────── */
+.statusBadge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-active   { background: #d1fae5; color: #065f46; }
+.badge-draft    { background: #e0f2fe; color: #0369a1; }
+.badge-inactive { background: #fef9c3; color: #854d0e; }
+.badge-expired  { background: #fee2e2; color: #991b1b; }
+.badge-rejected { background: #ffe4e6; color: #9f1239; }
 
 /* White text inside status badges */
 :host ::ng-deep .status-black app-status-action-dropdown .statusText,
