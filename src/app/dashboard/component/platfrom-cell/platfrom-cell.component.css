@@ -26,16 +26,16 @@
 }
 
 .icon.red {
-  background: #f25c54;
+  background: var(--iconRedBg);
 }
 
 .icon.green {
-  background: #22c55e;
+  background: var(--iconGreenBg);
 }
 
 .icon.blue {
-  background: #e0efff;
-  color: #2563eb;
+  background: var(--iconBlueBg);
+  color: var(--iconBlueText);
 }
 
 .list-property {
@@ -43,7 +43,7 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: #2563eb;
+  color: var(--linkText);
   cursor: pointer;
 }
 
@@ -52,10 +52,10 @@
   left: -190px;
   bottom: 40px;
   width: 220px;
-  background: #fff;
+  background: var(--whiteBg);
   border-radius: 14px;
   padding: 14px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 30px var(--popupShadow);
   z-index: 100;
 }
 
@@ -78,9 +78,9 @@
 
 .share-btn {
   margin-top: 10px;
-  background: linear-gradient(135deg, #2563eb, #0ea5e9);
+  background: var(--shareBtnGradient);
   border: none;
-  color: #fff;
+  color: var(--whiteText);
   border-radius: 10px;
   padding: 10px;
   display: flex;

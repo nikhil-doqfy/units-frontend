@@ -98,6 +98,274 @@
   --scrollbarTrack: #f5f5f5;
   --scrollbarThumb: #d9d9d9;
   --scrollbarThumbHover: #84b3dc;
+  --primaryRed: #e53935;
+  --yellowColor: #fbc02d;
+  --greenColor: #43a047;
+  --borderLight: #dee2e6;
+  --infoLightBg: #e7f1ff;
+  --accordionActiveBg: #d6e9ff;
+  --accordionFocusBorder: #0d6efd;
+  --whiteBg: #ffffff;
+
+  --shadowLight: rgba(190, 187, 187, 0.8);
+  --shadowDark: rgba(0, 0, 0, 0.1);
+  --shadowHover: rgba(0, 0, 0, 0.15);
+  --btnBg: #f3f4f6;
+  --btnBorder: #e2e2e2;
+
+  --dropdownBg: #ffffff;
+  --dropdownShadow: rgba(0, 0, 0, 0.15);
+
+  --hoverBg: #f3f4f6;
+
+  --gradientStart: #9333ea;
+  --gradientEnd: #3b82f6;
+
+  --whiteText: #ffffff;
+  --borderLight: #e5e7eb;
+  --whiteBg: #ffffff;
+  --blackBorder: #000000;
+
+  --shadowSoft: rgba(0, 0, 0, 0.12);
+
+  --gradientShadowStart: rgba(0, 0, 0, 0.12);
+  --gradientShadowMid: rgba(0, 0, 0, 0.05);
+  --shadowLeft: rgba(0, 0, 0, 0.06);
+
+  --iconColor: #6b7280;
+  --iconHoverColor: #2563eb;
+
+  --gradientShadowStart: rgba(0, 0, 0, 0.12);
+  --gradientShadowMid: rgba(0, 0, 0, 0.05);
+  --greenLightBg: #e8f5e9;
+  --redLightBg: #ffebee;
+  --blueLightBg: #e3f2fd;
+  --orangeLightBg: #fff3e0;
+  --yellowLightBg: #fffde7;
+
+  /* Status Colors */
+  --completedColor: #2e7d32;
+  --inProgressColor: #fb8c00;
+  --assignedColor: #2979ff;
+  --rejectedColor: #d32f2f;
+  --gradientShadowStart: rgba(0, 0, 0, 0.12);
+  --gradientShadowMid: rgba(0, 0, 0, 0.05);
+
+  --shadowRight: rgba(0, 0, 0, 0.06);
+  --addBtnHoverBg: #d6edfb;
+
+  --orangeColor: #ff6500;
+  --orangeLightBg: #fff8ec;
+  --whiteText: #ffffff;
+
+  /* Status Colors */
+  --successBg: #28a745;
+  --warningBg: #f39c12;
+
+  /* Text Colors */
+  --textPrimary: #333333;
+  --textSecondary: #777777;
+
+  /* Icon Color */
+  --warningIcon: #f39c12;
+
+  /* Text Colors */
+  --textPrimary: #1f2937;
+  --textSecondary: #6b7280;
+  --textDark: #444444;
+  --textBlack: #111827;
+  --textMuted: #4b5563;
+
+  /* Borders */
+  --borderLight: #eeeeee;
+  --borderLighter: #f0f0f0;
+  --borderDark: #000000;
+
+  /* Backgrounds */
+  --rowHoverBg: #fafafa;
+  --grayLightBg: #f3f4f6;
+  --grayBg: #f5f6f8;
+
+  /* Badge Colors */
+  --greenLightBg: #e7f7ed;
+  --greenColor: #15803d;
+  --greenBorder: #22c55e;
+
+  --orangeLightBg: #fff3e0;
+  --orangeColor: #f97316;
+  --orangeDark: #d97706;
+
+  --grayBadgeBg: #f7f3f3;
+  --grayText: #4b5563;
+
+  --purpleLightBg: #f3e8ff;
+  --purpleColor: #7c3aed;
+
+  --intentBg: #ede9fe;
+
+  /* Icon Colors */
+  --iconBlueBg: #e8f0ff;
+  --iconBlue: #2563eb;
+
+  --iconGreenBg: #e9f7ef;
+  --iconGreen: #16a34a;
+
+  --iconGray: #6b7280;
+  --progressBg: #e5e7eb;
+  --progressValue: #3b82f6;
+
+  /* Status */
+  --successColor: #059669;
+  --errorColor: #dc2626;
+  --whiteText: #ffffff;
+
+  /* Type Icons */
+  --orangeColor: #f97316;
+  --greenColor: #16a34a;
+  --purpleColor: #7c3aed;
+  --whatsappColor: #25d366;
+
+  /* Avatar */
+  --avatarBg: var(--activeBg);
+
+  /* Borders */
+  --borderLight: #e5e7eb;
+  --borderExtraLight: #eeeeee;
+  --borderSoft: #eceff4;
+
+  /* Text */
+  --textSecondary: #6b7280;
+  --textPrimary: #111827;
+  --textDark: #000000;
+
+  /* Primary */
+  --primaryColor: #0d6efd;
+
+  /* Error */
+  --errorColor: #ef4444;
+
+  /* Info Box */
+  --infoBg: #eef8ff;
+  --infoText: #1677ff;
+
+  /* Upload */
+  --uploadBorder: #e5e7eb;
+  --uploadHoverBg: #f8fafc;
+  --uploadIconColor: #9ca3af;
+  /* Borders */
+  --borderSoft: #eceff4;
+  --uploadBorder: #e5e7eb;
+
+  /* Backgrounds */
+  --uploadHoverBg: #f8fafc;
+  --infoBg: #eef8ff;
+
+  /* Icon */
+  --uploadIconColor: #9ca3af;
+  --borderLight: #e5e7eb;
+
+  /* Backgrounds */
+  --tagBg: #f3f4f6;
+
+  /* Text */
+  --whiteText: #ffffff;
+
+  /* Required */
+  --requiredColor: #ff0000;
+
+  /* Gradient Button */
+  --primaryGradient: linear-gradient(90deg, #7b3ff2, #2979ff);
+  --leadIdBg: #f2f2f2;
+  --tenantBg: #eef9ff;
+  --propertyBg: #f5f7f8;
+
+  /* Text */
+  --labelColor: #555555;
+  --textMuted: #666666;
+
+  /* Icon */
+  --platformIconBg: #ff5a3c;
+  --whiteText: #ffffff;
+  --iconColor: #555555;
+  --iconHoverColor: #000000;
+  --whiteBg: #ffffff;
+  --summaryBg: #f7f7f7;
+
+  /* Borders */
+  --tagBorder: rgb(248, 243, 243);
+
+  /* Text */
+  --textDark: #444444;
+  --textPrimaryDark: #2c2c2c;
+  --textSecondary: #6b7280;
+
+  /* Borders */
+  --borderLight: #e5e7eb;
+
+  /* Backgrounds */
+  --inputBg: #fafafa;
+  --textLight: #aaaaaa;
+  --textPrimary: #374151;
+
+  /* Borders */
+  --borderLight: #e5e7eb;
+
+  /* Backgrounds */
+  --whiteBg: #ffffff;
+  --hoverBg: #f3f4f6;
+  --mapBg: #e8ecf0;
+
+  /* Shadow */
+  --shadowSoft: rgba(0, 0, 0, 0.1);
+  --cardBg: #ffffff;
+
+  /* Borders */
+  --cardBorder: #eef1f5;
+
+  /* Text */
+  --textSecondary: #6b7280;
+
+  /* Status */
+  --successColor: #16a34a;
+  --errorColor: #dc2626;
+
+  /* Shadow */
+  --cardShadow: rgba(0, 0, 0, 0.2);
+  /* Backgrounds */
+  --whiteBg: #ffffff;
+  --cardHoverBg: #eef1f4;
+
+  /* Text */
+  --textMuted: #7a7a7a;
+
+  /* Shadow */
+  --hoverCardShadow: rgba(0, 0, 0, 0.15);
+
+  /* Icon Colors */
+  --iconRedBg: #f25c54;
+  --iconGreenBg: #22c55e;
+  --iconBlueBg: #e0efff;
+  --iconBlueText: #2563eb;
+
+  /* Text */
+  --linkText: #2563eb;
+
+  /* Popup */
+  --whiteBg: #ffffff;
+  --popupShadow: rgba(0, 0, 0, 0.12);
+
+  /* Gradient */
+  --shareBtnGradient: linear-gradient(135deg, #2563eb, #0ea5e9);
+
+  /* Text */
+  --whiteText: #ffffff;
+  --progressTextColor: #00a770;
+  --progressBorderColor: #8cfac7;
+  --tableHeaderText: #6b7280;
+  --tableBodyText: #374151;
+
+  /* Table Background */
+  --tableHeaderBg: #f9fafb;
 }
 
 .dark-theme {
@@ -205,6 +473,213 @@
   --scrollbarTrack: #1e1e1e;
   --scrollbarThumb: #444;
   --scrollbarThumbHover: #666;
+  --accordionActiveBg: #1e3a5f;
+  --accordionFocusBorder: #4da3ff;
+  --whiteBg: #121212;
+
+  --shadowLight: rgba(0, 0, 0, 0.6);
+  --shadowDark: rgba(0, 0, 0, 0.4);
+  --shadowHover: rgba(0, 0, 0, 0.7);
+  --btnBg: #2a2a2a;
+  --btnBorder: #444;
+
+  --dropdownBg: #1e1e1e;
+  --dropdownShadow: rgba(0, 0, 0, 0.6);
+
+  --hoverBg: #333;
+
+  --gradientStart: #a855f7;
+  --gradientEnd: #60a5fa;
+
+  --whiteText: #ffffff;
+
+  --shadowLeft: rgba(0, 0, 0, 0.5);
+
+  --iconColor: #cbd5e1;
+  --iconHoverColor: #4da3ff;
+
+  --gradientShadowStart: rgba(0, 0, 0, 0.6);
+  --gradientShadowMid: rgba(0, 0, 0, 0.3);
+  --greenLightBg: #1e3a2a;
+  --redLightBg: #3a1e1e;
+  --blueLightBg: #1e2f3f;
+  --orangeLightBg: #3a2a1e;
+  --yellowLightBg: #3a3a1e;
+
+  --completedColor: #66bb6a;
+  --inProgressColor: #ffb74d;
+  --assignedColor: #4da3ff;
+  --rejectedColor: #ff6b6b;
+  --gradientShadowStart: rgba(0, 0, 0, 0.6);
+  --gradientShadowMid: rgba(0, 0, 0, 0.3);
+
+  --shadowRight: rgba(0, 0, 0, 0.5);
+  --addBtnHoverBg: #1e3a4a;
+
+  --orangeColor: #ff9d5c;
+  --orangeLightBg: #3a2a1e;
+  --whiteText: #000000;
+
+  --successBg: #66bb6a;
+  --warningBg: #ffb74d;
+
+  --textPrimary: #e0e0e0;
+  --textSecondary: #b0b0b0;
+
+  --warningIcon: #ffb74d;
+
+  --textPrimary: #e0e0e0;
+  --textSecondary: #b0b0b0;
+  --textDark: #cccccc;
+  --textBlack: #ffffff;
+  --textMuted: #9ca3af;
+
+  --borderLight: #444;
+  --borderLighter: #555;
+  --borderDark: #aaa;
+
+  --rowHoverBg: #2a2a2a;
+  --grayLightBg: #2f2f2f;
+  --grayBg: #1f1f1f;
+
+  --greenLightBg: #1e3a2a;
+  --greenColor: #66bb6a;
+  --greenBorder: #4caf50;
+
+  --orangeLightBg: #3a2a1e;
+  --orangeColor: #ff9d5c;
+  --orangeDark: #ffb74d;
+
+  --grayBadgeBg: #2a2a2a;
+  --grayText: #cbd5e1;
+
+  --purpleLightBg: #2a1f3f;
+  --purpleColor: #b48cff;
+
+  --intentBg: #2a1f4a;
+
+  --iconBlueBg: #1e2f4f;
+  --iconBlue: #4da3ff;
+
+  --iconGreenBg: #1e3a2a;
+  --iconGreen: #6fe3a0;
+
+  --iconGray: #cbd5e1;
+  --progressBg: #444;
+  --progressValue: #60a5fa;
+
+  --successColor: #34d399;
+  --errorColor: #f87171;
+  --whiteText: #000000;
+
+  --orangeColor: #ff9d5c;
+  --greenColor: #6fe3a0;
+  --purpleColor: #b48cff;
+  --whatsappColor: #4ade80;
+
+  --borderLight: #444;
+  --borderExtraLight: #555;
+  --borderSoft: #3a3a3a;
+
+  --textSecondary: #cbd5e1;
+  --textPrimary: #ffffff;
+  --textDark: #e0e0e0;
+
+  --primaryColor: #4da3ff;
+
+  --errorColor: #ff6b6b;
+
+  --infoBg: #1e2f3f;
+  --infoText: #6fbaff;
+
+  --uploadBorder: #444;
+  --uploadHoverBg: #2a2a2a;
+  --uploadIconColor: #cbd5e1;
+  --borderSoft: #3a3a3a;
+  --uploadBorder: #444;
+
+  --uploadHoverBg: #2a2a2a;
+  --infoBg: #1e2f3f;
+
+  --uploadIconColor: #cbd5e1;
+  --borderLight: #444;
+
+  --tagBg: #2f2f2f;
+
+  --whiteText: #000000;
+
+  --requiredColor: #ff6b6b;
+
+  --primaryGradient: linear-gradient(90deg, #9b6bff, #4da3ff);
+  --leadIdBg: #2a2a2a;
+  --tenantBg: #1e2f3f;
+  --propertyBg: #1f1f1f;
+
+  --labelColor: #cbd5e1;
+  --textMuted: #9ca3af;
+
+  --platformIconBg: #ff7a5c;
+  --whiteText: #000000;
+  --iconColor: #cbd5e1;
+  --iconHoverColor: #ffffff;
+  --whiteBg: #1e1e1e;
+  --summaryBg: #2a2a2a;
+
+  --tagBorder: #444;
+
+  --textDark: #cbd5e1;
+  --textPrimaryDark: #e0e0e0;
+  --textSecondary: #cbd5e1;
+
+  --borderLight: #444;
+
+  --inputBg: #2a2a2a;
+  --textLight: #9ca3af;
+  --textPrimary: #e0e0e0;
+
+  --borderLight: #444;
+
+  --whiteBg: #1e1e1e;
+  --hoverBg: #2a2a2a;
+  --mapBg: #2f2f2f;
+
+  --shadowSoft: rgba(0, 0, 0, 0.6);
+  --cardBg: #1e1e1e;
+
+  --cardBorder: #3a3a3a;
+
+  --textSecondary: #cbd5e1;
+
+  --successColor: #6fe3a0;
+  --errorColor: #ff6b6b;
+
+  --cardShadow: rgba(0, 0, 0, 0.6);
+  --whiteBg: #1e1e1e;
+  --cardHoverBg: #2a2a2a;
+
+  --textMuted: #b0b0b0;
+
+  --hoverCardShadow: rgba(0, 0, 0, 0.6);
+
+  --iconRedBg: #ff6b6b;
+  --iconGreenBg: #4ade80;
+  --iconBlueBg: #1e3a5f;
+  --iconBlueText: #60a5fa;
+
+  --linkText: #60a5fa;
+
+  --whiteBg: #1e1e1e;
+  --popupShadow: rgba(0, 0, 0, 0.6);
+
+  --shareBtnGradient: linear-gradient(135deg, #3b82f6, #0ea5e9);
+
+  --whiteText: #ffffff;
+  --progressTextColor: #34d399;
+  --progressBorderColor: #065f46;
+  --tableHeaderText: #9ca3af;
+  --tableBodyText: #e5e7eb;
+
+  --tableHeaderBg: #2a2a2a;
 }
 
 *,

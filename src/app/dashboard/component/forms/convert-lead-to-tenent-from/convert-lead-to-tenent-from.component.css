@@ -1,5 +1,5 @@
 .lead-id {
-  background: #f2f2f2;
+  background: var(--leadIdBg);
   font-size: 12px;
   padding: 3px 8px;
   border-radius: 4px;
@@ -21,7 +21,7 @@
 }
 
 .label {
-  color: #555;
+  color: var(--labelColor);
   font-size: 14px;
   font-weight: 500;
 }
@@ -35,8 +35,8 @@
 .pf-icon {
   width: 26px;
   height: 26px;
-  background: #ff5a3c;
-  color: white;
+  background: var(--platformIconBg);
+  color: var(--whiteText);
   font-weight: bold;
   border-radius: 50%;
   display: flex;
@@ -54,12 +54,12 @@
 }
 
 .tenant-section {
-  background: #eef9ff;
+  background: var(--tenantBg);
   margin-bottom: 10px;
 }
 
 .property-section {
-  background: #f5f7f8;
+  background: var(--propertyBg);
 }
 
 .details-grid {
@@ -70,7 +70,7 @@
 
 .item label {
   font-size: 13px;
-  color: #666;
+  color: var(--textMuted);
 }
 
 .item p {

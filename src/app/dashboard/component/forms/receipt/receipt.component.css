@@ -11,9 +11,9 @@
   border: none;
   cursor: pointer;
   font-size: 18px;
-  color: #555;
+  color: var(--iconColor);
 }
 
 .icon-btn:hover {
-  color: #000;
+  color: var(--iconHoverColor);
 }
