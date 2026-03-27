@@ -163,6 +163,16 @@ export class LeaseService {
     return this.http.get(`${this.SERVER_ADDRESS}/api/lease/cheque-monthly${queryString}`);
   }
 
+  getRentAnalytics(params: Record<string, any> = {}): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/rent-analytics${queryString}`);
+  }
+
+  getPropertyAnalytics(params: Record<string, any> = {}): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/property-analytics${queryString}`);
+  }
+
   createLeaseCheque(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/cheques`, data);
   }

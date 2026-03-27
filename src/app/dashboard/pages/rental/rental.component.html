@@ -80,7 +80,7 @@
             [options]="yearOptions"
             key="key"
             value="value"
-            [placeholder]="selectedYear"
+            [selectedOption]="selectedYearOption"
             (optionSelected)="onYearSelected($event)"
             [isFilter]="true"
           >
@@ -88,7 +88,9 @@
         </div>
       </div>
 
-      <app-column-chart [data]="chartData"></app-column-chart>
+      <div class="chart-wrap">
+        <app-column-chart [data]="chartData"></app-column-chart>
+      </div>
     </app-white-card>
 
     <div class="mt-3">
@@ -108,6 +110,7 @@
               <div class="d-flex align-items-center gap-2 gap-md-3">
                 <app-table-search
                   placeholder="{{ 'SEARCH_HERE' | translate }}"
+                  [clearTrigger]="rentalClearTrigger"
                   (onValueChange)="searchTextChange($event)"
                 >
                 </app-table-search>
@@ -117,6 +120,7 @@
                   key="key"
                   value="value"
                   [placeholder]="'Property: All'"
+                  [selectedOption]="rentalSelectedProperty"
                   (optionSelected)="onRentalPropertySelected($event)"
                   [isFilter]="true"
                 >
@@ -127,6 +131,7 @@
                   key="key"
                   value="value"
                   [placeholder]="'Tower: All'"
+                  [selectedOption]="rentalSelectedBlock"
                   (optionSelected)="onRentalBlockSelected($event)"
                   [isFilter]="true"
                 >
@@ -137,6 +142,7 @@
                   key="key"
                   value="value"
                   [placeholder]="'Room No: All'"
+                  [selectedOption]="rentalSelectedUnit"
                   (optionSelected)="onRentalUnitSelected($event)"
                   [isFilter]="true"
                 >

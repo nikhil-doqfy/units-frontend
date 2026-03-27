@@ -1,3 +1,30 @@
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding: 14px 4px;
+  border-bottom: 1px solid #eef1f5;
+  margin-bottom: 8px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-item .amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #030507;
+}
+
+.summary-item .label {
+  font-size: 13px;
+  color: #545659;
+}
+
 .rent-card {
   background: #fff;
   border: 1px solid #eef1f5;
@@ -6,29 +33,21 @@
   height: 84px;
   overflow: visible;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
   cursor: pointer;
-  transition:
-    box-shadow 0.3s ease,
-    transform 0.3s ease;
 }
 
 .metrics-header {
   position: relative;
-  z-index: 1000;
 }
 
-:host ::ng-deep .metrics-header .customSelect.show {
-  z-index: 1001;
-}
-
-:host ::ng-deep .metrics-header .customSelect.show .customSelectDropdown {
-  z-index: 1002;
+.chart-wrap {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
 }
 
 .rent-card:hover {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
   cursor: pointer;
 }
 

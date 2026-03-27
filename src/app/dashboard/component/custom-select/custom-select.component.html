@@ -36,7 +36,7 @@
         <app-calender-icon *ngIf="isDropdownOpen" />
       </i>
     </div>
-    <ul *ngIf="isDropdownOpen" class="customSelectDropdown">
+    <ul *ngIf="isDropdownOpen" class="customSelectDropdown" [ngStyle]="dropdownStyle">
       <li *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
         <input
           type="text"

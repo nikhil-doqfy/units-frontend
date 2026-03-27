@@ -1,5 +1,5 @@
 <div class="statusWrapper">
-  <div class="statusText" (click)="toggleDropdown()">
+  <div class="statusText" [ngClass]="statusColorClass" (click)="toggleDropdown()">
     {{ status }}
     <i class="arrowIcon"><app-arrow-down-icon></app-arrow-down-icon></i>
   </div>
