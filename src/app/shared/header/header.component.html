@@ -252,6 +252,18 @@
                           All <span>{{ allCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
+                          <!-- Empty state first -->
+                          <div
+                            *ngIf="readNotifications.length === 0"
+                            class="hdrNotiEmptyCol"
+                          >
+                            <div class="hdrNotiEmptyInfo">
+                              <div class="hdrNotiEmptyIcon">
+                                <img src="assets/Bell.svg" />
+                              </div>
+                              <h4>No read notifications</h4>
+                            </div>
+                          </div>
                           <div
                             class="hdrNotiDrpdwnCol"
                             [class.unread]="!notification.is_read"
@@ -298,6 +310,17 @@
                         </button>
                         <ng-template ngbNavContent>
                           <div
+                            *ngIf="readNotifications.length === 0"
+                            class="hdrNotiEmptyCol"
+                          >
+                            <div class="hdrNotiEmptyInfo">
+                              <div class="hdrNotiEmptyIcon">
+                                <img src="assets/Bell.svg" />
+                              </div>
+                              <h4>No read notifications</h4>
+                            </div>
+                          </div>
+                          <div
                             class="hdrNotiDrpdwnCol"
                             *ngFor="let notification of readNotifications"
                           >
@@ -338,6 +361,17 @@
                           Unread <span>{{ unreadCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
+                          <div
+                            *ngIf="unreadNotifications.length === 0"
+                            class="hdrNotiEmptyCol"
+                          >
+                            <div class="hdrNotiEmptyInfo">
+                              <div class="hdrNotiEmptyIcon">
+                                <img src="assets/Bell.svg" />
+                              </div>
+                              <h4>No unread notifications</h4>
+                            </div>
+                          </div>
                           <div
                             class="hdrNotiDrpdwnCol unread"
                             *ngFor="let notification of unreadNotifications"
@@ -539,6 +573,15 @@
                         alt="Arabic"
                     /></i>
                     العربية
+                  </button>
+                  <div class="dropdown-divider"></div>
+
+                  <!-- ✅ Hindi Added -->
+                  <button ngbDropdownItem (click)="setLanguage('hi')">
+                    <i>
+                      <img src="assets/language/india.png" alt="Hindi" />
+                    </i>
+                    हिंदी
                   </button>
                 </div>
               </div>
