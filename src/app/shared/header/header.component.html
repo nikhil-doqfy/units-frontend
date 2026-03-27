@@ -181,8 +181,18 @@
                 {{ "New Tenant" | translate }}
               </button>
             </ng-container>
-            <button type="button" class="btn btnCommon btnWhite">
+            <!-- <button type="button" class="btn btnCommon btnWhite">
               <i><app-appearance-icon></app-appearance-icon></i>
+            </button> -->
+            <button
+              type="button"
+              class="btn btnCommon btnWhite"
+              (click)="toggleTheme()"
+            >
+              <i>
+                <app-appearance-icon *ngIf="isDark"></app-appearance-icon>
+                <app-moon-icon *ngIf="!isDark"></app-moon-icon>
+              </i>
             </button>
 
             <button

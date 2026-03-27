@@ -66,4 +66,15 @@ export class StorageService {
   getLanguage(): string {
     return localStorage.getItem(this.LANGUAGE) ?? 'en';
   }
+
+  /*----------------------toggle mode --------------------*/
+  private THEME_KEY = 'theme';
+
+  setTheme(theme: string): void {
+    localStorage.setItem(this.THEME_KEY, theme);
+  }
+
+  getTheme(): string {
+    return localStorage.getItem(this.THEME_KEY) ?? 'light';
+  }
 }

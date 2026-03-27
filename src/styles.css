@@ -100,6 +100,113 @@
   --scrollbarThumbHover: #84b3dc;
 }
 
+.dark-theme {
+  --ownerGradientBg: linear-gradient(90deg, #1a2f8f 0%, #0a6ea8 100%);
+  --managerGradientBg: linear-gradient(90deg, #6a1bb0 0%, #0f5fa8 100%);
+  --tenantGradientBg: linear-gradient(90deg, #4a1bb0 0%, #1c1c8f 100%);
+
+  --ownerBg: #2a3f8f;
+  --managerBg: #5a2fb0;
+  --tenantBg: #2c2c8f;
+
+  --whiteBg: #121212;
+  --blackBg: #ffffff;
+  --greyBg: #1e1e1e;
+  --greyLightBg: #9aa4a8;
+  --greyDarkBg: #2a2a2a;
+  --greyDarkBg1: #3a4a50;
+  --lightBg: #1a1a1a;
+  --lightBg1: #222222;
+  --lightBg2: #2a2d35;
+  --lightDarkBg: #2f3b40;
+  --muteBg: #1c1f22;
+  --muteBg1: #252a2e;
+  --muteBg2: #2d3240;
+  --muteBg3: #3a3f45;
+
+  --activeBg: #4da3ff;
+  --activeLightBg: #1a2a3a;
+  --activeExtraLightBg: #1f2f40;
+  --activeDarkBg: #3b8be0;
+
+  --greenBg: #2f6f45;
+  --greenLightBg: #3fae7a;
+  --purpleBg: #6a5be2;
+  --orangeBg: #ff8a3d;
+  --blueBg: #4da3ff;
+  --redBg: #ff4d5a;
+  --yellowBg: #d4b84f;
+
+  --ownerText: #6ea0ff;
+  --managerText: #b48cff;
+  --tenantText: #8a7cff;
+
+  --whiteText: #000000;
+  --blackText: #ffffff;
+  --greyText: #d1d1d1;
+  --greyText1: #c2c2c2;
+  --greyText2: #b5b5b5;
+  --greyText3: #a8a8a8;
+  --greyLightText: #9aa4a8;
+  --greyDarkText: #888888;
+  --greyDarkText1: #aaaaaa;
+  --greyDarkText2: #8899a6;
+  --greyDarkText3: #ccd6dd;
+  --greyDarkText4: #aab8c2;
+  --greyDarkText5: #88aaff;
+  --greyDarkText6: #99aabb;
+  --greyDarkText7: #8899ff;
+
+  --lightText: #9aa4a8;
+  --lightText1: #bbbbbb;
+  --lightDarkText: #8899a6;
+  --muteText: #1c1f22;
+
+  --activeText: #4da3ff;
+  --activeDarkText: #3b8be0;
+  --linkText: #4da3ff;
+
+  --purpleText: #a99bff;
+  --greenText: #5fcf8b;
+  --greenLightText: #6fe3a0;
+  --orangeText: #ff9d5c;
+  --blueText: #4da3ff;
+  --redText: #ff6b75;
+  --yellowText: #e6cc66;
+
+  --whiteBorder: #2a2a2a;
+  --blackBorder: #ffffff;
+  --greyBorder: #555555;
+  --greyDarkBorder: #666666;
+  --greyDarkBorder1: #777777;
+  --greyDarkBorder2: #888888;
+  --greyDarkBorder3: #999999;
+
+  --lightBorder: #3a3a3a;
+  --lightBorder1: #444444;
+  --muteBorder: #2a2a2a;
+  --muteBorder1: #333333;
+  --muteBorder2: #3a3f45;
+
+  --formBorder: #3a3f45;
+  --activeBorder: #4da3ff;
+  --activeLightBorder: #66b3ff;
+  --activeDarkBorder: #3b8be0;
+  --btnBorder: #3a3f45;
+
+  --purpleBorder: #6a5be2;
+  --greenBorder: #5fcf8b;
+  --greenLightBorder: #6fe3a0;
+  --orangeBorder: #ff9d5c;
+  --blueBorder: #4da3ff;
+  --redBorder: #ff6b75;
+  --yellowBorder: #e6cc66;
+
+  --scrollbarTrack: #1e1e1e;
+  --scrollbarThumb: #444;
+  --scrollbarThumbHover: #666;
+}
+
 *,
 *:focus {
   outline: 0;
