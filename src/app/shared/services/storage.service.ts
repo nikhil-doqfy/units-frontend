@@ -59,8 +59,8 @@ export class StorageService {
     return JSON.parse(status);
   }
 
-  setLanguage(laguage: string): void {
-    localStorage.setItem(this.LANGUAGE, laguage);
+  setLanguage(language: string): void {
+    localStorage.setItem(this.LANGUAGE, language);
   }
 
   getLanguage(): string {

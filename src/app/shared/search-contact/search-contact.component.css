@@ -187,3 +187,34 @@
 .info-item app-search-whatsapp-icon {
   margin-bottom: 4px;
 }
+
+/* Placeholder text color */
+.search-input::placeholder {
+  color: #888; /* gray placeholder */
+  opacity: 1; /* ensure it’s fully visible */
+}
+
+.search-input:focus {
+  outline: none;
+  color: black; /* keep typed text black on focus */
+}
+.no-results-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  text-align: center;
+  color: #555;
+}
+
+.no-results-wrapper img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+.no-results-wrapper .no-results {
+  font-size: 14px;
+  font-weight: 500;
+}
