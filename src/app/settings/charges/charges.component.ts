@@ -1,17 +1,23 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
 import { CommonModule } from '@angular/common';
-import { TableTitleComponent } from '../../dashboard/component/table-title/table-title.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { PlusIconComponent } from '../../shared/component/icons/plus-icon/plus-icon.component';
 import { EditIconComponent } from '../../dashboard/component/icons/edit-icon/edit-icon.component';
 import { DeleteIconComponent } from '../../dashboard/component/icons/delete-icon/delete-icon.component';
 import { SaveIconComponent } from '../../icons/save-icon/save-icon.component';
 import { BreadCrumb } from '../../shared/model/shared.model';
 import { SharedService } from '../../shared.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChargesService } from '../../charges.service';
 export interface Charge {
+  id?: number;
   label: string;
   amount: number | null;
   tax: string;
@@ -20,6 +26,7 @@ export interface Charge {
   total: number | null;
   checked: boolean;
   isNew?: boolean;
+  isEdit?: boolean;
 }
 @Component({
   selector: 'app-charges',
@@ -27,174 +34,35 @@ export interface Charge {
   imports: [
     WhiteCardComponent,
     CommonModule,
-    TableTitleComponent,
     TranslateModule,
-    CommonModule,
     FormsModule,
     PlusIconComponent,
     EditIconComponent,
     DeleteIconComponent,
     SaveIconComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './charges.component.html',
   styleUrl: './charges.component.css',
 })
 export class ChargesComponent {
-  private destroyRef = inject(DestroyRef);
-  private translate = inject(TranslateService);
   private sharedService = inject(SharedService);
-
+  private fb = inject(FormBuilder);
+  private chargesService = inject(ChargesService);
   currentLanguage = 'en';
   showSave = false;
   showDetailView: boolean = false;
   breadcrumbData: BreadCrumb[] = [];
 
-  charges: Charge[] = [
-    {
-      label: 'Admin Fee',
-      amount: 32.71,
-      tax: 'VAT @5%',
-      vat: 1.64,
-      editable: true,
-      total: 34.35,
-      checked: true,
-    },
-    {
-      label: 'Ejari Charge Disbursement',
-      amount: 175.65,
-      tax: 'VAT @Nil',
-      vat: 0,
-      editable: true,
-      total: 175.65,
-      checked: true,
-    },
-    {
-      label: 'Gas Charges',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      editable: true,
-      total: 1050,
-      checked: true,
-    },
-    {
-      label: 'COMMISSION- DUBAI',
-      amount: 1200,
-      tax: 'VAT @5%',
-      vat: 60,
-      editable: false,
-      total: 1260,
-      checked: true,
-    },
-    {
-      label: 'Security Deposit',
-      amount: 2400,
-      tax: 'VAT @Nil',
-      vat: 0,
-      total: 2400,
-      checked: true,
-    },
-    {
-      label: 'CAR PARKING',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: true,
-    },
-    {
-      label: 'TAWTHEEQ REGISTRATION A/C...',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: true,
-    },
-    {
-      label: 'RENEWAL COMMISSION (DUBAI)',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: false,
-    },
-    {
-      label: 'RENEWAL COMMISSION (SHARJ...)',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: false,
-    },
-    {
-      label: 'R COMMISSION- ABU DHABI BL...',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: false,
-    },
-    {
-      label: 'TAWTHEEQ SERVICE INCOME- A...',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: false,
-    },
-  ];
-
+  chargesForm!: FormGroup;
   ngOnInit() {
-    this.loadBreadcrumb();
-  }
-
-  addNewRow() {
-    this.showSave = true;
-
-    this.charges.unshift({
-      label: '',
-      amount: null,
-      tax: '',
-      vat: null,
-      editable: false,
-      total: null,
-      checked: true,
-      isNew: true,
+    this.chargesForm = this.fb.group({
+      charges: this.fb.array([]),
     });
+    this.loadBreadcrumb();
+    this.getCharges();
   }
 
-  deleteRow(i: number) {
-    this.charges.splice(i, 1);
-  }
-
-  calculateTotal(c: Charge) {
-    if (c.amount != null) {
-      const vat = c.vat || 0;
-      c.total = +c.amount + +vat;
-    }
-  }
-  saveRow() {
-    const index = this.charges.findIndex((c) => c.isNew);
-    if (index === -1) return;
-
-    const row = this.charges[index];
-
-    row.isNew = false;
-
-    this.charges.splice(index, 1);
-
-    this.charges.push(row);
-
-    this.showSave = false;
-  }
-
-  initLanguageListener() {
-    this.translate.onLangChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.loadBreadcrumb();
-      });
-  }
   loadBreadcrumb() {
     if (this.showDetailView) {
       this.setBreadCrumb([
@@ -216,5 +84,109 @@ export class ChargesComponent {
     this.sharedService
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
+  }
+  get chargesArray(): FormArray {
+    return this.chargesForm.get('charges') as FormArray;
+  }
+
+  createChargeForm(c?: any): FormGroup {
+    return this.fb.group({
+      charge_id: [c?.charge_id || c?.id || null],
+      description: [c?.description || ''],
+      amount: [c?.amount || 0],
+      tax_code: [c?.tax_code || ''],
+      vat: [c?.vat_amount || 0],
+      is_editable: [c?.editable || false],
+      total: [c?.total || 0],
+      isNew: [c?.isNew || false],
+      isEdit: [false],
+    });
+  }
+  getCharges() {
+    this.chargesService.charges({}).subscribe((resp: any) => {
+      const data = resp?.content ?? [];
+
+      this.chargesArray.clear();
+
+      data.forEach((c: any) => {
+        const mapped = {
+          id: c.id,
+          description: c.description,
+          amount: c.amount,
+          tax_code: c.tax_code,
+          vat_amount: c.vat,
+          total: c.total_amount,
+          editable: c.is_editable,
+        };
+
+        this.chargesArray.push(this.createChargeForm(mapped));
+      });
+    });
+  }
+  addNewRow() {
+    const hasNew = this.chargesArray.value.some((c: any) => c.isNew);
+
+    if (hasNew) return;
+
+    this.showSave = true;
+
+    this.chargesArray.insert(0, this.createChargeForm({ isNew: true }));
+  }
+
+  editRow(index: number) {
+    this.chargesArray.controls.forEach((c) => c.patchValue({ isEdit: false }));
+
+    this.chargesArray.at(index).patchValue({
+      isEdit: true,
+      isNew: false,
+    });
+
+    this.showSave = false;
+  }
+
+  saveRow(index?: number) {
+    const formValue = this.chargesArray.value;
+    const newIndex = formValue.findIndex((c: any) => c.isNew);
+    if (newIndex !== -1) {
+      const payload = {
+        description: formValue[newIndex]?.description,
+        amount: formValue[newIndex]?.amount,
+        tax_code: formValue[newIndex]?.tax_code,
+      };
+      this.showSave = false;
+      this.chargesService.addCharge(payload).subscribe(() => {
+        this.getCharges();
+      });
+    }
+
+    if (index !== undefined) {
+      const rowForm = this.chargesArray.at(index);
+      const payload = {
+        charge_id: rowForm.value.charge_id,
+        description: rowForm.value.description,
+        amount: rowForm.value.amount,
+        tax_code: rowForm.value.tax_code,
+      };
+
+      this.chargesService.editCharge(payload).subscribe(() => {
+        rowForm.patchValue({ isEdit: false });
+        this.getCharges();
+      });
+    }
+  }
+  deleteRow(index: number) {
+    const row = this.chargesArray.at(index)?.value;
+
+    if (row?.charge_id) {
+      const payload = {
+        charge_id: row.charge_id,
+      };
+
+      this.chargesService.deleteCharge(payload).subscribe(() => {
+        this.getCharges();
+      });
+    } else {
+      this.chargesArray.removeAt(index);
+    }
   }
 }

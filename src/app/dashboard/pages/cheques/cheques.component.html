@@ -8,84 +8,84 @@
 }
 
 @if (!showTenantDetail) {
-<ng-container *ngIf="!showTenantDetail">
-  <app-white-card>
-    <div class="top-filter-bar">
-      <div class="left-controls">
-        <div class="custom-select">
-          <div class="custom-select-wrapper">
-            <span class="cmmnTblFltrBtn">
-              <app-custom-select
-                class="with-left-icon"
-                [options]="yearOptions"
-                key="key"
-                value="value"
-                [placeholder]="'Year: All'"
-                (optionSelected)="onYearSelected($event)"
-              ></app-custom-select>
-            </span>
-          </div>
+  <ng-container *ngIf="!showTenantDetail">
+    <app-white-card>
+      <div class="top-filter-bar">
+        <div class="left-controls">
+          <div class="custom-select">
+            <div class="custom-select-wrapper">
+              <span class="cmmnTblFltrBtn">
+                <app-custom-select
+                  class="with-left-icon"
+                  [options]="yearOptions"
+                  key="key"
+                  value="value"
+                  [placeholder]="'Year: All'"
+                  (optionSelected)="onYearSelected($event)"
+                ></app-custom-select>
+              </span>
+            </div>
 
-          <div class="custom-select-wrapper">
-            <span class="cmmnTblFltrBtn">
-              <app-custom-select
-                class="with-left-icon"
-                [options]="propertyOptions"
-                key="key"
-                value="value"
-                [placeholder]="'Property: All'"
-                (optionSelected)="onPropertySelected($event)"
-              ></app-custom-select>
-            </span>
-          </div>
+            <div class="custom-select-wrapper">
+              <span class="cmmnTblFltrBtn">
+                <app-custom-select
+                  class="with-left-icon"
+                  [options]="propertyOptions"
+                  key="key"
+                  value="value"
+                  [placeholder]="'Property: All'"
+                  (optionSelected)="onPropertySelected($event)"
+                ></app-custom-select>
+              </span>
+            </div>
 
-          <div class="custom-select-wrapper">
-            <span class="cmmnTblFltrBtn">
-              <app-custom-select
-                class="with-left-icon"
-                [options]="blockOptions"
-                key="key"
-                value="value"
-                [placeholder]="'Block/Tower: All'"
-                (optionSelected)="onBlockSelected($event)"
-              ></app-custom-select>
-            </span>
-          </div>
+            <div class="custom-select-wrapper">
+              <span class="cmmnTblFltrBtn">
+                <app-custom-select
+                  class="with-left-icon"
+                  [options]="blockOptions"
+                  key="key"
+                  value="value"
+                  [placeholder]="'Block/Tower: All'"
+                  (optionSelected)="onBlockSelected($event)"
+                ></app-custom-select>
+              </span>
+            </div>
 
-          <div class="custom-select-wrapper">
-            <span class="cmmnTblFltrBtn">
-              <app-custom-select
-                class="with-left-icon"
-                [options]="unitOptions"
-                key="key"
-                value="value"
-                [placeholder]="'Unit: All'"
-                (optionSelected)="onUnitSelected($event)"
-              ></app-custom-select>
-            </span>
+            <div class="custom-select-wrapper">
+              <span class="cmmnTblFltrBtn">
+                <app-custom-select
+                  class="with-left-icon"
+                  [options]="unitOptions"
+                  key="key"
+                  value="value"
+                  [placeholder]="'Unit: All'"
+                  (optionSelected)="onUnitSelected($event)"
+                ></app-custom-select>
+              </span>
+            </div>
+            <button
+              *ngIf="hasActiveFilter"
+              class="cmmnTblFltrBtn"
+              type="button"
+              (click)="clearFilters()"
+            >
+              ✕ Clear Filter
+            </button>
           </div>
-          <button
-            *ngIf="hasActiveFilter"
-            class="cmmnTblFltrBtn"
-            type="button"
-            (click)="clearFilters()"
-          >
-            ✕ Clear Filter
-          </button>
+        </div>
+        <div class="right-controls">
+          <div class="search-box">
+            <i><app-search-icon></app-search-icon></i>
+            <input
+              type="text"
+              placeholder="Search here"
+              (input)="searchTextChange($any($event.target).value)"
+            />
+          </div>
         </div>
       </div>
-      <div class="right-controls">
-        <div class="search-box">
-          <i><app-search-icon></app-search-icon></i>
-          <input
-            type="text"
-            placeholder="Search here"
-            (input)="searchTextChange($any($event.target).value)"
-          />
-        </div>
-      </div>
-    </div>
-    <!-- <div class="summary-grid">
+      <!-- <div class="summary-grid">
       <div
         class="summary-card"
         *ngFor="let card of summaryCards"
@@ -96,153 +96,215 @@
         <div class="title">{{ card.title }}</div>
       </div>
     </div> -->
-    <div class="summary-grid">
-      <div
-        class="summary-card"
-        *ngFor="let card of summaryCards"
-        [class.active]="activeSummary === card.key"
-        (click)="onSummaryClick(card.key)"
-      >
-        <div class="top-row">
-          <div class="main-value">{{ card.amount }}</div>
-          <span class="tag" [ngClass]="card.color">
-            {{ card.count }} Cheques
-          </span>
-        </div>
+      <div class="summary-grid">
+        <div
+          class="summary-card"
+          *ngFor="let card of summaryCards"
+          [class.active]="activeSummary === card.key"
+          (click)="onSummaryClick(card.key)"
+        >
+          <div class="top-row">
+            <div class="main-value">{{ card.amount }}</div>
+            <span class="tag" [ngClass]="card.color">
+              {{ card.count }} Cheques
+            </span>
+          </div>
 
-        <div class="title">{{ card.title }}</div>
-        <div class="subtitle">{{ card.subtitle }}</div>
+          <div class="title">{{ card.title }}</div>
+          <div class="subtitle">{{ card.subtitle }}</div>
 
-        <span class="arrow"></span>
-      </div>
-    </div>
-
-    <div class="table-wrapper">
-      <div class="cmmnTbl">
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th width="60">Sl.No</th>
-                <th width="90">Unit ID</th>
-                <th>Property Name <i><app-sorting-icon></app-sorting-icon></i></th>
-                <th width="120">Block / Tower</th>
-                <th width="70">Unit</th>
-                <th>Tenant Name <i><app-sorting-icon></app-sorting-icon></i></th>
-                <th width="140">Cheque No</th>
-                <th width="110"
-                  *ngIf="(activeSummary !== 'total' && activeSummary === 'credited') || activeSummary === 'realized' || activeSummary == 'bounce'">
-                  Reference ID
-                </th>
-                <th width="140"
-                  *ngIf="activeSummary === 'credited' || (activeSummary !== 'total' && activeSummary !== 'bounce' && activeSummary !== 'realized' && activeSummary !== 'balance')">
-                  Settlement Bank
-                </th>
-                <th width="130"
-                  *ngIf="activeSummary === 'credited' || (activeSummary !== 'total' && activeSummary !== 'bounce' && activeSummary !== 'realized' && activeSummary !== 'balance')">
-                  Settlement Acc
-                </th>
-                <th width="120" *ngIf="activeSummary !== 'total'">Amount</th>
-                <th width="80" *ngIf="activeSummary == 'bounce'">Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <!-- Loading -->
-              <tr *ngIf="loading">
-                <td colspan="10" class="text-center py-4">
-                  <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-                </td>
-              </tr>
-
-              <!-- Data rows -->
-              <ng-container *ngIf="!loading">
-                <tr *ngFor="let row of tableData; let i = index">
-                  <td>{{ (currentPage - 1) * rowsPerPage + i + 1 }}</td>
-                  <td>{{ row.unit?.code || '—' }}</td>
-                  <td style="cursor:pointer" (click)="viewProperty(row)">
-                    <app-table-img-item
-                      [img]="row.property?.thumbnail || ''"
-                      [title]="row.property?.name || '—'"
-                      size="md"
-                      [showInitialsFallback]="true"
-                    ></app-table-img-item>
-                  </td>
-                  <td>{{ row.block_tower?.name || '—' }}</td>
-                  <td>{{ row.unit?.code || '—' }}</td>
-                  <td [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
-                      style="cursor:pointer" (click)="viewTenant(row)">
-                    <app-table-img-item
-                      [img]="row.tenant?.profile_image || ''"
-                      [title]="row.tenant?.name || '—'"
-                      size="md"
-                      [showInitialsFallback]="true"
-                    ></app-table-img-item>
-                  </td>
-                  <td [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }">
-                    {{ row.cheque?.cheque_number || '—' }}
-                  </td>
-                  <td
-                    [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
-                    *ngIf="activeSummary !== 'total' && activeSummary !== 'balance'"
-                  >
-                    {{ row.cheque?.id || '—' }}
-                  </td>
-                  <td *ngIf="activeSummary === 'credited' ||
-                    (activeSummary !== 'total' && activeSummary !== 'bounce' &&
-                     activeSummary !== 'realized' && activeSummary !== 'balance')">
-                    {{ row.settlement_bank?.name || '—' }}
-                  </td>
-                  <td *ngIf="activeSummary === 'credited' ||
-                    (activeSummary !== 'total' && activeSummary !== 'bounce' &&
-                     activeSummary !== 'realized' && activeSummary !== 'balance')">
-                    {{ row.settlement_bank?.account_number || '—' }}
-                  </td>
-                  <td
-                    [ngClass]="{ 'bounce-highlight': activeSummary === 'bounce' }"
-                    *ngIf="activeSummary !== 'total'"
-                    class="amount-cell"
-                  >
-                    AED {{ row.cheque?.amount | number }}
-                    <span><img src="assets/check.svg" /></span>
-                  </td>
-                  <td *ngIf="activeSummary == 'bounce'">
-                    <app-table-action-btn
-                      type="history"
-                      (clicked)="openChequeBounceHistoryModel(activityHistoryContent)"
-                    ></app-table-action-btn>
-                  </td>
-                </tr>
-
-                <!-- Empty state -->
-                <tr *ngIf="tableData.length === 0">
-                  <td colspan="10" class="text-center py-4">No cheques found</td>
-                </tr>
-              </ng-container>
-            </tbody>
-          </table>
+          <span class="arrow"></span>
         </div>
       </div>
 
-      <div class="cmmnTblFtr">
-        <app-table-select
-          [componentName]="componentName"
-          [rowsPerPage]="rowsPerPage"
-          [rowsPerPageOptions]="rowsPerPageOptions"
-          (rowsPerPageChange)="onPageSizeChange($event)"
-        />
-        <app-table-pagination
-          [componentName]="componentName"
-          [currentPage]="currentPage"
-          [totalRecords]="totalRecords"
-          [rowsPerPage]="rowsPerPage"
-          (pageChange)="onPageChange($event)"
-        />
+      <div class="table-wrapper">
+        <div class="cmmnTbl">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th width="60">Sl.No</th>
+                  <th width="90">Unit ID</th>
+                  <th>
+                    Property Name <i><app-sorting-icon></app-sorting-icon></i>
+                  </th>
+                  <th width="120">Block / Tower</th>
+                  <th width="70">Unit</th>
+                  <th>
+                    Tenant Name <i><app-sorting-icon></app-sorting-icon></i>
+                  </th>
+                  <th width="140">Cheque No</th>
+                  <th
+                    width="110"
+                    *ngIf="
+                      (activeSummary !== 'total' &&
+                        activeSummary === 'credited') ||
+                      activeSummary === 'realized' ||
+                      activeSummary == 'bounce'
+                    "
+                  >
+                    Reference ID
+                  </th>
+                  <th
+                    width="140"
+                    *ngIf="
+                      activeSummary === 'credited' ||
+                      (activeSummary !== 'total' &&
+                        activeSummary !== 'bounce' &&
+                        activeSummary !== 'realized' &&
+                        activeSummary !== 'balance')
+                    "
+                  >
+                    Settlement Bank
+                  </th>
+                  <th
+                    width="130"
+                    *ngIf="
+                      activeSummary === 'credited' ||
+                      (activeSummary !== 'total' &&
+                        activeSummary !== 'bounce' &&
+                        activeSummary !== 'realized' &&
+                        activeSummary !== 'balance')
+                    "
+                  >
+                    Settlement Acc
+                  </th>
+                  <th width="120" *ngIf="activeSummary !== 'total'">Amount</th>
+                  <th width="80" *ngIf="activeSummary == 'bounce'">Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <!-- Loading -->
+                <tr *ngIf="loading">
+                  <td colspan="10" class="text-center py-4">
+                    <div
+                      class="spinner-border spinner-border-sm text-primary"
+                      role="status"
+                    ></div>
+                  </td>
+                </tr>
+
+                <!-- Data rows -->
+                <ng-container *ngIf="!loading">
+                  <tr *ngFor="let row of tableData; let i = index">
+                    <td>{{ (currentPage - 1) * rowsPerPage + i + 1 }}</td>
+                    <td>{{ row.unit?.code || "—" }}</td>
+                    <td style="cursor: pointer" (click)="viewProperty(row)">
+                      <app-table-img-item
+                        [img]="row.property?.thumbnail || ''"
+                        [title]="row.property?.name || '—'"
+                        size="md"
+                        [showInitialsFallback]="true"
+                      ></app-table-img-item>
+                    </td>
+                    <td>{{ row.block_tower?.name || "—" }}</td>
+                    <td>{{ row.unit?.code || "—" }}</td>
+                    <td
+                      [ngClass]="{
+                        'bounce-highlight': activeSummary === 'bounce',
+                      }"
+                      style="cursor: pointer"
+                      (click)="viewTenant(row)"
+                    >
+                      <app-table-img-item
+                        [img]="row.tenant?.profile_image || ''"
+                        [title]="row.tenant?.name || '—'"
+                        size="md"
+                        [showInitialsFallback]="true"
+                      ></app-table-img-item>
+                    </td>
+                    <td
+                      [ngClass]="{
+                        'bounce-highlight': activeSummary === 'bounce',
+                      }"
+                    >
+                      {{ row.cheque?.cheque_number || "—" }}
+                    </td>
+                    <td
+                      [ngClass]="{
+                        'bounce-highlight': activeSummary === 'bounce',
+                      }"
+                      *ngIf="
+                        activeSummary !== 'total' && activeSummary !== 'balance'
+                      "
+                    >
+                      {{ row.cheque?.id || "—" }}
+                    </td>
+                    <td
+                      *ngIf="
+                        activeSummary === 'credited' ||
+                        (activeSummary !== 'total' &&
+                          activeSummary !== 'bounce' &&
+                          activeSummary !== 'realized' &&
+                          activeSummary !== 'balance')
+                      "
+                    >
+                      {{ row.settlement_bank?.name || "—" }}
+                    </td>
+                    <td
+                      *ngIf="
+                        activeSummary === 'credited' ||
+                        (activeSummary !== 'total' &&
+                          activeSummary !== 'bounce' &&
+                          activeSummary !== 'realized' &&
+                          activeSummary !== 'balance')
+                      "
+                    >
+                      {{ row.settlement_bank?.account_number || "—" }}
+                    </td>
+                    <td
+                      [ngClass]="{
+                        'bounce-highlight': activeSummary === 'bounce',
+                      }"
+                      *ngIf="activeSummary !== 'total'"
+                      class="amount-cell"
+                    >
+                      AED {{ row.cheque?.amount | number }}
+                      <span><img src="assets/check.svg" /></span>
+                    </td>
+                    <td *ngIf="activeSummary == 'bounce'">
+                      <app-table-action-btn
+                        type="history"
+                        (clicked)="
+                          openChequeBounceHistoryModel(activityHistoryContent)
+                        "
+                      ></app-table-action-btn>
+                    </td>
+                  </tr>
+
+                  <!-- Empty state -->
+                  <tr *ngIf="tableData.length === 0">
+                    <td colspan="10" class="text-center py-4">
+                      No cheques found
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="cmmnTblFtr">
+          <app-table-select
+            [componentName]="componentName"
+            [rowsPerPage]="rowsPerPage"
+            [rowsPerPageOptions]="rowsPerPageOptions"
+            (rowsPerPageChange)="onPageSizeChange($event)"
+          />
+          <app-table-pagination
+            [componentName]="componentName"
+            [currentPage]="currentPage"
+            [totalRecords]="totalRecords"
+            [rowsPerPage]="rowsPerPage"
+            (pageChange)="onPageChange($event)"
+          />
+        </div>
       </div>
-    </div>
-  </app-white-card>
-</ng-container>
-} <!-- end @if (!showTenantDetail) -->
+    </app-white-card>
+  </ng-container>
+}
+<!-- end @if (!showTenantDetail) -->
 
 <!----------------------------------------------------------Activity history from------------------------------------------------------------------------------>
 <ng-template #activityHistoryContent let-modal>
