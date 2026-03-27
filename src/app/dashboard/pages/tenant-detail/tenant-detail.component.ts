@@ -14,6 +14,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgbModal, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TenantsService } from '../../services/tenants.service';
+import { LeaseService } from '../../services/lease.service';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
@@ -72,6 +74,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
     ChnagePaymentModeFormComponent,
     ReplaceChequeComponent,
     ReceiptComponent,
+    NoDataComponent,
   ],
   templateUrl: './tenant-detail.component.html',
   styleUrl: './tenant-detail.component.css',
@@ -84,13 +87,23 @@ export class TenantDetailComponent implements OnChanges {
   private translate       = inject(TranslateService);
   private modalService    = inject(NgbModal);
   private tenantsService  = inject(TenantsService);
+  private leaseService    = inject(LeaseService);
   private destroyRef      = inject(DestroyRef);
 
   tenantData: any = null;
+  rentTransactions: any[] = [];
+  additionalTransactions: any[] = [];
+  areaChartData: { month: string; amount_received: number; cheque_bounce: number; total_amount: number }[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedLease'] && this.selectedLease?.tenant?.id) {
-      this.loadTenantData(this.selectedLease.tenant.id);
+    if (changes['selectedLease'] && this.selectedLease) {
+      if (this.selectedLease?.tenant?.id) {
+        this.loadTenantData(this.selectedLease.tenant.id);
+      }
+      if (this.selectedLease?.id) {
+        this.loadTransactions(this.selectedLease.id);
+        this.loadRentAnalytics(this.selectedLease.id);
+      }
     }
   }
 
@@ -104,6 +117,22 @@ export class TenantDetailComponent implements OnChanges {
       });
   }
 
+  private loadTransactions(leaseId: number): void {
+    this.leaseService
+      .getLeaseCheques(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.rentTransactions       = resp?.content?.rent_cheques       ?? [];
+          this.additionalTransactions = resp?.content?.additional_cheques ?? [];
+        },
+        error: () => {
+          this.rentTransactions       = [];
+          this.additionalTransactions = [];
+        },
+      });
+  }
+
   // ── view state ──────────────────────────────────────────────────
   showInvoiceDetails   = false;
   showRenewalBlockedMsg = false;
@@ -112,10 +141,29 @@ export class TenantDetailComponent implements OnChanges {
   showMonthDropdown    = false;
   selectedReceiptType  = '';
 
-  // ── summary (static placeholders, replace with real data later) ─
-  totalAmount    = 'AED 2,000.00';
-  receivedAmount = 'AED 1,200.00';
-  pendingAmount  = 'AED 800.00';
+  // ── summary ─────────────────────────────────────────────────────
+  totalAmount    = '—';
+  receivedAmount = '—';
+  pendingAmount  = '—';
+
+  private loadRentAnalytics(leaseId: number): void {
+    const fmt = (n: number) =>
+      `AED ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    this.leaseService.getRentAnalytics({ lease_id: leaseId, year: new Date().getFullYear() })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const s = resp?.content?.summary;
+          if (s) {
+            this.totalAmount    = fmt(s.total_amount    ?? 0);
+            this.receivedAmount = fmt(s.amount_received ?? 0);
+            this.pendingAmount  = fmt(s.pending_amount  ?? 0);
+          }
+          this.areaChartData = resp?.content?.monthly ?? [];
+        },
+      });
+  }
 
   componentName      = 'TenantDetailComponent';
   totalRecords       = 0;
@@ -126,6 +174,15 @@ export class TenantDetailComponent implements OnChanges {
   // ── helpers ─────────────────────────────────────────────────────
   getLabel(key: string): string {
     return this.translate.instant(key);
+  }
+
+  transactionStatusClass(status: string): string {
+    const s = (status || '').toLowerCase();
+    if (s.includes('credit') || s.includes('paid') || s.includes('realiz')) return 'badge-active';
+    if (s.includes('bounce') || s.includes('reject'))                        return 'badge-rejected';
+    if (s.includes('invoice') || s.includes('generat'))                      return 'badge-draft';
+    if (s.includes('pending') || s.includes('balance'))                      return 'badge-inactive';
+    return 'badge-inactive';
   }
 
   toggleMenu() { this.showMenu = !this.showMenu; }

@@ -26,4 +26,13 @@ export class StatusActionDropdownComponent {
   toggleDropdown() {
     this.isOpen = !this.isOpen;
   }
+
+  get statusColorClass(): string {
+    const s = (this.status || '').toLowerCase();
+    if (s.includes('credit') || s.includes('paid') || s.includes('realiz')) return 'status-green';
+    if (s.includes('bounce') || s.includes('fail'))                          return 'status-orange';
+    if (s.includes('invoice') || s.includes('generat'))                      return 'status-grey';
+    if (s.includes('pending') || s.includes('balance'))                      return 'status-yellow';
+    return '';
+  }
 }

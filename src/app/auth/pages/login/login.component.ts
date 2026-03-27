@@ -16,7 +16,6 @@ import { TimerTextComponent } from '../../component/timer-text/timer-text.compon
 import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { AlertService } from '../../../shared/services/alert.service';
-import { Subscription } from 'rxjs';
 import {
   FormBuilder,
   FormGroup,
@@ -57,6 +56,7 @@ export class LoginComponent implements OnInit {
   selectedRole: UserRole = 'owner';
   authTitle = 'Sign In';
   showPassword = false;
+  rememberMe   = false;
   loginMode: 'password' | 'otp' = 'password';
   email = '';
   password = '';
@@ -84,8 +84,10 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentRole = this.selectedRole;
+    const savedEmail = localStorage.getItem('remember_email') ?? '';
+    this.rememberMe   = !!savedEmail;
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [savedEmail, [Validators.required, Validators.email]],
       password: ['', Validators.required],
       role: [this.selectedRole],
     });
@@ -135,6 +137,12 @@ export class LoginComponent implements OnInit {
       this.loginForm.markAllAsTouched();
       this.alertService.error('Please enter email and password');
       return;
+    }
+
+    if (this.rememberMe) {
+      localStorage.setItem('remember_email', this.loginForm.value.email);
+    } else {
+      localStorage.removeItem('remember_email');
     }
 
     let payload = {

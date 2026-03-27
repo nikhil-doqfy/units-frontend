@@ -3,78 +3,50 @@
     <div class="revenue-summary-card">
       <div class="revenue-left1">
         <div class="amount-row">
-          <span class="amount">AED 1,20,573</span>
-          <span class="rank">
-            <span class="arrow-bg">
-              <app-arrow></app-arrow>
-            </span>
-            7th Rank
-          </span>
+          <span class="amount">{{ totalRevenueDisplay }}</span>
         </div>
         <div class="label">{{ "TOTAL_REVENUE_RECEIVED" | translate }}</div>
       </div>
 
       <div class="revenue-filters">
         <app-custom-select
-          [options]="[
-            'Falcom city',
-            'Novatis AG...',
-            'Agriculture',
-            'Honda',
-            'TVS',
-            'Samsung',
-          ]"
-          placeholder="Jan-Dec 2025"
+          [options]="yearOptions"
+          key="key"
+          value="value"
+          [selectedOption]="selectedYearOption"
+          (optionSelected)="onYearSelected($event)"
           [isFilter]="true"
-        >
-        </app-custom-select>
+        ></app-custom-select>
+
         <app-custom-select
-          [options]="[
-            'Falcom city',
-            'Novatis AG...',
-            'Agriculture',
-            'Honda',
-            'TVS',
-            'Samsung',
-          ]"
-          placeholder="property:property1"
+          [options]="propertyOptions"
+          key="key"
+          value="value"
+          placeholder="property:All"
+          [selectedOption]="selectedProperty"
+          (optionSelected)="onPropertySelected($event)"
           [isFilter]="true"
-        >
-        </app-custom-select>
+        ></app-custom-select>
+
         <app-custom-select
-          [options]="[
-            'Falcom city',
-            'Novatis AG...',
-            'Agriculture',
-            'Honda',
-            'TVS',
-            'Samsung',
-          ]"
-          placeholder="Black/Towner:All"
+          *ngIf="selectedPropertyId"
+          [options]="blockOptions"
+          key="key"
+          value="value"
+          placeholder="Block/Tower:All"
+          [selectedOption]="selectedBlock"
+          (optionSelected)="onBlockSelected($event)"
           [isFilter]="true"
-        >
-        </app-custom-select>
-        <app-custom-select
-          [options]="[
-            'Falcom city',
-            'Novatis AG...',
-            'Agriculture',
-            'Honda',
-            'TVS',
-            'Samsung',
-          ]"
-          placeholder="Unit:All"
-          [isFilter]="true"
-        >
-        </app-custom-select>
+        ></app-custom-select>
       </div>
     </div>
 
     <app-revenue-bar-chart
-      (click)="showRevenueDetails()"
-      style="cursor: pointer"
+      [data]="chartData"
+      [xAxisTitle]="xAxisTitle"
     ></app-revenue-bar-chart>
   </app-white-card>
+
   <div class="mt-3">
     <app-white-card [title]="'PROPERTY_COMPRISON' | translate">
       <div class="cards-container">

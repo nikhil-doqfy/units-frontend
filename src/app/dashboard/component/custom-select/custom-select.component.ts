@@ -4,16 +4,15 @@ import {
   Output,
   EventEmitter,
   HostListener,
-  OnDestroy,
   OnInit,
   forwardRef,
   inject,
   DestroyRef,
   OnChanges,
   SimpleChanges,
+  ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
 
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { ArrowUpIconComponent } from '../../../shared/component/icons/arrow-up-icon/arrow-up-icon.component';
@@ -74,16 +73,20 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   isDropdownOpen = false;
   filterText: string = '';
   displayOptions: any[] = [];
+  dropdownStyle: Record<string, string> = {};
 
   private onChange = (_: any) => {};
   private onTouched = () => {};
   isDisabled = false;
 
-  constructor(private dropdownService: CustomSelectService) {}
+  constructor(private dropdownService: CustomSelectService, private el: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['options'] && changes['options'].currentValue) {
       this.displayOptions = [...changes['options'].currentValue];
+    }
+    if ('selectedOption' in changes) {
+      this.selectedOption = changes['selectedOption'].currentValue ?? null;
     }
   }
 
@@ -103,6 +106,14 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
     this.isDropdownOpen = !this.isDropdownOpen;
     if (this.isDropdownOpen) {
       this.dropdownService.notifyOpen(this);
+      const rect = this.el.nativeElement.getBoundingClientRect();
+      this.dropdownStyle = {
+        position: 'fixed',
+        top:      `${rect.bottom + 4}px`,
+        left:     `${rect.left}px`,
+        width:    `${rect.width}px`,
+        'z-index': '9999',
+      };
     }
     this.onTouched();
   }

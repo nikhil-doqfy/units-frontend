@@ -1,3 +1,20 @@
+.rememberMe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+}
+
+.rememberMe input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: #1f6ed4;
+}
+
 .loginRoleSelection {
   display: flex;
   align-items: center;

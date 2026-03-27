@@ -1,9 +1,7 @@
 import {
   Component,
   DestroyRef,
-  EventEmitter,
   Input,
-  Output,
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -114,8 +112,9 @@ export class RentalComponent {
   currentPage = 1;
 
   // ── Cheque chart & summary ────────────────────────────────────────
-  selectedYear = String(new Date().getFullYear());
-  yearOptions  = Array.from({ length: 6 }, (_, i) => {
+  selectedYear       = String(new Date().getFullYear());
+  selectedYearOption = { key: String(new Date().getFullYear()), value: String(new Date().getFullYear()) };
+  yearOptions        = Array.from({ length: 6 }, (_, i) => {
     const y = String(new Date().getFullYear() - i);
     return { key: y, value: y };
   });
@@ -137,6 +136,11 @@ export class RentalComponent {
   rentalFilterPropertyId = '';
   rentalFilterBlockId    = '';
   rentalFilterUnitId     = '';
+
+  rentalSelectedProperty: any = null;
+  rentalSelectedBlock:    any = null;
+  rentalSelectedUnit:     any = null;
+  rentalClearTrigger          = 0;
 
   private rentalSearchSubject$ = new Subject<string>();
   private rentalSearchText     = '';
@@ -178,6 +182,7 @@ export class RentalComponent {
     this.getLeases();
     this.loadChequeSummary();
     this.loadChequeMonthly();
+    this.loadRentAnalytics();
     this.rentalSearchSubject$
       .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
       .subscribe(text => {
@@ -224,9 +229,11 @@ export class RentalComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  totalAmount    = 'AED 2,000.00';
-  receivedAmount = 'AED 1,200.00';
-  pendingAmount  = 'AED 800.00';
+  totalAmount    = '—';
+  receivedAmount = '—';
+  pendingAmount  = '—';
+
+  areaChartData: { month: string; amount_received: number; cheque_bounce: number; total_amount: number }[] = [];
 
   getLeases() {
     const params: Record<string, any> = {
@@ -262,6 +269,9 @@ export class RentalComponent {
   }
 
   onRentalPropertySelected(option: any) {
+    this.rentalSelectedProperty = option ?? null;
+    this.rentalSelectedBlock    = null;
+    this.rentalSelectedUnit     = null;
     this.rentalFilterPropertyId = option?.key ?? '';
     this.rentalFilterBlockId    = '';
     this.rentalFilterUnitId     = '';
@@ -284,6 +294,8 @@ export class RentalComponent {
   }
 
   onRentalBlockSelected(option: any) {
+    this.rentalSelectedBlock = option ?? null;
+    this.rentalSelectedUnit  = null;
     this.rentalFilterBlockId = option?.key ?? '';
     this.rentalFilterUnitId  = '';
     this.rentalUnitOptions   = [];
@@ -304,6 +316,7 @@ export class RentalComponent {
   }
 
   onRentalUnitSelected(option: any) {
+    this.rentalSelectedUnit = option ?? null;
     this.rentalFilterUnitId = option?.key ?? '';
     this.currentPage        = 1;
     this.getLeases();
@@ -320,6 +333,10 @@ export class RentalComponent {
     this.rentalSearchText       = '';
     this.rentalBlockOptions     = [];
     this.rentalUnitOptions      = [];
+    this.rentalSelectedProperty = null;
+    this.rentalSelectedBlock    = null;
+    this.rentalSelectedUnit     = null;
+    this.rentalClearTrigger++;
     this.currentPage            = 1;
     this.getLeases();
   }
@@ -377,10 +394,31 @@ export class RentalComponent {
       });
   }
 
+  loadRentAnalytics() {
+    const fmt = (n: number) =>
+      `AED ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    this.leaseService.getRentAnalytics({ year: this.selectedYear })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const s = resp?.content?.summary;
+          if (s) {
+            this.totalAmount    = fmt(s.total_amount    ?? 0);
+            this.receivedAmount = fmt(s.amount_received ?? 0);
+            this.pendingAmount  = fmt(s.pending_amount  ?? 0);
+          }
+          this.areaChartData = resp?.content?.monthly ?? [];
+        },
+      });
+  }
+
   onYearSelected(option: any) {
-    this.selectedYear = option?.key ?? String(new Date().getFullYear());
+    this.selectedYearOption = option;
+    this.selectedYear       = option?.key ?? String(new Date().getFullYear());
     this.loadChequeSummary();
     this.loadChequeMonthly();
+    this.loadRentAnalytics();
   }
 
   onLeaseClick(lease: any) {

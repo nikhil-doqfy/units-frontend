@@ -3,7 +3,9 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -18,10 +20,17 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './table-search.component.html',
   styleUrl: './table-search.component.css',
 })
-export class TableSearchComponent {
+export class TableSearchComponent implements OnChanges {
   @Input() placeholder: string = 'Search here...';
+  @Input() clearTrigger: number = 0;
   @Output() onValueChange = new EventEmitter<string>();
   searchText = '';
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['clearTrigger'] && !changes['clearTrigger'].firstChange) {
+      this.searchText = '';
+    }
+  }
   onSearch(): void {
     this.onValueChange.emit(this.searchText);
   }
