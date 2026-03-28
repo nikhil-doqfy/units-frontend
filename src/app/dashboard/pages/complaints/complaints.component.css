@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
+  background: var(--card-bg);
   padding: 18px 20px;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
@@ -24,14 +24,14 @@
   font-size: 18px;
   font-weight: 600;
   margin: 0;
-  color: #1c1c1c;
+  color: var(--text-primary);
 }
 
 .statItem h6 {
   margin: 6px 0 0;
   font-size: 13px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .statItem.total h4 {
@@ -41,8 +41,8 @@
 }
 
 .badge.green {
-  background: #e6f4ea;
-  color: #1e7f4d;
+  background: var(--badge-bg);
+  color: var(--badge-text);
   font-size: 11px;
   padding: 2px 6px;
   border-radius: 6px;
@@ -51,15 +51,15 @@
 
 .statItem.total small {
   font-size: 11px;
-  color: #1e7f4d;
+  color: var(--badge-text);
 }
 
 .statAction select {
   padding: 6px 12px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--select-border);
   font-size: 13px;
-  background: #fff;
+  background: var(--select-bg);
   cursor: pointer;
 }
 
@@ -97,7 +97,7 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--overlay-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,7 +105,7 @@
 }
 
 .modalCard {
-  background: #fff;
+  background: var(--modal-bg);
   width: 600px;
   max-height: 85vh;
   border-radius: 12px;
@@ -116,7 +116,7 @@
   padding: 12px;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-light);
 }
 .modalHeader h3 {
   font-size: 15px;
@@ -124,7 +124,7 @@
 
 .modalHeader span {
   font-size: 13px;
-  color: #777;
+  color: var(--text-muted);
   margin-left: 6px;
 }
 
@@ -162,7 +162,7 @@ textarea {
   width: 100%;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--input-border);
 }
 
 textarea {
@@ -171,11 +171,11 @@ textarea {
 
 .uploadBox {
   margin-top: 6px;
-  border: 2px dashed #ddd;
+  border: 2px dashed var(--upload-border);
   padding: 20px;
   text-align: center;
   border-radius: 8px;
-  color: #777;
+  color: var(--text-muted);
 }
 
 .modalFooter {

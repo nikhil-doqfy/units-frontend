@@ -21,7 +21,7 @@
   padding: 4px;
   border: 1px solid var(--lightBorder2);
   border-radius: 4px;
-  box-shadow: 4px 4px 15px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 4px 4px 15px 0 var(--dropdown-shadow);
   min-width: auto;
   transform: inherit !important;
   top: 100% !important;
@@ -62,5 +62,5 @@
 }
 
 .dashDrpdwnMenu.rejectDropdown {
-  background-color: #ffffff;
+  background-color: var(--dropdown-bg);
 }
