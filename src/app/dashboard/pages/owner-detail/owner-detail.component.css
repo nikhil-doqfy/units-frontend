@@ -12,18 +12,22 @@
   align-items: center;
   gap: 6px;
   padding: 7px 16px;
-  border: 1px solid #d1d5db;
-  background: #fff;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
   border-radius: 8px;
   font-size: 13px;
   font-weight: 500;
-  color: #374151;
+  color: var(--btn-text);
   cursor: pointer;
   transition: background 0.15s;
 }
-.tdBackBtn:hover { background: #f9fafb; }
+.tdBackBtn:hover {
+  background: var(--btn-hover-bg);
+}
 
-.tdBackArrow { font-size: 15px; }
+.tdBackArrow {
+  font-size: 15px;
+}
 
 .profile-top {
   display: flex;
@@ -37,8 +41,12 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #536c76, #7a9baa);
-  color: #fff;
+  background: linear-gradient(
+    135deg,
+    var(--avatar-gradient-start),
+    var(--avatar-gradient-end)
+  );
+  color: var(--avatar-text);
   font-size: 18px;
   font-weight: 700;
   display: flex;
@@ -56,25 +64,32 @@
 .tdTitle {
   font-size: 17px;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
   margin: 0 0 4px;
 }
 
-.profile-info { display: flex; flex-direction: column; gap: 2px; }
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 
 .profile-meta {
   margin: 0;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--text-muted);
 }
-.profile-meta strong { color: #374151; font-weight: 600; }
+.profile-meta strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
 
 /* ── Info strip — matches .tdInfoStrip ────────────────────── */
 .tdInfoStrip {
   display: flex;
   align-items: stretch;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--strip-bg);
+  border: 1px solid var(--strip-border);
   border-radius: 10px;
   padding: 16px 20px;
   flex-wrap: wrap;
@@ -89,26 +104,30 @@
   flex: 1;
   min-width: 110px;
 }
-.tdInfoItem:first-child { padding-left: 0; }
-.tdInfoItemLast { padding-right: 0; }
+.tdInfoItem:first-child {
+  padding-left: 0;
+}
+.tdInfoItemLast {
+  padding-right: 0;
+}
 
 .tdInfoDivider {
   width: 1px;
-  background: #e5e7eb;
+  background: var(--divider-color);
   align-self: stretch;
   flex-shrink: 0;
 }
 
 .tdInfoLabel {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--text-light);
   font-weight: 500;
   white-space: nowrap;
 }
 
 .tdInfoValue {
   font-size: 13px;
-  color: #111827;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -119,8 +138,8 @@
 
 .role-badge {
   display: inline-block;
-  background: #ede9fe;
-  color: #6d28d9;
+  background: var(--role-bg);
+  color: var(--role-text);
   border-radius: 20px;
   padding: 2px 10px;
   font-size: 12px;
@@ -133,7 +152,9 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-.table-responsive::-webkit-scrollbar { display: none; }
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
 
 /* ── Sticky last column — same as tenants-table ───────────── */
 .owner-props-table thead tr th:last-child,
@@ -150,7 +171,7 @@
 }
 .owner-props-table tbody tr td:last-child {
   background-color: var(--whiteBg);
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+  box-shadow: -2px 0 4px var(--table-shadow);
 }
 
 .table td:last-child::before,
@@ -162,7 +183,12 @@
   width: 12px;
   height: 100%;
   pointer-events: none;
-  background: linear-gradient(to left, rgba(0,0,0,0.12), rgba(0,0,0,0.05), transparent);
+  background: linear-gradient(
+    to left,
+    var(--gradient-dark),
+    var(--gradient-light),
+    transparent
+  );
 }
 
 /* ── Status badges — same as tenant statusBadge ───────────── */
@@ -176,16 +202,18 @@
 }
 
 .badge-occupied {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--occupied-bg);
+  color: var(--occupied-text);
 }
 
 .badge-vacant {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--vacant-bg);
+  color: var(--vacant-text);
 }
 
-.fw-500 { font-weight: 500; }
+.fw-500 {
+  font-weight: 500;
+}
 
 .disabled-btn {
   opacity: 0.35;

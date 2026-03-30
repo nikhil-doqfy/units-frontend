@@ -3,16 +3,16 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--doc-border);
   border-radius: 6px;
   cursor: pointer;
   font-size: 13px;
-  color: #374151;
+  color: var(--doc-text-color);
   transition: background 0.2s;
 }
 
 .doc-item:hover {
-  background: #f8fafc;
+  background: var(--doc-hover-bg);
 }
 
 .doc-name {
