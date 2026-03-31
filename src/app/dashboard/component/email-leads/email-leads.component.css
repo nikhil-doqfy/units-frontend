@@ -1,5 +1,5 @@
 .leads-wrapper {
-  background: #fff;
+  background: var(--whiteText);
   border-radius: 12px;
   padding: 12px;
   font-family: Inter, system-ui, sans-serif;
@@ -11,7 +11,7 @@
   align-items: center;
   padding: 10px 6px;
   font-size: 14px;
-  color: #444;
+  color: var(--textDark);
 }
 .table-header .left {
   display: flex;
@@ -20,7 +20,7 @@
 }
 
 .leads-table {
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--borderLight);
 }
 
 .lead-row {
@@ -28,12 +28,12 @@
   grid-template-columns: 36px 48px minmax(0, 1fr) 200px 70px;
   align-items: center;
   padding: 12px 6px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--borderLighter);
   column-gap: 8px;
 }
 
 .lead-row:hover {
-  background: #fafafa;
+  background: var(--rowHoverBg);
 }
 
 .checkbox input {
@@ -41,20 +41,20 @@
 }
 
 .badge.green {
-  background: #e7f7ed;
-  color: #15803d;
-  border: 1px solid #22c55e;
+  background: var(--greenLightBg);
+  color: var(--greenColor);
+  border: 1px solid var(--greenBorder);
 }
 
 .badge.gray {
-  background: #f7f3f3;
-  color: #111827;
-  border: 1px solid #000000;
+  background: var(--grayBadgeBg);
+  color: var(--textBlack);
+  border: 1px solid var(--borderDark);
 }
 .badge.orange {
-  color: #f97316;
-  background: #fff7ed;
-  border: 1px solid #f97316;
+  color: var(--orangeColor);
+  background: var(--orangeLightBg);
+  border: 1px solid var(--orangeColor);
 }
 .icon {
   width: 32px;
@@ -67,13 +67,13 @@
 }
 
 .icon.email {
-  background: #e8f0ff;
-  color: #2563eb;
+  background: var(--iconBlueBg);
+  color: var(--iconBlue);
 }
 
 .icon.user {
-  background: #e9f7ef;
-  color: #16a34a;
+  background: var(--iconGreenBg);
+  color: var(--iconGreen);
 }
 
 .icon.attch {
@@ -81,7 +81,7 @@
   right: -10px;
   bottom: -6px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--iconGray);
 }
 
 .name-row {
@@ -94,7 +94,7 @@
 .title {
   font-size: 14px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--textPrimary);
 }
 
 .subtitle {
@@ -102,7 +102,7 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--textSecondary);
   flex-wrap: wrap;
 }
 
@@ -115,16 +115,16 @@
 }
 
 .green {
-  background: #e7f7ed;
-  color: #15803d;
+  background: var(--greenLightBg);
+  color: var(--greenColor);
 }
 .gray {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--grayLightBg);
+  color: var(--grayText);
 }
 .orange {
-  background: #fff3e0;
-  color: #d97706;
+  background: var(--orangeLightBg);
+  color: var(--orangeDark);
 }
 
 .owner {
@@ -132,23 +132,23 @@
 }
 
 .owner-chip {
-  background: #f5f6f8;
+  background: var(--grayBg);
   padding: 4px 10px;
   border-radius: 14px;
   font-size: 12px;
-  color: #374151;
+  color: var(--textPrimary);
   white-space: nowrap;
 }
 
 .owner-chip i {
   font-size: 12px;
   margin-right: 4px;
-  color: #6b7280;
+  color: var(--iconGray);
 }
 
 .date {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--textSecondary);
   text-align: right;
 }
 
@@ -278,32 +278,32 @@
 }
 
 .badge.purple {
-  background: #f3e8ff;
-  color: #7c3aed;
-  border: 1px solid #7c3aed;
+  background: var(--purpleLightBg);
+  color: var(--purpleColor);
+  border: 1px solid var(--purpleColor);
 }
 .intent {
-  background-color: #ede9fe;
-  color: #7c3aed;
+  background-color: var(--intentBg);
+  color: var(--purpleColor);
   font-size: 12px;
   padding: 2px 8px;
   border: 1;
   border-radius: 12px;
-  border: 1px solid #7c3aed;
+  border: 1px solid var(--purpleColor);
 }
 .message-row .message {
-  color: #4b5563;
+  color: var(--textMuted);
   font-size: 13px;
 }
 
 .company-text {
-  color: #1f2937;
+  color: var(--textPrimary);
   font-weight: 500;
   margin-right: 6px;
 }
 
 .message-text {
-  color: #6b7280;
+  color: var(--textSecondary);
   font-size: 13px;
 }
 

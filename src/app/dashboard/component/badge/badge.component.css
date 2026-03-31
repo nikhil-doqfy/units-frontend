@@ -40,23 +40,23 @@
   font-weight: 500;
 }
 .badgeText.pill.green {
-  background-color: #e8f5e9;
+  background-color: var(--greenLightBg);
   color: var(--greenText);
 }
 .badgeText.pill.red {
-  background-color: #ffebee;
+  background-color: var(--redLightBg);
   color: var(--redText);
 }
 .badgeText.pill.blue {
-  background-color: #e3f2fd;
+  background-color: var(--blueLightBg);
   color: var(--blueText);
 }
 .badgeText.pill.orange {
-  background-color: #fff3e0;
+  background-color: var(--orangeLightBg);
   color: var(--orangeText);
 }
 .badgeText.pill.yellow {
-  background-color: #fffde7;
+  background-color: var(--yellowLightBg);
   color: var(--yellowText);
 }
 
@@ -66,17 +66,17 @@
 }
 
 .completed {
-  color: #2e7d32;
+  color: var(--completedColor);
 }
 
 .in-progress {
-  color: #fb8c00;
+  color: var(--inProgressColor);
 }
 
 .assigned {
-  color: #2979ff;
+  color: var(--assignedColor);
 }
 
 .rejected {
-  color: #d32f2f;
+  color: var(--rejectedColor);
 }

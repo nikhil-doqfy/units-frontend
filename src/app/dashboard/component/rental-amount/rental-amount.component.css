@@ -7,6 +7,7 @@
 .rent-value {
   font-size: 14px;
   font-weight: 500;
+  color: var(--rent-value-text);
 }
 
 .rent-badge {
@@ -19,21 +20,21 @@
 }
 
 .badge-green {
-  background: #e6f4ea;
-  color: #2e7d32;
+  background: var(--badge-green-bg);
+  color: var(--badge-green-text);
 }
 
 .badge-light-green {
-  background: #eaf7ee;
-  color: #3aa655;
+  background: var(--badge-light-green-bg);
+  color: var(--badge-light-green-text);
 }
 
 .badge-orange {
-  background: #fff4e5;
-  color: #f59e0b;
+  background: var(--badge-orange-bg);
+  color: var(--badge-orange-text);
 }
 
 .badge-red {
-  background: #fde8e8;
-  color: #ef4444;
+  background: var(--badge-red-bg);
+  color: var(--badge-red-text);
 }

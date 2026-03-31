@@ -1,32 +1,32 @@
 .prgrsBarTbl .table {
-    margin: 0;
+  margin: 0;
 }
 
 .prgrsBarTbl .table thead tr th,
 .prgrsBarTbl .table tbody tr td {
-    font-size: 12px;
-    color: var(--greyText);
-    padding: 13px 0;
-    min-width: 30px;
+  font-size: 12px;
+  color: var(--greyText);
+  padding: 13px 0;
+  min-width: 30px;
 }
 
 .prgrsBarTbl .table thead tr th {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .prgrsBarTbl .table tbody tr td {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .prgrsBarTbl .value {
-    font-size: 10px;
-    color: #00A770;
-    font-weight: 400;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 18px;
-    padding: 0 10px;
-    border: 1px solid #8CFAC7;
-    border-radius: 6px;
+  font-size: 10px;
+  color: var(--progressTextColor);
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  padding: 0 10px;
+  border: 1px solid var(--progressBorderColor);
+  border-radius: 6px;
 }

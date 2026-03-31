@@ -160,8 +160,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #5f7d83;
-  color: #fff;
+  background: var(--btn-bg);
+  color: var(--btn-bg);
   border: none;
   font-size: 20px;
   cursor: pointer;
@@ -172,9 +172,9 @@
   top: 45px;
   right: 0;
   width: 200px;
-  background: #fff;
+  background: var(--dropdown-bg);
   border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px var(--dropdown-shadow-dark);
   z-index: 9999;
   padding: 6px 0;
 }
@@ -190,11 +190,11 @@
 }
 
 .dropItem:hover {
-  background: #f5f7f9;
+  background: var(--hover-bg);
 }
 
 .dropItem.danger {
-  color: #e53935;
+  color: var(--text-primary);
 }
 
 .cmmnTblViewBtns {
@@ -219,10 +219,10 @@
   top: 110%;
   right: 0;
   min-width: 140px;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--dropdown-bg);
   border-radius: 8px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px var(--dropdown-border);
   list-style: none;
   padding: 6px;
   margin: 0;
@@ -239,7 +239,7 @@
 }
 
 .dropdownMenu li:hover {
-  background: #f5f7f8;
+  background: var(--hover-bg);
 }
 
 .dropdownWrap:hover .dropdownMenu {
@@ -258,7 +258,7 @@
   top: 45px;
   right: 0;
   width: 194px;
-  background: #fff;
+  background: var(--dropdown-bg);
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   padding: 15px;
@@ -283,10 +283,10 @@
   border: none;
   padding: 10px;
   border-radius: 8px;
-  color: #fff;
+  color: var(--done-btn-text);
   font-weight: 500;
   cursor: pointer;
-  background: linear-gradient(90deg, #8a2be2, #1e90ff);
+  background: var(--done-btn-gradient);
 }
 .column {
   display: flex;

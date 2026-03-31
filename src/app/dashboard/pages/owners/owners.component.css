@@ -23,11 +23,11 @@
 
 .owners-table tbody tr td:last-child {
   background-color: var(--whiteBg);
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+  box-shadow: -2px 0 4px var(--table-shadow);
 }
 
 .owner-name-link {
-  color: #4f6ef7;
+  color: var(--link-primary);
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;
@@ -52,8 +52,8 @@
 
   background: linear-gradient(
     to left,
-    rgba(0, 0, 0, 0.12),
-    rgba(0, 0, 0, 0.05),
+    var(--gradient-dark),
+    var(--gradient-light),
     transparent
   );
 }

@@ -156,7 +156,7 @@
 }
 
 .customSelectSearch::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 18px;
   top: 50%;
@@ -179,7 +179,9 @@
   color: var(--greyText);
   background-color: var(--muteBg);
   outline: none;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .customSelectSearch input::placeholder {
@@ -206,11 +208,11 @@
 }
 
 .customSelectSearch .addBtn:hover {
-  background: #d6edfb;
+  background: var(--addBtnHoverBg);
 }
 
 .highlight {
-  border: 1px solid #ff6500;
-  color: #ff6500;
-  background-color: #fff8ec;
+  border: 1px solid var(--orangeColor);
+  color: var(--orangeColor);
+  background-color: var(--orangeLightBg);
 }

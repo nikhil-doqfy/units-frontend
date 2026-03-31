@@ -48,24 +48,24 @@ progress {
 }
 
 progress::-webkit-progress-bar {
-  background-color: #e5e7eb;
+  background-color: var(--progressBg);
   border-radius: 10px;
 }
 
 progress::-webkit-progress-value {
-  background-color: #3b82f6;
+  background-color: var(--progressValue);
   border-radius: 10px;
 }
 
 .success {
   font-size: 12px;
-  color: #059669;
+  color: var(--successColor);
   font-weight: 400;
 }
 
 .error {
   font-size: 12px;
-  color: #dc2626;
+  color: var(--errorColor);
   font-weight: 400;
 }
 
