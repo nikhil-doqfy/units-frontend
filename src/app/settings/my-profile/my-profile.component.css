@@ -1,162 +1,87 @@
-.myPrflFrm {
-  padding: 0 16px 16px 16px;
+/* ── Section wrapper ──────────────────────────────────────────────── */
+.profileSection {
+  padding: 8px 16px 16px;
 }
 
-.usrProCol {
+/* ── Profile photo ────────────────────────────────────────────────── */
+.profilePhotoRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.profilePhotoWrap {
   position: relative;
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
+  flex-shrink: 0;
 }
 
-.usrProImg img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
+.profilePhoto {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
   object-fit: cover;
+  border: 2px solid var(--muteBorder1, #e2e8f0);
 }
 
-.usrProIcon {
+.profileEditBtn {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  display: none;
-}
-
-.editMode .usrProIcon {
-  display: block;
-}
-
-.usrProIcon i {
-  background-color: var(--muteBg);
-  color: var(--greyText);
-  width: 22px;
-  height: 22px;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--muteBg, #f1f5f9);
+  border: 1px solid var(--greyBorder, #cbd5e1);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--greyBorder);
-  border-radius: 4px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  padding: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
-.myPrflFrmGrpLst {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.othrDtlFrm .myPrflFrmGrpLst {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.myPrflFrmGrp {
-  display: flex;
-  gap: 16px;
-  padding: 8px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  width: 16%;
-}
-
-.myPrflFrmGrpLst .myPrflFrmGrp:first-child {
-  width: 25%;
-}
-
-.othrDtlFrm .myPrflFrmGrp {
-  gap: 32px;
-  width: 40%;
-}
-
-.othrDtlFrm .myPrflFrmGrpLst .myPrflFrmGrp:first-child {
-  width: 40%;
-}
-
-.editMode .myPrflFrmGrp {
-  border-color: var(--muteBorder1);
-}
-
-.changed.myPrflFrmGrp {
-  border-color: var(--activeBorder) !important;
-}
-
-.myPrflFrmGrp label {
-  font-size: 14px;
-  color: var(--greyText);
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  height: 24px;
-  white-space: nowrap;
-  margin: 0;
-}
-
-.othrDtlFrm .myPrflFrmGrp label {
-  min-width: 145px;
-}
-
-.myPrflFrmGrp input,
-.myPrflFrmGrp textarea {
-  background-color: transparent;
+.profileName {
+  font-size: 16px;
+  font-weight: 600;
   color: var(--blackText);
-  font-weight: 500;
-  width: 100%;
-  max-width: 100%;
-  height: 24px;
-  border: 0;
+  margin: 0 0 2px;
 }
 
-.myPrflFrmGrp textarea {
-  resize: none;
-  height: 76px;
+.profileRole {
+  font-size: 13px;
+  color: var(--greyText);
+  margin: 0;
+  text-transform: capitalize;
 }
 
-.othrDtlFrm .myPrflFrmGrp input,
-.othrDtlFrm .myPrflFrmGrp textarea {
-  width: 260px;
-  min-width: 260px;
-  max-width: 100%;
+/* ── Password field ───────────────────────────────────────────────── */
+.passwordFieldWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordFieldWrap .form-control {
+  padding-right: 40px;
+}
+
+.passwordFieldWrap app-password-popupbtn {
+  position: absolute;
+  right: 8px;
+}
+
+/* ── Disabled inputs look read-only (no grey wash) ────────────────── */
+.form-control:disabled,
+.form-control[disabled] {
+  background-color: var(--muteBg, #f8fafc);
+  color: var(--blackText);
+  border-color: transparent;
+  opacity: 1;
 }
 
 @media (max-width: 767px) {
-  .myPrflFrm {
-    padding: 0;
-  }
-
-  .myPrflFrmGrpLst {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .myPrflFrmGrp {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    width: 100%;
-  }
-
-  .myPrflFrmGrpLst .myPrflFrmGrp:first-child {
-    width: 100%;
-  }
-
-  .othrDtlFrm .myPrflFrmGrpLst {
-    gap: 8px;
-  }
-
-  .othrDtlFrm .myPrflFrmGrp {
-    gap: 8px;
-    width: 100%;
-  }
-
-  .othrDtlFrm .myPrflFrmGrpLst .myPrflFrmGrp:first-child {
-    width: 100%;
-  }
-
-  .othrDtlFrm .myPrflFrmGrp input,
-  .othrDtlFrm .myPrflFrmGrp textarea {
-    min-width: inherit;
+  .profileSection {
+    padding: 8px 0 8px;
   }
 }

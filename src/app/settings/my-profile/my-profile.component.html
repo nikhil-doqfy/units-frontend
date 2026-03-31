@@ -1,4 +1,6 @@
 <div class="mb-4" [ngClass]="{ arabic: currentLanguage === 'ar' }">
+
+  <!-- ── Account Details ───────────────────────────────────────────── -->
   <app-dash-form>
     <form>
       <app-white-card
@@ -6,140 +8,117 @@
         [description]="'HYLA' | translate"
         [showActions]="true"
       >
-        <div class="myPrflFrm" [class.editMode]="editUserMode">
-          <div class="row align-items-center g-2">
-            <div class="col-md-auto">
-              <div class="usrProCol">
-                <div class="usrProImg">
-                  <img
-                    [src]="userImage"
-                    width="50"
-                    height="50"
-                    alt="User Profile Image"
-                  />
-                </div>
-                <div class="usrProIcon" (click)="triggerFileInput()">
-                  <i>
-                    <app-edit-icon />
-                  </i>
-                </div>
-                <input
-                  type="file"
-                  #fileInput
-                  (change)="onFileSelected($event)"
-                  accept=".png, .jpg, .jpeg"
-                  hidden
-                />
-              </div>
-            </div>
-            <div class="col-md">
-              <div
-                class="myPrflFrmGrp"
-                [class.changed]="changedFields.name"
-                *ngIf="!editUserMode"
-              >
-                <input
-                  type="text"
-                  name="name"
-                  [(ngModel)]="profile.name"
-                  [disabled]="!editUserMode"
-                  (input)="onFieldChange('name')"
-                />
-              </div>
-              <div class="d-flex gap-3">
-                <div
-                  class="myPrflFrmGrp"
-                  [class.changed]="changedFields.firstName"
-                  *ngIf="editUserMode"
-                >
-                  <label for="firstName">{{ "FIRST_NAME" | translate }}</label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    [(ngModel)]="profile.firstName"
-                    [disabled]="!editUserMode"
-                    (input)="onFieldChange('firstName')"
-                  />
-                </div>
+        <div class="profileSection">
 
-                <div
-                  class="myPrflFrmGrp"
-                  [class.changed]="changedFields.lastName"
-                  *ngIf="editUserMode"
-                >
-                  <label for="lastName">{{ "LAST_NAME" | translate }}</label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    [(ngModel)]="profile.lastName"
-                    [disabled]="!editUserMode"
-                    (input)="onFieldChange('lastName')"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="myPrflFrmGrpLst mt-3">
-            <div class="myPrflFrmGrp" [class.changed]="changedFields.email">
-              <label for="email">{{ "PRIMARY_EMAIL_ID" | translate }}</label>
+          <!-- Profile photo row -->
+          <div class="profilePhotoRow">
+            <div class="profilePhotoWrap" [class.editMode]="editUserMode">
+              <img [src]="userImage" class="profilePhoto" alt="Profile" />
+              <button
+                type="button"
+                class="profileEditBtn"
+                *ngIf="editUserMode"
+                (click)="triggerFileInput()"
+              >
+                <i><app-edit-icon /></i>
+              </button>
               <input
-                type="email"
-                name="email"
-                [(ngModel)]="profile.email"
-                [disabled]="!editUserMode"
-                (input)="onFieldChange('email')"
+                type="file"
+                #fileInput
+                (change)="onFileSelected($event)"
+                accept=".png,.jpg,.jpeg"
+                hidden
               />
             </div>
-            <div class="myPrflFrmGrp" [class.changed]="changedFields.contact">
-              <label for="contact">{{ "CONTACT" | translate }}</label>
+            <div class="profilePhotoMeta">
+              <p class="profileName">{{ profile.name }}</p>
+              <p class="profileRole">{{ profile.role }}</p>
+            </div>
+          </div>
+
+          <!-- Fields grid -->
+          <div class="row g-3 mt-1">
+            <div class="col-md-4" *ngIf="editUserMode">
+              <label class="form-label">{{ "FIRST_NAME" | translate }}</label>
               <input
-                type="number"
+                type="text"
+                class="form-control"
+                name="firstName"
+                [(ngModel)]="profile.firstName"
+                [disabled]="!editUserMode"
+                (input)="onFieldChange('firstName')"
+              />
+            </div>
+            <div class="col-md-4" *ngIf="editUserMode">
+              <label class="form-label">{{ "LAST_NAME" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                name="lastName"
+                [(ngModel)]="profile.lastName"
+                [disabled]="!editUserMode"
+                (input)="onFieldChange('lastName')"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ "PRIMARY_EMAIL_ID" | translate }}</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                [(ngModel)]="profile.email"
+                [disabled]="true"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ "CONTACT" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
                 name="contact"
                 [(ngModel)]="profile.contact"
                 [disabled]="!editUserMode"
                 (input)="onFieldChange('contact')"
               />
             </div>
-            <div
-              class="myPrflFrmGrp"
-              [class.changed]="changedFields.firstName"
-              *ngIf="profile.role === 'PROPERTY_MANAGER'"
-            >
-              <label for="companyName">{{ "COMAPANY_NAME" | translate }}</label>
+            <div class="col-md-4" *ngIf="profile.role === 'PROPERTY_MANAGER'">
+              <label class="form-label">{{ "COMAPANY_NAME" | translate }}</label>
               <input
                 type="text"
+                class="form-control"
                 name="companyName"
                 [(ngModel)]="profile.companyName"
                 [disabled]="!editUserMode"
                 (input)="onFieldChange('companyName')"
               />
             </div>
-            <div class="myPrflFrmGrp" [class.changed]="changedFields.role">
-              <label for="role">{{ "ROLE" | translate }}</label>
+            <div class="col-md-4">
+              <label class="form-label">{{ "ROLE" | translate }}</label>
               <input
                 type="text"
+                class="form-control"
                 name="role"
-                autocomplete="off"
                 [(ngModel)]="profile.role"
-                [disabled]="!editUserMode"
-                (input)="onFieldChange('role')"
+                [disabled]="true"
               />
             </div>
-            <div class="myPrflFrmGrp" [class.changed]="changedFields.password">
-              <label for="password">{{ "PASSWORD" | translate }}</label>
-              <input
-                type="password"
-                name="password"
-                [(ngModel)]="profile.password"
-                [disabled]="!editUserMode"
-                autocomplete="current-password"
-                (input)="onFieldChange('password')"
-              />
-
-              <app-password-popupbtn></app-password-popupbtn>
+            <div class="col-md-4">
+              <label class="form-label">{{ "PASSWORD" | translate }}</label>
+              <div class="passwordFieldWrap">
+                <input
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  [(ngModel)]="profile.password"
+                  [disabled]="true"
+                  autocomplete="current-password"
+                />
+                <app-password-popupbtn></app-password-popupbtn>
+              </div>
             </div>
           </div>
         </div>
+
         <ng-container card-actions>
           <button
             *ngIf="!editUserMode"
@@ -169,168 +148,158 @@
       </app-white-card>
     </form>
   </app-dash-form>
-</div>
-<app-dash-form>
-  <form>
-    <app-white-card [title]="'OTHER_DETAILS' | translate" [showActions]="true">
-      <div class="myPrflFrm othrDtlFrm" [class.editMode]="editOtherDetailsMode">
-        <div class="myPrflFrmGrpLst">
-          <div class="myPrflFrmGrp" [class.changed]="changedFields.country">
-            <label for="country">{{ "COUNTRY" | translate }}</label>
-            <input
-              *ngIf="!editOtherDetailsMode; else editCountryTpl"
-              type="text"
-              name="country"
-              [(ngModel)]="otherDetails.country"
-              [disabled]="!editOtherDetailsMode"
-              (input)="onFieldChange('country')"
-            />
 
-            <ng-template #editCountryTpl>
-              <app-custom-select
-                [options]="countryList"
-                key="key"
-                value="value"
-                placeholder="Select Country"
-                [selectedOption]="selectedCountry"
-                (optionSelected)="onCountrySelected($event)"
-                (click)="handleviewclick()"
-              >
-              </app-custom-select>
-            </ng-template>
-          </div>
-          <div class="myPrflFrmGrp" [class.changed]="changedFields.timeZone">
-            <label for="timeZone">{{ "TIME_ZONE" | translate }}</label>
-            <input
-              type="text"
-              name="timeZone"
-              [(ngModel)]="otherDetails.timeZone"
-              [disabled]="!editOtherDetailsMode"
-              (input)="onFieldChange('timeZone')"
-            />
-          </div>
-          <div class="myPrflFrmGrp" [class.changed]="changedFields.address">
-            <label for="address">{{ "ADDRESS LINE 1" | translate }}</label>
-            <textarea
-              name="address"
-              [(ngModel)]="otherDetails.address"
-              [disabled]="!editOtherDetailsMode"
-              (input)="onFieldChange('address')"
-            ></textarea>
-          </div>
-          <div
-            class="myPrflFrmGrp"
-            [class.changed]="changedFields.additionalAddress"
-          >
-            <label for="additional_address">{{
-              "ADDRESS LINE 2" | translate
-            }}</label>
-            <textarea
-              name="additional_address"
-              [(ngModel)]="otherDetails.additionalAddress"
-              [disabled]="!editOtherDetailsMode"
-              (input)="onFieldChange('additional_address')"
-            ></textarea>
-          </div>
-          <div class="myPrflFrmGrp" [class.changed]="changedFields.state">
-            <label for="state">{{ "STATE" | translate }}</label>
-            <input
-              *ngIf="!editOtherDetailsMode; else editStateTpl"
-              type="text"
-              name="state"
-              [(ngModel)]="otherDetails.state"
-              [disabled]="!editOtherDetailsMode"
-              (input)="onFieldChange('state')"
-            />
-            <ng-template #editStateTpl>
-              <app-custom-select
-                [options]="stateList"
-                key="key"
-                value="value"
-                placeholder="Select State"
-                [selectedOption]="selectedState"
-                (optionSelected)="onStateSelected($event)"
-                (click)="handleviewclicks()"
-              >
-              </app-custom-select>
-            </ng-template>
-          </div>
-          <div class="myPrflFrmGrp" [class.changed]="changedFields.city">
-            <label>{{ "CITY" | translate }}</label>
+  <!-- ── Other Details ─────────────────────────────────────────────── -->
+  <app-dash-form class="mt-4">
+    <form>
+      <app-white-card [title]="'OTHER_DETAILS' | translate" [showActions]="true">
+        <div class="profileSection">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">{{ "COUNTRY" | translate }}</label>
+              <ng-container *ngIf="!editOtherDetailsMode; else editCountryTpl">
+                <input type="text" class="form-control" name="country" [(ngModel)]="otherDetails.country" [disabled]="true" />
+              </ng-container>
+              <ng-template #editCountryTpl>
+                <app-custom-select
+                  [options]="countryList"
+                  key="key" value="value"
+                  placeholder="Select Country"
+                  [selectedOption]="selectedCountry"
+                  (optionSelected)="onCountrySelected($event)"
+                  (click)="handleviewclick()"
+                />
+              </ng-template>
+            </div>
 
-            <input
-              *ngIf="!editOtherDetailsMode; else editCityTpl"
-              type="text"
-              name="city"
-              [(ngModel)]="otherDetails.city"
-              [disabled]="true"
-            />
+            <div class="col-md-4">
+              <label class="form-label">{{ "STATE" | translate }}</label>
+              <ng-container *ngIf="!editOtherDetailsMode; else editStateTpl">
+                <input type="text" class="form-control" name="state" [(ngModel)]="otherDetails.state" [disabled]="true" />
+              </ng-container>
+              <ng-template #editStateTpl>
+                <app-custom-select
+                  [options]="stateList"
+                  key="key" value="value"
+                  placeholder="Select State"
+                  [selectedOption]="selectedState"
+                  (optionSelected)="onStateSelected($event)"
+                  (click)="handleviewclicks()"
+                />
+              </ng-template>
+            </div>
 
-            <ng-template #editCityTpl>
-              <app-custom-select
-                [options]="cityList"
-                key="key"
-                value="value"
-                placeholder="Select City"
-                [selectedOption]="selectedCity"
-                (optionSelected)="onCitySelected($event)"
-                (click)="handleviewclickcity()"
-              >
-              </app-custom-select>
-            </ng-template>
-          </div>
-          <div class="myPrflFrmGrp" [class.changed]="changedFields.locality">
-            <label>{{ "LOCALITY" | translate }}</label>
+            <div class="col-md-4">
+              <label class="form-label">{{ "CITY" | translate }}</label>
+              <ng-container *ngIf="!editOtherDetailsMode; else editCityTpl">
+                <input type="text" class="form-control" name="city" [(ngModel)]="otherDetails.city" [disabled]="true" />
+              </ng-container>
+              <ng-template #editCityTpl>
+                <app-custom-select
+                  [options]="cityList"
+                  key="key" value="value"
+                  placeholder="Select City"
+                  [selectedOption]="selectedCity"
+                  (optionSelected)="onCitySelected($event)"
+                  (click)="handleviewclickcity()"
+                />
+              </ng-template>
+            </div>
 
-            <input
-              type="text"
-              name="locality"
-              [(ngModel)]="otherDetails.locality"
-              (input)="onFieldChange('locality')"
-              [disabled]="!editOtherDetailsMode"
-            />
-          </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ "LOCALITY" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                name="locality"
+                [(ngModel)]="otherDetails.locality"
+                [disabled]="!editOtherDetailsMode"
+                (input)="onFieldChange('locality')"
+              />
+            </div>
 
-          <div class="myPrflFrmGrp" [class.changed]="changedFields.postalCode">
-            <label for="postalCode">{{ "POSTAL_CODE" | translate }}</label>
-            <input
-              type="number"
-              inputmode="numeric"
-              maxlength="6"
-              name="postalCode"
-              [(ngModel)]="otherDetails.postalCode"
-              [disabled]="!editOtherDetailsMode"
-              (input)="onFieldChange('postalCode')"
-            />
+            <div class="col-md-4">
+              <label class="form-label">{{ "POSTAL_CODE" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                name="postalCode"
+                [(ngModel)]="otherDetails.postalCode"
+                [disabled]="!editOtherDetailsMode"
+                (input)="onFieldChange('postalCode')"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{ "TIME_ZONE" | translate }}</label>
+              <ng-container *ngIf="!editOtherDetailsMode; else editTimezoneTpl">
+                <input type="text" class="form-control" [value]="otherDetails.timeZone" [disabled]="true" />
+              </ng-container>
+              <ng-template #editTimezoneTpl>
+                <app-custom-select
+                  [options]="timezoneList"
+                  placeholder="Select Timezone"
+                  [selectedOption]="selectedTimezone"
+                  (optionSelected)="onTimezoneSelected($event)"
+                  (click)="handleTimezoneClick()"
+                />
+              </ng-template>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "ADDRESS LINE 1" | translate }}</label>
+              <textarea
+                class="form-control"
+                name="address"
+                rows="2"
+                [(ngModel)]="otherDetails.address"
+                [disabled]="!editOtherDetailsMode"
+                (input)="onFieldChange('address')"
+              ></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ "ADDRESS LINE 2" | translate }}</label>
+              <textarea
+                class="form-control"
+                name="additional_address"
+                rows="2"
+                [(ngModel)]="otherDetails.additionalAddress"
+                [disabled]="!editOtherDetailsMode"
+                (input)="onFieldChange('additional_address')"
+              ></textarea>
+            </div>
           </div>
         </div>
-      </div>
-      <ng-container card-actions>
-        <button
-          *ngIf="!editOtherDetailsMode"
-          type="button"
-          class="btn btnCommon btnWhite"
-          (click)="enableOtherDetailsEdit()"
-        >
-          <i><app-edit-icon /></i>{{ "EDIT" | translate }}
-        </button>
-        <button
-          *ngIf="editOtherDetailsMode"
-          type="submit"
-          class="btn btnCommon btnActive"
-          (click)="saveOtherDetails()"
-        >
-          {{ "SAVE_CHANGES" | translate }}
-        </button>
-        <button
-          *ngIf="editOtherDetailsMode"
-          type="button"
-          class="btn btnCommon btnDarkGrey"
-          (click)="cancelOtherDetails()"
-        >
-          {{ "CANCEL" | translate }}
-        </button>
-      </ng-container>
-    </app-white-card>
-  </form>
-</app-dash-form>
+
+        <ng-container card-actions>
+          <button
+            *ngIf="!editOtherDetailsMode"
+            type="button"
+            class="btn btnCommon btnWhite"
+            (click)="enableOtherDetailsEdit()"
+          >
+            <i><app-edit-icon /></i>{{ "EDIT" | translate }}
+          </button>
+          <button
+            *ngIf="editOtherDetailsMode"
+            type="submit"
+            class="btn btnCommon btnActive"
+            (click)="saveOtherDetails()"
+          >
+            {{ "SAVE_CHANGES" | translate }}
+          </button>
+          <button
+            *ngIf="editOtherDetailsMode"
+            type="button"
+            class="btn btnCommon btnDarkGrey"
+            (click)="cancelOtherDetails()"
+          >
+            {{ "CANCEL" | translate }}
+          </button>
+        </ng-container>
+      </app-white-card>
+    </form>
+  </app-dash-form>
+
+</div>
