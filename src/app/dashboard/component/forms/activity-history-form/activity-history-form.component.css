@@ -92,7 +92,7 @@
   align-items: center;
   justify-content: center;
   font-size: 15px;
-  color: #fff;
+  color: var(--whiteText);
   flex-shrink: 0;
 }
 
@@ -105,12 +105,24 @@
 }
 
 /* Type colors */
-.typeIcon.orange  { background: #f97316; }
-.typeIcon.green   { background: #16a34a; }
-.typeIcon.blue    { background: var(--activeBg); }
-.typeIcon.purple  { background: #7c3aed; }
-.typeIcon.whatsapp { background: #25d366; }
-.typeIcon.grey    { background: var(--lightText); }
+.typeIcon.orange {
+  background: var(--orangeColor);
+}
+.typeIcon.green {
+  background: var(--greenColor);
+}
+.typeIcon.blue {
+  background: var(--activeBg);
+}
+.typeIcon.purple {
+  background: var(--purpleColor);
+}
+.typeIcon.whatsapp {
+  background: var(--whatsappColor);
+}
+.typeIcon.grey {
+  background: var(--lightText);
+}
 
 /* ── Content ──────────────────────── */
 .content {
@@ -137,7 +149,7 @@
   height: 30px;
   border-radius: 50%;
   background: var(--activeBg);
-  color: #fff;
+  color: var(--whiteText);
   font-size: 11px;
   font-weight: 700;
   display: flex;

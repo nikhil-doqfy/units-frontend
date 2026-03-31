@@ -68,7 +68,7 @@
 }
 
 .custom-time-color {
-  color: blue;
+  color: var(--blueBg);
 }
 .otpVerifyLogo {
   position: relative;

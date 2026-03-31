@@ -59,11 +59,22 @@ export class StorageService {
     return JSON.parse(status);
   }
 
-  setLanguage(laguage: string): void {
-    localStorage.setItem(this.LANGUAGE, laguage);
+  setLanguage(language: string): void {
+    localStorage.setItem(this.LANGUAGE, language);
   }
 
   getLanguage(): string {
     return localStorage.getItem(this.LANGUAGE) ?? 'en';
+  }
+
+  /*----------------------toggle mode --------------------*/
+  private THEME_KEY = 'theme';
+
+  setTheme(theme: string): void {
+    localStorage.setItem(this.THEME_KEY, theme);
+  }
+
+  getTheme(): string {
+    return localStorage.getItem(this.THEME_KEY) ?? 'light';
   }
 }

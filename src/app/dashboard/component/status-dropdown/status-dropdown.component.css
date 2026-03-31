@@ -13,10 +13,10 @@
 
 .dropdown {
   margin-top: 6px;
-  background: #ffffff;
+  background: var(--dropdown-bg);
   border-radius: 14px;
   min-width: 220px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 15px 35px var(--dropdown-shadow);
   padding: 8px 0;
 }
 
@@ -31,5 +31,5 @@
 }
 
 .item:hover {
-  background: #f5f6f8;
+  background: var(--dropdown-hover);
 }

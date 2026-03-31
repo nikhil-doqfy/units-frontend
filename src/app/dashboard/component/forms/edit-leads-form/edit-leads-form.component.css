@@ -1,10 +1,10 @@
 .editLeadForm .form-label span {
-  color: #ef4444;
+  color: var(--errorColor);
   margin-left: 2px;
 }
 
 .errorMsg {
-  color: #ef4444;
+  color: var(--errorColor);
   font-size: 12px;
   margin-top: 4px;
   display: block;

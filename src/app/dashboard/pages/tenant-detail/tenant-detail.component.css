@@ -13,7 +13,7 @@
   align-items: center;
   border-radius: 12px;
   padding: 14px 26px;
-  box-shadow: 0 1px 10px rgba(66, 66, 66, 0.2);
+  box-shadow: 0 1px 10px var(--shadow-md);
 }
 
 .summary-item {
@@ -27,13 +27,13 @@
 .amount {
   font-size: 15px;
   font-weight: 600;
-  color: #030507;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
 .label {
   font-size: 14px;
-  color: #545659;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
@@ -56,7 +56,7 @@
 .line {
   flex: 1;
   height: 1px;
-  background: #e5e7eb;
+  background: var(--line-color);
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -85,7 +85,7 @@
 }
 .tenants-table tbody tr td:last-child {
   background-color: var(--whiteBg);
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+  box-shadow: -2px 0 4px var(--shadow-sm);
 }
 
 .tenants-table td:last-child,
@@ -95,7 +95,7 @@
 
 .tenants-table td:last-child::before,
 .tenants-table th:last-child::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -12px;
@@ -104,8 +104,8 @@
   pointer-events: none;
   background: linear-gradient(
     to left,
-    rgba(0, 0, 0, 0.12),
-    rgba(0, 0, 0, 0.05),
+    var(--fade-strong),
+    var(--fade-light),
     transparent
   );
 }
@@ -119,79 +119,94 @@
   font-weight: 600;
   white-space: nowrap;
 }
-.badge-active   { background: #d1fae5; color: #065f46; }
-.badge-draft    { background: #e0f2fe; color: #0369a1; }
-.badge-inactive { background: #fef9c3; color: #854d0e; }
-.badge-expired  { background: #fee2e2; color: #991b1b; }
-.badge-rejected { background: #ffe4e6; color: #9f1239; }
+.badge-active {
+  background: var(--badge-active-bg);
+  color: var(--badge-active-text);
+}
+.badge-draft {
+  background: var(--badge-active-bg);
+  color: var(--badge-active-text);
+}
+.badge-inactive {
+  background: var(--badge-inactive-bg);
+  color: var(--badge-inactive-text);
+}
+.badge-expired {
+  background: var(--badge-expired-bg);
+  color: var(--badge-expired-text);
+}
+.badge-rejected {
+  background: var(--badge-expired-bg);
+  color: var(--badge-expired-text);
+}
 
 /* White text inside status badges */
 :host ::ng-deep .status-black app-status-action-dropdown .statusText,
 :host ::ng-deep .status-green app-status-action-dropdown .statusText,
-:host ::ng-deep .status-grey  app-status-action-dropdown .statusText {
-  color: #fff !important;
+:host ::ng-deep .status-grey app-status-action-dropdown .statusText {
+  color: var(--text-white) !important;
   font-size: 12px;
   font-weight: 500;
   padding: 6px 10px;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   MODAL UTILITIES
-   ══════════════════════════════════════════════════════════════════ */
+    MODAL UTILITIES
+    ══════════════════════════════════════════════════════════════════ */
 .payment-link-btn {
-  color: blue !important;
+  color: var(--blue-link) !important;
   text-decoration: underline !important;
   background: transparent;
   border: none;
 }
 .ref {
   font-size: 14px;
-  color: #666;
+  color: var(--blue-link);
   margin-left: 10px;
 }
 .ref-badge {
-  background: #eee;
+  background: var(--text-muted);
   padding: 4px 10px;
   border-radius: 6px;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   DUES CARD & PAYMENT LINK
-   ══════════════════════════════════════════════════════════════════ */
+    DUES CARD & PAYMENT LINK
+    ══════════════════════════════════════════════════════════════════ */
 .dues-card {
   width: 210px;
-  background: #f3f3f3;
+  background: var(--dues-bg);
   padding: 16px;
   border-radius: 4px;
   cursor: pointer;
 }
 .dues-title {
   font-size: 14px;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 6px;
 }
 .dues-amount {
-  color: red;
+  color: var(--danger-color);
   font-weight: 600;
   font-size: 15px;
 }
 .payment-link {
-  color: #007bff;
+  color: var(--link-color);
   font-size: 14px;
   text-decoration: underline;
   cursor: pointer;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   RENEWAL ALERT
-   ══════════════════════════════════════════════════════════════════ */
+    RENEWAL ALERT
+    ══════════════════════════════════════════════════════════════════ */
 .renewal-alert {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 6px;
-  background: #fff1f2;
-  color: #b00020;
+  background: var(--renewal-bg);
+  color: var(--renewal-text);
   padding: 15px;
   border-radius: 4px;
   font-size: 15px;
@@ -237,7 +252,7 @@
 
 .transactions-table tbody tr td:last-child {
   background-color: var(--whiteBg, #fff);
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-sticky);
 }
 
 /* ── Receipt / filter toolbar ── */
@@ -254,10 +269,10 @@
   top: 110%;
   left: 0;
   z-index: 100;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: var (--shadow-dropdown);
   min-width: 160px;
   padding: 6px 0;
 }
@@ -265,11 +280,11 @@
 .custom-menu .dropdown-item {
   padding: 9px 16px;
   font-size: 13px;
-  color: #374151;
+  color: var(--text-primary);
   cursor: pointer;
 }
 .custom-menu .dropdown-item:hover {
-  background: #f9fafb;
+  background: var(--hover-bg);
 }
 
 .filter-box {
@@ -278,8 +293,8 @@
 }
 
 .generate-btn {
-  background: #1565c0;
-  color: #fff;
+  background: var(--primary-btn);
+  color: var(--text-white);
   border: none;
   border-radius: 6px;
   padding: 8px;
@@ -319,10 +334,10 @@
   font-weight: 500;
 }
 .additional.cheque {
-  background: #fff7ed;
-  color: #c2410c;
+  background: var(--cheque-bg);
+  color: var(--cheque-text);
 }
 .additional.tax {
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: var(--tax-bg);
+  color: var(--tax-text);
 }

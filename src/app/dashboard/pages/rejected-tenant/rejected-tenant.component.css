@@ -44,7 +44,7 @@
 .weekLabel .line {
   flex: 1;
   height: 1px;
-  background: #e5e7eb;
+  background: var(--line-color);
 }
 
 .left {
@@ -57,7 +57,7 @@
 .line {
   flex: 1;
   height: 1px;
-  background: #e5e7eb;
+  background: var(--line-color);
 }
 .customRadio {
   display: flex;

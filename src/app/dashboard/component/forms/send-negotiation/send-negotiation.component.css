@@ -7,7 +7,7 @@
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 10px;
-  color: #2c2c2c;
+  color: var(--textPrimaryDark);
 }
 
 .inputBox {
@@ -15,9 +15,9 @@
   min-height: 110px;
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  background-color: #fafafa;
+  border: 1px solid var(--borderLight);
+  background-color: var(--inputBg);
   font-size: 14px;
-  color: #6b7280;
+  color: var(--textSecondary);
   line-height: 1.5;
 }

@@ -1,17 +1,17 @@
 .ownerCardWrapper {
   position: relative;
-  border: 1px solid #3b82f6;
+  border: 1px solid var(--owner-border);
   border-radius: 10px;
   padding: 20px;
-  background-color: #f5f7f8;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+  background-color: var(--owner-bg);
+  box-shadow: 0 0 15px var(--owner-shadow);
 }
 
 .ownerCount {
   position: absolute;
   top: -10px;
   right: 15px;
-  background: #d6dee1;
+  background: var(--badge-bg);
   padding: 4px 10px;
   font-size: 12px;
   border-radius: 6px;
@@ -28,8 +28,8 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 1px solid #cbd5e1;
-  background: white;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
 
   display: flex;
   align-items: center;
@@ -41,13 +41,13 @@
 }
 
 .plusBtn {
-  color: #0c6ce9;
-  border: 1px solid #0c6ce9;
+  color: var(--btn-plus);
+  border: 1px solid var(--btn-plus);
 }
 
 .minusBtn {
-  border: 1px solid #536c76;
-  color: #536c76;
+  border: 1px solid var(--btn-minus);
+  color: var(--btn-minus);
 }
 
 .img-preview-grid {
@@ -63,7 +63,7 @@
   height: 90px;
   border-radius: 8px;
   overflow: visible;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--img-border);
 }
 
 .img-thumb {
@@ -81,8 +81,8 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #ef4444;
-  color: white;
+  background: var(--remove-bg);
+  color: var(--remove-text);
   border: none;
   font-size: 14px;
   line-height: 1;

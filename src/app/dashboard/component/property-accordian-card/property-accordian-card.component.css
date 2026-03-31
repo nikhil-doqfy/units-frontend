@@ -1,66 +1,66 @@
 .prprtyAcrdn .accordion-item {
-    border: 1px solid var(--muteBorder1);
-    border-radius: 8px;
-    overflow: hidden;
+  border: 1px solid var(--muteBorder1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.prprtyAcrdn .accordion-item+.accordion-item {
-    margin-top: 16px;
+.prprtyAcrdn .accordion-item + .accordion-item {
+  margin-top: 16px;
 }
 
 .prprtyAcrdn .accordion-button {
-    font-size: 14px;
-    color: var(--greyText);
-    font-weight: 500;
-    line-height: 18px;
-    padding: 10px 16px;
-    justify-content: space-between;
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 500;
+  line-height: 18px;
+  padding: 10px 16px;
+  justify-content: space-between;
 }
 
 .prprtyAcrdn .accordion-button:not(.collapsed),
 .prprtyAcrdn .accordion-button:focus {
-    color: var(--greyText2);
-    background-color: transparent;
-    box-shadow: none;
+  color: var(--greyText2);
+  background-color: transparent;
+  box-shadow: none;
 }
 
 .prprtyAcrdn .accordion-button::after {
-    background-size: 16px;
-    width: 16px;
-    height: 16px;
+  background-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .prprtyAcrdn .accordion-body {
-    padding: 16px;
-    border-top: 1px solid var(--muteBorder1);
+  padding: 16px;
+  border-top: 1px solid var(--muteBorder1);
 }
 
 .prprtyAcrdn .accordion-body ul {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
 .prprtyAcrdn .accordion-body ul li {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .prprtyAcrdn .accordion-body ul li span {
-    display: block;
-    font-size: 12px;
-    color: var(--greyText);
-    font-weight: 400;
-    line-height: 16px;
+  display: block;
+  font-size: 12px;
+  color: var(--greyText);
+  font-weight: 400;
+  line-height: 16px;
 }
 
 .prprtyAcrdn .accordion-body ul li p {
-    font-size: 13px;
-    color: var(--greyDarkText1);
-    font-weight: 500;
-    line-height: 16px;
-    margin: 0;
+  font-size: 13px;
+  color: var(--greyDarkText1);
+  font-weight: 500;
+  line-height: 16px;
+  margin: 0;
 }
 
 /* Table layout inside accordion */
@@ -69,22 +69,24 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-.acrd-table-wrap::-webkit-scrollbar { display: none; }
+.acrd-table-wrap::-webkit-scrollbar {
+  display: none;
+}
 
 .acrd-table thead th {
   font-size: 12px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--tableHeaderText);
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  background: #f9fafb;
+  background: var(--tableHeaderBg);
   white-space: nowrap;
   padding: 8px 12px;
 }
 
 .acrd-table tbody td {
   font-size: 13px;
-  color: #374151;
+  color: var(--tableBodyText);
   vertical-align: middle;
   padding: 8px 12px;
 }

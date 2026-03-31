@@ -20,8 +20,8 @@
 
   background: linear-gradient(
     to left,
-    rgba(0, 0, 0, 0.12),
-    rgba(0, 0, 0, 0.05),
+    var(--gradientShadowStart),
+    var(--gradientShadowMid),
     transparent
   );
 }
@@ -51,5 +51,5 @@
 
 .call-lead-table tbody tr td:last-child {
   background-color: var(--whiteBg);
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+  box-shadow: -2px 0 4px var(--shadowRight);
 }

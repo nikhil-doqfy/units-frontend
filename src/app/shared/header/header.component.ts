@@ -57,6 +57,7 @@ import { NewUnitsComponent } from '../../dashboard/pages/new-units/new-units.com
 import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon.component';
 import { SearchContactIconComponent } from '../../icon/search-contact-icon/search-contact-icon.component';
 import { SearchContactComponent } from '../search-contact/search-contact.component';
+import { MoonIconComponent } from '../../icons/moon-icon/moon-icon.component';
 
 @Component({
   selector: 'app-header',
@@ -90,6 +91,7 @@ import { SearchContactComponent } from '../search-contact/search-contact.compone
     NewUnitsIconComponent,
     SearchContactIconComponent,
     SearchContactComponent,
+    MoonIconComponent,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -146,6 +148,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const theme = this.storage.getTheme();
+    this.isDark = theme === 'dark';
+
+    this.applyTheme();
+
     this.subscriptions.add(
       this.sharedService.breadcrumb$.subscribe((res) => {
         this.breadcrumbData = res;
@@ -495,5 +502,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
       default:
         return `with: ${reason}`;
     }
+  }
+  /*----------------------------Toggle mode--------------------------------*/
+  isDark: boolean = false;
+  toggleTheme() {
+    this.isDark = !this.isDark;
+
+    const theme = this.isDark ? 'dark' : 'light';
+
+    this.storage.setTheme(theme); // 👈 save in localStorage
+
+    this.applyTheme();
+  }
+
+  applyTheme() {
+    const themeClass = this.isDark ? 'dark-theme' : 'light-theme';
+
+    document.body.classList.remove('light-theme', 'dark-theme');
+    document.body.classList.add(themeClass);
   }
 }

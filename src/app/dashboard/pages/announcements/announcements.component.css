@@ -1,5 +1,5 @@
 .cmmnTblBody table thead tr th {
-  background-color: #0c6ce9;
+  background-color: var(--table-header-bg);
 }
 
 .announcement-page {
@@ -10,10 +10,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
+  background: var(--top-actions-bg);
   padding: 12px 16px;
   border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 12px var(--top-actions-shadow);
   margin-bottom: 16px;
 }
 
@@ -24,8 +24,8 @@
 }
 
 .btn-outline {
-  border: 1px solid #d0d5dd;
-  background: #fff;
+  border: 1px solid var(--btn-outline-border);
+  background: var(--btn-outline-bg);
   padding: 8px 14px;
   border-radius: 8px;
   font-weight: 500;
@@ -37,9 +37,9 @@
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #7b61ff, #9b7cff);
+  background: var(--btn-primary-gradient);
   border: none;
-  color: #fff;
+  color: var(--btn-primary-text);
   padding: 8px 14px;
   border-radius: 8px;
   font-weight: 500;
@@ -48,12 +48,12 @@
 
 .btn-primary.dropdown {
   padding: 8px 10px;
-  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 1px solid var(--btn-divider);
 }
 
 .icon-btn.close {
   border: none;
-  background: #f1f3f9;
+  background: var(--icon-btn-bg);
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -62,14 +62,14 @@
 }
 
 .form-card {
-  background: #fff;
+  background: var(--form-card-bg);
   border-radius: 14px;
   padding: 20px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 15px var(--form-card-shadow);
 }
 
 .form-section {
-  border: 1px solid #eef1f6;
+  border: 1px solid var(--form-section-border);
   border-radius: 12px;
   padding: 18px;
   margin-bottom: 18px;
@@ -83,8 +83,8 @@
 }
 
 .section-header span {
-  background: #eef1f6;
-  color: #555;
+  background: var(--section-badge-bg);
+  color: var(--section-badge-text);
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 12px;
@@ -118,13 +118,13 @@
 .form-group label {
   font-size: 13px;
   font-weight: 500;
-  color: #333;
+  color: var(--label-color);
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
-  border: 1px solid #dfe3eb;
+  border: 1px solid var(--input-border);
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 13px;
@@ -135,7 +135,7 @@
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: #7b61ff;
+  border-color: var(--input-focus-border);
 }
 
 .radio-group label {
@@ -147,7 +147,7 @@
 }
 
 .upload-box {
-  border: 2px dashed #dfe3eb;
+  border: 2px dashed var(--upload-border);
   border-radius: 12px;
   height: 120px;
   display: flex;
@@ -155,14 +155,14 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  color: #777;
-  background: #fafbfe;
+  color: var(--upload-text);
+  background: var(--upload-bg);
   transition: 0.25s;
 }
 
 .upload-box:hover {
-  border-color: #7b61ff;
-  background: #f4f1ff;
+  border-color: var(--upload-hover-border);
+  background: var(--upload-hover-bg);
 }
 
 .upload-box p {
@@ -212,7 +212,7 @@
 :host ::ng-deep app-edit-icon i,
 :host ::ng-deep app-edit-icon svg {
   font-size: 16px;
-  color: #6b7280;
+  color: var(--icon-color);
   cursor: pointer;
 }
 
@@ -220,7 +220,7 @@
 :host ::ng-deep .cmmnTblActnBtnDiv svg,
 :host ::ng-deep .cmmnTblActnBtnDiv button {
   font-size: 18px;
-  color: #6b7280;
+  color: var(--icon-color);
   cursor: pointer;
   background: transparent;
   border: none;
@@ -229,7 +229,7 @@
 
 .tbl-action-inline app-edit-icon:hover,
 .tbl-action-inline .cmmnTblActnBtnDiv:hover {
-  color: #2563eb;
+  color: var(--action-hover-color);
 }
 
 .tbl-action {
@@ -237,7 +237,7 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  color: green;
+  color: var(--action-default-color);
 }
 
 .audience-header {
@@ -249,13 +249,13 @@
 .audience-header .title {
   font-size: 14px;
   font-weight: 600;
-  color: #222;
+  color: var(--text-primary);
   text-decoration: underline;
 }
 
 .audience-header .badge {
-  background: #eef2f6;
-  color: #222;
+  background: var(--badge-bg);
+  color: var(--text-primary);
   font-size: 12px;
   font-weight: 600;
   padding: 4px 10px;
@@ -269,8 +269,8 @@
 }
 
 .form-group select:focus {
-  border-color: #1976ff;
-  box-shadow: 0 0 0 2px rgba(25, 118, 255, 0.1);
+  border-color: var(--focus-border);
+  box-shadow: var(--focus-shadow);
 }
 
 @media (max-width: 768px) {
@@ -279,10 +279,10 @@
   }
 }
 .announce-card {
-  background: #ffffff;
+  background: var(--card-bg);
   border-radius: 14px;
   padding: 18px 22px 22px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 12px var(--card-shadow);
 }
 
 .announce-header {
@@ -295,13 +295,13 @@
 .announce-header .title {
   font-size: 14px;
   font-weight: 600;
-  color: #222;
+  color: var(--text-primary);
   text-decoration: underline;
 }
 
 .announce-header .badge {
-  background: #eef2f6;
-  color: #222;
+  background: var(--bg-badge);
+  color: var(--text-primary);
   font-size: 12px;
   font-weight: 600;
   padding: 4px 10px;
@@ -327,11 +327,11 @@
   font-size: 12px;
   font-weight: 500;
   margin-bottom: 6px;
-  color: #222;
+  color: var(--text-primary);
 }
 
 .form-group textarea {
-  border: 1px solid #e3e7ee;
+  border: 1px solid var(--border-light);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 13px;
@@ -344,12 +344,12 @@
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: #1976ff;
-  box-shadow: 0 0 0 2px rgba(25, 118, 255, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: var(--focus-shadow);
 }
 
 .upload-box {
-  border: 1px dashed #d6dbe3;
+  border: 1px dashed var(--upload-border);
   border-radius: 12px;
   height: 120px;
   display: flex;
@@ -362,7 +362,7 @@
 }
 
 .upload-box:hover {
-  background: #f7f9fc;
+  background: var(--upload-hover-bg);
 }
 
 .upload-box input {
@@ -374,7 +374,7 @@
 
 .upload-icon {
   font-size: 20px;
-  color: #6c7a89;
+  color: var(--upload-icon-color);
 }
 
 .upload-text {
@@ -455,7 +455,7 @@
 
 .broadcast-table tbody tr td:last-child {
   background-color: var(--whiteBg);
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+  box-shadow: -2px 0 4px var(--table-cell-shadow);
 }
 
 .table td:last-child::before,
@@ -470,8 +470,8 @@
 
   background: linear-gradient(
     to left,
-    rgba(0, 0, 0, 0.12),
-    rgba(0, 0, 0, 0.05),
+    var(--table-shadow-color1),
+    var(--table-shadow-color2),
     transparent
   );
 }

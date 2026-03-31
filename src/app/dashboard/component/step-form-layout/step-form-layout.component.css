@@ -134,7 +134,7 @@
   background: transparent;
   border: none;
   padding: 0;
-  color: #2b65f8;
+  color: var(--primary-color);
   text-decoration: underline;
   font-weight: 500;
   display: inline-flex;
@@ -150,7 +150,7 @@
 }
 
 .blockCount {
-  background: #e9ecef;
+  background: var(--block-count-bg);
   padding: 4px 12px;
   border-radius: 8px;
   font-weight: 600;

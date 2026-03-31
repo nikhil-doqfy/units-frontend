@@ -78,7 +78,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #1a73e8;
+  color: var(--primary-link-color);
   font-size: 14px;
 }
 
