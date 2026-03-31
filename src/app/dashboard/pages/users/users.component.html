@@ -1,475 +1,188 @@
-<div class="mb-3">
-  <app-white-card>
-    <div class="row align-items-center justify-content-between g-3">
-      <div class="col-md">
-        <div class="commonBoxTabs">
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link active"
-                id="allUsers-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#allUsers-tab-pane"
-                type="button"
-                role="tab"
-                aria-controls="allUsers-tab-pane"
-                aria-selected="true"
-                (click)="getActiveUser()"
-              >
-                {{ "ALL_USER" | translate }}
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="newUsers-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#newUsers-tab-pane"
-                type="button"
-                role="tab"
-                aria-controls="newUsers-tab-pane"
-                aria-selected="false"
-                (click)="getNewUser()"
-              >
-                {{ "NEW_USERS" | translate }}
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="deletedUsers-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#deletedUsers-tab-pane"
-                type="button"
-                role="tab"
-                aria-controls="deletedUsers-tab-pane"
-                aria-selected="false"
-                (click)="getDeletedUser()"
-              >
-                {{ "INACTIVE_USER" | translate }}
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="col-md-auto">
-        <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-filter-popup-btn #filterPopup>
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
+<!-- ── Top bar: tabs ───────────────────────────────────────────── -->
+<app-white-card>
+  <div class="row align-items-center justify-content-between g-3">
+    <div class="col-md">
+      <div class="commonBoxTabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              [class.active]="activeTab === 'all'"
+              (click)="getActiveUser()"
             >
-              <app-filter-icon />
-            </app-table-filter-btn>
+              {{ "ALL_USER" | translate }}
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              [class.active]="activeTab === 'active'"
+              (click)="getNewUser()"
+            >
+              {{ "NEW_USERS" | translate }}
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              [class.active]="activeTab === 'inactive'"
+              (click)="getDeletedUser()"
+            >
+              {{ "INACTIVE_USER" | translate }}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-auto">
+      <button
+        type="button"
+        class="btn btnCommon"
+        (click)="openAddUserModal(addUserContent)"
+      >
+        <i><app-plus-icon /></i>{{ "NEW_USER" | translate }}
+      </button>
+    </div>
+  </div>
+</app-white-card>
 
-            <ng-container form>
-              <form>
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <label class="form-label">{{
-                      "USER_TYPE" | translate
-                    }}</label>
-                    <app-custom-select
-                      [options]="userTypeList"
-                      [placeholder]="'SELECT_USER_TYPE' | translate"
-                      [selectedOption]="selectedUserType"
-                      (optionSelected)="onOptionSelectedUserType($event)"
-                      (click)="handleFilterClick()"
-                    >
-                    </app-custom-select>
+<!-- ── Table ─────────────────────────────────────────────────── -->
+<div class="mt-3">
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="activeTableTitle"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search
+              placeholder="Search here..."
+              (onValueChange)="onSearch($event)"
+            />
+            <app-filter-popup-btn #filterPopup>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{ "USER_TYPE" | translate }}</label>
+                      <app-custom-select
+                        [options]="userTypeList"
+                        [placeholder]="'SELECT_USER_TYPE' | translate"
+                        [selectedOption]="selectedUserType"
+                        (optionSelected)="onOptionSelectedUserType($event)"
+                        (click)="handleFilterClick()"
+                      />
+                    </div>
                   </div>
-                </div>
-              </form>
-            </ng-container>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon btnTransparent"
+                  (click)="removeFilter(); filterPopup.closePopup()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <ng-container action>
-              <button
-                type="button"
-                class="btn btnCommon"
-                (click)="removeFilter(); filterPopup.closePopup()"
-              >
-                {{ "REMOVE_ALL" | translate }}
-              </button>
-              <button
-                type="button"
-                class="btn btnCommon"
-                (click)="applyFilter()"
-              >
-                {{ "APPLY" | translate }}
-              </button>
-            </ng-container>
-          </app-filter-popup-btn>
-        </div>
-      </div>
-      <div class="col-md-auto">
-        <button
-          type="button"
-          class="btn btnCommon"
-          (click)="openAddUserModal(addUserContent)"
-        >
-          <i><app-plus-icon /></i>{{ "NEW_USER" | translate }}
-        </button>
-      </div>
-    </div>
-  </app-white-card>
-</div>
-<div class="tab-content" id="myTabContent">
-  <div
-    class="tab-pane fade show active"
-    id="allUsers-tab-pane"
-    role="tabpanel"
-    aria-labelledby="allUsers-tab"
-    tabindex="0"
-  >
-    <div class="cmmnTblOuter">
-      <div class="cmmnTblHdr">
-        <div class="row align-items-center">
-          <div class="col-md">
-            <app-table-title
-              [title]="totalRecords.toString()"
-              [subtitle]="'USERS_FOUND' | translate"
-            ></app-table-title>
-          </div>
-          <div class="col-md-auto">
-            <div class="d-flex align-items-center gap-2 gap-md-3"></div>
-          </div>
-        </div>
-      </div>
-      <div class="cmmnTbl">
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>{{ "USER_NAME" | translate }} <i><app-sorting-icon /></i></th>
+              <th>{{ "EMAIL" | translate }}</th>
+              <th>{{ "PHONE" | translate }}</th>
+              <th>{{ "ROLE" | translate }}</th>
+              <th>{{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i></th>
+              <th>{{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i></th>
+              <th>{{ "STATUS" | translate }}</th>
+              <th width="100">{{ "ACTIONS" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users; track $index) {
               <tr>
-                <th>
-                  {{ "USER_NAME" | translate }} <i><app-sorting-icon /></i>
-                </th>
-                <th>{{ "PHONE" | translate }}</th>
-                <th>{{ "ROLE" | translate }}</th>
-                <th>{{ "EMAIL" | translate }}</th>
-                <th>
-                  {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
-                </th>
-                <th>
-                  {{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i>
-                </th>
-                <th>{{ "STATUS" | translate }}</th>
-                <th width="200"></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (user of users; track $index) {
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      [img]="
-                        user.profile_image
-                          ? user.profile_image
-                          : '../../../../assets/userDefaultProImg.png'
-                      "
-                      [title]="user.first_name + ' ' + user.last_name"
-                    >
-                    </app-table-img-item>
-                  </td>
-                  <td>{{ user.contact_number || "XXXXXXX" }}</td>
-                  <td>{{ user.role.value }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.created_on | date: "dd MMM yyyy" }}</td>
-                  <td>
-                    {{
-                      (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A"
-                    }}
-                  </td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        (change)="toggleUserStatus(user.id)"
-                        [checked]="user.is_active"
-                      />
-                    </div>
-                  </td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="edit"
-                        (clicked)="openEditUserModal(user.id, addUserContent)"
-                      />
-                      <!-- <app-table-action-btn
-                      type="delete"
-                      (clicked)="onDeleteClick(user.id, $index)"
-                    /> -->
-                    </div>
-                  </td>
-                </tr>
-              } @empty {
-                <tr>
-                  <td colspan="7" align="center">No Data to Show</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="cmmnTblFtr">
-        <app-table-select
-          [componentName]="componentName"
-          [rowsPerPage]="rowsPerPage"
-          [rowsPerPageOptions]="rowsPerPageOptions"
-          (rowsPerPageChange)="onPageSizeChange($event)"
-        />
-        <app-table-pagination
-          [componentName]="componentName"
-          [currentPage]="currentPage"
-          [totalRecords]="totalRecords"
-          [rowsPerPage]="rowsPerPage"
-          (pageChange)="onPageChange($event)"
-        />
-      </div>
-    </div>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="newUsers-tab-pane"
-    role="tabpanel"
-    aria-labelledby="newUsers-tab"
-    tabindex="0"
-  >
-    <div class="cmmnTblOuter">
-      <div class="cmmnTblHdr">
-        <div class="row align-items-center">
-          <div class="col-md">
-            <app-table-title
-              [title]="totalRecords.toString()"
-              [subtitle]="'USERS_FOUND' | translate"
-            ></app-table-title>
-          </div>
-          <div class="col-md-auto">
-            <div class="d-flex align-items-center gap-2 gap-md-3"></div>
-          </div>
-        </div>
-      </div>
-      <div class="cmmnTblBody">
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>
-                  <button type="button">
-                    {{ "USER_NAME" | translate }} <i><app-sorting-icon /></i>
-                  </button>
-                </th>
-                <th>{{ "PHONE" | translate }}</th>
-                <th>{{ "ROLE" | translate }}</th>
-                <th>{{ "EMAIL" | translate }}</th>
-                <th>
-                  <button type="button">
-                    {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
-                  </button>
-                </th>
-                <th>
-                  <button type="button">
-                    {{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i>
-                  </button>
-                </th>
-                <th>{{ "STATUS" | translate }}</th>
-                <th width="200"></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (user of users; track $index) {
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      [img]="
-                        user.profile_image
-                          ? user.profile_image
-                          : '../../../../assets/userDefaultProImg.png'
-                      "
-                      [title]="user.first_name + ' ' + user.last_name"
-                    >
-                    </app-table-img-item>
-                  </td>
-                  <td>{{ user.phone_number || "XXXXXXX" }}</td>
-                  <td>{{ user.role.value }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.created_on | date: "dd MMM yyyy" }}</td>
-                  <td>
-                    {{
-                      (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A"
-                    }}
-                  </td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        (change)="toggleUserStatus(user.id)"
-                        [checked]="user.is_active"
-                      />
-                    </div>
-                  </td>
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="edit"
-                        (clicked)="openEditUserModal(user.id, addUserContent)"
-                      />
-                      <!-- <app-table-action-btn
-                      type="delete"
-                      (clicked)="onDeleteClick(user.id, $index)"
-                    /> -->
-                    </div>
-                  </td>
-                </tr>
-              } @empty {
-                <tr>
-                  <td colspan="7" align="center">No Data to Show</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="cmmnTblFtr">
-        <app-table-select
-          [componentName]="componentName"
-          [rowsPerPage]="rowsPerPage"
-          [rowsPerPageOptions]="rowsPerPageOptions"
-          (rowsPerPageChange)="onPageSizeChange($event)"
-        />
-        <app-table-pagination
-          [componentName]="componentName"
-          [currentPage]="currentPage"
-          [totalRecords]="totalRecords"
-          [rowsPerPage]="rowsPerPage"
-          (pageChange)="onPageChange($event)"
-        />
-      </div>
-    </div>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="deletedUsers-tab-pane"
-    role="tabpanel"
-    aria-labelledby="deletedUsers-tab"
-    tabindex="0"
-  >
-    <div class="cmmnTblOuter">
-      <div class="cmmnTblHdr">
-        <div class="row align-items-center">
-          <div class="col-md">
-            <app-table-title
-              [title]="totalRecords.toString()"
-              [subtitle]="'USERS_FOUND' | translate"
-            ></app-table-title>
-          </div>
-          <div class="col-md-auto">
-            <div class="d-flex align-items-center gap-2 gap-md-3"></div>
-          </div>
-        </div>
-      </div>
-      <div class="cmmnTblBody">
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>
-                  <button type="button">
-                    {{ "USER_NAME" | translate }} <i><app-sorting-icon /></i>
-                  </button>
-                </th>
-                <th>{{ "PHONE" | translate }}</th>
-                <th>{{ "ROLE" | translate }}</th>
-                <th>{{ "EMAIL" | translate }}</th>
-                <th>
-                  <button type="button">
-                    {{ "CREATED_ON" | translate }}<i><app-sorting-icon /></i>
-                  </button>
-                </th>
-                <th>
-                  <button type="button">
-                    {{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i>
-                  </button>
-                </th>
-                <th>{{ "STATUS" | translate }}</th>
-                <th width="200"></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (user of users; track $index) {
-                <tr>
-                  <td>
-                    <app-table-img-item
-                      [img]="
-                        user.profile_image
-                          ? user.profile_image
-                          : '../../../../assets/userDefaultProImg.png'
-                      "
-                      [title]="user.first_name + ' ' + user.last_name"
-                    >
-                    </app-table-img-item>
-                  </td>
-                  <td>{{ user.phone_number || "XXXXXXX" }}</td>
-                  <td>{{ user.role.value }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.created_on | date: "dd MMM yyyy" }}</td>
-                  <td>
-                    {{
-                      (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A"
-                    }}
-                  </td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        (change)="toggleUserStatus(user.id)"
-                        [checked]="user.is_active"
-                        disabled
-                      />
-                    </div>
-                  </td>
-                  <!-- <td align="center">
+                <td>
+                  <app-table-img-item
+                    [img]="user.profile_image"
+                    [title]="(user.first_name || '') + ' ' + (user.last_name || '')"
+                    size="md"
+                    [showInitialsFallback]="true"
+                  />
+                </td>
+                <td>{{ user.email || "N/A" }}</td>
+                <td>{{ user.contact_number || "N/A" }}</td>
+                <td>{{ user.role?.value || "N/A" }}</td>
+                <td>{{ user.created_on | date: "dd MMM yyyy" }}</td>
+                <td>{{ (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A" }}</td>
+                <td>
+                  <span
+                    class="statusBadge"
+                    [ngClass]="user.is_active ? 'active' : 'inactive'"
+                  >
+                    {{ user.is_active ? "Active" : "Inactive" }}
+                  </span>
+                </td>
+                <td align="center">
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="edit"
-                      (clicked)="handleEditClick()"
-                    />
-                    <app-table-action-btn
-                      type="delete"
-                      (clicked)="onDeleteClick(user.id, $index)"
+                      (clicked)="openEditUserModal(user.id, addUserContent)"
                     />
                   </div>
-                </td> -->
-                </tr>
-              } @empty {
-                <tr>
-                  <td colspan="7" align="center">No Data to Show</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="8" align="center">
+                  <app-no-data />
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
       </div>
-      <div class="cmmnTblFtr">
-        <app-table-select
-          [componentName]="componentName"
-          [rowsPerPage]="rowsPerPage"
-          [rowsPerPageOptions]="rowsPerPageOptions"
-          (rowsPerPageChange)="onPageSizeChange($event)"
-        />
-        <app-table-pagination
-          [componentName]="componentName"
-          [currentPage]="currentPage"
-          [totalRecords]="totalRecords"
-          [rowsPerPage]="rowsPerPage"
-          (pageChange)="onPageChange($event)"
-        />
-      </div>
+    </div>
+
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 </div>
@@ -477,9 +190,7 @@
 <ng-template #addUserContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
-      {{
-        isEditMode ? ("EDIT_USER" | translate) : ("ADD_NEW_USER" | translate)
-      }}
+      {{ isEditMode ? ("EDIT_USER" | translate) : ("ADD_NEW_USER" | translate) }}
     </h4>
     <button
       type="button"

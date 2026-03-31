@@ -87,9 +87,8 @@ export class AddLeaseComponent {
     { label: 'Add Lease', link: '' },
   ];
 
-  propertyDetailForm = this.leaseFormService.propertyDetailsForm;
-  tenantDetailsForm = this.leaseFormService.tenantDetailsForm;
-  leaseDetailsForm = this.leaseFormService.leaseDetailsForm;
+  basicDetailsForm  = this.leaseFormService.basicDetailsForm;
+  leaseDetailsForm  = this.leaseFormService.leaseDetailsForm;
   // documentLayoutForm = this.leaseFormService.leaseDocumentLayoutForm;
   // negotiationForm = this.leaseFormService.leaseNegotiationForm;
   documentsForm = this.leaseFormService.leaseDocumentsForm;
@@ -135,7 +134,13 @@ export class AddLeaseComponent {
     const formId = this.route.snapshot.paramMap.get('id');
     if (formId) {
       this.engine.setFormId(+formId);
-      this.engine.loadStep(0);
+      this.engine.loadStep(0).then(() => {
+        const steps = this.engine.getSteps();
+        const ongoingIdx = steps.findIndex(
+          (s) => this.engine.getStepStatus(s.id) === 'ONGOING'
+        );
+        if (ongoingIdx > 0) this.engine.goTo(ongoingIdx);
+      });
     }
 
     this.getOptionsTypes([
@@ -174,7 +179,7 @@ export class AddLeaseComponent {
     if (!property) return;
     this.blockList = [];
     this.propertyUnitList = [];
-    this.propertyDetailForm.patchValue({ block: '', unit: '' });
+    this.basicDetailsForm.patchValue({ block: '', unit: '' });
 
     this.getOptionsTypes([
       {
@@ -189,7 +194,7 @@ export class AddLeaseComponent {
   onBlockSelect(block: any) {
     if (!block) return;
     this.propertyUnitList = [];
-    this.propertyDetailForm.patchValue({ unit: '' });
+    this.basicDetailsForm.patchValue({ unit: '' });
 
     this.getOptionsTypes([
       {
@@ -209,7 +214,20 @@ export class AddLeaseComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp: any) => {
         this.selectedPropertyDetails = resp.content;
+        this.prepopulateCommercialDetails(resp.content?.property_unit);
       });
+  }
+
+  private prepopulateCommercialDetails(unit: any) {
+    if (!unit) return;
+    const annualRent = unit.rent ?? null;
+    this.leaseDetailsForm.patchValue({
+      annualAmount:       annualRent,
+      actualAnnualAmount: annualRent,
+      rent:               annualRent,
+      securityDeposite:   unit.security_deposit     ?? null,
+      maintenanceCharges: unit.maintenance_charges   ?? null,
+    });
   }
 
   onTenantSelect(tenant: any) {

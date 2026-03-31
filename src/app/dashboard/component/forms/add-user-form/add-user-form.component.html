@@ -1,244 +1,109 @@
 <app-modal-form-card>
   <form [formGroup]="userForm">
+
+    <!-- Profile image upload -->
     <div class="userProCol">
       <div class="usertProIcon">
         <i *ngIf="!imageBase64"><app-upload-big-icon /></i>
-
-        <img
-          *ngIf="imageBase64"
-          [src]="imageBase64"
-          width="60"
-          height="60"
-          alt="User Profile Image"
-        />
+        <img *ngIf="imageBase64" [src]="imageBase64" width="60" height="60" alt="Profile" />
       </div>
-
       <div class="userProTtl">
         <button type="button" (click)="triggerFileInput()">
           {{ "UPLOAD_IMAGE" | translate }}
         </button>
-
-        <input
-          type="file"
-          #fileInput
-          (change)="onFileSelected($event)"
-          accept=".png, .jpg, .jpeg"
-          hidden
-        />
-
-        <p>JPG, GIF or PNG. Max size of 800K</p>
-
-        @if (isInvalid(userForm, "imageBase64").status) {
-          <small class="errorMsg">
-            {{ isInvalid(userForm, "imageBase64").msg }}
-          </small>
-        }
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png,.jpg,.jpeg" hidden />
+        <p>JPG or PNG. Max size of 800K</p>
       </div>
     </div>
 
     <div class="row g-3">
+
+      <!-- First Name -->
       <div class="col-md-6">
-        <div class="mb-0">
-          <label for="fName" class="form-label">
-            {{ "FIRST_NAME" | translate }}<span>*</span>
-          </label>
-
-          <input
-            class="form-control"
-            type="text"
-            name="fName"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="firstName"
-          />
-
-          @if (isInvalid(userForm, "firstName").status) {
-            <small class="errorMsg">
-              {{ isInvalid(userForm, "firstName").msg }}
-            </small>
-          }
-        </div>
+        <label class="form-label">{{ "FIRST_NAME" | translate }}<span>*</span></label>
+        <input class="form-control" type="text" [placeholder]="'ENTER_HERE' | translate" formControlName="firstName" />
+        @if (isInvalid(userForm, 'firstName').status) {
+          <small class="errorMsg">{{ isInvalid(userForm, 'firstName').msg }}</small>
+        }
       </div>
 
+      <!-- Last Name -->
       <div class="col-md-6">
-        <div class="mb-0">
-          <label for="lName" class="form-label">
-            {{ "LAST_NAME" | translate }}<span>*</span>
-          </label>
-
-          <input
-            class="form-control"
-            type="text"
-            name="lastName"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="lastName"
-          />
-
-          @if (isInvalid(userForm, "lastName").status) {
-            <small class="errorMsg">
-              {{ isInvalid(userForm, "lastName").msg }}
-            </small>
-          }
-        </div>
+        <label class="form-label">{{ "LAST_NAME" | translate }}<span>*</span></label>
+        <input class="form-control" type="text" [placeholder]="'ENTER_HERE' | translate" formControlName="lastName" />
+        @if (isInvalid(userForm, 'lastName').status) {
+          <small class="errorMsg">{{ isInvalid(userForm, 'lastName').msg }}</small>
+        }
       </div>
 
+      <!-- Email -->
       <div class="col-md-6">
-        <div class="mb-0">
-          <label for="email" class="form-label">
-            {{ "EMAIL" | translate }}<span>*</span>
-          </label>
-
-          <div class="iconInput">
-            <i><app-email-icon /></i>
-            <input
-              class="form-control"
-              type="email"
-              name="email"
-              [placeholder]="'ENTER_HERE' | translate"
-              formControlName="email"
-            />
-          </div>
-
-          @if (isInvalid(userForm, "email").status) {
-            <small class="errorMsg">
-              {{ isInvalid(userForm, "email").msg }}
-            </small>
-          }
+        <label class="form-label">{{ "EMAIL" | translate }}<span>*</span></label>
+        <div class="iconInput">
+          <i><app-email-icon /></i>
+          <input class="form-control" type="email" [placeholder]="'ENTER_HERE' | translate" formControlName="email" />
         </div>
+        @if (isInvalid(userForm, 'email').status) {
+          <small class="errorMsg">{{ isInvalid(userForm, 'email').msg }}</small>
+        }
       </div>
 
+      <!-- Phone -->
       <div class="col-md-6">
-        <div class="mb-0">
-          <label for="phone" class="form-label">
-            {{ "PHONE_NUMBER" | translate }}<span>*</span>
-          </label>
-
-          <input
-            class="form-control"
-            type="text"
-            name="phone"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="contactNumber"
-          />
-
-          @if (isInvalid(userForm, "contactNumber").status) {
-            <small class="errorMsg">
-              {{ isInvalid(userForm, "contactNumber").msg }}
-            </small>
-          }
-        </div>
+        <label class="form-label">{{ "PHONE_NUMBER" | translate }}<span>*</span></label>
+        <input class="form-control" type="text" [placeholder]="'ENTER_HERE' | translate" formControlName="contactNumber" />
+        @if (isInvalid(userForm, 'contactNumber').status) {
+          <small class="errorMsg">{{ isInvalid(userForm, 'contactNumber').msg }}</small>
+        }
       </div>
 
+      <!-- User Type -->
       <div class="col-md-6">
-        <div class="mb-0">
-          <label for="role" class="form-label">
-            {{ "ROLE" | translate }}<span>*</span>
-          </label>
-
-          <app-custom-select
-            [options]="userTypeList"
-            key="key"
-            value="value"
-            [placeholder]="'SELECT_USER_TYPE' | translate"
-            [selectedOption]="selectedUserType"
-            (optionSelected)="onOptionSelectedUserType($event)"
-            (click)="handleFilterClick()"
-          ></app-custom-select>
-
-          @if (isInvalid(userForm, "role").status) {
-            <small class="errorMsg">
-              {{ isInvalid(userForm, "role").msg }}
-            </small>
-          }
-        </div>
+        <label class="form-label">{{ "ROLE" | translate }}<span>*</span></label>
+        <app-custom-select
+          [options]="userTypeList"
+          [placeholder]="'SELECT_USER_TYPE' | translate"
+          [selectedOption]="selectedUserType"
+          (optionSelected)="onOptionSelectedUserType($event)"
+        />
+        @if (isInvalid(userForm, 'role').status) {
+          <small class="errorMsg">{{ isInvalid(userForm, 'role').msg }}</small>
+        }
       </div>
 
-      <div class="col-md-6">
-        <div class="mb-0">
-          <label for="location" class="form-label">
-            {{ "LOCATION" | translate }}<span>*</span>
-          </label>
-
-          <input
-            class="form-control"
-            type="text"
-            name="location"
-            [placeholder]="'ENTER_HERE' | translate"
-            formControlName="location"
-          />
-
-          @if (isInvalid(userForm, "location").status) {
-            <small class="errorMsg">
-              {{ isInvalid(userForm, "location").msg }}
-            </small>
-          }
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="mb-0">
-          <label for="password" class="form-label">
-            {{ "ENTER_PASSWORD" | translate }}<span>*</span>
-          </label>
-
+      <!-- Password fields — hidden in edit mode -->
+      @if (!editData) {
+        <div class="col-md-6">
+          <label class="form-label">{{ "ENTER_PASSWORD" | translate }}<span>*</span></label>
           <div class="password">
-            <input
-              class="form-control"
-              [type]="hidePassword ? 'password' : 'text'"
-              name="password"
-              [placeholder]="'ENTER_HERE' | translate"
-              formControlName="password"
-            />
-
+            <input class="form-control" [type]="hidePassword ? 'password' : 'text'"
+              [placeholder]="'ENTER_HERE' | translate" formControlName="password" />
             <i class="right" (click)="togglePasswordHidden()">
-              <app-password-show-icon
-                *ngIf="hidePassword"
-              ></app-password-show-icon>
-              <app-password-hide-icon
-                *ngIf="!hidePassword"
-              ></app-password-hide-icon>
+              <app-password-show-icon *ngIf="hidePassword" />
+              <app-password-hide-icon *ngIf="!hidePassword" />
             </i>
           </div>
-
-          @if (isInvalid(userForm, "password").status) {
-            <small class="errorMsg">
-              {{ isInvalid(userForm, "password").msg }}
-            </small>
+          @if (isInvalid(userForm, 'password').status) {
+            <small class="errorMsg">{{ isInvalid(userForm, 'password').msg }}</small>
           }
         </div>
-      </div>
 
-      <div class="col-md-6">
-        <div class="mb-0">
-          <label for="confirmPassword" class="form-label">
-            {{ "CONFIRM_PASSWORD" | translate }}<span>*</span>
-          </label>
-
+        <div class="col-md-6">
+          <label class="form-label">{{ "CONFIRM_PASSWORD" | translate }}<span>*</span></label>
           <div class="password">
-            <input
-              class="form-control"
-              [type]="hideConfirmPassword ? 'password' : 'text'"
-              name="confirmPassword"
-              [placeholder]="'ENTER_HERE' | translate"
-              formControlName="confirmPassword"
-            />
-
+            <input class="form-control" [type]="hideConfirmPassword ? 'password' : 'text'"
+              [placeholder]="'ENTER_HERE' | translate" formControlName="confirmPassword" />
             <i class="right" (click)="toggleConfirmPasswordHidden()">
-              <app-password-show-icon
-                *ngIf="hideConfirmPassword"
-              ></app-password-show-icon>
-              <app-password-hide-icon
-                *ngIf="!hideConfirmPassword"
-              ></app-password-hide-icon>
+              <app-password-show-icon *ngIf="hideConfirmPassword" />
+              <app-password-hide-icon *ngIf="!hideConfirmPassword" />
             </i>
           </div>
-
-          @if (isInvalid(userForm, "confirmPassword").status) {
-            <small class="errorMsg">
-              {{ isInvalid(userForm, "confirmPassword").msg }}
-            </small>
+          @if (isInvalid(userForm, 'confirmPassword').status) {
+            <small class="errorMsg">{{ isInvalid(userForm, 'confirmPassword').msg }}</small>
           }
         </div>
-      </div>
+      }
+
     </div>
   </form>
 </app-modal-form-card>

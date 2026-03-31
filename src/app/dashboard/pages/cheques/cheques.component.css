@@ -182,7 +182,7 @@
 
 .arrow {
   position: absolute;
-  bottom: -10px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
@@ -245,8 +245,20 @@ table {
 
 .table-wrapper {
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
 }
+
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 :host ::ng-deep .custom-select-wrapper .customSelectInput {
   padding: 0 !important;

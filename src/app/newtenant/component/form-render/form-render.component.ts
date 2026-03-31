@@ -209,6 +209,12 @@ export class FormRenderComponent {
       return;
     }
 
+    if (this.currentSubStep?.component === ProfileComponent) {
+      this.formService.updateLeaseStage('ONBOARDING');
+      this.goToNextStep();
+      return;
+    }
+
     // BasicPersonal step — save before advancing
     if (this.currentSubStep?.formGroup) {
       if (this.currentSubStep.formGroup.invalid) {
