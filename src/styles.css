@@ -1,15 +1,12 @@
 :root {
   --primaryFont: "Onest", sans-serif;
   --secondaryFont: "Inter", sans-serif;
-
   --ownerGradientBg: linear-gradient(90deg, #204df3 0%, #0fb8fe 100%);
   --managerGradientBg: linear-gradient(90deg, #a924fa 0%, #1b94fd 100%);
   --tenantGradientBg: linear-gradient(90deg, #7b2fff 0%, #2c2cff 100%);
-
   --ownerBg: #1f55f4;
   --managerBg: #8c3bfb;
   --tenantBg: #382cff;
-
   --whiteBg: #ffffff;
   --blackBg: #000000;
   --greyBg: #344046;
@@ -35,11 +32,9 @@
   --blueBg: #0c6ce9;
   --redBg: #eb172c;
   --yellowBg: #c9a403;
-
   --ownerText: #1f55f4;
   --managerText: #8c3bfb;
   --tenantText: #382cff;
-
   --whiteText: #ffffff;
   --blackText: #000000;
   --greyText: #344046;
@@ -69,7 +64,6 @@
   --blueText: #0c6ce9;
   --redText: #eb172c;
   --yellowText: #c9a403;
-
   --whiteBorder: #ffffff;
   --blackBorder: #000000;
   --greyBorder: #344046;
@@ -94,7 +88,6 @@
   --blueBorder: #0c6ce9;
   --redBorder: #eb172c;
   --yellowBorder: #c9a403;
-
   --scrollbarTrack: #f5f5f5;
   --scrollbarThumb: #d9d9d9;
   --scrollbarThumbHover: #84b3dc;
@@ -106,35 +99,26 @@
   --accordionActiveBg: #d6e9ff;
   --accordionFocusBorder: #0d6efd;
   --whiteBg: #ffffff;
-
   --shadowLight: rgba(190, 187, 187, 0.8);
   --shadowDark: rgba(0, 0, 0, 0.1);
   --shadowHover: rgba(0, 0, 0, 0.15);
   --btnBg: #f3f4f6;
   --btnBorder: #e2e2e2;
-
   --dropdownBg: #ffffff;
   --dropdownShadow: rgba(0, 0, 0, 0.15);
-
   --hoverBg: #f3f4f6;
-
   --gradientStart: #9333ea;
   --gradientEnd: #3b82f6;
-
   --whiteText: #ffffff;
   --borderLight: #e5e7eb;
   --whiteBg: #ffffff;
   --blackBorder: #000000;
-
   --shadowSoft: rgba(0, 0, 0, 0.12);
-
   --gradientShadowStart: rgba(0, 0, 0, 0.12);
   --gradientShadowMid: rgba(0, 0, 0, 0.05);
   --shadowLeft: rgba(0, 0, 0, 0.06);
-
   --iconColor: #6b7280;
   --iconHoverColor: #2563eb;
-
   --gradientShadowStart: rgba(0, 0, 0, 0.12);
   --gradientShadowMid: rgba(0, 0, 0, 0.05);
   --greenLightBg: #e8f5e9;
@@ -142,175 +126,102 @@
   --blueLightBg: #e3f2fd;
   --orangeLightBg: #fff3e0;
   --yellowLightBg: #fffde7;
-
-  /* Status Colors */
   --completedColor: #2e7d32;
   --inProgressColor: #fb8c00;
   --assignedColor: #2979ff;
   --rejectedColor: #d32f2f;
   --gradientShadowStart: rgba(0, 0, 0, 0.12);
   --gradientShadowMid: rgba(0, 0, 0, 0.05);
-
   --shadowRight: rgba(0, 0, 0, 0.06);
   --addBtnHoverBg: #d6edfb;
-
   --orangeColor: #ff6500;
   --orangeLightBg: #fff8ec;
   --whiteText: #ffffff;
-
-  /* Status Colors */
   --successBg: #28a745;
   --warningBg: #f39c12;
-
-  /* Text Colors */
   --textPrimary: #333333;
   --textSecondary: #777777;
-
-  /* Icon Color */
   --warningIcon: #f39c12;
-
-  /* Text Colors */
   --textPrimary: #1f2937;
   --textSecondary: #6b7280;
   --textDark: #444444;
   --textBlack: #111827;
   --textMuted: #4b5563;
-
-  /* Borders */
   --borderLight: #eeeeee;
   --borderLighter: #f0f0f0;
   --borderDark: #000000;
-
-  /* Backgrounds */
   --rowHoverBg: #fafafa;
   --grayLightBg: #f3f4f6;
   --grayBg: #f5f6f8;
-
-  /* Badge Colors */
   --greenLightBg: #e7f7ed;
   --greenColor: #15803d;
   --greenBorder: #22c55e;
-
   --orangeLightBg: #fff3e0;
   --orangeColor: #f97316;
   --orangeDark: #d97706;
-
   --grayBadgeBg: #f7f3f3;
   --grayText: #4b5563;
-
   --purpleLightBg: #f3e8ff;
   --purpleColor: #7c3aed;
-
   --intentBg: #ede9fe;
-
-  /* Icon Colors */
   --iconBlueBg: #e8f0ff;
   --iconBlue: #2563eb;
-
   --iconGreenBg: #e9f7ef;
   --iconGreen: #16a34a;
-
   --iconGray: #6b7280;
   --progressBg: #e5e7eb;
   --progressValue: #3b82f6;
-
-  /* Status */
   --successColor: #059669;
   --errorColor: #dc2626;
   --whiteText: #ffffff;
-
-  /* Type Icons */
   --orangeColor: #f97316;
   --greenColor: #16a34a;
   --purpleColor: #7c3aed;
   --whatsappColor: #25d366;
-
-  /* Avatar */
   --avatarBg: var(--activeBg);
-
-  /* Borders */
   --borderLight: #e5e7eb;
   --borderExtraLight: #eeeeee;
   --borderSoft: #eceff4;
-
-  /* Text */
   --textSecondary: #6b7280;
   --textPrimary: #111827;
   --textDark: #000000;
-
-  /* Primary */
   --primaryColor: #0d6efd;
-
-  /* Error */
   --errorColor: #ef4444;
-
-  /* Info Box */
   --infoBg: #eef8ff;
   --infoText: #1677ff;
-
-  /* Upload */
   --uploadBorder: #e5e7eb;
   --uploadHoverBg: #f8fafc;
   --uploadIconColor: #9ca3af;
-  /* Borders */
   --borderSoft: #eceff4;
   --uploadBorder: #e5e7eb;
-
-  /* Backgrounds */
   --uploadHoverBg: #f8fafc;
   --infoBg: #eef8ff;
-
-  /* Icon */
   --uploadIconColor: #9ca3af;
   --borderLight: #e5e7eb;
-
-  /* Backgrounds */
   --tagBg: #f3f4f6;
-
-  /* Text */
   --whiteText: #ffffff;
-
-  /* Required */
   --requiredColor: #ff0000;
-
-  /* Gradient Button */
   --primaryGradient: linear-gradient(90deg, #7b3ff2, #2979ff);
   --leadIdBg: #f2f2f2;
   --tenantBg: #eef9ff;
   --propertyBg: #f5f7f8;
-
-  /* Text */
   --labelColor: #555555;
   --textMuted: #666666;
-
-  /* Icon */
   --platformIconBg: #ff5a3c;
   --whiteText: #ffffff;
   --iconColor: #555555;
   --iconHoverColor: #000000;
   --whiteBg: #ffffff;
   --summaryBg: #f7f7f7;
-
-  /* Borders */
   --tagBorder: rgb(248, 243, 243);
-
-  /* Text */
   --textDark: #444444;
   --textPrimaryDark: #2c2c2c;
   --textSecondary: #6b7280;
-
-  /* Borders */
   --borderLight: #e5e7eb;
-
-  /* Backgrounds */
   --inputBg: #fafafa;
   --textLight: #aaaaaa;
   --textPrimary: #374151;
-
-  /* Borders */
   --borderLight: #e5e7eb;
-
-  /* Backgrounds */
   --whiteBg: #ffffff;
   --hoverBg: #f3f4f6;
   --mapBg: #e8ecf0;
@@ -823,255 +734,150 @@
 
   /* Link */
   --link-primary: #4f6ef7;
-
-  /* Gradient overlay */
   --gradient-dark: rgba(0, 0, 0, 0.12);
   --gradient-light: rgba(0, 0, 0, 0.05);
   --card-shadow: rgba(66, 66, 66, 0.2);
-
-  /* Text */
   --text-strong: #030507;
   --text-label: #545659;
   --box-bg: #f7f9fb;
   --box-border: #eef1f5;
-
-  /* Text */
   --section-title: #64748b;
   --text-label: #475569;
   --text-light: #94a3b8;
   --text-primary: #111827;
-
-  /* Status */
   --paid-color: #16a34a;
   --badge-bg: #6f8f95;
   --badge-text: #ffffff;
   --table-head-text: #6b7280;
   --table-head-bg: #f9fafb;
   --table-body-text: #374151;
-
-  /* Document item */
   --doc-bg: #f9fafb;
   --doc-border: #e5e7eb;
   --doc-hover-bg: #f0f0ff;
   --doc-hover-border: #c7d2fe;
   --doc-text: #374151;
   --card-shadow: rgba(66, 66, 66, 0.2);
-
-  /* Text */
   --text-strong: #030507;
   --text-label: #545659;
-
-  /* Divider */
   --line-color: #e5e7eb;
-
-  /* Card */
   --card-bg: #ffffff;
   --card-shadow: rgba(0, 0, 0, 0.2);
-
-  /* Text */
   --text-strong: #030507;
   --text-label: #545659;
-
-  /* Status */
   --status-active: #16a34a;
   --status-inactive: #dc2626;
-
-  /* Green badge (already using) */
   --green-100: #dcfce7;
   --green-700: #15803d;
   --text-muted: #6b7280;
   --text-secondary: #666666;
   --text-primary: #111827;
-
-  /* Status */
   --status-active: #1fa750;
   --status-inactive: #999999;
-
-  /* Shadow */
   --shadow-light: rgba(0, 0, 0, 0.06);
   --text-label: #888888;
   --text-secondary: #666666;
   --text-primary: #111111;
-
-  /* Card */
   --card-bg: #ffffff;
   --card-border: #eef1f5;
-
-  /* Shadow */
   --shadow-sm: rgba(0, 0, 0, 0.06);
   --shadow-md: rgba(0, 0, 0, 0.12);
-
-  /* Hover */
   --hover-underline: #000000;
   --status-active: #1fa750;
   --status-inactive: #dc2626;
   --text-secondary: #374151;
   --text-muted: #6b7280;
-
-  /* Status */
   --success: #22c55e;
   --warning: #f97316;
   --danger: #ef4444;
-
-  /* Background */
   --bg-white: #ffffff;
-
-  /* Link */
   --link-primary: #2563eb;
-  /* Box */
   --box-bg: #f7f9fb;
   --box-border: #eef1f5;
-
-  /* Text */
   --text-section: #64748b;
   --text-label: #475569;
   --text-light: #94a3b8;
   --text-primary: #111827;
-
-  /* Status */
   --paid-color: #16a34a;
-  /* Backgrounds */
   --bg-white: #ffffff;
   --bg-light: #f5f7f9;
   --bg-soft-green: #f1f8f2;
-
-  /* Borders */
   --border-light: #e5e7eb;
   --border-soft: #f5f7f8;
   --border-green: #bfdbc1;
-
-  /* Text */
   --text-primary: #030507;
   --text-secondary: #545659;
   --text-muted: #6b7280;
   --text-dark: #1d3724;
-
-  /* Colors */
   --primary: #0066ff;
   --danger: #e53935;
-
-  /* Icon */
   --icon-bg: #5f7d83;
   --icon-text: #ffffff;
-
-  /* Shadows */
   --shadow-sm: rgba(0, 0, 0, 0.15);
   --shadow-md: rgba(0, 0, 0, 0.2);
   --shadow-green: rgba(29, 55, 36, 0.2);
   --line-color: #e5e7eb;
   --bg-white: #ffffff;
   --bg-light: #f5f7f8;
-
-  /* Text */
   --text-primary: #374151;
   --text-inverse: #ffffff;
-
-  /* Borders / Divider */
   --line-color: #e5e7eb;
-
-  /* Shadow */
   --shadow-sm: rgba(0, 0, 0, 0.06);
   --text-muted: #6b7280;
   --text-primary: #374151;
   --text-dark: #333333;
-
-  /* Button */
   --btn-bg: #f3f4f6;
   --btn-border: #e2e2e2;
   --btn-hover: #e9ecef;
-
-  /* Gradient */
   --gradient-primary: linear-gradient(90deg, #9333ea, #3b82f6);
-
-  /* Shadow */
   --shadow-lg: rgba(0, 0, 0, 0.15);
-  /* Backgrounds */
   --bg-white: #ffffff;
   --bg-light: #f3f4f6;
-
-  /* Text */
   --text-dark: #374151;
-
-  /* Borders */
   --border-light: #e2e2e2;
-
-  /* Shadow */
   --shadow-md: rgba(0, 0, 0, 0.15);
   --shadow-soft: rgba(0, 0, 0, 0.15);
-
-  /* Gradient */
   --gradient-primary: linear-gradient(90deg, #9333ea, #3b82f6);
   --color-success: green;
   --color-text-dark: #000000;
-
-  /* Background */
   --bg-white: #ffffff;
-
-  /* Shadow */
   --shadow-right: rgba(0, 0, 0, 0.06);
-
-  /* Gradient (table fade) */
   --table-fade-strong: rgba(0, 0, 0, 0.12);
   --table-fade-light: rgba(0, 0, 0, 0.05);
   --text-muted: #6b7280;
   --text-dark: #000000;
   --text-white: #ffffff;
-
-  /* Primary */
   --primary: #2563eb;
   --primary-dark: #1f6ed4;
-
-  /* Background */
   --bg-light: #f3f4f6;
   --bg-white: #ffffff;
-
-  /* Table */
   --active-bg: #f9fafb;
-
-  /* Shadow */
   --shadow-sm: rgba(0, 0, 0, 0.06);
-
-  /* Gradient fade */
   --fade-strong: rgba(0, 0, 0, 0.12);
   --fade-light: rgba(0, 0, 0, 0.05);
   --text-primary: #030507;
   --text-secondary: #545659;
-
-  /* Shadow */
   --shadow-md: rgba(66, 66, 66, 0.2);
   --line-color: #e5e7eb;
   --shadow-sm: rgba(0, 0, 0, 0.06);
-
-  /* Gradient fade */
   --fade-strong: rgba(0, 0, 0, 0.12);
   --fade-light: rgba(0, 0, 0, 0.05);
-
-  /* Status badges */
   --badge-active-bg: #d1fae5;
   --badge-active-text: #065f46;
-
   --badge-draft-bg: #e0f2fe;
   --badge-draft-text: #0369a1;
-
   --badge-inactive-bg: #fef9c3;
   --badge-inactive-text: #854d0e;
-
   --badge-expired-bg: #fee2e2;
   --badge-expired-text: #991b1b;
-
   --badge-rejected-bg: #ffe4e6;
   --badge-rejected-text: #9f1239;
   --text-white: #ffffff;
   --text-muted: #666666;
   --text-light: #555555;
-
-  /* Colors */
   --primary-link: #007bff;
   --blue-link: blue;
   --danger: red;
   --danger-dark: #b00020;
-
-  /* Background */
   --bg-light: #f3f3f3;
   --bg-soft: #eeeeee;
   --bg-alert: #fff1f2;
@@ -1079,8 +885,6 @@
   --dues-bg: #f3f3f3;
   --text-primary: #374151;
   --text-secondary: #555;
-
-  /* Colors */
   --danger-color: red;
   --link-color: #007bff;
   --renewal-bg: #fff1f2;
@@ -1088,25 +892,14 @@
   --white-bg: #ffffff;
   --dropdown-bg: #ffffff;
   --hover-bg: #f9fafb;
-
-  /* Borders */
   --border-light: #e5e7eb;
-
-  /* Text */
   --text-primary: #374151;
   --text-white: #ffffff;
-
-  /* Button */
   --primary-btn: #1565c0;
-
-  /* Shadows */
   --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.12);
   --shadow-sticky: -2px 0 4px rgba(0, 0, 0, 0.06);
-
-  /* Badges */
   --cheque-bg: #fff7ed;
   --cheque-text: #c2410c;
-
   --tax-bg: #eff6ff;
   --tax-text: #1d4ed8;
   --white-bg: #ffffff;
@@ -1268,6 +1061,349 @@
   --toast-bg: #e6f9ed;
   --toast-text: #1a7f37;
   --toast-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+  --whiteBg: #ffffff;
+  --borderColor: #e2e8f0;
+  --cardShadow: 0 0 15px rgba(0, 0, 0, 0.1);
+
+  --badgeBg: #d6dee1;
+  --badgeText: #374151;
+  --textPrimary: #111827;
+  --textSecondary: #536c76;
+  --textMuted: #374151;
+
+  --tableHeaderBg: #eef2f5;
+  --tableHeaderAltBg: #f8fafc;
+
+  --borderColor: #e2e8f0;
+  --cardShadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  --textPrimary: #111827;
+  --textSecondary: #536c76;
+  --textStrong: #232b2e;
+  --hoverBg: #f5f7f8;
+  --textBlack: #000000;
+  --textWhite: #ffffff;
+
+  --btnPrimary: #458453;
+
+  --editUnderline: #007bff;
+
+  --rowShadowTop: rgba(0, 0, 0, 0.12);
+  --rowShadowBottom: rgba(0, 0, 0, 0.12);
+  --textPrimary: #111111;
+  --textSecondary: #6b7280;
+  --textBlack: #000000;
+  --inputBorder: #e3e7ee;
+  --inputFocus: #1976ff;
+  --inputFocusShadow: rgba(25, 118, 255, 0.1);
+
+  /* Modal */
+  --modalBg: #ffffff;
+  --modalOverlay: rgba(0, 0, 0, 0.35);
+  --modalShadow: rgba(0, 0, 0, 0.25);
+
+  /* Decorative */
+  --accentBlue: #6b8cff;
+  --accentOrange: #ff7a18;
+
+  /* Success */
+  --success: #22c55e;
+  --successDark: #16a34a;
+
+  /* Text */
+  --textPrimary: #111827;
+  --textSecondary: #6b7280;
+  --textWhite: #ffffff;
+
+  /* Button shadow */
+  --btnShadow: rgba(34, 197, 94, 0.35);
+
+  /* Links */
+  --linkColor: #2563eb;
+
+  /* Card */
+  --cardBg: #ffffff;
+  --cardShadow: #00000026;
+
+  /* Alerts */
+  --warningBg: #ffefd3;
+  --warningText: #ff6500;
+
+  --successBg: #e6f7ec;
+  --successText: #1f8f4c;
+  --textPrimary: #111827;
+  --textSecondary: #6b7280;
+  --textMuted: #9ca3af;
+
+  --borderLight: #d1d5db;
+  --whiteBg: #ffffff;
+
+  --success: #2fa51a;
+  --successShadow: rgba(47, 165, 26, 0.12);
+
+  --shadowLight: #00000026;
+  --dropdownShadow: rgba(0, 0, 0, 0.18);
+
+  --successBtn: #458453;
+  --rejectBtn: #ff6500;
+  --neutralBtn: #6f8b95;
+
+  --whiteBg: #ffffff;
+  --whiteText: #ffffff;
+
+  --borderLight: #e5e5e5;
+  --borderInput: #e4e4e4;
+
+  --inputBg: #fafafa;
+  --textSecondary: #6b7280;
+
+  --dividerLight: rgba(255, 255, 255, 0.45);
+  --textMedium: #555555;
+  --textPrimary: #444444;
+  --textSecondary: #666666;
+  --fadeGradient: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 20%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  --cardBg: #ffffff;
+  --shadowMedium: #00000030;
+  --primaryBtn: #3f51b5;
+  --primaryBtnHover: #2c3e9a;
+
+  --whiteBg: #ffffff;
+  --whiteText: #ffffff;
+
+  --popupShadow: rgba(0, 0, 0, 0.15);
+  --whiteBg: #ffffff;
+  --textBlack: #000000;
+  --textSecondary: #6b7280;
+
+  --tableHeaderBg: #f2f5f9;
+  --rowHoverBg: var(--muteBg1);
+  --rowNewBg: #eef9ff;
+  --editModeBg: #f3f4f6;
+
+  --borderAccent: #3b82f6;
+  --inputUnderline: #6ea8fe;
+
+  --shadowLight: #00000026;
+
+  --primaryBlue: #0d6efd;
+
+  --successBtn: #2f6f44;
+  --successBtn: #2f6f44;
+  --whiteText: #ffffff;
+  --shadowSoft: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+  --activeBg: #eef9ff;
+  --accentColor: #0c6ce9;
+  --whiteBg: #ffffff;
+
+  --borderLight: #e5e7eb;
+
+  --textPrimary: #030507;
+  --textSecondary: #232b2e;
+  --textMuted: #6b7280;
+  --textBlack: #000000;
+
+  --hoverBg: #f8fafc;
+
+  --shadowSoft: rgba(0, 0, 0, 0.06);
+  --shadowLight: #00000026;
+
+  --shadowHeader: 5px 2px 4px 0 #00000040;
+  --errorColor: #ef4444;
+  --whiteBg: #ffffff;
+
+  --borderLight: #ecf0f2;
+  --borderDashed: #cfd8dc;
+
+  --shadowDropdown: rgba(0, 0, 0, 0.15);
+  --textMuted: #777777;
+  --textSecondary: #666666;
+
+  --borderDashedLight: #cfd6ff;
+  --borderDashed: #ebebec;
+
+  --accentPrimary: #5b6cff;
+  --borderDashed: #ebebec;
+  --textSecondary: #666666;
+
+  --borderDashed: #ebebec;
+  --borderDashedAlt: #cfd6e0;
+  --borderLight: #e5e7eb;
+
+  --accentPrimary: #4a6cf7;
+
+  --textMuted: #6b7280;
+
+  --whiteBg: #ffffff;
+
+  --shadowDropdown: rgba(0, 0, 0, 0.12);
+  --hoverBg: #f5f7fa;
+
+  --borderInput: #d0d5dd;
+  --textIcon: #667085;
+
+  --borderLight: #e0e0e0;
+  --bodyBg: #2f2f2f;
+  --whiteBg: #ffffff;
+
+  --borderLight: #e5e7eb;
+
+  --primaryDark: #0b3c8c;
+  --primaryText: #19438c;
+  --primaryText: #19438c;
+  --grandBg: #1e3a8a;
+  --whiteText: #ffffff;
+
+  --cardLightBg: #f3f4f6;
+  --textSecondary: #374151;
+  --textPrimary: #0a0a0b;
+  --textMuted: #6b7280;
+  --textSecondary: #374151;
+
+  --borderLight: #e5e7eb;
+
+  --tableHeaderBg: #1e3a8a;
+  --whiteText: #ffffff;
+
+  --tableBorderLight: #ffffff40;
+  --borderLight: #e5e7eb;
+  --cardLightBg: #f5f7f8;
+  --whiteBg: #ffffff;
+
+  --textPrimary: #111827;
+  --textSecondary: #374151;
+  --textMuted: #6b7280;
+  --textLight: #536c76;
+
+  --accentPrimary: #1e3a8a;
+  --accentSecondary: #1b448d;
+
+  --borderLight: #e5e7eb;
+
+  --shadowSoft: rgba(0, 0, 0, 0.05);
+  --whiteText: #ffffff;
+  --whiteBg: #ffffff;
+  --shadowSoft: rgba(0, 0, 0, 0.08);
+  --whiteBg: #ffffff;
+  --inputBg: #f5f7f8;
+  --dropdownBg: #ffffff;
+
+  --borderPrimary: #0c6ce9;
+  --borderLight: #ecf0f2;
+  --borderSoft: #dddddd;
+
+  --textPrimary: #000000;
+
+  --shadowDropdown: rgba(0, 0, 0, 0.1);
+  --textPrimary: #232b2e;
+  --textSecondary: #555555;
+  --textMuted: #888888;
+  --blackText: #000000;
+
+  --hoverBg: #f5f7f8;
+
+  --badgeBg: #e6f0ff;
+
+  --badgeTenantBg: #eef9ff;
+  --badgeTenantText: #112f5a;
+
+  --badgeTeamBg: #fff8ec;
+  --badgeTeamText: #cc4802;
+  --badgePrimaryBg: #1ea7ff;
+  --badgeActiveBg: rgba(255, 255, 255, 0.25);
+  --whiteText: #ffffff;
+  --badgeBg: #1ea7ff;
+  --badgeText: #ffffff;
+  --badgeActiveBg: rgba(255, 255, 255, 0.25);
+  --shadowDefault: 0 0 4px 0 rgba(0, 0, 0, 0.15);
+  --bgLight: #f1f3f5;
+  --borderColor: #e5e5e5;
+
+  --primaryBlue: #0c6ce9;
+  --primaryBlueDark: #1e66d0;
+
+  --successGreen: #458453;
+  --dangerOrange: #ff6500;
+
+  --dotColor: #ff6a00;
+  --dotGlow: rgba(255, 165, 0, 0.3);
+
+  --textPrimary: #000000;
+  --textLight: #ffffff;
+  --btnText: #ffffff;
+
+  --rejectBg: #ff6500;
+  --approveBg: #458453;
+  --tableBorder: #e5e5e5;
+  --tableHeaderBg: #0c6ce9;
+  --tableHeaderText: #ffffff;
+
+  --dotColor: #ff6a00;
+  --dotGlow: rgba(255, 165, 0, 0.3);
+
+  --status-green: #16a34a;
+  --status-orange: #f97316;
+  --status-grey: #536c76;
+  --status-yellow: #ca8a04;
+
+  --status-text-color: #ffffff;
+  --status-hover-bg: #1f6ed4;
+
+  --dropdown-bg: #ffffff;
+  --dropdown-hover-bg: #f5f7fb;
+  --dropdown-shadow: rgba(0, 0, 0, 0.15);
+  --status-green: #16a34a;
+  --status-orange: #f97316;
+  --status-grey: #536c76;
+  --status-yellow: #ca8a04;
+  --success-bg: #e6f4ea;
+  --success-text: #1e7f3f;
+
+  --warning-bg: #fff4e5;
+  --warning-text: #b45309;
+
+  --danger-bg: #fdecea;
+  --danger-text: #b91c1c;
+
+  --empty-bg: #fff4e5;
+  --empty-text: #6b7280;
+  --whiteBg: #ffffff;
+  --borderColor: #dddddd;
+  --searchBg: #f5f7f8;
+  --iconColor: #888888;
+  --logs-bg: #f5f6f8;
+  --whiteBg: #ffffff;
+
+  --textPrimary: #232b2e;
+  --textSecondary: #344046;
+  --textMuted: #666666;
+
+  --borderLight: #ecf0f2;
+  --lineColor: #e0e0e0;
+
+  --linkColor: #2563eb;
+  --alert-bg: #fffbeb;
+  --alert-border: #fde68a;
+  --alert-accent: #f59e0b;
+  --alert-text: #78350f;
+
+  --primary: #0d6efd;
+  --success: #28a745;
+
+  --primary-light: rgba(13, 110, 253, 0.05);
+  --success: #28a745;
+  --primary: #0d6efd;
+  --success-dark: #4f8f5f;
+
+  --border-light: #e6e6e6;
+  --border-muted: #e9eeea;
+  --text-primary: #2f6f3e;
+  --confirm-bg: #eef9ff;
+  --confirm-border: #1988fd;
 }
 
 .dark-theme {
@@ -2399,6 +2535,375 @@
   --toast-bg: #052e16;
   --toast-text: #4ade80;
   --toast-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+
+  --borderColor: #374151;
+  --cardShadow: 0 0 15px rgba(0, 0, 0, 0.4);
+
+  --badgeBg: #374151;
+  --badgeText: #e5e7eb;
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #9ca3af;
+  --textMuted: #d1d5db;
+
+  --tableHeaderBg: #1f2937;
+  --tableHeaderAltBg: #111827;
+
+  --borderColor: #374151;
+  --cardShadow: 0 0 15px rgba(0, 0, 0, 0.4);
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #9ca3af;
+  --textStrong: #e5e7eb;
+
+  --hoverBg: #1f2937;
+  --textBlack: #f9fafb;
+  --textWhite: #111827;
+
+  --btnPrimary: #22c55e;
+
+  --editUnderline: #60a5fa;
+
+  --rowShadowTop: rgba(0, 0, 0, 0.5);
+  --rowShadowBottom: rgba(0, 0, 0, 0.5);
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #9ca3af;
+  --textBlack: #ffffff;
+
+  --inputBorder: #374151;
+  --inputFocus: #60a5fa;
+  --inputFocusShadow: rgba(96, 165, 250, 0.2);
+
+  --modalBg: #1f2937;
+  --modalOverlay: rgba(0, 0, 0, 0.6);
+  --modalShadow: rgba(0, 0, 0, 0.6);
+
+  --accentBlue: #4f6cff;
+  --accentOrange: #ff8c42;
+
+  --success: #22c55e;
+  --successDark: #15803d;
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #9ca3af;
+  --textWhite: #111827;
+
+  --btnShadow: rgba(34, 197, 94, 0.5);
+
+  --linkColor: #60a5fa;
+
+  --cardBg: #1f2937;
+  --cardShadow: rgba(0, 0, 0, 0.6);
+
+  --warningBg: #3b2f1c;
+  --warningText: #fbbf24;
+
+  --successBg: #022c22;
+  --successText: #4ade80;
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #9ca3af;
+  --textMuted: #6b7280;
+
+  --borderLight: #374151;
+  --whiteBg: #1f2937;
+
+  --success: #22c55e;
+  --successShadow: rgba(34, 197, 94, 0.25);
+  --shadowLight: rgba(0, 0, 0, 0.6);
+  --dropdownShadow: rgba(0, 0, 0, 0.5);
+
+  --successBtn: #22c55e;
+  --rejectBtn: #f97316;
+  --neutralBtn: #64748b;
+
+  --whiteBg: #1f2937;
+  --whiteText: #111827;
+
+  --borderLight: #374151;
+  --borderInput: #4b5563;
+
+  --inputBg: #111827;
+  --textSecondary: #9ca3af;
+
+  --dividerLight: rgba(255, 255, 255, 0.2);
+
+  -textmedium: #9ca3af;
+
+  --textPrimary: #d1d5db;
+  --textSecondary: #9ca3af;
+
+  --fadeGradient: linear-gradient(
+    180deg,
+    rgba(17, 24, 39, 0) 0%,
+    rgba(17, 24, 39, 0) 20%,
+    rgba(17, 24, 39, 1) 100%
+  );
+
+  --cardBg: #1f2937;
+  --shadowMedium: rgba(0, 0, 0, 0.6);
+
+  --primaryBtn: #6366f1;
+  --primaryBtnHover: #4f46e5;
+
+  --whiteBg: #1f2937;
+  --whiteText: #111827;
+
+  --popupShadow: rgba(0, 0, 0, 0.5);
+
+  --whiteBg: #1f2937;
+  --textBlack: #f9fafb;
+  --textSecondary: #9ca3af;
+
+  --tableHeaderBg: #111827;
+  --rowHoverBg: #374151;
+  --rowNewBg: #0b2533;
+  --editModeBg: #374151;
+
+  --borderAccent: #60a5fa;
+  --inputUnderline: #93c5fd;
+
+  --shadowLight: rgba(0, 0, 0, 0.6);
+
+  --primaryBlue: #3b82f6;
+
+  --successBtn: #22c55e;
+
+  --successBtn: #22c55e;
+  --whiteText: #111827;
+
+  --shadowSoft: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  --activeBg: #0b2533;
+  --accentColor: #60a5fa;
+  --whiteBg: #1f2937;
+
+  --borderLight: #374151;
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #d1d5db;
+  --textMuted: #9ca3af;
+  --textBlack: #ffffff;
+
+  --hoverBg: #111827;
+
+  --shadowSoft: rgba(0, 0, 0, 0.5);
+  --shadowLight: rgba(0, 0, 0, 0.6);
+
+  --shadowHeader: 5px 2px 6px 0 rgba(0, 0, 0, 0.6);
+
+  --errorColor: #ef4444;
+  --whiteBg: #1f2937;
+
+  --borderLight: #374151;
+  --borderDashed: #4b5563;
+
+  --shadowDropdown: rgba(0, 0, 0, 0.5);
+
+  --textMuted: #9ca3af;
+  --textSecondary: #9ca3af;
+
+  --borderDashedLight: #4f5bd5;
+  --borderDashed: #374151;
+
+  --accentPrimary: #818cf8;
+
+  --borderDashed: #374151;
+  --textSecondary: #9ca3af;
+
+  --borderDashed: #374151;
+  --borderDashedAlt: #4b5563;
+  --borderLight: #374151;
+
+  --accentPrimary: #818cf8;
+
+  --textMuted: #9ca3af;
+
+  --whiteBg: #1f2937;
+
+  --shadowDropdown: rgba(0, 0, 0, 0.5);
+  --hoverBg: #111827;
+
+  --borderInput: #374151;
+  --textIcon: #9ca3af;
+
+  --borderLight: #374151;
+
+  --bodyBg: #111827;
+  --whiteBg: #1f2937;
+
+  --borderLight: #374151;
+
+  --primaryDark: #60a5fa;
+  --primaryText: #93c5fd;
+
+  --primaryText: #93c5fd;
+  --grandBg: #1e40af;
+  --whiteText: #111827;
+
+  --cardLightBg: #374151;
+  --textSecondary: #9ca3af;
+
+  --textPrimary: #f9fafb;
+  --textMuted: #9ca3af;
+  --textSecondary: #9ca3af;
+
+  --borderLight: #374151;
+
+  --tableHeaderBg: #1e40af;
+  --whiteText: #111827;
+
+  --tableBorderLight: rgba(255, 255, 255, 0.2);
+
+  --borderLight: #374151;
+
+  --cardLightBg: #111827;
+  --whiteBg: #1f2937;
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #9ca3af;
+  --textMuted: #9ca3af;
+  --textLight: #9ca3af;
+
+  --accentPrimary: #3b82f6;
+  --accentSecondary: #60a5fa;
+
+  --borderLight: #374151;
+
+  --shadowSoft: rgba(0, 0, 0, 0.5);
+  --whiteText: #111827;
+
+  --whiteBg: #1f2937;
+  --shadowSoft: rgba(0, 0, 0, 0.5);
+
+  --whiteBg: #1f2937;
+  --inputBg: #111827;
+  --dropdownBg: #1f2937;
+
+  --borderPrimary: #60a5fa;
+  --borderLight: #374151;
+  --borderSoft: #4b5563;
+
+  --textPrimary: #f9fafb;
+
+  --shadowDropdown: rgba(0, 0, 0, 0.5);
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #9ca3af;
+  --textMuted: #9ca3af;
+  --blackText: #ffffff;
+
+  --hoverBg: #111827;
+
+  --badgeBg: #1e3a8a;
+
+  --badgeTenantBg: #0b2533;
+  --badgeTenantText: #60a5fa;
+
+  --badgeTeamBg: #3b2a12;
+  --badgeTeamText: #f59e0b;
+
+  --badgePrimaryBg: #60a5fa;
+  --badgeActiveBg: rgba(255, 255, 255, 0.15);
+  --whiteText: #111827;
+
+  --badgeBg: #3b82f6;
+  --badgeText: #111827;
+  --badgeActiveBg: rgba(255, 255, 255, 0.15);
+
+  --shadowDefault: 0 0 4px 0 rgba(255, 255, 255, 0.1);
+
+  --bgLight: #1f2937;
+  --borderColor: #374151;
+
+  --primaryBlue: #3b82f6;
+  --primaryBlueDark: #2563eb;
+
+  --successGreen: #22c55e;
+  --dangerOrange: #f97316;
+
+  --dotColor: #fb923c;
+  --dotGlow: rgba(251, 146, 60, 0.3);
+
+  --textPrimary: #f9fafb;
+  --textLight: #ffffff;
+
+  --rejectBg: #f97316;
+  --approveBg: #22c55e;
+
+  --tableBorder: #374151;
+  --tableHeaderBg: #3b82f6;
+  --tableHeaderText: #ffffff;
+
+  --dotColor: #fb923c;
+  --dotGlow: rgba(251, 146, 60, 0.3);
+
+  --status-green: #22c55e;
+  --status-orange: #fb923c;
+  --status-grey: #94a3b8;
+  --status-yellow: #facc15;
+
+  --status-text-color: #ffffff;
+  --status-hover-bg: #2563eb;
+
+  --dropdown-bg: #1f2937;
+  --dropdown-hover-bg: #374151;
+  --dropdown-shadow: rgba(0, 0, 0, 0.3);
+
+  --status-green: #22c55e;
+  --status-orange: #fb923c;
+  --status-grey: #94a3b8;
+  --status-yellow: #facc15;
+
+  --success-bg: #14532d;
+  --success-text: #bbf7d0;
+
+  --warning-bg: #3a2c12;
+  --warning-text: #fcd34d;
+
+  --danger-bg: #3b0a0a;
+  --danger-text: #fca5a5;
+
+  --empty-bg: #1f2937;
+  --empty-text: #9ca3af;
+
+  --borderColor: #374151;
+  --searchBg: #111827;
+  --iconColor: #9ca3af;
+
+  --logs-bg: #111827;
+  --whiteBg: #1f2937;
+
+  --textPrimary: #f9fafb;
+  --textSecondary: #d1d5db;
+  --textMuted: #9ca3af;
+
+  --borderLight: #374151;
+  --lineColor: #4b5563;
+
+  --linkColor: #60a5fa;
+
+  --alert-bg: #1f2937;
+  --alert-border: #374151;
+  --alert-accent: #f59e0b;
+  --alert-text: #fbbf24;
+  --primary: #60a5fa;
+  --success: #22c55e;
+
+  --primary-light: rgba(96, 165, 250, 0.1);
+
+  --primary: #60a5fa;
+  --success: #22c55e;
+  --success-dark: #22c55e;
+
+  --border-light: #374151;
+  --border-muted: #4b5563;
+
+  --text-primary: #86efac;
+  --text-white: #ffffff;
+
+  --confirm-bg: #1e293b;
+  --confirm-border: #38bdf8;
 }
 
 *,

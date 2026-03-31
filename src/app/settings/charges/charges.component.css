@@ -1,16 +1,16 @@
 .btnCommonsx {
-  background-color: #fff;
-  box-shadow: 0 0 6px 0 #00000026;
+  background-color: var(--whiteBg);
+  box-shadow: 0 0 6px 0 var(--shadowLight);
   border-radius: 10px;
   padding: 6px 14px;
 }
 .mt-3 {
-  background: #ffffff;
+  background: var(--whiteBg);
   border-radius: 10px;
 }
 .cmmnTblBody table thead tr th {
-  background-color: #f2f5f9;
-  color: #000;
+  background-color: var(--tableHeaderBg);
+  color: var(--textBlack);
 }
 
 .desc-cell {
@@ -20,7 +20,7 @@
 }
 
 .sr-no {
-  color: #6b7280;
+  color: var(--textSecondary);
   font-weight: 500;
   min-width: 18px;
 }
@@ -30,14 +30,14 @@
 }
 
 .new-row {
-  background: #eef9ff;
+  background: var(--rowNewBg);
 }
 
 .inline-input {
   width: 100%;
   border: none;
   outline: none;
-  border-bottom: 2px solid #6ea8fe;
+  border-bottom: 2px solid var(--inputUnderline);
   background: transparent;
   padding: 4px 6px;
   font-size: 14px;
@@ -70,12 +70,12 @@
 }
 
 .form-switch .form-check-input:checked {
-  background-color: #0d6efd !important;
-  border-color: #0d6efd !important;
+  background-color: var(--primaryBlue) !important;
+  border-color: var(--primaryBlue) !important;
 }
 /* underline clickable text */
 .edit-text {
-  border-bottom: 2px solid #3b82f6;
+  border-bottom: 2px solid var(--borderAccent);
   cursor: pointer;
   padding-bottom: 2px;
 }
@@ -83,20 +83,20 @@
 /* edit input */
 .edit-input {
   border: none;
-  border-bottom: 2px solid #3b82f6;
+  border-bottom: 2px solid var(--borderAccent);
   outline: none;
   background: transparent;
   width: 100%;
 }
 
 .editMode {
-  background: #f3f4f6;
+  background: var(--editModeBg);
   border-radius: 8px;
 }
 
 .saveBtn {
-  background: #2f6f44;
-  color: #fff;
+  background: var(--successBtn);
+  color: var(--whiteText);
   border: none;
   padding: 4px 12px;
   border-radius: 6px;
@@ -104,5 +104,5 @@
 }
 
 .edit-underline {
-  border-bottom: 2px solid #3b82f6;
+  border-bottom: 2px solid var(--borderAccent);
 }

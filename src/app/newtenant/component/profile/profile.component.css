@@ -9,6 +9,6 @@
 .waiting-text {
   margin-top: 16px;
   font-size: 16px;
-  color: #555;
+  color: var(--textMedium);
   font-weight: 600;
 }

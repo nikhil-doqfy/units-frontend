@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   border-radius: 10px;
-  background: #fff;
+  background: var(--whiteBg);
   flex-wrap: wrap;
   gap: 10px;
 }
@@ -24,7 +24,7 @@
   padding: 8px 14px;
   border-radius: 10px;
   /* border: 1px solid #ddd; */
-  background: #ffffff;
+  background: var(--whiteBg);
   font-size: 14px;
   cursor: pointer;
   /* box-shadow: #232b2e1a; */
@@ -54,10 +54,10 @@
   width: 197px;
   height: 34px;
   align-items: center;
-  background: #f5f7f8;
+  background: var(--searchBg);
   border-radius: 10px;
   padding: 6px 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borderColor);
   min-width: 230px;
   border: none;
 }
@@ -73,7 +73,7 @@
 
 .search-icon {
   margin-right: 6px;
-  color: #888;
+  color: var(--iconColor);
 }
 
 .clear-icon {
@@ -98,7 +98,7 @@
 }
 
 .logs-container {
-  background: #f5f6f8;
+  background: var(--logs-bg);
   padding: 20px;
   min-height: 100vh;
 }
@@ -120,7 +120,7 @@
 
 .download-link {
   font-size: 14px;
-  color: #2563eb;
+  color: var(--linkColor);
   text-decoration: underline;
   font-weight: 500;
 }
@@ -158,7 +158,7 @@
   top: 50px;
   width: 1.5px;
   height: calc(100% + -34px);
-  background: #e0e0e0;
+  background: var(--lineColor);
 }
 
 /* Right Content */
@@ -174,7 +174,7 @@
 }
 
 .username {
-  color: #344046;
+  color: var(--textSecondary);
   font-weight: 400;
   font-size: 14px;
 }
@@ -183,7 +183,7 @@
   font-weight: bold;
   font-size: 13px;
   font-weight: 600;
-  color: #232b2e;
+  color: var(--textPrimary);
 }
 
 /* Activity Box */
@@ -191,7 +191,8 @@
   /* background: #f1f2f4; */
   border-radius: 8px;
   padding: 15px;
-  border: 1px solid #ecf0f2;
+  border: 1px solid var(--borderLight);
+  background: var(--whiteBg);
 }
 
 .activity-box ul {
@@ -210,7 +211,7 @@
 
 .activity-sub {
   font-size: 13px;
-  color: #666;
+  color: var(--textMuted);
   margin-top: 4px;
 }
 

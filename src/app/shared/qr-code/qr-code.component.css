@@ -1,8 +1,8 @@
 .qr-wrapper {
   padding: 12px;
   border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  background: var(--whiteBg);
+  box-shadow: 0 1px 2px var(--shadowSoft);
 }
 
 canvas {

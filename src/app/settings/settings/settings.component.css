@@ -148,12 +148,12 @@
 }
 
 .sidebar-link.active {
-  background: #eef9ff;
-  color: #0c6ce9;
+  background: var(--activeBg);
+  color: var(--accentColor);
 }
 
 .sidebar-link.active app-profile-icon,
 .sidebar-link.active app-termscondition-icon,
 .sidebar-link.active app-charges-icon {
-  color: #0c6ce9;
+  color: var(--accentColor);
 }

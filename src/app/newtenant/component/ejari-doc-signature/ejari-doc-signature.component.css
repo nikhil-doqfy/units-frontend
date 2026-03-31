@@ -40,15 +40,15 @@
   width: 100%;
   height: 44px;
   border-radius: 10px;
-  border: 1px solid #e3e7ee;
+  border: 1px solid var(--inputBorder);
   padding: 0 14px;
   font-size: 13px;
   outline: none;
 }
 
 .doc-form input:focus {
-  border-color: #1976ff;
-  box-shadow: 0 0 0 2px rgba(25, 118, 255, 0.1);
+  border-color: var(--inputFocus);
+  box-shadow: 0 0 0 2px var(--inputFocusShadow);
 }
 .doc-preview img {
   width: 100%;
@@ -58,7 +58,7 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--modalOverlay);
   backdrop-filter: blur(2px);
   display: flex;
   justify-content: center;
@@ -67,12 +67,12 @@
 }
 
 .success-modal {
-  background: #fff;
+  background: var(--modalBg);
   border-radius: 18px;
   padding: 28px 28px 30px;
   width: 360px;
   text-align: center;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 40px var(--modalShadow);
   position: relative;
   overflow: hidden;
 }
@@ -90,13 +90,13 @@
 .success-modal::before {
   top: -60px;
   left: -60px;
-  background: #6b8cff;
+  background: var(--accentBlue);
 }
 
 .success-modal::after {
   bottom: -60px;
   right: -60px;
-  background: #ff7a18;
+  background: var(--accentOrange);
 }
 
 .success-icon {
@@ -107,8 +107,8 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: #22c55e;
-  color: #fff;
+  background: var(--success);
+  color: var(--textWhite);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,40 +124,40 @@
 
 .success-modal p {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--textSecondary);
   margin-bottom: 18px;
   line-height: 1.5;
 }
 
 .primary-btn {
-  background: #22c55e;
+  background: var(--success);
   border: none;
   border-radius: 10px;
   padding: 10px 22px;
-  color: #fff;
+  color: var(--textWhite);
   font-weight: 500;
   font-size: 13px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+  box-shadow: 0 4px 12px var(--btnShadow);
 }
 
 .primary-btn:hover {
-  background: #16a34a;
+  background: ar(--successDark);
 }
 
 .secondary-link {
   display: inline-block;
   margin-top: 10px;
   font-size: 14px;
-  color: #2563eb;
+  color: var(--linkColor);
   text-decoration: none;
   font-weight: 500;
   text-decoration: underline;
 }
 
 .btnCommonsx {
-  background-color: #fff;
-  box-shadow: 0 0 6px 0 #00000026;
+  background-color: var(--cardBg);
+  box-shadow: 0 0 6px 0 var(--cardShadow);
   border-radius: 10px;
   padding: 6px 14px;
 }
@@ -179,11 +179,11 @@
 }
 
 .waiting-alert {
-  background-color: #ffefd3;
-  color: #ff6500;
+  background-color: var(--warningBg);
+  color: var(--warningText);
 }
 
 .success-alert {
-  background-color: #e6f7ec;
-  color: #1f8f4c;
+  background-color: var(--successBg);
+  color: var(--successText);
 }

@@ -1,5 +1,5 @@
 body {
-  background: #2f2f2f;
+  background: var(--bodyBg);
   font-family:
     system-ui,
     -apple-system,
@@ -10,7 +10,7 @@ body {
 .invoice-page {
   width: 820px;
   margin: 30px auto;
-  background: #fff;
+  background: var(--whiteBg);
   padding: 24px;
   border-radius: 6px;
 }
@@ -19,18 +19,18 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--borderLight);
   padding-bottom: 12px;
 }
 
 .logo {
   font-weight: 700;
-  color: #0b3c8c;
+  color: var(--primaryDark);
 }
 
 .invoice-title h2 {
   margin: 0;
-  color: #19438c;
+  color: var(--primaryText);
   font-weight: bold;
 }
 
@@ -65,15 +65,15 @@ body {
 }
 
 .summary .grand {
-  background: #1e3a8a;
-  color: #fff;
+  background: var(--grandBg);
+  color: var(--whiteText);
   padding: 6px 10px;
   border-radius: 6px;
   margin-top: 6px;
 }
 
 .payment {
-  background: #f3f4f6;
+  background: var(--cardLightBg);
   padding: 12px;
   margin-top: 20px;
   font-size: 13px;
@@ -83,7 +83,7 @@ body {
 .invoice-footer {
   margin-top: 28px;
   font-size: 12px;
-  color: #374151;
+  color: var(--textSecondary);
 }
 
 /* TOP SECTION */
@@ -127,7 +127,7 @@ body {
 
 .signature .role {
   font-size: 11px;
-  color: #0a0a0b;
+  color: var(--textPrimary);
 }
 
 /* NOTE */
@@ -135,7 +135,7 @@ body {
   text-align: center;
   font-size: 11px;
   margin: 16px 0;
-  color: #6b7280;
+  color: var(--textMuted);
 }
 
 /* BOTTOM BAR */
@@ -143,10 +143,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--borderLight);
   padding-top: 10px;
   font-size: 11px;
-  color: #374151;
+  color: var(--textSecondary);
 }
 
 .sign {
@@ -163,16 +163,16 @@ body {
 
 /* HEADER ROW */
 .invoice-table thead tr {
-  background: #1e3a8a;
+  background: var(--tableHeaderBg);
 }
 
 /* HEADER CELLS */
 .invoice-table th {
-  color: #fff;
+  color: var(--whiteText);
   padding: 10px 12px;
   font-weight: 500;
   text-align: center;
-  border-right: 2px solid #ffffff40;
+  border-right: 2px solid var(--tableBorderLight);
 }
 
 /* LEFT ROUND */
@@ -193,7 +193,7 @@ body {
 /* BODY CELLS */
 .invoice-table td {
   padding: 10px 8px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--borderLight);
   text-align: center;
 }
 
@@ -205,11 +205,11 @@ body {
 .invoice-info {
   display: flex;
   gap: 32px;
-  background: #f5f7f8;
+  background: var(--cardLightBg);
   padding: 20px;
   border-radius: 8px;
   font-size: 13px;
-  color: #374151;
+  color: var(--textSecondary);
   margin-top: 38px;
   margin-bottom: 38px;
 }
@@ -223,7 +223,7 @@ body {
   margin: 0 0 6px;
   font-size: 13px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--textMuted);
 }
 
 .info-col p {
@@ -232,36 +232,36 @@ body {
 
 .info-col .bold {
   font-weight: 700;
-  color: #111827;
+  color: var(--textPrimary);
 }
 
 /* RIGHT WHITE CARD */
 .info-card {
   width: 260px;
-  background: #ffffff;
+  background: var(--whiteBg);
   border-radius: 14px;
   padding: 14px 16px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px var(--shadowSoft);
 }
 
 .info-card p {
   margin: 6px 0;
-  color: #374151;
+  color: var(--textSecondary);
 }
 
 .info-card strong {
-  color: #111827;
+  color: var(--textPrimary);
 }
 .payment p {
-  color: #536c76;
+  color: var(--textLight);
 }
 
 :host ::ng-deep app-call-icons-new svg,
 :host ::ng-deep app-call-icons-new svg * {
-  color: #1b448d !important;
+  color: var(--accentSecondary) !important;
 }
 :host ::ng-deep app-email-icon svg * {
-  color: #1b448d;
+  color: var(--accentSecondary);
 }
 
 .totals {
@@ -292,8 +292,8 @@ body {
 
 .summary .grand {
   display: inline-block;
-  background: #1e3a8a;
-  color: #fff;
+  background: var(--accentPrimary);
+  color: var(--whiteText);
   padding: 8px 14px;
   border-radius: 8px;
   margin-top: 10px;
@@ -305,7 +305,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding-bottom: 14px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--borderLight);
 }
 
 .brand img {
@@ -323,12 +323,12 @@ body {
   font-size: 28px; /* bigger like first image */
   font-weight: 800;
   letter-spacing: 0.5px;
-  color: #1e3a8a;
+  color: var(--accentPrimary);
 }
 
 .invoice-title p {
   margin-top: 4px;
   font-size: 13px;
-  color: #6b7280; /* lighter TRN */
+  color: var(--textMuted); /* lighter TRN */
   font-weight: 500;
 }
