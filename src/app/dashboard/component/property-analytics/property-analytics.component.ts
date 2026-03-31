@@ -93,52 +93,12 @@ export class PropertyAnalyticsComponent implements OnInit {
   totalRevenue  = 0;
   totalRevenueDisplay = '—';
 
-  photos: string[] = [
-    '../assets/property/property-comprison1.svg',
-    '../assets/property/property-comprison2.svg',
-    'assets/property/property-comprison3.svg',
-  ];
-
-  properties = [
-    {
-      name: 'Property1',
-      image: 'assets/property/property-comprison1.svg',
-      revenue: '1,20,573',
-      rank: '7th Rank',
-      plotArea: '13,000.00',
-      builtUpArea: '8,000.00',
-      blocks: 24,
-      totalUnits: 445,
-      occupiedUnits: 200,
-      availableUnits: 245,
-      parking: 500,
-    },
-    {
-      name: 'Property2',
-      image: 'assets/property/property-comprison2.svg',
-      revenue: '2,20,573',
-      rank: '18th Rank',
-      plotArea: '13,000.00',
-      builtUpArea: '8,000.00',
-      blocks: 24,
-      totalUnits: 445,
-      occupiedUnits: 200,
-      availableUnits: 245,
-      parking: 500,
-    },
-    {
-      name: 'Property3',
-      image: 'assets/property/property-comprison3.svg',
-      revenue: '6,00,736',
-      rank: '2nd Rank',
-      plotArea: '13,000.00',
-      builtUpArea: '8,000.00',
-      blocks: 24,
-      totalUnits: 445,
-      occupiedUnits: 200,
-      availableUnits: 245,
-      parking: 500,
-    },
+  // ── Comparison slots (4 cards) ────────────────────────────────────────────
+  comparisonSlots: { selectedOption: any; data: any | null }[] = [
+    { selectedOption: null, data: null },
+    { selectedOption: null, data: null },
+    { selectedOption: null, data: null },
+    { selectedOption: null, data: null },
   ];
 
   constructor(private router: Router) {}
@@ -216,6 +176,50 @@ export class PropertyAnalyticsComponent implements OnInit {
     this.selectedBlock   = option ?? null;
     this.selectedBlockId = option?.key ?? '';
     this.loadAnalytics();
+  }
+
+  clearFilters() {
+    this.selectedProperty   = null;
+    this.selectedBlock      = null;
+    this.selectedPropertyId = '';
+    this.selectedBlockId    = '';
+    this.blockOptions       = [];
+    this.loadAnalytics();
+  }
+
+  onComparisonPropertySelected(slotIndex: number, option: any) {
+    this.comparisonSlots[slotIndex].selectedOption = option ?? null;
+    if (!option?.key) {
+      this.comparisonSlots[slotIndex].data = null;
+      return;
+    }
+    this.leaseService.getPropertyComparison(option.key)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const c = resp?.content;
+          if (!c) return;
+          this.comparisonSlots[slotIndex].data = {
+            name:           c.property_name,
+            image:          c.thumbnail,
+            revenue:        `AED ${(c.revenue || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`,
+            rank:           this.ordinalRank(c.rank),
+            plotArea:       `${(c.land_area || 0).toLocaleString('en-IN')} ${c.land_area_unit || ''}`.trim(),
+            builtUpArea:    (c.built_up_area || 0).toLocaleString('en-IN'),
+            blocks:         c.no_of_blocks,
+            totalUnits:     c.total_units,
+            occupiedUnits:  c.occupied_units,
+            availableUnits: c.available_units,
+            parking:        c.total_parking,
+          };
+        },
+      });
+  }
+
+  ordinalRank(n: number): string {
+    const s = ['th', 'st', 'nd', 'rd'];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]) + ' Rank';
   }
 
   getLabel(key: string): string {

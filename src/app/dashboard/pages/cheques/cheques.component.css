@@ -183,7 +183,7 @@
 
 .arrow {
   position: absolute;
-  bottom: -10px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
@@ -196,7 +196,12 @@
 
 .summary-card.active .arrow {
   display: block;
-  border-top-color: #f6f9ff;
+  border-top-color: #f5f7f8;
+}
+
+.summary-grid {
+  overflow: visible;
+  padding-bottom: 0;
 }
 
 @media (max-width: 1200px) {
@@ -246,8 +251,20 @@ table {
 
 .table-wrapper {
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
 }
+
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 :host ::ng-deep .custom-select-wrapper .customSelectInput {
   padding: 0 !important;

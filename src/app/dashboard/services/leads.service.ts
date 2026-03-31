@@ -40,6 +40,10 @@ export class LeadsService {
     });
   }
 
+  checkActiveLease(leadId: number | string): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/lead/check-active-lease?lead_id=${leadId}`);
+  }
+
   bulkImportLeads(fileBase64: string): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/lead/bulk-import`, { file: fileBase64 });
   }

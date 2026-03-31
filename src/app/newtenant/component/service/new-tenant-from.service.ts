@@ -23,6 +23,14 @@ export class NewTenantFromService {
 
   getLeaseId() { return this.leaseId; }
 
+  // Commercial data from the selected unit — used to pre-fill the commercial form
+  private unitCommercialData = signal<any>(null);
+  getUnitCommercialData() { return this.unitCommercialData; }
+  setUnitCommercialData(data: any) {
+    this.unitCommercialData.set(data);
+    this.prefillCommercialFromUnit(data);
+  }
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -195,8 +203,10 @@ export class NewTenantFromService {
     });
   }
 
+  private _commercialForm: FormGroup | null = null;
+
   private createCommercialForm(): FormGroup {
-    return this.fb.group({
+    const form = this.fb.group({
       startDate:            ['', Validators.required],
       endDate:              ['', Validators.required],
       graceStartDate:       ['', Validators.required],
@@ -214,6 +224,29 @@ export class NewTenantFromService {
       shellAndCore:         [''],
       paymentCount:         ['', Validators.required],
     });
+    this._commercialForm = form;
+    return form;
+  }
+
+  /** Patch the commercial form with unit defaults (blank fields only). */
+  prefillCommercialFromUnit(u: any) {
+    const form = this._commercialForm;
+    if (!form || !u) return;
+
+    const blank = (ctrl: string) => !form.get(ctrl)?.value;
+    const patch: Record<string, any> = {};
+
+    if (blank('rent')                  && u.rent)               patch['rent']                 = parseFloat(u.rent);
+    if (blank('securityDeposit')       && u.security_deposit)   patch['securityDeposit']      = parseFloat(u.security_deposit);
+    if (blank('securityBookingAmount') && u.booking_amount)     patch['securityBookingAmount']= parseFloat(u.booking_amount);
+    if (blank('maintenanceCharges')    && u.maintenance_charges)patch['maintenanceCharges']   = parseFloat(u.maintenance_charges);
+    if (blank('paymentCount')          && u.cycle)              patch['paymentCount']         = parseInt(u.cycle, 10);
+    if (blank('noticePeriod')          && u.notice_period)      patch['noticePeriod']         = parseInt(u.notice_period, 10);
+    if (blank('commissionPercent')     && u.commission_percent) patch['commissionPercent']    = parseFloat(u.commission_percent);
+
+    if (Object.keys(patch).length) {
+      form.patchValue(patch, { emitEvent: false });
+    }
   }
 
   private createProfileForm(): FormGroup {
@@ -412,17 +445,23 @@ export class NewTenantFromService {
   startEjariFlow() {
     this.btnTitle.set('Send for Signature');
   }
-  saveBasicStep(basicForm: FormGroup, onSuccess?: () => void) {
-    const v = basicForm.value;
-    const propertyId = v.unit?.key ?? v.unit ?? null;
+  private isSavingBasic = false;
 
-    if (!propertyId) {
+  saveBasicStep(basicForm: FormGroup, onSuccess?: () => void) {
+    if (this.isSavingBasic) return;
+    this.isSavingBasic = true;
+
+    const v = basicForm.value;
+    const unitId = v.unit?.key ?? v.unit ?? null;
+
+    if (!unitId) {
+      this.isSavingBasic = false;
       onSuccess?.();
       return;
     }
 
     const payload: Record<string, any> = {
-      unit_id: propertyId,
+      unit_id: unitId,
       tenant_id: v.tenantId ?? null,
       email: v.email ?? '',
       tenant_name: v.tenantName ?? '',
@@ -437,21 +476,82 @@ export class NewTenantFromService {
       address_line_2: v.addressLine2 ?? '',
       platform: v.platform ?? '',
     };
+
     const existingId = this.leaseId();
 
-    const req$ = existingId
-      ? this.leaseService.updateLease({ ...payload, lease_id: existingId })
-      : this.leaseService.createLease(payload);
+    if (existingId) {
+      this.leaseService
+        .updateLease({ ...payload, lease_id: existingId, lease_stage: 'COMMERCIAL_DETAILS' })
+        .subscribe({
+          next: () => {
+            this.isSavingBasic = false;
+            this.alertService.success('Lease saved successfully');
+            onSuccess?.();
+          },
+          error: () => {
+            this.isSavingBasic = false;
+            this.alertService.error('Failed to save lease. Please try again.');
+          },
+        });
+      return;
+    }
 
-    req$.subscribe({
+    // leaseId not in memory — check for an existing draft lease for this unit
+    // to avoid creating duplicates when the user navigates away and returns.
+    this.leaseService.getLeases({ unit_id: unitId, page_size: 1 }).subscribe({
       next: (resp: any) => {
-        if (resp?.content?.id) this.leaseId.set(resp.content.id);
-        this.alertService.success('Lease saved successfully');
-        onSuccess?.();
+        const existingLease = resp?.content?.[0] ?? null;
+        const stage = existingLease?.lease_stage?.toUpperCase();
+        const isDraft = stage === 'BASIC_DETAILS' || stage === 'COMMERCIAL_DETAILS';
+
+        if (isDraft) {
+          this.leaseId.set(existingLease.id);
+          this.leaseService
+            .updateLease({ ...payload, lease_id: existingLease.id, lease_stage: 'COMMERCIAL_DETAILS' })
+            .subscribe({
+              next: () => {
+                this.isSavingBasic = false;
+                this.alertService.success('Lease saved successfully');
+                onSuccess?.();
+              },
+              error: () => {
+                this.isSavingBasic = false;
+                this.alertService.error('Failed to save lease. Please try again.');
+              },
+            });
+        } else {
+          this.leaseService
+            .createLease({ ...payload, lease_stage: 'COMMERCIAL_DETAILS' })
+            .subscribe({
+              next: (createResp: any) => {
+                if (createResp?.content?.id) this.leaseId.set(createResp.content.id);
+                this.isSavingBasic = false;
+                this.alertService.success('Lease saved successfully');
+                onSuccess?.();
+              },
+              error: () => {
+                this.isSavingBasic = false;
+                this.alertService.error('Failed to save lease. Please try again.');
+              },
+            });
+        }
       },
       error: () => {
-        this.alertService.error('Failed to save lease. Please try again.');
-        onSuccess?.();
+        // Lookup failed — fall back to create
+        this.leaseService
+          .createLease({ ...payload, lease_stage: 'COMMERCIAL_DETAILS' })
+          .subscribe({
+            next: (createResp: any) => {
+              if (createResp?.content?.id) this.leaseId.set(createResp.content.id);
+              this.isSavingBasic = false;
+              this.alertService.success('Lease saved successfully');
+              onSuccess?.();
+            },
+            error: () => {
+              this.isSavingBasic = false;
+              this.alertService.error('Failed to save lease. Please try again.');
+            },
+          });
       },
     });
   }
