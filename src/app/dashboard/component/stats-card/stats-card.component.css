@@ -5,7 +5,7 @@
   gap: 10px;
   padding: 16px;
   border-radius: 12px;
-  box-shadow: 0 0 6px 0 #00000026;
+  box-shadow: var(--stats-shadow);
 }
 
 .statsColHdr {
@@ -110,20 +110,20 @@
 }
 
 .greenBadge {
-  background: #e6f4ea;
-  color: #1e7f4d;
+  background: var(--badge-green-bg);
+  color: var(--badge-green-text);
 }
 
 .mutedText {
   font-size: 11px;
-  color: #7a7a7a;
+  color: var(--text-muted);
   margin-left: 6px;
 }
 
 .propertySelect {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   padding: 6px 10px;
   border-radius: 8px;
   font-size: 13px;
-  background: #fff;
+  background: var(--input-bg);
 }

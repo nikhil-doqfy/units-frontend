@@ -41,6 +41,7 @@ import { LogoutModalIconComponent } from '../component/icons/logout-modal-icon/l
 import { DashBreadcrumbComponent } from '../component/dash-breadcrumb/dash-breadcrumb.component';
 import { AuthService } from '../../auth/services/auth.service';
 import { StorageService } from '../services/storage.service';
+import { UserService } from '../../user/services/user.service';
 import { AlertService } from '../services/alert.service';
 import { SignatureIconComponent } from '../../dashboard/component/icons/signature-icon/signature-icon.component';
 import { EditIconComponent } from '../../dashboard/component/icons/edit-icon/edit-icon.component';
@@ -127,6 +128,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private storage: StorageService,
     private alertService: AlertService,
+    private userService: UserService,
   ) {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
@@ -148,6 +150,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userService.getUserProfile({}).subscribe({
+      next: (resp: any) => {
+        const profile = resp?.content ?? null;
+        if (profile) {
+          this.userProfile = { ...this.storage.getUserProfile(), ...profile };
+          this.storage.setUserProfile(this.userProfile);
+        }
+      },
+    });
+
+    this.subscriptions.add(
+      this.userService.profileUpdated$.subscribe((updated) => {
+        if (updated) {
+          this.userProfile = { ...this.userProfile, ...updated };
+        }
+      }),
+    );
+
     const theme = this.storage.getTheme();
     this.isDark = theme === 'dark';
 

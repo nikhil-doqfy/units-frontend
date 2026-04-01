@@ -62,7 +62,7 @@
   color: var(--lightDarkText);
   border: 0;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 #00000026;
+  box-shadow: var(--shadowDefault);
   width: 20px;
   min-width: 20px;
   height: 20px;
@@ -126,7 +126,7 @@
   padding: 8px 8px 8px 34px;
   border: 0;
   border-radius: 8px;
-  box-shadow: 0 0 6px 0 #00000026;
+  box-shadow: var(--shadowDefault);
   transition: all 0s ease 0s;
 }
 

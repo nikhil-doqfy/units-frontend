@@ -86,7 +86,12 @@ export class BasicpersonalComponent implements OnInit {
             floorNo:   u.floor_no   ?? '',
           });
           this.patchOwners(u.unit_owners ?? []);
+          this.formService.setUnitCommercialData(u);
         });
+    }
+
+    if (this.leadData?.email) {
+      this.lookupTenantByEmail(this.leadData.email);
     }
   }
 
@@ -162,13 +167,17 @@ export class BasicpersonalComponent implements OnInit {
           floorNo:   u.floor_no   ?? '',
         });
         this.patchOwners(u.unit_owners ?? []);
+        this.formService.setUnitCommercialData(u);
       });
   }
 
   onEmailBlur() {
     const email = (this.form.get('email')?.value || '').trim();
     if (!email) return;
+    this.lookupTenantByEmail(email);
+  }
 
+  private lookupTenantByEmail(email: string) {
     this.tenantLookupLoading = true;
     this.tenantsService.getTenantByEmail(email)
       .pipe(takeUntilDestroyed(this.destroyRef))

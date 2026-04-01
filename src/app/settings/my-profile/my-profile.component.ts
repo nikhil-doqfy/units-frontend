@@ -63,6 +63,8 @@ export class MyProfileComponent implements AfterViewInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
   stateList: any[] = [];
   selectedState: any = null;
+  timezoneList: any[] = [];
+  selectedTimezone: any = null;
   currentLanguage = 'en';
   isOpen: boolean = false;
   userImage: string = '';
@@ -89,12 +91,14 @@ export class MyProfileComponent implements AfterViewInit {
 
   otherDetails = {
     country: '',
+    countryId: null as number | null,
+    state: '',
+    stateId: null as number | null,
     city: '',
-    cityId: null,
+    cityId: null as number | null,
     additionalAddress: '',
     timeZone: '',
     address: '',
-    state: '',
     postalCode: '',
     locality: '',
   };
@@ -213,29 +217,40 @@ export class MyProfileComponent implements AfterViewInit {
       this.userImage = content.profile_image;
     }
 
+    const roleKey = content?.user_role ?? '';
+    const roleLabels: Record<string, string> = {
+      COMPANY_USER: 'Property Manager',
+      OWNER: 'Owner',
+      TENANT: 'Tenant',
+    };
     this.profile = {
       name: content?.first_name + ' ' + content?.last_name,
-      firstName: content?.first_name,
-      lastName: content?.last_name,
-      companyName:
-        content?.user_type == 'PROPERTY_MANAGER' ? content.company_name : '',
-      email: content?.email,
-      contact: content?.contact_number,
-      role: content?.user_type,
+      firstName: content?.first_name ?? '',
+      lastName: content?.last_name ?? '',
+      companyName: roleKey === 'COMPANY_USER' ? (content?.company_name ?? '') : '',
+      email: content?.email ?? '',
+      contact: content?.contact_number ?? '',
+      role: roleLabels[roleKey] ?? roleKey,
       password: '************',
     };
 
+    const tz = content?.time_zone ?? '';
     this.otherDetails = {
-      country: content?.country.value,
-      timeZone: content?.time_zone,
-      address: content?.address,
-      additionalAddress: content?.additional_address,
-      city: content?.city.value,
-      cityId: content?.city_id,
-      state: content?.state.value,
-      postalCode: content?.postal_code,
-      locality: content?.locality,
+      country: content?.country?.value ?? '',
+      countryId: content?.country?.key ?? null,
+      state: content?.state?.value ?? '',
+      stateId: content?.state?.key ?? null,
+      city: content?.city?.value ?? '',
+      cityId: content?.city?.key ?? null,
+      timeZone: tz,
+      address: content?.address ?? '',
+      additionalAddress: content?.additional_address ?? '',
+      postalCode: content?.postal_code ?? '',
+      locality: content?.locality ?? '',
     };
+    if (tz) {
+      this.selectedTimezone = { key: tz, value: tz };
+    }
   }
 
   triggerFileInput() {
@@ -305,6 +320,7 @@ export class MyProfileComponent implements AfterViewInit {
       .subscribe({
         next: (res: any) => {
           this.storageService.saveUserProfile(payload);
+          this.userService.notifyProfileUpdated(payload);
 
           this.profile = this.storageService.getUserProfile();
           this.getUserProfileData();
@@ -321,6 +337,20 @@ export class MyProfileComponent implements AfterViewInit {
   handleviewclick() {
     this.getOptionTypes(['COUNTRY']);
   }
+
+  handleTimezoneClick() {
+    if (this.timezoneList.length) return;
+    this.sharedApiService
+      .getOptions({ option_type: 'TIMEZONE' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: (r: any) => (this.timezoneList = r?.content?.timezone ?? []) });
+  }
+
+  onTimezoneSelected(option: any) {
+    this.selectedTimezone = option;
+    this.otherDetails.timeZone = option?.key ?? '';
+    this.onFieldChange('timeZone');
+  }
   cancelUser() {
     this.editUserMode = false;
     this.changedFields = {};
@@ -328,10 +358,17 @@ export class MyProfileComponent implements AfterViewInit {
 
   enableOtherDetailsEdit() {
     this.editOtherDetailsMode = true;
-
-    this.selectedCountry = this.countryList.find(
-      (c) => c.value === this.otherDetails.country,
-    );
+    // Pre-populate selections from stored IDs so state/city dropdowns work
+    // without requiring the user to re-select country first
+    if (this.otherDetails.countryId) {
+      this.selectedCountry = { key: this.otherDetails.countryId, value: this.otherDetails.country };
+    }
+    if (this.otherDetails.stateId) {
+      this.selectedState = { key: this.otherDetails.stateId, value: this.otherDetails.state };
+    }
+    if (this.otherDetails.cityId) {
+      this.selectedCity = { key: this.otherDetails.cityId, value: this.otherDetails.city };
+    }
   }
 
   cancelOtherDetails() {
@@ -341,20 +378,28 @@ export class MyProfileComponent implements AfterViewInit {
 
   onCountrySelected(option: any) {
     this.selectedCountry = option;
-
-    this.otherDetails.country = option?.value;
-
+    this.otherDetails.country = option?.value ?? '';
+    this.otherDetails.countryId = option?.key ?? null;
+    // Reset dependent fields
+    this.selectedState = null;
+    this.selectedCity = null;
+    this.otherDetails.state = '';
+    this.otherDetails.stateId = null;
+    this.otherDetails.city = '';
+    this.otherDetails.cityId = null;
+    this.stateList = [];
+    this.cityList = [];
     this.onFieldChange('country');
   }
 
   onStateSelected(option: any) {
     this.selectedState = option;
-    this.otherDetails.state = option?.value || '';
+    this.otherDetails.state = option?.value ?? '';
+    this.otherDetails.stateId = option?.key ?? null;
     this.otherDetails.city = '';
-    this.selectedCity = null;
     this.otherDetails.cityId = null;
+    this.selectedCity = null;
     this.cityList = [];
-
     this.onFieldChange('state');
   }
 
@@ -365,7 +410,8 @@ export class MyProfileComponent implements AfterViewInit {
     this.onFieldChange('city');
   }
   handleviewclickcity() {
-    this.getCityOptions(this.selectedState.key);
+    const stateId = this.selectedState?.key ?? this.otherDetails.stateId;
+    if (stateId) this.getCityOptions(stateId);
   }
   getCityOptions(stateId: number) {
     this.sharedApiService
@@ -403,7 +449,8 @@ export class MyProfileComponent implements AfterViewInit {
   }
 
   handleviewclicks() {
-    this.getStateOptions(this.selectedCountry?.key);
+    const countryId = this.selectedCountry?.key ?? this.otherDetails.countryId;
+    if (countryId) this.getStateOptions(countryId);
   }
   getOptionTypes(options: string[]) {
     this.sharedApiService

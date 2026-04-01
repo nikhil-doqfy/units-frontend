@@ -22,7 +22,7 @@
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 6px;
-  color: #111;
+  color: var(--textPrimary);
   font-style: unset;
 }
 
@@ -34,14 +34,14 @@
 
 .upload-link {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--textSecondary);
 }
 
 .upload-link span {
   font-weight: 500;
   cursor: pointer;
   margin-left: 6px;
-  color: black;
+  color: var(--textBlack);
   font-size: 14px;
   display: inline-flex;
   align-items: center;

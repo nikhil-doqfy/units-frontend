@@ -54,6 +54,26 @@ export class ChequesComponent {
   private router          = inject(Router);
   private propertyService = inject(PropertyService);
 
+  // ── Status options (inline row dropdown) ─────────────────────────
+  statusOptions: { key: string; value: string }[] = [
+    { key: 'BALANCE',  value: 'Balance'  },
+    { key: 'CREDITED', value: 'Credited' },
+    { key: 'REALIZED', value: 'Realized' },
+    { key: 'BOUNCE',   value: 'Bounce'   },
+  ];
+
+  getStatusOption(status: string): { key: string; value: string } | null {
+    return this.statusOptions.find(o => o.key === status) ?? null;
+  }
+
+  onChequeStatusChange(row: any, option: any) {
+    if (!option?.key || !row?.cheque?.id) return;
+    row.cheque.status = option.key;
+    this.leaseService.updateLeaseCheque({ cheque_id: row.cheque.id, status: option.key })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: () => this.loadSummary() });
+  }
+
   // ── Filter options ───────────────────────────────────────────────
   yearOptions:     { key: string; value: string }[] = [];
   propertyOptions: { key: string; value: string }[] = [];

@@ -6,7 +6,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { NgApexchartsModule, ChartComponent } from 'ng-apexcharts';
+import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
   selector: 'app-revenue-bar-chart',
@@ -17,8 +17,8 @@ import { NgApexchartsModule, ChartComponent } from 'ng-apexcharts';
 })
 export class RevenueBarChartComponent implements OnChanges, AfterViewInit {
   @Input() data: { name: string; value: number }[] = [];
-  @Input() xAxisTitle: string = 'Block / Tower';
-  @ViewChild('chart') chartRef?: ChartComponent;
+  @Input() xAxisTitle: string = 'Property';
+  @ViewChild('chart') chart!: ChartComponent;
 
   private viewReady = false;
 
@@ -47,7 +47,7 @@ export class RevenueBarChartComponent implements OnChanges, AfterViewInit {
         style: { fontSize: '11px', colors: '#6b7280' },
       },
       title: {
-        text: this.xAxisTitle,
+        text: 'Property',
         offsetY: -28,
         style: { fontSize: '12px', fontWeight: 600, color: '#030507' },
       },
@@ -68,62 +68,75 @@ export class RevenueBarChartComponent implements OnChanges, AfterViewInit {
           <strong style="font-size:16px">
             AED ${series[seriesIndex][dataPointIndex].toLocaleString()}
           </strong>
-          <div style="font-size:12px;color:#6b7280;margin-top:4px">
-            Revenue Received
-          </div>
+          <div style="font-size:12px;color:#6b7280;margin-top:4px">Revenue Received</div>
         </div>
       `,
     },
     responsive: [
-      {
-        breakpoint: 768,
-        options: { plotOptions: { bar: { columnWidth: '55%' } } },
-      },
-      {
-        breakpoint: 480,
-        options: {
-          chart: { height: 240 },
-          plotOptions: { bar: { columnWidth: '65%' } },
-        },
-      },
+      { breakpoint: 768, options: { plotOptions: { bar: { columnWidth: '55%' } } } },
+      { breakpoint: 480, options: { chart: { height: 240 }, plotOptions: { bar: { columnWidth: '65%' } } } },
     ],
   };
 
   ngAfterViewInit() {
     this.viewReady = true;
-    if (this.data.length) this.applyData();
+    if (this.data?.length) {
+      this.applyToChart();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] || changes['xAxisTitle']) {
+      const values     = (this.data || []).map(d => d.value);
+      const categories = (this.data || []).map(d => d.name);
+      const colors     = (this.data || []).map(() => '#0B63E6');
+
+      // Update bound options so the chart renders correctly even before view is ready
+      this.chartOptions = {
+        ...this.chartOptions,
+        series: [{ name: 'Revenue', data: values }],
+        colors,
+        xaxis: {
+          ...this.chartOptions.xaxis,
+          categories,
+          title: {
+            ...this.chartOptions.xaxis.title,
+            text: this.xAxisTitle,
+          },
+        },
+      };
+
       if (this.viewReady) {
-        this.applyData();
+        this.applyToChart();
       }
     }
   }
 
-  private applyData() {
-    const categories = this.data.map(d => d.name);
-    const values     = this.data.map(d => d.value);
-    const colors     = this.data.map(() => '#0B63E6');
+  private applyToChart() {
+    if (!this.chart) return;
+    const values     = (this.data || []).map(d => d.value);
+    const categories = (this.data || []).map(d => d.name);
+    const colors     = (this.data || []).map(() => '#0B63E6');
 
-    const opts = {
-      series:  [{ name: 'Revenue', data: values }],
-      xaxis:   {
+    this.chart.updateSeries([{ name: 'Revenue', data: values }]);
+    this.chart.updateOptions({
+      colors,
+      xaxis: {
         categories,
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        labels: {
+          rotate: -35,
+          rotateAlways: true,
+          offsetY: -2,
+          style: { fontSize: '11px', colors: '#6b7280' },
+        },
         title: {
           text: this.xAxisTitle,
           offsetY: -28,
           style: { fontSize: '12px', fontWeight: 600, color: '#030507' },
         },
       },
-      colors,
-    };
-
-    if (this.chartRef) {
-      this.chartRef.updateOptions(opts, false, false);
-    } else {
-      this.chartOptions = { ...this.chartOptions, ...opts };
-    }
+    }, false, true);
   }
 }

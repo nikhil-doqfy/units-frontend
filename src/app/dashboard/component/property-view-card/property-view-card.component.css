@@ -6,11 +6,12 @@
 .no-img-placeholder {
   align-items: center;
   justify-content: center;
-  background: #f3f4f6;
+  background: var(--no-img-bg);
+  border-radius: var(--radius-md);
   border-radius: 8px;
 }
 .no-img-box {
-  color: #9ca3af;
+  color: var(--no-img-text);
   font-size: 13px;
 }
 
@@ -319,13 +320,13 @@ img {
   position: absolute;
   top: -30px;
   right: 90px;
-  background: #fff;
+  background: var(--popup-bg);
   padding: 15px;
   width: 186px;
   height: 88px;
   gap: 12px;
   border-radius: 12px;
-  box-shadow: 0 0px 20px black;
+  box-shadow: 0 0px 20px var(--popup-shadow);
 }
 
 .shareItem {
@@ -342,8 +343,12 @@ img {
   padding: 10px;
   margin-top: 5px;
   border-radius: 8px;
-  background: linear-gradient(90deg, #2b4eff, #00a6ff);
-  color: white;
+  background: linear-gradient(
+    90deg,
+    var(--share-btn-gradient-start),
+    var(--share-btn-gradient-end)
+  );
+  color: var(--share-btn-text);
   margin-left: -15px;
 }
 
@@ -363,19 +368,19 @@ img {
 }
 
 .reraBox {
-  background: #f8e4c5;
+  background: var(--rera-bg);
   padding: 8px 12px;
   border-radius: 8px;
 }
 
 .reraTitle {
   font-size: 10px;
-  color: black;
+  color: var(--rera-text);
   display: block;
 }
 
 .reraValue {
   font-size: 14px;
   font-weight: 600;
-  color: black;
+  color: var(--rera-text);
 }

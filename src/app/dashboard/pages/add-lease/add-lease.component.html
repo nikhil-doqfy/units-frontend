@@ -5,13 +5,13 @@
   [stepSchema]="steps"
   (finish)="submitLease()"
 >
-  <!-- Step Property Selection Content -->
+  <!-- Step 1: Basic Details (Property + Tenant) -->
   <ng-container>
     <app-step-pane
-      [title]="'PROPERTY_DETAILS' | translate"
+      [title]="'BASIC_DETAILS' | translate"
       [description]="'SELECT_PROPERTY_DETAILS' | translate"
     >
-      <form class="row g-4" [formGroup]="propertyDetailForm">
+      <form class="row g-4" [formGroup]="basicDetailsForm">
         <div class="col-md-6">
           <label class="form-label">{{ "PROPERETY" | translate }}</label>
           <app-custom-select
@@ -21,9 +21,9 @@
             formControlName="property"
             (optionSelected)="onPropertySelect($event)"
           ></app-custom-select>
-          @if (isInvalid(propertyDetailForm, "property").status) {
+          @if (isInvalid(basicDetailsForm, "property").status) {
             <small class="errorMsg">
-              {{ isInvalid(propertyDetailForm, "property").msg }}
+              {{ isInvalid(basicDetailsForm, "property").msg }}
             </small>
           }
         </div>
@@ -37,9 +37,9 @@
             formControlName="block"
             (optionSelected)="onBlockSelect($event)"
           ></app-custom-select>
-          @if (isInvalid(propertyDetailForm, "block").status) {
+          @if (isInvalid(basicDetailsForm, "block").status) {
             <small class="errorMsg">
-              {{ isInvalid(propertyDetailForm, "block").msg }}
+              {{ isInvalid(basicDetailsForm, "block").msg }}
             </small>
           }
         </div>
@@ -53,9 +53,25 @@
             formControlName="unit"
             (optionSelected)="onUnitSelect($event)"
           ></app-custom-select>
-          @if (isInvalid(propertyDetailForm, "unit").status) {
+          @if (isInvalid(basicDetailsForm, "unit").status) {
             <small class="errorMsg">
-              {{ isInvalid(propertyDetailForm, "unit").msg }}
+              {{ isInvalid(basicDetailsForm, "unit").msg }}
+            </small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">{{ "TENANT" | translate }}</label>
+          <app-custom-select
+            [options]="tenantList"
+            key="key"
+            value="value"
+            formControlName="tenant"
+            (optionSelected)="onTenantSelect($event)"
+          ></app-custom-select>
+          @if (isInvalid(basicDetailsForm, "tenant").status) {
+            <small class="errorMsg">
+              {{ isInvalid(basicDetailsForm, "tenant").msg }}
             </small>
           }
         </div>
@@ -379,35 +395,7 @@
           </div>
         </form>
       </app-step-pane>
-    </ng-container>
-  </ng-container>
 
-  <!-- Step Tenant Selection Content -->
-  <ng-container>
-    <app-step-pane
-      [title]="'TENANT_DETAILS' | translate"
-      [description]="'SELECT_TENANT_DETAILS' | translate"
-    >
-      <form class="row g-4" [formGroup]="tenantDetailsForm">
-        <div class="col-md-6">
-          <label class="form-label">{{ "TENANT" | translate }}</label>
-          <app-custom-select
-            [options]="tenantList"
-            key="key"
-            value="value"
-            formControlName="tenant"
-            (optionSelected)="onTenantSelect($event)"
-          ></app-custom-select>
-          @if (isInvalid(propertyDetailForm, "tenant").status) {
-            <small class="errorMsg">
-              {{ isInvalid(propertyDetailForm, "tenant").msg }}
-            </small>
-          }
-        </div>
-      </form>
-    </app-step-pane>
-
-    <ng-container>
       <app-step-pane [title]="'TENANT_DETAILS' | translate" [secondCard]="true">
         <form class="row g-4">
           <div class="col-md-6">
@@ -493,9 +481,9 @@
     </ng-container>
   </ng-container>
 
-  <!-- Step Lease Details Content -->
+  <!-- Step Commercial Details Content -->
   <app-step-pane
-    [title]="'LEASE_DETAILS' | translate"
+    [title]="'COMMERCIAL_DETAILS' | translate"
     [description]="'FILL_ALL_FIELDS_CREATE_LEASE' | translate"
   >
     <form class="row g-4" [formGroup]="leaseDetailsForm">

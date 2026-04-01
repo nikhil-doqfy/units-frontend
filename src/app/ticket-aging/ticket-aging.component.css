@@ -14,23 +14,23 @@
 }
 
 .success {
-  background-color: #e6f4ea;
-  color: #1e7f3f;
+  background-color: var(--success-bg);
+  color: var(--success-text);
 }
 
 .warning {
-  background-color: #fff4e5;
-  color: #b45309;
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
 }
 
 .danger {
-  background-color: #fdecea;
-  color: #b91c1c;
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
 }
 
 .empty {
   width: 166px;
   height: 30px;
-  background-color: #fff4e5;
-  color: #6b7280;
+  background-color: var(--empty-bg);
+  color: var(--empty-text);
 }

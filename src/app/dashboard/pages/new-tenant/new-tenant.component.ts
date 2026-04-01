@@ -39,6 +39,11 @@ export class NewTenantComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
 
+    // Reset singleton state for a fresh visit
+    this.newTenantService.getLeaseId().set(null);
+    this.newTenantService.getActiveIndex().set(0);
+    this.newTenantService.getActiveSubIndex().set(0);
+
     // ── Case 1: coming from tenants list "Continue" action ────────────
     const stateLeaseId    = history.state?.leaseId;
     const stateLeaseStage = history.state?.leaseStage;
@@ -84,6 +89,9 @@ export class NewTenantComponent {
               };
 
               this.steps = this.newTenantService.PropertySteps(leadData);
+
+              // Pre-fill commercial form with unit defaults (blank fields only)
+              this.newTenantService.setUnitCommercialData(u);
 
               const basicFormGroup = this.steps()?.[0]?.subSteps?.[0]?.formGroup;
               if (basicFormGroup) {
@@ -134,8 +142,13 @@ export class NewTenantComponent {
                 // regardless of is_onboarding flag
                 this.newTenantService.getActiveIndex().set(1);
                 this.newTenantService.getActiveSubIndex().set(0);
+              } else if (s === 'COMMERCIAL_DETAILS') {
+                // Property details saved — resume on Commercial Details (step 1-2)
+                this.newTenantService.getActiveIndex().set(0);
+                this.newTenantService.getActiveSubIndex().set(1);
               } else if (!isAgreementOrLater && (
                   t.is_onboarding          ||
+                  s === 'ONBOARDING'       ||
                   s === 'NEGOTIATION_SENT' || s === 'PENDING_APPROVAL' ||
                   s === 'OWNER_APPROVED'   || s === 'TENANT_APPROVED'  ||
                   s === 'WAITING_CHEQUE'   || s === 'CHEQUE_REQUESTED' ||
@@ -172,7 +185,33 @@ export class NewTenantComponent {
           next: (resp: any) => {
             const leadData = resp?.content ?? null;
             this.steps = this.newTenantService.PropertySteps(leadData);
-            this.loading.set(false);
+
+            if (leadData?.unit_id) {
+              this.leaseService
+                .getLeases({ unit_id: leadData.unit_id, page_size: 1 })
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe({
+                  next: (leaseResp: any) => {
+                    const lease = leaseResp?.content?.[0] ?? null;
+                    if (lease) {
+                      this.newTenantService.getLeaseId().set(lease.id);
+                      const stage = lease.lease_stage ?? '';
+                      this.newTenantService.restoreStepFromStage(stage);
+                      if (stage === 'COMMERCIAL_DETAILS') {
+                        this.newTenantService.getActiveIndex().set(0);
+                        this.newTenantService.getActiveSubIndex().set(1);
+                      } else if (stage && stage !== 'BASIC_DETAILS') {
+                        this.newTenantService.getActiveIndex().set(this.leaseStageToStepIndex(stage));
+                        this.newTenantService.getActiveSubIndex().set(0);
+                      }
+                    }
+                    this.loading.set(false);
+                  },
+                  error: () => this.loading.set(false),
+                });
+            } else {
+              this.loading.set(false);
+            }
           },
           error: () => this.loading.set(false),
         });

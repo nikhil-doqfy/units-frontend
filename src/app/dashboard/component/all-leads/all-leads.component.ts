@@ -273,9 +273,23 @@ export class AllLeadsComponent implements OnInit {
     }
   }
   convertToTenancy(modal: NgbActiveModal): void {
-    modal.close();
-    this.router.navigate(['/dashboard/new-tenant'], {
-      queryParams: { lead_id: this.selectedLead?.id },
+    const leadId = this.selectedLead?.id;
+    if (!leadId) return;
+
+    this.leadsService.checkActiveLease(leadId).subscribe({
+      next: (resp: any) => {
+        if (resp?.content?.has_active_lease) {
+          this.alertService.error('This unit already has an active lease. Cannot convert to tenancy.');
+          return;
+        }
+        modal.close();
+        this.router.navigate(['/dashboard/new-tenant'], {
+          queryParams: { lead_id: leadId },
+        });
+      },
+      error: () => {
+        this.alertService.error('Failed to verify lease status. Please try again.');
+      },
     });
   }
 

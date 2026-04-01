@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   border-radius: 10px;
-  background: #fff;
+  /* background: var(--bg-white); */
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 32px;
@@ -30,7 +30,7 @@
 .filter-select {
   padding: 8px 14px;
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--bg-white);
   font-size: 14px;
   cursor: pointer;
   min-width: 130px;
@@ -41,7 +41,6 @@
   align-items: center;
   gap: 11px;
 }
-
 
 .custom-select .icon {
   position: absolute;
@@ -60,10 +59,10 @@
   width: 197px;
   height: 34px;
   align-items: center;
-  background: #f5f7f8;
+  background: var(--bg-light);
   border-radius: 10px;
   padding: 6px 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-light);
   min-width: 230px;
   border: none;
 }
@@ -79,7 +78,7 @@
 
 .search-icon {
   margin-right: 6px;
-  color: #888;
+  color: var(--text-muted);
 }
 
 .clear-icon {
@@ -118,7 +117,7 @@
 }
 
 .summary-card.active {
-  background: #f5f7f8;
+  background: var(--card-active-bg);
 }
 
 .top-row {
@@ -131,7 +130,7 @@
 .main-value {
   font-size: 18px;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
 }
 
 .tag {
@@ -143,47 +142,47 @@
 }
 
 .grey {
-  background: #ffffff;
-  color: #333;
-  border: 1px solid #ecf0f2;
+  background: var(--tag-grey-bg);
+  /* color: var(--tag-grey-bg); */
+  border: 1px solid var(--tag-grey-border);
 }
 
 .purple {
-  background: #f2e9ff;
-  color: #7c3aed;
+  background: var(--tag-purple-bg);
+  color: var(--tag-purple-text);
 }
 
 .green {
-  background: #e9f7ef;
-  color: #1b5e20;
+  background: var(--tag-purple-bg);
+  color: var(--tag-purple-text);
 }
 
 .orange {
-  background: #fff1e6;
-  color: #ef6c00;
+  background: var(--tag-orange-bg);
+  color: var(--tag-orange-text);
 }
 
 .blue {
-  background: #e9f1ff;
-  color: #1565c0;
+  background: var(--tag-blue-bg);
+  color: var(--tag-blue-text);
 }
 
 .title {
   font-size: 14px;
   font-weight: 600;
   margin-top: 8px;
-  color: #222;
+  color: var(--text-secondary);
 }
 
 .subtitle {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
   margin-top: 4px;
 }
 
 .arrow {
   position: absolute;
-  bottom: -10px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
@@ -196,7 +195,7 @@
 
 .summary-card.active .arrow {
   display: block;
-  border-top-color: #f6f9ff;
+  border-top-color: var(--arrow-color);
 }
 
 @media (max-width: 1200px) {
@@ -227,7 +226,7 @@
 .main-value {
   font-size: 18px;
   font-weight: 700;
-  color: #111;
+  color: var(--text-dark);
   white-space: nowrap;
 }
 
@@ -246,8 +245,20 @@ table {
 
 .table-wrapper {
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
 }
+
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 :host ::ng-deep .custom-select-wrapper .customSelectInput {
   padding: 0 !important;
@@ -257,7 +268,11 @@ table {
 
 /*----------------------------*/
 .bounce-highlight {
-  background: linear-gradient(to bottom, transparent 6px, #fff8ec 6px);
+  background: linear-gradient(
+    to bottom,
+    transparent 6px,
+    var(--highlight-bg) 6px
+  );
 }
 .amount-cell {
   display: flex;

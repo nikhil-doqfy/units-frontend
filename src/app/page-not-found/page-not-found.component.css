@@ -1,91 +1,91 @@
 .errorBlock {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-    z-index: 1;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  z-index: 1;
 }
 
 .errorBlock::before {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 1) 100%);
-    position: absolute;
-    content: "";
-    left: 0;
-    top: 50%;
-    right: 0;
-    height: 100%;
-    z-index: -1;
+  background: var(--fadeGradient);
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 50%;
+  right: 0;
+  height: 100%;
+  z-index: -1;
 }
 
 .errorCol {
-    text-align: center;
+  text-align: center;
 }
 
 .errorLogo {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .errorLogo a {
-    display: inline-block;
+  display: inline-block;
 }
 
 .errorLogo a img {
-    height: 56px;
+  height: 56px;
 }
 
 .errorIcon span {
-    display: inline-block;
+  display: inline-block;
 }
 
 .errorIcon span img {
-    width: 400px;
-    height: 370px;
+  width: 400px;
+  height: 370px;
 }
 
 .errorCntnt {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .errorCntnt h2 {
-    font-size: 48px;
-    color: var(--primaryText);
-    font-weight: 700;
-    margin: 0 0 16px 0;
+  font-size: 48px;
+  color: var(--primaryText);
+  font-weight: 700;
+  margin: 0 0 16px 0;
 }
 
 .errorCntnt p {
-    font-size: 18px;
-    color: var(--blackText2);
-    font-weight: 500;
-    margin: 0;
+  font-size: 18px;
+  color: var(--blackText2);
+  font-weight: 500;
+  margin: 0;
 }
 
 .errorBtn {
-    margin-top: 24px;
+  margin-top: 24px;
 }
 
 .errorBtn button {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 @media (max-width: 767px) {
-    .errorBlock {
-        padding: 16px;
-    }
+  .errorBlock {
+    padding: 16px;
+  }
 
-    .errorIcon span img {
-        width: auto;
-        height: 150px;
-    }
+  .errorIcon span img {
+    width: auto;
+    height: 150px;
+  }
 
-    .errorCntnt h2 {
-        font-size: 24px;
-    }
+  .errorCntnt h2 {
+    font-size: 24px;
+  }
 
-    .errorCntnt p {
-        font-size: 14px;
-    }
+  .errorCntnt p {
+    font-size: 14px;
+  }
 }

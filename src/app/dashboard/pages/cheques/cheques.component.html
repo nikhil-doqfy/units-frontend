@@ -120,7 +120,7 @@
       <div class="table-wrapper">
         <div class="cmmnTbl">
           <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered cheques-table">
               <thead>
                 <tr>
                   <th width="60">Sl.No</th>
@@ -134,6 +134,7 @@
                     Tenant Name <i><app-sorting-icon></app-sorting-icon></i>
                   </th>
                   <th width="140">Cheque No</th>
+                  <th width="110">Status</th>
                   <th
                     width="110"
                     *ngIf="
@@ -220,6 +221,16 @@
                       }"
                     >
                       {{ row.cheque?.cheque_number || "—" }}
+                    </td>
+                    <td>
+                      <app-custom-select
+                        [options]="statusOptions"
+                        key="key"
+                        value="value"
+                        [selectedOption]="getStatusOption(row.cheque?.status)"
+                        (optionSelected)="onChequeStatusChange(row, $event)"
+                        [isFilter]="true"
+                      ></app-custom-select>
                     </td>
                     <td
                       [ngClass]="{

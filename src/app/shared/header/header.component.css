@@ -245,7 +245,7 @@
 }
 
 .hdrUserDrpdwnLinks {
-  border-top: 1px solid var(--muteBorder);
+  border-top: 1px solid var(--muteBorder1);
 }
 
 .hdrUserDrpdwnLinks li + li {
@@ -647,18 +647,18 @@
 
 .add-btn {
   border-radius: 50%;
-  border: 1px solid #ecf0f2;
+  border: 1px solid var(--borderLight);
   padding: 10px 16px;
   cursor: pointer;
   font-size: 14px;
   display: flex;
-  background-color: white;
+  background-color: var(--whiteBg);
   align-items: center;
   gap: 6px;
 }
 
 .card {
-  border: 1px dashed #cfd8dc;
+  border: 1px dashed var(--borderDashed);
   border-radius: 10px;
   padding: 12px;
   width: 110px;
@@ -673,7 +673,7 @@
   position: absolute;
   top: 48px;
   right: 0;
-  background: #fff;
+  background: var(--whiteBg);
   border-radius: 14px;
   padding: 10px;
   display: flex;
@@ -694,7 +694,7 @@
 }
 
 .add-card:hover {
-  border: 1px solid #ecf0f2;
+  border: 1px solid var(--borderLight);
 }
 
 .icon {
@@ -708,7 +708,7 @@
 
 .sub {
   font-size: 12px;
-  color: #777;
+  color: var(--textMuted);
 }
 
 .bold {
@@ -718,7 +718,7 @@
 .draw-box {
   width: 130px;
   height: 57px;
-  border: 1px dashed #cfd6ff;
+  border: 1px dashed var(--borderDashed);
   border-radius: 6px;
   margin: 8px 0;
   display: flex;
@@ -735,7 +735,7 @@
   justify-content: center;
   gap: 10px;
   font-size: 14px;
-  color: #666;
+  color: var(--textSecondary);
 }
 
 .draw-card {
@@ -753,13 +753,13 @@
 .draw-check {
   width: 16px;
   height: 16px;
-  accent-color: #5b6cff;
+  accent-color: var(--accentPrimary);
 }
 
 .draw-box {
   width: 100%;
   height: 60px;
-  border: 1px dashed #ebebec;
+  border: 1px dashed var(--borderDashed);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -777,7 +777,7 @@
   justify-content: flex-end;
   gap: 10px;
   font-size: 16px;
-  color: #666;
+  color: var(--textSecondary);
 }
 
 .draw-actions i {
@@ -827,7 +827,7 @@
   gap: 8px;
 }
 .add-card.draw-card {
-  border: 1px solid #ebebec;
+  border: 1px solid var(--borderDashed);
 }
 .add-card.upload .draw-actions {
   display: none !important;
@@ -835,12 +835,12 @@
 
 .upload-icon {
   font-size: 22px;
-  color: #4a6cf7;
+  color: var(--accentPrimary);
 }
 
 .upload-text {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--textMuted);
   margin-top: 4px;
 }
 
@@ -852,18 +852,18 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border: 1px dashed #cfd6e0;
+  border: 1px dashed var(--borderDashedAlt);
   border-radius: 8px;
 }
 
 .upload-icon {
   font-size: 22px;
-  color: #4a6cf7;
+  color: var(--accentPrimary);
 }
 
 .upload-text {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--textMuted);
   margin-bottom: 4px; /* icon वर space */
 }
 
@@ -872,11 +872,11 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--whiteBg);
+  border: 1px solid var(--borderLight);
   border-radius: 8px;
   /* min-width: 161px; */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px var(--borderLight);
   z-index: 999;
   margin-top: 6px;
 }
@@ -889,7 +889,7 @@
 }
 
 .dropdown-item:hover {
-  background: #f5f7fa;
+  background: var(--hoverBg);
 }
 /*--------------------------Search conatct ---------------------------------------------------*/
 .hdrProfileWrapper {
@@ -913,7 +913,7 @@
   width: 100%;
   height: 44px;
   border-radius: 12px;
-  border: 1px solid #d0d5dd;
+  border: 1px solid var(--borderInput);
   padding: 0 40px 0 14px;
   font-size: 14px;
 }
@@ -925,7 +925,7 @@
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 20px;
-  color: #667085;
+  color: var(--textIcon);
 }
 
 .hdrProfileWrapper {
@@ -953,7 +953,7 @@
 .right-side-modal .modal-content {
   width: 498px;
   border-radius: 12px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--borderLight);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -983,7 +983,7 @@
   font-size: 16px;
   line-height: 1;
   letter-spacing: 0;
-  color: #232b2e;
+  color: var(--textPrimary);
 }
 .modal-header {
   padding: 0;
@@ -1010,7 +1010,7 @@
   width: 498px;
   max-height: 415px;
   border-radius: 12px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--borderLight);
   padding: 12px;
   display: flex;
   flex-direction: column;
