@@ -245,7 +245,7 @@
 }
 
 .hdrUserDrpdwnLinks {
-  border-top: 1px solid var(--muteBorder);
+  border-top: 1px solid var(--muteBorder1);
 }
 
 .hdrUserDrpdwnLinks li + li {

@@ -21,7 +21,7 @@
   --muteBg1: #ecf0f2;
   --muteBg2: #eff2ff;
   --muteBg3: #d6dee1;
-  --activeBg: #0c6ce9;
+  --activeBg1: #0c6ce9;
   --activeLightBg: #eef9ff;
   --activeExtraLightBg: #eff8fe;
   --activeDarkBg: #1988fd;
@@ -178,7 +178,7 @@
   --greenColor: #16a34a;
   --purpleColor: #7c3aed;
   --whatsappColor: #25d366;
-  --avatarBg: var(--activeBg);
+
   --borderLight: #e5e7eb;
   --borderExtraLight: #eeeeee;
   --borderSoft: #eceff4;
@@ -1404,17 +1404,90 @@
   --text-primary: #2f6f3e;
   --confirm-bg: #eef9ff;
   --confirm-border: #1988fd;
+
+  --muteBorder1: #e2e8f0;
+  --greyBorder: #cbd5e1;
+  --muteBg: #f1f5f9;
+  --disabledBg: #f8fafc;
+
+  --shadowLight: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+  --primaryGreen: #4f8f5f;
+  --darkGreen: #2f6f3e;
+
+  --primaryBlue: #1988fd;
+  --lightBlueBg: #eef9ff;
+  --checkboxBlue: #2f80ed;
+
+  --textDark: #1f2937;
+  --textMuted: #6c757d;
+
+  --borderLight: #ccd1d6;
+  --white: #ffffff;
+
+  --tableBg: #f7f9fc;
+  --inputBorder: #e0e5ec;
+  --imgBorder: #d6dee1;
+  --dropdownBorder: #e5e7eb;
+  --hoverBg: #f3f4f6;
+  --overlayBg: rgba(125, 125, 125, 0.35);
+  --dropdownShadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  --textPrimary: #1f2937;
+  --textMuted: #6b7280;
+  --textLight: #9ca3af;
+  --white: #ffffff;
+  --lightBg: #f8fafc;
+  --borderLight: #e5e9f0;
+  --inputBorder: #d1d5db;
+  --primaryBlue: #0d6efd;
+  --successGreen: #2fa51a;
+  --textPrimary: #374151;
+  --textMuted: #9ca3af;
+  --borderLight: #d1d5db;
+  --borderSoft: #e0e0e0;
+  --primaryBlue: #0d6efd;
+  --primaryBlueHover: rgba(13, 110, 253, 0.14);
+  --dangerRed: #ef4444;
+  --textPrimary: #1f2937;
+  --textMuted: #6b7280;
+  --textLight: #aaa;
+  --white: #ffffff;
+  --highlightBg: #fff9c4;
+  --borderLight: #e5e9f0;
+  --borderInput: #e0e5ec;
+  --borderSoft: #b1c2c8;
+  --primaryBlue: #0d6efd;
+  --primaryBlueLight: rgba(13, 110, 253, 0.07);
+  --primaryBlueHover: rgba(13, 110, 253, 0.14);
+  --textPrimary: #1a1a2e;
+  --textMuted: #6b7280;
+
+  /* Backgrounds */
+  --white: #ffffff;
+  --warningBg: #fef3c7;
+
+  /* Borders */
+  --borderLight: #e5e7eb;
+  --warningBorder: #fde68a;
+
+  /* Colors */
+  --warningText: #92400e;
+  --dividerColor: #344046;
+  --shadowLg: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadowLight: 0 0 6px 0 rgba(0, 0, 0, 0.15);
+  --whiteBg: #ffffff;
 }
 
 .dark-theme {
   --ownerGradientBg: linear-gradient(90deg, #1a2f8f 0%, #0a6ea8 100%);
   --managerGradientBg: linear-gradient(90deg, #6a1bb0 0%, #0f5fa8 100%);
   --tenantGradientBg: linear-gradient(90deg, #4a1bb0 0%, #1c1c8f 100%);
-
+  --whiteBg: #1f1f1f;
   --ownerBg: #2a3f8f;
   --managerBg: #5a2fb0;
   --tenantBg: #2c2c8f;
-
+  --activeBg1: #1f2937;
   --whiteBg: #121212;
   --blackBg: #ffffff;
   --greyBg: #1e1e1e;
@@ -2904,6 +2977,100 @@
 
   --confirm-bg: #1e293b;
   --confirm-border: #38bdf8;
+
+  --muteBorder1: #334155;
+  --greyBorder: #475569;
+  --muteBg: #1e293b;
+  --disabledBg: #0f172a;
+  --blackText: #ffffff;
+
+  --shadowLight: 0 1px 3px rgba(0, 0, 0, 0.5);
+
+  --primaryGreen: #6fbf73;
+  --darkGreen: #4a9b5c;
+
+  --primaryBlue: #4da3ff;
+  --lightBlueBg: #0f1f2e;
+  --checkboxBlue: #3b82f6;
+
+  --textDark: #e5e7eb;
+  --textMuted: #9ca3af;
+
+  --borderLight: #374151;
+  --white: #1f2937;
+
+  --tableBg: #111827;
+
+  --dropdownShadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  --inputBorder: #374151;
+  --imgBorder: #4b5563;
+  --dropdownBorder: #374151;
+
+  --white: #1f2937;
+  --hoverBg: #374151;
+  --overlayBg: rgba(0, 0, 0, 0.6);
+
+  --textPrimary: #f9fafb;
+
+  --dropdownShadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+  --textPrimary: #f9fafb;
+  --textMuted: #9ca3af;
+  --textLight: #6b7280;
+
+  --white: #1f2937;
+  --lightBg: #111827;
+
+  --borderLight: #374151;
+  --inputBorder: #4b5563;
+
+  --primaryBlue: #3b82f6;
+  --successGreen: #22c55e;
+  --textPrimary: #e5e7eb;
+  --textMuted: #9ca3af;
+
+  --borderLight: #374151;
+  --borderSoft: #4b5563;
+
+  --primaryBlue: #3b82f6;
+  --primaryBlueHover: rgba(59, 130, 246, 0.22);
+
+  --dangerRed: #f87171;
+
+  --textPrimary: #f9fafb;
+  --textMuted: #9ca3af;
+  --textLight: #6b7280;
+
+  --white: #1f2937;
+  --highlightBg: #4b5563;
+
+  --borderLight: #374151;
+  --borderInput: #4b5563;
+  --borderSoft: #6b7280;
+
+  --primaryBlue: #3b82f6;
+  --primaryBlueLight: rgba(59, 130, 246, 0.12);
+  --primaryBlueHover: rgba(59, 130, 246, 0.22);
+
+  --textPrimary: #f9fafb;
+  --textMuted: #9ca3af;
+
+  --white: #1f2937;
+
+  --borderLight: #374151;
+
+  --warningBg: #78350f;
+  --warningText: #fcd34d;
+  --warningBorder: #92400e;
+
+  --dividerColor: #6b7280;
+
+  --shadowLg: 0 4px 24px rgba(0, 0, 0, 0.5);
+
+  --shadowLight: 0 0 6px 0 rgba(0, 0, 0, 0.7);
+
+  --blackText: white;
 }
 
 *,
@@ -3186,7 +3353,7 @@ input[type="number"] {
 .commonForm .form-control,
 .commonForm .form-select {
   font-size: 14px;
-  color: var(--blackText);
+  /* color: var(--blackText); */
   font-weight: 400;
   padding: 8px 12px;
   height: 42px;
@@ -3230,6 +3397,13 @@ input[type="number"] {
   box-shadow: none;
 }
 
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme .form-control {
+  background: var(--muteBg);
+  color: #f5f5f5;
+  border: 1px solid #3a3a3a;
+}
 .commonForm .form-control:disabled,
 .commonForm .form-control:disabled:hover,
 .commonForm .form-control:disabled:focus {
@@ -3919,7 +4093,7 @@ linearGradient .authBgPatt stop:last-child {
 .btnWhite.btnCommon {
   background: var(--whiteBg);
   color: var(--greyText);
-  box-shadow: 0 0 6px 0 #00000026;
+  box-shadow: var(--shadowLight);
 }
 
 .btnWhite.btnCommon:hover,
@@ -4198,9 +4372,9 @@ linearGradient .authBgPatt stop:last-child {
   white-space: nowrap;
 }
 .cmmnTbl table thead tr th {
-  background-color: var(--activeBg);
+  background-color: var(--activeBg1);
   font-size: 14px;
-  color: var(--whiteText);
+  color: white;
   font-weight: 600;
   border: 0;
 }
@@ -4455,6 +4629,7 @@ linearGradient .authBgPatt stop:last-child {
   padding: 6px;
   border: 1px solid var(--muteBorder2);
   border-radius: 6px;
+  background-color: transparent;
 }
 
 /***Table Select Css End***/
@@ -4557,6 +4732,9 @@ linearGradient .authBgPatt stop:last-child {
   gap: 8px;
 }
 
+body.dark-theme .dropdown-menu {
+  background: var(--muteBg);
+}
 .mdlCommon .modal-title i {
   display: inline-flex;
   align-items: center;
@@ -5818,7 +5996,7 @@ app-plus-icon {
   border: 1px solid #f5f7f8;
   box-shadow: 0px 2px 6px rgba(29, 55, 36, 0.2);
 
-  background: #fff;
+  /* background: #fff; */
   font-size: 12px;
 }
 
@@ -6100,4 +6278,35 @@ app-plus-icon {
 .bottom-right {
   bottom: 0;
   right: 0;
+}
+/*-----dark theme ---------------------------------------------*/
+body.dark-theme .nav-link.active {
+  background: transparent !important;
+  color: #f5f5f5; /* white text */
+  border-color: white;
+}
+body.dark-theme .btnCommonsx {
+  color: #f5f5f5;
+}
+
+body.dark-theme .table > :not(caption) > * > * {
+  box-shadow: none !important;
+  background-color: transparent;
+}
+
+body.dark-theme .text-muted {
+  color: unset !important;
+}
+
+body.dark-theme .cmmnTbl .table thead th {
+  border: 1px solid var(--muteBorder1) !important;
+}
+
+body.dark-theme .cmmnTbl .table tbody td {
+  border: 1px solid var(--muteBorder1) !important;
+}
+
+body.dark-theme .cmmnTbl .table th,
+body.dark-theme .cmmnTbl .table td {
+  box-shadow: none !important;
 }

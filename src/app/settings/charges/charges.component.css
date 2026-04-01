@@ -1,6 +1,6 @@
 .btnCommonsx {
   background-color: var(--whiteBg);
-  box-shadow: 0 0 6px 0 var(--shadowLight);
+  /* box-shadow: 0 0 6px 0 var(--shadowLight); */
   border-radius: 10px;
   padding: 6px 14px;
 }
@@ -9,7 +9,6 @@
   border-radius: 10px;
 }
 .cmmnTblBody table thead tr th {
-  background-color: var(--tableHeaderBg);
   color: var(--textBlack);
 }
 
