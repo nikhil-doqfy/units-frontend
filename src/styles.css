@@ -4720,6 +4720,7 @@ linearGradient .authBgPatt stop:last-child {
 .mdlCommon .modal-header {
   padding: 16px;
   border-bottom: 1px solid var(--muteBorder1);
+  background: var(--muteBg);
 }
 
 .mdlCommon .modal-title {
@@ -4766,6 +4767,7 @@ body.dark-theme .dropdown-menu {
 
 .mdlCommon .modal-body {
   padding: 24px 16px;
+  background: var(--muteBg);
 }
 
 .mdlMedium .modal-dialog {
@@ -4776,6 +4778,7 @@ body.dark-theme .dropdown-menu {
   padding: 8px 16px;
   border-top: 1px solid var(--muteBorder1);
   gap: 8px;
+  background: var(--muteBg);
 }
 
 .mdlCommon .modal-footer * {
@@ -5703,7 +5706,7 @@ app-plus-icon {
   position: absolute;
   top: -30px;
   right: 90px;
-  background: #fff;
+  background: var(--popup-bg);
   padding: 15px;
   width: 186px;
   height: 88px;
