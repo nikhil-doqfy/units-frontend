@@ -17,7 +17,7 @@
 
 .leads-table thead tr th:last-child {
   z-index: 3;
-  background-color: var(--activeBg);
+  background-color: var(--activeBg1);
   box-shadow: none;
 }
 
@@ -52,6 +52,7 @@
   border: 1px solid var(--borderLight);
   background: var(--whiteBg);
   padding: 10px;
+  color: var(--modal-text-color);
   border-radius: 10px;
   gap: 10px;
   font-size: 14px;
@@ -72,7 +73,7 @@
 
   width: 19px;
   height: 19px;
-  border: 1px solid var(--blackBorder);
+  /* border: 1px solid var(--blackBorder); */
   border-radius: 50%;
 
   display: flex;

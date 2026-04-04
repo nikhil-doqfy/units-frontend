@@ -264,15 +264,17 @@
                     >
                       {{ row.settlement_bank?.account_number || "—" }}
                     </td>
+
                     <td
                       [ngClass]="{
                         'bounce-highlight': activeSummary === 'bounce',
                       }"
                       *ngIf="activeSummary !== 'total'"
-                      class="amount-cell"
                     >
-                      AED {{ row.cheque?.amount | number }}
-                      <span><img src="assets/check.svg" /></span>
+                      <span class="amount-cell">
+                        AED {{ row.cheque?.amount | number }}
+                        <span><img src="assets/check.svg" /></span>
+                      </span>
                     </td>
                     <td *ngIf="activeSummary == 'bounce'">
                       <app-table-action-btn
@@ -286,7 +288,7 @@
 
                   <!-- Empty state -->
                   <tr *ngIf="tableData.length === 0">
-                    <td colspan="10" class="text-center py-4">
+                    <td colspan="50" class="text-center py-4">
                       No cheques found
                     </td>
                   </tr>

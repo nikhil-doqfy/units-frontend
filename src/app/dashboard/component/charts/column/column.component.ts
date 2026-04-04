@@ -36,6 +36,7 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   @Input() data: { name: string; value: number }[] = [];
+
   constructor() {
     this.chartOptions = {
       series: [
@@ -108,14 +109,14 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data?.length) {
-      const values     = this.data.map((d) => d.value);
+      const values = this.data.map((d) => d.value);
       const categories = this.data.map((d) => d.name);
 
       // Always update bound options so the chart renders correctly on first paint
       this.chartOptions = {
         ...this.chartOptions,
         series: [{ name: 'My-series', data: values }],
-        xaxis:  { ...this.chartOptions.xaxis, categories },
+        xaxis: { ...this.chartOptions.xaxis, categories },
       };
 
       // Also call the imperative API if the chart instance is already mounted
@@ -127,7 +128,7 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
 
   private applyToChart() {
     if (!this.chart) return;
-    const values     = this.data.map((d) => d.value);
+    const values = this.data.map((d) => d.value);
     const categories = this.data.map((d) => d.name);
 
     this.chart.updateSeries([{ name: 'My-series', data: values }]);

@@ -19,6 +19,7 @@
   --lightDarkBg: #445860;
   --muteBg: #f5f7f8;
   --muteBg1: #ecf0f2;
+  --modelBg: white;
   --muteBg2: #eff2ff;
   --muteBg3: #d6dee1;
   --activeBg1: #0c6ce9;
@@ -26,6 +27,7 @@
   --activeExtraLightBg: #eff8fe;
   --activeDarkBg: #1988fd;
   --greenBg: #458453;
+  --header-border: #ecf0f2;
   --greenLightBg: #4ab58e;
   --purpleBg: #4f41e5;
   --orangeBg: #ff6500;
@@ -144,6 +146,7 @@
   --warningIcon: #f39c12;
   --textPrimary: #1f2937;
   --textSecondary: #6b7280;
+  --axis-text-color: #333;
   --textDark: #444444;
   --textBlack: #111827;
   --textMuted: #4b5563;
@@ -225,7 +228,7 @@
   --whiteBg: #ffffff;
   --hoverBg: #f3f4f6;
   --mapBg: #e8ecf0;
-
+  --btnTransprent: black;
   /* Shadow */
   --shadowSoft: rgba(0, 0, 0, 0.1);
   --cardBg: #ffffff;
@@ -443,7 +446,7 @@
   --btn-border: #000000;
   --steps-text-color: #111b21;
   --step-border: #000000;
-  --step-bg: #ffffff;
+  --step-bg1: #ffffff;
   --step-text: #000000;
   --step-line-color: #000000;
   --login-card-bg: #ffffff;
@@ -484,7 +487,7 @@
   --icon-btn-bg: #f1f3f9;
   --form-card-bg: #ffffff;
   --form-card-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
-
+  --tbl-text-color: #000;
   --form-section-border: #eef1f6;
   --section-badge-bg: #eef1f6;
   --section-badge-text: #555555;
@@ -907,10 +910,10 @@
   /* Backgrounds */
   --dropdown-bg: #ffffff;
   --hover-bg: #f9fafb;
-
+  --invoice-bg: #f1f8f2;
   /* Borders */
   --border-light: #e5e7eb;
-
+  --invoice-link-color: #1d3724;
   /* Text */
   --text-primary: #374151;
   --text-white: #ffffff;
@@ -1061,7 +1064,7 @@
   --toast-bg: #e6f9ed;
   --toast-text: #1a7f37;
   --toast-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-
+  --modal-text-color: #000;
   --whiteBg: #ffffff;
   --borderColor: #e2e8f0;
   --cardShadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -1143,7 +1146,7 @@
 
   --shadowLight: #00000026;
   --dropdownShadow: rgba(0, 0, 0, 0.18);
-
+  --other-charges-bg: #f7f9fb;
   --successBtn: #458453;
   --rejectBtn: #ff6500;
   --neutralBtn: #6f8b95;
@@ -1239,10 +1242,10 @@
   --textMuted: #6b7280;
 
   --whiteBg: #ffffff;
-
+  ---info-box1: #374151;
   --shadowDropdown: rgba(0, 0, 0, 0.12);
   --hoverBg: #f5f7fa;
-
+  --textPrimary1: #f5f7f8;
   --borderInput: #d0d5dd;
   --textIcon: #667085;
 
@@ -1502,12 +1505,12 @@
   --muteBg1: #252a2e;
   --muteBg2: #2d3240;
   --muteBg3: #3a3f45;
-
+  --header-border: #374151;
   --activeBg: #4da3ff;
   --activeLightBg: #1a2a3a;
   --activeExtraLightBg: #1f2f40;
   --activeDarkBg: #3b8be0;
-
+  --other-charges-bg: #1f2937;
   --greenBg: #2f6f45;
   --greenLightBg: #3fae7a;
   --purpleBg: #6a5be2;
@@ -1515,11 +1518,11 @@
   --blueBg: #4da3ff;
   --redBg: #ff4d5a;
   --yellowBg: #d4b84f;
-
+  --invoice-link-color: #a7f3d0;
   --ownerText: #6ea0ff;
   --managerText: #b48cff;
   --tenantText: #8a7cff;
-
+  --tbl-text-color: #e5e7eb;
   --whiteText: #000000;
   --blackText: #ffffff;
   --greyText: #d1d1d1;
@@ -1535,16 +1538,16 @@
   --greyDarkText5: #88aaff;
   --greyDarkText6: #99aabb;
   --greyDarkText7: #8899ff;
-
+  --btnTransprent: #fff;
   --lightText: #9aa4a8;
   --lightText1: #bbbbbb;
   --lightDarkText: #8899a6;
   --muteText: #1c1f22;
-
+  --invoice-bg: #1f2937;
   --activeText: #4da3ff;
   --activeDarkText: #3b8be0;
   --linkText: #4da3ff;
-
+  --textPrimary1: #1f2937;
   --purpleText: #a99bff;
   --greenText: #5fcf8b;
   --greenLightText: #6fe3a0;
@@ -1552,7 +1555,7 @@
   --blueText: #4da3ff;
   --redText: #ff6b75;
   --yellowText: #e6cc66;
-
+  ---info-box1: #fffff;
   --whiteBorder: #2a2a2a;
   --blackBorder: #ffffff;
   --greyBorder: #555555;
@@ -1560,7 +1563,7 @@
   --greyDarkBorder1: #777777;
   --greyDarkBorder2: #888888;
   --greyDarkBorder3: #999999;
-
+  --axis-text-color: #ffffff;
   --lightBorder: #3a3a3a;
   --lightBorder1: #444444;
   --muteBorder: #2a2a2a;
@@ -1942,7 +1945,7 @@
   --btn-border: #ffffff;
   --steps-text-color: #e9edef;
   --step-border: #ffffff;
-  --step-bg: #0b141a;
+  --step-bg1: #0b141a;
   --step-text: #ffffff;
   --step-line-color: #ffffff;
   --login-card-bg: #0b141a;
@@ -1972,7 +1975,7 @@
   --block-text: #e9edef;
   --unit-bg: #2a3942;
   --unit-text: #e9edef;
-  --table-header-bg: #4da3ff;
+  --table-header-bg: ##1f2937;
   --top-actions-bg: #0b141a;
   --top-actions-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   --btn-outline-border: #3b4a54;
@@ -2265,7 +2268,7 @@
   --text-label: #9ca3af;
   --text-secondary: #a1a1aa;
   --text-primary: #f9fafb;
-
+  --modal-text-color: #fff;
   --card-bg: #1f2937;
   --card-border: #374151;
 
@@ -2922,7 +2925,7 @@
   --dropdown-bg: #1f2937;
   --dropdown-hover-bg: #374151;
   --dropdown-shadow: rgba(0, 0, 0, 0.3);
-
+  --modelBg: #1e293b;
   --status-green: #22c55e;
   --status-orange: #fb923c;
   --status-grey: #94a3b8;
@@ -3249,7 +3252,7 @@ input[type="number"] {
 }
 
 .form-check-input:checked {
-  background-color: var(--activeBg) !important;
+  /* background-color: var(--activeBg) !important; */
   border-color: var(--activeBorder) !important;
 }
 
@@ -3397,7 +3400,6 @@ input[type="number"] {
   box-shadow: none;
 }
 
-body.dark-theme input,
 body.dark-theme textarea,
 body.dark-theme .form-control {
   background: var(--muteBg);
@@ -4715,12 +4717,13 @@ linearGradient .authBgPatt stop:last-child {
 .mdlCommon .modal-content {
   border: 0;
   border-radius: 12px;
+  color: var(--modal-text-color);
 }
 
 .mdlCommon .modal-header {
   padding: 16px;
   border-bottom: 1px solid var(--muteBorder1);
-  background: var(--muteBg);
+  background: var(--modelBg);
 }
 
 .mdlCommon .modal-title {
@@ -4767,7 +4770,7 @@ body.dark-theme .dropdown-menu {
 
 .mdlCommon .modal-body {
   padding: 24px 16px;
-  background: var(--muteBg);
+  /* background: var(--muteBg); */
 }
 
 .mdlMedium .modal-dialog {
@@ -4778,7 +4781,7 @@ body.dark-theme .dropdown-menu {
   padding: 8px 16px;
   border-top: 1px solid var(--muteBorder1);
   gap: 8px;
-  background: var(--muteBg);
+  background: var(--modelBg);
 }
 
 .mdlCommon .modal-footer * {
@@ -5295,12 +5298,12 @@ a .simple {
 .lease-header h6 {
   font-size: 14px;
   font-weight: 600;
-  color: #2f2f2f;
+  /* color: #2f2f2f; */
   margin: 0;
 }
 
 .badge {
-  background: #e9edf3;
+  background: var(--badge-bg);
   color: #000;
   font-size: 12px;
   padding: 4px 10px;
@@ -5770,7 +5773,7 @@ app-plus-icon {
 /*----------------------charges other---------------------------*/
 
 .other-charges-box {
-  background: #f7f9fb;
+  background: var(--other-charges-bg);
   border-radius: 10px;
   padding: 16px;
   border: 1px solid #eef1f5;
@@ -5873,22 +5876,22 @@ app-plus-icon {
   border-radius: 30px;
   padding: 6 13px;
   text-align: center;
-  background-color: #f1f8f2;
+  background-color: var(--invoice-bg);
 }
 .invoice-section a {
   margin-left: 8px;
   text-decoration: underline;
-  color: #1d3724;
+  color: var(--invoice-link-color);
 }
 
 /*-----------------invoice details css----------------------------------------*/
 
 .invoice-info {
   display: flex;
-  background: #f5f7f8;
+  background: var(--textPrimary1);
   border-radius: 8px;
   font-size: 13px;
-  color: #374151;
+  color: var(--info-box1);
 }
 
 .info-col {
@@ -5963,7 +5966,7 @@ app-plus-icon {
 
 .info-col p {
   font-size: 14px;
-  color: #374151;
+  color: var(--info-box1);
   margin: 3px 0;
   line-height: 1.4;
 }
@@ -6078,7 +6081,7 @@ app-plus-icon {
   top: 42px;
   right: 0;
   width: 200px;
-  background: #fff;
+  background: var(--modelBg);
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   padding: 6px 0;
@@ -6089,6 +6092,7 @@ app-plus-icon {
   width: 100%;
   padding: 10px 14px;
   border: none;
+  color: var(--tbl-text-color);
   background: transparent;
   text-align: left;
   cursor: pointer;
@@ -6292,6 +6296,10 @@ body.dark-theme .btnCommonsx {
   color: #f5f5f5;
 }
 
+body.dark-theme .modal-content {
+  background-color: var(--modelBg);
+  color: #fff;
+}
 body.dark-theme .table > :not(caption) > * > * {
   box-shadow: none !important;
   background-color: transparent;
@@ -6312,4 +6320,17 @@ body.dark-theme .cmmnTbl .table tbody td {
 body.dark-theme .cmmnTbl .table th,
 body.dark-theme .cmmnTbl .table td {
   box-shadow: none !important;
+}
+
+.accordion-button::after {
+  filter: brightness(0.1); /* grey (light mode default) */
+}
+
+body.dark-theme .accordion-button::after {
+  filter: brightness(1) invert(1); /* white (dark mode) */
+}
+
+body.dark-theme .btn-close {
+  filter: invert(1);
+  opacity: 1;
 }

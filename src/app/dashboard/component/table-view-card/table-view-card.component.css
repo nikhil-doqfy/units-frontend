@@ -11,7 +11,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 16px;
-  border-bottom: 1px solid #ecf0f2;
+  border-bottom: 1px solid var(--header-border);
 }
 
 .cmmnTblViewTtl {
@@ -51,7 +51,7 @@
 
 .cmmnTblViewTtl ul li {
   font-size: 12px;
-  color: var(--whiteText);
+  color: var(--tbl-text-color);
   font-weight: 400;
   line-height: 100%;
   display: flex;
@@ -172,7 +172,7 @@
   top: 45px;
   right: 0;
   width: 200px;
-  background: var(--dropdown-bg);
+  background: var(--modelBg);
   border-radius: 10px;
   box-shadow: 0 8px 24px var(--dropdown-shadow-dark);
   z-index: 9999;
@@ -183,6 +183,8 @@
   width: 100%;
   padding: 10px 14px;
   border: none;
+  color: var(--tbl-text-color);
+
   background: transparent;
   text-align: left;
   cursor: pointer;

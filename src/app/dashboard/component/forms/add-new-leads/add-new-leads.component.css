@@ -98,7 +98,7 @@
   .btn-transparent {
     background-color: transparent;
     box-shadow: none;
-    color: white;
+    color: var(--btnTransprent);
   }
   .uploadBox {
     .uploadArea {
