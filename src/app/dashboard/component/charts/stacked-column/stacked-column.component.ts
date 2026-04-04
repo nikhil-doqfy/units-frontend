@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -10,6 +10,7 @@ import {
   ApexLegend,
   ApexFill,
   ApexYAxis,
+  ApexTooltip,
   NgApexchartsModule,
 } from 'ng-apexcharts';
 
@@ -23,8 +24,11 @@ export type ChartOptions = {
   yaxis?: ApexYAxis;
   legend: ApexLegend;
   fill: ApexFill;
+  tooltip: ApexTooltip;
   colors?: string[];
 };
+
+const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 @Component({
   selector: 'app-stacked-column-chart',
@@ -33,56 +37,55 @@ export type ChartOptions = {
   templateUrl: './stacked-column.component.html',
   styleUrl: './stacked-column.component.css',
 })
-export class StackedColumnChartComponent {
+export class StackedColumnChartComponent implements OnChanges {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+
   @Input() monthlyData: any[] = [];
+
   constructor() {
-    this.chartOptions = {
+    this.chartOptions = this._buildOptions([], [], [], []);
+  }
+
+  ngOnChanges(): void {
+    const data = this.monthlyData || [];
+    if (!data.length) return;
+
+    const cheque       = data.map((d) => d.cheque        ?? 0);
+    const cash         = data.map((d) => d.cash          ?? 0);
+    const bankTransfer = data.map((d) => d.bank_transfer ?? 0);
+    const pdc          = data.map((d) => d.pdc           ?? 0);
+    const months       = data.map((d) => d.month_str || MONTH_LABELS[(d.month ?? 1) - 1]);
+
+    this.chartOptions = this._buildOptions(cheque, cash, bankTransfer, pdc, months);
+  }
+
+  private _buildOptions(
+    cheque: number[],
+    cash: number[],
+    bankTransfer: number[],
+    pdc: number[],
+    months: string[] = MONTH_LABELS,
+  ): Partial<ChartOptions> {
+    const allValues = [...cheque, ...cash, ...bankTransfer, ...pdc];
+    const maxVal    = allValues.length ? Math.max(...allValues) : 0;
+    const yMax      = maxVal > 0 ? Math.ceil(maxVal * 1.2 / 1000) * 1000 : 10000;
+
+    return {
       series: [
-        {
-          name: 'Credit Card',
-          data: [
-            180000, 220000, 180000, 180000, 180000, 180000, 180000, 180000,
-            180000, 180000, 180000, 180000,
-          ],
-        },
-        {
-          name: 'Debit Card',
-          data: [
-            100000, 140000, 100000, 100000, 100000, 100000, 100000, 100000,
-            100000, 100000, 100000, 100000,
-          ],
-        },
-        {
-          name: 'Net Banking',
-          data: [
-            50000, 90000, 50000, 50000, 50000, 50000, 50000, 50000, 50000,
-            50000, 50000, 50000,
-          ],
-        },
+        { name: 'Cheque',        data: cheque       },
+        { name: 'Cash',          data: cash         },
+        { name: 'Bank Transfer', data: bankTransfer },
+        { name: 'PDC',           data: pdc          },
       ],
       chart: {
         type: 'bar',
         height: 240,
         stacked: true,
-        toolbar: {
-          show: false,
-        },
+        toolbar: { show: false },
+        animations: { enabled: false },
       },
-      colors: ['#2C7AFF', '#FF7105', '#00BEDB'],
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: 'bottom',
-              offsetX: -10,
-              offsetY: 0,
-            },
-          },
-        },
-      ],
+      colors: ['#2C7AFF', '#FF7105', '#00BEDB', '#7C3AED'],
       plotOptions: {
         bar: {
           borderRadius: 2,
@@ -92,98 +95,37 @@ export class StackedColumnChartComponent {
         },
       },
       xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
+        categories: months,
         axisBorder: { show: false },
         axisTicks: { show: false },
       },
-      dataLabels: {
-        enabled: false,
-      },
       yaxis: {
-        min: 100000,
-        max: 500000,
+        min: 0,
+        max: yMax,
         labels: {
-          formatter: (value) => 'AED ' + value.toLocaleString('en-IN'),
+          formatter: (val: number) => 'AED ' + val.toLocaleString(),
         },
         axisBorder: { show: false },
         axisTicks: { show: false },
       },
-      fill: {
-        opacity: 1,
+      dataLabels: { enabled: false },
+      fill: { opacity: 1 },
+      tooltip: {
+        y: { formatter: (val: number) => 'AED ' + val.toLocaleString() },
       },
       legend: {
         position: 'top',
         offsetX: 0,
         offsetY: 0,
-        markers: {
-          size: 8,
-          height: 8,
-          radius: 8,
-        } as any,
-        labels: {
-          colors: '#344046',
-        },
+        markers: { size: 8, height: 8, radius: 8 } as any,
+        labels: { colors: '#344046' },
       },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: { legend: { position: 'bottom', offsetX: -10, offsetY: 0 } },
+        },
+      ],
     };
   }
-
-  // ngOnChanges() {
-  //   if (!this.monthlyData.length);
-
-  //   this.chartOptions = {
-  //     series: [
-  //       {
-  //         name: 'Credit Card',
-  //         data: this.monthlyData.map((d) => d.credit_card),
-  //       },
-  //       { name: 'Debit Card', data: this.monthlyData.map((d) => d.debit_card) },
-  //       {
-  //         name: 'Net Banking',
-  //         data: this.monthlyData.map((d) => d.net_banking),
-  //       },
-  //     ],
-  //     chart: {
-  //       type: 'bar',
-  //       height: 240,
-  //       stacked: true,
-  //       toolbar: { show: false },
-  //     },
-  //     colors: ['#2C7AFF', '#FF7105', '#00BEDB'],
-  //     xaxis: {
-  //       categories: this.monthlyData.map(
-  //         (d) =>
-  //           [
-  //             'Jan',
-  //             'Feb',
-  //             'Mar',
-  //             'Apr',
-  //             'May',
-  //             'Jun',
-  //             'Jul',
-  //             'Aug',
-  //             'Sep',
-  //             'Oct',
-  //             'Nov',
-  //             'Dec',
-  //           ][d.month - 1]
-  //       ),
-  //     },
-  //     dataLabels: { enabled: false },
-  //     fill: { opacity: 1 },
-  //     legend: { position: 'top' },
-  //   };
-  // }
 }

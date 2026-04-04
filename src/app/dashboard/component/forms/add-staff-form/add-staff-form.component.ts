@@ -89,11 +89,11 @@ export class AddStaffFormComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.staffRole = response?.content?.role;
-          if (this.editData?.staff_role) {
+          this.staffRole = response?.content?.role ?? [];
+          if (this.editData?.staff_role?.key) {
             this.selectedStaffRole = this.staffRole.find(
-              (r) => r.key === this.editData.staff_role.key,
-            );
+              (r: any) => r.key === this.editData.staff_role.key,
+            ) ?? this.editData.staff_role;
           }
         },
       });
@@ -119,9 +119,9 @@ export class AddStaffFormComponent {
   onAssignedPropertySelected(option: any) {
     this.selectedAssignedProperty = option;
 
-    if (option?.value) {
+    if (option?.key) {
       this.staffForm.patchValue({
-        assigned_property: option.value,
+        assigned_property: option.key,
       });
     } else {
       this.staffForm.patchValue({ assigned_property: null });
@@ -134,9 +134,9 @@ export class AddStaffFormComponent {
   onOptionSelectedUserType(option: any) {
     this.selectedStffRole = option;
 
-    if (option?.value) {
+    if (option?.key) {
       this.staffForm.patchValue({
-        role: option.value,
+        role: option.key,
       });
     } else {
       this.staffForm.patchValue({ role: null });
@@ -172,37 +172,41 @@ export class AddStaffFormComponent {
       this.staffService
         .editUserStaff(data)
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((resp: any) => {
-          if (resp.status === 200) {
-            this.alertService.success(resp.message);
+        .subscribe({
+          next: (resp: any) => {
+            this.alertService.success(resp?.message || 'Staff updated successfully');
             this.formSubmitted.emit(true);
-            this.router.navigate(['/dashboard/staff']);
-          }
+          },
+          error: (err: any) => {
+            this.alertService.error(err?.error?.message || 'Update failed');
+          },
+        });
+    } else {
+      // ---------- ADD ----------
+      this.staffService
+        .addNewStaff(data)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (resp: any) => {
+            this.alertService.success(resp?.message || 'Staff added successfully');
+            this.formSubmitted.emit(true);
+          },
+          error: (err: any) => {
+            this.alertService.error(err?.error?.message || 'Add failed');
+          },
         });
     }
-
-    // ---------- ADD ----------
-    this.staffService
-      .addNewStaff(data)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp: any) => {
-        if (resp.status === 201) {
-          this.alertService.success(resp.message);
-          this.formSubmitted.emit(true);
-          this.router.navigate(['/dashboard/staff']);
-        }
-      });
   }
 
   patchEditForm() {
     if (!this.editData) return;
-    this.selectedStaffRole = this.editData.role;
+    this.selectedStaffRole = this.editData.staff_role ?? null;
     this.staffForm.patchValue({
       staffName: this.editData.staff_name,
       email: this.editData.email,
       contactNumber: this.editData.contact_number,
-      role: this.editData.staff_role?.key,
-      assigned_property: this.editData.assigned_property?.key,
+      role: this.editData.staff_role?.key ?? null,
+      assigned_property: null,
       password: '********',
       confirmPassword: '********',
     });

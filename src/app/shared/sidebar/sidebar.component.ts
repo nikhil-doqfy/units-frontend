@@ -6,6 +6,7 @@ import { ThemeService, UserRole } from '../../theme.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { SharedService } from '../../shared.service';
+import { PermissionService } from '../../services/permission.service';
 
 import { MenuOpenIconComponent } from '../component/icons/menu-open-icon/menu-open-icon.component';
 import { MenuCloseIconComponent } from '../component/icons/menu-close-icon/menu-close-icon.component';
@@ -83,6 +84,7 @@ export class SidebarComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private themeService: ThemeService,
     private translate: TranslateService,
+    private permissionService: PermissionService,
   ) {
     this.router.events
       .pipe(
@@ -130,6 +132,10 @@ export class SidebarComponent implements OnInit {
 
   handleOpenPopup() {
     this.sharedService.toggleSidebar();
+  }
+
+  canAccess(module: string): boolean {
+    return this.permissionService.canAccessModule(module);
   }
 
   goToDashboard(): void {

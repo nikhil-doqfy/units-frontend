@@ -18,6 +18,7 @@ import { ShareIconComponent } from '../icons/share-icon/share-icon.component';
 import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
 import { FilterPopupButtonComponent } from '../filter-popup-btn/filter-popup-btn.component';
 import { CustomSelectComponent } from '../custom-select/custom-select.component';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 import { Router } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject } from 'rxjs';
@@ -42,6 +43,7 @@ import { debounceTime, Subject } from 'rxjs';
     PropertySharePlatfromComponent,
     FilterPopupButtonComponent,
     CustomSelectComponent,
+    NoDataComponent,
   ],
   templateUrl: './all-properties.component.html',
   styleUrl: './all-properties.component.css',

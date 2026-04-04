@@ -42,6 +42,7 @@ import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn
 import { SortingIconComponent } from '../icons/sorting-icon/sorting-icon.component';
 import { CheckIconComponent } from '../../../icons/check-icon/check-icon.component';
 import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenent-from/convert-lead-to-tenent-from.component';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-all-leads',
@@ -71,6 +72,7 @@ import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenen
     CheckIconComponent,
     ConvertLeadToTenentFromComponent,
     CustomSelectComponent,
+    NoDataComponent,
   ],
   templateUrl: './all-leads.component.html',
   styleUrl: './all-leads.component.css',

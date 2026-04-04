@@ -37,6 +37,9 @@
             </thead>
 
             <tbody formArrayName="charges">
+              <tr *ngIf="!chargesArray.controls.length">
+                <td colspan="6" align="center"><app-no-data /></td>
+              </tr>
               <tr
                 *ngFor="let c of chargesArray.controls; let i = index"
                 [formGroupName]="i"

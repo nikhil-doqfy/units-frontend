@@ -16,6 +16,7 @@ import { SaveIconComponent } from '../../icons/save-icon/save-icon.component';
 import { BreadCrumb } from '../../shared/model/shared.model';
 import { SharedService } from '../../shared.service';
 import { ChargesService } from '../../charges.service';
+import { NoDataComponent } from '../../no-data/no-data.component';
 export interface Charge {
   id?: number;
   label: string;
@@ -41,6 +42,7 @@ export interface Charge {
     DeleteIconComponent,
     SaveIconComponent,
     ReactiveFormsModule,
+    NoDataComponent,
   ],
   templateUrl: './charges.component.html',
   styleUrl: './charges.component.css',

@@ -89,6 +89,7 @@ export class StaffComponent {
   private sharedApiService = inject(SharedApiService);
   isEditMode: boolean = false;
   componentName: string = 'StaffComponent';
+  detailComponentName: string = 'StaffDetailComponent';
   breadcrumbData: BreadCrumb[] = [];
   selectedStaff: any = null;
   selectedstaffRole: any = null;
@@ -101,6 +102,27 @@ export class StaffComponent {
   totalPages: number = 1;
   staffRole: any = [];
   private onStaffSearch$ = new Subject<string>();
+  // Detail table state
+  detailSearchText = '';
+  detailCurrentPage = 1;
+  detailRowsPerPage = 10;
+  detailTotalRecords = 0;
+
+  get filteredAssignedProperties(): any[] {
+    const text = this.detailSearchText.toLowerCase();
+    const filtered = text
+      ? this.assignedProperties.filter(
+          (p) =>
+            (p.property_name || '').toLowerCase().includes(text) ||
+            (p.property_code || '').toLowerCase().includes(text) ||
+            (p.tenant_name || '').toLowerCase().includes(text) ||
+            (p.owner_name || '').toLowerCase().includes(text),
+        )
+      : this.assignedProperties;
+    this.detailTotalRecords = filtered.length;
+    const start = (this.detailCurrentPage - 1) * this.detailRowsPerPage;
+    return filtered.slice(start, start + this.detailRowsPerPage);
+  }
   closeResult: WritableSignal<string> = signal('');
   currentLanguage = 'en';
   showDetailView: boolean = false;
@@ -190,15 +212,30 @@ export class StaffComponent {
       });
   }
 
+  onDetailSearch(text: string): void {
+    this.detailSearchText = text.trim();
+    this.detailCurrentPage = 1;
+  }
+
+  onDetailPageChange(event: PageChange): void {
+    if (event.componentName !== this.detailComponentName) return;
+    this.detailCurrentPage = event.currentPage;
+  }
+
+  onDetailPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.detailComponentName) return;
+    this.detailRowsPerPage = event.pageSize;
+    this.detailCurrentPage = 1;
+  }
+
   handleInternalTableExport(): void {
     if (!this.showDetailView) return;
 
-    const payload = {
-      staff_id: this.selectedStaff.staff_id,
-    };
+    const params: Record<string, any> = { staff_id: this.selectedStaff.staff_id };
+    if (this.detailSearchText) params['search'] = this.detailSearchText;
 
     this.staffService
-      .getExcelFileOfStaff(payload)
+      .getExcelFileOfStaff(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: Blob) => {
@@ -208,7 +245,7 @@ export class StaffComponent {
           a.download = `assigned_properties_export.csv`;
           a.click();
           window.URL.revokeObjectURL(url);
-          this.alertService.success('Internal table exported successfully!');
+          this.alertService.success('Exported successfully!');
         },
         error: (err) => {
           this.alertService.error(err?.error?.message || 'Export failed');
@@ -220,21 +257,35 @@ export class StaffComponent {
   }
 
   handleExportClick(): void {
-    this.staffService.getExcelFileOfStaff({}).subscribe((resp) => {
-      const url = window.URL.createObjectURL(resp);
+    const params: Record<string, any> = {};
+    if (this.staffRolesData['search']) params['search'] = this.staffRolesData['search'];
+    if (this.staffRolesData['role']) params['role_id'] = this.staffRolesData['role'];
 
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'staff_export.csv';
-      a.click();
-
-      window.URL.revokeObjectURL(url);
-      this.alertService.success('File downloaded successfully!');
-    });
+    this.staffService
+      .getExcelFileOfStaff(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'staff_export.csv';
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('File downloaded successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
+        },
+      });
   }
 
   applyFilter() {
-    this.staffRolesData['role'] = this.selectedstaffRole.key;
+    if (this.selectedstaffRole?.key) {
+      this.staffRolesData['role'] = this.selectedstaffRole.key;
+    } else {
+      delete this.staffRolesData['role'];
+    }
     this.currentPage = 1;
     this.getStaffRoleDetails();
   }
@@ -355,8 +406,14 @@ export class StaffComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.selectedStaff = resp.content;
+          this.selectedStaff = resp?.content ?? null;
           this.assignedProperties = resp?.content?.assigned_properties ?? [];
+          this.totalRecords = this.assignedProperties.length;
+          this.setBreadCrumb([
+            { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+            { label: 'PAGE_TITLE.TEAM', link: '/dashboard/staff' },
+            { label: this.selectedStaff?.staff_name ?? 'Detail', link: '' },
+          ]);
         },
         error: (err) => console.error('Detail API Error:', err),
       });

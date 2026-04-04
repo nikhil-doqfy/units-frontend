@@ -116,9 +116,7 @@
         <tbody>
           @if (units.length === 0) {
             <tr>
-              <td colspan="11" class="text-center text-muted py-4">
-                No units found
-              </td>
+              <td colspan="11" align="center"><app-no-data /></td>
             </tr>
           }
           @for (unit of units; track unit.id) {

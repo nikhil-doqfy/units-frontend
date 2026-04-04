@@ -4,7 +4,7 @@
   (click)="onClick()"
 >
   <i *ngIf="img">
-    <img [src]="img" [alt]="title" />
+    <img [src]="img" [alt]="title" (error)="$any($event.target).src='assets/property/property-list-1.png'" />
   </i>
   <i *ngIf="!img && showInitialsFallback" class="initialsAvatar">
     {{ initials }}

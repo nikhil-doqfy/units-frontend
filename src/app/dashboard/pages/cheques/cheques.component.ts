@@ -7,6 +7,8 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { SearchIconComponent } from '../../../shared/component/icons/search-icon/search-icon.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
+import { TableTitleComponent } from '../../component/table-title/table-title.component';
+import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import {
   BreadCrumb,
   PageChange,
@@ -24,6 +26,8 @@ import { debounceTime, Subject } from 'rxjs';
 import { LeaseService } from '../../services/lease.service';
 import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component';
 import { PropertyService } from '../../services/property.service';
+import { NoDataComponent } from '../../../no-data/no-data.component';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-cheques',
@@ -41,6 +45,9 @@ import { PropertyService } from '../../services/property.service';
     TableActionButtonComponent,
     ChequeBounceHistoryModalComponent,
     TenantDetailComponent,
+    NoDataComponent,
+    TableTitleComponent,
+    TableSearchComponent,
   ],
   templateUrl: './cheques.component.html',
   styleUrl: './cheques.component.css',
@@ -53,13 +60,14 @@ export class ChequesComponent {
   private leaseService    = inject(LeaseService);
   private router          = inject(Router);
   private propertyService = inject(PropertyService);
+  private alertService    = inject(AlertService);
 
   // ── Status options (inline row dropdown) ─────────────────────────
   statusOptions: { key: string; value: string }[] = [
     { key: 'BALANCE',  value: 'Balance'  },
     { key: 'CREDITED', value: 'Credited' },
     { key: 'REALIZED', value: 'Realized' },
-    { key: 'BOUNCE',   value: 'Bounce'   },
+    { key: 'BOUNCED',  value: 'Bounce'   },
   ];
 
   getStatusOption(status: string): { key: string; value: string } | null {
@@ -68,10 +76,11 @@ export class ChequesComponent {
 
   onChequeStatusChange(row: any, option: any) {
     if (!option?.key || !row?.cheque?.id) return;
-    row.cheque.status = option.key;
-    this.leaseService.updateLeaseCheque({ cheque_id: row.cheque.id, status: option.key })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: () => this.loadSummary() });
+    this.alertService.confirmStatusChange(option.value, () => {
+      row.cheque.status = option.key;
+      this.leaseService.updateLeaseCheque({ cheque_id: row.cheque.id, status: option.key })
+        .subscribe({ next: () => this.loadSummary() });
+    });
   }
 
   // ── Filter options ───────────────────────────────────────────────
@@ -251,7 +260,9 @@ export class ChequesComponent {
       page_size: this.rowsPerPage,
     };
     if (this.searchText) params['search'] = this.searchText;
-    if (this.activeSummary !== 'total') params['status'] = this.activeSummary.toUpperCase();
+    if (this.activeSummary !== 'total') {
+      params['status'] = this.activeSummary === 'bounce' ? 'BOUNCED' : this.activeSummary.toUpperCase();
+    }
 
     this.leaseService.getAllCheques(params)
       .pipe(takeUntilDestroyed(this.destroyRef))

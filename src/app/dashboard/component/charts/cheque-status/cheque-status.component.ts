@@ -38,7 +38,7 @@ export class ChequeStatusComponent implements OnChanges {
   }
 
   get realizedFillPercent() {
-    return (this.realized / this.totalCheques) * 100;
+    return this.totalCheques > 0 ? (this.realized / this.totalCheques) * 100 : 0;
   }
 
   get realizedRemainingPercent() {
@@ -46,7 +46,7 @@ export class ChequeStatusComponent implements OnChanges {
   }
 
   get bouncedFillPercent() {
-    return (this.bounced / this.totalCheques) * 100;
+    return this.totalCheques > 0 ? (this.bounced / this.totalCheques) * 100 : 0;
   }
 
   get bouncedRemainingPercent() {

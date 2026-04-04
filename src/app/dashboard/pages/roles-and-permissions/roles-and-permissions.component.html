@@ -23,7 +23,7 @@
       <div class="row align-items-center">
         <div class="col-md">
           <app-table-title
-            title="6"
+            [title]="totalRecords.toString()"
             [subtitle]="'ROLES_FOUND' | translate"
             (onRefresh)="onRefresh()"
           ></app-table-title>
@@ -48,47 +48,54 @@
           <tbody>
             <tr *ngFor="let role of roles">
               <td>{{ role.role_name }}</td>
-              <td>{{ role.created_on }}</td>
+              <td>{{ role.created_on | date:'dd MMM yyyy' }}</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
                     type="edit"
-                    (click)="openAddRoleModal(addRoleContent, true)"
+                    (click)="openAddRoleModal(addRoleContent, true, role)"
                   />
-                  <!-- (clicked)="handleEditClick()" -->
-
                   <app-table-action-btn
                     type="view"
-                    (clicked)="handleViewClick()"
+                    (clicked)="handleViewClick(role)"
                   />
                 </div>
               </td>
+            </tr>
+            <tr *ngIf="!roles.length && !tableLoading">
+              <td colspan="3" align="center"><app-no-data /></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
     <div class="cmmnTblFtr">
-      <app-table-select />
-      <app-table-pagination />
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="pageSize"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="pageSize"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 </ng-container>
 
-<ng-container *ngIf="showDetailView">
+<ng-container *ngIf="showDetailView && selectedRole">
   <div class="mb-3">
     <app-white-card>
       <div class="row align-items-center justify-content-between g-3">
         <div class="col">
-          <app-card-title title="Admin" />
+          <app-card-title [title]="selectedRole.role_name" />
         </div>
         <div class="col-auto">
-          <button
-            type="button"
-            class="btn btnCommon btnWhite"
-            (click)="handleBackClick()"
-          >
-            <i><app-back-icon /></i> Back
+          <button type="button" class="btn btnCommon btnWhite" (click)="handleBackClick()">
+            <i><app-back-icon /></i> {{ "BACK" | translate }}
           </button>
         </div>
       </div>
@@ -99,10 +106,10 @@
     <div class="cmmnTblHdr">
       <div class="row align-items-center">
         <div class="col-md">
-          <app-table-title title="Roles Found" subtitle="6"></app-table-title>
-        </div>
-        <div class="col-md-auto">
-          <div class="d-flex align-items-center gap-2 gap-md-3"></div>
+          <app-table-title
+            [title]="(selectedRole.permissions?.length || 0).toString()"
+            [subtitle]="'PERMISSIONS' | translate"
+          />
         </div>
       </div>
     </div>
@@ -111,289 +118,30 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Modules</th>
-              <th>Created</th>
-              <th>Edit</th>
-              <th>Delete</th>
-              <th>View</th>
-              <th>All all</th>
+              <th>{{ "MODULE" | translate }}</th>
+              <th class="text-center">{{ "CREATE" | translate }}</th>
+              <th class="text-center">{{ "EDIT" | translate }}</th>
+              <th class="text-center">{{ "DELETE" | translate }}</th>
+              <th class="text-center">{{ "VIEW" | translate }}</th>
             </tr>
           </thead>
           <tbody>
-            <!-- @for (property of RoleAndPermission; track $index){ -->
+            @for (perm of selectedRole.permissions; track $index) {
             <tr>
-              <td>Properties</td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="properties"
-                      value="Created"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="properties"
-                      value="Edit"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="properties"
-                      value="Delete"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="properties"
-                      value="View"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="properties"
-                      value="All all"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
+              <td>{{ perm.module_name }}</td>
+              <td class="text-center"><div class="cmmnCheckbox"><label><input type="checkbox" [checked]="perm.create" disabled /><span></span></label></div></td>
+              <td class="text-center"><div class="cmmnCheckbox"><label><input type="checkbox" [checked]="perm.edit" disabled /><span></span></label></div></td>
+              <td class="text-center"><div class="cmmnCheckbox"><label><input type="checkbox" [checked]="perm.delete" disabled /><span></span></label></div></td>
+              <td class="text-center"><div class="cmmnCheckbox"><label><input type="checkbox" [checked]="perm.view" disabled /><span></span></label></div></td>
             </tr>
+            } @empty {
             <tr>
-              <td>Tenant Management</td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="tenantManagement"
-                      value="Created"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="tenantManagement"
-                      value="Edit"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="tenantManagement"
-                      value="Delete"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="tenantManagement"
-                      value="View"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="tenantManagement"
-                      value="All all"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
+              <td colspan="5" align="center"><app-no-data /></td>
             </tr>
-            <tr>
-              <td>Owner Management</td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="ownerManagement"
-                      value="Created"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="ownerManagement"
-                      value="Edit"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="ownerManagement"
-                      value="Delete"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="ownerManagement"
-                      value="View"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="ownerManagement"
-                      value="All all"
-                      checked
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Role Management</td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="roleManagement"
-                      value="Created"
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input type="checkbox" name="roleManagement" value="Edit" />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="roleManagement"
-                      value="Delete"
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input type="checkbox" name="roleManagement" value="View" />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="cmmnCheckbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="roleManagement"
-                      value="All all"
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </td>
-            </tr>
-            <!-- }@empty {
-            <tr>
-              <td colspan="20" align="center">
-                <app-no-data />
-              </td>
-            </tr>
-            } -->
+            }
           </tbody>
         </table>
       </div>
-    </div>
-    <div class="cmmnTblFtr">
-      <app-table-select />
-      <app-table-pagination />
     </div>
   </div>
 </ng-container>
@@ -423,10 +171,10 @@
     >
       {{ "CANCEL" | translate }}
     </button>
-    <button type="button" class="btn btnCommon" (click)="createRole()">
+    <button type="button" class="btn btnCommon" (click)="saveRole()" [disabled]="roleForm.invalid || isLoading">
       <!-- (click)="modal.close('Save click')" -->
 
-      {{ "CREATE_ROLE" | translate }}
+      {{ (isEditMode ? "UPDATE_ROLE" : "CREATE_ROLE") | translate }}
     </button>
   </div>
 </ng-template>
