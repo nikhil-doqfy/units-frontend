@@ -277,6 +277,9 @@
           </tr>
         </thead>
         <tbody>
+          <tr *ngIf="!charges.length">
+            <td colspan="5" align="center"><app-no-data /></td>
+          </tr>
           <tr
             *ngFor="let c of charges"
             class="tableRow"

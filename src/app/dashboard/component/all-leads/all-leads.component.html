@@ -112,9 +112,7 @@
           </thead>
           <tbody>
             <tr *ngIf="leads.length === 0">
-              <td colspan="12" class="text-center text-muted py-4">
-                No leads found
-              </td>
+              <td colspan="12" align="center"><app-no-data /></td>
             </tr>
             <tr *ngFor="let lead of leads">
               <td>{{ lead.code }}</td>

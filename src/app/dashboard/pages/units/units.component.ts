@@ -20,6 +20,7 @@ import { PropertyService } from '../../services/property.service';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { debounceTime, Subject } from 'rxjs';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-units',
@@ -40,6 +41,7 @@ import { debounceTime, Subject } from 'rxjs';
     CommonModule,
     FilterPopupButtonComponent,
     CustomSelectComponent,
+    NoDataComponent,
   ],
   templateUrl: './units.component.html',
   styleUrl: './units.component.css',

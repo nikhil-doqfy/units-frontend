@@ -53,7 +53,7 @@
                 <button
                   type="button"
                   class="btn btnCommon"
-                  (click)="applyFilter()"
+                  (click)="applyFilter(); filterPopup.closePopup()"
                 >
                   {{ "APPLY" | translate }}
                 </button>
@@ -108,22 +108,15 @@
                   </app-table-img-item>
                 </td>
 
-                <td>{{ staff.staff_id }}</td>
+                <td>{{ staff.code || "_" }}</td>
                 <td>{{ staff.contact_number | maskPhone }}</td>
 
                 <td>
                   <app-table-multi-img-item
-                    [images]="[
-                      'assets/property/property-list-1.png',
-                      'assets/property/property-list-2.png',
-                      'assets/property/property-list-2.png',
-                      'assets/property/property-list-2.png',
-                      'assets/property/property-list-2.png',
-                      'assets/property/property-list-3.png',
-                    ]"
+                    [images]="staff.property_images?.length ? staff.property_images : ['assets/property/property-list-1.png']"
+                    [totalCount]="staff.property_count"
                     size="md"
-                  >
-                  </app-table-multi-img-item>
+                  />
                 </td>
 
                 <td>{{ staff.tenancy_ratio || "_" }}</td>
@@ -158,7 +151,7 @@
               </tr>
             } @empty {
               <tr>
-                <td colspan="7" align="center">No Data to Show</td>
+                <td colspan="7" align="center"><app-no-data /></td>
               </tr>
             }
           </tbody>
@@ -226,36 +219,24 @@
 <ng-container *ngIf="showDetailView && selectedStaff">
   <app-table-view-card
     [title]="selectedStaff.staff_name"
-    [imgSrc]="'../../../assets/user/user-2.png'"
+    [imgSrc]="selectedStaff.profile_image || '../../../assets/user/user-2.png'"
     [items]="[
+      { label: getLabel('CODE'), value: selectedStaff.code || 'N/A' },
       { label: getLabel('EMAIL'), value: selectedStaff.email },
       { label: getLabel('PHONE_NUMBER'), value: selectedStaff.contact_number },
-      { label: getLabel('EMIRATES_ID'), value: selectedStaff.emirate_id },
-      { label: getLabel('CITY'), value: selectedStaff.city },
-      { label: getLabel('LOCALITY'), value: selectedStaff.locality },
-      { label: getLabel('POSTAL_CODE'), value: selectedStaff.postal_code },
-      { label: getLabel('ADDRESS_LINE_1'), value: selectedStaff.address },
-      {
-        label: getLabel('ADDRESS_LINE_2'),
-        value: selectedStaff.additional_address,
-      },
+      { label: getLabel('EMIRATES_ID'), value: selectedStaff.emirate_id || 'N/A' },
+      { label: getLabel('CITY'), value: selectedStaff.city || 'N/A' },
+      { label: getLabel('LOCALITY'), value: selectedStaff.locality || 'N/A' },
+      { label: getLabel('POSTAL_CODE'), value: selectedStaff.postal_code || 'N/A' },
+      { label: getLabel('ADDRESS_LINE_1'), value: selectedStaff.address || 'N/A' },
+      { label: getLabel('ADDRESS_LINE_2'), value: selectedStaff.additional_address || 'N/A' },
       {
         label: getLabel('STAFF_ROLE'),
-        value: selectedStaff.roles?.length
-          ? selectedStaff.roles.join(', ')
-          : 'N/A',
-      },
-      {
-        label: getLabel('ASSIGNED_PROPERTY'),
-        value:
-          selectedStaff.assigned_properties?.length > 0
-            ? selectedStaff.assigned_properties[0].name
-            : 'None',
-        link: '/dashboard/staff',
+        value: selectedStaff.roles?.length ? selectedStaff.roles.join(', ') : 'N/A',
       },
     ]"
     [showEdit]="true"
-    (edit)="handleEditClick()"
+    (edit)="openEditStaffModal(addStaffContent, selectedStaff.staff_id)"
     (back)="handleBackClick()"
   ></app-table-view-card>
 
@@ -270,14 +251,10 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="SEARCH_HERE" />
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-              (clicked)="handleExportClick()"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
+            <app-table-search
+              placeholder="Search properties..."
+              (onValueChange)="onDetailSearch($event)"
+            />
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
@@ -296,7 +273,7 @@
             <tr>
               <th>{{ "CODE" | translate }}</th>
               <th>
-                {{ "PROPERTY_NAME" | translate }} <i><app-sorting-icon /></i>
+                {{ "UNIT_NAME" | translate }} <i><app-sorting-icon /></i>
               </th>
               <th>
                 {{ "TENANT_NAME" | translate }} <i><app-sorting-icon /></i>
@@ -308,16 +285,13 @@
           </thead>
 
           <tbody>
-            @for (property of assignedProperties; track $index) {
+            @for (property of filteredAssignedProperties; track $index) {
               <tr>
                 <td>{{ property.property_code || "_" }}</td>
 
                 <td>
                   <app-table-img-item
-                    [img]="
-                      property.property_image?.data ||
-                      'assets/property/property-list-1.png'
-                    "
+                    [img]="property.property_image || 'assets/property/property-list-1.png'"
                     size="md"
                     [title]="property.property_name"
                   />
@@ -359,17 +333,17 @@
     </div>
     <div class="cmmnTblFtr">
       <app-table-select
-        [componentName]="componentName"
-        [rowsPerPage]="rowsPerPage"
+        [componentName]="detailComponentName"
+        [rowsPerPage]="detailRowsPerPage"
         [rowsPerPageOptions]="rowsPerPageOptions"
-        (rowsPerPageChange)="onPageSizeChange($event)"
+        (rowsPerPageChange)="onDetailPageSizeChange($event)"
       />
       <app-table-pagination
-        [componentName]="componentName"
-        [currentPage]="currentPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage"
-        (pageChange)="onPageChange($event)"
+        [componentName]="detailComponentName"
+        [currentPage]="detailCurrentPage"
+        [totalRecords]="detailTotalRecords"
+        [rowsPerPage]="detailRowsPerPage"
+        (pageChange)="onDetailPageChange($event)"
       />
     </div></div
 ></ng-container>

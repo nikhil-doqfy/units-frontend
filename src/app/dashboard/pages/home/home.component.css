@@ -1,9 +1,88 @@
+.equal-height-row > [class*='col'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.equal-height-row > [class*='col'] app-white-card {
+  flex: 1 1 auto;
+}
+
+.equal-height-row > [class*='col'] ::ng-deep .dashWhiteCol {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.dues-summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.dues-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--lightBg, #f8f9fa);
+  border-radius: 8px;
+  padding: 8px 14px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.dues-stat-label {
+  font-size: 11px;
+  color: var(--lightDarkText, #888);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.dues-stat-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--greyDarkText1, #1a1a2e);
+}
+
+.dues-stat-value.received {
+  color: #16a34a;
+}
+
+.dues-stat-value.due {
+  color: #dc2626;
+}
+
 .cmmnTbl .table-responsive {
+  overflow-x: auto;
   overflow-y: auto;
   position: relative;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cmmnTbl .table-responsive::-webkit-scrollbar {
+  display: none;
 }
 
 .cmmnTbl table.header-stickey thead th {
   position: sticky;
   top: 0;
+}
+
+/* Equal height cards in the properties-revenue row */
+.proegress-bar-graph,
+.proegress-bar-graph ~ div {
+  display: flex;
+  flex-direction: column;
+}
+
+.proegress-bar-graph app-white-card,
+.proegress-bar-graph ~ div app-white-card {
+  flex: 1 1 auto;
+}
+
+.proegress-bar-graph ::ng-deep .dashWhiteCol,
+.proegress-bar-graph ~ div ::ng-deep .dashWhiteCol {
+  height: 100%;
+  box-sizing: border-box;
 }

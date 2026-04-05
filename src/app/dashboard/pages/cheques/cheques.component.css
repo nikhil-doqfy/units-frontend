@@ -238,17 +238,6 @@
   white-space: nowrap;
 }
 
-.cmmnTbl,
-table {
-  border-radius: 10px;
-}
-
-.table-wrapper {
-  border-radius: 12px;
-  overflow-x: auto;
-  overflow-y: visible;
-}
-
 .table-responsive {
   overflow-x: auto;
   scrollbar-width: none;

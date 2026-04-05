@@ -11,8 +11,10 @@ import { CommonModule } from '@angular/common';
 export class TableMultiImgItemComponent {
   @Input() images: string[] = [];
   @Input() size: 'sm' | 'md' | 'lg' = 'sm';
+  @Input() totalCount: number | null = null;
 
   get remainingCount(): number {
-    return this.images.length > 3 ? this.images.length - 3 : 0;
+    const total = this.totalCount ?? this.images.length;
+    return total > 3 ? total - 3 : 0;
   }
 }

@@ -97,6 +97,7 @@
           <app-dashboard-icon></app-dashboard-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          *ngIf="canAccess('Properties')"
           title="{{ 'PROPERTIES' | translate }}"
           href="/dashboard/properties"
         >
@@ -110,6 +111,7 @@
           <app-lead-icon></app-lead-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          *ngIf="canAccess('Tenant')"
           title="{{ 'TENANTS' | translate }}"
           href="/dashboard/tenants"
         >
@@ -117,6 +119,7 @@
         </app-sidebar-item>
 
         <app-sidebar-item
+          *ngIf="canAccess('Owner')"
           title="{{ 'OWNER' | translate }}"
           href="/dashboard/owners"
         >
@@ -135,12 +138,14 @@
           <app-lease-tenancy-icon></app-lease-tenancy-icon>
         </app-sidebar-item> -->
         <app-sidebar-item
+          *ngIf="canAccess('Rental Portfolio')"
           title="{{ 'PAGE_TITLE.RENTAL_PORTFOLIO' | translate }}"
           href="/dashboard/rental"
         >
           <app-rental-portfolio-icon></app-rental-portfolio-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          *ngIf="canAccess('Approval')"
           title="{{ 'APPROVAL' | translate }}"
           href="/dashboard/approval"
         >
@@ -148,6 +153,7 @@
         </app-sidebar-item>
 
         <app-sidebar-item
+          *ngIf="canAccess('Complaints')"
           title="{{ 'PAGE_TITLE.COMPLAINTS' | translate }}"
           href="/dashboard/complaints"
           [count]="243"
@@ -155,6 +161,7 @@
           <app-raise-complaint-icon></app-raise-complaint-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          *ngIf="canAccess('Broadcast')"
           title="{{ 'PAGE_TITLE.BROADCAST' | translate }}"
           href="/dashboard/announcements"
         >
@@ -167,6 +174,7 @@
       <app-sidebar-heading title="{{ 'USER_MANAGEMENT' | translate }}" />
       <div class="dashSdbrItemList">
         <app-sidebar-item
+          *ngIf="canAccess('Users')"
           title="{{ 'USERS' | translate }}"
           href="/dashboard/users"
         >
@@ -179,6 +187,7 @@
           <app-staff-icon></app-staff-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          *ngIf="canAccess('Roles and Permission')"
           title="{{ 'ROLES_AND_PERMISSIONS' | translate }}"
           href="/dashboard/roles-and-permissions"
         >
