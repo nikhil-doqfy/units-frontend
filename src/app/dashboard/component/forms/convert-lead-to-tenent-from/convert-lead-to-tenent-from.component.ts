@@ -1,18 +1,21 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlatfromBadgeComponent } from '../../platfrom-badge/platfrom-badge.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-convert-lead-to-tenent-from',
   standalone: true,
-  imports: [CommonModule, PlatfromBadgeComponent],
+  imports: [CommonModule, PlatfromBadgeComponent, TranslateModule],
   templateUrl: './convert-lead-to-tenent-from.component.html',
   styleUrl: './convert-lead-to-tenent-from.component.css',
 })
 export class ConvertLeadToTenentFromComponent {
   @Input() leadData: any = null;
 
-  getPlatformType(platform: string): 'propertyFinder' | 'bayut' | 'direct' | 'referral' {
+  getPlatformType(
+    platform: string,
+  ): 'propertyFinder' | 'bayut' | 'direct' | 'referral' {
     const map: Record<string, any> = {
       PROPERTY_FINDER: 'propertyFinder',
       BAYUT: 'bayut',

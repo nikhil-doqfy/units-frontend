@@ -138,7 +138,7 @@
                   [ngClass]="isAddPropertyActive ? 'btnActive' : 'btnGrey'"
                 >
                   <i><app-plus-icon></app-plus-icon></i>
-                  {{ "Add" | translate }}
+                  {{ "PAGE_TITLE.ADD" | translate }}
                   <i><app-arrow-down-icon></app-arrow-down-icon></i>
                 </button>
 
@@ -146,10 +146,11 @@
                 <div class="custom-dropdown" *ngIf="showDropdown">
                   <div class="dropdown-item" (click)="openProperty()">
                     <i><app-new-propertry-icons></app-new-propertry-icons></i>
-                    New Property
+                    {{ "PAGE_TITLE.NEW_PROPERTY" | translate }}
                   </div>
                   <div class="dropdown-item" (click)="openUnit()">
-                    <i><app-new-units-icon></app-new-units-icon></i> New Unit
+                    <i><app-new-units-icon></app-new-units-icon></i>
+                    {{ "PAGE_TITLE.NEW_UNIT" | translate }}
                   </div>
                 </div>
               </div>
@@ -178,7 +179,7 @@
                 [ngClass]="isAddLeaseActive ? 'btnActive' : 'btnWhite'"
               >
                 <i><app-plus-icon></app-plus-icon></i>
-                {{ "New Tenant" | translate }}
+                {{ "PAGE_TITLE.NEW_TENANT" | translate }}
               </button>
             </ng-container>
             <!-- <button type="button" class="btn btnCommon btnWhite">

@@ -66,7 +66,7 @@
 .charges-table th {
   font-size: 13px;
   font-weight: 600;
-  background-color: var(--table-th-bg);
+  background-color: var(--table-th-bg1);
   color: var(--table-th-text);
   padding: 10px;
   border: none;

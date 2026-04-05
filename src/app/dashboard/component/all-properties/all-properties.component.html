@@ -3,39 +3,69 @@
     <div class="cmmnTblHdr">
       <div class="row g-3 align-items-center">
         <div class="col-md">
-          <app-table-title [title]="'ALL_PROPERTIES' | translate" [subtitle]="'(' + totalRecords + ')'"
-            (onRefresh)="onRefresh()"></app-table-title>
+          <app-table-title
+            [title]="'ALL_PROPERTIES' | translate"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search [placeholder]="'SEARCH_HERE' | translate" (onValueChange)="searchTextChange($event)" />
+            <app-table-search
+              [placeholder]="'SEARCH_HERE' | translate"
+              (onValueChange)="searchTextChange($event)"
+            />
 
             <app-filter-popup-btn #filterPopup>
               <ng-container form>
                 <div class="row g-3">
                   <div class="col-12">
                     <label class="form-label">Property Type</label>
-                    <app-custom-select [options]="propertyTypeOptions" key="key" value="value"
+                    <app-custom-select
+                      [options]="propertyTypeOptions"
+                      key="key"
+                      value="value"
                       placeholder="Select type"
-                      (optionSelected)="filterPropertyType = $event?.key">
+                      (optionSelected)="filterPropertyType = $event?.key"
+                    >
                     </app-custom-select>
                   </div>
                   <div class="col-12">
                     <label class="form-label">Status</label>
-                    <app-custom-select [options]="statusOptions" key="key" value="value"
+                    <app-custom-select
+                      [options]="statusOptions"
+                      key="key"
+                      value="value"
                       placeholder="Select status"
-                      (optionSelected)="filterStatus = $event?.key">
+                      (optionSelected)="filterStatus = $event?.key"
+                    >
                     </app-custom-select>
                   </div>
                 </div>
               </ng-container>
               <ng-container action>
-                <button type="button" class="btn btnCommon" (click)="removeFilter(); filterPopup.closePopup()">Remove All</button>
-                <button type="button" class="btn btnCommon" (click)="applyFilter(); filterPopup.closePopup()">Apply</button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter(); filterPopup.closePopup()"
+                >
+                  Remove All
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter(); filterPopup.closePopup()"
+                >
+                  Apply
+                </button>
               </ng-container>
             </app-filter-popup-btn>
 
-            <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true" (clicked)="handleExport()">
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+              (clicked)="handleExport()"
+            >
               <app-export-icon />
             </app-table-filter-btn>
           </div>
@@ -48,40 +78,55 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Property ID</th>
+              <th>{{ "PROPERTY_ID" | translate }}</th>
               <th>
-                Property Name <i><app-sorting-icon></app-sorting-icon></i>
+                {{ "PROPERTY_NAME" | translate
+                }}<i><app-sorting-icon></app-sorting-icon></i>
               </th>
-              <th>Location</th>
-              <th>Total Blocks /Tower</th>
-              <th>Total No of Units</th>
-              <th>PMC</th>
-              <th>Plot No</th>
-              <th>Plot Area(Sqft)</th>
-              <th>Makani No</th>
-              <th>Dewa No</th>
-              <th>Status</th>
-              <th>Platform</th>
-              <th>Action</th>
+              <th>{{ "LOCATION" | translate }}</th>
+              <th>{{ "TOTAL_BLOCKS_TOWERS" | translate }}</th>
+              <th>{{ "TOTAL_UNITS" | translate }}</th>
+              <th>{{ "PMC" | translate }}</th>
+              <th>{{ "PLOT_NO" | translate }}</th>
+              <th>{{ "PLOT_AREA" | translate }}</th>
+              <th>{{ "MAKANI_NO" | translate }}</th>
+              <th>{{ "DEWA_NO" | translate }}</th>
+              <th>{{ "STATUS" | translate }}</th>
+              <th>{{ "PLATFORM" | translate }}</th>
+              <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let prop of properties">
               <td>{{ prop.code }}</td>
-              <td style="cursor:pointer" (click)="onViewClick(prop.id)">
-                <app-table-img-item [img]="prop.thumbnail || 'assets/property/property-img-1.png'" [title]="prop.property_name" />
+              <td style="cursor: pointer" (click)="onViewClick(prop.id)">
+                <app-table-img-item
+                  [img]="prop.thumbnail || 'assets/property/property-img-1.png'"
+                  [title]="prop.property_name"
+                />
               </td>
-              <td>{{ prop.address_line_1 || '--' }}</td>
+              <td>{{ prop.address_line_1 || "--" }}</td>
               <td>{{ prop.no_of_blocks }}</td>
               <td>{{ prop.no_of_units }}</td>
-              <td>{{ prop.pmc?.value || '--' }}</td>
-              <td>{{ prop.plot_no || '--' }}</td>
-              <td>{{ prop.land_area ? (prop.land_area + ' ' + prop.land_area_unit) : '--' }}</td>
-              <td>{{ prop.makani_no || '--' }}</td>
-              <td>{{ prop.dewa_no || '--' }}</td>
+              <td>{{ prop.pmc?.value || "--" }}</td>
+              <td>{{ prop.plot_no || "--" }}</td>
               <td>
-                <span class="badge text-white" [ngClass]="prop.status === 'PUBLIC' ? 'bg-success' : 'bg-secondary'">
-                  {{ prop.status === 'PUBLIC' ? 'Public' : 'Draft' }}
+                {{
+                  prop.land_area
+                    ? prop.land_area + " " + prop.land_area_unit
+                    : "--"
+                }}
+              </td>
+              <td>{{ prop.makani_no || "--" }}</td>
+              <td>{{ prop.dewa_no || "--" }}</td>
+              <td>
+                <span
+                  class="badge text-white"
+                  [ngClass]="
+                    prop.status === 'PUBLIC' ? 'bg-success' : 'bg-secondary'
+                  "
+                >
+                  {{ prop.status === "PUBLIC" ? "Public" : "Draft" }}
                 </span>
               </td>
               <td>--</td>
@@ -89,15 +134,22 @@
                 <div class="tbl-action-inline">
                   <app-edit-icon (click)="onEditClick(prop.id)"></app-edit-icon>
                   <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)">
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event)"
+                    >
                     </app-table-action-dropdown>
                   </div>
                 </div>
               </td>
             </tr>
             <tr *ngIf="properties.length === 0">
-              <td colspan="13" style="text-align:center; padding: 24px; color: #aaa;">No properties found</td>
+              <td
+                colspan="13"
+                style="text-align: center; padding: 24px; color: #aaa"
+              >
+                No properties found
+              </td>
             </tr>
           </tbody>
         </table>
@@ -105,10 +157,19 @@
     </div>
 
     <div class="cmmnTblFtr">
-      <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
-      <app-table-pagination [componentName]="componentName" [currentPage]="currentPage" [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 </ng-container>

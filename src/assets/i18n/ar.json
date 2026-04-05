@@ -14,6 +14,9 @@
     "STAFF": "الموظفون",
     "USERS": "المستخدمون",
     "ADD": "يضيف",
+    "NEW_PROPERTY": "عقار جديد",
+    "ACTIVE_TENANTS": "المستأجرون النشطون",
+    "ONBOARDING_TENANTS": "تأجير المستأجرين",
     "ROLES_PERMISSIONS": "الأدوار والصلاحيات",
     "DOCUMENTATIONS": "المستندات",
     "PAYMENTS_INVOICE": "المدفوعات والفواتير",
@@ -22,8 +25,12 @@
     "PRIVACY_POLICY": "سياسة الخصوصية",
     "RENTAL_PORTFOLIO": "محفظة الإيجار",
     "RENTAL": "تأجير",
-    "COMPLAINTS": "الشكاوى"
+    "COMPLAINTS": "الشكاوى",
+    "BROADCAST": "البث",
+    "TEAM": "الفريق",
+    "NEW_TENANT": "مستأجر جديد"
   },
+
   "ADD_PROPERTY": "إضافة عقار",
   "NEW_LEASE": "عقد جديد",
   "UNIT_DETAILS": "تفاصيل الوحدة",
@@ -388,7 +395,6 @@
   "CALLER_NAME": "اسم المتصل",
   "CALL_SUMMARY": "ملخص الملاحظة الصوتية  للمكالمات",
   "1_39_OF_39_THREAD": "1 - 39 من 39 موضوعًا",
-
   "WHATSAPP_FOR_WINDOWS": "تحميل واتس اب للويندوز",
   "CALL_SHARE_FAST": " قم بإجراء المكالمات، وشارك شاشتك، واحصل على تجربة أسرع عند تنزيل تطبيق ويندوز. ويندوز. بتنزيل تطبيق ويندوز.قم",
   "DOWNLOAD": "تحميل",
@@ -539,5 +545,25 @@
   "PROPERTY_COMPRISON": "ملكية الملكية",
   "LOGIN_SIGNUP": "تسجيل الدخول / الاشتراك",
   "WAITING_FOR_TENANT_TO_SIGNUP": "في انتظار تسجيل المستأجر/",
-  "UPDATE_THEIR_PROFILE": "تحديث الملف الشخصي هناك"
+  "UPDATE_THEIR_PROFILE": "تحديث الملف الشخصي هناك",
+  "UNITS": "الوحدات",
+  "TENANCY_LEDGER": "دفتر الإيجار",
+  "TOTAL_BLOCKS_TOWERS": "إجمالي الكتل / الأبراج",
+  "PLATFORM": "منصة",
+  "CONVERT_LEAD_TO_TENANT": "تحويل الرصاص إلى مستأجر",
+  "CONVERT_TO_TENANCY": "تحويل إلى إيجار",
+  "LEAD_TYPE": "نوع الرصاص",
+  "LEADS": "يؤدي",
+  "TENANT_CODE": "رمز المستأجر",
+  "LEASE_CODE": "رمز الإيجار",
+  "BLOCK_TOWER": "الكتلة / البرج",
+  "OWNER_NO": "رقم المالك",
+  "LICENSE_NO": "رقم الترخيص",
+  "LICENSE_EXPIRY": "انتهاء الترخيص",
+  "FAX_NO": "رقم الفاكس",
+  "PO_BOX": "صندوق البريد",
+  "OWNER_NUMBER": "رقم المالك",
+  "CURRENT_TENANTS": "المستأجرون الحاليون",
+  "PAST_TENANTS": "المستأجرون السابقون",
+  "REJECTED_TENANTS": "المستأجرون المرفوضون"
 }
