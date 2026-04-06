@@ -643,14 +643,16 @@
           </button>
           <ng-container *ngIf="currentRole === 'property-manager'">
             <button ngbDropdownItem (click)="goToTermsConditions()">
-              <i><app-termscondition-icon></app-termscondition-icon></i>Terms &
-              Conditions
+              <i><app-termscondition-icon></app-termscondition-icon></i
+              >{{ "TERMS_AND_CONDITIONS" | translate }}
             </button>
             <button ngbDropdownItem (click)="goToCharges()">
-              <i><app-charges-icon></app-charges-icon></i>Charges
+              <i><app-charges-icon></app-charges-icon></i
+              >{{ "CHARGES" | translate }}
             </button>
             <button ngbDropdownItem (click)="goToAuditLog()">
-              <i><app-auditlog-icon></app-auditlog-icon></i>Audit Log
+              <i><app-auditlog-icon></app-auditlog-icon></i
+              >{{ "AUDIT_LOGS" | translate }}
             </button>
           </ng-container>
           <button ngbDropdownItem (click)="goToDocumentation()">

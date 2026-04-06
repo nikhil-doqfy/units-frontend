@@ -30,11 +30,11 @@
         </div>
         <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
-            <label class="form-label">{{ "Property Name" | translate }}</label>
+            <label class="form-label">{{ "PROPERTY_NAME" | translate }}</label>
             <input
               type="text"
               class="form-control"
-              [placeholder]="'Enter name here' | translate"
+              [placeholder]="'ENTER_NAME_HERE' | translate"
               formControlName="propertyName"
             />
             @if (isInvalid(pmDetailsForm, "propertyName").status) {
@@ -45,7 +45,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'No of Blocks / Tower' | translate"
+              [label]="'NO_OF_BLOCKS_TOWER' | translate"
               [options]="blocksCount"
               [bindToControl]="true"
               [form]="pmDetailsForm"
@@ -54,7 +54,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'No of Units' | translate"
+              [label]="'NO_OF_UNITS' | translate"
               [options]="unitsCount"
               [bindToControl]="true"
               [form]="pmDetailsForm"
@@ -63,7 +63,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'Property Type' | translate"
+              [label]="'PROPERTY_TYPE' | translate"
               [options]="propertyType"
               [bindToControl]="true"
               [form]="pmDetailsForm"
@@ -71,7 +71,7 @@
             ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Land Area" | translate }}</label>
+            <label class="form-label">{{ "LAND_AREA" | translate }}</label>
             <div class="d-flex gap-2">
               <input
                 type="number"
@@ -89,17 +89,17 @@
           </div>
           <div class="col-md-3">
             <label class="form-label">{{
-              "Land DM No(Affection Plan)" | translate
+              "LAND_DM_NO(AFFECTION_PLAN)" | translate
             }}</label>
             <input
               type="text"
               class="form-control"
-              [placeholder]="'Enter Land DM No' | translate"
+              [placeholder]="'ENTER_LAND_DM_NO' | translate"
               formControlName="landDmNo"
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Plot No" | translate }}</label>
+            <label class="form-label">{{ "PLOT_NO" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -108,7 +108,7 @@
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Makani No" | translate }}</label>
+            <label class="form-label">{{ "MAKANI_NO" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -117,7 +117,7 @@
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Dewa No" | translate }}</label>
+            <label class="form-label">{{ "DEWA_NO" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -127,12 +127,12 @@
           </div>
           <div class="col-md-3">
             <label class="form-label">{{
-              "Approx Rent Cost" | translate
+              "APPROX_RENT_COST" | translate
             }}</label>
             <input
               type="number"
               class="form-control"
-              [placeholder]="'Enter approx rent' | translate"
+              [placeholder]="'ENTER_APPROX_RENT' | translate"
               formControlName="approxRent"
             />
           </div>
@@ -142,12 +142,12 @@
 
     <ng-container>
       <app-step-pane
-        [title]="'Location / Address Details' | translate"
+        [title]="'LOCATION_ADDRESS_DETAILS' | translate"
         [secondCard]="true"
       >
         <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
-            <label class="form-label">{{ "Address Lane 1" | translate }}</label>
+            <label class="form-label">{{ "ADDRESS_LINE_1" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -156,7 +156,7 @@
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Address Lane 2" | translate }}</label>
+            <label class="form-label">{{ "ADDRESS_LINE_2" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -165,7 +165,7 @@
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Landmark" | translate }}</label>
+            <label class="form-label">{{ "LANDMARK" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -174,7 +174,7 @@
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Pincode" | translate }}</label>
+            <label class="form-label">{{ "PINCODE" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -184,7 +184,7 @@
           </div>
           <div class="col-12">
             <label class="form-label">{{
-              "Select From Map" | translate
+              "SELECT_FROM_MAP" | translate
             }}</label>
             <app-map-picker
               [initialLat]="pmDetailsForm.get('latitude')?.value"
@@ -364,7 +364,7 @@
 
   <ng-container>
     <app-step-pane
-      [title]="'BLOCKS / TOWER' | translate"
+      [title]="'BLOCKS / TOWERS' | translate"
       [pageTitle]="getPageTitle()"
       [showBulkUpload]="true"
     >
@@ -378,18 +378,18 @@
             <div class="row g-3" [formGroupName]="i">
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "Block / Tower Name" | translate
+                  "BLOCK_TOWER_NAME" | translate
                 }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  [placeholder]="'Enter name here' | translate"
+                  [placeholder]="'ENTER_NAME_HERE' | translate"
                   formControlName="blockName"
                 />
               </div>
               <div class="col-md-3">
                 <app-form-select-field
-                  [label]="'No of Floors' | translate"
+                  [label]="'NO_OF_FLOORS' | translate"
                   [options]="floorsCount"
                   [bindToControl]="true"
                   controlName="noOfFloors"
@@ -397,7 +397,7 @@
               </div>
               <div class="col-md-3">
                 <app-form-select-field
-                  [label]="'No of Parking' | translate"
+                  [label]="'NO_OF_PARKING' | translate"
                   [options]="parkingCount"
                   [bindToControl]="true"
                   controlName="noOfParking"
@@ -405,7 +405,7 @@
               </div>
               <div class="col-md-3">
                 <app-form-select-field
-                  [label]="'No of Units' | translate"
+                  [label]="'NO_OF_UNITS' | translate"
                   [options]="unitsCount"
                   [bindToControl]="true"
                   controlName="noOfUnits"
@@ -513,7 +513,7 @@
   <ng-container>
     <app-step-pane
       [title]="'DOCUMENTATION' | translate"
-      [pageTitle]="'Documentation' | translate"
+      [pageTitle]="'DOCUMENTATION' | translate"
       [description]="'UPLOAD_DOCUMENTS_OF_THE_PROPERTY' | translate"
     >
       <div class="commonTabs">

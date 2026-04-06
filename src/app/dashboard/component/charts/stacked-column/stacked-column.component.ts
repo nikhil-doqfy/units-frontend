@@ -208,7 +208,7 @@ export class StackedColumnChartComponent
         axisBorder: { show: false },
         axisTicks: { show: false },
       },
-      // dataLabels: { enabled: false },
+      dataLabels: { enabled: false },
       fill: { opacity: 1 },
       tooltip: {
         y: { formatter: (val: number) => 'AED ' + val.toLocaleString() },

@@ -6,7 +6,7 @@ import { forkJoin } from 'rxjs';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
 import { PropertyService } from '../../services/property.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-property-detail',
@@ -46,8 +46,9 @@ export class PropertyDetailComponent implements OnInit {
   documentsByType: Record<string, any[]> = {};
   docTypeNames: Record<string, string> = {};
   activeDocTab = '';
-
+  constructor(private translate: TranslateService) {}
   ngOnInit(): void {
+    console.log(this.translate.instant('PROPERTY_CODE'));
     this.propertyId = +(this.route.snapshot.paramMap.get('id') || 0);
     if (!this.propertyId) {
       this.router.navigate(['/dashboard/properties']);
@@ -56,6 +57,9 @@ export class PropertyDetailComponent implements OnInit {
     this.loadAll();
   }
 
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   loadAll(): void {
     this.loading = true;
     forkJoin({
@@ -96,29 +100,56 @@ export class PropertyDetailComponent implements OnInit {
             {
               title: 'Property Details',
               items: [
-                { label: 'Property Code', value: prop.code || '--' },
-                { label: 'Property Type', value: prop.property_type || '--' },
                 {
-                  label: 'No of Blocks',
+                  label: this.getLabel('PROPERTY_CODE'),
+                  value: prop.code || '--',
+                },
+                {
+                  label: this.getLabel('PROPERTY_TYPE'),
+                  value: prop.property_type || '--',
+                },
+                {
+                  label: this.getLabel('NO_OF_BLOCKS'),
                   value: String(prop.no_of_blocks ?? '--'),
                 },
                 {
-                  label: 'No of Units',
+                  label: this.getLabel('NO_OF_UNITS'),
                   value: String(prop.no_of_units ?? '--'),
                 },
                 {
-                  label: 'Land Area',
+                  label: this.getLabel('LAND_AREA'),
                   value: prop.land_area
                     ? `${prop.land_area} ${prop.land_area_unit}`
                     : '--',
                 },
-                { label: 'Land DM No', value: prop.land_dm_no || '--' },
-                { label: 'Plot No', value: prop.plot_no || '--' },
-                { label: 'Makani No', value: prop.makani_no || '--' },
-                { label: 'DEWA No', value: prop.dewa_no || '--' },
-                { label: 'Pincode', value: prop.pincode || '--' },
-                { label: 'Address 1', value: prop.address_line_1 || '--' },
-                { label: 'Address 2', value: prop.address_line_2 || '--' },
+                {
+                  label: this.getLabel('LAND_DM_NO'),
+                  value: prop.land_dm_no || '--',
+                },
+                {
+                  label: this.getLabel('PLOT_NO'),
+                  value: prop.plot_no || '--',
+                },
+                {
+                  label: this.getLabel('MAKANI_NO'),
+                  value: prop.makani_no || '--',
+                },
+                {
+                  label: this.getLabel('DEWA_NO'),
+                  value: prop.dewa_no || '--',
+                },
+                {
+                  label: this.getLabel('_PINCODE'),
+                  value: prop.pincode || '--',
+                },
+                {
+                  label: this.getLabel('ADDRESS_1'),
+                  value: prop.address_line_1 || '--',
+                },
+                {
+                  label: this.getLabel('ADDRESS_2'),
+                  value: prop.address_line_2 || '--',
+                },
               ],
             },
             {
@@ -127,19 +158,24 @@ export class PropertyDetailComponent implements OnInit {
                 ? blockList.flatMap((b: any, i: number) => [
                     { label: `Block ${i + 1}`, value: b.block_name || '--' },
                     {
-                      label: 'No of Floors',
+                      label: this.getLabel('NO_OF_FLOORS'),
                       value: String(b.no_of_floors ?? '--'),
                     },
                     {
-                      label: 'No of Parking',
+                      label: this.getLabel('NO_OF_PARKING'),
                       value: String(b.no_of_parking ?? '--'),
                     },
                     {
-                      label: 'No of Units',
+                      label: this.getLabel('NO_OF_UNITS'),
                       value: String(b.no_of_units ?? '--'),
                     },
                   ])
-                : [{ label: 'Blocks', value: 'No blocks added' }],
+                : [
+                    {
+                      label: this.getLabel('BLOCKS'),
+                      value: 'No blocks added',
+                    },
+                  ],
             },
           ];
         }

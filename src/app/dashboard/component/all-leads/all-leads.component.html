@@ -19,34 +19,38 @@
               <ng-container form>
                 <div class="row g-3">
                   <div class="col-12">
-                    <label class="form-label">Status</label>
+                    <label class="form-label">{{ "STATUS" | translate }}</label>
                     <app-custom-select
                       [options]="statusOptions"
                       key="key"
                       value="value"
-                      placeholder="Select status"
+                      [placeholder]="'SELECT_STATUS' | translate"
                       (optionSelected)="filterStatus = $event?.key"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-12">
-                    <label class="form-label">Platform</label>
+                    <label class="form-label">{{
+                      "PLATFORM" | translate
+                    }}</label>
                     <app-custom-select
                       [options]="platformOptions"
                       key="key"
                       value="value"
-                      placeholder="Select platform"
+                      [placeholder]="'SELECT_PLATFORM' | translate"
                       (optionSelected)="filterPlatform = $event?.key"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-12">
-                    <label class="form-label">Lead Type</label>
+                    <label class="form-label">{{
+                      "LEAD_TYPE" | translate
+                    }}</label>
                     <app-custom-select
                       [options]="leadTypeOptions"
                       key="key"
                       value="value"
-                      placeholder="Select type"
+                      [placeholder]="'SELECT_LEAD_TYPE' | translate"
                       (optionSelected)="filterLeadType = $event?.key"
                     >
                     </app-custom-select>
@@ -59,14 +63,14 @@
                   class="btn btnCommon"
                   (click)="removeFilter(); filterPopup.closePopup()"
                 >
-                  Remove All
+                  {{ "REMOVE_ALL" | translate }}
                 </button>
                 <button
                   type="button"
                   class="btn btnCommon"
                   (click)="applyFilter(); filterPopup.closePopup()"
                 >
-                  Apply
+                  {{ "APPLY" | translate }}
                 </button>
               </ng-container>
             </app-filter-popup-btn>

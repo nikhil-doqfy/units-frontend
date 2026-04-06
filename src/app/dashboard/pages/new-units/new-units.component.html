@@ -36,7 +36,7 @@
             <div class="row g-3" [formGroupName]="i">
               <!-- Owner Code dropdown — auto-fills all fields -->
               <div class="col-md-3">
-                <label class="form-label">{{ "Owner Code" | translate }}</label>
+                <label class="form-label">{{ "OWNER_CODE" | translate }}</label>
                 <app-custom-select
                   [options]="ownerList"
                   key="key"
@@ -48,81 +48,81 @@
                 ></app-custom-select>
               </div>
               <div class="col-md-3">
-                <label class="form-label">{{ "Owner Name" | translate }}</label>
+                <label class="form-label">{{ "OWNER_NAME" | translate }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  [placeholder]="'Enter name here' | translate"
+                  [placeholder]="'ENTER_NAME_HERE' | translate"
                   formControlName="ownerName"
                 />
               </div>
               <div class="col-md-3">
-                <label class="form-label">{{ "Email" | translate }}</label>
+                <label class="form-label">{{ "EMAIL" | translate }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  [placeholder]="'Enter email here' | translate"
+                  [placeholder]="'ENTER_EMAIL_HERE' | translate"
                   formControlName="ownerEmail"
                 />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "Contact Number" | translate
+                  "CONTACT_NUMBER" | translate
                 }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  [placeholder]="'Enter number here' | translate"
+                  [placeholder]="'ENTER_NUMBER_HERE' | translate"
                   formControlName="ownerContact"
                 />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "Emirates ID" | translate
+                  "EMIRATES_ID" | translate
                 }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  [placeholder]="'Enter ID here' | translate"
+                  [placeholder]="'ENTER_ID_HERE' | translate"
                   formControlName="ownerEmiratesId"
                 />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "Owner Number" | translate
+                  "OWNER_NUMBER" | translate
                 }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Enter here"
+                  [placeholder]="'ENTER_NUMBER_HERE' | translate"
                   formControlName="ownerNumber"
                 />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "Trade License No" | translate
+                  "TRADE_LICENSE_NUMBER" | translate
                 }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Enter here"
+                  [placeholder]="'ENTER_NUMBER_HERE' | translate"
                   formControlName="tradeLicenseNumber"
                 />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "License Number" | translate
+                  "LICENSE_NUMBER" | translate
                 }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Enter here"
+                  [placeholder]="'ENTER_NUMBER_HERE' | translate"
                   formControlName="licenseNumber"
                 />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "License Expiry Date" | translate
+                  "LICENSE_EXPIRY_DATE" | translate
                 }}</label>
                 <input
                   type="date"
@@ -132,32 +132,32 @@
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "License Issuer" | translate
+                  "LICENSE_ISSUER" | translate
                 }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Enter here"
+                  [placeholder]="'ENTER_HERE' | translate"
                   formControlName="licenseIssuer"
                 />
               </div>
               <div class="col-md-3">
-                <label class="form-label">{{ "Fax Number" | translate }}</label>
+                <label class="form-label">{{ "FAX_NUMBER" | translate }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Enter here"
+                  [placeholder]="'ENTER_NUMBER_HERE' | translate"
                   formControlName="faxNumber"
                 />
               </div>
               <div class="col-md-3">
                 <label class="form-label">{{
-                  "P.O. Box Number" | translate
+                  "P_O_BOX_NUMBER" | translate
                 }}</label>
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Enter here"
+                  [placeholder]="'ENTER_HERE' | translate"
                   formControlName="poBoxNumber"
                 />
               </div>
@@ -181,7 +181,7 @@
 
     <!-- Unit Details Card -->
     <ng-container>
-      <app-step-pane [title]="'Basic Details' | translate" [secondCard]="true">
+      <app-step-pane [title]="'BASIC_DETAILS' | translate" [secondCard]="true">
         <form class="row g-3" [formGroup]="basicDetailsForm">
           <div class="col-md-3">
             <app-form-select-field
@@ -195,7 +195,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'Property Block / Tower' | translate"
+              [label]="'PROPERTY_BLOCK_TOWER' | translate"
               [options]="blockList"
               [bindToControl]="true"
               [form]="basicDetailsForm"
@@ -203,7 +203,7 @@
             ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Unit Name" | translate }}</label>
+            <label class="form-label">{{ "UNIT_NAME" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -218,7 +218,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'No of Bedrooms' | translate"
+              [label]="'NO_OF_BEDROOMS' | translate"
               [options]="bedroomList"
               [bindToControl]="true"
               [form]="basicDetailsForm"
@@ -227,7 +227,7 @@
           </div>
           <div class="col-md-3">
             <label class="form-label">{{
-              "Unit Size (Sq ft)" | translate
+              "UNIT_SIZE(SQ_FT)" | translate
             }}</label>
             <input
               type="number"
@@ -237,7 +237,7 @@
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Area of Unit" | translate }}</label>
+            <label class="form-label">{{ "AREA_OF_UNIT" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -247,7 +247,7 @@
           </div>
           <div class="col-md-3">
             <label class="form-label">{{
-              "DM No (Affection Plan)" | translate
+              "DM_NO(AFFECTION_PLAN)" | translate
             }}</label>
             <input
               type="text"
@@ -258,7 +258,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'Floor No' | translate"
+              [label]="'FLOOR_NO' | translate"
               [options]="floorList"
               [bindToControl]="true"
               [form]="basicDetailsForm"
@@ -266,7 +266,7 @@
             ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Parking No" | translate }}</label>
+            <label class="form-label">{{ "PARKING_NO" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -276,7 +276,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'No of Balcony' | translate"
+              [label]="'NO_OF_BALCONY' | translate"
               [options]="balconyList"
               [bindToControl]="true"
               [form]="basicDetailsForm"
@@ -284,7 +284,7 @@
             ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Land No" | translate }}</label>
+            <label class="form-label">{{ "LAND_NO" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -294,7 +294,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'Unit Usage' | translate"
+              [label]="'UNIT_USAGE' | translate"
               [options]="unitUsageList"
               [bindToControl]="true"
               [form]="basicDetailsForm"
@@ -303,7 +303,7 @@
           </div>
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'Unit Type' | translate"
+              [label]="'UNIT_TYPE' | translate"
               [options]="unitTypeList"
               [bindToControl]="true"
               [form]="basicDetailsForm"
@@ -311,7 +311,7 @@
             ></app-form-select-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Sub Type / BHK" | translate }}</label>
+            <label class="form-label">{{ "SUB_TYPE_BHK" | translate }}</label>
             <input
               type="text"
               class="form-control"
