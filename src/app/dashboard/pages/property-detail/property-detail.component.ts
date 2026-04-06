@@ -11,7 +11,12 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-property-detail',
   standalone: true,
-  imports: [CommonModule, WhiteCardComponent, PropertyViewCardComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    WhiteCardComponent,
+    PropertyViewCardComponent,
+    TranslateModule,
+  ],
   templateUrl: './property-detail.component.html',
   styleUrl: './property-detail.component.css',
 })
@@ -37,7 +42,6 @@ export class PropertyDetailComponent implements OnInit {
     tableRows?: Record<string, string>[];
   }[] = [];
 
-
   // Documents
   documentsByType: Record<string, any[]> = {};
   docTypeNames: Record<string, string> = {};
@@ -55,10 +59,18 @@ export class PropertyDetailComponent implements OnInit {
   loadAll(): void {
     this.loading = true;
     forkJoin({
-      property: this.propertyService.getProperties({ property_id: this.propertyId }),
-      blocks: this.propertyService.getPropertyBlocks({ property_id: this.propertyId }),
-      images: this.propertyService.getPropertyImages({ property_id: this.propertyId }),
-      documents: this.propertyService.getPropertyDocuments({ property_id: this.propertyId }),
+      property: this.propertyService.getProperties({
+        property_id: this.propertyId,
+      }),
+      blocks: this.propertyService.getPropertyBlocks({
+        property_id: this.propertyId,
+      }),
+      images: this.propertyService.getPropertyImages({
+        property_id: this.propertyId,
+      }),
+      documents: this.propertyService.getPropertyDocuments({
+        property_id: this.propertyId,
+      }),
     }).subscribe({
       next: ({ property, blocks, images, documents }) => {
         const prop = property?.content || null;
@@ -66,14 +78,18 @@ export class PropertyDetailComponent implements OnInit {
         if (prop) {
           this.propertyName = prop.property_name || '';
           this.propertyCode = prop.code || '';
-          this.propertyLocation = [prop.address_line_1, prop.address_line_2, prop.landmark]
-            .filter(Boolean).join(', ') || '';
+          this.propertyLocation =
+            [prop.address_line_1, prop.address_line_2, prop.landmark]
+              .filter(Boolean)
+              .join(', ') || '';
           this.propertyStatus = prop.status === 'PUBLIC' ? 'Public' : 'Draft';
           this.propertyRent = prop.approx_rent
             ? `AED${Number(prop.approx_rent).toLocaleString('en-US', { maximumFractionDigits: 0 })}`
             : '';
 
-          this.propertyImages = (images?.content || []).map((img: any) => ({ imgSrc: img.url }));
+          this.propertyImages = (images?.content || []).map((img: any) => ({
+            imgSrc: img.url,
+          }));
           const blockList: any[] = blocks?.content || [];
 
           this.propertySections = [
@@ -82,9 +98,20 @@ export class PropertyDetailComponent implements OnInit {
               items: [
                 { label: 'Property Code', value: prop.code || '--' },
                 { label: 'Property Type', value: prop.property_type || '--' },
-                { label: 'No of Blocks', value: String(prop.no_of_blocks ?? '--') },
-                { label: 'No of Units', value: String(prop.no_of_units ?? '--') },
-                { label: 'Land Area', value: prop.land_area ? `${prop.land_area} ${prop.land_area_unit}` : '--' },
+                {
+                  label: 'No of Blocks',
+                  value: String(prop.no_of_blocks ?? '--'),
+                },
+                {
+                  label: 'No of Units',
+                  value: String(prop.no_of_units ?? '--'),
+                },
+                {
+                  label: 'Land Area',
+                  value: prop.land_area
+                    ? `${prop.land_area} ${prop.land_area_unit}`
+                    : '--',
+                },
                 { label: 'Land DM No', value: prop.land_dm_no || '--' },
                 { label: 'Plot No', value: prop.plot_no || '--' },
                 { label: 'Makani No', value: prop.makani_no || '--' },
@@ -99,9 +126,18 @@ export class PropertyDetailComponent implements OnInit {
               items: blockList.length
                 ? blockList.flatMap((b: any, i: number) => [
                     { label: `Block ${i + 1}`, value: b.block_name || '--' },
-                    { label: 'No of Floors', value: String(b.no_of_floors ?? '--') },
-                    { label: 'No of Parking', value: String(b.no_of_parking ?? '--') },
-                    { label: 'No of Units', value: String(b.no_of_units ?? '--') },
+                    {
+                      label: 'No of Floors',
+                      value: String(b.no_of_floors ?? '--'),
+                    },
+                    {
+                      label: 'No of Parking',
+                      value: String(b.no_of_parking ?? '--'),
+                    },
+                    {
+                      label: 'No of Units',
+                      value: String(b.no_of_units ?? '--'),
+                    },
                   ])
                 : [{ label: 'Blocks', value: 'No blocks added' }],
             },
@@ -120,7 +156,9 @@ export class PropertyDetailComponent implements OnInit {
 
         this.loading = false;
       },
-      error: () => { this.loading = false; },
+      error: () => {
+        this.loading = false;
+      },
     });
   }
 

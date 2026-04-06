@@ -1,4 +1,12 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+} from '@angular/core';
 import {
   NgApexchartsModule,
   ApexAxisChartSeries,
@@ -13,6 +21,8 @@ import {
   ApexTooltip,
   ChartComponent,
 } from 'ng-apexcharts';
+import { Subject, takeUntil } from 'rxjs';
+import { ThemeService } from '../../../../theme.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -35,8 +45,15 @@ export type ChartOptions = {
   templateUrl: './line.component.html',
   styleUrls: ['./line.component.css'],
 })
-export class LineChartComponent implements OnChanges {
+export class LineChartComponent
+  implements OnChanges, OnDestroy, OnInit, AfterViewInit
+{
   @ViewChild('chart') chart!: ChartComponent;
+
+  private destroy$ = new Subject<void>();
+  private viewReady = false;
+
+  public chartOptions: Partial<ChartOptions>;
 
   @Input() monthlyData: {
     monthName: string;
@@ -44,90 +61,19 @@ export class LineChartComponent implements OnChanges {
     receivedAmount: number;
     dueAmount: number;
   }[] = [];
-  chartOptions: Partial<ChartOptions> = {
-    series: [
-      {
-        name: 'Total Amount',
-        data: [60, 95, 70, 50, 90, 72],
-      },
 
-      {
-        name: 'Received Amount',
-        data: [30, 75, 100, 50, 45, 90],
-      },
-      {
-        name: 'Due Amount',
-        data: [100, 50, 20, 45, 25, 80],
-      },
-    ],
-    chart: {
-      type: 'line',
-      height: 220,
-      toolbar: { show: false },
-      zoom: {
-        enabled: false,
-      },
+  constructor(private themeService: ThemeService) {
+    this.chartOptions = this.getBaseOptions();
+  }
 
-      animations: {
-        enabled: false,
-      },
-    },
-    stroke: {
-      width: 3,
-      curve: 'smooth',
-    },
-    markers: {
-      size: 4,
-      hover: { size: 6 },
-    },
-    dataLabels: { enabled: false },
-    xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    },
-    yaxis: {
-      min: 0,
-      max: 100,
-      tickAmount: 4,
-    },
-    colors: ['#1988FD', '#00B7AD', '#4B9C5E'],
-    legend: {
-      position: 'top',
-      horizontalAlign: 'center',
-      formatter: function (seriesName: string, opts: any) {
-        const data = opts.w.globals.series[opts.seriesIndex];
-        const total = data.reduce((a: number, b: number) => a + b, 0);
-        const percent = Math.round((total / 600) * 100);
-        return `${seriesName}   ${percent}%`;
-      },
-      labels: {
-        colors: '#344046',
-      },
-    },
-    grid: {
-      strokeDashArray: 0,
-    },
-  };
-
-  ngOnChanges() {
-    const data = this.monthlyData || [];
-
-    const allMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const months = data.length === 12
-      ? data.map((m, i) => m.monthName || allMonths[i])
-      : data.map((m) => m.monthName || allMonths[0]);
-
-    const totalAmount    = data.map((m) => m.totalAmount    ?? 0);
-    const receivedAmount = data.map((m) => m.receivedAmount ?? 0);
-    const dueAmount      = data.map((m) => m.dueAmount      ?? 0);
-
-    const monthsWithData = data.filter((m) => (m.totalAmount ?? 0) > 0);
-    const totalPct    = monthsWithData.length > 0 ? 100 : 0;
-    const receivedPct = monthsWithData.length
-      ? Math.round(monthsWithData.reduce((a, m) => a + (m.receivedAmount ?? 0), 0) / monthsWithData.length)
-      : 0;
-    const duePct = monthsWithData.length ? 100 - receivedPct : 0;
-
-    this.chartOptions = {
+  // ✅ BASE OPTIONS
+  private getBaseOptions(): Partial<ChartOptions> {
+    return {
+      series: [
+        { name: 'Total Amount', data: [] },
+        { name: 'Received Amount', data: [] },
+        { name: 'Due Amount', data: [] },
+      ],
       chart: {
         type: 'line',
         height: 220,
@@ -138,33 +84,163 @@ export class LineChartComponent implements OnChanges {
       stroke: { width: 3, curve: 'smooth' },
       markers: { size: 4, hover: { size: 6 } },
       dataLabels: { enabled: false },
-      colors: ['#1988FD', '#00B7AD', '#FF6B35'],
-      series: [
-        { name: `Total Amount`, data: totalAmount },
-        { name: `Received Amount`, data: receivedAmount },
-        { name: `Due Amount`, data: dueAmount },
-      ],
-      xaxis: { categories: months },
+      xaxis: {
+        categories: [],
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        labels: {
+          style: { colors: '#344046' },
+        },
+      },
       yaxis: {
         min: 0,
         max: 100,
         tickAmount: 4,
-        labels: { formatter: (val: number) => `${val}%` },
+        labels: {
+          style: { colors: '#344046' },
+        },
       },
-      tooltip: {
-        y: { formatter: (val: number) => `${val}%` },
-      },
+      colors: ['#1988FD', '#00B7AD', '#4B9C5E'],
       legend: {
         position: 'top',
         horizontalAlign: 'center',
-        formatter: (_name: string, opts: any) => {
-          const pcts = [totalPct, receivedPct, duePct];
-          const names = ['Total Amount', 'Received Amount', 'Due Amount'];
-          return `${names[opts.seriesIndex]}   ${pcts[opts.seriesIndex]}%`;
-        },
         labels: { colors: '#344046' },
+        formatter: function (seriesName: string, opts: any) {
+          const data = opts.w.globals.series[opts.seriesIndex];
+          const total = data.reduce((a: number, b: number) => a + b, 0);
+          const percent = Math.round((total / 600) * 100);
+          return `${seriesName}   ${percent}%`;
+        },
       },
-      grid: { strokeDashArray: 0 },
+      grid: {
+        strokeDashArray: 0,
+        borderColor: '#e0e0e0',
+      },
+      tooltip: {
+        theme: 'light',
+      },
     };
+  }
+
+  // ✅ NGONINIT (DARK MODE HANDLING)
+  ngOnInit() {
+    this.themeService.isDarkMode$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isDark) => {
+        this.applyTheme(isDark);
+      });
+  }
+
+  private applyTheme(isDark: boolean) {
+    const axisColor = isDark ? '#FFFFFF' : '#344046';
+    const gridColor = isDark ? '#2c2c2c' : '#e0e0e0';
+
+    this.chartOptions = {
+      ...this.chartOptions,
+      xaxis: {
+        ...this.chartOptions.xaxis,
+        labels: { style: { colors: axisColor } },
+        axisBorder: { show: false, color: axisColor },
+        axisTicks: { show: false },
+      },
+      yaxis: {
+        ...this.chartOptions.yaxis,
+        labels: {
+          style: { colors: axisColor },
+        },
+      },
+      legend: {
+        ...this.chartOptions.legend,
+        labels: { colors: axisColor },
+      },
+      grid: {
+        borderColor: gridColor,
+      },
+      tooltip: {
+        theme: isDark ? 'dark' : 'light',
+      },
+    };
+
+    if (this.viewReady && this.chart) {
+      this.chart.updateOptions(
+        {
+          xaxis: {
+            labels: { style: { colors: axisColor } },
+          },
+          yaxis: {
+            labels: { style: { colors: axisColor } },
+          },
+          legend: {
+            labels: { colors: axisColor },
+          },
+          grid: {
+            borderColor: gridColor,
+          },
+          tooltip: {
+            theme: isDark ? 'dark' : 'light',
+          },
+        },
+        true,
+        true,
+      );
+    }
+  }
+
+  // ✅ DATA UPDATE
+  ngOnChanges() {
+    const data = this.monthlyData || [];
+
+    const allMonths = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    const months =
+      data.length === 12
+        ? data.map((m, i) => m.monthName || allMonths[i])
+        : data.map((m) => m.monthName || allMonths[0]);
+
+    const totalAmount = data.map((m) => m.totalAmount ?? 0);
+    const receivedAmount = data.map((m) => m.receivedAmount ?? 0);
+    const dueAmount = data.map((m) => m.dueAmount ?? 0);
+
+    this.chartOptions = {
+      ...this.chartOptions,
+      series: [
+        { name: 'Total Amount', data: totalAmount },
+        { name: 'Received Amount', data: receivedAmount },
+        { name: 'Due Amount', data: dueAmount },
+      ],
+      xaxis: {
+        ...this.chartOptions.xaxis,
+        categories: months,
+      },
+    };
+
+    if (this.viewReady && this.chart) {
+      this.chart.updateSeries(this.chartOptions.series as any);
+      this.chart.updateOptions({
+        xaxis: { categories: months },
+      });
+    }
+  }
+
+  ngAfterViewInit() {
+    this.viewReady = true;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

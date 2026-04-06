@@ -21,6 +21,7 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { OwnerService } from '../../services/owner.service';
 import { SharedService } from '../../../shared.service';
 import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-owner-detail',
@@ -40,26 +41,27 @@ import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component'
     TableSelectComponent,
     TableActionButtonComponent,
     TenantDetailComponent,
+    TranslateModule,
   ],
   templateUrl: './owner-detail.component.html',
   styleUrl: './owner-detail.component.css',
 })
 export class OwnerDetailComponent implements OnInit {
-  private route       = inject(ActivatedRoute);
-  private router      = inject(Router);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private ownerService = inject(OwnerService);
   private sharedService = inject(SharedService);
-  private destroyRef  = inject(DestroyRef);
+  private destroyRef = inject(DestroyRef);
 
-  loading       = signal(true);
-  propsLoading  = signal(false);
-  owner: any    = null;
+  loading = signal(true);
+  propsLoading = signal(false);
+  owner: any = null;
   properties: any[] = [];
 
   totalRecords = 0;
-  rowsPerPage  = 10;
-  currentPage  = 1;
-  totalPages   = 1;
+  rowsPerPage = 10;
+  currentPage = 1;
+  totalPages = 1;
   rowsPerPageOptions = [10, 25, 50];
   componentName = 'OwnerDetailComponent';
 
@@ -70,10 +72,13 @@ export class OwnerDetailComponent implements OnInit {
   private searchSubject$ = new Subject<string>();
   private searchText = '';
   private ownerId!: number;
-
+  constructor(private translate: TranslateService) {}
   ngOnInit(): void {
     this.ownerId = +(this.route.snapshot.paramMap.get('owner_id') || 0);
-    if (!this.ownerId) { this.router.navigate(['/dashboard/owners']); return; }
+    if (!this.ownerId) {
+      this.router.navigate(['/dashboard/owners']);
+      return;
+    }
 
     this.sharedService.setTitle('PAGE_TITLE.OWNERS');
     this.loadOwner();
@@ -90,10 +95,13 @@ export class OwnerDetailComponent implements OnInit {
         this.loadProperties();
       });
   }
-
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   loadOwner() {
     this.loading.set(true);
-    this.ownerService.getOwners({ owner_id: this.ownerId })
+    this.ownerService
+      .getOwners({ owner_id: this.ownerId })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
@@ -114,24 +122,30 @@ export class OwnerDetailComponent implements OnInit {
     };
     if (this.searchText) params['search'] = this.searchText;
 
-    this.ownerService.getOwnerDetails(params)
+    this.ownerService
+      .getOwnerDetails(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           // owner_id response: { content: { owner_details: {}, table: [] } }
           const c = resp?.content;
-          this.properties   = c?.table ?? (Array.isArray(c) ? c : []);
-          this.totalRecords = resp?.pagination?.total_records ?? this.properties.length;
-          this.totalPages   = resp?.pagination?.total_pages  ?? 1;
+          this.properties = c?.table ?? (Array.isArray(c) ? c : []);
+          this.totalRecords =
+            resp?.pagination?.total_records ?? this.properties.length;
+          this.totalPages = resp?.pagination?.total_pages ?? 1;
           this.propsLoading.set(false);
         },
         error: () => this.propsLoading.set(false),
       });
   }
 
-  onRefresh() { this.loadProperties(); }
+  onRefresh() {
+    this.loadProperties();
+  }
 
-  searchTextChange(text: string) { this.searchSubject$.next(text); }
+  searchTextChange(text: string) {
+    this.searchSubject$.next(text);
+  }
 
   onPageChange(event: PageChange) {
     if (event.componentName !== this.componentName) return;
@@ -141,12 +155,14 @@ export class OwnerDetailComponent implements OnInit {
 
   onPageSizeChange(event: PageSizeChange) {
     if (event.componentName !== this.componentName) return;
-    this.rowsPerPage  = event.pageSize;
-    this.currentPage  = 1;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
     this.loadProperties();
   }
 
-  goBack() { this.router.navigate(['/dashboard/owners']); }
+  goBack() {
+    this.router.navigate(['/dashboard/owners']);
+  }
 
   viewProperty(prop: any) {
     const id = prop.property_id || prop.id;
@@ -167,7 +183,9 @@ export class OwnerDetailComponent implements OnInit {
 
   viewContract(prop: any) {
     const url = prop.pdf_url;
-    if (url) { window.open(url, '_blank'); }
+    if (url) {
+      window.open(url, '_blank');
+    }
   }
 
   editUnit(prop: any) {
@@ -176,7 +194,9 @@ export class OwnerDetailComponent implements OnInit {
 
   downloadContract(prop: any) {
     const url = prop.pdf_download_url;
-    if (!url) { return; }
+    if (!url) {
+      return;
+    }
     const a = document.createElement('a');
     a.href = url;
     a.download = 'agreement.pdf';
@@ -185,10 +205,14 @@ export class OwnerDetailComponent implements OnInit {
   }
 
   get initial(): string {
-    return (this.owner?.name || this.owner?.first_name || '?').charAt(0).toUpperCase();
+    return (this.owner?.name || this.owner?.first_name || '?')
+      .charAt(0)
+      .toUpperCase();
   }
 
   statusClass(status: string): string {
-    return status?.toLowerCase() === 'occupied' ? 'badge-occupied' : 'badge-vacant';
+    return status?.toLowerCase() === 'occupied'
+      ? 'badge-occupied'
+      : 'badge-vacant';
   }
 }

@@ -119,7 +119,7 @@
                   [options]="rentalPropertyOptions"
                   key="key"
                   value="value"
-                  [placeholder]="'Property: All'"
+                  [placeholder]="'PROPERTY_ALL' | translate"
                   [selectedOption]="rentalSelectedProperty"
                   (optionSelected)="onRentalPropertySelected($event)"
                   [isFilter]="true"
@@ -130,7 +130,7 @@
                   [options]="rentalBlockOptions"
                   key="key"
                   value="value"
-                  [placeholder]="'Tower: All'"
+                  [placeholder]="'TOWER_ALL' | translate"
                   [selectedOption]="rentalSelectedBlock"
                   (optionSelected)="onRentalBlockSelected($event)"
                   [isFilter]="true"
@@ -141,7 +141,7 @@
                   [options]="rentalUnitOptions"
                   key="key"
                   value="value"
-                  [placeholder]="'Room No: All'"
+                  [placeholder]="'ROOM_NO_ALL' | translate"
                   [selectedOption]="rentalSelectedUnit"
                   (optionSelected)="onRentalUnitSelected($event)"
                   [isFilter]="true"
@@ -168,9 +168,14 @@
             (click)="onLeaseClick(l)"
           >
             <div class="lease-header">
-              <h4>{{ l.tenant?.name || '—' }} | {{ l.property?.name || '—' }} | {{ l.unit?.name || '—' }}</h4>
+              <h4>
+                {{ l.tenant?.name || "—" }} | {{ l.property?.name || "—" }} |
+                {{ l.unit?.name || "—" }}
+              </h4>
               <div class="right">
-                <span class="lease-no">{{ "LEASE_NO" | translate }}: {{ l.code }}</span>
+                <span class="lease-no"
+                  >{{ "LEASE_NO" | translate }}: {{ l.code }}</span
+                >
                 <span class="status" [ngClass]="l.lease_status?.toLowerCase()">
                   {{ l.lease_status }}
                 </span>
@@ -180,7 +185,7 @@
             <div class="lease-grid">
               <div>
                 <label>{{ "TENANT_NO" | translate }}</label>
-                <span>{{ l.tenant?.code || '—' }}</span>
+                <span>{{ l.tenant?.code || "—" }}</span>
               </div>
 
               <div>
@@ -195,12 +200,12 @@
 
               <div>
                 <label>{{ "UNIT_TYPE" | translate }}</label>
-                <span>{{ l.property?.block_name || '—' }}</span>
+                <span>{{ l.property?.block_name || "—" }}</span>
               </div>
 
               <div>
                 <label>{{ "YEAR_RENT" | translate }}</label>
-                <span>{{ l.financials?.annual_amount || '—' }}</span>
+                <span>{{ l.financials?.annual_amount || "—" }}</span>
               </div>
 
               <div>
@@ -215,7 +220,7 @@
 
               <div>
                 <label>{{ "TOTAL_RENT" | translate }}</label>
-                <strong>{{ l.financials?.rent || '—' }}</strong>
+                <strong>{{ l.financials?.rent || "—" }}</strong>
               </div>
             </div>
           </div>

@@ -285,15 +285,21 @@
         <div class="dues-summary">
           <div class="dues-stat">
             <span class="dues-stat-label">Total Amount</span>
-            <span class="dues-stat-value total">AED {{ duesOverall.total_amount | number:'1.0-0' }}</span>
+            <span class="dues-stat-value total"
+              >AED {{ duesOverall.total_amount | number: "1.0-0" }}</span
+            >
           </div>
           <div class="dues-stat">
             <span class="dues-stat-label">Received</span>
-            <span class="dues-stat-value received">AED {{ duesOverall.received_amount | number:'1.0-0' }}</span>
+            <span class="dues-stat-value received"
+              >AED {{ duesOverall.received_amount | number: "1.0-0" }}</span
+            >
           </div>
           <div class="dues-stat">
             <span class="dues-stat-label">Due</span>
-            <span class="dues-stat-value due">AED {{ duesOverall.due_amount | number:'1.0-0' }}</span>
+            <span class="dues-stat-value due"
+              >AED {{ duesOverall.due_amount | number: "1.0-0" }}</span
+            >
           </div>
         </div>
         <app-line-chart [monthlyData]="duesData"></app-line-chart>
@@ -342,17 +348,23 @@
                     <form>
                       <div class="row g-3">
                         <div class="col-md-6">
-                          <label class="form-label">{{ "PROPERTY" | translate }}</label>
+                          <label class="form-label">{{
+                            "PROPERTY" | translate
+                          }}</label>
                           <app-custom-select
                             [options]="properties"
                             key="key"
                             value="value"
                             [selectedOption]="chequeVisSelectedProperty"
-                            (optionSelected)="onChequeVisPropertySelected($event)"
+                            (optionSelected)="
+                              onChequeVisPropertySelected($event)
+                            "
                           ></app-custom-select>
                         </div>
                         <div class="col-md-6">
-                          <label class="form-label">{{ "UNIT" | translate }}</label>
+                          <label class="form-label">{{
+                            "UNIT" | translate
+                          }}</label>
                           <app-custom-select
                             [options]="chequeVisUnits"
                             key="key"
@@ -362,7 +374,9 @@
                           ></app-custom-select>
                         </div>
                         <div class="col-md-6">
-                          <label class="form-label">{{ "STATUS" | translate }}</label>
+                          <label class="form-label">{{
+                            "STATUS" | translate
+                          }}</label>
                           <app-custom-select
                             [options]="chequeStatusOptions"
                             key="key"
@@ -379,8 +393,12 @@
                                   type="radio"
                                   name="chequeVisPeriod"
                                   value="month"
-                                  [checked]="chequeVisSelectedPeriodType === 'month'"
-                                  (change)="chequeVisSelectedPeriodType = 'month'"
+                                  [checked]="
+                                    chequeVisSelectedPeriodType === 'month'
+                                  "
+                                  (change)="
+                                    chequeVisSelectedPeriodType = 'month'
+                                  "
                                 />
                                 <span>{{ "MONTH" | translate }}</span>
                               </label>
@@ -389,8 +407,12 @@
                                   type="radio"
                                   name="chequeVisPeriod"
                                   value="last6"
-                                  [checked]="chequeVisSelectedPeriodType === 'last6'"
-                                  (change)="chequeVisSelectedPeriodType = 'last6'"
+                                  [checked]="
+                                    chequeVisSelectedPeriodType === 'last6'
+                                  "
+                                  (change)="
+                                    chequeVisSelectedPeriodType = 'last6'
+                                  "
                                 />
                                 <span>{{ "LAST_6_MONTHS" | translate }}</span>
                               </label>
@@ -399,16 +421,25 @@
                                   type="radio"
                                   name="chequeVisPeriod"
                                   value="year"
-                                  [checked]="chequeVisSelectedPeriodType === 'year'"
-                                  (change)="chequeVisSelectedPeriodType = 'year'"
+                                  [checked]="
+                                    chequeVisSelectedPeriodType === 'year'
+                                  "
+                                  (change)="
+                                    chequeVisSelectedPeriodType = 'year'
+                                  "
                                 />
                                 <span>{{ "YEARS" | translate }}</span>
                               </label>
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-6" *ngIf="chequeVisSelectedPeriodType === 'month'">
-                          <label class="form-label">{{ "MONTH" | translate }}</label>
+                        <div
+                          class="col-md-6"
+                          *ngIf="chequeVisSelectedPeriodType === 'month'"
+                        >
+                          <label class="form-label">{{
+                            "MONTH" | translate
+                          }}</label>
                           <input
                             type="month"
                             class="form-control"
@@ -416,8 +447,13 @@
                             name="chequeVisMonth"
                           />
                         </div>
-                        <div class="col-md-6" *ngIf="chequeVisSelectedPeriodType === 'year'">
-                          <label class="form-label">{{ "YEARS" | translate }}</label>
+                        <div
+                          class="col-md-6"
+                          *ngIf="chequeVisSelectedPeriodType === 'year'"
+                        >
+                          <label class="form-label">{{
+                            "YEARS" | translate
+                          }}</label>
                           <input
                             type="number"
                             class="form-control"
@@ -538,7 +574,9 @@
     <div class="col-lg-7">
       <app-white-card
         title="{{ 'OTHER TYPE PAYMENTS' | translate }}"
-        subtitle="Total Revenue - AED {{ paymentTotalRevenue | number:'1.0-0' }}"
+        subtitle="Total Revenue - AED {{
+          paymentTotalRevenue | number: '1.0-0'
+        }}"
         [showActions]="true"
         customClass="pb-0"
       >

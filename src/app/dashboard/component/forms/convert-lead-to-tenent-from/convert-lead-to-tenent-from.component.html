@@ -1,29 +1,30 @@
 <ng-container *ngIf="leadData">
-
   <!-- Platform row -->
   <div class="platform-row">
     <span class="label">Platform</span>
-    <app-platfrom-badge [platform]="{ type: getPlatformType(leadData.platform) }"></app-platfrom-badge>
+    <app-platfrom-badge
+      [platform]="{ type: getPlatformType(leadData.platform) }"
+    ></app-platfrom-badge>
   </div>
 
   <!-- Tenant Details -->
   <div class="section tenant-section">
-    <div class="section-title">Tenant Details</div>
+    <div class="section-title">{{ "TENANT_DETAILS" | translate }}</div>
     <div class="details-grid">
       <div class="item">
-        <label>Name :</label>
-        <p>{{ leadData.name || '—' }}</p>
+        <label>{{ "NAME" | translate }} :</label>
+        <p>{{ leadData.name || "—" }}</p>
       </div>
       <div class="item">
-        <label>Email :</label>
-        <p>{{ leadData.email || '—' }}</p>
+        <label>{{ "EMAIL" | translate }} :</label>
+        <p>{{ leadData.email || "—" }}</p>
       </div>
       <div class="item">
-        <label>Contact :</label>
-        <p>{{ leadData.contact_number || '—' }}</p>
+        <label>{{ "CONTACT_NUMBER" | translate }} :</label>
+        <p>{{ leadData.contact_number || "—" }}</p>
       </div>
       <div class="item">
-        <label>Status :</label>
+        <label>{{ "STATUS" | translate }} :</label>
         <p>{{ getStatusLabel(leadData.status) }}</p>
       </div>
     </div>
@@ -31,25 +32,24 @@
 
   <!-- Property Details -->
   <div class="section property-section">
-    <div class="section-title">Property Details</div>
+    <div class="section-title">{{ "PROPERTY_DETAILS" | translate }}</div>
     <div class="details-grid">
       <div class="item">
-        <label>Property :</label>
-        <p>{{ leadData.property_name || '—' }}</p>
+        <label>{{ "PROPERTY_NAME" | translate }} :</label>
+        <p>{{ leadData.property_name || "—" }}</p>
       </div>
       <div class="item">
-        <label>Unit :</label>
-        <p>{{ leadData.unit_name || '—' }}</p>
+        <label>{{ "UNIT" | translate }} :</label>
+        <p>{{ leadData.unit_name || "—" }}</p>
       </div>
       <div class="item">
-        <label>Lead Type :</label>
-        <p>{{ leadData.lead_type || '—' }}</p>
+        <label>{{ "LEAD_TYPE" | translate }} :</label>
+        <p>{{ leadData.lead_type || "—" }}</p>
       </div>
       <div class="item">
-        <label>Rent :</label>
-        <p>{{ leadData.rent ? 'AED ' + leadData.rent : '—' }}</p>
+        <label>{{ "RENT" | translate }} :</label>
+        <p>{{ leadData.rent ? "AED " + leadData.rent : "—" }}</p>
       </div>
     </div>
   </div>
-
 </ng-container>

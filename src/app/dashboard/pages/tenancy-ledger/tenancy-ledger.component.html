@@ -4,7 +4,7 @@
       <div class="row g-3 align-items-center">
         <div class="col-md">
           <app-table-title
-            [title]="'All Properties & Tenants' | translate"
+            [title]="'ALL_PROPERTIES_AND_TENANTS' | translate"
             [subtitle]="'(' + totalRecords + ')'"
             (onRefresh)="onRefresh()"
           ></app-table-title>
@@ -35,22 +35,23 @@
         <table class="table table-bordered tenancy-table">
           <thead>
             <tr>
-              <th>Property ID</th>
+              <th>{{ "PROPERTY_ID" | translate }}</th>
               <th>
-                Property Name <i><app-sorting-icon></app-sorting-icon></i>
+                {{ "PROPERTY_NAME" | translate
+                }}<i><app-sorting-icon></app-sorting-icon></i>
               </th>
 
-              <th>Blocks /Tower</th>
-              <th>Unit</th>
-              <th>Tenant Name</th>
-              <th>Agreement Status</th>
-              <th>Dimension</th>
-              <th>Property Status</th>
-              <th>PMC</th>
-              <th>Rental Amount(AED)</th>
-              <th>Rera Index(AED)</th>
-              <th>Platfrom</th>
-              <th>Action</th>
+              <th>{{ "BLOCKS_TOWERS" | translate }}</th>
+              <th>{{ "UNIT" | translate }}</th>
+              <th>{{ "TENANT_NAME" | translate }}</th>
+              <th>{{ "AGREEMENT_STATUS" | translate }}</th>
+              <th>{{ "DIMENSION" | translate }}</th>
+              <th>{{ "PROPERTY_STATUS" | translate }}</th>
+              <th>{{ "PMC" | translate }}</th>
+              <th>{{ "RENTAL_AMOUNT" | translate }}</th>
+              <th>{{ "RERA_INDEX" | translate }}</th>
+              <th>{{ "PLATFORM" | translate }}</th>
+              <th>{{ "ACTION" | translate }}</th>
             </tr>
           </thead>
           <tbody>
@@ -589,9 +590,12 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="Search here..." />
+            <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
 
-            <app-custom-dropdown [title]="'Receipt'" [hasIcon]="true">
+            <app-custom-dropdown
+              [title]="'RECEIPT' | translate"
+              [hasIcon]="true"
+            >
               <app-receipt-icon></app-receipt-icon>
             </app-custom-dropdown>
             <app-table-filter-btn
@@ -628,8 +632,8 @@
               <th>{{ "PURPOSE" | translate }}</th>
               <th>{{ "STATUS" | translate }}</th>
               <th>{{ "AMOUNT" | translate }}</th>
-              <th>{{ "Additional Charges" }}</th>
-              <th>{{ "Total Amount" | translate }}</th>
+              <th>{{ "ADDITIONAL_CHARGES" | translate }}</th>
+              <th>{{ "TOTAL_AMOUNT" | translate }}</th>
             </tr>
           </thead>
 

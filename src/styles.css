@@ -15,6 +15,7 @@
   --greyDarkBg1: #536c76;
   --lightBg: #e9e9e9;
   --lightBg1: #f4f4f4;
+  --color-black: #000000;
   --lightBg2: #f5f7fb;
   --lightDarkBg: #445860;
   --muteBg: #f5f7f8;
@@ -181,7 +182,12 @@
   --greenColor: #16a34a;
   --purpleColor: #7c3aed;
   --whatsappColor: #25d366;
-
+  --logout-modal-bg: linear-gradient(
+    231.42deg,
+    #f5f8ff -1%,
+    #d9f3ff 54.04%,
+    #f5f8ff 99.08%
+  );
   --borderLight: #e5e7eb;
   --borderExtraLight: #eeeeee;
   --borderSoft: #eceff4;
@@ -232,7 +238,7 @@
   /* Shadow */
   --shadowSoft: rgba(0, 0, 0, 0.1);
   --cardBg: #ffffff;
-
+  --other-charges-bg1: black;
   /* Borders */
   --cardBorder: #eef1f5;
 
@@ -477,6 +483,7 @@
   --unit-bg: #ecf0f2;
   --unit-text: #000000;
   --table-header-bg: #0c6ce9;
+  --table-header-bg1: #0c6ce9;
   --top-actions-bg: #ffffff;
   --top-actions-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   --btn-outline-border: #d0d5dd;
@@ -535,7 +542,7 @@
 
   /* Table */
   --table-th-bg: #f8fafc;
-  --table-th-bg: #eef2f5;
+  --table-th-bg1: #eef2f5;
   --table-th-text: #374151;
   --card-bg: var(--whiteBg, #ffffff);
   --card-border: #e2e8f0;
@@ -1494,6 +1501,7 @@
   --whiteBg: #121212;
   --blackBg: #ffffff;
   --greyBg: #1e1e1e;
+  --color-black: #ffffff;
   --greyLightBg: #9aa4a8;
   --greyDarkBg: #2a2a2a;
   --greyDarkBg1: #3a4a50;
@@ -1569,13 +1577,13 @@
   --muteBorder: #2a2a2a;
   --muteBorder1: #333333;
   --muteBorder2: #3a3f45;
-
+  --other-charges-bg1: white;
   --formBorder: #3a3f45;
   --activeBorder: #4da3ff;
   --activeLightBorder: #66b3ff;
   --activeDarkBorder: #3b8be0;
   --btnBorder: #3a3f45;
-
+  --logout-modal-bg: #1e293b;
   --purpleBorder: #6a5be2;
   --greenBorder: #5fcf8b;
   --greenLightBorder: #6fe3a0;
@@ -1975,7 +1983,8 @@
   --block-text: #e9edef;
   --unit-bg: #2a3942;
   --unit-text: #e9edef;
-  --table-header-bg: ##1f2937;
+  --table-header-bg: #1f2937;
+  --table-header-bg1: #1f2937;
   --top-actions-bg: #0b141a;
   --top-actions-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   --btn-outline-border: #3b4a54;
@@ -2028,7 +2037,7 @@
   --approve-bg: #22c55e;
   --table-th-bg: #1f2937;
   --btn-text: #ffffff;
-  --table-th-bg: #1f2937;
+  --table-th-bg1: #2a2f3a;
   --table-th-text: #d1d5db;
 
   --card-bg: #111827;
@@ -4868,12 +4877,7 @@ body.dark-theme .dropdown-menu {
 }
 
 .logoutMdlBody {
-  background: linear-gradient(
-    231.42deg,
-    #f5f8ff -1%,
-    #d9f3ff 54.04%,
-    #f5f8ff 99.08%
-  );
+  background: var(--logout-modal-bg);
   padding: 30px 20px 20px 20px;
   border-radius: 6px;
 }
@@ -4888,11 +4892,7 @@ body.dark-theme .dropdown-menu {
 }
 
 .theme-manager .logoutMdlBody {
-  background: radial-gradient(
-    50.09% 62.8% at 50% 47.83%,
-    #f9e7ff 0%,
-    #f5f8ff 100%
-  );
+  background: var(--logout-modal-bg);
 }
 
 .theme-tenant .logoutMdlBody {
@@ -4904,7 +4904,7 @@ body.dark-theme .dropdown-menu {
 }
 
 .logoutMdlInfo i {
-  background-color: var(--whiteBg);
+  background-color: #ffff;
   color: var(--greyText5);
   width: 60px;
   min-width: 60px;
@@ -6337,4 +6337,13 @@ body.dark-theme .accordion-button::after {
 body.dark-theme .btn-close {
   filter: invert(1);
   opacity: 1;
+}
+
+.dark-mode .charges-table td,
+.dark-mode .charges-table th {
+  color: white !important;
+}
+
+table.charges-table tbody td {
+  color: var(--text-black) !important;
 }

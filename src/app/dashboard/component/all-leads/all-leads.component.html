@@ -3,47 +3,79 @@
     <div class="cmmnTblHdr">
       <div class="row g-3 align-items-center">
         <div class="col-md">
-          <app-table-title [title]="'ALL_LEADS' | translate" [subtitle]="'(' + totalRecords + ')'"
-            (onRefresh)="onRefresh()"></app-table-title>
+          <app-table-title
+            [title]="'ALL_LEADS' | translate"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="{{ 'SEARCH_HERE' | translate }}"
-              (onValueChange)="searchTextChange($event)" />
+            <app-table-search
+              placeholder="{{ 'SEARCH_HERE' | translate }}"
+              (onValueChange)="searchTextChange($event)"
+            />
             <app-filter-popup-btn #filterPopup>
               <ng-container form>
                 <div class="row g-3">
                   <div class="col-12">
                     <label class="form-label">Status</label>
-                    <app-custom-select [options]="statusOptions" key="key" value="value" placeholder="Select status"
-                      (optionSelected)="filterStatus = $event?.key">
+                    <app-custom-select
+                      [options]="statusOptions"
+                      key="key"
+                      value="value"
+                      placeholder="Select status"
+                      (optionSelected)="filterStatus = $event?.key"
+                    >
                     </app-custom-select>
                   </div>
                   <div class="col-12">
                     <label class="form-label">Platform</label>
-                    <app-custom-select [options]="platformOptions" key="key" value="value" placeholder="Select platform"
-                      (optionSelected)="filterPlatform = $event?.key">
+                    <app-custom-select
+                      [options]="platformOptions"
+                      key="key"
+                      value="value"
+                      placeholder="Select platform"
+                      (optionSelected)="filterPlatform = $event?.key"
+                    >
                     </app-custom-select>
                   </div>
                   <div class="col-12">
                     <label class="form-label">Lead Type</label>
-                    <app-custom-select [options]="leadTypeOptions" key="key" value="value" placeholder="Select type"
-                      (optionSelected)="filterLeadType = $event?.key">
+                    <app-custom-select
+                      [options]="leadTypeOptions"
+                      key="key"
+                      value="value"
+                      placeholder="Select type"
+                      (optionSelected)="filterLeadType = $event?.key"
+                    >
                     </app-custom-select>
                   </div>
                 </div>
               </ng-container>
               <ng-container action>
-                <button type="button" class="btn btnCommon" (click)="removeFilter(); filterPopup.closePopup()">
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter(); filterPopup.closePopup()"
+                >
                   Remove All
                 </button>
-                <button type="button" class="btn btnCommon" (click)="applyFilter(); filterPopup.closePopup()">
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter(); filterPopup.closePopup()"
+                >
                   Apply
                 </button>
               </ng-container>
             </app-filter-popup-btn>
 
-            <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true" (clicked)="handleExportClick()">
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
+            >
               <app-export-icon />
             </app-table-filter-btn>
           </div>
@@ -86,10 +118,13 @@
               <td>{{ lead.code }}</td>
               <td>{{ lead.created_at || "--" }}</td>
               <td>
-                <app-table-img-item [img]="
+                <app-table-img-item
+                  [img]="
                     lead.property_thumbnail ||
                     'assets/property/property-img-default.svg'
-                  " [title]="lead.property_name" />
+                  "
+                  [title]="lead.property_name"
+                />
               </td>
               <td>{{ lead.unit_name }}</td>
               <td>{{ lead.rent || "--" }}</td>
@@ -97,24 +132,40 @@
               <td>{{ lead.contact_number }}</td>
               <td>{{ lead.email }}</td>
               <td>
-                <app-badge [title]="getStatusBadge(lead.status).title" [status]="getStatusBadge(lead.status).color"
-                  [showIcon]="true" [enableBg]="true">
+                <app-badge
+                  [title]="getStatusBadge(lead.status).title"
+                  [status]="getStatusBadge(lead.status).color"
+                  [showIcon]="true"
+                  [enableBg]="true"
+                >
                 </app-badge>
               </td>
               <td>
-                <app-platfrom-badge [platform]="{ type: getPlatformType(lead.platform) }">
+                <app-platfrom-badge
+                  [platform]="{ type: getPlatformType(lead.platform) }"
+                >
                 </app-platfrom-badge>
               </td>
               <td>{{ lead.lead_type }}</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
-                  <app-check-icon (click)="openLeadToTenantModel(convertLeadToTenentContent, lead)">
+                  <app-check-icon
+                    (click)="
+                      openLeadToTenantModel(convertLeadToTenentContent, lead)
+                    "
+                  >
                   </app-check-icon>
-                  <app-table-action-btn type="edit" (clicked)="openEditLeadModal(editLeadContent, lead)">
+                  <app-table-action-btn
+                    type="edit"
+                    (clicked)="openEditLeadModal(editLeadContent, lead)"
+                  >
                   </app-table-action-btn>
-                  <app-table-action-btn type="file" (clicked)="
+                  <app-table-action-btn
+                    type="file"
+                    (clicked)="
                       openActivityHistroyModal(activityHistroyContent, lead)
-                    ">
+                    "
+                  >
                   </app-table-action-btn>
                 </div>
               </td>
@@ -124,10 +175,19 @@
       </div>
     </div>
     <div class="cmmnTblFtr">
-      <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
-      <app-table-pagination [componentName]="componentName" [currentPage]="currentPage" [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 </ng-container>
@@ -139,16 +199,33 @@
     <h4 class="modal-title" id="modal-title">
       {{ "EDIT_LEAD" | translate }}
     </h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body">
-    <app-edit-leads-form #EditLeadFormComponent [editData]="selectedLead" (formSubmitted)="onUserSave($event, modal)" />
+    <app-edit-leads-form
+      #EditLeadFormComponent
+      [editData]="selectedLead"
+      (formSubmitted)="onUserSave($event, modal)"
+    />
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btnCommon btnTransparent" (click)="modal.dismiss('Save click')">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
       {{ "CANCEL" | translate }}
     </button>
-    <button type="button" class="btn btnCommon" (click)="EditLeadFormComponent.submitForm()">
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="EditLeadFormComponent.submitForm()"
+    >
       {{ "UPDATE_LEAD" | translate }}
     </button>
   </div>
@@ -170,7 +247,12 @@
         </button>
       </div>
       <div>
-        <button type="button" class="closeCircle" aria-label="Close" (click)="modal.dismiss()">
+        <button
+          type="button"
+          class="closeCircle"
+          aria-label="Close"
+          (click)="modal.dismiss()"
+        >
           <i><app-circular-cross-btn-icon></app-circular-cross-btn-icon></i>
         </button>
       </div>
@@ -178,27 +260,45 @@
   </div>
 
   <div class="modal-body activityBody">
-    <app-activity-history-form [editData]="selectedLead"></app-activity-history-form>
+    <app-activity-history-form
+      [editData]="selectedLead"
+    ></app-activity-history-form>
   </div>
 </ng-template>
 <!---------------------------------------Lead TO Tenant From---------------------------------------------------------->
 <ng-template #convertLeadToTenentContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
-      {{ "Convert Lead to Tenant" | translate }}
+      {{ "CONVERT_LEAD_TO_TENANT" | translate }}
       <span class="lead-id" *ngIf="selectedLead">#{{ selectedLead.code }}</span>
     </h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body" style="padding: 0">
-    <app-convert-lead-to-tenent-from #convertLeadToTenantForm [leadData]="selectedLead" />
+    <app-convert-lead-to-tenent-from
+      #convertLeadToTenantForm
+      [leadData]="selectedLead"
+    />
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btnCommon btnTransparent" (click)="modal.dismiss('Save click')">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Save click')"
+    >
       {{ "CANCEL" | translate }}
     </button>
-    <button type="button" class="btn btnCommon" (click)="convertToTenancy(modal)">
-      {{ "Convert to tenancy" | translate }}
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="convertToTenancy(modal)"
+    >
+      {{ "CONVERT_TO_TENANCY" | translate }}
     </button>
   </div>
 </ng-template>
