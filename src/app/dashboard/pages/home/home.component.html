@@ -32,16 +32,16 @@
             [title]="'PROPERTIES' | translate"
             [stats]="[
               {
-                label: ('TOTAL' | translate),
-                value: stats?.properties?.total ?? 'N/A',
+                label: ('TOTAL_UNITS' | translate),
+                value: stats?.properties?.total ?? 0,
               },
               {
                 label: ('RENTED' | translate),
-                value: stats?.properties?.rented ?? 'N/A',
+                value: stats?.properties?.rented ?? 0,
               },
               {
                 label: ('VACANT' | translate),
-                value: stats?.properties?.vacant ?? 'N/A',
+                value: stats?.properties?.vacant ?? 0,
               },
             ]"
           >
@@ -56,15 +56,15 @@
             [stats]="[
               {
                 label: ('ACTIVE' | translate),
-                value: stats?.tenants?.active ?? 'N/A',
+                value: stats?.tenants?.active ?? 0,
               },
               {
                 label: ('UPCOMING RENEWALS' | translate),
-                value: stats?.tenants?.upcoming_renewals ?? 'N/A',
+                value: stats?.tenants?.upcoming_renewals ?? 0,
               },
               {
                 label: ('NEGOTIATIONS' | translate),
-                value: stats?.tenants?.negotiations ?? 'N/A',
+                value: stats?.tenants?.negotiations ?? 0,
               },
             ]"
           >
@@ -88,7 +88,7 @@
     <div class="col-lg-7">
       <app-white-card
         title="{{ 'REVENUE' | translate }}"
-        subtitle="{{ 'SUBTITLE' | translate }} - AED {{ totalRevenue }}"
+        subtitle="{{ 'SUBTITLE' | translate }} - AED {{ mrr }}"
         [showActions]="true"
         customClass="pb-0"
       >
@@ -196,8 +196,8 @@
 </div>
 
 <div class="mt-3">
-  <div class="row g-3">
-    <div class="col-lg-5">
+  <div class="row g-3 equal-height-row">
+    <div class="col-lg-5 d-flex flex-column">
       <app-white-card
         title="{{ 'OCCUPANCY' | translate }}"
         [showActions]="true"
@@ -220,10 +220,9 @@
         ></app-donut-chart>
       </app-white-card>
     </div>
-    <div class="col-lg-7">
+    <div class="col-lg-7 d-flex flex-column">
       <app-white-card
         title="{{ 'DUES' | translate }}"
-        subtitle="{{ 'TOTAL_DUE_AMOUNT' | translate }} : {{ totalAmount }}"
         [showActions]="true"
         customClass="pb-0"
       >
@@ -238,8 +237,10 @@
                     }}</label>
                     <app-custom-select
                       [options]="properties"
-                      [selectedOption]="selectedFilter"
-                      (optionSelected)="onPropertySelected($event)"
+                      key="key"
+                      value="value"
+                      [selectedOption]="duesSelectedProperty"
+                      (optionSelected)="onDuesPropertySelected($event)"
                     >
                     </app-custom-select>
                   </div>
@@ -248,11 +249,11 @@
                       >{{ "UNIT" | translate }}<span>*</span></label
                     >
                     <app-custom-select
-                      [options]="units"
+                      [options]="duesUnits"
                       key="key"
                       value="value"
-                      [selectedOption]="selectedUnit"
-                      (optionSelected)="onUnitSelected($event)"
+                      [selectedOption]="duesSelectedUnit"
+                      (optionSelected)="onDuesUnitSelected($event)"
                     >
                     </app-custom-select>
                   </div>
@@ -263,8 +264,8 @@
                       type="number"
                       class="form-control"
                       [placeholder]="'ENTER_YEAR' | translate"
-                      [(ngModel)]="selectedYear"
-                      name="year"
+                      [(ngModel)]="duesSelectedYear"
+                      name="duesYear"
                     />
                   </div>
                 </div>
@@ -281,10 +282,21 @@
             </ng-container>
           </app-filter-popup-btn>
         </ng-container>
-        <app-line-chart
-          *ngIf="monthlyData && monthlyData.length > 0"
-          [monthlyData]="monthlyData"
-        ></app-line-chart>
+        <div class="dues-summary">
+          <div class="dues-stat">
+            <span class="dues-stat-label">Total Amount</span>
+            <span class="dues-stat-value total">AED {{ duesOverall.total_amount | number:'1.0-0' }}</span>
+          </div>
+          <div class="dues-stat">
+            <span class="dues-stat-label">Received</span>
+            <span class="dues-stat-value received">AED {{ duesOverall.received_amount | number:'1.0-0' }}</span>
+          </div>
+          <div class="dues-stat">
+            <span class="dues-stat-label">Due</span>
+            <span class="dues-stat-value due">AED {{ duesOverall.due_amount | number:'1.0-0' }}</span>
+          </div>
+        </div>
+        <app-line-chart [monthlyData]="duesData"></app-line-chart>
       </app-white-card>
     </div>
   </div>
@@ -330,28 +342,34 @@
                     <form>
                       <div class="row g-3">
                         <div class="col-md-6">
-                          <label class="form-label">{{
-                            "PROPERTY" | translate
-                          }}</label>
+                          <label class="form-label">{{ "PROPERTY" | translate }}</label>
                           <app-custom-select
                             [options]="properties"
-                            [selectedOption]="selectedFilter"
-                            (optionSelected)="onPropertySelected($event)"
-                          >
-                          </app-custom-select>
-                        </div>
-                        <div class="col-md-6">
-                          <label class="form-label"
-                            >{{ "UNIT" | translate }}<span>*</span></label
-                          >
-                          <app-custom-select
-                            [options]="units"
                             key="key"
                             value="value"
-                            [selectedOption]="selectedUnit"
-                            (optionSelected)="onUnitSelected($event)"
-                          >
-                          </app-custom-select>
+                            [selectedOption]="chequeVisSelectedProperty"
+                            (optionSelected)="onChequeVisPropertySelected($event)"
+                          ></app-custom-select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">{{ "UNIT" | translate }}</label>
+                          <app-custom-select
+                            [options]="chequeVisUnits"
+                            key="key"
+                            value="value"
+                            [selectedOption]="chequeVisSelectedUnit"
+                            (optionSelected)="onChequeVisUnitSelected($event)"
+                          ></app-custom-select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">{{ "STATUS" | translate }}</label>
+                          <app-custom-select
+                            [options]="chequeStatusOptions"
+                            key="key"
+                            value="value"
+                            [selectedOption]="chequeVisSelectedStatus"
+                            (optionSelected)="chequeVisSelectedStatus = $event"
+                          ></app-custom-select>
                         </div>
                         <div class="col-md-12">
                           <div class="cmmnFltrRadioOuter">
@@ -359,47 +377,53 @@
                               <label>
                                 <input
                                   type="radio"
-                                  name="filterPeriod"
+                                  name="chequeVisPeriod"
                                   value="month"
-                                  [checked]="selectedPeriodType === 'month'"
-                                  (change)="selectPeriod('month')"
+                                  [checked]="chequeVisSelectedPeriodType === 'month'"
+                                  (change)="chequeVisSelectedPeriodType = 'month'"
                                 />
                                 <span>{{ "MONTH" | translate }}</span>
                               </label>
                               <label>
                                 <input
                                   type="radio"
-                                  name="filterPeriod"
+                                  name="chequeVisPeriod"
                                   value="last6"
-                                  [checked]="selectedPeriodType === 'last6'"
-                                  (change)="selectPeriod('last6')"
+                                  [checked]="chequeVisSelectedPeriodType === 'last6'"
+                                  (change)="chequeVisSelectedPeriodType = 'last6'"
                                 />
                                 <span>{{ "LAST_6_MONTHS" | translate }}</span>
                               </label>
                               <label>
                                 <input
                                   type="radio"
-                                  name="filterPeriod"
+                                  name="chequeVisPeriod"
                                   value="year"
-                                  [checked]="selectedPeriodType === 'year'"
-                                  (change)="selectPeriod('year')"
+                                  [checked]="chequeVisSelectedPeriodType === 'year'"
+                                  (change)="chequeVisSelectedPeriodType = 'year'"
                                 />
                                 <span>{{ "YEARS" | translate }}</span>
                               </label>
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-6">
-                          <label class="form-label">
-                            {{ "YEARS" | translate }}</label
-                          >
-
+                        <div class="col-md-6" *ngIf="chequeVisSelectedPeriodType === 'month'">
+                          <label class="form-label">{{ "MONTH" | translate }}</label>
+                          <input
+                            type="month"
+                            class="form-control"
+                            [(ngModel)]="chequeVisSelectedMonthly"
+                            name="chequeVisMonth"
+                          />
+                        </div>
+                        <div class="col-md-6" *ngIf="chequeVisSelectedPeriodType === 'year'">
+                          <label class="form-label">{{ "YEARS" | translate }}</label>
                           <input
                             type="number"
                             class="form-control"
                             [placeholder]="'ENTER_YEAR' | translate"
-                            [(ngModel)]="selectedYear"
-                            name="year"
+                            [(ngModel)]="chequeVisSelectedYear"
+                            name="chequeVisYear"
                           />
                         </div>
                       </div>
@@ -429,44 +453,42 @@
                 <tr>
                   <th>{{ "SI.No" | translate }}</th>
                   <th>{{ "PROPERTY" | translate }}</th>
+                  <th>{{ "UNIT" | translate }}</th>
                   <th>{{ "NAME" | translate }}</th>
                   <th>{{ "CHEQUE NUMBER" | translate }}</th>
+                  <th>{{ "CHEQUE DATE" | translate }}</th>
+                  <th>{{ "AMOUNT" | translate }}</th>
                   <th>{{ "STATUS" | translate }}</th>
-                  <th width="200">{{ "AMOUNT" | translate }}</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- *ngIf="chequeList.length; else noData" -->
-                @for (approval of chequeList; track $index) {
-                  <tr *ngFor="let c of chequeList; let i = index">
-                    <!-- <td>{{ i + 1 }}</td> -->
-                    <td>{{ c.lease_number || "N/A" }}</td>
-                    <td>{{ c.property_unit_name }}</td>
-                    <td>{{ c.tenant_name }}</td>
-                    <td>{{ c.cheque_number || "N/A" }}</td>
+                @for (c of chequeList; track $index) {
+                  <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ c.property_name || "—" }}</td>
+                    <td>{{ c.property_unit_name || "—" }}</td>
+                    <td>{{ c.tenant_name || "—" }}</td>
+                    <td>{{ c.cheque_number || "—" }}</td>
+                    <td>{{ c.cheque_date || "—" }}</td>
+                    <td>AED {{ c.amount | number }}</td>
                     <td>
-                      <!-- <ng-container
-                        *ngIf="c?.status; else noStatus"
-                      ></ng-container> -->
                       <app-badge
-                        [title]="c.status"
+                        [title]="c.status_display || c.status"
                         [status]="
-                          c.status === 'Payment Successful'
+                          c.status === 'REALIZED'
                             ? 'light-green'
-                            : c.status === 'Payment Bounced'
+                            : c.status === 'BOUNCED'
                               ? 'red'
-                              : 'yellow'
+                              : c.status === 'CREDITED'
+                                ? 'blue'
+                                : 'yellow'
                         "
                       />
-                      <!-- <ng-template #noStatus>
-                        <span><app-no-data></app-no-data></span>
-                      </ng-template> -->
                     </td>
-                    <td>AED {{ c.amount | number }}</td>
                   </tr>
                 } @empty {
                   <tr>
-                    <td colspan="20" align="center">
+                    <td colspan="8" align="center">
                       <app-no-data></app-no-data>
                     </td>
                   </tr>
@@ -516,7 +538,7 @@
     <div class="col-lg-7">
       <app-white-card
         title="{{ 'OTHER TYPE PAYMENTS' | translate }}"
-        subtitle="{{ 'Total Revenue - AED 1,54,456' | translate }}"
+        subtitle="Total Revenue - AED {{ paymentTotalRevenue | number:'1.0-0' }}"
         [showActions]="true"
         customClass="pb-0"
       >

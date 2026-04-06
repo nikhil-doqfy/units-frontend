@@ -31,6 +31,7 @@ import { BreadCrumb } from '../../../shared/model/shared.model';
     TableActionButtonComponent,
     TablePaginationComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './documentations.component.html',
   styleUrl: './documentations.component.css',

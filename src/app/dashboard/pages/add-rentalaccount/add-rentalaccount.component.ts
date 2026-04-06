@@ -27,6 +27,7 @@ import { FormService } from '../../../shared/services/form.service';
 import { ToggleiconComponent } from '../../../icon/toggleicon/toggleicon.component';
 import { ThemeService, UserRole } from '../../../theme.service';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 
 @Component({
   selector: 'app-add-rentalaccount',
@@ -48,6 +49,7 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
     NgbDatepickerModule,
     ToggleiconComponent,
     WhiteCardComponent,
+    NoDataComponent,
   ],
   templateUrl: './add-rentalaccount.component.html',
   styleUrl: './add-rentalaccount.component.css',

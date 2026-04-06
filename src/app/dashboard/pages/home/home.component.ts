@@ -20,7 +20,6 @@ import { GraphStatsIconComponent } from '../../component/icons/graph-stats-icon/
 import { PropertyStatsIconComponent } from '../../component/icons/property-stats-icon/property-stats-icon.component';
 import { TenantStatsIconComponent } from '../../component/icons/tenant-stats-icon/tenant-stats-icon.component';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
-import { DateIconComponent } from '../../component/icons/date-icon/date-icon.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { BadgeComponent } from '../../component/badge/badge.component';
@@ -37,7 +36,6 @@ import { LineChartComponent } from '../../component/charts/line/line.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { HomeService } from '../../services/home.service';
-import { Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
@@ -97,6 +95,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   monthlyRevenue: any[] = [];
   totalRevenue = 0;
   totalAmount = 0;
+  duesOverall = { total_amount: 0, received_amount: 0, due_amount: 0 };
   mrr = 0;
   occupancyOptions: any[] = [];
   selectedOccupancy: any = {
@@ -108,8 +107,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
   model: NgbDateStruct | null = null;
   currentLanguage = 'en';
   monthlyData: any[] = [];
+  duesData: any[] = [];
   unitsWithLease: any[] = [];
   selectedYear: number | null = null;
+
+  // Dues filter — separate state so it doesn't share with Revenue/Payment filters
+  duesSelectedProperty: any = null;
+  duesSelectedUnit: any = null;
+  duesUnits: any[] = [];
+  duesSelectedYear: number | null = null;
+
+  // Cheques Visibility filter — separate state
+  chequeVisSelectedProperty: any = null;
+  chequeVisSelectedUnit: any = null;
+  chequeVisUnits: any[] = [];
+  chequeVisSelectedPeriodType: 'month' | 'last6' | 'year' = 'month';
+  chequeVisSelectedMonthly: string = '';
+  chequeVisSelectedYear: number | null = null;
+  chequeVisSelectedStatus: any = null;
+
+  chequeStatusOptions = [
+    { key: '', value: 'All' },
+    { key: 'BALANCE',  value: 'Balance'  },
+    { key: 'CREDITED', value: 'Credited' },
+    { key: 'REALIZED', value: 'Realized' },
+    { key: 'BOUNCED',  value: 'Bounced'  },
+  ];
   breadcrumbData = [
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
@@ -170,9 +193,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
+  paymentTotalRevenue = 0;
+
   loadPayments(params?: any) {
     this.homeService.getOtherTypePayments(params).subscribe((res) => {
-      this.monthlyData = res.content.monthly_data;
+      this.monthlyData          = res.content.monthly_data   || [];
+      this.paymentTotalRevenue  = res.content.total_revenue  ?? 0;
     });
   }
   stats: any = {
@@ -204,7 +230,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   loadChequeAging(property?: any) {
     const params =
       property && property.key !== 'ALL'
-        ? { property_unit_id: property.key }
+        ? { property_id: property.key }
         : {};
     this.homeService
       .getChequeAging(params)
@@ -275,7 +301,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           res.content?.occupancy_data?.occupied_percent ?? 0;
 
         this.vacantPercent = res.content?.occupancy_data?.vacant_percent ?? 0;
-        this.propertyData = res.content.top_properties.map(
+        this.propertyData = (res.content.top_properties ?? []).map(
           ({ rank, name, occupancy_rate }: any) => ({
             id: rank,
             name,
@@ -335,17 +361,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   loadDueGraph(params?: any) {
-    this.homeService.getDashboardGraphDue(params).subscribe((res) => {
-      this.monthlyData = res.content;
-      console.log('API Response:', res);
-      this.totalAmount = res.content?.overall?.total_amount ?? 0;
-      this.monthlyData = (res.content?.monthly_data || []).map((m: any) => ({
-        monthName: m.month_str,
-        totalAmount: m.total_amount,
-        receivedAmount: m.received_amount,
-        dueAmount: m.due_amount,
-      }));
-      console.log('Mapped monthlyData:', this.monthlyData);
+    this.homeService.getDashboardGraphDue(params).subscribe({
+      next: (res) => {
+        this.totalAmount = res.content?.overall?.due_amount ?? 0;
+        this.duesOverall = {
+          total_amount:    res.content?.overall?.total_amount    ?? 0,
+          received_amount: res.content?.overall?.received_amount ?? 0,
+          due_amount:      res.content?.overall?.due_amount      ?? 0,
+        };
+        this.duesData = (res.content?.monthly_data || []).map((m: any) => ({
+          monthName:      m.month_str,
+          totalAmount:    m.total_amount    > 0 ? 100 : 0,
+          receivedAmount: m.received_percent ?? 0,
+          dueAmount:      m.due_percent      ?? 0,
+        }));
+      },
+      error: (err) => console.error('Dues API error:', err),
     });
   }
 
@@ -376,7 +407,44 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.selectedPropertiesOwned = option;
   }
 
+  onDuesPropertySelected(property: any) {
+    this.duesSelectedProperty = property;
+    this.duesSelectedUnit = null;
+    this.duesUnits = [];
+    if (property?.key && property.key !== 'ALL') {
+      this.sharedApiService
+        .getOptions({
+          option_type: 'PROPERTY_UNIT_BY_LEASE',
+          parent_property_id: property.key,
+        })
+        .subscribe({
+          next: (res) => {
+            this.duesUnits = res?.content?.property_unit_with_lease || [];
+          },
+          error: () => {
+            this.duesUnits = [];
+          },
+        });
+    }
+  }
+
+  onDuesUnitSelected(unit: any) {
+    this.duesSelectedUnit = unit;
+  }
+
   handleFilterClick(chartType: 'revenue' | 'dues' | 'payment'): void {
+    if (chartType === 'dues') {
+      const params: any = {};
+      if (this.duesSelectedUnit?.key) {
+        params.property_unit_id = this.duesSelectedUnit.key;
+      }
+      if (this.duesSelectedYear) {
+        params.year = this.duesSelectedYear;
+      }
+      this.loadDueGraph(Object.keys(params).length ? params : undefined);
+      return;
+    }
+
     const params: any = {};
 
     if (this.selectedUnit?.key) {
@@ -389,8 +457,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (chartType === 'revenue') {
       this.getMonthlyRevenue(Object.keys(params).length ? params : undefined);
-    } else if (chartType === 'dues') {
-      this.loadDueGraph(Object.keys(params).length ? params : undefined);
     } else if (chartType == 'payment') {
       this.loadPayments(Object.keys(params).length ? params : undefined);
     }
@@ -449,16 +515,69 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return { fromDate, toDate };
   }
 
+  onChequeVisPropertySelected(property: any) {
+    this.chequeVisSelectedProperty = property;
+    this.chequeVisSelectedUnit = null;
+    this.chequeVisUnits = [];
+    if (property?.key && property.key !== 'ALL') {
+      this.sharedApiService
+        .getOptions({
+          option_type: 'PROPERTY_UNIT_BY_LEASE',
+          parent_property_id: property.key,
+        })
+        .subscribe({
+          next: (res) => {
+            this.chequeVisUnits = res?.content?.property_unit_with_lease || [];
+          },
+          error: () => { this.chequeVisUnits = []; },
+        });
+    }
+  }
+
+  onChequeVisUnitSelected(unit: any) {
+    this.chequeVisSelectedUnit = unit;
+  }
+
+  getChequeVisDateRange(): { fromDate: number; toDate: number } {
+    const now = new Date();
+    let fromDate!: number;
+    let toDate!: number;
+
+    if (this.chequeVisSelectedPeriodType === 'month' && this.chequeVisSelectedMonthly) {
+      // input type="month" returns "YYYY-MM"
+      const [yearStr, monthStr] = this.chequeVisSelectedMonthly.split('-');
+      const year = Number(yearStr);
+      const monthIndex = Number(monthStr) - 1;
+      fromDate = new Date(year, monthIndex, 1, 0, 0, 0).getTime();
+      toDate   = new Date(year, monthIndex + 1, 0, 23, 59, 59).getTime();
+    } else if (this.chequeVisSelectedPeriodType === 'last6') {
+      toDate   = now.getTime();
+      fromDate = new Date(now.getFullYear(), now.getMonth() - 5, 1, 0, 0, 0).getTime();
+    } else if (this.chequeVisSelectedPeriodType === 'year' && this.chequeVisSelectedYear) {
+      fromDate = new Date(this.chequeVisSelectedYear, 0, 1, 0, 0, 0).getTime();
+      toDate   = new Date(this.chequeVisSelectedYear, 11, 31, 23, 59, 59).getTime();
+    } else {
+      // default: current month
+      fromDate = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0).getTime();
+      toDate   = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).getTime();
+    }
+
+    return { fromDate, toDate };
+  }
+
   handleApplyFilter() {
-    const { fromDate, toDate } = this.getChequeDateRange();
+    const { fromDate, toDate } = this.getChequeVisDateRange();
 
-    const params: any = {
-      from_date: fromDate,
-      to_date: toDate,
-    };
+    const params: any = { from_date: fromDate, to_date: toDate };
 
-    if (this.selectedUnit?.key) {
-      params.property_unit_id = this.selectedUnit.key;
+    if (this.chequeVisSelectedProperty?.key && this.chequeVisSelectedProperty.key !== 'ALL') {
+      params.property_id = this.chequeVisSelectedProperty.key;
+    }
+    if (this.chequeVisSelectedUnit?.key) {
+      params.property_unit_id = this.chequeVisSelectedUnit.key;
+    }
+    if (this.chequeVisSelectedStatus?.key) {
+      params.cheque_status = this.chequeVisSelectedStatus.key;
     }
 
     this.homeService

@@ -20,6 +20,10 @@
 
       <div class="halfBar">
         <div class="bouncedFill" [style.width.%]="bouncedFillPercent"></div>
+        <div
+          class="bouncedRemaining"
+          [style.width.%]="bouncedRemainingPercent"
+        ></div>
         <div class="halfBarHover">
           <span></span>
           <div>
@@ -27,10 +31,6 @@
             <strong>{{ bounced }} / {{ totalCheques }}</strong>
           </div>
         </div>
-        <div
-          class="bouncedRemaining"
-          [style.width.%]="bouncedRemainingPercent"
-        ></div>
       </div>
     </div>
 

@@ -2,14 +2,12 @@ import {
   Component,
   DestroyRef,
   inject,
-  signal,
   TemplateRef,
-  WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { CardTitleComponent } from '../../../shared/component/card-title/card-title.component';
@@ -21,12 +19,12 @@ import { PlusIconComponent } from '../../../shared/component/icons/plus-icon/plu
 import { BackIconComponent } from '../../component/icons/back-icon/back-icon.component';
 import { TablePaginationComponent } from '../../../dashboard/component/table-pagination/table-pagination.component';
 import { AddRoleFormComponent } from '../../component/forms/add-role-form/add-role-form.component';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleAndPermissionsService } from '../../../services/role-and-permissions.service';
 
 @Component({
@@ -45,6 +43,7 @@ import { RoleAndPermissionsService } from '../../../services/role-and-permission
     TablePaginationComponent,
     AddRoleFormComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './roles-and-permissions.component.html',
   styleUrl: './roles-and-permissions.component.css',
@@ -57,27 +56,39 @@ export class RolesAndPermissionsComponent {
   private modalService = inject(NgbModal);
 
   breadcrumbData: BreadCrumb[] = [];
-  currentLanguage = 'en';
-  showDetailView: boolean = false;
-  isEditMode: boolean = false;
-  closeResult: WritableSignal<string> = signal('');
+  showDetailView = false;
+  isEditMode = false;
+
+  readonly MODULES = [
+    'Properties',
+    'Lead',
+    'Tenant',
+    'Owner',
+    'Cheque',
+    'Rental Portfolio',
+    'Approval',
+    'Complaints',
+    'Broadcast',
+    'Users',
+    'Team',
+    'Roles and Permission',
+  ];
 
   roles: any[] = [];
+  totalRecords = 0;
   tableLoading = false;
   currentPage = 1;
   pageSize = 10;
-  roleForm: FormGroup;
+  componentName = 'RolesAndPermissionsComponent';
+  roleForm!: FormGroup;
   isLoading = false;
-  successMessage = '';
-  errorMessage = '';
+  selectedRole: any = null;
+
   constructor(
-    private router: Router,
     private roleService: RoleAndPermissionsService,
     private fb: FormBuilder
   ) {
-    this.roleForm = this.fb.group({
-      name: ['', Validators.required],
-    });
+    this.roleForm = this.buildForm([]);
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
@@ -85,21 +96,39 @@ export class RolesAndPermissionsComponent {
   ngOnInit(): void {
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
-
     this.initLanguageListener();
-
     this.fetchRoles();
+  }
+
+  buildForm(existingPermissions: any[]): FormGroup {
+    const permArray = this.MODULES.map((module) => {
+      const existing = existingPermissions.find((p) => p.module_name === module);
+      return this.fb.group({
+        module_name: [module],
+        create: [existing?.create ?? false],
+        edit: [existing?.edit ?? false],
+        delete: [existing?.delete ?? false],
+        view: [existing?.view ?? false],
+      });
+    });
+    return this.fb.group({
+      name: ['', Validators.required],
+      permissions: this.fb.array(permArray),
+    });
+  }
+
+  get permissionsArray(): FormArray {
+    return this.roleForm.get('permissions') as FormArray;
   }
 
   onRefresh() {
     this.fetchRoles();
   }
+
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.loadBreadcrumb();
-      });
+      .subscribe(() => this.loadBreadcrumb());
   }
 
   loadBreadcrumb() {
@@ -115,81 +144,62 @@ export class RolesAndPermissionsComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  createRole() {
+  saveRole() {
     if (this.roleForm.invalid) return;
-
     this.isLoading = true;
-    this.roleService.createRole(this.roleForm.value).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.successMessage = 'Role created successfully!';
-        this.modalService.dismissAll();
-
-        this.fetchRoles();
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = err?.error?.message || 'Failed to create role.';
-      },
-    });
+    const payload = this.roleForm.value;
+    if (this.isEditMode && this.selectedRole) {
+      this.roleService
+        .updateRole({ role_id: this.selectedRole.role_id, name: payload.name, permissions: payload.permissions })
+        .subscribe({
+          next: () => { this.isLoading = false; this.modalService.dismissAll(); this.fetchRoles(); },
+          error: () => { this.isLoading = false; },
+        });
+    } else {
+      this.roleService.createRole(payload).subscribe({
+        next: () => { this.isLoading = false; this.modalService.dismissAll(); this.fetchRoles(); },
+        error: () => { this.isLoading = false; },
+      });
+    }
   }
 
   fetchRoles(): void {
     this.tableLoading = true;
-
-    this.roleService
-      .getRoles({
-        page: this.currentPage,
-        limit: this.pageSize,
-      })
-      .subscribe({
-        next: (res) => {
-          this.roles = res?.content || [];
-          this.tableLoading = false;
-        },
-        error: () => {
-          this.tableLoading = false;
-        },
-      });
+    this.roleService.getRoles({ page: this.currentPage, limit: this.pageSize }).subscribe({
+      next: (res) => {
+        this.roles = res?.content || [];
+        this.totalRecords = res?.pagination?.total_records ?? 0;
+        this.tableLoading = false;
+      },
+      error: () => { this.tableLoading = false; },
+    });
   }
 
-  openAddRoleModal(
-    addRoleContent: TemplateRef<any>,
-    editMode: boolean = false
-  ) {
+  onPageChange(event: any) {
+    if (event.componentName !== this.componentName) return;
+    this.currentPage = event.currentPage;
+    this.fetchRoles();
+  }
+
+  onPageSizeChange(event: any) {
+    if (event.componentName !== this.componentName) return;
+    this.pageSize = event.pageSize;
+    this.currentPage = 1;
+    this.fetchRoles();
+  }
+
+  openAddRoleModal(addRoleContent: TemplateRef<any>, editMode = false, role: any = null) {
     this.isEditMode = editMode;
+    this.selectedRole = role;
+    this.roleForm = this.buildForm(role?.permissions ?? []);
+    this.roleForm.patchValue({ name: role?.role_name ?? '' });
     this.modalService
-      .open(addRoleContent, {
-        ariaLabelledBy: 'modal-title',
-        windowClass: 'mdlCommon mdlSmall',
-        centered: true,
-      })
-      .result.then(
-        (result) => {
-          this.closeResult.set(`Closed with: ${result}`);
-        },
-        (reason) => {
-          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        }
-      );
+      .open(addRoleContent, { ariaLabelledBy: 'modal-title', windowClass: 'mdlCommon mdlLarge', centered: true })
+      .result.then(null, () => {});
   }
 
-  private getDismissReason(reason: any): string {
-    switch (reason) {
-      case ModalDismissReasons.ESC:
-        return 'by pressing ESC';
-      case ModalDismissReasons.BACKDROP_CLICK:
-        return 'by clicking on a backdrop';
-      default:
-        return `with: ${reason}`;
-    }
-  }
-
-  handleEditClick(): void {
-    console.log('Edit button clicked');
-  }
-
-  handleViewClick(): void {
+  handleViewClick(role: any): void {
+    this.selectedRole = role;
     this.showDetailView = true;
   }
 

@@ -19,8 +19,10 @@ export class RoleAndPermissionsService {
 
   getRoles(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/user/role_table${queryString}`
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/user/role_table${queryString}`);
+  }
+
+  updateRole(data: { role_id: number; name: string; permissions?: any[] }): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/user/role_table`, data);
   }
 }

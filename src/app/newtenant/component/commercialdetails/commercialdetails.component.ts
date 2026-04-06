@@ -9,6 +9,7 @@ import { ToastService } from '../../../core/toast.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
 import { FormService } from '../../../shared/services/form.service';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 
 @Component({
@@ -22,6 +23,7 @@ import { NewTenantFromService } from '../service/new-tenant-from.service';
     FormsModule,
     CustomSelectComponent,
     EditIconComponent,
+    NoDataComponent,
   ],
   templateUrl: './commercialdetails.component.html',
   styleUrl: './commercialdetails.component.css',

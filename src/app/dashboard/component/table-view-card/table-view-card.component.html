@@ -3,7 +3,7 @@
     <div class="cmmnTblViewTtl">
       <i *ngIf="showImage">
         <ng-container *ngIf="imgSrc; else noImg">
-          <img [src]="imgSrc" alt="" />
+          <img [src]="imgSrc" alt="" (error)="imgSrc = ''" />
         </ng-container>
         <ng-template #noImg>
           <div class="avatar">{{ titleInitial }}</div>

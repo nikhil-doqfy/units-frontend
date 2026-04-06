@@ -1,48 +1,35 @@
 <!-- ── Top bar: tabs ───────────────────────────────────────────── -->
 <app-white-card>
-  <div class="row align-items-center justify-content-between g-3">
-    <div class="col-md">
-      <div class="commonBoxTabs">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              [class.active]="activeTab === 'all'"
-              (click)="getActiveUser()"
-            >
-              {{ "ALL_USER" | translate }}
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              [class.active]="activeTab === 'active'"
-              (click)="getNewUser()"
-            >
-              {{ "NEW_USERS" | translate }}
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              [class.active]="activeTab === 'inactive'"
-              (click)="getDeletedUser()"
-            >
-              {{ "INACTIVE_USER" | translate }}
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-md-auto">
-      <button
-        type="button"
-        class="btn btnCommon"
-        (click)="openAddUserModal(addUserContent)"
-      >
-        <i><app-plus-icon /></i>{{ "NEW_USER" | translate }}
-      </button>
-    </div>
+  <div class="commonTabs analytics-header">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          [class.active]="activeTab === 'all'"
+          (click)="getActiveUser()"
+        >
+          {{ "ALL_USER" | translate }}
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          [class.active]="activeTab === 'active'"
+          (click)="getNewUser()"
+        >
+          {{ "NEW_USERS" | translate }}
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          [class.active]="activeTab === 'inactive'"
+          (click)="getDeletedUser()"
+        >
+          {{ "INACTIVE_USER" | translate }}
+        </button>
+      </li>
+    </ul>
   </div>
 </app-white-card>
 
@@ -104,6 +91,13 @@
                 </button>
               </ng-container>
             </app-filter-popup-btn>
+            <button
+              type="button"
+              class="btn btnCommon"
+              (click)="openAddUserModal(addUserContent)"
+            >
+              <i><app-plus-icon /></i>{{ "NEW_USER" | translate }}
+            </button>
           </div>
         </div>
       </div>
@@ -111,10 +105,11 @@
 
     <div class="cmmnTbl">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered users-table">
           <thead>
             <tr>
               <th>{{ "USER_NAME" | translate }} <i><app-sorting-icon /></i></th>
+              <th>{{ "CODE" | translate }}</th>
               <th>{{ "EMAIL" | translate }}</th>
               <th>{{ "PHONE" | translate }}</th>
               <th>{{ "ROLE" | translate }}</th>
@@ -135,6 +130,7 @@
                     [showInitialsFallback]="true"
                   />
                 </td>
+                <td>{{ user.code || "N/A" }}</td>
                 <td>{{ user.email || "N/A" }}</td>
                 <td>{{ user.contact_number || "N/A" }}</td>
                 <td>{{ user.role?.value || "N/A" }}</td>
@@ -159,7 +155,7 @@
               </tr>
             } @empty {
               <tr>
-                <td colspan="8" align="center">
+                <td colspan="9" align="center">
                   <app-no-data />
                 </td>
               </tr>

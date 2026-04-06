@@ -4777,6 +4777,10 @@ body.dark-theme .dropdown-menu {
   max-width: 544px;
 }
 
+.mdlLarge .modal-dialog {
+  max-width: 800px;
+}
+
 .mdlCommon .modal-footer {
   padding: 8px 16px;
   border-top: 1px solid var(--muteBorder1);
