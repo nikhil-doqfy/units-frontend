@@ -1,5 +1,4 @@
 <div class="mb-4" [ngClass]="{ arabic: currentLanguage === 'ar' }">
-
   <!-- ── Account Details ───────────────────────────────────────────── -->
   <app-dash-form>
     <form>
@@ -9,7 +8,6 @@
         [showActions]="true"
       >
         <div class="profileSection">
-
           <!-- Profile photo row -->
           <div class="profilePhotoRow">
             <div class="profilePhotoWrap" [class.editMode]="editUserMode">
@@ -61,7 +59,9 @@
               />
             </div>
             <div class="col-md-4">
-              <label class="form-label">{{ "PRIMARY_EMAIL_ID" | translate }}</label>
+              <label class="form-label">{{
+                "PRIMARY_EMAIL_ID" | translate
+              }}</label>
               <input
                 type="email"
                 class="form-control"
@@ -82,7 +82,9 @@
               />
             </div>
             <div class="col-md-4" *ngIf="profile.role === 'PROPERTY_MANAGER'">
-              <label class="form-label">{{ "COMAPANY_NAME" | translate }}</label>
+              <label class="form-label">{{
+                "COMAPANY_NAME" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
@@ -152,18 +154,28 @@
   <!-- ── Other Details ─────────────────────────────────────────────── -->
   <app-dash-form class="mt-4">
     <form>
-      <app-white-card [title]="'OTHER_DETAILS' | translate" [showActions]="true">
+      <app-white-card
+        [title]="'OTHER_DETAILS' | translate"
+        [showActions]="true"
+      >
         <div class="profileSection">
           <div class="row g-3">
             <div class="col-md-4">
               <label class="form-label">{{ "COUNTRY" | translate }}</label>
               <ng-container *ngIf="!editOtherDetailsMode; else editCountryTpl">
-                <input type="text" class="form-control" name="country" [(ngModel)]="otherDetails.country" [disabled]="true" />
+                <input
+                  type="text"
+                  class="form-control"
+                  name="country"
+                  [(ngModel)]="otherDetails.country"
+                  [disabled]="true"
+                />
               </ng-container>
               <ng-template #editCountryTpl>
                 <app-custom-select
                   [options]="countryList"
-                  key="key" value="value"
+                  key="key"
+                  value="value"
                   placeholder="Select Country"
                   [selectedOption]="selectedCountry"
                   (optionSelected)="onCountrySelected($event)"
@@ -175,12 +187,19 @@
             <div class="col-md-4">
               <label class="form-label">{{ "STATE" | translate }}</label>
               <ng-container *ngIf="!editOtherDetailsMode; else editStateTpl">
-                <input type="text" class="form-control" name="state" [(ngModel)]="otherDetails.state" [disabled]="true" />
+                <input
+                  type="text"
+                  class="form-control"
+                  name="state"
+                  [(ngModel)]="otherDetails.state"
+                  [disabled]="true"
+                />
               </ng-container>
               <ng-template #editStateTpl>
                 <app-custom-select
                   [options]="stateList"
-                  key="key" value="value"
+                  key="key"
+                  value="value"
                   placeholder="Select State"
                   [selectedOption]="selectedState"
                   (optionSelected)="onStateSelected($event)"
@@ -192,12 +211,19 @@
             <div class="col-md-4">
               <label class="form-label">{{ "CITY" | translate }}</label>
               <ng-container *ngIf="!editOtherDetailsMode; else editCityTpl">
-                <input type="text" class="form-control" name="city" [(ngModel)]="otherDetails.city" [disabled]="true" />
+                <input
+                  type="text"
+                  class="form-control"
+                  name="city"
+                  [(ngModel)]="otherDetails.city"
+                  [disabled]="true"
+                />
               </ng-container>
               <ng-template #editCityTpl>
                 <app-custom-select
                   [options]="cityList"
-                  key="key" value="value"
+                  key="key"
+                  value="value"
                   placeholder="Select City"
                   [selectedOption]="selectedCity"
                   (optionSelected)="onCitySelected($event)"
@@ -233,7 +259,12 @@
             <div class="col-md-4">
               <label class="form-label">{{ "TIME_ZONE" | translate }}</label>
               <ng-container *ngIf="!editOtherDetailsMode; else editTimezoneTpl">
-                <input type="text" class="form-control" [value]="otherDetails.timeZone" [disabled]="true" />
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="otherDetails.timeZone"
+                  [disabled]="true"
+                />
               </ng-container>
               <ng-template #editTimezoneTpl>
                 <app-custom-select
@@ -247,7 +278,9 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "ADDRESS LINE 1" | translate }}</label>
+              <label class="form-label">{{
+                "ADDRESS LINE 1" | translate
+              }}</label>
               <textarea
                 class="form-control"
                 name="address"
@@ -259,7 +292,9 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "ADDRESS LINE 2" | translate }}</label>
+              <label class="form-label">{{
+                "ADDRESS LINE 2" | translate
+              }}</label>
               <textarea
                 class="form-control"
                 name="additional_address"
@@ -301,5 +336,4 @@
       </app-white-card>
     </form>
   </app-dash-form>
-
 </div>

@@ -15,6 +15,7 @@ import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.co
 import { FileIconComponent } from '../../../icons/file-icon/file-icon.component';
 import { SendAppLinkIconComponent } from '../../../icons/send-app-link-icon/send-app-link-icon.component';
 import { HistoryIconComponent } from '../../../icons/history-icon/history-icon.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-table-action-btn',
@@ -34,6 +35,7 @@ import { HistoryIconComponent } from '../../../icons/history-icon/history-icon.c
     FileIconComponent,
     SendAppLinkIconComponent,
     HistoryIconComponent,
+    TranslateModule,
   ],
   templateUrl: './table-action-btn.component.html',
   styleUrls: ['./table-action-btn.component.css'],

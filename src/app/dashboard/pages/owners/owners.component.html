@@ -2,13 +2,23 @@
   <div class="cmmnTblHdr">
     <div class="row g-3 align-items-center">
       <div class="col-md">
-        <app-table-title [title]="'ALL_OWNERS' | translate" [subtitle]="'(' + totalRecords + ')'"
-          (onRefresh)="onRefresh()"></app-table-title>
+        <app-table-title
+          [title]="'ALL_OWNERS' | translate"
+          [subtitle]="'(' + totalRecords + ')'"
+          (onRefresh)="onRefresh()"
+        ></app-table-title>
       </div>
       <div class="col-md-auto">
         <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-table-search [placeholder]="'SEARCH_HERE' | translate" (onValueChange)="searchTextChange($event)" />
-          <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true" (clicked)="handleExportClick()">
+          <app-table-search
+            [placeholder]="'SEARCH_HERE' | translate"
+            (onValueChange)="searchTextChange($event)"
+          />
+          <app-table-filter-btn
+            [title]="'EXPORT' | translate"
+            [hasIcon]="true"
+            (clicked)="handleExportClick()"
+          >
             <app-export-icon />
           </app-table-filter-btn>
         </div>
@@ -21,53 +31,62 @@
       <table class="table table-bordered owners-table">
         <thead>
           <tr>
-            <th>Owner Name <i><app-sorting-icon /></i></th>
-            <th>Code</th>
-            <th>Owner No.</th>
-            <th>Contact</th>
-            <th>Email</th>
-            <th>Emirates ID</th>
-            <th>Trade License No</th>
-            <th>License No</th>
-            <th>License Expiry</th>
-            <th>License Issuer</th>
-            <th>Fax No</th>
-            <th>P.O. Box</th>
-            <th width="100">Actions</th>
+            <th>
+              {{ "OWNER_NAME" | translate }} <i><app-sorting-icon /></i>
+            </th>
+            <th>{{ "CODE" | translate }}</th>
+            <th>{{ "OWNER_NUMBER" | translate }}</th>
+            <th>{{ "CONTACT_NUMBER" | translate }}</th>
+            <th>{{ "EMAIL" | translate }}</th>
+            <th>{{ "EMIRATES_ID" | translate }}</th>
+            <th>{{ "TRADE_LICENSE_NO" | translate }}</th>
+            <th>{{ "LICENSE_NO" | translate }}</th>
+            <th>{{ "LICENSE_EXPIRY" | translate }}</th>
+            <th>{{ "LICENSE_ISSUER" | translate }}</th>
+            <th>{{ "FAX_NO" | translate }}</th>
+            <th>{{ "PO_BOX" | translate }}</th>
+            <th width="100">{{ "ACTIONS" | translate }}</th>
           </tr>
         </thead>
         <tbody>
           @for (owner of owners; track $index) {
-          <tr>
-            <td class="ownerNameClickable" (click)="goToDetail(owner)">
-              <app-table-img-item
-                [img]="owner.profile_image || ''"
-                [title]="owner.name || 'N/A'"
-                size="md"
-                [showInitialsFallback]="true" />
-            </td>
-            <td>{{ owner.code || 'N/A' }}</td>
-            <td>{{ owner.owner_number || 'N/A' }}</td>
-            <td>{{ owner.contact_number || 'N/A' }}</td>
-            <td>{{ owner.email || 'N/A' }}</td>
-            <td>{{ owner.emirates_id || 'N/A' }}</td>
-            <td>{{ owner.trade_license_number || 'N/A' }}</td>
-            <td>{{ owner.license_number || 'N/A' }}</td>
-            <td>{{ owner.license_expiry_date || 'N/A' }}</td>
-            <td>{{ owner.license_issuer || 'N/A' }}</td>
-            <td>{{ owner.fax_number || 'N/A' }}</td>
-            <td>{{ owner.po_box_number || 'N/A' }}</td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <app-table-action-btn type="edit" (clicked)="openEditModal(ownerModal, owner)" />
-                <app-table-action-btn type="delete" (clicked)="deleteOwner(owner)" />
-              </div>
-            </td>
-          </tr>
+            <tr>
+              <td class="ownerNameClickable" (click)="goToDetail(owner)">
+                <app-table-img-item
+                  [img]="owner.profile_image || ''"
+                  [title]="owner.name || 'N/A'"
+                  size="md"
+                  [showInitialsFallback]="true"
+                />
+              </td>
+              <td>{{ owner.code || "N/A" }}</td>
+              <td>{{ owner.owner_number || "N/A" }}</td>
+              <td>{{ owner.contact_number || "N/A" }}</td>
+              <td>{{ owner.email || "N/A" }}</td>
+              <td>{{ owner.emirates_id || "N/A" }}</td>
+              <td>{{ owner.trade_license_number || "N/A" }}</td>
+              <td>{{ owner.license_number || "N/A" }}</td>
+              <td>{{ owner.license_expiry_date || "N/A" }}</td>
+              <td>{{ owner.license_issuer || "N/A" }}</td>
+              <td>{{ owner.fax_number || "N/A" }}</td>
+              <td>{{ owner.po_box_number || "N/A" }}</td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <app-table-action-btn
+                    type="edit"
+                    (clicked)="openEditModal(ownerModal, owner)"
+                  />
+                  <app-table-action-btn
+                    type="delete"
+                    (clicked)="deleteOwner(owner)"
+                  />
+                </div>
+              </td>
+            </tr>
           } @empty {
-          <tr>
-            <td colspan="13" align="center"><app-no-data></app-no-data></td>
-          </tr>
+            <tr>
+              <td colspan="13" align="center"><app-no-data></app-no-data></td>
+            </tr>
           }
         </tbody>
       </table>
@@ -75,104 +94,214 @@
   </div>
 
   <div class="cmmnTblFtr">
-    <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage"
-      [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
-    <app-table-pagination [componentName]="componentName" [currentPage]="currentPage" [totalRecords]="totalRecords"
-      [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
+    <app-table-select
+      [componentName]="componentName"
+      [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (rowsPerPageChange)="onPageSizeChange($event)"
+    />
+    <app-table-pagination
+      [componentName]="componentName"
+      [currentPage]="currentPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage"
+      (pageChange)="onPageChange($event)"
+    />
   </div>
 </div>
 
 <!-- Add / Edit Owner Modal -->
 <ng-template #ownerModal let-modal>
   <div class="modal-header">
-    <h5 class="modal-title">{{ editingOwnerId ? 'Edit Owner' : 'Add Owner' }}</h5>
+    <h5 class="modal-title">
+      {{ editingOwnerId ? "Edit Owner" : "Add Owner" }}
+    </h5>
     <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="ownerForm" class="row g-3">
       <div class="col-md-4">
         <label class="form-label">First Name</label>
-        <input type="text" class="form-control" formControlName="first_name" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="first_name"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Last Name</label>
-        <input type="text" class="form-control" formControlName="last_name" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="last_name"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Email</label>
-        <input type="email" class="form-control" formControlName="email" placeholder="Enter here"
-          [attr.readonly]="editingOwnerId ? true : null" />
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="Enter here"
+          [attr.readonly]="editingOwnerId ? true : null"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Contact Number</label>
-        <input type="text" class="form-control" formControlName="contact_number" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="contact_number"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Emirates ID</label>
-        <input type="text" class="form-control" formControlName="emirates_id" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="emirates_id"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Address Line 1</label>
-        <input type="text" class="form-control" formControlName="address_line_1" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="address_line_1"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Address Line 2</label>
-        <input type="text" class="form-control" formControlName="address_line_2" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="address_line_2"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Pin Code</label>
-        <input type="text" class="form-control" formControlName="pin_code" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="pin_code"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Passport Number</label>
-        <input type="text" class="form-control" formControlName="passport_number" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="passport_number"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Passport Expiry Date</label>
-        <input type="date" class="form-control" formControlName="passport_expiry_date" />
+        <input
+          type="date"
+          class="form-control"
+          formControlName="passport_expiry_date"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Visa Number</label>
-        <input type="text" class="form-control" formControlName="visa_number" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="visa_number"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Visa Expiry Date</label>
-        <input type="date" class="form-control" formControlName="visa_expiry_date" />
+        <input
+          type="date"
+          class="form-control"
+          formControlName="visa_expiry_date"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Owner Number</label>
-        <input type="text" class="form-control" formControlName="owner_number" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="owner_number"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Trade License No</label>
-        <input type="text" class="form-control" formControlName="trade_license_number" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="trade_license_number"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">License Number</label>
-        <input type="text" class="form-control" formControlName="license_number" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="license_number"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">License Expiry Date</label>
-        <input type="date" class="form-control" formControlName="license_expiry_date" />
+        <input
+          type="date"
+          class="form-control"
+          formControlName="license_expiry_date"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">License Issuer</label>
-        <input type="text" class="form-control" formControlName="license_issuer" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="license_issuer"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">Fax Number</label>
-        <input type="text" class="form-control" formControlName="fax_number" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="fax_number"
+          placeholder="Enter here"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label">P.O. Box Number</label>
-        <input type="text" class="form-control" formControlName="po_box_number" placeholder="Enter here" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="po_box_number"
+          placeholder="Enter here"
+        />
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
-    <button type="button" class="btn btnCommon" (click)="saveOwner(modal)" [disabled]="formLoading">
-      {{ formLoading ? 'Saving...' : 'Save' }}
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="saveOwner(modal)"
+      [disabled]="formLoading"
+    >
+      {{ formLoading ? "Saving..." : "Save" }}
     </button>
   </div>
 </ng-template>

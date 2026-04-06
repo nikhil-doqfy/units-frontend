@@ -20,7 +20,7 @@
                 [options]="yearOptions"
                 key="key"
                 value="value"
-                [placeholder]="'Year: All'"
+                [placeholder]="'YEAR_ALL' | translate"
                 (optionSelected)="onYearSelected($event)"
               ></app-custom-select>
             </span>
@@ -33,7 +33,7 @@
                 [options]="propertyOptions"
                 key="key"
                 value="value"
-                [placeholder]="'Property: All'"
+                [placeholder]="'PROPERTY_ALL' | translate"
                 (optionSelected)="onPropertySelected($event)"
               ></app-custom-select>
             </span>
@@ -46,7 +46,7 @@
                 [options]="blockOptions"
                 key="key"
                 value="value"
-                [placeholder]="'Block/Tower: All'"
+                [placeholder]="'BLOCK_TOWER_ALL' | translate"
                 (optionSelected)="onBlockSelected($event)"
               ></app-custom-select>
             </span>
@@ -59,7 +59,7 @@
                 [options]="unitOptions"
                 key="key"
                 value="value"
-                [placeholder]="'Unit: All'"
+                [placeholder]="'UNIT_ALL' | translate"
                 (optionSelected)="onUnitSelected($event)"
               ></app-custom-select>
             </span>
@@ -70,7 +70,7 @@
             type="button"
             (click)="clearFilters()"
           >
-            ✕ Clear Filter
+            ✕ {{ "CLEAR_FILTER" | translate }}
           </button>
         </div>
       </div>
@@ -79,7 +79,7 @@
           <i><app-search-icon></app-search-icon></i>
           <input
             type="text"
-            placeholder="Search here"
+            [placeholder]="'SEARCH_HERE' | translate"
             (input)="searchTextChange($any($event.target).value)"
           />
         </div>
@@ -99,8 +99,8 @@
             {{ card.count }} Cheques
           </span>
         </div>
-        <div class="title">{{ card.title }}</div>
-        <div class="subtitle">{{ card.subtitle }}</div>
+        <div class="title">{{ card.title | translate }}</div>
+        <div class="subtitle">{{ card.subtitle | translate }}</div>
         <span class="arrow"></span>
       </div>
     </div>
@@ -113,7 +113,7 @@
         <div class="row g-3 align-items-center">
           <div class="col-md">
             <app-table-title
-              title="Cheques"
+              [title]="'CHEQUES' | translate"
               [subtitle]="'(' + totalRecords + ')'"
               (onRefresh)="loadCheques()"
             ></app-table-title>
@@ -132,18 +132,20 @@
           <table class="table table-bordered cheques-table">
             <thead>
               <tr>
-                <th width="60">Sl.No</th>
-                <th width="90">Unit ID</th>
+                <th width="60">{{ "SI.NO" | translate }}</th>
+                <th width="90">{{ "UNIT_ID" | translate }}</th>
                 <th>
-                  Property Name <i><app-sorting-icon></app-sorting-icon></i>
+                  {{ "PROPERTY_NAME" | translate }}
+                  <i><app-sorting-icon></app-sorting-icon></i>
                 </th>
-                <th width="120">Block / Tower</th>
-                <th width="70">Unit</th>
+                <th width="120">{{ "BLOCK_TOWER_ALL" | translate }}</th>
+                <th width="70">{{ "UNIT_ALL" | translate }}</th>
                 <th>
-                  Tenant Name <i><app-sorting-icon></app-sorting-icon></i>
+                  {{ "TENANT_NAME" | translate }}
+                  <i><app-sorting-icon></app-sorting-icon></i>
                 </th>
-                <th width="140">Cheque No</th>
-                <th width="120">Cheque Date</th>
+                <th width="140">{{ "CHEQUE_NUMBER" | translate }}</th>
+                <th width="120">{{ "CHEQUE_DATE" | translate }}</th>
                 <th
                   width="110"
                   *ngIf="
@@ -153,7 +155,7 @@
                     activeSummary == 'bounce'
                   "
                 >
-                  Reference ID
+                  {{ "REFERENCE_ID" | translate }}
                 </th>
                 <th
                   width="140"
@@ -165,7 +167,7 @@
                       activeSummary !== 'balance')
                   "
                 >
-                  Settlement Bank
+                  {{ "SETTLEMENT_BANK" | translate }}
                 </th>
                 <th
                   width="130"
@@ -177,11 +179,13 @@
                       activeSummary !== 'balance')
                   "
                 >
-                  Settlement Acc
+                  {{ "SETTLEMENT_ACC" | translate }}
                 </th>
-                <th width="120">Amount</th>
-                <th width="80" *ngIf="activeSummary == 'bounce'">Actions</th>
-                <th width="110">Status</th>
+                <th width="120">{{ "AMOUNT" | translate }}</th>
+                <th width="80" *ngIf="activeSummary == 'bounce'">
+                  {{ "ACTIONS" | translate }}
+                </th>
+                <th width="110">{{ "STATUS" | translate }}</th>
               </tr>
             </thead>
 
@@ -269,10 +273,11 @@
                     [ngClass]="{
                       'bounce-highlight': activeSummary === 'bounce',
                     }"
-                    class="amount-cell"
                   >
-                    AED {{ row.cheque?.amount | number }}
-                    <span><img src="assets/check.svg" /></span>
+                    <span class="amount-cell">
+                      AED {{ row.cheque?.amount | number }}
+                      <span><img src="assets/check.svg" /></span>
+                    </span>
                   </td>
                   <td *ngIf="activeSummary == 'bounce'">
                     <app-table-action-btn

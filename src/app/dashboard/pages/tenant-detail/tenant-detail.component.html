@@ -9,19 +9,39 @@
   <app-table-view-card
     (click)="showMsg()"
     (dblclick)="hideMsg()"
-    [title]="(tenantData?.first_name || tenantData?.last_name)
-      ? ((tenantData.first_name + ' ' + tenantData.last_name).trim())
-      : (selectedLease?.tenant?.name || 'Abhram|Khaleeja Building|302')"
+    [title]="
+      tenantData?.first_name || tenantData?.last_name
+        ? (tenantData.first_name + ' ' + tenantData.last_name).trim()
+        : selectedLease?.tenant?.name || 'Abhram|Khaleeja Building|302'
+    "
     [imgSrc]="tenantData?.profile_image || selectedLease?.tenant?.photo || ''"
     [items]="[
-      { label: getLabel('TENANT_NO'), value: selectedLease?.tenant?.code || '98909897' },
-      { label: getLabel('PERIOD_FROM'), value: selectedLease?.dates?.start_date || '28/02/24' },
-      { label: getLabel('PERIOD_TO'), value: selectedLease?.dates?.end_date || '28/02/25' },
-      { label: getLabel('UNIT_TYPE'), value: selectedLease?.unit?.name || 'Residential' },
-      { label: getLabel('YEAR_RENT'), value: selectedLease?.financials?.rent || '67,000' },
+      {
+        label: getLabel('TENANT_NO'),
+        value: selectedLease?.tenant?.code || '98909897',
+      },
+      {
+        label: getLabel('PERIOD_FROM'),
+        value: selectedLease?.dates?.start_date || '28/02/24',
+      },
+      {
+        label: getLabel('PERIOD_TO'),
+        value: selectedLease?.dates?.end_date || '28/02/25',
+      },
+      {
+        label: getLabel('UNIT_TYPE'),
+        value: selectedLease?.unit?.name || 'Residential',
+      },
+      {
+        label: getLabel('YEAR_RENT'),
+        value: selectedLease?.financials?.rent || '67,000',
+      },
       { label: getLabel('OTHER_CHARGESE'), value: '13,000' },
       { label: getLabel('VAT'), value: '--' },
-      { label: getLabel('TOTAL_RENT'), value: selectedLease?.financials?.annual_amount || '1,00,000' }
+      {
+        label: getLabel('TOTAL_RENT'),
+        value: selectedLease?.financials?.annual_amount || '1,00,000',
+      },
     ]"
     (back)="handleBackClick()"
     [showCloseBtn]="false"
@@ -98,8 +118,13 @@
 
         <div class="invoice-section mt-3">
           <div class="mt-1">
-            <span><i><app-invoice-icon></app-invoice-icon></i> Invoice Generated Successfully</span>
-            <a href="#" (click)="onViewInvoiceClick(selectedLease, $event)">View Invoice</a>
+            <span
+              ><i><app-invoice-icon></app-invoice-icon></i>
+              {{ "INVOICE_GENERATED_SUCCESSFULLY" | translate }}</span
+            >
+            <a href="#" (click)="onViewInvoiceClick(selectedLease, $event)">{{
+              "VIEW_INVOICE" | translate
+            }}</a>
           </div>
         </div>
       </div>
@@ -108,17 +133,21 @@
 
   <!-- Photos & Documents -->
   <div class="mt-3">
-    <app-white-card title="Photos & Documents">
+    <app-white-card [title]="'PHOTOS_AND_DOCUMENTS' | translate">
       <ng-container *ngIf="tenantData?.document_groups?.length; else noDocs">
         <div class="commonTabs">
           <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item" *ngFor="let grp of tenantData.document_groups; let i = index">
+            <li
+              class="nav-item"
+              *ngFor="let grp of tenantData.document_groups; let i = index"
+            >
               <button
                 class="nav-link"
                 [class.active]="i === 0"
                 [attr.data-bs-toggle]="'tab'"
                 [attr.data-bs-target]="'#docGrp-' + i"
-                type="button" role="tab"
+                type="button"
+                role="tab"
               >
                 {{ grp.group }}
               </button>
@@ -145,7 +174,9 @@
         </div>
       </ng-container>
       <ng-template #noDocs>
-        <p class="text-muted mb-0">No documents uploaded.</p>
+        <p class="text-muted mb-0">
+          {{ "NO_DOCUMENTS_UPLOADED" | translate }}.
+        </p>
       </ng-template>
     </app-white-card>
   </div>
@@ -156,15 +187,15 @@
       <div class="summary-card">
         <div class="summary-item">
           <div class="amount">{{ totalAmount }}</div>
-          <div class="label">Total Rental Amount</div>
+          <div class="label">{{ "TOTAL_RENTAL_AMOUNT" | translate }}</div>
         </div>
         <div class="summary-item">
           <div class="amount">{{ receivedAmount }}</div>
-          <div class="label">Amount Received</div>
+          <div class="label">{{ "AMOUNT_RECEIVED" | translate }}</div>
         </div>
         <div class="summary-item">
           <div class="amount">{{ pendingAmount }}</div>
-          <div class="label">Pending Amount</div>
+          <div class="label">{{ "PENDING_AMOUNT" | translate }}</div>
         </div>
       </div>
       <div class="mt-4">
@@ -180,55 +211,34 @@
         <div class="col-md">
           <app-table-title
             [title]="'RENT_TRANSACTIONS' | translate"
-            [subtitle]="'(' + (rentTransactions.length + additionalTransactions.length) + ')'">
+            [subtitle]="
+              '(' +
+              (rentTransactions.length + additionalTransactions.length) +
+              ')'
+            "
+          >
           </app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
             <app-table-search placeholder="Search here..." />
+            <app-custom-dropdown
+              [title]="'RECEIPT' | translate"
+              [hasIcon]="true"
+            >
+              <app-receipt-icon></app-receipt-icon>
+            </app-custom-dropdown>
 
-            <div class="report-top-bar d-flex align-items-start gap-2">
-              <div class="custom-dropdown position-relative">
-                <button class="btn cmmnTblFltrBtn" (click)="toggleReceipt()">
-                  <i><app-receipt-icon></app-receipt-icon></i>
-                  Receipt
-                  <i><app-arrow-down-icon></app-arrow-down-icon></i>
-                </button>
-                <div class="custom-menu" *ngIf="showReceiptDropdown">
-                  <div class="dropdown-item" (click)="selectReceiptType('rental')">Rental</div>
-                  <div class="dropdown-item" (click)="selectReceiptType('charges')">Other Charges</div>
-                  <div class="dropdown-item" (click)="selectReceiptType('combined')">Combined</div>
-                </div>
-              </div>
-              <div class="custom-dropdown position-relative" *ngIf="showMonthDropdown">
-                <div class="custom-menu filter-box">
-                  <div class="form-check mb-2">
-                    <input type="checkbox" class="form-check-input" id="jan" />
-                    <label for="jan">Jan 2025</label>
-                  </div>
-                  <div class="form-check mb-2">
-                    <input type="checkbox" class="form-check-input" id="feb" checked />
-                    <label for="feb">Feb 2025</label>
-                  </div>
-                  <div class="form-check mb-2">
-                    <input type="checkbox" class="form-check-input" id="mar" checked />
-                    <label for="mar">Mar 2025</label>
-                  </div>
-                  <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="apr" />
-                    <label for="apr">Apr 2025</label>
-                  </div>
-                  <button class="btn generate-btn w-100" (click)="onViewInvoiceClick(selectedLease, $event)">
-                    Generate
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <app-table-filter-btn [title]="'FILTER' | translate" [hasIcon]="true">
+            <app-table-filter-btn
+              [title]="'FILTER' | translate"
+              [hasIcon]="true"
+            >
               <app-filter-icon />
             </app-table-filter-btn>
-            <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true">
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+            >
               <app-export-icon />
             </app-table-filter-btn>
           </div>
@@ -258,26 +268,34 @@
           <tbody>
             @for (t of rentTransactions; track t.id) {
               <tr>
-                <td>{{ t.code || '—' }}</td>
-                <td>{{ t.origin_bank?.name || '—' }}</td>
-                <td>{{ t.origin_account_number || '—' }}</td>
-                <td>{{ t.cheque_number || '—' }}</td>
-                <td>{{ t.cheque_date | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ t.payment_type || '—' }}</td>
+                <td>{{ t.code || "—" }}</td>
+                <td>{{ t.origin_bank?.name || "—" }}</td>
+                <td>{{ t.origin_account_number || "—" }}</td>
+                <td>{{ t.cheque_number || "—" }}</td>
+                <td>{{ t.cheque_date | date: "dd/MM/yyyy" }}</td>
+                <td>{{ t.payment_type || "—" }}</td>
                 <td>
                   @if (t.start_date && t.end_date) {
-                    {{ t.start_date | date: 'MMM yyyy' }} – {{ t.end_date | date: 'MMM yyyy' }}
-                  } @else { — }
+                    {{ t.start_date | date: "MMM yyyy" }} –
+                    {{ t.end_date | date: "MMM yyyy" }}
+                  } @else {
+                    —
+                  }
                 </td>
                 <td>
-                  <app-status-action-dropdown [status]="t.status || '—'"></app-status-action-dropdown>
+                  <app-status-action-dropdown
+                    [status]="t.status || '—'"
+                  ></app-status-action-dropdown>
                 </td>
                 <td>{{ t.amount | number }}</td>
                 <td>—</td>
                 <td>{{ t.amount | number }}</td>
                 <td align="center">
                   <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn type="preview" (clicked)="openReceiptModal(receiptContent)" />
+                    <app-table-action-btn
+                      type="preview"
+                      (clicked)="openReceiptModal(receiptContent)"
+                    />
                     <app-table-action-btn type="download" />
                   </div>
                 </td>
@@ -285,15 +303,17 @@
             }
             @for (t of additionalTransactions; track t.id) {
               <tr>
-                <td>{{ t.code || '—' }}</td>
-                <td>{{ t.origin_bank?.name || '—' }}</td>
-                <td>{{ t.origin_account_number || '—' }}</td>
-                <td>{{ t.cheque_number || '—' }}</td>
-                <td>{{ t.cheque_date | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ t.payment_type || '—' }}</td>
+                <td>{{ t.code || "—" }}</td>
+                <td>{{ t.origin_bank?.name || "—" }}</td>
+                <td>{{ t.origin_account_number || "—" }}</td>
+                <td>{{ t.cheque_number || "—" }}</td>
+                <td>{{ t.cheque_date | date: "dd/MM/yyyy" }}</td>
+                <td>{{ t.payment_type || "—" }}</td>
                 <td>Other Charges</td>
                 <td>
-                  <app-status-action-dropdown [status]="t.status || '—'"></app-status-action-dropdown>
+                  <app-status-action-dropdown
+                    [status]="t.status || '—'"
+                  ></app-status-action-dropdown>
                 </td>
                 <td>{{ t.amount | number }}</td>
                 <td>—</td>
@@ -319,10 +339,19 @@
     </div>
 
     <div class="cmmnTblFtr">
-      <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
-      <app-table-pagination [componentName]="componentName" [currentPage]="currentPage"
-        [totalRecords]="totalRecords" [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </div>
 
@@ -347,7 +376,8 @@
         <div class="activityItem">
           <div class="icon blue">P</div>
           <div class="content simple">
-            <strong>Prnjitha</strong> account was created by <strong>Hajji</strong>
+            <strong>Prnjitha</strong> account was created by
+            <strong>Hajji</strong>
           </div>
         </div>
       </div>
@@ -408,31 +438,51 @@
             </thead>
             <tbody>
               <tr>
-                <td>01</td><td>LP26272</td>
+                <td>01</td>
+                <td>LP26272</td>
                 <td>Rent for the period [Feb/2025-Mar/2025]</td>
-                <td>12/02/2025</td><td>Ali Amir</td><td>Cheque</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
                 <td>1234 53635 6537</td>
                 <td><app-badge title="Paid" status="green"></app-badge></td>
-                <td>1</td><td>14,576.00</td><td>14,576.00</td>
-                <td>5%</td><td>728.00</td><td>15,305.00</td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
               </tr>
               <tr>
-                <td rowspan="2">02</td><td>LP672628</td>
+                <td rowspan="2">02</td>
+                <td>LP672628</td>
                 <td>Rent for the period [Feb/2025-Mar/2025]</td>
-                <td>12/02/2025</td><td>Ali Amir</td><td>Cheque</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
                 <td>1234 53635 6537</td>
                 <td><app-badge title="Paid" status="green"></app-badge></td>
-                <td>1</td><td>14,576.00</td><td>14,576.00</td>
-                <td>5%</td><td>728.00</td><td>15,305.00</td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
               </tr>
               <tr>
                 <td>LP672628</td>
                 <td>Rent for the period [Feb/2025-Mar/2025]</td>
-                <td>12/02/2025</td><td>Ali Amir</td><td>Cheque</td>
+                <td>12/02/2025</td>
+                <td>Ali Amir</td>
+                <td>Cheque</td>
                 <td>1234 53635 6537</td>
                 <td><app-badge title="Paid" status="green"></app-badge></td>
-                <td>1</td><td>14,576.00</td><td>14,576.00</td>
-                <td>5%</td><td>728.00</td><td>15,305.00</td>
+                <td>1</td>
+                <td>14,576.00</td>
+                <td>14,576.00</td>
+                <td>5%</td>
+                <td>728.00</td>
+                <td>15,305.00</td>
               </tr>
             </tbody>
           </table>
@@ -456,15 +506,28 @@
 <!-- ── Modals ─────────────────────────────────────────────────────── -->
 <ng-template #changePaymentModeContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">{{ "Change payment Mode" | translate }}</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <h4 class="modal-title" id="modal-title">
+      {{ "Change payment Mode" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body"><app-chnage-payment-mode-form /></div>
   <div class="modal-footer">
-    <button type="button" class="btn btnCommon btnTransparent payment-link-btn" (click)="modal.dismiss('Save click')">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent payment-link-btn"
+      (click)="modal.dismiss('Save click')"
+    >
       {{ "Send Payement Link" | translate }}
     </button>
-    <button type="button" class="btn btnCommon">{{ "Done" | translate }}</button>
+    <button type="button" class="btn btnCommon">
+      {{ "Done" | translate }}
+    </button>
   </div>
 </ng-template>
 
@@ -472,25 +535,44 @@
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
       {{ "Replace cheque" | translate }}
-      <span class="ref">Reference No <span class="ref-badge">#72628 72827 27282</span></span>
+      <span class="ref"
+        >Reference No <span class="ref-badge">#72628 72827 27282</span></span
+      >
     </h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body"><app-replace-cheque /></div>
   <div class="modal-footer">
-    <button type="button" class="btn btnCommon btnTransparent payment-link-btn" (click)="modal.dismiss('Save click')">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent payment-link-btn"
+      (click)="modal.dismiss('Save click')"
+    >
       {{ "Send Payement Link" | translate }}
     </button>
-    <button type="button" class="btn btnCommon">{{ "Replace Cheque" | translate }}</button>
+    <button type="button" class="btn btnCommon">
+      {{ "Replace Cheque" | translate }}
+    </button>
   </div>
 </ng-template>
 
 <ng-template #receiptContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
-      {{ "Receipt:" | translate }} <span class="ref-badge">#72628 72827 27282</span>
+      {{ "Receipt:" | translate }}
+      <span class="ref-badge">#72628 72827 27282</span>
     </h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body"><app-receipt /></div>
 </ng-template>

@@ -29,7 +29,7 @@
 }
 
 .totalRow td {
-  background: var(--primary);
+  /* background: var(--primary); */
   font-weight: 600;
   padding: 14px;
 }
@@ -86,7 +86,7 @@
 
 .tenancy-table thead tr th:last-child {
   z-index: 3;
-  background-color: var(--activeBg);
+  background-color: var(--activeBg1);
   box-shadow: none;
 }
 

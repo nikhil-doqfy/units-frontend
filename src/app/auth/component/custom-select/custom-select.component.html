@@ -10,7 +10,7 @@
       *ngIf="!selectedOption"
       class="customSelectPlaceholder"
       [innerHTML]="placeholder"
-      >{{ placeholder }}</span
+      >{{ placeholder | translate }}</span
     >
     <span *ngIf="selectedOption">{{
       selectedOption ? selectedOption : "Select"

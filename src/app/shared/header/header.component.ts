@@ -533,6 +533,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.storage.setTheme(theme); // 👈 save in localStorage
 
     this.applyTheme();
+    this.themeService.setDarkMode(this.isDark);
   }
 
   applyTheme() {

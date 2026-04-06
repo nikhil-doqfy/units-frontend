@@ -42,6 +42,7 @@ import { ChnagePaymentModeFormComponent } from '../../component/forms/chnage-pay
 import { ReplaceChequeComponent } from '../../component/forms/replace-cheque/replace-cheque.component';
 import { ReceiptComponent } from '../../component/forms/receipt/receipt.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
 
 @Component({
   selector: 'app-tenant-detail',
@@ -75,25 +76,31 @@ import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
     ReplaceChequeComponent,
     ReceiptComponent,
     NoDataComponent,
+    CustomDropdownComponent,
   ],
   templateUrl: './tenant-detail.component.html',
   styleUrl: './tenant-detail.component.css',
 })
 export class TenantDetailComponent implements OnChanges {
   @Input() selectedLease: any = null;
-  @Output() back  = new EventEmitter<void>();
+  @Output() back = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
-  private translate       = inject(TranslateService);
-  private modalService    = inject(NgbModal);
-  private tenantsService  = inject(TenantsService);
-  private leaseService    = inject(LeaseService);
-  private destroyRef      = inject(DestroyRef);
+  private translate = inject(TranslateService);
+  private modalService = inject(NgbModal);
+  private tenantsService = inject(TenantsService);
+  private leaseService = inject(LeaseService);
+  private destroyRef = inject(DestroyRef);
 
   tenantData: any = null;
   rentTransactions: any[] = [];
   additionalTransactions: any[] = [];
-  areaChartData: { month: string; amount_received: number; cheque_bounce: number; total_amount: number }[] = [];
+  areaChartData: {
+    month: string;
+    amount_received: number;
+    cheque_bounce: number;
+    total_amount: number;
+  }[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedLease'] && this.selectedLease) {
@@ -112,8 +119,12 @@ export class TenantDetailComponent implements OnChanges {
       .getTenantDetails({ tenant_id: tenantId })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (resp: any) => { this.tenantData = resp?.content ?? null; },
-        error: () => { this.tenantData = null; },
+        next: (resp: any) => {
+          this.tenantData = resp?.content ?? null;
+        },
+        error: () => {
+          this.tenantData = null;
+        },
       });
   }
 
@@ -123,53 +134,54 @@ export class TenantDetailComponent implements OnChanges {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.rentTransactions       = resp?.content?.rent_cheques       ?? [];
+          this.rentTransactions = resp?.content?.rent_cheques ?? [];
           this.additionalTransactions = resp?.content?.additional_cheques ?? [];
         },
         error: () => {
-          this.rentTransactions       = [];
+          this.rentTransactions = [];
           this.additionalTransactions = [];
         },
       });
   }
 
   // ── view state ──────────────────────────────────────────────────
-  showInvoiceDetails   = false;
+  showInvoiceDetails = false;
   showRenewalBlockedMsg = false;
-  showMenu             = false;
-  showReceiptDropdown  = false;
-  showMonthDropdown    = false;
-  selectedReceiptType  = '';
+  showMenu = false;
+  showReceiptDropdown = false;
+  showMonthDropdown = false;
+  selectedReceiptType = '';
 
   // ── summary ─────────────────────────────────────────────────────
-  totalAmount    = '—';
+  totalAmount = '—';
   receivedAmount = '—';
-  pendingAmount  = '—';
+  pendingAmount = '—';
 
   private loadRentAnalytics(leaseId: number): void {
     const fmt = (n: number) =>
       `AED ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-    this.leaseService.getRentAnalytics({ lease_id: leaseId, year: new Date().getFullYear() })
+    this.leaseService
+      .getRentAnalytics({ lease_id: leaseId, year: new Date().getFullYear() })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           const s = resp?.content?.summary;
           if (s) {
-            this.totalAmount    = fmt(s.total_amount    ?? 0);
+            this.totalAmount = fmt(s.total_amount ?? 0);
             this.receivedAmount = fmt(s.amount_received ?? 0);
-            this.pendingAmount  = fmt(s.pending_amount  ?? 0);
+            this.pendingAmount = fmt(s.pending_amount ?? 0);
           }
           this.areaChartData = resp?.content?.monthly ?? [];
         },
       });
   }
 
-  componentName      = 'TenantDetailComponent';
-  totalRecords       = 0;
-  rowsPerPage        = 10;
+  componentName = 'TenantDetailComponent';
+  totalRecords = 0;
+  rowsPerPage = 10;
   rowsPerPageOptions = [10, 25, 50, 100];
-  currentPage        = 1;
+  currentPage = 1;
 
   // ── helpers ─────────────────────────────────────────────────────
   getLabel(key: string): string {
@@ -178,36 +190,43 @@ export class TenantDetailComponent implements OnChanges {
 
   transactionStatusClass(status: string): string {
     const s = (status || '').toLowerCase();
-    if (s.includes('credit') || s.includes('paid') || s.includes('realiz')) return 'badge-active';
-    if (s.includes('bounce') || s.includes('reject'))                        return 'badge-rejected';
-    if (s.includes('invoice') || s.includes('generat'))                      return 'badge-draft';
-    if (s.includes('pending') || s.includes('balance'))                      return 'badge-inactive';
+    if (s.includes('credit') || s.includes('paid') || s.includes('realiz'))
+      return 'badge-active';
+    if (s.includes('bounce') || s.includes('reject')) return 'badge-rejected';
+    if (s.includes('invoice') || s.includes('generat')) return 'badge-draft';
+    if (s.includes('pending') || s.includes('balance')) return 'badge-inactive';
     return 'badge-inactive';
   }
 
-  toggleMenu() { this.showMenu = !this.showMenu; }
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
 
-  showMsg()  { this.showRenewalBlockedMsg = true; }
-  hideMsg()  { this.showRenewalBlockedMsg = false; }
+  showMsg() {
+    this.showRenewalBlockedMsg = true;
+  }
+  hideMsg() {
+    this.showRenewalBlockedMsg = false;
+  }
 
   toggleReceipt() {
     this.showReceiptDropdown = !this.showReceiptDropdown;
-    this.showMonthDropdown   = false;
+    this.showMonthDropdown = false;
   }
 
   selectReceiptType(type: string) {
     this.selectedReceiptType = type;
-    this.showMonthDropdown   = true;
+    this.showMonthDropdown = true;
   }
 
   onViewInvoiceClick(lease: any, event: Event) {
     event.preventDefault();
-    this.selectedLease     = lease;
+    this.selectedLease = lease;
     this.showInvoiceDetails = true;
   }
 
   handleBackClick() {
-    this.showInvoiceDetails   = false;
+    this.showInvoiceDetails = false;
     this.showRenewalBlockedMsg = false;
     this.back.emit();
   }

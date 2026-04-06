@@ -16,11 +16,17 @@ import { CustomSelectService } from './custom-select.service';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { ArrowUpIconComponent } from '../../../shared/component/icons/arrow-up-icon/arrow-up-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-custom-select',
   standalone: true,
-  imports: [CommonModule, ArrowDownIconComponent, ArrowUpIconComponent],
+  imports: [
+    CommonModule,
+    ArrowDownIconComponent,
+    ArrowUpIconComponent,
+    TranslateModule,
+  ],
   templateUrl: './custom-select.component.html',
   styleUrls: ['./custom-select.component.css'],
 })
@@ -28,7 +34,7 @@ export class CustomSelectComponent implements OnInit {
   @Input() isFilter: boolean = false;
   @Input() isSmall: boolean = false;
   @Input() options: string[] = [];
-  @Input() placeholder: string = '--select--';
+  @Input() placeholder: string = 'SELECT_OPTION';
   @Output() optionSelected = new EventEmitter<string>();
 
   @Input() selectedOption: string | null = null;

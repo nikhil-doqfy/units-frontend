@@ -15,6 +15,7 @@ import { SearchWhatsappIconComponent } from '../../icons/search-whatsapp-icon/se
 import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ContactSearchService } from '../../contact-search.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-search-contact',
@@ -27,6 +28,7 @@ import { ContactSearchService } from '../../contact-search.service';
     SearchMailIconComponent,
     SearchWhatsappIconComponent,
     ReactiveFormsModule,
+    TranslateModule,
   ],
   templateUrl: './search-contact.component.html',
   styleUrl: './search-contact.component.css',

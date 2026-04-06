@@ -21,7 +21,7 @@
   height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--muteBorder1, #e2e8f0);
+  border: 2px solid var(--muteBorder1, --muteBorder1);
 }
 
 .profileEditBtn {
@@ -31,14 +31,14 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: var(--muteBg, #f1f5f9);
-  border: 1px solid var(--greyBorder, #cbd5e1);
+  background: var(--muteBg, var(--muteBg));
+  border: 1px solid var(--greyBorder);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: var (--shadowLight);
 }
 
 .profileName {
@@ -74,7 +74,7 @@
 /* ── Disabled inputs look read-only (no grey wash) ────────────────── */
 .form-control:disabled,
 .form-control[disabled] {
-  background-color: var(--muteBg, #f8fafc);
+  background-color: var(--muteBg, --disabledBg);
   color: var(--blackText);
   border-color: transparent;
   opacity: 1;

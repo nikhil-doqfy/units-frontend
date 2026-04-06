@@ -1,5 +1,7 @@
 .cmmnTblBody table thead tr th {
-  background-color: var(--table-header-bg);
+  background-color: var(--table-header-bg1);
+  color: white;
+  border-right: 1px solid var(--muteBorder1);
 }
 
 .announcement-page {
@@ -131,7 +133,11 @@
   outline: none;
   transition: 0.2s;
 }
-
+.form-group select {
+  background-color: var(--modelBg);
+  color: var(--greyText);
+  border: 1px solid var(--formBorder);
+}
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
@@ -402,6 +408,9 @@
 
 .title-width input {
   width: 273.75px;
+  background-color: var(--modelBg);
+  color: var(--greyText);
+  border: 1px solid var(--formBorder);
 }
 
 .priority-inline {
@@ -455,7 +464,7 @@
 
 .broadcast-table tbody tr td:last-child {
   background-color: var(--whiteBg);
-  box-shadow: -2px 0 4px var(--table-cell-shadow);
+  /* box-shadow: -2px 0 4px var(--table-shadow); */
 }
 
 .table td:last-child::before,

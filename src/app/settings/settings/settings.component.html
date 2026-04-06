@@ -15,7 +15,7 @@
               class="sidebar-link"
             >
               <i><app-profile-icon></app-profile-icon></i>
-              MY PROFILE
+              {{ "MY_PROFILE" | translate }}
             </a>
 
             <a
@@ -24,7 +24,9 @@
               class="sidebar-link"
             >
               <app-termscondition-icon></app-termscondition-icon>
-              <span class="link-text">TERMS & CONDITIONS</span>
+              <span class="link-text">{{
+                "TERMS & CONDITIONS" | translate
+              }}</span>
             </a>
 
             <a
@@ -33,7 +35,7 @@
               class="sidebar-link"
             >
               <app-charges-icon></app-charges-icon>
-              CHARGES
+              {{ "CHARGES" | translate }}
             </a>
           </nav>
         </aside>

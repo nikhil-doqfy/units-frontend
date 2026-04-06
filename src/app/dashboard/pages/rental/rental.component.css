@@ -544,7 +544,7 @@ Link .replace-link {
   top: 42px;
   right: 0;
   width: 200px;
-  background: var(--bg-white);
+  background: var(--modelBg);
   border-radius: 10px;
   box-shadow: 0 8px 24px var(--shadow-md);
   padding: 6px 0;
@@ -555,6 +555,8 @@ Link .replace-link {
   width: 100%;
   padding: 10px 14px;
   border: none;
+  color: var(--tbl-text-color);
+
   background: transparent;
   text-align: left;
   cursor: pointer;

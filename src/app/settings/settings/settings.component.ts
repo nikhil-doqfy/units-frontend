@@ -9,6 +9,8 @@ import { ChargesIconComponent } from '../../icons/charges-icon/charges-icon.comp
 import { TermsconditionIconComponent } from '../../icons/termscondition-icon/termscondition-icon.component';
 import { UserIconComponent } from '../../auth/component/icons/user-icon/user-icon.component';
 import { ProfileIconComponent } from '../../icons/profile-icon/profile-icon.component';
+import { translate } from 'ol/transform';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings',
@@ -25,6 +27,7 @@ import { ProfileIconComponent } from '../../icons/profile-icon/profile-icon.comp
     TermsconditionIconComponent,
     UserIconComponent,
     ProfileIconComponent,
+    TranslateModule,
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',

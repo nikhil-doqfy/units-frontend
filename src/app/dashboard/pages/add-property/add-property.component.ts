@@ -361,9 +361,9 @@ export class AddPropertyComponent {
 
   getPageTitle() {
     return `
-    Total Blocks / Tower 
+    ${this.translate.instant('TOTAL_BLOCKS_TOWERS')}
     <span class="blockCount">${this.blockCount}</span>
-    Total Units 
+    ${this.translate.instant('TOTAL_UNITS')}
     <span class="unitCount">${this.unitCount}/</span>
   `;
   }

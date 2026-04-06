@@ -3,9 +3,9 @@
   position: relative;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--cardShadow);
   background-color: var(--whiteBg);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--borderColor);
 }
 
 /* ── Badge number (top-right) ──────────────────────── */
@@ -13,12 +13,12 @@
   position: absolute;
   top: -10px;
   right: 15px;
-  background: #d6dee1;
+  background: var(--badgeBg);
   padding: 4px 10px;
   font-size: 12px;
   font-weight: 600;
   border-radius: 6px;
-  color: #374151;
+  color: var(--badgeText);
 }
 
 /* ── Section title ─────────────────────────────────── */
@@ -27,7 +27,7 @@
   font-weight: 600;
   text-decoration: underline;
   margin-bottom: 16px;
-  color: #111827;
+  color: var(--textPrimary);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -37,7 +37,7 @@
   font-size: 13px;
   font-weight: 400;
   text-decoration: none;
-  color: #536c76;
+  color: var(--textSecondary);
 }
 
 /* ── Form labels ───────────────────────────────────── */
@@ -52,12 +52,14 @@
 .charges-table th {
   font-size: 13px;
   font-weight: 600;
-  background-color: #f8fafc;
+  background-color: var(--tableHeaderBg);
+  color: var(--textMuted);
 }
 
 .charges-table td {
   font-size: 13px;
   vertical-align: middle;
+  color: var(--textPrimary);
 }
 
 /*───────── CHARGES TABLE ───────── */
@@ -65,17 +67,17 @@
 .charges-table th {
   font-size: 13px;
   font-weight: 600;
-  background-color: #eef2f5;
-  color: #374151;
+  background-color: var(--table-th-bg1);
+  color: var(--textMuted);
   padding: 10px;
   border: none;
 }
 .sectionCardThree {
   position: relative;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 15px var(--cardShadow);
   background-color: var(--whiteBg);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--borderColor);
 }
 
 .otherChargesTitle {
@@ -83,20 +85,20 @@
   font-weight: 600;
   padding: 20px;
   text-decoration: underline;
-  color: #111827;
+  color: var(--textPrimary);
   display: flex;
   align-items: center;
   gap: 24px;
 }
 
 .totalText {
-  color: #536c76;
+  color: var(--textSecondary);
   font-size: 14px;
   font-weight: 400;
 }
 
 .currency {
-  color: #232b2e;
+  color: var(--textStrong);
   font-weight: 600;
   margin-left: 4px;
   font-size: 14px;
@@ -124,13 +126,13 @@
 }
 
 ::ng-deep .tableRow:hover td {
-  background-color: #f5f7f8 !important;
-  color: black;
+  background-color: var(--hoverBg) !important;
+  color: var(--textBlack);
 }
 
 .saveBtn {
-  background-color: #458453;
-  color: white;
+  background-color: var(--btnPrimary);
+  color: var(--textWhite);
   border: none;
   padding: 4px 10px;
   border-radius: 4px;
@@ -143,11 +145,11 @@
 
 .amountText {
   display: inline-block;
-  color: black;
+  color: var(--textBlack);
 }
 
 .editUnderline {
-  border-bottom: 2px solid #007bff;
+  border-bottom: 2px solid var(--editUnderline);
   padding: 0 12px;
 }
 
@@ -168,8 +170,8 @@
   z-index: -1;
 
   box-shadow:
-    0 -4px 8px rgba(0, 0, 0, 0.12),
-    0 4px 8px rgba(0, 0, 0, 0.12);
+    0 -4px 8px var(--rowShadowTop),
+    0 4px 8px var(--rowShadowBottom);
 }
 
 .charges-table td,
