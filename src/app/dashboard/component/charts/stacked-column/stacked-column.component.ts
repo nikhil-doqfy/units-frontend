@@ -202,12 +202,13 @@ export class StackedColumnChartComponent
         min: 0,
         max: yMax,
         labels: {
-          formatter: (val: number) => `AED ${val.toLocaleString()}`,
+          // style: { colors: axisColor },
+          formatter: (value) => 'AED ' + value.toLocaleString('en-IN'),
         },
         axisBorder: { show: false },
         axisTicks: { show: false },
       },
-      dataLabels: { enabled: false },
+      // dataLabels: { enabled: false },
       fill: { opacity: 1 },
       tooltip: {
         y: { formatter: (val: number) => 'AED ' + val.toLocaleString() },
