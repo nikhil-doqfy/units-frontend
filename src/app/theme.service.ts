@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 export type UserRole = 'owner' | 'property-manager' | 'tenant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ThemeService {
   private roleSubject = new BehaviorSubject<UserRole>('owner');
@@ -14,7 +14,12 @@ export class ThemeService {
     const savedRole = localStorage.getItem('userRole') as UserRole;
     if (savedRole) this.setRole(savedRole);
   }
+  private darkMode = new BehaviorSubject<boolean>(false);
+  isDarkMode$ = this.darkMode.asObservable();
 
+  setDarkMode(value: boolean) {
+    this.darkMode.next(value);
+  }
   setRole(role: UserRole): void {
     this.roleSubject.next(role);
     localStorage.setItem('userRole', role);
@@ -26,7 +31,11 @@ export class ThemeService {
   }
 
   private applyTheme(role: UserRole): void {
-    document.body.classList.remove('theme-owner', 'theme-manager', 'theme-tenant');
+    document.body.classList.remove(
+      'theme-owner',
+      'theme-manager',
+      'theme-tenant',
+    );
     switch (role) {
       case 'owner':
         document.body.classList.add('theme-owner');

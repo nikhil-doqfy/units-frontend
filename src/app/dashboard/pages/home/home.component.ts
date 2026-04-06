@@ -78,7 +78,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
   private sharedApiService = inject(SharedApiService);
-
   selectedMonthly: string = 'Oct 2025';
   selectedFilter: string = '';
   occupiedPercent = 0;
@@ -128,10 +127,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   chequeStatusOptions = [
     { key: '', value: 'All' },
-    { key: 'BALANCE',  value: 'Balance'  },
+    { key: 'BALANCE', value: 'Balance' },
     { key: 'CREDITED', value: 'Credited' },
     { key: 'REALIZED', value: 'Realized' },
-    { key: 'BOUNCED',  value: 'Bounced'  },
+    { key: 'BOUNCED', value: 'Bounced' },
   ];
   breadcrumbData = [
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
@@ -159,7 +158,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.getChequeVisibility();
     this.loadPayments();
   }
-
   changeLanguage(lang: string) {
     this.sharedService.setLanguage(lang);
   }
@@ -197,8 +195,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   loadPayments(params?: any) {
     this.homeService.getOtherTypePayments(params).subscribe((res) => {
-      this.monthlyData          = res.content.monthly_data   || [];
-      this.paymentTotalRevenue  = res.content.total_revenue  ?? 0;
+      this.monthlyData = res.content.monthly_data || [];
+      this.paymentTotalRevenue = res.content.total_revenue ?? 0;
     });
   }
   stats: any = {
@@ -229,9 +227,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   loadChequeAging(property?: any) {
     const params =
-      property && property.key !== 'ALL'
-        ? { property_id: property.key }
-        : {};
+      property && property.key !== 'ALL' ? { property_id: property.key } : {};
     this.homeService
       .getChequeAging(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -365,15 +361,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       next: (res) => {
         this.totalAmount = res.content?.overall?.due_amount ?? 0;
         this.duesOverall = {
-          total_amount:    res.content?.overall?.total_amount    ?? 0,
+          total_amount: res.content?.overall?.total_amount ?? 0,
           received_amount: res.content?.overall?.received_amount ?? 0,
-          due_amount:      res.content?.overall?.due_amount      ?? 0,
+          due_amount: res.content?.overall?.due_amount ?? 0,
         };
         this.duesData = (res.content?.monthly_data || []).map((m: any) => ({
-          monthName:      m.month_str,
-          totalAmount:    m.total_amount    > 0 ? 100 : 0,
+          monthName: m.month_str,
+          totalAmount: m.total_amount > 0 ? 100 : 0,
           receivedAmount: m.received_percent ?? 0,
-          dueAmount:      m.due_percent      ?? 0,
+          dueAmount: m.due_percent ?? 0,
         }));
       },
       error: (err) => console.error('Dues API error:', err),
@@ -529,7 +525,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
           next: (res) => {
             this.chequeVisUnits = res?.content?.property_unit_with_lease || [];
           },
-          error: () => { this.chequeVisUnits = []; },
+          error: () => {
+            this.chequeVisUnits = [];
+          },
         });
     }
   }
@@ -543,23 +541,57 @@ export class HomeComponent implements OnInit, AfterViewInit {
     let fromDate!: number;
     let toDate!: number;
 
-    if (this.chequeVisSelectedPeriodType === 'month' && this.chequeVisSelectedMonthly) {
+    if (
+      this.chequeVisSelectedPeriodType === 'month' &&
+      this.chequeVisSelectedMonthly
+    ) {
       // input type="month" returns "YYYY-MM"
       const [yearStr, monthStr] = this.chequeVisSelectedMonthly.split('-');
       const year = Number(yearStr);
       const monthIndex = Number(monthStr) - 1;
       fromDate = new Date(year, monthIndex, 1, 0, 0, 0).getTime();
-      toDate   = new Date(year, monthIndex + 1, 0, 23, 59, 59).getTime();
+      toDate = new Date(year, monthIndex + 1, 0, 23, 59, 59).getTime();
     } else if (this.chequeVisSelectedPeriodType === 'last6') {
-      toDate   = now.getTime();
-      fromDate = new Date(now.getFullYear(), now.getMonth() - 5, 1, 0, 0, 0).getTime();
-    } else if (this.chequeVisSelectedPeriodType === 'year' && this.chequeVisSelectedYear) {
+      toDate = now.getTime();
+      fromDate = new Date(
+        now.getFullYear(),
+        now.getMonth() - 5,
+        1,
+        0,
+        0,
+        0,
+      ).getTime();
+    } else if (
+      this.chequeVisSelectedPeriodType === 'year' &&
+      this.chequeVisSelectedYear
+    ) {
       fromDate = new Date(this.chequeVisSelectedYear, 0, 1, 0, 0, 0).getTime();
-      toDate   = new Date(this.chequeVisSelectedYear, 11, 31, 23, 59, 59).getTime();
+      toDate = new Date(
+        this.chequeVisSelectedYear,
+        11,
+        31,
+        23,
+        59,
+        59,
+      ).getTime();
     } else {
       // default: current month
-      fromDate = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0).getTime();
-      toDate   = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).getTime();
+      fromDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1,
+        0,
+        0,
+        0,
+      ).getTime();
+      toDate = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        0,
+        23,
+        59,
+        59,
+      ).getTime();
     }
 
     return { fromDate, toDate };
@@ -570,7 +602,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     const params: any = { from_date: fromDate, to_date: toDate };
 
-    if (this.chequeVisSelectedProperty?.key && this.chequeVisSelectedProperty.key !== 'ALL') {
+    if (
+      this.chequeVisSelectedProperty?.key &&
+      this.chequeVisSelectedProperty.key !== 'ALL'
+    ) {
       params.property_id = this.chequeVisSelectedProperty.key;
     }
     if (this.chequeVisSelectedUnit?.key) {

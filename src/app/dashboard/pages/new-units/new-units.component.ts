@@ -140,22 +140,32 @@ export class NewUnitsComponent implements OnInit {
     this.loadProperties();
     this.loadDocumentTypes();
     this.sharedApiService.getOptionsType([
-      { param: 'PMC_OWNERS', key: 'pmc_owners', setter: (v) => (this.ownerList = v) },
+      {
+        param: 'PMC_OWNERS',
+        key: 'pmc_owners',
+        setter: (v) => (this.ownerList = v),
+      },
     ]);
 
     // In edit mode, auto-load blocks when property is pre-populated via patchValue
     if (this.route.snapshot.paramMap.get('id')) {
-      this.basicDetailsForm.get('property')?.valueChanges
-        .pipe(filter((v) => !!v?.key), take(1))
+      this.basicDetailsForm
+        .get('property')
+        ?.valueChanges.pipe(
+          filter((v) => !!v?.key),
+          take(1),
+        )
         .subscribe((prop) => {
-          this.propertyService.getPropertyBlocks({ property_id: prop.key }).subscribe({
-            next: (resp: any) => {
-              this.blockList = (resp?.content || []).map((b: any) => ({
-                key: b.id,
-                value: b.block_name,
-              }));
-            },
-          });
+          this.propertyService
+            .getPropertyBlocks({ property_id: prop.key })
+            .subscribe({
+              next: (resp: any) => {
+                this.blockList = (resp?.content || []).map((b: any) => ({
+                  key: b.id,
+                  value: b.block_name,
+                }));
+              },
+            });
         });
     }
   }

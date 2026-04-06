@@ -29,7 +29,7 @@
                   <div class="add-card draw-card">
                     <!-- Top Row -->
                     <div class="draw-header">
-                      <span class="title">Draw</span>
+                      <span class="title">{{ "DRAW" | translate }}</span>
                       <input type="radio" name="signType" class="draw-check" />
                     </div>
 
@@ -51,7 +51,7 @@
 
                   <div class="add-card font">
                     <div class="draw-header">
-                      <span class="title">Font</span>
+                      <span class="title">{{ "FONT" | translate }}</span>
                       <input type="radio" name="signType" class="draw-check" />
                     </div>
 
@@ -73,7 +73,7 @@
 
                   <div class="add-card upload">
                     <div class="draw-header">
-                      <span class="title">Upload</span>
+                      <span class="title">{{ "UPLOAD" | translate }}</span>
                       <input type="radio" name="signType" class="draw-check" />
                     </div>
 
@@ -82,7 +82,9 @@
                       <i class="fa fa-cloud-upload upload-icon"
                         ><app-upload-doc-icon></app-upload-doc-icon
                       ></i>
-                      <div class="upload-text">click to select file</div>
+                      <div class="upload-text">
+                        {{ "CLICK_TO_SELECT_FILE" | translate }}
+                      </div>
 
                       <input
                         type="file"

@@ -3,7 +3,7 @@
     <div class="row g-3 align-items-center">
       <div class="col-md">
         <app-table-title
-          [title]="'All Units' | translate"
+          [title]="'ALL_UNITS' | translate"
           [subtitle]="'(' + totalRecords + ')'"
           (onRefresh)="onRefresh()"
         ></app-table-title>
@@ -19,45 +19,49 @@
             <ng-container form>
               <div class="row g-3">
                 <div class="col-12">
-                  <label class="form-label">Property</label>
+                  <label class="form-label">{{ "PROPERTY" | translate }}</label>
                   <app-custom-select
                     [options]="propertyOptions"
                     key="key"
                     value="value"
-                    placeholder="Select property"
+                    [placeholder]="'SELECT_PROPERTY' | translate"
                     (optionSelected)="filterPropertyId = $event?.key"
                   >
                   </app-custom-select>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">No of Bedrooms</label>
+                  <label class="form-label">{{
+                    "NO_OF_BEDROOMS" | translate
+                  }}</label>
                   <app-custom-select
                     [options]="bedroomOptions"
                     key="key"
                     value="value"
-                    placeholder="Select bedrooms"
+                    [placeholder]="'SELECT_BEDROOMS' | translate"
                     (optionSelected)="filterBedrooms = $event?.key"
                   >
                   </app-custom-select>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">Floor No</label>
+                  <label class="form-label">{{ "FLOOR_NO" | translate }}</label>
                   <app-custom-select
                     [options]="floorOptions"
                     key="key"
                     value="value"
-                    placeholder="Select floor"
+                    [placeholder]="'SELECT_FLOOR' | translate"
                     (optionSelected)="filterFloor = $event?.key"
                   >
                   </app-custom-select>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">Area Unit</label>
+                  <label class="form-label">{{
+                    "AREA_UNIT" | translate
+                  }}</label>
                   <app-custom-select
                     [options]="areaUnitOptions"
                     key="key"
                     value="value"
-                    placeholder="Select area unit"
+                    [placeholder]="'SELECT_AREA_UNIT' | translate"
                     (optionSelected)="filterAreaUnit = $event?.key"
                   >
                   </app-custom-select>
@@ -70,14 +74,14 @@
                 class="btn btnCommon"
                 (click)="removeFilter(); filterPopup.closePopup()"
               >
-                Remove All
+                {{ "REMOVE_ALL" | translate }}
               </button>
               <button
                 type="button"
                 class="btn btnCommon"
                 (click)="applyFilter(); filterPopup.closePopup()"
               >
-                Apply
+                {{ "APPLY" | translate }}
               </button>
             </ng-container>
           </app-filter-popup-btn>
@@ -98,18 +102,19 @@
       <table class="table table-bordered units-table">
         <thead>
           <tr>
-            <th>Unit ID</th>
+            <th>{{ "UNIT_ID" | translate }}</th>
             <th>
-              Unit Name <i><app-sorting-icon></app-sorting-icon></i>
+              {{ "UNIT_NAME" | translate }}
+              <i><app-sorting-icon></app-sorting-icon></i>
             </th>
-            <th>Property Name</th>
-            <th>Block / Tower</th>
-            <th>Floor No</th>
-            <th>Plot No</th>
-            <th>Plot Area (Sqft)</th>
-            <th>Makani No</th>
-            <th>Dewa No</th>
-            <th>Rent (AED)</th>
+            <th>{{ "PROPERTY_NAME" | translate }}</th>
+            <th>{{ "BLOCK_TOWER" | translate }}</th>
+            <th>{{ "FLOOR_NO" | translate }}</th>
+            <th>{{ "PLOT_NO" | translate }}</th>
+            <th>{{ "PLOT_AREA" | translate }}</th>
+            <th>{{ "MAKANI_NO" | translate }}</th>
+            <th>{{ "DEWA_NO" | translate }}</th>
+            <th>{{ "RENT_AED" | translate }}</th>
             <th></th>
           </tr>
         </thead>

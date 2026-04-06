@@ -8,151 +8,194 @@
 }
 
 @if (!showTenantDetail) {
+  <!-- Loading -->
+  <div *ngIf="loading()" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
 
-<!-- Loading -->
-<div *ngIf="loading()" class="text-center py-5">
-  <div class="spinner-border text-primary" role="status"></div>
-</div>
+  <ng-container *ngIf="!loading()">
+    <!-- ── Owner Profile Card ─────────────────────────────── -->
+    <app-table-view-card
+      class="mb-3"
+      [title]="
+        owner?.name ||
+        ((owner?.first_name || '') + ' ' + (owner?.last_name || '')).trim()
+      "
+      [imgSrc]="owner?.profile_image || ''"
+      [headerItems]="[
+        { label: 'Contact', value: owner?.contact_number || '' },
+        { label: 'Email', value: owner?.email || '' },
+      ]"
+      [items]="[
+        { label: getLabel('EMIRATES_ID'), value: owner?.emirates_id || '—' },
+        { label: getLabel('RESIDENCE_VISA'), value: owner?.visa_number || '—' },
+        {
+          label: getLabel('TRADE_LICENSE'),
+          value: owner?.trade_license_number || '—',
+        },
+        {
+          label: getLabel('OWNER_CODE'),
+          value: owner?.code || owner?.owner_number || '—',
+        },
+        { label: getLabel('ROLE'), value: 'Owner' },
+      ]"
+      [showCloseBtn]="false"
+      (back)="goBack()"
+    />
 
-<ng-container *ngIf="!loading()">
-
-  <!-- ── Owner Profile Card ─────────────────────────────── -->
-  <app-table-view-card
-    class="mb-3"
-    [title]="owner?.name || ((owner?.first_name || '') + ' ' + (owner?.last_name || '')).trim()"
-    [imgSrc]="owner?.profile_image || ''"
-    [headerItems]="[
-      { label: 'Contact', value: owner?.contact_number || '' },
-      { label: 'Email',   value: owner?.email || '' }
-    ]"
-    [items]="[
-      { label: 'Emirates ID',    value: owner?.emirates_id || '—' },
-      { label: 'Residence Visa', value: owner?.visa_number || '—' },
-      { label: 'Trade License',  value: owner?.trade_license_number || '—' },
-      { label: 'Owner Code',     value: owner?.code || owner?.owner_number || '—' },
-      { label: 'Role',           value: 'Owner' }
-    ]"
-    [showCloseBtn]="false"
-    (back)="goBack()"
-  />
-
-  <!-- ── Owner Properties Table ────────────────────────── -->
-  <div class="cmmnTblOuter mt-3">
-    <div class="cmmnTblHdr">
-      <div class="row g-3 align-items-center">
-        <div class="col-md">
-          <app-table-title
-            [title]="'Owner Properties'"
-            [subtitle]="'(' + totalRecords + ')'"
-            (onRefresh)="onRefresh()" />
-        </div>
-        <div class="col-md-auto">
-          <div class="d-flex align-items-center gap-2">
-            <app-table-search placeholder="Search..." (onValueChange)="searchTextChange($event)" />
-            <app-table-filter-btn title="Export" [hasIcon]="true">
-              <app-export-icon />
-            </app-table-filter-btn>
+    <!-- ── Owner Properties Table ────────────────────────── -->
+    <div class="cmmnTblOuter mt-3">
+      <div class="cmmnTblHdr">
+        <div class="row g-3 align-items-center">
+          <div class="col-md">
+            <app-table-title
+              [title]="'OWNER_PROPERTIES' | translate"
+              [subtitle]="'(' + totalRecords + ')'"
+              (onRefresh)="onRefresh()"
+            />
+          </div>
+          <div class="col-md-auto">
+            <div class="d-flex align-items-center gap-2">
+              <app-table-search
+                [placeholder]="'SEARCH_HERE' | translate"
+                (onValueChange)="searchTextChange($event)"
+              />
+              <app-table-filter-btn
+                [title]="'EXPORT' | translate"
+                [hasIcon]="true"
+              >
+                <app-export-icon />
+              </app-table-filter-btn>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="cmmnTbl">
-      <div class="table-responsive">
-        <table class="table table-bordered owner-props-table">
-          <thead>
-            <tr>
-              <th>Code <i><app-sorting-icon /></i></th>
-              <th>Property Name <i><app-sorting-icon /></i></th>
-              <th>Tenant Name <i><app-sorting-icon /></i></th>
-              <th>Tenancy Status</th>
-              <th>Agreement</th>
-              <th width="80">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngIf="propsLoading()">
+      <div class="cmmnTbl">
+        <div class="table-responsive">
+          <table class="table table-bordered owner-props-table">
+            <thead>
               <tr>
-                <td colspan="6" class="text-center py-4">
-                  <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-                </td>
+                <th>
+                  {{ "CODE" | translate }} <i><app-sorting-icon /></i>
+                </th>
+                <th>
+                  {{ "PROPERTY_NAME" | translate }} <i><app-sorting-icon /></i>
+                </th>
+                <th>
+                  {{ "TENANT_NAME" | translate }} <i><app-sorting-icon /></i>
+                </th>
+                <th>{{ "TENANCY_STATUS" | translate }}</th>
+                <th>{{ "AGREEMENT" | translate }}</th>
+                <th width="80">{{ "ACTIONS" | translate }}</th>
               </tr>
-            </ng-container>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="propsLoading()">
+                <tr>
+                  <td colspan="6" class="text-center py-4">
+                    <div
+                      class="spinner-border spinner-border-sm text-primary"
+                      role="status"
+                    ></div>
+                  </td>
+                </tr>
+              </ng-container>
 
-            <ng-container *ngIf="!propsLoading()">
-              @for (prop of properties; track $index) {
-              <tr>
-                <td class="fw-500">{{ prop.code || prop.property_unit_id || '—' }}</td>
-                <td style="cursor:pointer" (click)="viewProperty(prop)">
-                  <app-table-img-item
-                    [img]="prop.property_image || prop.thumbnail || '../../../../assets/property/property-img-default.svg'"
-                    [title]="prop.property_name || prop.name || '—'"
-                    size="md"
-                    [showInitialsFallback]="true" />
-                </td>
-                <td>
-                  <ng-container *ngIf="prop.tenant_name; else noTenant">
-                    <span style="cursor:pointer" (click)="viewTenant(prop)">
+              <ng-container *ngIf="!propsLoading()">
+                @for (prop of properties; track $index) {
+                  <tr>
+                    <td class="fw-500">
+                      {{ prop.code || prop.property_unit_id || "—" }}
+                    </td>
+                    <td style="cursor: pointer" (click)="viewProperty(prop)">
                       <app-table-img-item
-                        [img]="prop.tenant_profile_image || ''"
-                        [title]="prop.tenant_name"
+                        [img]="
+                          prop.property_image ||
+                          prop.thumbnail ||
+                          '../../../../assets/property/property-img-default.svg'
+                        "
+                        [title]="prop.property_name || prop.name || '—'"
                         size="md"
-                        [showInitialsFallback]="true" />
-                    </span>
-                  </ng-container>
-                  <ng-template #noTenant>
-                    <span class="text-muted">N/A</span>
-                  </ng-template>
-                </td>
-                <td>
-                  <span class="statusBadge" [ngClass]="statusClass(prop.tenancy_status)">
-                    {{ prop.tenancy_status || '—' }}
-                  </span>
-                </td>
-                <td>
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn
-                      type="download"
-                      [class.disabled-btn]="!prop.pdf_download_url"
-                      (clicked)="downloadContract(prop)" />
-                    <app-table-action-btn
-                      type="view"
-                      [class.disabled-btn]="!prop.pdf_url"
-                      (clicked)="viewContract(prop)" />
-                  </div>
-                </td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn type="edit" (clicked)="editUnit(prop)" />
-                  </div>
-                </td>
-              </tr>
-              } @empty {
-              <tr>
-                <td colspan="6" class="text-center"><app-no-data /></td>
-              </tr>
-              }
-            </ng-container>
-          </tbody>
-        </table>
+                        [showInitialsFallback]="true"
+                      />
+                    </td>
+                    <td>
+                      <ng-container *ngIf="prop.tenant_name; else noTenant">
+                        <span
+                          style="cursor: pointer"
+                          (click)="viewTenant(prop)"
+                        >
+                          <app-table-img-item
+                            [img]="prop.tenant_profile_image || ''"
+                            [title]="prop.tenant_name"
+                            size="md"
+                            [showInitialsFallback]="true"
+                          />
+                        </span>
+                      </ng-container>
+                      <ng-template #noTenant>
+                        <span class="text-muted">N/A</span>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <span
+                        class="statusBadge"
+                        [ngClass]="statusClass(prop.tenancy_status)"
+                      >
+                        {{ prop.tenancy_status || "—" }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="cmmnTblActnBtnDiv">
+                        <app-table-action-btn
+                          type="download"
+                          [class.disabled-btn]="!prop.pdf_download_url"
+                          (clicked)="downloadContract(prop)"
+                        />
+                        <app-table-action-btn
+                          type="view"
+                          [class.disabled-btn]="!prop.pdf_url"
+                          (clicked)="viewContract(prop)"
+                        />
+                      </div>
+                    </td>
+                    <td align="center">
+                      <div class="cmmnTblActnBtnDiv">
+                        <app-table-action-btn
+                          type="edit"
+                          (clicked)="editUnit(prop)"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6" class="text-center"><app-no-data /></td>
+                  </tr>
+                }
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="cmmnTblFtr">
+        <app-table-select
+          [componentName]="componentName"
+          [rowsPerPage]="rowsPerPage"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          (rowsPerPageChange)="onPageSizeChange($event)"
+        />
+        <app-table-pagination
+          [componentName]="componentName"
+          [currentPage]="currentPage"
+          [totalRecords]="totalRecords"
+          [rowsPerPage]="rowsPerPage"
+          (pageChange)="onPageChange($event)"
+        />
       </div>
     </div>
-
-    <div class="cmmnTblFtr">
-      <app-table-select
-        [componentName]="componentName"
-        [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-        (rowsPerPageChange)="onPageSizeChange($event)" />
-      <app-table-pagination
-        [componentName]="componentName"
-        [currentPage]="currentPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage"
-        (pageChange)="onPageChange($event)" />
-    </div>
-  </div>
-
-</ng-container>
-
-} <!-- end @if (!showTenantDetail) -->
+  </ng-container>
+}
+<!-- end @if (!showTenantDetail) -->

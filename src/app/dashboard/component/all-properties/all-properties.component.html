@@ -20,23 +20,25 @@
               <ng-container form>
                 <div class="row g-3">
                   <div class="col-12">
-                    <label class="form-label">Property Type</label>
+                    <label class="form-label">{{
+                      "PROPERTY_TYPE" | translate
+                    }}</label>
                     <app-custom-select
                       [options]="propertyTypeOptions"
                       key="key"
                       value="value"
-                      placeholder="Select type"
+                      [placeholder]="'SELECT_PROPERTY' | translate"
                       (optionSelected)="filterPropertyType = $event?.key"
                     >
                     </app-custom-select>
                   </div>
                   <div class="col-12">
-                    <label class="form-label">Status</label>
+                    <label class="form-label">{{ "STATUS" | translate }}</label>
                     <app-custom-select
                       [options]="statusOptions"
                       key="key"
                       value="value"
-                      placeholder="Select status"
+                      [placeholder]="'SELECT_STATUS' | translate"
                       (optionSelected)="filterStatus = $event?.key"
                     >
                     </app-custom-select>
@@ -49,14 +51,14 @@
                   class="btn btnCommon"
                   (click)="removeFilter(); filterPopup.closePopup()"
                 >
-                  Remove All
+                  {{ "REMOVE_ALL" | translate }}
                 </button>
                 <button
                   type="button"
                   class="btn btnCommon"
                   (click)="applyFilter(); filterPopup.closePopup()"
                 >
-                  Apply
+                  {{ "APPLY" | translate }}
                 </button>
               </ng-container>
             </app-filter-popup-btn>

@@ -73,21 +73,22 @@
             <table class="table table-bordered">
               <thead>
                 <tr>
-                  <th>Date Requested</th>
-                  <th>Requested by</th>
-                  <th>Property Name</th>
+                  <th>{{ "DATE_REQUESTED" | translate }}</th>
+                  <th>{{ "REQUESTED_BY" | translate }}</th>
+                  <th>{{ "PROPERTY_NAME" | translate }}</th>
                   <th>
-                    Block/Tower<i><app-sorting-icon></app-sorting-icon></i>
+                    {{ "BLOCK_TOWER" | translate
+                    }}<i><app-sorting-icon></app-sorting-icon></i>
                   </th>
-                  <th>Unit</th>
+                  <th>{{ "UNIT" | translate }}</th>
 
                   <th>
                     {{ "TENANT_NAME" | translate }}
                     <i><app-sorting-icon /></i>
                   </th>
-                  <th>Tenure</th>
-                  <th>Rent</th>
-                  <th>Actual Rent</th>
+                  <th>{{ "TENURE" | translate }}</th>
+                  <th>{{ "RENT" | translate }}</th>
+                  <th>{{ "ACTUAL_RENT" | translate }}</th>
                   <th width="200"></th>
                 </tr>
               </thead>
@@ -709,11 +710,11 @@
   >
     <div header-actions class="column">
       <button type="button" class="btn btnWhite btnCommon rejectBtn">
-        Reject
+        {{ "REJECT" | translate }}
       </button>
 
       <button type="button" class="btn btnWhite btnCommon approveBtn">
-        Approve
+        {{ "APPROVE" | translate }}
       </button>
     </div>
     <div rental class="mt-3">
@@ -721,7 +722,7 @@
         <div class="row">
           <!-- Tenant Details -->
           <div class="col-md-2">
-            <p class="section-title">Tenant Details</p>
+            <p class="section-title">{{ "TENANT_DETAILS" | translate }}</p>
 
             <h6 class="main-name">ABHRAM</h6>
 
@@ -732,7 +733,7 @@
 
           <!-- Property Details -->
           <div class="col-md-6">
-            <p class="section-title">Property Details:</p>
+            <p class="section-title">{{ "PROPERTY_DETAILS" | translate }}</p>
 
             <h6 class="main-name">KHALEEJA BUILDING | 302</h6>
 
@@ -752,13 +753,13 @@
         <div class="lease-card">
           <!-- Header -->
           <div class="lease-header">
-            <h6>Leased Unit</h6>
+            <h6>{{ "LEASED_UNIT" | translate }}</h6>
             <span class="badge">01</span>
           </div>
 
           <div class="form-grid row g-3">
             <div class="col-md-6">
-              <label class="form-label">{{ "Start Date" }}</label>
+              <label class="form-label">{{ "START_DATE" | translate }}</label>
               <app-custom-select
                 [width]="'300px'"
                 [iconType]="'custom'"
@@ -766,7 +767,7 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "End Date" }}</label>
+              <label class="form-label">{{ "END_DATE" | translate }}</label>
               <app-custom-select
                 [highlight]="true"
                 [width]="'300px'"
@@ -775,14 +776,18 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Grace Start Date" }}</label>
+              <label class="form-label">{{
+                "GRACE_START_DATE" | translate
+              }}</label>
               <app-custom-select
                 [width]="'300px'"
                 [iconType]="'custom'"
               ></app-custom-select>
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ "Grace End Date" }}</label>
+              <label class="form-label">{{
+                "GRACE_END_DATE" | translate
+              }}</label>
               <app-custom-select
                 [width]="'300px'"
                 [iconType]="'custom'"
@@ -799,53 +804,61 @@
         <div class="lease-card">
           <!-- Header -->
           <div class="lease-header">
-            <h6>Amount/Rent Details</h6>
+            <h6>{{ "AMOUNT_RENT_DETAILS" | translate }}</h6>
             <span class="badge">02</span>
           </div>
 
           <!-- Form Grid -->
           <div class="form-grid row g-3">
             <div class="col-md-6">
-              <label class="form-label">{{ "Annual Amount" }}</label>
+              <label class="form-label">{{
+                "ANNUAL_AMOUNT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Actual Annual  Amount " }}</label>
+              <label class="form-label">{{
+                "ACTUAL_ANNUAL_AMOUNT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Security/Booking Amount" }}</label>
+              <label class="form-label">{{
+                "SECURITY_BOOKING_AMOUNT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ "Maintenance Charges" }}</label>
+              <label class="form-label">{{
+                "MAINTENANCE_CHARGES" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Rent " }}</label>
+              <label class="form-label">{{ "RENT" | translate }}</label>
               <input
                 type="text"
                 class="form-control rentHighlight"
@@ -854,61 +867,73 @@
               />
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ "Security Deposit" }}</label>
+              <label class="form-label">{{
+                "SECURITY_DEPOSIT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ "Commission in %" }}</label>
+              <label class="form-label">{{
+                "COMMISION_IN %" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Notice-Period" }}</label>
+              <label class="form-label">{{
+                "NOTICE_PERIOD" | translate
+              }}</label>
               <app-custom-select [width]="'300px'"></app-custom-select>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Contract Amount" }}</label>
+              <label class="form-label">{{
+                "CONTRACT_AMOUNT" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Discount (Optional)" }}</label>
+              <label class="form-label">{{ "DISCOUNT" | translate }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Shell & Core " }}</label>
+              <label class="form-label">{{
+                "SHELL_AND_CORE" | translate
+              }}</label>
               <input
                 type="text"
                 class="form-control"
-                [placeholder]="'Enter here'"
+                [placeholder]="'ENTER_HERE' | translate"
                 style="width: 300px"
               />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">{{ "Payment Count" }}</label>
+              <label class="form-label">{{
+                "PAYMENT_COUNT" | translate
+              }}</label>
               <app-custom-select [width]="'300px'"></app-custom-select>
             </div>
           </div>
@@ -919,9 +944,9 @@
   <div class="sectionCardThree mt-3">
     <span class="sectionBadge">03</span>
     <h6 class="otherChargesTitle">
-      Other Charges
+      {{ "OTHER_CHARGES" | translate }}
       <span class="totalLabel">
-        <span class="totalText">Total:</span>
+        <span class="totalText">{{ "TOTAL:" | translate }}</span>
         <span class="currency"
           >AED {{ totalAmount | number: "1.2-2" }}</span
         ></span
