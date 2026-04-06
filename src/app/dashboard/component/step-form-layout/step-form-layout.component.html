@@ -47,7 +47,7 @@
                 <i class="uploadIcon"
                   ><app-download-icon></app-download-icon
                 ></i>
-                Bulk Uploads
+                {{ "BULK_UPLOADS" | translate }}
               </button>
               <button
                 type="button"
@@ -55,7 +55,7 @@
                 *ngIf="group.main.showEditButton"
                 (click)="nextStep()"
               >
-                {{ "Add/Edit Fields" | translate }}
+                {{ "ADD/Edit_FIELDS" | translate }}
               </button>
               <button
                 type="button"

@@ -4,7 +4,7 @@
       <div class="row g-3 align-items-center">
         <div class="col-md">
           <app-table-title
-            [title]="'All Employee' | translate"
+            [title]="'All_EMPLOYEE' | translate"
             [subtitle]="'(' + totalRecords + ')'"
           ></app-table-title>
         </div>
@@ -67,7 +67,7 @@
               <app-export-icon />
             </app-table-filter-btn>
             <app-table-filter-btn
-              [title]="'Add Employee' | translate"
+              [title]="'ADD_EMPLOYEE' | translate"
               [hasIcon]="true"
               (clicked)="openAddStaffModal(addStaffContent)"
             >
@@ -113,7 +113,11 @@
 
                 <td>
                   <app-table-multi-img-item
-                    [images]="staff.property_images?.length ? staff.property_images : ['assets/property/property-list-1.png']"
+                    [images]="
+                      staff.property_images?.length
+                        ? staff.property_images
+                        : ['assets/property/property-list-1.png']
+                    "
                     [totalCount]="staff.property_count"
                     size="md"
                   />
@@ -180,7 +184,7 @@
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
       {{
-        isEditMode ? ("EDIT_STAFF" | translate) : ("Add Employee" | translate)
+        isEditMode ? ("EDIT_STAFF" | translate) : ("ADD_EMPLOYEE" | translate)
       }}
     </h4>
     <button
@@ -224,15 +228,29 @@
       { label: getLabel('CODE'), value: selectedStaff.code || 'N/A' },
       { label: getLabel('EMAIL'), value: selectedStaff.email },
       { label: getLabel('PHONE_NUMBER'), value: selectedStaff.contact_number },
-      { label: getLabel('EMIRATES_ID'), value: selectedStaff.emirate_id || 'N/A' },
+      {
+        label: getLabel('EMIRATES_ID'),
+        value: selectedStaff.emirate_id || 'N/A',
+      },
       { label: getLabel('CITY'), value: selectedStaff.city || 'N/A' },
       { label: getLabel('LOCALITY'), value: selectedStaff.locality || 'N/A' },
-      { label: getLabel('POSTAL_CODE'), value: selectedStaff.postal_code || 'N/A' },
-      { label: getLabel('ADDRESS_LINE_1'), value: selectedStaff.address || 'N/A' },
-      { label: getLabel('ADDRESS_LINE_2'), value: selectedStaff.additional_address || 'N/A' },
+      {
+        label: getLabel('POSTAL_CODE'),
+        value: selectedStaff.postal_code || 'N/A',
+      },
+      {
+        label: getLabel('ADDRESS_LINE_1'),
+        value: selectedStaff.address || 'N/A',
+      },
+      {
+        label: getLabel('ADDRESS_LINE_2'),
+        value: selectedStaff.additional_address || 'N/A',
+      },
       {
         label: getLabel('STAFF_ROLE'),
-        value: selectedStaff.roles?.length ? selectedStaff.roles.join(', ') : 'N/A',
+        value: selectedStaff.roles?.length
+          ? selectedStaff.roles.join(', ')
+          : 'N/A',
       },
     ]"
     [showEdit]="true"
@@ -291,7 +309,10 @@
 
                 <td>
                   <app-table-img-item
-                    [img]="property.property_image || 'assets/property/property-list-1.png'"
+                    [img]="
+                      property.property_image ||
+                      'assets/property/property-list-1.png'
+                    "
                     size="md"
                     [title]="property.property_name"
                   />

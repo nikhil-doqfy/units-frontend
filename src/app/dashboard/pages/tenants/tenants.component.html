@@ -18,7 +18,7 @@
               [class.active]="mainTab === 'onboarding'"
               (click)="selectMainTab('onboarding')"
             >
-              Onboarding Tenants
+              {{ "PAGE_TITLE.ONBOARDING_TENANTS" | translate }}
             </button>
           </li>
           <li>
@@ -27,7 +27,7 @@
               [class.active]="mainTab === 'active'"
               (click)="selectMainTab('active')"
             >
-              Active Tenants
+              {{ "PAGE_TITLE.ACTIVE_TENANTS" | translate }}
             </button>
           </li>
         </ul>
@@ -48,7 +48,7 @@
                     [class.active]="subTab === s.key"
                     (click)="selectSubTab(s.key)"
                   >
-                    {{ s.label }}
+                    {{ s.label | translate }}
                   </button>
                 }
               </ul>
@@ -73,11 +73,11 @@
           <div class="col-md-auto">
             <div class="d-flex align-items-center gap-2 gap-md-3">
               <app-table-search
-                placeholder="Search here..."
+                [placeholder]="'SEARCH_HERE' | translate"
                 (onValueChange)="searchTextChange($event)"
               />
               <app-table-filter-btn
-                title="Export"
+                [title]="'EXPORT' | translate"
                 [hasIcon]="true"
                 (clicked)="handleExportClick()"
               >
@@ -95,20 +95,20 @@
             <thead>
               <tr>
                 <th>
-                  Tenant Name <i><app-sorting-icon /></i>
+                  {{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i>
                 </th>
-                <th>Tenant Code</th>
-                <th>Lease Code</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Emirates ID</th>
-                <th>Property</th>
-                <th>Block / Tower</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Rent (AED)</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>{{ "TENANT_CODE" | translate }}</th>
+                <th>{{ "LEASE_CODE" | translate }}</th>
+                <th>{{ "EMAIL" | translate }}</th>
+                <th>{{ "CONTACT_NUMBER" | translate }}</th>
+                <th>{{ "EMIRATES_ID" | translate }}</th>
+                <th>{{ "PROPERTY" | translate }}</th>
+                <th>{{ "BLOCK_TOWER" | translate }}</th>
+                <th>{{ "START_DATE" | translate }}</th>
+                <th>{{ "END_DATE" | translate }}</th>
+                <th>{{ "RENT(AED)" | translate }}</th>
+                <th>{{ "STATUS" | translate }}</th>
+                <th>{{ "ACTIONS" | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -145,7 +145,11 @@
                   <td>{{ t.dates?.start_date || "—" }}</td>
                   <td>{{ t.dates?.end_date || "—" }}</td>
                   <td>
-                    {{ t.financials?.rent != null ? (t.financials.rent | number: "1.2-2") : "N/A" }}
+                    {{
+                      t.financials?.rent != null
+                        ? (t.financials.rent | number: "1.2-2")
+                        : "N/A"
+                    }}
                   </td>
                   <td>
                     <span

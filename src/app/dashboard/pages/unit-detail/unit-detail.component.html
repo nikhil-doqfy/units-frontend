@@ -5,22 +5,41 @@
 <ng-container *ngIf="!loading">
   <!-- Unit card: image gallery + unit info accordion -->
   <app-white-card class="mb-3">
-    <app-property-view-card [propertyImages]="unitImages" [name]="unitName" [location]="unitLocation" [price]="unitRent"
-      [priceLabel]="'Unit ID'" [priceValue]="unitCode" [sections]="unitSections" [showBack]="true" [status]="status"
-      [showPlatformIcons]="false" [infoLabel]="'UNIT_INFORMATION'" (back)="goBack()" />
+    <app-property-view-card
+      [propertyImages]="unitImages"
+      [name]="unitName"
+      [location]="unitLocation"
+      [price]="unitRent"
+      [priceLabel]="'Unit ID'"
+      [priceValue]="unitCode"
+      [sections]="unitSections"
+      [showBack]="true"
+      [status]="status"
+      [showPlatformIcons]="false"
+      [infoLabel]="'UNIT_INFORMATION'"
+      (back)="goBack()"
+    />
   </app-white-card>
 
   <!-- Documents -->
-  <app-white-card [title]="'All Documents'">
-    <div *ngIf="docTabKeys.length === 0" class="text-muted" style="font-size:13px; padding: 8px 0;">
-      No documents uploaded.
+  <app-white-card [title]="'ALL_DOCUMENTS' | translate">
+    <div
+      *ngIf="docTabKeys.length === 0"
+      class="text-muted"
+      style="font-size: 13px; padding: 8px 0"
+    >
+      {{ "NO_DOCUMENTS_UPLOADED" | translate }}
     </div>
 
     <ng-container *ngIf="docTabKeys.length > 0">
       <div class="commonTabs">
         <ul class="nav nav-tabs">
           <li class="nav-item" *ngFor="let typeId of docTabKeys">
-            <button class="nav-link" [class.active]="activeDocTab === typeId" (click)="activeDocTab = typeId">
+            <button
+              class="nav-link"
+              [class.active]="activeDocTab === typeId"
+              (click)="activeDocTab = typeId"
+            >
               {{ docTypeNames[typeId] || typeId }}
             </button>
           </li>
@@ -29,23 +48,38 @@
 
       <div class="commonTabsContent">
         <div class="tab-content">
-          <div *ngFor="let typeId of docTabKeys" class="tab-pane fade" [class.show]="activeDocTab === typeId"
-            [class.active]="activeDocTab === typeId">
+          <div
+            *ngFor="let typeId of docTabKeys"
+            class="tab-pane fade"
+            [class.show]="activeDocTab === typeId"
+            [class.active]="activeDocTab === typeId"
+          >
             <div class="row g-2 mt-1">
               <div class="col-auto" *ngFor="let doc of documentsByType[typeId]">
                 <div class="doc-item" (click)="openDocument(doc.url)">
                   <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
                     <path
                       d="M11 2H5C4.46957 2 3.96086 2.21071 3.58579 2.58579C3.21071 2.96086 3 3.46957 3 4V16C3 16.5304 3.21071 17.0391 3.58579 17.4142C3.96086 17.7893 4.46957 18 5 18H15C15.5304 18 16.0391 17.7893 16.4142 17.4142C16.7893 17.0391 17 16.5304 17 16V8L11 2Z"
-                      stroke="#6366F1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M11 2V8H17" stroke="#6366F1" stroke-width="1.5" stroke-linecap="round"
-                      stroke-linejoin="round" />
+                      stroke="#6366F1"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M11 2V8H17"
+                      stroke="#6366F1"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
                   <span class="doc-name">{{ doc.file_name }}</span>
                 </div>
               </div>
               <div class="col-12" *ngIf="documentsByType[typeId]?.length === 0">
-                <span class="text-muted" style="font-size:13px">No documents for this type.</span>
+                <span class="text-muted" style="font-size: 13px"
+                  >No documents for this type.</span
+                >
               </div>
             </div>
           </div>

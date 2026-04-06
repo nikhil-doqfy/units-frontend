@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { OnChanges, SimpleChanges } from '@angular/core';
 import {
   ApexAxisChartSeries,
@@ -12,6 +18,8 @@ import {
   ApexTitleSubtitle,
   NgApexchartsModule,
 } from 'ng-apexcharts';
+import { ThemeService } from '../../../../theme.service';
+import { Subject, takeUntil } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,6 +31,8 @@ export type ChartOptions = {
   title: ApexTitleSubtitle;
   colors?: string[];
   fill: ApexFill;
+  theme?: any;
+  grid?: any;
 };
 
 @Component({
@@ -32,24 +42,25 @@ export type ChartOptions = {
   templateUrl: './column.component.html',
   styleUrl: './column.component.css',
 })
-export class ColumnChartComponent implements OnChanges, AfterViewInit {
+export class ColumnChartComponent
+  implements OnChanges, OnDestroy, AfterViewInit
+{
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+
   @Input() data: { name: string; value: number }[] = [];
-  constructor() {
+
+  public chartOptions: Partial<ChartOptions>;
+
+  private destroy$ = new Subject<void>();
+  private viewReady = false;
+
+  constructor(private themeService: ThemeService) {
     this.chartOptions = {
-      series: [
-        {
-          name: 'My-series',
-          data: [],
-        },
-      ],
+      series: [{ name: 'My-series', data: [] }],
       chart: {
         height: 212,
         type: 'bar',
-        toolbar: {
-          show: false,
-        },
+        toolbar: { show: false },
       },
       colors: ['#2C7AFF'],
       plotOptions: {
@@ -58,101 +69,101 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
           horizontal: false,
         },
       },
-      title: {
-        text: '',
-        align: 'left',
-      },
       xaxis: {
         categories: [],
         axisBorder: { show: false },
         axisTicks: { show: false },
       },
-      dataLabels: {
-        enabled: false,
-      },
       yaxis: {
+        axisBorder: { show: false },
+        axisTicks: { show: false },
         labels: {
           formatter: (value) => 'AED ' + value.toLocaleString('en-IN'),
         },
-        axisBorder: { show: false },
-        axisTicks: { show: false },
       },
-      fill: {
-        opacity: 1,
-      },
+      dataLabels: { enabled: false },
+      fill: { opacity: 1 },
     };
   }
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['data'] && this.data?.length) {
-  //     this.chartOptions.series = [
-  //       {
-  //         name: 'My-series',
-  //         data: this.data.map((d) => d.value),
-  //       },
-  //     ];
 
-  //     this.chartOptions.xaxis = {
-  //       ...this.chartOptions.xaxis,
-  //       categories: this.data.map((d) => d.name),
-  //     };
-  //   }
+  // ✅ THEME HANDLE (SAFE WAY)
+  ngOnInit() {
+    const theme = localStorage.getItem('theme');
+    const isDark = theme === 'dark';
 
-  private viewReady = false;
+    this.themeService.setDarkMode(isDark);
 
-  ngAfterViewInit() {
-    this.viewReady = true;
-    if (this.data?.length) {
-      this.applyToChart();
-    }
+    this.themeService.isDarkMode$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isDark) => {
+        const axisColor = isDark ? '#FFFFFF' : '#000000';
+        const gridColor = isDark
+          ? '#e8e1e114' // 👈 VERY faint (HEX with opacity)
+          : '#0000001a';
+
+        // ✅ Update options for initial render
+        this.chartOptions = {
+          ...this.chartOptions,
+          xaxis: {
+            ...this.chartOptions.xaxis,
+            labels: { style: { colors: axisColor } },
+          },
+          yaxis: {
+            ...this.chartOptions.yaxis,
+            labels: {
+              style: { colors: axisColor },
+              formatter: (value) => 'AED ' + value.toLocaleString('en-IN'),
+            },
+          },
+          grid: {
+            show: true,
+            borderColor: gridColor,
+            strokeDashArray: 0,
+            position: 'back',
+          },
+        };
+
+        // ✅ If chart is ready → update UI instantly
+        if (this.viewReady && this.chart) {
+          this.chart.updateOptions(
+            {
+              xaxis: { labels: { style: { colors: axisColor } } },
+              yaxis: { labels: { style: { colors: axisColor } } },
+              grid: { borderColor: gridColor },
+            },
+            true,
+            true,
+          );
+        }
+      });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] && this.data?.length) {
-      const values     = this.data.map((d) => d.value);
+  // ✅ DATA HANDLE
+  ngOnChanges() {
+    if (this.data?.length) {
+      const values = this.data.map((d) => d.value);
       const categories = this.data.map((d) => d.name);
 
-      // Always update bound options so the chart renders correctly on first paint
       this.chartOptions = {
         ...this.chartOptions,
         series: [{ name: 'My-series', data: values }],
-        xaxis:  { ...this.chartOptions.xaxis, categories },
+        xaxis: { ...this.chartOptions.xaxis, categories },
       };
 
-      // Also call the imperative API if the chart instance is already mounted
-      if (this.viewReady) {
-        this.applyToChart();
+      if (this.viewReady && this.chart) {
+        this.chart.updateSeries([{ name: 'My-series', data: values }]);
+        this.chart.updateOptions({ xaxis: { categories } }, true);
       }
     }
   }
 
-  private applyToChart() {
-    if (!this.chart) return;
-    const values     = this.data.map((d) => d.value);
-    const categories = this.data.map((d) => d.name);
-
-    this.chart.updateSeries([{ name: 'My-series', data: values }]);
-    this.chart.updateOptions({ xaxis: { categories } }, true);
+  ngAfterViewInit() {
+    this.viewReady = true;
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['data'] && this.data?.length && this.chart) {
-  //     const values = this.data.map((d) => d.value);
-  //     const categories = this.data.map((d) => d.name);
-
-  //     this.chart.updateOptions(
-  //       {
-  //         series: [
-  //           {
-  //             name: 'My-series',
-  //             data: values,
-  //           },
-  //         ],
-  //         xaxis: {
-  //           categories: categories,
-  //         },
-  //       },
-  //       true,
-  //     );
-  //   }
-  // }
+  // ✅ MEMORY SAFE
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

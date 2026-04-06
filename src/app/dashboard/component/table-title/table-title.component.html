@@ -1,6 +1,9 @@
 <div class="cmmnTblTtl" [ngClass]="size">
   <h4>
-    {{ title }} <span *ngIf="subtitle">{{ subtitle }}</span>
-    <button *ngIf="subtitle" type="button" (click)="onRefresh.emit()"><app-refresh-icon /></button>
+    {{ title | translate }}
+    <span *ngIf="subtitle">{{ subtitle }}</span>
+    <button *ngIf="subtitle" type="button" (click)="onRefresh.emit()">
+      <app-refresh-icon />
+    </button>
   </h4>
 </div>

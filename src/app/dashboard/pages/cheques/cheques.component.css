@@ -247,8 +247,6 @@
   display: none;
 }
 
-
-
 :host ::ng-deep .custom-select-wrapper .customSelectInput {
   padding: 0 !important;
   border: none !important;
@@ -264,7 +262,17 @@
   );
 }
 .amount-cell {
+  height: 100%;
   display: flex;
   align-items: center;
   gap: 40px;
+}
+.cmmnTbl .table tr > *:last-child {
+  border-right: none !important;
+}
+/* .cmmnTbl .table tr > *:last-child {
+  border-bottom: none !important;
+} */
+.cmmnTbl .table > :not(caption) > tbody > tr:last-child > td:last-child {
+  border-bottom: none !important;
 }

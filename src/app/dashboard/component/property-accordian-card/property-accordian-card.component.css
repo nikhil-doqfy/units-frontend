@@ -15,12 +15,14 @@
   line-height: 18px;
   padding: 10px 16px;
   justify-content: space-between;
+  background-color: var(--whiteBg);
 }
 
 .prprtyAcrdn .accordion-button:not(.collapsed),
 .prprtyAcrdn .accordion-button:focus {
   color: var(--greyText2);
-  background-color: transparent;
+  /* background-color: transparent; */
+  background-color: var(--whiteBg);
   box-shadow: none;
 }
 
@@ -33,6 +35,7 @@
 .prprtyAcrdn .accordion-body {
   padding: 16px;
   border-top: 1px solid var(--muteBorder1);
+  background-color: var(--whiteBg);
 }
 
 .prprtyAcrdn .accordion-body ul {

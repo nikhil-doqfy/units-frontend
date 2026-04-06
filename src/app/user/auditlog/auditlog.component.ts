@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BreadCrumb } from '../../shared/model/shared.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../shared.service';
+import { AuditlogService } from '../../auditlog.service';
 
 @Component({
   selector: 'app-auditlog',
@@ -32,6 +33,7 @@ import { SharedService } from '../../shared.service';
   styleUrl: './auditlog.component.css',
 })
 export class AuditlogComponent {
+  auditLogList: any[] = [];
   pageTitle: string = '';
   currentLanguage = 'en';
   logs = [
@@ -81,6 +83,7 @@ export class AuditlogComponent {
     },
   ];
   constructor(
+    private auditLogService: AuditlogService,
     private router: Router,
     private translate: TranslateService,
   ) {
@@ -105,6 +108,7 @@ export class AuditlogComponent {
   private destroyRef = inject(DestroyRef);
   ngOnInit() {
     this.loadBreadcrumb();
+    this.getAuditLog();
   }
   showDetailView: boolean = false;
 
@@ -139,5 +143,15 @@ export class AuditlogComponent {
     this.sharedService
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
+  }
+  getAuditLog() {
+    console.log('API method called');
+    this.auditLogService
+      .getAuditLog()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((resp: any) => {
+        console.log('API response:', resp);
+        this.auditLogList = resp?.content ?? [];
+      });
   }
 }

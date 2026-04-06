@@ -62,7 +62,9 @@
                 <form>
                   <div class="row g-3">
                     <div class="col-md-6">
-                      <label class="form-label">{{ "USER_TYPE" | translate }}</label>
+                      <label class="form-label">{{
+                        "USER_TYPE" | translate
+                      }}</label>
                       <app-custom-select
                         [options]="userTypeList"
                         [placeholder]="'SELECT_USER_TYPE' | translate"
@@ -108,13 +110,19 @@
         <table class="table table-bordered users-table">
           <thead>
             <tr>
-              <th>{{ "USER_NAME" | translate }} <i><app-sorting-icon /></i></th>
+              <th>
+                {{ "USER_NAME" | translate }} <i><app-sorting-icon /></i>
+              </th>
               <th>{{ "CODE" | translate }}</th>
               <th>{{ "EMAIL" | translate }}</th>
               <th>{{ "PHONE" | translate }}</th>
               <th>{{ "ROLE" | translate }}</th>
-              <th>{{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i></th>
-              <th>{{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i></th>
+              <th>
+                {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
+              </th>
+              <th>
+                {{ "LAST_LOGIN" | translate }} <i><app-sorting-icon /></i>
+              </th>
               <th>{{ "STATUS" | translate }}</th>
               <th width="100">{{ "ACTIONS" | translate }}</th>
             </tr>
@@ -125,7 +133,9 @@
                 <td>
                   <app-table-img-item
                     [img]="user.profile_image"
-                    [title]="(user.first_name || '') + ' ' + (user.last_name || '')"
+                    [title]="
+                      (user.first_name || '') + ' ' + (user.last_name || '')
+                    "
                     size="md"
                     [showInitialsFallback]="true"
                   />
@@ -135,7 +145,11 @@
                 <td>{{ user.contact_number || "N/A" }}</td>
                 <td>{{ user.role?.value || "N/A" }}</td>
                 <td>{{ user.created_on | date: "dd MMM yyyy" }}</td>
-                <td>{{ (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A" }}</td>
+                <td>
+                  {{
+                    (user.last_login | date: "dd MMM yyyy, hh:mm a") || "N/A"
+                  }}
+                </td>
                 <td>
                   <span
                     class="statusBadge"
@@ -186,7 +200,9 @@
 <ng-template #addUserContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
-      {{ isEditMode ? ("EDIT_USER" | translate) : ("ADD_NEW_USER" | translate) }}
+      {{
+        isEditMode ? ("EDIT_USER" | translate) : ("ADD_NEW_USER" | translate)
+      }}
     </h4>
     <button
       type="button"

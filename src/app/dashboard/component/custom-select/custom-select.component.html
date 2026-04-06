@@ -13,7 +13,7 @@
       *ngIf="!selectedOption"
       class="customSelectPlaceholder"
       [innerHTML]="placeholder | translate"
-      >{{ placeholder }}</span
+      >{{ placeholder | translate }}</span
     >
     <span *ngIf="selectedOption">{{ selectedOption[value] }}</span>
     <!-- <i *ngIf="!isDropdownOpen">
@@ -36,7 +36,11 @@
         <app-calender-icon *ngIf="isDropdownOpen" />
       </i>
     </div>
-    <ul *ngIf="isDropdownOpen" class="customSelectDropdown" [ngStyle]="dropdownStyle">
+    <ul
+      *ngIf="isDropdownOpen"
+      class="customSelectDropdown"
+      [ngStyle]="dropdownStyle"
+    >
       <li *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
         <input
           type="text"

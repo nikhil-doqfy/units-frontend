@@ -19,7 +19,7 @@
 
 .users-table thead tr th:last-child {
   z-index: 3;
-  background-color: var(--activeBg);
+  background-color: var(--activeBg1);
   box-shadow: none;
 }
 

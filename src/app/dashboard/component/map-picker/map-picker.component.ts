@@ -14,6 +14,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface MapLocation {
   latitude: number;
@@ -23,7 +24,8 @@ export interface MapLocation {
 
 const markerIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconRetinaUrl:
+    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -32,7 +34,7 @@ const markerIcon = L.icon({
 @Component({
   selector: 'app-map-picker',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './map-picker.component.html',
   styleUrl: './map-picker.component.css',
   encapsulation: ViewEncapsulation.None,
@@ -62,8 +64,16 @@ export class MapPickerComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.mapInitialized) return;
-    if ((changes['initialLat'] || changes['initialLng']) && this.initialLat && this.initialLng) {
-      this.placeMarker(this.initialLat, this.initialLng, this.initialAddress || '');
+    if (
+      (changes['initialLat'] || changes['initialLng']) &&
+      this.initialLat &&
+      this.initialLng
+    ) {
+      this.placeMarker(
+        this.initialLat,
+        this.initialLng,
+        this.initialAddress || '',
+      );
     }
   }
 
@@ -89,8 +99,10 @@ export class MapPickerComponent implements AfterViewInit, OnChanges, OnDestroy {
       maxZoom: 19,
     }).addTo(this.map);
 
-    this.marker = L.marker([lat, lng], { icon: markerIcon, draggable: true })
-      .addTo(this.map);
+    this.marker = L.marker([lat, lng], {
+      icon: markerIcon,
+      draggable: true,
+    }).addTo(this.map);
 
     if (this.initialLat && this.initialLng) {
       this.searchQuery = this.initialAddress || '';
@@ -124,7 +136,7 @@ export class MapPickerComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.searching = true;
     fetch(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.searchQuery)}&limit=5`,
-      { headers: { 'Accept-Language': 'en' } }
+      { headers: { 'Accept-Language': 'en' } },
     )
       .then((r) => r.json())
       .then((results) => {
@@ -133,7 +145,11 @@ export class MapPickerComponent implements AfterViewInit, OnChanges, OnDestroy {
           this.searching = false;
         });
       })
-      .catch(() => this.zone.run(() => { this.searching = false; }));
+      .catch(() =>
+        this.zone.run(() => {
+          this.searching = false;
+        }),
+      );
   }
 
   selectResult(result: any): void {
@@ -153,15 +169,18 @@ export class MapPickerComponent implements AfterViewInit, OnChanges, OnDestroy {
   private reverseGeocode(lat: number, lng: number): void {
     fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
-      { headers: { 'Accept-Language': 'en' } }
+      { headers: { 'Accept-Language': 'en' } },
     )
       .then((r) => r.json())
       .then((result) => {
-        const address = result.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        const address =
+          result.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
         this.zone.run(() => this.placeMarker(lat, lng, address));
       })
-      .catch(() => this.zone.run(() =>
-        this.placeMarker(lat, lng, `${lat.toFixed(6)}, ${lng.toFixed(6)}`)
-      ));
+      .catch(() =>
+        this.zone.run(() =>
+          this.placeMarker(lat, lng, `${lat.toFixed(6)}, ${lng.toFixed(6)}`),
+        ),
+      );
   }
 }

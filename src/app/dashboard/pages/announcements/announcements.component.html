@@ -14,7 +14,7 @@
             aria-selected="true"
             (click)="activeTab = 'marketing'"
           >
-            {{ "Marketing Notification" | translate }}
+            {{ "MARKETING_NOTIFICATIONS" | translate }}
           </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -29,7 +29,7 @@
             aria-selected="false"
             (click)="activeTab = 'ads'"
           >
-            Ads
+            {{ "ADS" | translate }}
           </button>
         </li>
       </ul>
@@ -68,7 +68,7 @@
                     aria-controls="notification-tab-pane"
                     aria-selected="true"
                   >
-                    {{ "Notification Logs" | translate }}
+                    {{ "NOTIFICATION_LOGS" | translate }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -84,7 +84,7 @@
                     aria-controls="sentItems-tab-pane"
                     aria-selected="false"
                   >
-                    {{ "Sents Items" | translate }}
+                    {{ "SENT_ITEMS" | translate }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -100,7 +100,7 @@
                     aria-controls="scheduled-tab-pane"
                     aria-selected="false"
                   >
-                    {{ "Scheduled" | translate }}
+                    {{ "SCHEDULED" | translate }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -116,7 +116,7 @@
                     aria-controls="drafts-tab-pane"
                     aria-selected="false"
                   >
-                    {{ "Drafts" | translate }}
+                    {{ "DRAFTS" | translate }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -132,7 +132,7 @@
                     aria-controls="deletedItems-tab-pane"
                     aria-selected="false"
                   >
-                    {{ "Deleted Items" | translate }}
+                    {{ "DELETED_ITEMS" | translate }}
                   </button>
                 </li>
               </ul>
@@ -143,8 +143,8 @@
               <i><app-plus-icon /></i>
               {{
                 activeTab === "ads"
-                  ? "Create New"
-                  : ("New Announcement" | translate)
+                  ? ("CREATE_NEW" | translate)
+                  : ("NEW_ANNOUNCEMENT" | translate)
               }}
             </button>
           </div>
@@ -164,7 +164,7 @@
                 <div class="row align-items-center">
                   <div class="col-md">
                     <app-table-title
-                      [title]="'Results' | translate"
+                      [title]="'RESULTS' | translate"
                       [subtitle]="'(' + totalRecords + ')'"
                       (onRefresh)="onRefresh()"
                     ></app-table-title>
@@ -178,7 +178,7 @@
                       <div class="custom-select-wrapper">
                         <span class="cmmnTblFltrBtn">
                           <app-custom-select
-                            placeholder="Property: All"
+                            [placeholder]="'PROPERTY_ALL' | translate"
                             key="key"
                             value="value"
                           >
@@ -188,7 +188,7 @@
                       <div class="custom-select-wrapper">
                         <span class="cmmnTblFltrBtn">
                           <app-custom-select
-                            placeholder="Block/Tower: All"
+                            [placeholder]="'BLOCK_TOWER_ALL' | translate"
                             key="key"
                             value="value"
                           >
@@ -198,7 +198,7 @@
                       <div class="custom-select-wrapper">
                         <span class="cmmnTblFltrBtn">
                           <app-custom-select
-                            placeholder="Unit: All"
+                            [placeholder]="'UNIT_ALL' | translate"
                             key="key"
                             value="value"
                           >
@@ -221,7 +221,7 @@
                   <table class="table-bordered table broadcast-table">
                     <thead>
                       <tr>
-                        <th>Sl.No</th>
+                        <th>{{ "SI_NO" | translate }}</th>
                         <th
                           *ngIf="
                             prop !== 'sent' &&
@@ -230,7 +230,7 @@
                             prop !== 'deleted'
                           "
                         >
-                          Log ID
+                          {{ "LOG_ID" | translate }}
                         </th>
                         <th
                           *ngIf="
@@ -239,24 +239,27 @@
                             prop === 'deleted'
                           "
                         >
-                          ID
+                          {{ "ID" | translate }}
                         </th>
-                        <th *ngIf="prop == 'draft'">Draft ID</th>
+                        <th *ngIf="prop == 'draft'">
+                          {{ "DRAFT_ID" | translate }}
+                        </th>
 
-                        <th>Announcement Title</th>
+                        <th>{{ "ANNOUNCEMENT_TITLE" | translate }}</th>
 
                         <th>
-                          Property Name<i
-                            ><app-sorting-icon></app-sorting-icon
-                          ></i>
+                          {{ "PROPERTY_NAME" | translate
+                          }}<i><app-sorting-icon></app-sorting-icon></i>
                         </th>
-                        <th>Block / Tower</th>
-                        <th>Unit</th>
+                        <th>{{ "BLOCK_TOWER" | translate }}</th>
+                        <th>{{ "UNIT" | translate }}</th>
                         <th *ngIf="prop == 'draft'">
-                          Last Edited Date
+                          {{ "LAST_EDITED_DATE" | translate }}
                           <i><app-sorting-icon></app-sorting-icon></i>
                         </th>
-                        <th *ngIf="prop === 'deleted'">Deleted Date</th>
+                        <th *ngIf="prop === 'deleted'">
+                          {{ "DELETED_DATE" | translate }}
+                        </th>
                         <th
                           *ngIf="
                             prop === 'sent' ||
@@ -266,7 +269,7 @@
                               prop !== 'draft')
                           "
                         >
-                          Sent By
+                          {{ "SENT_BY" | translate }}
                         </th>
                         <th
                           *ngIf="
@@ -277,15 +280,16 @@
                               prop !== 'draft')
                           "
                         >
-                          Sent Date<i><app-sorting-icon></app-sorting-icon></i>
+                          {{ "SENT_DATE" | translate
+                          }}<i><app-sorting-icon></app-sorting-icon></i>
                         </th>
                         <th *ngIf="prop === 'scheduled'">
-                          Scheduled Date & Time
+                          {{ "SCHEDULED_DATE_TIME" | translate }}
                           <i><app-sorting-icon></app-sorting-icon></i>
                         </th>
 
                         <th *ngIf="prop !== 'draft' && prop !== 'deleted'">
-                          Channel
+                          {{ "CHANNEL" | translate }}
                         </th>
                         <th
                           *ngIf="
@@ -295,7 +299,7 @@
                             prop !== 'deleted'
                           "
                         >
-                          Recipients
+                          {{ "RECIPIENTS" | translate }}
                         </th>
                         <th
                           *ngIf="
@@ -305,7 +309,7 @@
                             prop !== 'deleted'
                           "
                         >
-                          Delivered
+                          {{ "DELIVERED" | translate }}
                         </th>
                         <th
                           *ngIf="
@@ -315,7 +319,7 @@
                             prop !== 'deleted'
                           "
                         >
-                          Failed
+                          {{ "FAILED" | translate }}
                         </th>
 
                         <th width="120"></th>
@@ -666,11 +670,15 @@
             <div class="right-actions">
               <app-preview-icon></app-preview-icon>
               <app-delete-icon></app-delete-icon>|
-              <button class="btn-outline">Save as Draft</button>
+              <button class="btn-outline">
+                {{ "SAVE_AS_DRAFT" | translate }}
+              </button>
 
               <div class="btn btncommon">
                 <button class="btn btnCommon">
-                  Send Now |<i><app-arrow-down-icon></app-arrow-down-icon></i>
+                  {{ "SEND_NOW" | translate }} |<i
+                    ><app-arrow-down-icon></app-arrow-down-icon
+                  ></i>
                 </button>
               </div>
 
@@ -682,89 +690,109 @@
           <div class="mt-3">
             <app-white-card>
               <div class="audience-header">
-                <span class="title">Audience Selection</span>
+                <span class="title">{{
+                  "AUDIENCE_SELECTION" | translate
+                }}</span>
                 <span class="badge">01</span>
               </div>
 
               <div class="audience-form">
                 <div class="form-group">
-                  <label>Property</label>
+                  <label>{{ "PROPERTY" | translate }}</label>
                   <select>
                     <option>--Select--</option>
                   </select>
                 </div>
 
                 <div class="form-group">
-                  <label>Block / Tower</label>
+                  <label>{{ "BLOCK_TOWER" | translate }}</label>
                   <select>
                     <option>--Select--</option>
                   </select>
                 </div>
 
                 <div class="form-group">
-                  <label>Unit</label>
+                  <label>{{ "UNIT" | translate }}</label>
                   <select>
                     <option>--Select--</option>
                   </select>
                 </div>
               </div>
               <div class="d-flex gap-3 align-items-center mt-3">
-                <label> <input type="checkbox" /> App Notification </label>
+                <label>
+                  <input type="checkbox" /> {{ "APP_NOTIFICATION" | translate }}
+                </label>
 
-                <label> <input type="checkbox" /> SMS </label>
+                <label>
+                  <input type="checkbox" /> {{ "SMS" | translate }}
+                </label>
 
-                <label> <input type="checkbox" /> Mail </label>
+                <label>
+                  <input type="checkbox" /> {{ "MAIL" | translate }}
+                </label>
 
-                <label> <input type="checkbox" /> WhatsApp </label>
+                <label>
+                  <input type="checkbox" /> {{ "WHATSAPP" | translate }}
+                </label>
               </div>
             </app-white-card>
           </div>
           <div class="mt-3">
             <app-white-card>
               <div class="announce-header">
-                <span class="title">Announcement Details</span>
+                <span class="title">{{
+                  "ANNOUNCEMENT_DETAILS" | translate
+                }}</span>
                 <span class="badge">02</span>
               </div>
 
               <div class="form-grid">
                 <div class="form-group title-width">
-                  <label>Title</label>
-                  <input type="text" placeholder="Enter here" />
+                  <label>{{ "TITLE" | translate }}</label>
+                  <input
+                    type="text"
+                    placeholder="{{ 'ENTER_HERE' | translate }}"
+                  />
                 </div>
 
                 <div class="form-group priority-inline">
-                  <label>Priority</label>
+                  <label>{{ "PRIORITY" | translate }}</label>
                   <div class="radio-group">
                     <label class="radio">
                       <input type="radio" name="priority" checked />
-                      Normal
+                      {{ "NORMAL" | translate }}
                     </label>
 
                     <label class="radio">
                       <input type="radio" name="priority" />
-                      Important
+                      {{ "IMPORTANT" | translate }}
                     </label>
 
                     <label class="radio">
                       <input type="radio" name="priority" />
-                      Urgent
+                      {{ "URGENT" | translate }}
                     </label>
                   </div>
                 </div>
 
                 <div class="form-group full">
-                  <label>Description</label>
-                  <textarea rows="4" placeholder="Enter here"></textarea>
+                  <label>{{ "DESCRIPTION" | translate }}</label>
+                  <textarea
+                    rows="4"
+                    placeholder="{{ 'ENTER_HERE' | translate }}"
+                  ></textarea>
                 </div>
 
                 <div class="form-group full">
-                  <label>Upload Banner Image</label>
+                  <label>{{ "UPLOAD_BANNER_IMAGE" | translate }}</label>
 
                   <div class="upload-box">
                     <i class="upload-icon"
                       ><app-download-icon></app-download-icon>
                     </i>
-                    <span class="upload-text">Upload here</span>
+                    <span class="upload-text">{{
+                      "UPLOAD_HERE" | translate
+                    }}</span>
                     <div class="upload-info">
                       800px * 350px &nbsp;|&nbsp; Max 5MB
                     </div>

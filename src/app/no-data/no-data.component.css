@@ -1,7 +1,7 @@
 .no-data-container {
   text-align: center;
   padding: 30px 20px;
-  color: #444;
+  color: var(--textPrimary);
 }
 
 .no-data-img {
@@ -13,9 +13,10 @@
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 5px;
+  color: var(--textPrimary);
 }
 
 .subtitle {
   font-size: 14px;
-  color: #666;
+  color: var(--textSecondary);
 }

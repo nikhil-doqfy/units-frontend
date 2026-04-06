@@ -29,7 +29,7 @@
                   <div class="add-card draw-card">
                     <!-- Top Row -->
                     <div class="draw-header">
-                      <span class="title">Draw</span>
+                      <span class="title">{{ "DRAW" | translate }}</span>
                       <input type="radio" name="signType" class="draw-check" />
                     </div>
 
@@ -51,7 +51,7 @@
 
                   <div class="add-card font">
                     <div class="draw-header">
-                      <span class="title">Font</span>
+                      <span class="title">{{ "FONT" | translate }}</span>
                       <input type="radio" name="signType" class="draw-check" />
                     </div>
 
@@ -73,7 +73,7 @@
 
                   <div class="add-card upload">
                     <div class="draw-header">
-                      <span class="title">Upload</span>
+                      <span class="title">{{ "UPLOAD" | translate }}</span>
                       <input type="radio" name="signType" class="draw-check" />
                     </div>
 
@@ -82,7 +82,9 @@
                       <i class="fa fa-cloud-upload upload-icon"
                         ><app-upload-doc-icon></app-upload-doc-icon
                       ></i>
-                      <div class="upload-text">click to select file</div>
+                      <div class="upload-text">
+                        {{ "CLICK_TO_SELECT_FILE" | translate }}
+                      </div>
 
                       <input
                         type="file"
@@ -138,7 +140,7 @@
                   [ngClass]="isAddPropertyActive ? 'btnActive' : 'btnGrey'"
                 >
                   <i><app-plus-icon></app-plus-icon></i>
-                  {{ "Add" | translate }}
+                  {{ "PAGE_TITLE.ADD" | translate }}
                   <i><app-arrow-down-icon></app-arrow-down-icon></i>
                 </button>
 
@@ -146,10 +148,11 @@
                 <div class="custom-dropdown" *ngIf="showDropdown">
                   <div class="dropdown-item" (click)="openProperty()">
                     <i><app-new-propertry-icons></app-new-propertry-icons></i>
-                    New Property
+                    {{ "PAGE_TITLE.NEW_PROPERTY" | translate }}
                   </div>
                   <div class="dropdown-item" (click)="openUnit()">
-                    <i><app-new-units-icon></app-new-units-icon></i> New Unit
+                    <i><app-new-units-icon></app-new-units-icon></i>
+                    {{ "PAGE_TITLE.NEW_UNIT" | translate }}
                   </div>
                 </div>
               </div>
@@ -178,7 +181,7 @@
                 [ngClass]="isAddLeaseActive ? 'btnActive' : 'btnWhite'"
               >
                 <i><app-plus-icon></app-plus-icon></i>
-                {{ "New Tenant" | translate }}
+                {{ "PAGE_TITLE.NEW_TENANT" | translate }}
               </button>
             </ng-container>
             <!-- <button type="button" class="btn btnCommon btnWhite">
@@ -574,15 +577,6 @@
                     /></i>
                     العربية
                   </button>
-                  <div class="dropdown-divider"></div>
-
-                  <!-- ✅ Hindi Added -->
-                  <button ngbDropdownItem (click)="setLanguage('hi')">
-                    <i>
-                      <img src="assets/language/india.png" alt="Hindi" />
-                    </i>
-                    हिंदी
-                  </button>
                 </div>
               </div>
             </div>
@@ -649,14 +643,16 @@
           </button>
           <ng-container *ngIf="currentRole === 'property-manager'">
             <button ngbDropdownItem (click)="goToTermsConditions()">
-              <i><app-termscondition-icon></app-termscondition-icon></i>Terms &
-              Conditions
+              <i><app-termscondition-icon></app-termscondition-icon></i
+              >{{ "TERMS_AND_CONDITIONS" | translate }}
             </button>
             <button ngbDropdownItem (click)="goToCharges()">
-              <i><app-charges-icon></app-charges-icon></i>Charges
+              <i><app-charges-icon></app-charges-icon></i
+              >{{ "CHARGES" | translate }}
             </button>
             <button ngbDropdownItem (click)="goToAuditLog()">
-              <i><app-auditlog-icon></app-auditlog-icon></i>Audit Log
+              <i><app-auditlog-icon></app-auditlog-icon></i
+              >{{ "AUDIT_LOGS" | translate }}
             </button>
           </ng-container>
           <button ngbDropdownItem (click)="goToDocumentation()">

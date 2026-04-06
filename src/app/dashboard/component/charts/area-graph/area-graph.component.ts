@@ -5,6 +5,8 @@ import {
   SimpleChanges,
   ViewChild,
   AfterViewInit,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import {
@@ -18,9 +20,11 @@ import {
   ApexFill,
 } from 'ng-apexcharts';
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
+import { ThemeService } from '../../../../theme.service';
 
 export type ChartOptions = {
-  series: ApexAxisChartSeries;
+  series: any;
   chart: ApexChart;
   xaxis: ApexXAxis;
   dataLabels: ApexDataLabels;
@@ -53,7 +57,20 @@ export class AreaGraphComponent implements OnChanges, AfterViewInit {
 
   private viewReady = false;
 
-  private static readonly MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  private static readonly MONTHS = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
   public chartOptions: ChartOptions = this.buildOptions([], []);
 
@@ -64,8 +81,8 @@ export class AreaGraphComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] && this.data?.length) {
-      const received = this.data.map(d => d.amount_received);
-      const total    = this.data.map(d => d.total_amount);
+      const received = this.data.map((d) => d.amount_received);
+      const total = this.data.map((d) => d.total_amount);
       this.chartOptions = this.buildOptions(received, total);
       if (this.viewReady) this.applyToChart();
     }
@@ -74,8 +91,11 @@ export class AreaGraphComponent implements OnChanges, AfterViewInit {
   private applyToChart() {
     if (!this.chart) return;
     this.chart.updateSeries([
-      { name: 'Amount Received', data: this.data.map(d => d.amount_received) },
-      { name: 'Total Amount',    data: this.data.map(d => d.total_amount) },
+      {
+        name: 'Amount Received',
+        data: this.data.map((d) => d.amount_received),
+      },
+      { name: 'Total Amount', data: this.data.map((d) => d.total_amount) },
     ]);
   }
 
@@ -83,9 +103,15 @@ export class AreaGraphComponent implements OnChanges, AfterViewInit {
     return {
       series: [
         { name: 'Amount Received', data: received },
-        { name: 'Total Amount',    data: total },
+        { name: 'Total Amount', data: total },
       ],
-      chart: { type: 'area', height: 350, stacked: false, toolbar: { show: false }, zoom: { enabled: false } },
+      chart: {
+        type: 'area',
+        height: 350,
+        stacked: false,
+        toolbar: { show: false },
+        zoom: { enabled: false },
+      },
       colors: ['#43A047', '#FF7043'],
       dataLabels: { enabled: false },
       stroke: { curve: 'smooth', width: 2 },
@@ -113,7 +139,7 @@ export class AreaGraphComponent implements OnChanges, AfterViewInit {
           formatter: (val: number) => 'AED ' + val.toLocaleString('en-IN'),
         },
         axisBorder: { show: false },
-        axisTicks:  { show: false },
+        axisTicks: { show: false },
       },
     };
   }

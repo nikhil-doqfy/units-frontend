@@ -104,8 +104,7 @@
           <app-property-icon></app-property-icon>
         </app-sidebar-item>
         <app-sidebar-item
-          *ngIf="canAccess('Lead')"
-          title="{{ 'Leads' | translate }}"
+          title="{{ 'LEADS' | translate }}"
           href="/dashboard/leads"
           [count]="11243"
         >
@@ -127,8 +126,7 @@
           <app-owner-icon></app-owner-icon>
         </app-sidebar-item>
         <app-sidebar-item
-          *ngIf="canAccess('Cheque')"
-          title="{{ 'Cheques' | translate }}"
+          title="{{ 'CHEQUES' | translate }}"
           href="/dashboard/cheques"
         >
           <app-cheques-icon></app-cheques-icon>
@@ -183,8 +181,7 @@
           <app-staff-icon></app-staff-icon>
         </app-sidebar-item>
         <app-sidebar-item
-          *ngIf="canAccess('Team')"
-          title="{{ 'Team' | translate }}"
+          title="{{ 'PAGE_TITLE.TEAM' | translate }}"
           href="/dashboard/staff"
         >
           <app-staff-icon></app-staff-icon>

@@ -77,9 +77,9 @@ export class TenantsComponent {
   subTab: SubTab = 'current';
 
   subTabs: { key: SubTab; label: string }[] = [
-    { key: 'current', label: 'Current Tenants' },
-    { key: 'past', label: 'Past Tenants' },
-    { key: 'rejected', label: 'Rejected Tenants' },
+    { key: 'current', label: 'CURRENT_TENANTS' },
+    { key: 'past', label: 'PAST_TENANTS' },
+    { key: 'rejected', label: 'REJECTED_TENANTS' },
   ];
 
   // ── Detail view ──────────────────────────────────
