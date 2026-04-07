@@ -136,6 +136,8 @@ export class AddPropertyComponent {
   }
 
   ngOnInit() {
+    this.sharedService.initLanguage();
+
     const options: OptionsParams[] = [
       {
         param: 'PROPERTY_TYPE',

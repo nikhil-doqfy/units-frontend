@@ -750,5 +750,7 @@
   "LEASE_TEMPLATE": "Lease Template",
   "TENANTS_DOCUMENTS": "Tenant Documents",
   "UPLOAD_MORE": "Upload More",
-  "UPLOADING": "Uploading…"
+  "UPLOADING": "Uploading…",
+  "EJARI": "Ejari",
+  "ENTER_EMAIL": "Enter email"
 }

@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   OnInit,
   signal,
@@ -13,9 +14,13 @@ import { TableTitleComponent } from '../table-title/table-title.component';
 import { TableSearchComponent } from '../table-search/table-search.component';
 import { TableFilterButtonComponent } from '../table-filter-btn/table-filter-btn.component';
 import { ExportIconComponent } from '../icons/export-icon/export-icon.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { debounceTime, Subject } from 'rxjs';
-import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { CommonModule } from '@angular/common';
 import { LeadsService } from '../../services/leads.service';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -43,6 +48,8 @@ import { SortingIconComponent } from '../icons/sorting-icon/sorting-icon.compone
 import { CheckIconComponent } from '../../../icons/check-icon/check-icon.component';
 import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenent-from/convert-lead-to-tenent-from.component';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SharedService } from '../../../shared.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-all-leads',
@@ -83,8 +90,10 @@ export class AllLeadsComponent implements OnInit {
   private search$ = new Subject<string>();
   private modalService = inject(NgbModal);
   private router = inject(Router);
+  private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
   closeResult: WritableSignal<string> = signal('');
-
+  private destroyRef = inject(DestroyRef);
   leads: any[] = [];
   totalRecords: number = 0;
   rowsPerPage: number = 10;
@@ -94,7 +103,9 @@ export class AllLeadsComponent implements OnInit {
   selectedLead: any = null;
   showDetailView: boolean = false;
   componentName = 'allLeadsComponent';
-
+  breadcrumbData = [
+    { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
+  ];
   // Filter values
   filterStatus: string = '';
   filterPlatform: string = '';
@@ -127,10 +138,16 @@ export class AllLeadsComponent implements OnInit {
       this.loadLeads();
     });
     this.loadLeads();
+    this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
   }
 
   buildParams(): Record<string, any> {
-    const params: Record<string, any> = { page: this.currentPage, page_size: this.rowsPerPage };
+    const params: Record<string, any> = {
+      page: this.currentPage,
+      page_size: this.rowsPerPage,
+    };
     if (this.searchText) params['search'] = this.searchText;
     if (this.filterStatus) params['status'] = this.filterStatus;
     if (this.filterPlatform) params['platform'] = this.filterPlatform;
@@ -142,11 +159,38 @@ export class AllLeadsComponent implements OnInit {
     this.leadsService.getLeads(this.buildParams()).subscribe({
       next: (resp: any) => {
         this.leads = resp?.content || [];
-        this.totalRecords = resp?.pagination?.total_records ?? this.leads.length;
+        this.totalRecords =
+          resp?.pagination?.total_records ?? this.leads.length;
       },
     });
   }
 
+  loadBreadcrumb() {
+    if (this.showDetailView) {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.LEADS', link: '/dashboard/leads' },
+        { label: 'PROPERTY_DETAILS', link: '' },
+      ]);
+    } else {
+      this.setBreadCrumb([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.LEADS', link: '/dashboard/leads' },
+      ]);
+    }
+  }
+  setBreadCrumb(breadCrumb: BreadCrumb[]) {
+    this.sharedService
+      .getBreadcrumbs(breadCrumb)
+      .subscribe((data) => (this.breadcrumbData = data));
+  }
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
   onRefresh(): void {
     this.loadLeads();
   }
@@ -172,7 +216,9 @@ export class AllLeadsComponent implements OnInit {
     this.leadsService.exportLeads(this.buildParams());
   }
 
-  getPlatformType(platform: string): 'propertyFinder' | 'bayut' | 'direct' | 'referral' {
+  getPlatformType(
+    platform: string,
+  ): 'propertyFinder' | 'bayut' | 'direct' | 'referral' {
     const map: Record<string, any> = {
       PROPERTY_FINDER: 'propertyFinder',
       BAYUT: 'bayut',
@@ -204,10 +250,7 @@ export class AllLeadsComponent implements OnInit {
     this.loadLeads();
   }
 
-  openEditLeadModal(
-    editLeadContent: TemplateRef<any>,
-    lead: any = null,
-  ) {
+  openEditLeadModal(editLeadContent: TemplateRef<any>, lead: any = null) {
     this.selectedLead = lead;
     this.modalService
       .open(editLeadContent, {
@@ -245,7 +288,10 @@ export class AllLeadsComponent implements OnInit {
         },
       );
   }
-  openLeadToTenantModel(convertLeadToTenentContent: TemplateRef<any>, lead: any = null) {
+  openLeadToTenantModel(
+    convertLeadToTenentContent: TemplateRef<any>,
+    lead: any = null,
+  ) {
     this.selectedLead = lead;
     this.modalService
       .open(convertLeadToTenentContent, {
@@ -281,7 +327,9 @@ export class AllLeadsComponent implements OnInit {
     this.leadsService.checkActiveLease(leadId).subscribe({
       next: (resp: any) => {
         if (resp?.content?.has_active_lease) {
-          this.alertService.error('This unit already has an active lease. Cannot convert to tenancy.');
+          this.alertService.error(
+            'This unit already has an active lease. Cannot convert to tenancy.',
+          );
           return;
         }
         modal.close();
@@ -290,7 +338,9 @@ export class AllLeadsComponent implements OnInit {
         });
       },
       error: () => {
-        this.alertService.error('Failed to verify lease status. Please try again.');
+        this.alertService.error(
+          'Failed to verify lease status. Please try again.',
+        );
       },
     });
   }

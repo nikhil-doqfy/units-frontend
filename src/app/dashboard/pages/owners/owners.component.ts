@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, signal, TemplateRef, WritableSignal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  TemplateRef,
+  WritableSignal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,7 +31,11 @@ import { InviteOwnerBtnComponent } from '../../component/invite-owner-btn/invite
 import { OwnerService } from '../../services/owner.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { SharedService } from '../../../shared.service';
-import { BreadCrumb, PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-owners',
@@ -88,33 +99,47 @@ export class OwnersComponent {
   }
 
   ngOnInit() {
-    this.sharedService.getBreadcrumbs([
-      { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
-      { label: 'PAGE_TITLE.OWNERS', link: '' },
-    ]).subscribe((data) => (this.breadcrumbData = data));
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.OWNERS', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private initForm(owner?: any) {
     this.ownerForm = this.fb.group({
-      first_name:          [owner?.first_name ?? ''],
-      last_name:           [owner?.last_name ?? ''],
-      email:               [owner?.email ?? ''],
-      contact_number:      [owner?.contact_number ?? ''],
-      emirates_id:         [owner?.emirates_id ?? ''],
-      address_line_1:      [owner?.address_line_1 ?? ''],
-      address_line_2:      [owner?.address_line_2 ?? ''],
-      pin_code:            [owner?.pin_code ?? ''],
-      passport_number:     [owner?.passport_number ?? ''],
-      passport_expiry_date:[owner?.passport_expiry_date ? String(owner.passport_expiry_date).slice(0, 10) : ''],
-      visa_number:         [owner?.visa_number ?? ''],
-      visa_expiry_date:    [owner?.visa_expiry_date ? String(owner.visa_expiry_date).slice(0, 10) : ''],
-      owner_number:        [owner?.owner_number ?? ''],
-      trade_license_number:[owner?.trade_license_number ?? ''],
-      license_number:      [owner?.license_number ?? ''],
-      license_expiry_date: [owner?.license_expiry_date ? String(owner.license_expiry_date).slice(0, 10) : ''],
-      license_issuer:      [owner?.license_issuer ?? ''],
-      fax_number:          [owner?.fax_number ?? ''],
-      po_box_number:       [owner?.po_box_number ?? ''],
+      first_name: [owner?.first_name ?? ''],
+      last_name: [owner?.last_name ?? ''],
+      email: [owner?.email ?? ''],
+      contact_number: [owner?.contact_number ?? ''],
+      emirates_id: [owner?.emirates_id ?? ''],
+      address_line_1: [owner?.address_line_1 ?? ''],
+      address_line_2: [owner?.address_line_2 ?? ''],
+      pin_code: [owner?.pin_code ?? ''],
+      passport_number: [owner?.passport_number ?? ''],
+      passport_expiry_date: [
+        owner?.passport_expiry_date
+          ? String(owner.passport_expiry_date).slice(0, 10)
+          : '',
+      ],
+      visa_number: [owner?.visa_number ?? ''],
+      visa_expiry_date: [
+        owner?.visa_expiry_date
+          ? String(owner.visa_expiry_date).slice(0, 10)
+          : '',
+      ],
+      owner_number: [owner?.owner_number ?? ''],
+      trade_license_number: [owner?.trade_license_number ?? ''],
+      license_number: [owner?.license_number ?? ''],
+      license_expiry_date: [
+        owner?.license_expiry_date
+          ? String(owner.license_expiry_date).slice(0, 10)
+          : '',
+      ],
+      license_issuer: [owner?.license_issuer ?? ''],
+      fax_number: [owner?.fax_number ?? ''],
+      po_box_number: [owner?.po_box_number ?? ''],
     });
   }
 
@@ -126,6 +151,7 @@ export class OwnersComponent {
         this.currentPage = 1;
         this.loadOwners();
       });
+    this.sharedService.initLanguage();
   }
 
   loadOwners() {
@@ -135,7 +161,8 @@ export class OwnersComponent {
     };
     if (this.searchText) params['search'] = this.searchText;
 
-    this.ownerService.getOwners(params)
+    this.ownerService
+      .getOwners(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
@@ -146,9 +173,13 @@ export class OwnersComponent {
       });
   }
 
-  onRefresh() { this.loadOwners(); }
+  onRefresh() {
+    this.loadOwners();
+  }
 
-  searchTextChange(text: string) { this.searchSubject$.next(text); }
+  searchTextChange(text: string) {
+    this.searchSubject$.next(text);
+  }
 
   onPageChange(event: PageChange) {
     if (event.componentName !== this.componentName) return;
@@ -166,7 +197,8 @@ export class OwnersComponent {
   handleExportClick() {
     const params: Record<string, any> = {};
     if (this.searchText) params['search'] = this.searchText;
-    this.ownerService.exportOwners(params)
+    this.ownerService
+      .exportOwners(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((blob) => {
         const url = window.URL.createObjectURL(blob);
@@ -194,20 +226,32 @@ export class OwnersComponent {
 
   private openModal(content: TemplateRef<any>) {
     this.modalService
-      .open(content, { ariaLabelledBy: 'modal-title', windowClass: 'mdlCommon', centered: true, size: 'xl' })
+      .open(content, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon',
+        centered: true,
+        size: 'xl',
+      })
       .result.then(
         (result) => this.closeResult.set(`Closed with: ${result}`),
-        (reason) => this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`),
+        (reason) =>
+          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`),
       );
   }
 
   saveOwner(modal: any) {
-    if (this.ownerForm.invalid) { this.ownerForm.markAllAsTouched(); return; }
+    if (this.ownerForm.invalid) {
+      this.ownerForm.markAllAsTouched();
+      return;
+    }
     this.formLoading = true;
     const payload = { ...this.ownerForm.value };
 
     const request$ = this.editingOwnerId
-      ? this.ownerService.updateOwner({ ...payload, owner_id: this.editingOwnerId })
+      ? this.ownerService.updateOwner({
+          ...payload,
+          owner_id: this.editingOwnerId,
+        })
       : this.ownerService.createOwner(payload);
 
     request$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
@@ -230,22 +274,27 @@ export class OwnersComponent {
 
   deleteOwner(owner: any) {
     if (!confirm(`Delete owner "${owner.name}"?`)) return;
-    this.ownerService.deleteOwner(owner.id)
+    this.ownerService
+      .deleteOwner(owner.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.alertService.success(resp?.message ?? 'Deleted');
           this.loadOwners();
         },
-        error: (err: any) => this.alertService.error(err?.error?.message ?? 'Delete failed'),
+        error: (err: any) =>
+          this.alertService.error(err?.error?.message ?? 'Delete failed'),
       });
   }
 
   private getDismissReason(reason: any): string {
     switch (reason) {
-      case ModalDismissReasons.ESC: return 'by pressing ESC';
-      case ModalDismissReasons.BACKDROP_CLICK: return 'by clicking on a backdrop';
-      default: return `with: ${reason}`;
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
     }
   }
 }

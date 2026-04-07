@@ -132,6 +132,7 @@ export class TenantsComponent {
         this.currentPage = 1;
         this.loadTenants();
       });
+    this.sharedService.initLanguage();
   }
 
   // ── Tab switching ─────────────────────────────────

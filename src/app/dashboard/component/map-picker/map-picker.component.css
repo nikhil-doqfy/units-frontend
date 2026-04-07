@@ -77,3 +77,22 @@
   width: 100% !important;
   height: 100% !important;
 }
+/* Arabic mode */
+.arabic .map-search-input-wrap {
+  direction: rtl;
+}
+
+/* ICON → right ला */
+.arabic .map-search-icon {
+  right: 12px;
+  left: auto;
+}
+
+/* INPUT padding adjust */
+.arabic .map-search-input-wrap .form-control {
+  direction: rtl;
+  text-align: right;
+
+  padding-right: 36px; /* icon साठी जागा */
+  padding-left: 12px;
+}

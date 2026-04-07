@@ -66,8 +66,14 @@ export class UnitsComponent implements OnInit {
 
   // Filter options
   propertyOptions: { key: string; value: string }[] = [];
-  bedroomOptions = Array.from({ length: 10 }, (_, i) => ({ key: String(i + 1), value: String(i + 1) }));
-  floorOptions = Array.from({ length: 51 }, (_, i) => ({ key: String(i), value: String(i) }));
+  bedroomOptions = Array.from({ length: 10 }, (_, i) => ({
+    key: String(i + 1),
+    value: String(i + 1),
+  }));
+  floorOptions = Array.from({ length: 51 }, (_, i) => ({
+    key: String(i),
+    value: String(i),
+  }));
   areaUnitOptions = [
     { key: 'SQ_FT', value: 'Sq-ft' },
     { key: 'SQ_MT', value: 'Sq-mt' },
@@ -96,13 +102,19 @@ export class UnitsComponent implements OnInit {
   loadPropertyOptions(): void {
     this.propertyService.getProperties({ page: 1, page_size: 200 }).subscribe({
       next: (resp: any) => {
-        this.propertyOptions = (resp?.content || []).map((p: any) => ({ key: String(p.id), value: p.property_name }));
+        this.propertyOptions = (resp?.content || []).map((p: any) => ({
+          key: String(p.id),
+          value: p.property_name,
+        }));
       },
     });
   }
 
   buildParams(): Record<string, any> {
-    const params: Record<string, any> = { page: this.currentPage, page_size: this.rowsPerPage };
+    const params: Record<string, any> = {
+      page: this.currentPage,
+      page_size: this.rowsPerPage,
+    };
     if (this.searchText) params['search'] = this.searchText;
     if (this.filterPropertyId) params['property_id'] = this.filterPropertyId;
     if (this.filterBedrooms) params['no_of_bedrooms'] = this.filterBedrooms;
@@ -115,7 +127,8 @@ export class UnitsComponent implements OnInit {
     this.propertyService.getUnits(this.buildParams()).subscribe({
       next: (resp: any) => {
         this.units = resp?.content || [];
-        this.totalRecords = resp?.pagination?.total_records ?? this.units.length;
+        this.totalRecords =
+          resp?.pagination?.total_records ?? this.units.length;
       },
     });
   }

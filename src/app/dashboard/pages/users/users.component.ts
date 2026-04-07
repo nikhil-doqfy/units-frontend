@@ -37,7 +37,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
-import { BreadCrumb, PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 
 @Component({
   selector: 'app-users',
@@ -109,6 +113,8 @@ export class UsersComponent {
 
   ngOnInit(): void {
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
@@ -127,12 +133,22 @@ export class UsersComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
+  initLanguageListener() {
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loadBreadcrumb();
+      });
+  }
 
   get activeTableTitle(): string {
     switch (this.activeTab) {
-      case 'active':   return 'Active Users';
-      case 'inactive': return 'Inactive Users';
-      default:         return 'All Users';
+      case 'active':
+        return 'Active Users';
+      case 'inactive':
+        return 'Inactive Users';
+      default:
+        return 'All Users';
     }
   }
 
@@ -145,7 +161,11 @@ export class UsersComponent {
   }
 
   getUser(): void {
-    this.userData = { ...this.userData, limit: this.rowsPerPage, page: this.currentPage };
+    this.userData = {
+      ...this.userData,
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
     this.userService
       .accessUserManagement(this.userData)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -213,18 +233,26 @@ export class UsersComponent {
 
   private openModal(content: TemplateRef<any>) {
     this.modalService
-      .open(content, { ariaLabelledBy: 'modal-title', windowClass: 'mdlCommon', centered: true })
+      .open(content, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon',
+        centered: true,
+      })
       .result.then(
         (result) => this.closeResult.set(`Closed with: ${result}`),
-        (reason) => this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`),
+        (reason) =>
+          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`),
       );
   }
 
   private getDismissReason(reason: any): string {
     switch (reason) {
-      case ModalDismissReasons.ESC: return 'by pressing ESC';
-      case ModalDismissReasons.BACKDROP_CLICK: return 'by clicking on a backdrop';
-      default: return `with: ${reason}`;
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
     }
   }
 
@@ -240,7 +268,9 @@ export class UsersComponent {
     this.sharedApiService
       .getOptions({ option_type: 'USER_ROLE' })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: (r) => (this.userTypeList = r?.content?.user_role ?? []) });
+      .subscribe({
+        next: (r) => (this.userTypeList = r?.content?.user_role ?? []),
+      });
   }
 
   onOptionSelectedUserType(option: any) {

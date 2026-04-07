@@ -10,6 +10,7 @@ import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { TenantsService } from '../../../dashboard/services/tenants.service';
 import { FormService } from '../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-basicpersonal',
@@ -28,6 +29,7 @@ export class BasicpersonalComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() leadData: any = null;
 
+  private sharedService = inject(SharedService);
   private sharedAPIService = inject(SharedApiService);
   private propertyService = inject(PropertyService);
   private formService = inject(NewTenantFromService);
@@ -104,6 +106,7 @@ export class BasicpersonalComponent implements OnInit {
     if (this.leadData?.email) {
       this.lookupTenantByEmail(this.leadData.email);
     }
+    this.sharedService.initLanguage();
   }
 
   private patchOwners(owners: any[]) {

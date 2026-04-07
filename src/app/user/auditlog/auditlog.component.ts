@@ -109,6 +109,8 @@ export class AuditlogComponent {
   ngOnInit() {
     this.loadBreadcrumb();
     this.getAuditLog();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
   }
   showDetailView: boolean = false;
 

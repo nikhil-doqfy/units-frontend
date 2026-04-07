@@ -109,7 +109,7 @@ export class NewTenantFromService {
       },
       {
         id: '4',
-        title: 'Ejari',
+        title: 'EJARI',
         subSteps: [
           {
             id: '4-1',
