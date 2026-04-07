@@ -2,13 +2,13 @@
   <div class="dashWhiteHdr" *ngIf="title">
     <div>
       <h4>
-        {{ title }}
+        {{ title | translate }}
         <span *ngIf="subtitle">
-          {{ subtitle }}
+          {{ subtitle | translate }}
         </span>
       </h4>
       <p *ngIf="description">
-        {{ description }}
+        {{ description | translate }}
       </p>
     </div>
     <div class="dashWhiteActn" *ngIf="showActions">
