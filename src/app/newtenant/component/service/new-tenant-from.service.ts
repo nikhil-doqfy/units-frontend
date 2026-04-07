@@ -21,11 +21,15 @@ export class NewTenantFromService {
   private activeSubIndex = signal<number>(0);
   private leaseId = signal<number | null>(null);
 
-  getLeaseId() { return this.leaseId; }
+  getLeaseId() {
+    return this.leaseId;
+  }
 
   // Commercial data from the selected unit — used to pre-fill the commercial form
   private unitCommercialData = signal<any>(null);
-  getUnitCommercialData() { return this.unitCommercialData; }
+  getUnitCommercialData() {
+    return this.unitCommercialData;
+  }
   setUnitCommercialData(data: any) {
     this.unitCommercialData.set(data);
     this.prefillCommercialFromUnit(data);
@@ -42,12 +46,12 @@ export class NewTenantFromService {
     return signal<NewTenant[]>([
       {
         id: '1',
-        title: 'Invite',
+        title: 'INVITE',
         subSteps: [
           {
             id: '1-1',
-            title: 'Property details',
-            description: 'Fill all the fields to add create your lease',
+            title: 'PROPERTY_DETAILS',
+            description: 'CREATE_LEASE_FIELDS',
             component: BasicpersonalComponent,
             formGroup: this.createBasicForm(leadData),
             inputs: { leadData: leadData ?? null },
@@ -59,8 +63,8 @@ export class NewTenantFromService {
           },
           {
             id: '1-2',
-            title: 'Commercial Details',
-            description: 'Fill all the fields to add create your lease',
+            title: 'COMMERCIAL_DETAILS',
+            description: 'CREATE_LEASE_FIELDS',
             component: CommercialdetailsComponent,
             formGroup: this.createCommercialForm(),
           },
@@ -68,19 +72,19 @@ export class NewTenantFromService {
       },
       {
         id: '2',
-        title: 'Onboarding',
+        title: 'ONBOARDING',
         subSteps: [
           {
             id: '2-1',
-            title: 'Waiting for Tenant',
-            description: 'Invite sent — waiting for the tenant to complete their signup',
+            title: 'WAITING_FOR_TENANT',
+            description: 'INVITE_SENT',
             component: ProfileComponent,
             formGroup: this.createProfileForm(),
           },
           {
             id: '2-2',
-            title: 'Onboarding',
-            description: 'Review cheques and send negotiation',
+            title: 'ONBOARDING',
+            description: 'REVIEW_CHEQUES_AND_SEND_NEGOTIATION',
             component: OnboardingComponent,
             formGroup: this.createOnboardingForm(),
           },
@@ -88,15 +92,15 @@ export class NewTenantFromService {
       },
       {
         id: '3',
-        title: 'Agreement',
+        title: 'AGREEMENT',
         subSteps: [
           {
             id: '3-1',
-            title: 'Profile',
+            title: 'PROFILE',
             component: AgreementComponent,
             formGroup: this.createBasicForm(),
             saveButtonDetails: {
-              title: 'Send for Signature',
+              title: 'SEND_FOR_SIGNATURE',
               buttonType: 'SIMPLE',
               onClick: () => this.handleMainButtonClick(),
             },
@@ -109,11 +113,11 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '4-1',
-            title: 'Profile',
+            title: 'PROFILE',
             component: EjariDocComponent,
             formGroup: this.createCommercialForm(),
             saveButtonDetails: {
-              title: 'Send for Signature',
+              title: 'SEND_FOR_SIGNATURE',
               buttonType: 'SIMPLE',
               onClick: () => this.startEjariFlow(),
             },
@@ -133,7 +137,7 @@ export class NewTenantFromService {
       },
       {
         id: '5',
-        title: 'Activated',
+        title: 'ACTIVATED',
       },
     ]);
   }
@@ -151,32 +155,45 @@ export class NewTenantFromService {
       platform: [leadData?.platform ?? ''],
 
       // Section 01 — Leased Unit
-      property:  [leadData?.property_id ? { key: leadData.property_id, value: leadData.property_name } : ''],
-      block:     [leadData?.block_id    ? { key: leadData.block_id,    value: leadData.block_name    } : ''],
-      unit:      [leadData?.unit_id     ? { key: leadData.unit_id,     value: leadData.unit_name     } : '', Validators.required],
-      unitName:  [leadData?.unit_name   ?? '', Validators.required],
-      unitSize:  [leadData?.unit_size   ?? '', Validators.required],
-      landNo:    [leadData?.land_no     ?? '', Validators.required],
-      dmNo:      [leadData?.dm_no       ?? '', Validators.required],
-      unitUsage: [leadData?.unit_usage  ?? '', Validators.required],
-      unitType:  [leadData?.unit_type   ?? '', Validators.required],
-      subType:   [leadData?.sub_type    ?? '', Validators.required],
-      makaniNo:  [leadData?.makani_no   ?? '', Validators.required],
-      floorNo:   [leadData?.floor_no    ?? '', Validators.required],
+      property: [
+        leadData?.property_id
+          ? { key: leadData.property_id, value: leadData.property_name }
+          : '',
+      ],
+      block: [
+        leadData?.block_id
+          ? { key: leadData.block_id, value: leadData.block_name }
+          : '',
+      ],
+      unit: [
+        leadData?.unit_id
+          ? { key: leadData.unit_id, value: leadData.unit_name }
+          : '',
+        Validators.required,
+      ],
+      unitName: [leadData?.unit_name ?? '', Validators.required],
+      unitSize: [leadData?.unit_size ?? '', Validators.required],
+      landNo: [leadData?.land_no ?? '', Validators.required],
+      dmNo: [leadData?.dm_no ?? '', Validators.required],
+      unitUsage: [leadData?.unit_usage ?? '', Validators.required],
+      unitType: [leadData?.unit_type ?? '', Validators.required],
+      subType: [leadData?.sub_type ?? '', Validators.required],
+      makaniNo: [leadData?.makani_no ?? '', Validators.required],
+      floorNo: [leadData?.floor_no ?? '', Validators.required],
 
       // Section 02 — Tenant
-      tenantId:       [leadData?.tenant_id ?? null],
-      email:          [leadData?.email ?? '', [Validators.required, Validators.email]],
-      tenantName:     [leadData?.name ?? '', Validators.required],
-      nationality:    [leadData?.nationality ?? '', Validators.required],
-      passportNo:     ['', Validators.required],
+      tenantId: [leadData?.tenant_id ?? null],
+      email: [leadData?.email ?? '', [Validators.required, Validators.email]],
+      tenantName: [leadData?.name ?? '', Validators.required],
+      nationality: [leadData?.nationality ?? '', Validators.required],
+      passportNo: ['', Validators.required],
       passportExpiry: ['', Validators.required],
-      emiratesId:     ['', Validators.required],
-      visaNo:         ['', Validators.required],
-      visaExpiry:     ['', Validators.required],
-      telNo:          [leadData?.contact_number ?? '', Validators.required],
-      addressLine1:   ['', Validators.required],
-      addressLine2:   [''],
+      emiratesId: ['', Validators.required],
+      visaNo: ['', Validators.required],
+      visaExpiry: ['', Validators.required],
+      telNo: [leadData?.contact_number ?? '', Validators.required],
+      addressLine1: ['', Validators.required],
+      addressLine2: [''],
 
       // Section 03 — Owner Details (FormArray)
       unitOwners: this.fb.array(
@@ -189,17 +206,22 @@ export class NewTenantFromService {
 
   createOwnerGroup(o?: any): FormGroup {
     return this.fb.group({
-      ownerName:      [o?.name                 ?? '', Validators.required],
-      ownerEmail:     [o?.email                ?? '', [Validators.required, Validators.email]],
-      ownerContact:   [o?.contact_number       ?? '', Validators.required],
-      ownerEmiratesId:[o?.emirates_id          ?? '', Validators.required],
-      ownerNumber:    [o?.owner_number         ?? '', Validators.required],
+      ownerName: [o?.name ?? '', Validators.required],
+      ownerEmail: [o?.email ?? '', [Validators.required, Validators.email]],
+      ownerContact: [o?.contact_number ?? '', Validators.required],
+      ownerEmiratesId: [o?.emirates_id ?? '', Validators.required],
+      ownerNumber: [o?.owner_number ?? '', Validators.required],
       tradeLicenseNo: [o?.trade_license_number ?? '', Validators.required],
-      licenseNumber:  [o?.license_number       ?? '', Validators.required],
-      licenseExpiry:  [o?.license_expiry_date ? String(o.license_expiry_date).slice(0, 10) : '', Validators.required],
-      licenseIssuer:  [o?.license_issuer       ?? '', Validators.required],
-      faxNo:          [o?.fax_number           ?? ''],
-      poBox:          [o?.po_box_number        ?? ''],
+      licenseNumber: [o?.license_number ?? '', Validators.required],
+      licenseExpiry: [
+        o?.license_expiry_date
+          ? String(o.license_expiry_date).slice(0, 10)
+          : '',
+        Validators.required,
+      ],
+      licenseIssuer: [o?.license_issuer ?? '', Validators.required],
+      faxNo: [o?.fax_number ?? ''],
+      poBox: [o?.po_box_number ?? ''],
     });
   }
 
@@ -207,22 +229,22 @@ export class NewTenantFromService {
 
   private createCommercialForm(): FormGroup {
     const form = this.fb.group({
-      startDate:            ['', Validators.required],
-      endDate:              ['', Validators.required],
-      graceStartDate:       ['', Validators.required],
-      graceEndDate:         ['', Validators.required],
-      annualAmount:         ['', Validators.required],
-      actualAnnualAmount:   ['', Validators.required],
-      securityBookingAmount:['', Validators.required],
-      maintenanceCharges:   ['', Validators.required],
-      rent:                 ['', Validators.required],
-      securityDeposit:      ['', Validators.required],
-      commissionPercent:    ['', Validators.required],
-      noticePeriod:         ['', Validators.required],
-      contractAmount:       ['', Validators.required],
-      discount:             [''],
-      shellAndCore:         [''],
-      paymentCount:         ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      graceStartDate: ['', Validators.required],
+      graceEndDate: ['', Validators.required],
+      annualAmount: ['', Validators.required],
+      actualAnnualAmount: ['', Validators.required],
+      securityBookingAmount: ['', Validators.required],
+      maintenanceCharges: ['', Validators.required],
+      rent: ['', Validators.required],
+      securityDeposit: ['', Validators.required],
+      commissionPercent: ['', Validators.required],
+      noticePeriod: ['', Validators.required],
+      contractAmount: ['', Validators.required],
+      discount: [''],
+      shellAndCore: [''],
+      paymentCount: ['', Validators.required],
     });
     this._commercialForm = form;
     return form;
@@ -236,13 +258,19 @@ export class NewTenantFromService {
     const blank = (ctrl: string) => !form.get(ctrl)?.value;
     const patch: Record<string, any> = {};
 
-    if (blank('rent')                  && u.rent)               patch['rent']                 = parseFloat(u.rent);
-    if (blank('securityDeposit')       && u.security_deposit)   patch['securityDeposit']      = parseFloat(u.security_deposit);
-    if (blank('securityBookingAmount') && u.booking_amount)     patch['securityBookingAmount']= parseFloat(u.booking_amount);
-    if (blank('maintenanceCharges')    && u.maintenance_charges)patch['maintenanceCharges']   = parseFloat(u.maintenance_charges);
-    if (blank('paymentCount')          && u.cycle)              patch['paymentCount']         = parseInt(u.cycle, 10);
-    if (blank('noticePeriod')          && u.notice_period)      patch['noticePeriod']         = parseInt(u.notice_period, 10);
-    if (blank('commissionPercent')     && u.commission_percent) patch['commissionPercent']    = parseFloat(u.commission_percent);
+    if (blank('rent') && u.rent) patch['rent'] = parseFloat(u.rent);
+    if (blank('securityDeposit') && u.security_deposit)
+      patch['securityDeposit'] = parseFloat(u.security_deposit);
+    if (blank('securityBookingAmount') && u.booking_amount)
+      patch['securityBookingAmount'] = parseFloat(u.booking_amount);
+    if (blank('maintenanceCharges') && u.maintenance_charges)
+      patch['maintenanceCharges'] = parseFloat(u.maintenance_charges);
+    if (blank('paymentCount') && u.cycle)
+      patch['paymentCount'] = parseInt(u.cycle, 10);
+    if (blank('noticePeriod') && u.notice_period)
+      patch['noticePeriod'] = parseInt(u.notice_period, 10);
+    if (blank('commissionPercent') && u.commission_percent)
+      patch['commissionPercent'] = parseFloat(u.commission_percent);
 
     if (Object.keys(patch).length) {
       form.patchValue(patch, { emitEvent: false });
@@ -266,15 +294,25 @@ export class NewTenantFromService {
 
   /* ================= FORMS ================= */
 
-  private showCheckSection  = signal(false);
+  private showCheckSection = signal(false);
   private showChequeWaiting = signal(false);
-  private approvalStage     = signal<'NEGOTIATION_SENT' | 'OWNER_APPROVED' | 'TENANT_APPROVED' | null>(null);
-  private chequeConfirmed   = signal(false);
+  private approvalStage = signal<
+    'NEGOTIATION_SENT' | 'OWNER_APPROVED' | 'TENANT_APPROVED' | null
+  >(null);
+  private chequeConfirmed = signal(false);
 
-  getShowCheckSection()  { return this.showCheckSection; }
-  getShowChequeWaiting() { return this.showChequeWaiting; }
-  getApprovalStage()     { return this.approvalStage; }
-  getChequeConfirmed()   { return this.chequeConfirmed; }
+  getShowCheckSection() {
+    return this.showCheckSection;
+  }
+  getShowChequeWaiting() {
+    return this.showChequeWaiting;
+  }
+  getApprovalStage() {
+    return this.approvalStage;
+  }
+  getChequeConfirmed() {
+    return this.chequeConfirmed;
+  }
   private showMsg = signal(false);
   private msgText = signal('');
   private btnTitle = signal<
@@ -289,13 +327,19 @@ export class NewTenantFromService {
   private currentLeaseStage = signal<string>('');
   private showRefresh = signal(false);
   showRefresh$ = computed(() => this.showRefresh());
-  private stepPhase = signal<'NEGOTIATION' | 'CHEQUE' | 'COLLECTED' | 'FINAL'>('NEGOTIATION');
+  private stepPhase = signal<'NEGOTIATION' | 'CHEQUE' | 'COLLECTED' | 'FINAL'>(
+    'NEGOTIATION',
+  );
   private agreementPhase = signal<'INIT' | 'SIGNING' | 'SIGNED'>('INIT');
   private ejariPhase = signal<'INIT' | 'SIGNING' | 'SIGNED'>('INIT');
   private agreementPdfUrl = signal<string | null>(null);
 
-  getAgreementPdfUrl() { return this.agreementPdfUrl; }
-  setAgreementPdfUrl(url: string | null) { this.agreementPdfUrl.set(url); }
+  getAgreementPdfUrl() {
+    return this.agreementPdfUrl;
+  }
+  setAgreementPdfUrl(url: string | null) {
+    this.agreementPdfUrl.set(url);
+  }
   getShowMsg() {
     return this.showMsg;
   }
@@ -351,7 +395,9 @@ export class NewTenantFromService {
   private triggerNegotiation() {
     const id = this.leaseId();
     if (!id) {
-      this.alertService.error('Lease not found. Please complete the previous steps first.');
+      this.alertService.error(
+        'Lease not found. Please complete the previous steps first.',
+      );
       return;
     }
     this.msgText.set('Sending negotiation document…');
@@ -359,7 +405,9 @@ export class NewTenantFromService {
 
     this.leaseService.sendNegotiation(id).subscribe({
       next: () => {
-        this.msgText.set('Negotiation sent  |  Waiting for approval from Owner and Tenant…');
+        this.msgText.set(
+          'Negotiation sent  |  Waiting for approval from Owner and Tenant…',
+        );
         this.btnTitle.set('Cheque Request');
         this.stepPhase.set('CHEQUE');
       },
@@ -374,7 +422,9 @@ export class NewTenantFromService {
     this.updateLeaseStage('CHEQUE_REQUESTED');
     this.showChequeWaiting.set(true);
     this.stepPhase.set('CHEQUE');
-    this.msgText.set('A cheque request has been sent to the tenant. This page will update once the tenant uploads their cheque documents.');
+    this.msgText.set(
+      'A cheque request has been sent to the tenant. This page will update once the tenant uploads their cheque documents.',
+    );
     this.showMsg.set(true);
   }
 
@@ -392,7 +442,9 @@ export class NewTenantFromService {
     if (this.agreementPhase() === 'INIT') {
       const id = this.leaseId();
       if (!id) {
-        this.alertService.error('Lease not found. Please complete the previous steps first.');
+        this.alertService.error(
+          'Lease not found. Please complete the previous steps first.',
+        );
         return;
       }
       this.msgText.set('Sending signature requests…');
@@ -406,7 +458,9 @@ export class NewTenantFromService {
           this.agreementPhase.set('SIGNING');
         },
         error: () => {
-          this.msgText.set('Failed to send signature requests. Please try again.');
+          this.msgText.set(
+            'Failed to send signature requests. Please try again.',
+          );
           setTimeout(() => this.showMsg.set(false), 3000);
         },
       });
@@ -481,7 +535,11 @@ export class NewTenantFromService {
 
     if (existingId) {
       this.leaseService
-        .updateLease({ ...payload, lease_id: existingId, lease_stage: 'COMMERCIAL_DETAILS' })
+        .updateLease({
+          ...payload,
+          lease_id: existingId,
+          lease_stage: 'COMMERCIAL_DETAILS',
+        })
         .subscribe({
           next: () => {
             this.isSavingBasic = false;
@@ -502,12 +560,17 @@ export class NewTenantFromService {
       next: (resp: any) => {
         const existingLease = resp?.content?.[0] ?? null;
         const stage = existingLease?.lease_stage?.toUpperCase();
-        const isDraft = stage === 'BASIC_DETAILS' || stage === 'COMMERCIAL_DETAILS';
+        const isDraft =
+          stage === 'BASIC_DETAILS' || stage === 'COMMERCIAL_DETAILS';
 
         if (isDraft) {
           this.leaseId.set(existingLease.id);
           this.leaseService
-            .updateLease({ ...payload, lease_id: existingLease.id, lease_stage: 'COMMERCIAL_DETAILS' })
+            .updateLease({
+              ...payload,
+              lease_id: existingLease.id,
+              lease_stage: 'COMMERCIAL_DETAILS',
+            })
             .subscribe({
               next: () => {
                 this.isSavingBasic = false;
@@ -516,7 +579,9 @@ export class NewTenantFromService {
               },
               error: () => {
                 this.isSavingBasic = false;
-                this.alertService.error('Failed to save lease. Please try again.');
+                this.alertService.error(
+                  'Failed to save lease. Please try again.',
+                );
               },
             });
         } else {
@@ -524,14 +589,17 @@ export class NewTenantFromService {
             .createLease({ ...payload, lease_stage: 'COMMERCIAL_DETAILS' })
             .subscribe({
               next: (createResp: any) => {
-                if (createResp?.content?.id) this.leaseId.set(createResp.content.id);
+                if (createResp?.content?.id)
+                  this.leaseId.set(createResp.content.id);
                 this.isSavingBasic = false;
                 this.alertService.success('Lease saved successfully');
                 onSuccess?.();
               },
               error: () => {
                 this.isSavingBasic = false;
-                this.alertService.error('Failed to save lease. Please try again.');
+                this.alertService.error(
+                  'Failed to save lease. Please try again.',
+                );
               },
             });
         }
@@ -542,14 +610,17 @@ export class NewTenantFromService {
           .createLease({ ...payload, lease_stage: 'COMMERCIAL_DETAILS' })
           .subscribe({
             next: (createResp: any) => {
-              if (createResp?.content?.id) this.leaseId.set(createResp.content.id);
+              if (createResp?.content?.id)
+                this.leaseId.set(createResp.content.id);
               this.isSavingBasic = false;
               this.alertService.success('Lease saved successfully');
               onSuccess?.();
             },
             error: () => {
               this.isSavingBasic = false;
-              this.alertService.error('Failed to save lease. Please try again.');
+              this.alertService.error(
+                'Failed to save lease. Please try again.',
+              );
             },
           });
       },
@@ -585,26 +656,38 @@ export class NewTenantFromService {
       return;
     }
 
-    this.leaseService.updateLease({ ...payload, lease_id: existingId, lease_stage: 'WAITING_FOR_SIGNUP' }).subscribe({
-      next: () => {
-        this.leaseService.sendLeaseInvite(existingId).subscribe({
-          next: () => this.alertService.success('Invite sent successfully to tenant'),
-          error: () => this.alertService.error('Lease saved but failed to send invite email'),
-        });
-        onSuccess?.();
-      },
-      error: () => {
-        this.alertService.success('Invite Sent Successfully');
-        onSuccess?.();
-      },
-    });
+    this.leaseService
+      .updateLease({
+        ...payload,
+        lease_id: existingId,
+        lease_stage: 'WAITING_FOR_SIGNUP',
+      })
+      .subscribe({
+        next: () => {
+          this.leaseService.sendLeaseInvite(existingId).subscribe({
+            next: () =>
+              this.alertService.success('Invite sent successfully to tenant'),
+            error: () =>
+              this.alertService.error(
+                'Lease saved but failed to send invite email',
+              ),
+          });
+          onSuccess?.();
+        },
+        error: () => {
+          this.alertService.success('Invite Sent Successfully');
+          onSuccess?.();
+        },
+      });
   }
 
   /** Called by FormRenderComponent when the user advances to a new main step. */
   updateLeaseStage(stage: string) {
     const id = this.leaseId();
     if (!id) return;
-    this.leaseService.updateLease({ lease_id: id, lease_stage: stage }).subscribe();
+    this.leaseService
+      .updateLease({ lease_id: id, lease_stage: stage })
+      .subscribe();
   }
 
   resetFlow() {
@@ -630,61 +713,65 @@ export class NewTenantFromService {
 
     // Negotiation sent — waiting for both approvals
     if (s === 'NEGOTIATION_SENT' || s === 'PENDING_APPROVAL') {
-      this.msgText.set('Negotiation sent  |  Waiting for approval from Owner and Tenant…');
+      this.msgText.set(
+        'Negotiation sent  |  Waiting for approval from Owner and Tenant…',
+      );
       this.showMsg.set(true);
       this.btnTitle.set('Cheque Request');
       this.stepPhase.set('CHEQUE');
 
-    // Owner approved — still waiting for tenant
+      // Owner approved — still waiting for tenant
     } else if (s === 'OWNER_APPROVED') {
       this.msgText.set('Owner has approved ✓  |  Waiting for Tenant approval…');
       this.showMsg.set(true);
       this.btnTitle.set('Cheque Request');
       this.stepPhase.set('CHEQUE');
 
-    // Tenant approved — still waiting for owner
+      // Tenant approved — still waiting for owner
     } else if (s === 'TENANT_APPROVED') {
       this.msgText.set('Tenant has approved ✓  |  Waiting for Owner approval…');
       this.showMsg.set(true);
       this.btnTitle.set('Cheque Request');
       this.stepPhase.set('CHEQUE');
 
-    // Both approved — admin yet to click Cheque Request → show Cheque Request button
+      // Both approved — admin yet to click Cheque Request → show Cheque Request button
     } else if (s === 'WAITING_CHEQUE') {
       this.btnTitle.set('Cheque Request');
       this.stepPhase.set('CHEQUE');
 
-    // Admin clicked Cheque Request → show waiting screen
+      // Admin clicked Cheque Request → show waiting screen
     } else if (s === 'CHEQUE_REQUESTED') {
-      this.msgText.set('A cheque request has been sent to the tenant. This page will update once the tenant uploads their cheque documents.');
+      this.msgText.set(
+        'A cheque request has been sent to the tenant. This page will update once the tenant uploads their cheque documents.',
+      );
       this.showMsg.set(true);
       this.btnTitle.set('Cheque Request');
       this.stepPhase.set('CHEQUE');
 
-    // Cheque collected — show rent cheques section
+      // Cheque collected — show rent cheques section
     } else if (s === 'CHEQUE_COLLECTED') {
       this.showCheckSection.set(true);
       this.btnTitle.set('Proceed to Agreement');
       this.stepPhase.set('COLLECTED');
 
-    // Agreement stage — show Send for Signature button
+      // Agreement stage — show Send for Signature button
     } else if (s === 'AGREEMENT') {
       this.btnTitle.set('Send for Signature');
       this.agreementPhase.set('INIT');
 
-    // Agreement sent for signature
+      // Agreement sent for signature
     } else if (s === 'AGREEMENT_SIGNING') {
       this.btnTitle.set('Submit for Ejari');
       this.agreementPhase.set('SIGNING');
       this.msgText.set('Waiting for Signature');
       this.showMsg.set(true);
 
-    // Agreement signed, ready to proceed to Ejari
+      // Agreement signed, ready to proceed to Ejari
     } else if (s === 'AGREEMENT_SIGNED') {
       this.btnTitle.set('Submit for Ejari');
       this.agreementPhase.set('SIGNED');
 
-    // Ejari sent for signature
+      // Ejari sent for signature
     } else if (s === 'EJARI_SIGNING') {
       this.btnTitle.set('Approval & Generate Invoice');
       this.ejariPhase.set('SIGNING');

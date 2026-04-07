@@ -2,11 +2,12 @@
   <!-- 01 Lessor Period -->
   <div class="sectionCard mt-3">
     <span class="sectionBadge">01</span>
-    <h6 class="sectionTitle">Lessor Period</h6>
+    <h6 class="sectionTitle">{{ "LESSOR_PERIOD" | translate }}</h6>
     <div class="row g-3">
       <div class="col-md-3">
         <label class="form-label"
-          >Start Date <span class="text-danger">*</span></label
+          >{{ "START_DATE" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input type="date" class="form-control" formControlName="startDate" />
         @if (isInvalid(form, "startDate").status) {
@@ -16,7 +17,8 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >End Date <span class="text-danger">*</span></label
+          >{{ "END_DATE" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input type="date" class="form-control" formControlName="endDate" />
         @if (isInvalid(form, "endDate").status) {
@@ -26,7 +28,8 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Grace Start Date <span class="text-danger">*</span></label
+          >{{ "GRACE_START_DATE" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="date"
@@ -42,7 +45,8 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Grace End Date <span class="text-danger">*</span></label
+          >{{ "GRACE_END_DATE" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="date"
@@ -61,16 +65,17 @@
   <!-- 02 Amount / Rent Details -->
   <div class="sectionCard mt-3">
     <span class="sectionBadge">02</span>
-    <h6 class="sectionTitle">Amount / Rent Details</h6>
+    <h6 class="sectionTitle">{{ "AMOUNT_RENT_DETAILS" | translate }}</h6>
     <div class="row g-3">
       <div class="col-md-3">
         <label class="form-label"
-          >Annual Amount <span class="text-danger">*</span></label
+          >{{ "ANNUAL_AMOUNT" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="annualAmount"
         />
         @if (isInvalid(form, "annualAmount").status) {
@@ -82,12 +87,13 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Actual Annual Amount <span class="text-danger">*</span></label
+          >{{ "ACTUAL_ANNUAL_AMOUNT" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="actualAnnualAmount"
         />
         @if (isInvalid(form, "actualAnnualAmount").status) {
@@ -99,12 +105,13 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Security / Booking Amount <span class="text-danger">*</span></label
+          >{{ "SECURITY_BOOKING_AMOUNT" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="securityBookingAmount"
         />
         @if (isInvalid(form, "securityBookingAmount").status) {
@@ -116,12 +123,13 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Maintenance Charges <span class="text-danger">*</span></label
+          >{{ "MAINTENANCE_CHARGES" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="maintenanceCharges"
         />
         @if (isInvalid(form, "maintenanceCharges").status) {
@@ -133,12 +141,12 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Rent <span class="text-danger">*</span></label
+          >{{ "RENT" | translate }} <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="rent"
         />
         @if (isInvalid(form, "rent").status) {
@@ -148,12 +156,13 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Security Deposit <span class="text-danger">*</span></label
+          >{{ "SECURITY_DEPOSIT" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="securityDeposit"
         />
         @if (isInvalid(form, "securityDeposit").status) {
@@ -165,12 +174,13 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Commission in % <span class="text-danger">*</span></label
+          >{{ "COMMISSION_IN_PERCENT" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="commissionPercent"
         />
         @if (isInvalid(form, "commissionPercent").status) {
@@ -182,12 +192,13 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Notice Period (in months) <span class="text-danger">*</span></label
+          >{{ "NOTICE_PERIOD_(IN_MONTHS)" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="noticePeriod"
         />
         @if (isInvalid(form, "noticePeriod").status) {
@@ -199,12 +210,13 @@
 
       <div class="col-md-3">
         <label class="form-label"
-          >Contract Amount <span class="text-danger">*</span></label
+          >{{ "CONTRACT_AMOUNT" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="contractAmount"
         />
         @if (isInvalid(form, "contractAmount").status) {
@@ -215,33 +227,36 @@
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Discount (Optional)</label>
+        <label class="form-label">{{
+          "DISCOUNT_(OPTIONAL)" | translate
+        }}</label>
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="discount"
         />
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Shell &amp; Core</label>
+        <label class="form-label">{{ "SHELL_AND_CORES" | translate }}</label>
         <input
           type="text"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="shellAndCore"
         />
       </div>
 
       <div class="col-md-3">
         <label class="form-label"
-          >Payment Count <span class="text-danger">*</span></label
+          >{{ "PAYMENT_COUNT" | translate }}
+          <span class="text-danger">*</span></label
         >
         <input
           type="number"
           class="form-control"
-          placeholder="Enter here"
+          placeholder="{{ 'ENTER_HERE' | translate }}"
           formControlName="paymentCount"
         />
         @if (isInvalid(form, "paymentCount").status) {
@@ -257,9 +272,9 @@
   <div class="sectionCardThree mt-3">
     <span class="sectionBadge">03</span>
     <h6 class="otherChargesTitle">
-      Other Charges
+      {{ "OTHER_CHARGES" | translate }}
       <span class="totalLabel">
-        <span class="totalText">Total:</span>
+        <span class="totalText">{{ "TOTAL" | translate }}:</span>
         <span class="currency"
           >AED {{ totalAmount | number: "1.2-2" }}</span
         ></span
