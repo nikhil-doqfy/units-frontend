@@ -29,6 +29,8 @@ export class TermsconditionsComponent {
   terms: any;
   ngOnInit() {
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+
     this.getTerms();
   }
   showDetailView: boolean = false;

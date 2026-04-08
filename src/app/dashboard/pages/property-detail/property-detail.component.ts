@@ -7,6 +7,7 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
 import { PropertyService } from '../../services/property.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-property-detail',
@@ -24,6 +25,7 @@ export class PropertyDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private propertyService = inject(PropertyService);
+  private sharedService = inject(SharedService);
 
   propertyId!: number;
   loading = true;
@@ -55,6 +57,7 @@ export class PropertyDetailComponent implements OnInit {
       return;
     }
     this.loadAll();
+    this.sharedService.initLanguage();
   }
 
   getLabel(key: string): string {
@@ -98,7 +101,7 @@ export class PropertyDetailComponent implements OnInit {
 
           this.propertySections = [
             {
-              title: 'Property Details',
+              title: 'PEROPERTY_DETAILS',
               items: [
                 {
                   label: this.getLabel('PROPERTY_CODE'),
@@ -139,7 +142,7 @@ export class PropertyDetailComponent implements OnInit {
                   value: prop.dewa_no || '--',
                 },
                 {
-                  label: this.getLabel('_PINCODE'),
+                  label: this.getLabel('PINCODE'),
                   value: prop.pincode || '--',
                 },
                 {
@@ -153,10 +156,13 @@ export class PropertyDetailComponent implements OnInit {
               ],
             },
             {
-              title: 'Block Details',
+              title: 'BLOCK_DETAILS',
               items: blockList.length
                 ? blockList.flatMap((b: any, i: number) => [
-                    { label: `Block ${i + 1}`, value: b.block_name || '--' },
+                    {
+                      label: `${this.getLabel('BLOCK')}${i + 1}`,
+                      value: b.block_name || '--',
+                    },
                     {
                       label: this.getLabel('NO_OF_FLOORS'),
                       value: String(b.no_of_floors ?? '--'),

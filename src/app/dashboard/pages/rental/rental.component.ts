@@ -1,9 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  Input,
-  inject,
-} from '@angular/core';
+import { Component, DestroyRef, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, ɵEmptyOutletComponent } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -23,7 +18,11 @@ import { TableActionButtonComponent } from '../../component/table-action-btn/tab
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
-import { BreadCrumb, PageChange, PageSizeChange } from '../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../shared/model/shared.model';
 import { LeaseService } from '../../services/lease.service';
 import { TenantsService } from '../../services/tenants.service';
 import { PropertyService } from '../../services/property.service';
@@ -85,9 +84,9 @@ export class RentalComponent {
   private sharedService = inject(SharedService);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
-  private leaseService         = inject(LeaseService);
-  private tenantsService       = inject(TenantsService);
-  private propertyService      = inject(PropertyService);
+  private leaseService = inject(LeaseService);
+  private tenantsService = inject(TenantsService);
+  private propertyService = inject(PropertyService);
   showNavBar: boolean = true;
 
   @Input() data: any;
@@ -112,38 +111,56 @@ export class RentalComponent {
   currentPage = 1;
 
   // ── Cheque chart & summary ────────────────────────────────────────
-  selectedYear       = String(new Date().getFullYear());
-  selectedYearOption = { key: String(new Date().getFullYear()), value: String(new Date().getFullYear()) };
-  yearOptions        = Array.from({ length: 6 }, (_, i) => {
+  selectedYear = String(new Date().getFullYear());
+  selectedYearOption = {
+    key: String(new Date().getFullYear()),
+    value: String(new Date().getFullYear()),
+  };
+  yearOptions = Array.from({ length: 6 }, (_, i) => {
     const y = String(new Date().getFullYear() - i);
     return { key: y, value: y };
   });
 
-  private static readonly MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  chartData: { name: string; value: number }[] = RentalComponent.MONTHS.map(m => ({ name: m, value: 0 }));
+  private static readonly MONTHS = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  chartData: { name: string; value: number }[] = RentalComponent.MONTHS.map(
+    (m) => ({ name: m, value: 0 }),
+  );
 
-  summaryAmountReceived  = '—';
+  summaryAmountReceived = '—';
   summaryChequesApproved = '—';
   summaryChequesDeposited = '—';
-  summaryCountApproved   = '—';
-  summaryCountDeposited  = '—';
+  summaryCountApproved = '—';
+  summaryCountDeposited = '—';
 
   // ── Rent Amounts filters ──────────────────────────────────────────
   rentalPropertyOptions: { key: string; value: string }[] = [];
-  rentalBlockOptions:    { key: string; value: string }[] = [];
-  rentalUnitOptions:     { key: string; value: string }[] = [];
+  rentalBlockOptions: { key: string; value: string }[] = [];
+  rentalUnitOptions: { key: string; value: string }[] = [];
 
   rentalFilterPropertyId = '';
-  rentalFilterBlockId    = '';
-  rentalFilterUnitId     = '';
+  rentalFilterBlockId = '';
+  rentalFilterUnitId = '';
 
   rentalSelectedProperty: any = null;
-  rentalSelectedBlock:    any = null;
-  rentalSelectedUnit:     any = null;
-  rentalClearTrigger          = 0;
+  rentalSelectedBlock: any = null;
+  rentalSelectedUnit: any = null;
+  rentalClearTrigger = 0;
 
   private rentalSearchSubject$ = new Subject<string>();
-  private rentalSearchText     = '';
+  private rentalSearchText = '';
 
   leases: any[] = [
     {
@@ -173,11 +190,9 @@ export class RentalComponent {
   }
   ngOnInit() {
     this.loadBreadcrumb();
-    this.sharedService.initLanguage();
     this.initLanguageListener();
     this.initCurrentRoleListener();
     this.sharedService.initLanguage();
-    this.initLanguageListener();
     this.loadRentalFilterOptions();
     this.getLeases();
     this.loadChequeSummary();
@@ -185,11 +200,12 @@ export class RentalComponent {
     this.loadRentAnalytics();
     this.rentalSearchSubject$
       .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
-      .subscribe(text => {
+      .subscribe((text) => {
         this.rentalSearchText = text.trim();
         this.currentPage = 1;
         this.getLeases();
       });
+    this.sharedService.initLanguage();
   }
   onPropertyDetailToggle(flag: boolean) {
     this.showNavBar = flag;
@@ -229,40 +245,50 @@ export class RentalComponent {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  totalAmount    = '—';
+  totalAmount = '—';
   receivedAmount = '—';
-  pendingAmount  = '—';
+  pendingAmount = '—';
 
-  areaChartData: { month: string; amount_received: number; cheque_bounce: number; total_amount: number }[] = [];
+  areaChartData: {
+    month: string;
+    amount_received: number;
+    cheque_bounce: number;
+    total_amount: number;
+  }[] = [];
 
   getLeases() {
     const params: Record<string, any> = {
-      tab:       'all',
-      page:      this.currentPage,
+      tab: 'all',
+      page: this.currentPage,
       page_size: this.rowsPerPage,
     };
-    if (this.rentalSearchText)      params['search']      = this.rentalSearchText;
-    if (this.rentalFilterPropertyId) params['property_id'] = this.rentalFilterPropertyId;
-    if (this.rentalFilterBlockId)    params['block_id']    = this.rentalFilterBlockId;
-    if (this.rentalFilterUnitId)     params['unit_id']     = this.rentalFilterUnitId;
+    if (this.rentalSearchText) params['search'] = this.rentalSearchText;
+    if (this.rentalFilterPropertyId)
+      params['property_id'] = this.rentalFilterPropertyId;
+    if (this.rentalFilterBlockId) params['block_id'] = this.rentalFilterBlockId;
+    if (this.rentalFilterUnitId) params['unit_id'] = this.rentalFilterUnitId;
 
-    this.tenantsService.getTenantsByTab(params)
+    this.tenantsService
+      .getTenantsByTab(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res: any) => {
-          this.leases       = res?.content ?? [];
-          this.totalRecords = res?.pagination?.total_records ?? this.leases.length;
+          this.leases = res?.content ?? [];
+          this.totalRecords =
+            res?.pagination?.total_records ?? this.leases.length;
         },
       });
   }
 
   loadRentalFilterOptions() {
-    this.propertyService.getProperties({ page: 1, page_size: 200 })
+    this.propertyService
+      .getProperties({ page: 1, page_size: 200 })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.rentalPropertyOptions = (resp?.content || []).map((p: any) => ({
-            key: String(p.id), value: p.property_name,
+            key: String(p.id),
+            value: p.property_name,
           }));
         },
       });
@@ -270,23 +296,25 @@ export class RentalComponent {
 
   onRentalPropertySelected(option: any) {
     this.rentalSelectedProperty = option ?? null;
-    this.rentalSelectedBlock    = null;
-    this.rentalSelectedUnit     = null;
+    this.rentalSelectedBlock = null;
+    this.rentalSelectedUnit = null;
     this.rentalFilterPropertyId = option?.key ?? '';
-    this.rentalFilterBlockId    = '';
-    this.rentalFilterUnitId     = '';
-    this.rentalBlockOptions     = [];
-    this.rentalUnitOptions      = [];
-    this.currentPage            = 1;
+    this.rentalFilterBlockId = '';
+    this.rentalFilterUnitId = '';
+    this.rentalBlockOptions = [];
+    this.rentalUnitOptions = [];
+    this.currentPage = 1;
     this.getLeases();
 
     if (this.rentalFilterPropertyId) {
-      this.propertyService.getPropertyBlocks({ property_id: this.rentalFilterPropertyId })
+      this.propertyService
+        .getPropertyBlocks({ property_id: this.rentalFilterPropertyId })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (resp: any) => {
             this.rentalBlockOptions = (resp?.content || []).map((b: any) => ({
-              key: String(b.id), value: b.block_name,
+              key: String(b.id),
+              value: b.block_name,
             }));
           },
         });
@@ -295,20 +323,26 @@ export class RentalComponent {
 
   onRentalBlockSelected(option: any) {
     this.rentalSelectedBlock = option ?? null;
-    this.rentalSelectedUnit  = null;
+    this.rentalSelectedUnit = null;
     this.rentalFilterBlockId = option?.key ?? '';
-    this.rentalFilterUnitId  = '';
-    this.rentalUnitOptions   = [];
-    this.currentPage         = 1;
+    this.rentalFilterUnitId = '';
+    this.rentalUnitOptions = [];
+    this.currentPage = 1;
     this.getLeases();
 
     if (this.rentalFilterBlockId) {
-      this.propertyService.getUnits({ property_block_tower_id: this.rentalFilterBlockId, page: 1, page_size: 200 })
+      this.propertyService
+        .getUnits({
+          property_block_tower_id: this.rentalFilterBlockId,
+          page: 1,
+          page_size: 200,
+        })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (resp: any) => {
             this.rentalUnitOptions = (resp?.content || []).map((u: any) => ({
-              key: String(u.id), value: u.unit_name || u.code,
+              key: String(u.id),
+              value: u.unit_name || u.code,
             }));
           },
         });
@@ -318,26 +352,31 @@ export class RentalComponent {
   onRentalUnitSelected(option: any) {
     this.rentalSelectedUnit = option ?? null;
     this.rentalFilterUnitId = option?.key ?? '';
-    this.currentPage        = 1;
+    this.currentPage = 1;
     this.getLeases();
   }
 
   get hasRentalFilter(): boolean {
-    return !!(this.rentalFilterPropertyId || this.rentalFilterBlockId || this.rentalFilterUnitId || this.rentalSearchText);
+    return !!(
+      this.rentalFilterPropertyId ||
+      this.rentalFilterBlockId ||
+      this.rentalFilterUnitId ||
+      this.rentalSearchText
+    );
   }
 
   clearRentalFilters() {
     this.rentalFilterPropertyId = '';
-    this.rentalFilterBlockId    = '';
-    this.rentalFilterUnitId     = '';
-    this.rentalSearchText       = '';
-    this.rentalBlockOptions     = [];
-    this.rentalUnitOptions      = [];
+    this.rentalFilterBlockId = '';
+    this.rentalFilterUnitId = '';
+    this.rentalSearchText = '';
+    this.rentalBlockOptions = [];
+    this.rentalUnitOptions = [];
     this.rentalSelectedProperty = null;
-    this.rentalSelectedBlock    = null;
-    this.rentalSelectedUnit     = null;
+    this.rentalSelectedBlock = null;
+    this.rentalSelectedUnit = null;
     this.rentalClearTrigger++;
-    this.currentPage            = 1;
+    this.currentPage = 1;
     this.getLeases();
   }
 
@@ -364,30 +403,33 @@ export class RentalComponent {
   }
 
   loadChequeSummary() {
-    this.leaseService.getChequeSummary({ year: this.selectedYear })
+    this.leaseService
+      .getChequeSummary({ year: this.selectedYear })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           const s = resp?.content;
           if (!s) return;
-          const fmt = (n: number) => `AED ${n.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
-          this.summaryAmountReceived   = fmt(s['total']?.amount    ?? 0);
-          this.summaryChequesApproved  = fmt(s['credited']?.amount ?? 0);
+          const fmt = (n: number) =>
+            `AED ${n.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+          this.summaryAmountReceived = fmt(s['total']?.amount ?? 0);
+          this.summaryChequesApproved = fmt(s['credited']?.amount ?? 0);
           this.summaryChequesDeposited = fmt(s['realized']?.amount ?? 0);
-          this.summaryCountApproved    = String(s['credited']?.count ?? 0);
-          this.summaryCountDeposited   = String(s['realized']?.count ?? 0);
+          this.summaryCountApproved = String(s['credited']?.count ?? 0);
+          this.summaryCountDeposited = String(s['realized']?.count ?? 0);
         },
       });
   }
 
   loadChequeMonthly() {
-    this.leaseService.getChequeMonthly({ year: this.selectedYear })
+    this.leaseService
+      .getChequeMonthly({ year: this.selectedYear })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           const rows: { month: string; amount: number }[] = resp?.content ?? [];
-          this.chartData = RentalComponent.MONTHS.map(m => {
-            const found = rows.find(r => r.month === m);
+          this.chartData = RentalComponent.MONTHS.map((m) => {
+            const found = rows.find((r) => r.month === m);
             return { name: m, value: found ? found.amount : 0 };
           });
         },
@@ -398,15 +440,16 @@ export class RentalComponent {
     const fmt = (n: number) =>
       `AED ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-    this.leaseService.getRentAnalytics({ year: this.selectedYear })
+    this.leaseService
+      .getRentAnalytics({ year: this.selectedYear })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           const s = resp?.content?.summary;
           if (s) {
-            this.totalAmount    = fmt(s.total_amount    ?? 0);
+            this.totalAmount = fmt(s.total_amount ?? 0);
             this.receivedAmount = fmt(s.amount_received ?? 0);
-            this.pendingAmount  = fmt(s.pending_amount  ?? 0);
+            this.pendingAmount = fmt(s.pending_amount ?? 0);
           }
           this.areaChartData = resp?.content?.monthly ?? [];
         },
@@ -415,7 +458,7 @@ export class RentalComponent {
 
   onYearSelected(option: any) {
     this.selectedYearOption = option;
-    this.selectedYear       = option?.key ?? String(new Date().getFullYear());
+    this.selectedYear = option?.key ?? String(new Date().getFullYear());
     this.loadChequeSummary();
     this.loadChequeMonthly();
     this.loadRentAnalytics();

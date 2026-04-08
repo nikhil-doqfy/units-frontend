@@ -4766,7 +4766,7 @@ body.dark-theme .dropdown-menu {
 }
 
 .modal .btn-close {
-  /* position: absolute; */
+  position: absolute;
   font-size: 12px;
   right: 20px;
   top: 22px;
@@ -6346,4 +6346,17 @@ body.dark-theme .btn-close {
 
 table.charges-table tbody td {
   color: var(--text-black) !important;
+}
+/*--------------------------------------LTR------------------------------*/
+
+[dir="rtl"] .modal-header .btn-close {
+  position: absolute;
+  left: 10px;
+  right: auto;
+}
+
+[dir="ltr"] .modal-header .btn-close {
+  position: absolute;
+  right: 10px;
+  left: auto;
 }

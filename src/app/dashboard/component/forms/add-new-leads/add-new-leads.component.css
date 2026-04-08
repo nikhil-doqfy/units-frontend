@@ -170,3 +170,38 @@
     margin-bottom: 4px;
   }
 }
+.addLeadForm .form-check {
+  display: flex;
+  align-items: center;
+}
+
+/* English (default) */
+.addLeadForm .form-check-input {
+  margin-right: 8px;
+}
+
+/* Arabic (RTL) */
+.arabic .addLeadForm .form-check {
+  flex-direction: row-reverse;
+}
+
+.arabic .addLeadForm .form-check-input {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+.addLeadForm .form-check {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+}
+
+/* checkbox / radio */
+.addLeadForm .form-check-input {
+  margin: 0;
+}
+
+/* label */
+.addLeadForm .form-check-label {
+  margin: 0;
+}

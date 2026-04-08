@@ -63,6 +63,7 @@ export class ChargesComponent {
     });
     this.loadBreadcrumb();
     this.getCharges();
+    this.sharedService.initLanguage();
   }
 
   loadBreadcrumb() {

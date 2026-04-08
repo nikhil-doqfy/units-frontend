@@ -2,9 +2,13 @@
   <div class="stepper-container">
     <div class="sub-stepper" *ngIf="currentSubStep">
       <div class="sub-step active">
-        {{ currentSubStep.title }}
+        {{ currentSubStep.title | translate }}
         <span class="sub-desc">
-          {{ currentSubStep.description || "" }}
+          {{
+            currentSubStep.description
+              ? (currentSubStep.description | translate)
+              : ""
+          }}
         </span>
       </div>
     </div>
@@ -26,7 +30,7 @@
           </div>
         </ng-template>
 
-        <div class="label">{{ step.title }}</div>
+        <div class="label">{{ step.title | translate }}</div>
 
         <div class="line" *ngIf="i < steps().length - 1"></div>
       </div>
@@ -108,10 +112,16 @@
         *ngIf="currentSubStep?.component === OnboardingComponent && !showMsg$()"
         class="send-negotiation-wrap"
       >
-        <button class="send-negotiation-btn"
-          [disabled]="btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()"
-          [class.btn-disabled]="btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()"
-          (click)="onMainClick()">
+        <button
+          class="send-negotiation-btn"
+          [disabled]="
+            btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()
+          "
+          [class.btn-disabled]="
+            btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()
+          "
+          (click)="onMainClick()"
+        >
           {{ btnTitle$() }}
 
           <span
@@ -153,8 +163,14 @@
       <a
         href="javascript:void(0)"
         (click)="fillDummyData()"
-        style="font-size: 12px; color: #aaa; text-decoration: underline; cursor: pointer"
-      >Fill dummy data</a>
+        style="
+          font-size: 12px;
+          color: #aaa;
+          text-decoration: underline;
+          cursor: pointer;
+        "
+        >Fill dummy data</a
+      >
     </div>
     <ng-container
       *ngComponentOutlet="

@@ -70,6 +70,8 @@ export class AnnouncementsComponent {
   private translate = inject(TranslateService);
   ngOnInit() {
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
   }
   showDetailView: boolean = false;
 

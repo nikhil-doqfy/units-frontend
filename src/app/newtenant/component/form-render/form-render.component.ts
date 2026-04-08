@@ -64,25 +64,27 @@ export class FormRenderComponent {
 
   get showDummyLink(): boolean {
     const c = this.currentSubStep?.component;
-    return c !== this.ProfileComponent &&
-           c !== this.OnboardingComponent &&
-           c !== this.AgreementComponent &&
-           c !== this.EjariComponent &&
-           c !== this.EjariDocSignatureComponent;
+    return (
+      c !== this.ProfileComponent &&
+      c !== this.OnboardingComponent &&
+      c !== this.AgreementComponent &&
+      c !== this.EjariComponent &&
+      c !== this.EjariDocSignatureComponent
+    );
   }
   showWaitingMsg = true;
   showNegotiationMsg = false;
   isChequeStep = false;
-  btnTitle$         = this.formService.getBtnTitle();
-  showMsg$          = this.formService.getShowMsg();
-  msgText$          = this.formService.getMsgText();
-  showRefresh$      = this.formService.showRefresh$;
-  chequeConfirmed$  = this.formService.getChequeConfirmed();
+  btnTitle$ = this.formService.getBtnTitle();
+  showMsg$ = this.formService.getShowMsg();
+  msgText$ = this.formService.getMsgText();
+  showRefresh$ = this.formService.showRefresh$;
+  chequeConfirmed$ = this.formService.getChequeConfirmed();
   constructor(
     private ejariModelService: EjarimodelService,
     private formService: NewTenantFromService,
     private alertService: AlertService,
-  ) { }
+  ) {}
 
   get currentStep() {
     return this.steps()[this.activeIndex()];
@@ -114,15 +116,19 @@ export class FormRenderComponent {
 
   get isSaveDisabled(): boolean {
     const c = this.currentSubStep?.component;
-    if (c === this.EjariComponent &&
-        this.formService.getCurrentLeaseStage()?.toUpperCase() === 'EJARI') return true;
+    if (
+      c === this.EjariComponent &&
+      this.formService.getCurrentLeaseStage()?.toUpperCase() === 'EJARI'
+    )
+      return true;
     if (
       c === this.ProfileComponent ||
       c === this.OnboardingComponent ||
       c === this.AgreementComponent ||
       c === this.EjariComponent ||
       c === this.EjariDocSignatureComponent
-    ) return false;
+    )
+      return false;
     return !!this.currentSubStep?.formGroup?.invalid;
   }
 
@@ -156,7 +162,6 @@ export class FormRenderComponent {
 
     return 'Save & Next';
   }
-
 
   next() {
     if (
@@ -200,7 +205,9 @@ export class FormRenderComponent {
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
       if (this.currentSubStep.formGroup.invalid) {
         this.currentSubStep.formGroup.markAllAsTouched();
-        this.alertService.error('Please fill all required fields before proceeding.');
+        this.alertService.error(
+          'Please fill all required fields before proceeding.',
+        );
         return;
       }
       this.formService.saveCommercialStep(this.currentSubStep.formGroup, () => {
@@ -219,10 +226,14 @@ export class FormRenderComponent {
     if (this.currentSubStep?.formGroup) {
       if (this.currentSubStep.formGroup.invalid) {
         this.currentSubStep.formGroup.markAllAsTouched();
-        this.alertService.error('Please fill all required fields before proceeding.');
+        this.alertService.error(
+          'Please fill all required fields before proceeding.',
+        );
         return;
       }
-      this.formService.saveBasicStep(this.currentSubStep.formGroup, () => this.goToNextStep());
+      this.formService.saveBasicStep(this.currentSubStep.formGroup, () =>
+        this.goToNextStep(),
+      );
       return;
     }
 
@@ -235,22 +246,22 @@ export class FormRenderComponent {
 
     if (this.currentSubStep?.component === CommercialdetailsComponent) {
       form.patchValue({
-        startDate:            '2025-01-01',
-        endDate:              '2026-01-01',
-        graceStartDate:       '2025-01-01',
-        graceEndDate:         '2025-01-15',
-        annualAmount:         120000,
-        actualAnnualAmount:   110000,
+        startDate: '2025-01-01',
+        endDate: '2026-01-01',
+        graceStartDate: '2025-01-01',
+        graceEndDate: '2025-01-15',
+        annualAmount: 120000,
+        actualAnnualAmount: 110000,
         securityBookingAmount: 10000,
-        maintenanceCharges:   2000,
-        rent:                 10000,
-        securityDeposit:      20000,
-        commissionPercent:    5,
-        noticePeriod:         3,
-        contractAmount:       115000,
-        discount:             5000,
-        shellAndCore:         false,
-        paymentCount:         12,
+        maintenanceCharges: 2000,
+        rent: 10000,
+        securityDeposit: 20000,
+        commissionPercent: 5,
+        noticePeriod: 3,
+        contractAmount: 115000,
+        discount: 5000,
+        shellAndCore: false,
+        paymentCount: 12,
       });
       return;
     }
@@ -258,36 +269,36 @@ export class FormRenderComponent {
     // BasicPersonal — fill all required fields
     form.patchValue({
       // Unit
-      unitName:  'Unit 101',
-      unitSize:  '1200',
-      landNo:    'LAND-001',
-      dmNo:      'DM-001',
+      unitName: 'Unit 101',
+      unitSize: '1200',
+      landNo: 'LAND-001',
+      dmNo: 'DM-001',
       unitUsage: 'Residential',
-      unitType:  'Apartment',
-      subType:   'Studio',
-      makaniNo:  '12345678',
-      floorNo:   '1',
+      unitType: 'Apartment',
+      subType: 'Studio',
+      makaniNo: '12345678',
+      floorNo: '1',
       // Tenant
-      tenantName:     'Ahmed Al Mansoori',
-      email:          'ahmed.mansoori@example.com',
-      nationality:    'United Arab Emirates',
-      passportNo:     'P1234567',
+      tenantName: 'Ahmed Al Mansoori',
+      email: 'ahmed.mansoori@example.com',
+      nationality: 'United Arab Emirates',
+      passportNo: 'P1234567',
       passportExpiry: '2028-06-30',
-      emiratesId:     '784-1990-1234567-1',
-      visaNo:         'V-9876543',
-      visaExpiry:     '2026-12-31',
-      telNo:          '+971501234567',
-      addressLine1:   'Villa 12, Al Barsha',
-      addressLine2:   'Dubai, UAE',
+      emiratesId: '784-1990-1234567-1',
+      visaNo: 'V-9876543',
+      visaExpiry: '2026-12-31',
+      telNo: '+971501234567',
+      addressLine1: 'Villa 12, Al Barsha',
+      addressLine2: 'Dubai, UAE',
     });
     // Fill first owner group if present
     const owners = form.get('unitOwners') as any;
     if (owners?.controls?.length) {
       owners.controls[0].patchValue({
-        ownerName:       'Mohammed Al Rashidi',
-        ownerEmail:      'owner@example.com',
-        contactNumber:   '+971551234567',
-        emiratesId:      '784-1980-9876543-1',
+        ownerName: 'Mohammed Al Rashidi',
+        ownerEmail: 'owner@example.com',
+        contactNumber: '+971551234567',
+        emiratesId: '784-1980-9876543-1',
       });
     }
   }
