@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
@@ -107,6 +107,7 @@ export class TenantsComponent {
 
   private searchSubject$ = new Subject<string>();
   private searchText = '';
+  private translate = inject(TranslateService);
 
   constructor() {
     const key = this.route.snapshot.data['titleKey'];
@@ -132,6 +133,7 @@ export class TenantsComponent {
         this.currentPage = 1;
         this.loadTenants();
       });
+    this.sharedService.initLanguage();
   }
 
   // ── Tab switching ─────────────────────────────────
@@ -149,13 +151,16 @@ export class TenantsComponent {
     this.searchText = '';
     this.loadTenants();
   }
-
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   private get backendTab(): string {
     return this.mainTab === 'onboarding' ? 'onboarding' : TAB_MAP[this.subTab];
   }
 
   get activeTableTitle(): string {
-    if (this.mainTab === 'onboarding') return 'Onboarding Tenants';
+    if (this.mainTab === 'onboarding')
+      return this.getLabel('ONBOARDING_TENANTS');
     return (
       this.subTabs.find((s) => s.key === this.subTab)?.label ?? 'Active Tenants'
     );

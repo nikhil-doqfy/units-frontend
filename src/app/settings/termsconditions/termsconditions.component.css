@@ -73,3 +73,8 @@ a {
     padding: 5px 10px;
   }
 }
+
+:host-context(.arabic) .edit-btn {
+  right: auto !important;
+  left: 16px !important;
+}

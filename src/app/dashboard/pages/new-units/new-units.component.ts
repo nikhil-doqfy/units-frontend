@@ -137,6 +137,7 @@ export class NewUnitsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sharedService.initLanguage();
     this.loadProperties();
     this.loadDocumentTypes();
     this.sharedApiService.getOptionsType([

@@ -9,11 +9,19 @@ import { PropertyService } from '../../../dashboard/services/property.service';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { TenantsService } from '../../../dashboard/services/tenants.service';
 import { FormService } from '../../../shared/services/form.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-basicpersonal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, WhiteCardComponent, CustomSelectComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    WhiteCardComponent,
+    CustomSelectComponent,
+    TranslateModule,
+  ],
   templateUrl: './basicpersonal.component.html',
   styleUrl: './basicpersonal.component.css',
 })
@@ -21,6 +29,7 @@ export class BasicpersonalComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() leadData: any = null;
 
+  private sharedService = inject(SharedService);
   private sharedAPIService = inject(SharedApiService);
   private propertyService = inject(PropertyService);
   private formService = inject(NewTenantFromService);
@@ -56,7 +65,11 @@ export class BasicpersonalComponent implements OnInit {
 
   ngOnInit() {
     this.sharedAPIService.getOptionsType([
-      { param: 'PARENT_PROPERTY', key: 'property', setter: (v) => (this.propertyList = v) },
+      {
+        param: 'PARENT_PROPERTY',
+        key: 'property',
+        setter: (v) => (this.propertyList = v),
+      },
     ]);
 
     if (this.leadData?.property_id) {
@@ -75,15 +88,15 @@ export class BasicpersonalComponent implements OnInit {
           const u = resp?.content;
           if (!u) return;
           this.form.patchValue({
-            unitName:  u.unit_name  ?? '',
-            unitSize:  u.unit_size  ?? '',
-            landNo:    u.land_no    ?? '',
-            dmNo:      u.dm_no      ?? '',
+            unitName: u.unit_name ?? '',
+            unitSize: u.unit_size ?? '',
+            landNo: u.land_no ?? '',
+            dmNo: u.dm_no ?? '',
             unitUsage: u.unit_usage ?? '',
-            unitType:  u.unit_type  ?? '',
-            subType:   u.sub_type   ?? '',
-            makaniNo:  u.makani_no  ?? '',
-            floorNo:   u.floor_no   ?? '',
+            unitType: u.unit_type ?? '',
+            subType: u.sub_type ?? '',
+            makaniNo: u.makani_no ?? '',
+            floorNo: u.floor_no ?? '',
           });
           this.patchOwners(u.unit_owners ?? []);
           this.formService.setUnitCommercialData(u);
@@ -93,12 +106,15 @@ export class BasicpersonalComponent implements OnInit {
     if (this.leadData?.email) {
       this.lookupTenantByEmail(this.leadData.email);
     }
+    this.sharedService.initLanguage();
   }
 
   private patchOwners(owners: any[]) {
     while (this.ownerForms.length > 0) this.ownerForms.removeAt(0);
     const list = owners.length > 0 ? owners : [null];
-    list.forEach((o) => this.ownerForms.push(this.formService.createOwnerGroup(o ?? undefined)));
+    list.forEach((o) =>
+      this.ownerForms.push(this.formService.createOwnerGroup(o ?? undefined)),
+    );
   }
 
   private loadBlocks(propertyId: number) {
@@ -137,7 +153,8 @@ export class BasicpersonalComponent implements OnInit {
   }
 
   private loadUnits(blockId: number) {
-    this.propertyService.getUnits({ block_id: blockId })
+    this.propertyService
+      .getUnits({ block_id: blockId })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp: any) => {
         this.unitList = (resp?.content || []).map((u: any) => ({
@@ -156,15 +173,15 @@ export class BasicpersonalComponent implements OnInit {
         const u = resp?.content;
         if (!u) return;
         this.form.patchValue({
-          unitName:  u.unit_name  ?? '',
-          unitSize:  u.unit_size  ?? '',
-          landNo:    u.land_no    ?? '',
-          dmNo:      u.dm_no      ?? '',
+          unitName: u.unit_name ?? '',
+          unitSize: u.unit_size ?? '',
+          landNo: u.land_no ?? '',
+          dmNo: u.dm_no ?? '',
           unitUsage: u.unit_usage ?? '',
-          unitType:  u.unit_type  ?? '',
-          subType:   u.sub_type   ?? '',
-          makaniNo:  u.makani_no  ?? '',
-          floorNo:   u.floor_no   ?? '',
+          unitType: u.unit_type ?? '',
+          subType: u.sub_type ?? '',
+          makaniNo: u.makani_no ?? '',
+          floorNo: u.floor_no ?? '',
         });
         this.patchOwners(u.unit_owners ?? []);
         this.formService.setUnitCommercialData(u);
@@ -179,7 +196,8 @@ export class BasicpersonalComponent implements OnInit {
 
   private lookupTenantByEmail(email: string) {
     this.tenantLookupLoading = true;
-    this.tenantsService.getTenantByEmail(email)
+    this.tenantsService
+      .getTenantByEmail(email)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
@@ -187,20 +205,26 @@ export class BasicpersonalComponent implements OnInit {
           const t = resp?.content;
           if (!t) return;
           this.form.patchValue({
-            tenantId:       t.id ?? null,
-            tenantName:     t.name ?? '',
-            telNo:          t.contact_number ?? '',
-            emiratesId:     t.emirates_id ?? '',
-            nationality:    t.nationality ?? '',
-            passportNo:     t.passport_number ?? '',
-            passportExpiry: t.passport_expiry_date ? String(t.passport_expiry_date).slice(0, 10) : '',
-            visaNo:         t.visa_number ?? '',
-            visaExpiry:     t.visa_expiry_date ? String(t.visa_expiry_date).slice(0, 10) : '',
-            addressLine1:   t.address_line_1 ?? '',
-            addressLine2:   t.address_line_2 ?? '',
+            tenantId: t.id ?? null,
+            tenantName: t.name ?? '',
+            telNo: t.contact_number ?? '',
+            emiratesId: t.emirates_id ?? '',
+            nationality: t.nationality ?? '',
+            passportNo: t.passport_number ?? '',
+            passportExpiry: t.passport_expiry_date
+              ? String(t.passport_expiry_date).slice(0, 10)
+              : '',
+            visaNo: t.visa_number ?? '',
+            visaExpiry: t.visa_expiry_date
+              ? String(t.visa_expiry_date).slice(0, 10)
+              : '',
+            addressLine1: t.address_line_1 ?? '',
+            addressLine2: t.address_line_2 ?? '',
           });
         },
-        error: () => { this.tenantLookupLoading = false; },
+        error: () => {
+          this.tenantLookupLoading = false;
+        },
       });
   }
 
@@ -214,9 +238,15 @@ export class BasicpersonalComponent implements OnInit {
 
   private clearUnitFields() {
     this.form.patchValue({
-      unitName: '', unitSize: '', landNo: '', dmNo: '',
-      unitUsage: '', unitType: '', subType: '',
-      makaniNo: '', floorNo: '',
+      unitName: '',
+      unitSize: '',
+      landNo: '',
+      dmNo: '',
+      unitUsage: '',
+      unitType: '',
+      subType: '',
+      makaniNo: '',
+      floorNo: '',
     });
     this.patchOwners([]);
   }

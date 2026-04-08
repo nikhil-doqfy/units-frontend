@@ -11,6 +11,7 @@ import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-
 import { FormService } from '../../../shared/services/form.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-commercialdetails',
@@ -34,6 +35,7 @@ export class CommercialdetailsComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private newTenantService = inject(NewTenantFromService);
   isInvalid: FormService['isInvalid'];
+  private sharedService = inject(SharedService);
 
   constructor(
     private toastService: ToastService,
@@ -46,6 +48,7 @@ export class CommercialdetailsComponent implements OnInit {
   ngOnInit() {
     this.prefillFromUnit();
     this.setupAutoCalculations();
+    this.sharedService.initLanguage();
   }
 
   private prefillFromUnit() {
@@ -55,13 +58,19 @@ export class CommercialdetailsComponent implements OnInit {
     const patch: Record<string, any> = {};
     const blank = (ctrl: string) => !this.form.get(ctrl)!.value;
 
-    if (blank('rent')                 && u.rent)               patch['rent']                 = parseFloat(u.rent);
-    if (blank('securityDeposit')      && u.security_deposit)   patch['securityDeposit']      = parseFloat(u.security_deposit);
-    if (blank('securityBookingAmount')&& u.booking_amount)     patch['securityBookingAmount']= parseFloat(u.booking_amount);
-    if (blank('maintenanceCharges')   && u.maintenance_charges)patch['maintenanceCharges']   = parseFloat(u.maintenance_charges);
-    if (blank('paymentCount')         && u.cycle)              patch['paymentCount']         = parseInt(u.cycle, 10);
-    if (blank('noticePeriod')         && u.notice_period)      patch['noticePeriod']         = parseInt(u.notice_period, 10);
-    if (blank('commissionPercent')    && u.commission_percent) patch['commissionPercent']    = parseFloat(u.commission_percent);
+    if (blank('rent') && u.rent) patch['rent'] = parseFloat(u.rent);
+    if (blank('securityDeposit') && u.security_deposit)
+      patch['securityDeposit'] = parseFloat(u.security_deposit);
+    if (blank('securityBookingAmount') && u.booking_amount)
+      patch['securityBookingAmount'] = parseFloat(u.booking_amount);
+    if (blank('maintenanceCharges') && u.maintenance_charges)
+      patch['maintenanceCharges'] = parseFloat(u.maintenance_charges);
+    if (blank('paymentCount') && u.cycle)
+      patch['paymentCount'] = parseInt(u.cycle, 10);
+    if (blank('noticePeriod') && u.notice_period)
+      patch['noticePeriod'] = parseInt(u.notice_period, 10);
+    if (blank('commissionPercent') && u.commission_percent)
+      patch['commissionPercent'] = parseFloat(u.commission_percent);
 
     if (Object.keys(patch).length) {
       this.form.patchValue(patch, { emitEvent: false });
@@ -70,27 +79,34 @@ export class CommercialdetailsComponent implements OnInit {
 
   private setupAutoCalculations() {
     // annualAmount + actualAnnualAmount: derived from startDate + endDate (rent × months)
-    this.form.get('startDate')!.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.form
+      .get('startDate')!
+      .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.recalculateAnnualFromDates());
 
-    this.form.get('endDate')!.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.form
+      .get('endDate')!
+      .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.recalculateAnnualFromDates());
 
     // contractAmount: recalculate whenever any of its components change
-    const contractTriggers = ['securityBookingAmount', 'maintenanceCharges', 'securityDeposit'];
+    const contractTriggers = [
+      'securityBookingAmount',
+      'maintenanceCharges',
+      'securityDeposit',
+    ];
     contractTriggers.forEach((ctrl) => {
-      this.form.get(ctrl)!.valueChanges
-        .pipe(takeUntilDestroyed(this.destroyRef))
+      this.form
+        .get(ctrl)!
+        .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => this.recalculateContractAmount());
     });
   }
 
   private recalculateAnnualFromDates() {
     const start = this.form.get('startDate')!.value;
-    const end   = this.form.get('endDate')!.value;
-    const rent  = parseFloat(this.form.get('rent')!.value) || 0;
+    const end = this.form.get('endDate')!.value;
+    const rent = parseFloat(this.form.get('rent')!.value) || 0;
 
     if (!start || !end || rent <= 0) return;
 
@@ -105,20 +121,24 @@ export class CommercialdetailsComponent implements OnInit {
   }
 
   private recalculateContractAmount() {
-    const annual   = parseFloat(this.form.get('annualAmount')!.value)          || 0;
-    const booking  = parseFloat(this.form.get('securityBookingAmount')!.value) || 0;
-    const maint    = parseFloat(this.form.get('maintenanceCharges')!.value)    || 0;
-    const security = parseFloat(this.form.get('securityDeposit')!.value)       || 0;
+    const annual = parseFloat(this.form.get('annualAmount')!.value) || 0;
+    const booking =
+      parseFloat(this.form.get('securityBookingAmount')!.value) || 0;
+    const maint = parseFloat(this.form.get('maintenanceCharges')!.value) || 0;
+    const security = parseFloat(this.form.get('securityDeposit')!.value) || 0;
 
-    this.form.get('contractAmount')!.setValue(
-      Math.round((annual + booking + maint + security) * 100) / 100,
-      { emitEvent: false },
-    );
+    this.form
+      .get('contractAmount')!
+      .setValue(Math.round((annual + booking + maint + security) * 100) / 100, {
+        emitEvent: false,
+      });
   }
 
   private monthsBetween(start: Date, end: Date): number {
-    return (end.getFullYear() - start.getFullYear()) * 12
-         + (end.getMonth() - start.getMonth());
+    return (
+      (end.getFullYear() - start.getFullYear()) * 12 +
+      (end.getMonth() - start.getMonth())
+    );
   }
 
   charges = [

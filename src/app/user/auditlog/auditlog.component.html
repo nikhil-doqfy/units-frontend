@@ -9,7 +9,7 @@
             </span>
             <app-custom-select
               class="with-left-icon"
-              [placeholder]="'All Users'"
+              [placeholder]="'ALL_USERS' | translate"
             ></app-custom-select>
           </div>
 
@@ -20,7 +20,7 @@
             </span>
             <app-custom-select
               class="with-left-icon"
-              [placeholder]="' All Time'"
+              [placeholder]="'ALL_TIME' | translate"
             ></app-custom-select>
           </div>
         </div>
@@ -28,7 +28,7 @@
       <div class="right-controls">
         <div class="search-box">
           <i><app-search-icon></app-search-icon></i>
-          <input type="text" placeholder="Search here" />
+          <input type="text" [placeholder]="'SEARCH_HERE' | translate" />
         </div>
       </div>
       <span class="clear-icon"
@@ -41,9 +41,10 @@
       <!-- <div class="logs-container"> -->
       <!-- Header -->
       <div class="logs-header">
-        <h3>Logs</h3>
+        <h3>{{ "LOGS" | translate }}</h3>
         <a href="#" class="download-link">
-          <i><app-download-icon></app-download-icon></i> Download Log
+          <i><app-download-icon></app-download-icon></i>
+          {{ "DOWNLOAD_LOG" | translate }}
         </a>
       </div>
 

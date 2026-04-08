@@ -16,6 +16,7 @@ import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ContactSearchService } from '../../contact-search.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedService } from '../../shared.service';
 
 @Component({
   selector: 'app-search-contact',
@@ -35,7 +36,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class SearchContactComponent {
   private contactSearchService = inject(ContactSearchService);
-
+  private sharedService = inject(SharedService);
   @ViewChild('searchInput') searchInput!: ElementRef;
   @Output() close = new EventEmitter<void>();
 
@@ -59,6 +60,7 @@ export class SearchContactComponent {
         ),
       )
       .subscribe((res) => (this.contacts = res || []));
+    this.sharedService.initLanguage();
   }
 
   onFocus() {

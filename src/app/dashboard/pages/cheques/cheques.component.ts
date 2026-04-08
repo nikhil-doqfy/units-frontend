@@ -180,6 +180,7 @@ export class ChequesComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
+    this.sharedService.initLanguage();
   }
 
   loadSummary() {

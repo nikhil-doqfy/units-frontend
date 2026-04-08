@@ -176,6 +176,8 @@ export class PropertiesComponent {
   // }
   ngOnInit() {
     this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
     const tab = this.route.snapshot.queryParamMap.get('tab');
     if (tab) this.activeLeadTab = tab;
     //   this.sharedService.initLanguage();
