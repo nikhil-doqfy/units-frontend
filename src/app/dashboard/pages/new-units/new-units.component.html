@@ -1,5 +1,5 @@
 <app-step-form-layout
-  [leftCardTitle]="'Unit Details'"
+  [leftCardTitle]="'UNIT_DETAILS' | translate"
   finishButtonText="{{ 'PAGE_TITLE.ADD_UNIT' | translate }}"
   [engine]="engine"
   [stepSchema]="steps"
@@ -185,7 +185,7 @@
         <form class="row g-3" [formGroup]="basicDetailsForm">
           <div class="col-md-3">
             <app-form-select-field
-              [label]="'Property' | translate"
+              [label]="'PROPERTY' | translate"
               [options]="propertyList"
               [bindToControl]="true"
               [form]="basicDetailsForm"
@@ -320,7 +320,7 @@
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Makani No" | translate }}</label>
+            <label class="form-label">{{ "MAKANI_NO" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -329,7 +329,7 @@
             />
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ "Dewa No" | translate }}</label>
+            <label class="form-label">{{ "DEWA_NO" | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -346,7 +346,7 @@
   <ng-container>
     <app-step-pane
       [title]="'COMMERCIALS' | translate"
-      [pageTitle]="'Commercials In AED'"
+      [pageTitle]="'COMMERCIALS_IN_AED' | translate"
       [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
     >
       <form class="row g-3" [formGroup]="commercialsForm">
@@ -462,7 +462,7 @@
   <ng-container>
     <app-step-pane
       [title]="'PROPERTY_IMAGES' | translate"
-      [pageTitle]="'Property Details'"
+      [pageTitle]="'PROPERTY_DETAILS' | translate"
       [description]="'UPLOAD_PROPERTY_IMAGES' | translate"
     >
       <div class="commonTabs">
@@ -536,7 +536,7 @@
   <ng-container>
     <app-step-pane
       [title]="'DOCUMENTATION' | translate"
-      [pageTitle]="'Documentation'"
+      [pageTitle]="'DOCUMENTATION' | translate"
       [description]="'UPLOAD_DOCUMENTS_OF_THE_PROPERTY' | translate"
     >
       <div class="commonTabs">

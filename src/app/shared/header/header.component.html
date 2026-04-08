@@ -235,12 +235,12 @@
               >
                 <div class="hdrNotiDrpdwnInfo">
                   <div class="hdrNotiDrpdwnHdr">
-                    <h5>Notifications</h5>
+                    <h5>{{ "NOTIFICATIONS" | translate }}</h5>
                     <button
                       type="button"
                       (click)="clearAllClearedNotifications()"
                     >
-                      Clear all
+                      {{ "CLEAR_ALL" | translate }}
                     </button>
                   </div>
                   <div class="hdrNotiDrpdwnBody">
@@ -252,7 +252,7 @@
                     >
                       <li [ngbNavItem]="1">
                         <button ngbNavLink>
-                          All <span>{{ allCount }}</span>
+                          {{ "ALL" | translate }} <span>{{ allCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
                           <!-- Empty state first -->
@@ -264,7 +264,7 @@
                               <div class="hdrNotiEmptyIcon">
                                 <img src="assets/Bell.svg" />
                               </div>
-                              <h4>No read notifications</h4>
+                              <h4>{{ "NO_READ_NOTIFICATIONS" | translate }}</h4>
                             </div>
                           </div>
                           <div
@@ -309,7 +309,7 @@
                       </li>
                       <li [ngbNavItem]="2">
                         <button ngbNavLink>
-                          Read <span>{{ readCount }}</span>
+                          {{ "READ" | translate }}<span>{{ readCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
                           <div
@@ -320,7 +320,7 @@
                               <div class="hdrNotiEmptyIcon">
                                 <img src="assets/Bell.svg" />
                               </div>
-                              <h4>No read notifications</h4>
+                              <h4>{{ "NO_READ_NOTIFICATIONS" | translate }}</h4>
                             </div>
                           </div>
                           <div
@@ -361,7 +361,8 @@
                       </li>
                       <li [ngbNavItem]="3">
                         <button ngbNavLink>
-                          Unread <span>{{ unreadCount }}</span>
+                          {{ "UNREAD" | translate
+                          }}<span>{{ unreadCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
                           <div
@@ -372,7 +373,9 @@
                               <div class="hdrNotiEmptyIcon">
                                 <img src="assets/Bell.svg" />
                               </div>
-                              <h4>No unread notifications</h4>
+                              <h4>
+                                {{ "NO_UNREAD_NOTIFICATIONS" | translate }}
+                              </h4>
                             </div>
                           </div>
                           <div
@@ -412,7 +415,7 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="4">
-                        <button ngbNavLink>Cleared</button>
+                        <button ngbNavLink>{{ "CLEARED" }}</button>
                         <ng-template ngbNavContent>
                           <div
                             class="hdrNotiEmptyCol"
@@ -426,15 +429,16 @@
                               /> -->
                                 <!-- <app-notification-icon></app-notification-icon> -->
                               </div>
-                              <h4>No cleared Invitations</h4>
+                              <h4>
+                                {{ "NO_CLEARED_NOTIFICATIONS" | translate }}
+                              </h4>
                             </div>
                             <div class="hdrNotiEmptyNote">
                               <i>
                                 <!-- <app-info-icon /> -->
                               </i>
                               <p>
-                                Cleared invitations will be retained for 30 days
-                                from the date of rejection.
+                                {{ "CLEARED_INVITATIONS" | translate }}
                               </p>
                             </div>
                           </div>
@@ -965,7 +969,7 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="4">
-          <button ngbNavLink>Cleared</button>
+          <button ngbNavLink>{{ "CLEARED" | translate }}</button>
           <ng-template ngbNavContent>
             <div class="hdrNotiEmptyCol">
               <div class="hdrNotiEmptyInfo">

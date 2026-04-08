@@ -141,14 +141,17 @@ export class UsersComponent {
       });
   }
 
+  getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
   get activeTableTitle(): string {
     switch (this.activeTab) {
       case 'active':
-        return 'Active Users';
+        return this.getLabel('ACTIVE_USERS');
       case 'inactive':
-        return 'Inactive Users';
+        return this.getLabel('INACTIVE_USERS');
       default:
-        return 'All Users';
+        return this.getLabel('ALL_USERS');
     }
   }
 

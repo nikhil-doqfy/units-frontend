@@ -9,7 +9,7 @@ import { UsersIconsComponent } from '../../icons/users-icons/users-icons.compone
 import { CustomSelectComponent } from '../../dashboard/component/custom-select/custom-select.component';
 import { DashTitleComponent } from '../../shared/component/dash-title/dash-title.component';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BreadCrumb } from '../../shared/model/shared.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../shared.service';
@@ -28,6 +28,7 @@ import { AuditlogService } from '../../auditlog.service';
     UsersIconsComponent,
     CustomSelectComponent,
     DashTitleComponent,
+    TranslateModule,
   ],
   templateUrl: './auditlog.component.html',
   styleUrl: './auditlog.component.css',
