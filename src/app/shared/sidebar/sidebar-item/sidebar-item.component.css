@@ -56,7 +56,7 @@
 
 .dashSdbrItem a.active {
   background: var(--ownerGradientBg);
-  color: var(--whiteText);
+  color: white;
 }
 
 /* Default owner theme */

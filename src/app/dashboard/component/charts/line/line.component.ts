@@ -95,9 +95,13 @@ export class LineChartComponent
       yaxis: {
         min: 0,
         max: 100,
-        tickAmount: 4,
+        tickAmount: 5,
         labels: {
           style: { colors: '#344046' },
+          formatter: (value: number) => {
+            if (value == null) return '';
+            return value + '%';
+          },
         },
       },
       colors: ['#1988FD', '#00B7AD', '#4B9C5E'],
@@ -146,7 +150,12 @@ export class LineChartComponent
       yaxis: {
         ...this.chartOptions.yaxis,
         labels: {
+          ...this.chartOptions.yaxis?.labels,
           style: { colors: axisColor },
+          formatter: (value: number) => {
+            if (value == null) return '';
+            return value + '%';
+          },
         },
       },
       legend: {
