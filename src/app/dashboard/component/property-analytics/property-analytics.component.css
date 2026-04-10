@@ -146,8 +146,12 @@
 }
 
 @keyframes ph-shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
 }
 
 .ph-line {
@@ -158,11 +162,24 @@
   animation: ph-shimmer 1.4s infinite linear;
 }
 
-.ph-line-lg  { width: 70%; height: 16px; }
-.ph-line-md  { width: 80%; }
-.ph-line-sm  { width: 45%; height: 10px; }
-.ph-line.mt-1 { margin-top: 6px; }
-.mx-auto     { margin-left: auto; margin-right: auto; }
+.ph-line-lg {
+  width: 70%;
+  height: 16px;
+}
+.ph-line-md {
+  width: 80%;
+}
+.ph-line-sm {
+  width: 45%;
+  height: 10px;
+}
+.ph-line.mt-1 {
+  margin-top: 6px;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .image-wrapper img {
   width: 100%;
@@ -233,7 +250,7 @@
 .amount {
   font-size: 15px;
   font-weight: 600;
-  color: #000;
+  color: var(--text-primary1);
   display: inline-block;
   margin-right: 8px;
 }

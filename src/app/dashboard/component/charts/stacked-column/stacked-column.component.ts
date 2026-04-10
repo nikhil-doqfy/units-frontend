@@ -36,6 +36,7 @@ export type ChartOptions = {
   fill: ApexFill;
   tooltip: ApexTooltip;
   colors?: string[];
+  grid?: ApexGrid;
 };
 
 const MONTH_LABELS = [
@@ -80,6 +81,10 @@ export class StackedColumnChartComponent
         this.applyTheme(isDark);
       });
   }
+  private formatAED(value: number): string {
+    if (value == null) return '';
+    return 'AED ' + Number(value).toLocaleString('en-IN');
+  }
   ngOnChanges(): void {
     const data = this.monthlyData || [];
     if (!data.length) return;
@@ -109,7 +114,9 @@ export class StackedColumnChartComponent
 
   private applyTheme(isDark: boolean) {
     const axisColor = isDark ? '#FFFFFF' : '#344046';
-    const gridColor = isDark ? '#2c2c2c' : '#e0e0e0';
+    const gridColor = isDark
+      ? '#e8e1e114' // 👈 VERY faint (HEX with opacity)
+      : '#0000001a';
 
     this.chartOptions = {
       ...this.chartOptions,
@@ -122,6 +129,7 @@ export class StackedColumnChartComponent
       yaxis: {
         ...this.chartOptions.yaxis,
         labels: {
+          formatter: (value: number) => this.formatAED(value), // ✅ FORCE AGAIN
           style: { colors: axisColor },
         },
       },
@@ -134,6 +142,9 @@ export class StackedColumnChartComponent
       tooltip: {
         ...this.chartOptions.tooltip,
         theme: isDark ? 'dark' : 'light',
+      },
+      grid: {
+        borderColor: gridColor, // ✅ ADD THIS
       },
     };
 
@@ -202,8 +213,7 @@ export class StackedColumnChartComponent
         min: 0,
         max: yMax,
         labels: {
-          // style: { colors: axisColor },
-          formatter: (value) => 'AED ' + value.toLocaleString('en-IN'),
+          formatter: (value: number) => this.formatAED(value), // ✅ FIXED
         },
         axisBorder: { show: false },
         axisTicks: { show: false },
@@ -211,7 +221,9 @@ export class StackedColumnChartComponent
       dataLabels: { enabled: false },
       fill: { opacity: 1 },
       tooltip: {
-        y: { formatter: (val: number) => 'AED ' + val.toLocaleString() },
+        y: {
+          formatter: (val: number) => this.formatAED(val), // ✅ FIXED
+        },
       },
       legend: {
         position: 'top',

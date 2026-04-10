@@ -1,15 +1,3 @@
-<!-- <apx-chart
-  *ngIf="chartOptions"
-  #chart
-  [series]="chartOptions.series!"
-  [chart]="chartOptions.chart!"
-  [xaxis]="chartOptions.xaxis!"
-  [dataLabels]="chartOptions.dataLabels!"
-  [colors]="chartOptions.colors!"
-  [legend]="chartOptions.legend!"
-  [fill]="chartOptions.fill!"
->
-</apx-chart> -->
 <apx-chart
   *ngIf="chartOptions"
   #chart
@@ -23,5 +11,7 @@
   [fill]="chartOptions.fill"
   [stroke]="chartOptions.stroke"
   [markers]="chartOptions.markers"
+  ,
+  [grid]="chartOptions.grid"
 >
 </apx-chart>

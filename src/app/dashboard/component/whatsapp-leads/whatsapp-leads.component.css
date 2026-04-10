@@ -330,3 +330,35 @@
     padding: 12px;
   }
 }
+.wa-steps li {
+  position: relative;
+  padding-left: 40px;
+  text-align: left;
+}
+
+.wa-steps li::before {
+  left: 0;
+  right: auto;
+}
+
+.wa-steps li::after {
+  left: 14px;
+  right: auto;
+}
+
+/* RTL (Arabic) */
+[dir="rtl"] .wa-steps li {
+  padding-left: 0;
+  padding-right: 40px;
+  text-align: right;
+}
+
+[dir="rtl"] .wa-steps li::before {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .wa-steps li::after {
+  left: auto;
+  right: 14px;
+}

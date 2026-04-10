@@ -44,7 +44,7 @@
 
   "NEW_LEASE": "New Lease",
   "UNITS": "Units",
-
+  "MY_PROFILE": "My Profile",
   "TENANCY_LEDGER": "Tenancy Ledger",
   "DOCUMENTATION": "Documentation",
   "LOGOUT": "Logout",
@@ -584,7 +584,7 @@
   "CURRENT_TENANTS": "Current Tenants",
   "PAST_TENANTS": "Past Tenants",
   "REJECTED_TENANTS": "Rejected Tenants",
-  "All_UNITS": "All units",
+  "ALL_UNITS": "All units",
   "UNIT_ID": "Unit ID",
   "UNIT_NAME": "Unit Name",
   "RENT_AED": "Rent (AED)",
@@ -699,7 +699,7 @@
   "ADD_DELETE": "Add / Delete",
   "ADD_MORE": "Add More",
   "EDITABLE": "Editable",
-  "AUDIT_LOG": "Audit Log",
+  "AUDIT_LOGS": "Audit Log",
   "BLOCKS / TOWERS": "Blocks / Towers",
   "ADD/Edit_FIELDS": "Add/Edit Fields",
   "NO_OF_BLOCKS_TOWER": "No of Blocks/Tower",

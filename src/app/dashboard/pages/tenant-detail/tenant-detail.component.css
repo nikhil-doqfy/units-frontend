@@ -27,13 +27,13 @@
 .amount {
   font-size: 15px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-primary1);
   line-height: 1.2;
 }
 
 .label {
   font-size: 14px;
-  color: var(--text-primary);
+  color: var(--text-primary1);
   line-height: 1.2;
 }
 
