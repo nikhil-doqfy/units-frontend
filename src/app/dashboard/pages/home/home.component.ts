@@ -168,6 +168,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
   //   if (height) return `${height - 8 - 18 - 56 - 2}px`;
   //   else return 0;
   // }
+
+  getTableStyle() {
+    const graphHeight = this.chequesAgingGraph?.nativeElement?.offsetHeight;
+
+    if (graphHeight) {
+      return {
+        'max-height': graphHeight + 'px',
+        'overflow-y': 'auto',
+      };
+    }
+
+    return {};
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))

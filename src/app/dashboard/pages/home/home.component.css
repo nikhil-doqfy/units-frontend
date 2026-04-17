@@ -1,13 +1,13 @@
-.equal-height-row > [class*='col'] {
+.equal-height-row > [class*="col"] {
   display: flex;
   flex-direction: column;
 }
 
-.equal-height-row > [class*='col'] app-white-card {
+.equal-height-row > [class*="col"] app-white-card {
   flex: 1 1 auto;
 }
 
-.equal-height-row > [class*='col'] ::ng-deep .dashWhiteCol {
+.equal-height-row > [class*="col"] ::ng-deep .dashWhiteCol {
   height: 100%;
   box-sizing: border-box;
 }
