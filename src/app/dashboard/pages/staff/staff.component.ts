@@ -48,6 +48,7 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-staff',
   standalone: true,
@@ -74,6 +75,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
     FilterPopupButtonComponent,
     CustomSelectComponent,
     NoDataComponent,
+    FormsModule,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',
@@ -107,7 +109,6 @@ export class StaffComponent {
   detailCurrentPage = 1;
   detailRowsPerPage = 10;
   detailTotalRecords = 0;
-
   get filteredAssignedProperties(): any[] {
     const text = this.detailSearchText.toLowerCase();
     const filtered = text
@@ -193,12 +194,25 @@ export class StaffComponent {
       this.getStaffRoleDetails();
     }
   }
+  // removeFilter() {
+  //   this.selectedstaffRole = null;
+  //   delete this.staffRolesData['role'];
+
+  //   this.currentPage = 1;
+  //   this.getStaffRoleDetails();
+  // }
+
   removeFilter() {
     this.selectedstaffRole = null;
     delete this.staffRolesData['role'];
 
     this.currentPage = 1;
     this.getStaffRoleDetails();
+
+    // 🔥 force UI reset
+    setTimeout(() => {
+      this.selectedstaffRole = null;
+    });
   }
 
   getOptionTypes(options: string[]) {
@@ -231,7 +245,9 @@ export class StaffComponent {
   handleInternalTableExport(): void {
     if (!this.showDetailView) return;
 
-    const params: Record<string, any> = { staff_id: this.selectedStaff.staff_id };
+    const params: Record<string, any> = {
+      staff_id: this.selectedStaff.staff_id,
+    };
     if (this.detailSearchText) params['search'] = this.detailSearchText;
 
     this.staffService
@@ -258,8 +274,10 @@ export class StaffComponent {
 
   handleExportClick(): void {
     const params: Record<string, any> = {};
-    if (this.staffRolesData['search']) params['search'] = this.staffRolesData['search'];
-    if (this.staffRolesData['role']) params['role_id'] = this.staffRolesData['role'];
+    if (this.staffRolesData['search'])
+      params['search'] = this.staffRolesData['search'];
+    if (this.staffRolesData['role'])
+      params['role_id'] = this.staffRolesData['role'];
 
     this.staffService
       .getExcelFileOfStaff(params)
@@ -280,14 +298,32 @@ export class StaffComponent {
       });
   }
 
+  // applyFilter() {
+  //   this.selectedstaffRole = null;
+  //   if (this.selectedstaffRole?.key) {
+  //     this.staffRolesData['role'] = this.selectedstaffRole.key;
+  //   } else {
+  //     delete this.staffRolesData['role'];
+  //   }
+  //   this.currentPage = 1;
+  //   this.getStaffRoleDetails();
+  // }
   applyFilter() {
-    if (this.selectedstaffRole?.key) {
-      this.staffRolesData['role'] = this.selectedstaffRole.key;
+    const selectedRole = this.selectedstaffRole; // store first
+
+    if (selectedRole?.key) {
+      this.staffRolesData['role'] = selectedRole.key;
     } else {
       delete this.staffRolesData['role'];
     }
+
     this.currentPage = 1;
     this.getStaffRoleDetails();
+
+    // 🔥 IMPORTANT: reset dropdown AFTER apply
+    setTimeout(() => {
+      this.selectedstaffRole = null;
+    });
   }
 
   openAddStaffModal(addStaffContent: TemplateRef<any>) {

@@ -25,6 +25,7 @@
                     }}</label>
                     <app-custom-select
                       [options]="propertyTypeOptions"
+                      [(ngModel)]="selectedPropertyType"
                       key="key"
                       value="value"
                       [placeholder]="'SELECT_PROPERTY' | translate"
@@ -36,6 +37,7 @@
                     <label class="form-label">{{ "STATUS" | translate }}</label>
                     <app-custom-select
                       [options]="statusOptions"
+                      [(ngModel)]="selectedStatus"
                       key="key"
                       value="value"
                       [placeholder]="'SELECT_STATUS' | translate"

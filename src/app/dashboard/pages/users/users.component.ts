@@ -43,6 +43,7 @@ import {
   PageSizeChange,
 } from '../../../shared/model/shared.model';
 
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -64,6 +65,7 @@ import {
     NoDataComponent,
     AddUserFormComponent,
     TranslateModule,
+    FormsModule,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
@@ -286,6 +288,7 @@ export class UsersComponent {
   }
 
   applyFilter() {
+    this.selectedUserType = null;
     this.currentPage = 1;
     this.getUser();
   }

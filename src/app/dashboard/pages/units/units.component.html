@@ -22,6 +22,7 @@
                   <label class="form-label">{{ "PROPERTY" | translate }}</label>
                   <app-custom-select
                     [options]="propertyOptions"
+                    [(ngModel)]="selectedProperty"
                     key="key"
                     value="value"
                     [placeholder]="'SELECT_PROPERTY' | translate"
@@ -35,6 +36,7 @@
                   }}</label>
                   <app-custom-select
                     [options]="bedroomOptions"
+                    [(ngModel)]="selectedBedroom"
                     key="key"
                     value="value"
                     [placeholder]="'SELECT_BEDROOMS' | translate"
@@ -46,6 +48,7 @@
                   <label class="form-label">{{ "FLOOR_NO" | translate }}</label>
                   <app-custom-select
                     [options]="floorOptions"
+                    [(ngModel)]="selectedFloor"
                     key="key"
                     value="value"
                     [placeholder]="'SELECT_FLOOR' | translate"
@@ -59,6 +62,7 @@
                   }}</label>
                   <app-custom-select
                     [options]="areaUnitOptions"
+                    [(ngModel)]="selectedAreaUnit"
                     key="key"
                     value="value"
                     [placeholder]="'SELECT_AREA_UNIT' | translate"

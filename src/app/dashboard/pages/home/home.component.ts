@@ -451,6 +451,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         params.year = this.duesSelectedYear;
       }
       this.loadDueGraph(Object.keys(params).length ? params : undefined);
+      this.duesSelectedProperty = null;
+      this.duesSelectedUnit = null;
+      this.duesSelectedYear = null;
+      this.duesUnits = [];
       return;
     }
 
@@ -466,8 +470,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (chartType === 'revenue') {
       this.getMonthlyRevenue(Object.keys(params).length ? params : undefined);
+      this.selectedProperty = null;
+      this.selectedUnit = null;
+      this.selectedYear = null;
+      this.units = [];
     } else if (chartType == 'payment') {
       this.loadPayments(Object.keys(params).length ? params : undefined);
+      this.selectedProperty = null;
+      // this.selectedFilter = null;
+      this.selectedUnit = null;
+      this.selectedYear = null;
+      this.units = [];
     }
   }
 
@@ -634,13 +647,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (res) => {
           this.chequeList = res?.content?.cheques ?? [];
+          this.resetChequeFilter();
         },
         error: () => {
           this.chequeList = [];
         },
       });
   }
+  resetChequeFilter() {
+    this.chequeVisSelectedProperty = null;
+    this.chequeVisSelectedUnit = null;
+    this.chequeVisSelectedStatus = null;
 
+    this.chequeVisSelectedPeriodType = 'month';
+    this.chequeVisSelectedMonthly = '';
+    this.chequeVisSelectedYear = null;
+
+    this.chequeVisUnits = [];
+  }
   //---------------------------------------error-------------------------------------------------
   tableMaxHeight: string = 'auto';
   ngAfterViewInit(): void {

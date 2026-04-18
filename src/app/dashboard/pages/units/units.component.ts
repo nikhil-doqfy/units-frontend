@@ -21,7 +21,7 @@ import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/fil
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { debounceTime, Subject } from 'rxjs';
 import { NoDataComponent } from '../../../no-data/no-data.component';
-
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-units',
   standalone: true,
@@ -42,6 +42,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
     FilterPopupButtonComponent,
     CustomSelectComponent,
     NoDataComponent,
+    FormsModule,
   ],
   templateUrl: './units.component.html',
   styleUrl: './units.component.css',
@@ -64,6 +65,10 @@ export class UnitsComponent implements OnInit {
   filterFloor: string = '';
   filterAreaUnit: string = '';
 
+  selectedProperty: any = null;
+  selectedBedroom: any = null;
+  selectedFloor: any = null;
+  selectedAreaUnit: any = null;
   // Filter options
   propertyOptions: { key: string; value: string }[] = [];
   bedroomOptions = Array.from({ length: 10 }, (_, i) => ({
@@ -144,6 +149,10 @@ export class UnitsComponent implements OnInit {
   applyFilter(): void {
     this.currentPage = 1;
     this.loadUnits();
+    this.selectedProperty = null;
+    this.selectedBedroom = null;
+    this.selectedFloor = null;
+    this.selectedAreaUnit = null;
   }
 
   removeFilter(): void {
@@ -152,6 +161,11 @@ export class UnitsComponent implements OnInit {
     this.filterFloor = '';
     this.filterAreaUnit = '';
     this.currentPage = 1;
+    this.selectedProperty = null;
+    this.selectedBedroom = null;
+    this.selectedFloor = null;
+    this.selectedAreaUnit = null;
+
     this.loadUnits();
   }
 

@@ -22,7 +22,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
 import { Router } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject } from 'rxjs';
-
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-all-properties',
   standalone: true,
@@ -44,13 +44,15 @@ import { debounceTime, Subject } from 'rxjs';
     FilterPopupButtonComponent,
     CustomSelectComponent,
     NoDataComponent,
+    FormsModule,
   ],
   templateUrl: './all-properties.component.html',
   styleUrl: './all-properties.component.css',
 })
 export class AllPropertiesComponent implements OnInit {
   private propertyService = inject(PropertyService);
-
+  selectedPropertyType: any = null;
+  selectedStatus: any = null;
   showDetailView: boolean = false;
   properties: any[] = [];
   totalRecords: number = 0;
@@ -123,6 +125,15 @@ export class AllPropertiesComponent implements OnInit {
     this.loadProperties();
   }
 
+  onPropertyTypeSelect(option: any) {
+    this.selectedPropertyType = option;
+    this.filterPropertyType = option?.key;
+  }
+
+  onStatusSelect(option: any) {
+    this.selectedStatus = option;
+    this.filterStatus = option?.key;
+  }
   searchTextChange(text: string): void {
     this.search$.next(text);
   }
@@ -130,11 +141,17 @@ export class AllPropertiesComponent implements OnInit {
   applyFilter(): void {
     this.currentPage = 1;
     this.loadProperties();
+    this.selectedPropertyType = null;
+    this.selectedStatus = null;
   }
 
   removeFilter(): void {
     this.filterPropertyType = '';
     this.filterStatus = '';
+
+    // ✅ UI reset
+    this.selectedPropertyType = null;
+    this.selectedStatus = null;
     this.currentPage = 1;
     this.loadProperties();
   }
