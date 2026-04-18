@@ -23,11 +23,12 @@
   border-radius: 4px;
   box-shadow: 4px 4px 15px 0 var(--dropdown-shadow);
   min-width: auto;
-  transform: inherit !important;
+  /* transform: inherit !important;
   top: 100% !important;
   right: 0 !important;
   left: inherit !important;
-  overflow: hidden;
+  overflow: hidden; */
+  z-index: 9999; /* ✅ ADD */
 }
 
 .dashDrpdwnMenu button {
