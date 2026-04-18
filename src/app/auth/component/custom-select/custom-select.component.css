@@ -58,7 +58,7 @@
 
 .customSelectDropdown {
   background-color: var(--whiteBg);
-  position: absolute;
+  /* position: absolute; */
   left: 0;
   top: 100%;
   right: 0;
