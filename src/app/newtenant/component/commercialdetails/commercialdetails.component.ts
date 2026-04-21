@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
@@ -45,6 +46,17 @@ export class CommercialdetailsComponent implements OnInit {
     private formService: FormService,
   ) {
     this.isInvalid = this.formService.isInvalid.bind(this.formService);
+
+    // React to unit data arriving after this component has already initialised
+    // (happens when the user navigates here before the unit-detail API call completes)
+    toObservable(this.newTenantService.getUnitCommercialData())
+      .pipe(takeUntilDestroyed(this.destroyRef), filter(u => !!u))
+      .subscribe(() => {
+        if (this.form) {
+          this.prefillFromUnit();
+          this.recalculateAnnualFromDates();
+        }
+      });
   }
 
   ngOnInit() {
@@ -52,6 +64,7 @@ export class CommercialdetailsComponent implements OnInit {
     this.setupAutoCalculations();
     this.sharedService.initLanguage();
     this.loadCharges();
+    this.recalculateAnnualFromDates();
   }
 
   private loadCharges() {
@@ -70,6 +83,7 @@ export class CommercialdetailsComponent implements OnInit {
             isEdit: false,
           }));
         },
+        error: () => { this.charges = []; },
       });
   }
 
@@ -100,24 +114,16 @@ export class CommercialdetailsComponent implements OnInit {
   }
 
   private setupAutoCalculations() {
-    // annualAmount + actualAnnualAmount: derived from startDate + endDate (rent × months)
-    this.form
-      .get('startDate')!
-      .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.recalculateAnnualFromDates());
-
-    this.form
-      .get('endDate')!
-      .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.recalculateAnnualFromDates());
+    // annualAmount + actualAnnualAmount: recalculate when any of these three change
+    ['startDate', 'endDate', 'rent'].forEach((ctrl) => {
+      this.form
+        .get(ctrl)!
+        .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => this.recalculateAnnualFromDates());
+    });
 
     // contractAmount: recalculate whenever any of its components change
-    const contractTriggers = [
-      'securityBookingAmount',
-      'maintenanceCharges',
-      'securityDeposit',
-    ];
-    contractTriggers.forEach((ctrl) => {
+    ['securityBookingAmount', 'maintenanceCharges', 'securityDeposit'].forEach((ctrl) => {
       this.form
         .get(ctrl)!
         .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
@@ -126,41 +132,37 @@ export class CommercialdetailsComponent implements OnInit {
   }
 
   private recalculateAnnualFromDates() {
-    const start = this.form.get('startDate')!.value;
-    const end = this.form.get('endDate')!.value;
+    const start = this.form.get('startDate')!.value as string;
+    const end = this.form.get('endDate')!.value as string;
     const rent = parseFloat(this.form.get('rent')!.value) || 0;
 
     if (!start || !end || rent <= 0) return;
 
-    const months = this.monthsBetween(new Date(start), new Date(end));
+    const months = this.monthsBetween(start, end);
     if (months <= 0) return;
 
     const annual = Math.round(rent * months * 100) / 100;
 
-    this.form.get('annualAmount')!.setValue(annual, { emitEvent: false });
-    this.form.get('actualAnnualAmount')!.setValue(annual, { emitEvent: false });
+    this.form.patchValue({ annualAmount: annual, actualAnnualAmount: annual });
     this.recalculateContractAmount();
   }
 
   private recalculateContractAmount() {
     const annual = parseFloat(this.form.get('annualAmount')!.value) || 0;
-    const booking =
-      parseFloat(this.form.get('securityBookingAmount')!.value) || 0;
+    const booking = parseFloat(this.form.get('securityBookingAmount')!.value) || 0;
     const maint = parseFloat(this.form.get('maintenanceCharges')!.value) || 0;
     const security = parseFloat(this.form.get('securityDeposit')!.value) || 0;
 
-    this.form
-      .get('contractAmount')!
-      .setValue(Math.round((annual + booking + maint + security) * 100) / 100, {
-        emitEvent: false,
-      });
+    this.form.patchValue({
+      contractAmount: Math.round((annual + booking + maint + security) * 100) / 100,
+    });
   }
 
-  private monthsBetween(start: Date, end: Date): number {
-    return (
-      (end.getFullYear() - start.getFullYear()) * 12 +
-      (end.getMonth() - start.getMonth())
-    );
+  // Parse YYYY-MM-DD strings directly to avoid new Date() timezone shifting
+  private monthsBetween(startStr: string, endStr: string): number {
+    const [sy, sm] = startStr.split('-').map(Number);
+    const [ey, em] = endStr.split('-').map(Number);
+    return (ey - sy) * 12 + (em - sm);
   }
 
   charges: any[] = [];

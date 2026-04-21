@@ -83,7 +83,6 @@ export class BasicpersonalComponent implements OnInit {
     if (this.leadData?.unit_id) {
       this.propertyService
         .getUnits({ unit_id: this.leadData.unit_id })
-        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((resp: any) => {
           const u = resp?.content;
           if (!u) return;
@@ -168,7 +167,6 @@ export class BasicpersonalComponent implements OnInit {
     if (!unit?.key) return;
     this.propertyService
       .getUnits({ unit_id: unit.key })
-      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp: any) => {
         const u = resp?.content;
         if (!u) return;
