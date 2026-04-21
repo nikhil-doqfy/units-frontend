@@ -1,12 +1,15 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, ElementRef, HostListener, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { FormsModule } from '@angular/forms';
+import { Router, NavigationEnd } from '@angular/router';
+import { Subject, of } from 'rxjs';
+import { filter, debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { ThemeService, UserRole } from '../../theme.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { SharedService } from '../../shared.service';
 import { PermissionService } from '../../services/permission.service';
+import { GlobalSearchService } from '../services/global-search.service';
 
 import { MenuOpenIconComponent } from '../component/icons/menu-open-icon/menu-open-icon.component';
 import { MenuCloseIconComponent } from '../component/icons/menu-close-icon/menu-close-icon.component';
@@ -40,6 +43,7 @@ import { LeadIconComponent } from '../../icon/lead-icon/lead-icon.component';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MenuOpenIconComponent,
     MenuCloseIconComponent,
     SearchIconComponent,
@@ -72,29 +76,43 @@ import { LeadIconComponent } from '../../icon/lead-icon/lead-icon.component';
 })
 export class SidebarComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private globalSearchService = inject(GlobalSearchService);
+  private el = inject(ElementRef);
+
   currentRole: UserRole = 'owner';
   selected: string = '';
   openSidebarValue = true;
   currentRoute: string = '/';
   currentLanguage = 'en';
 
+  searchQuery = '';
+  searchResults: any[] = [];
+  isSearching = false;
+  showSearchDropdown = false;
+  private searchSubject = new Subject<string>();
+
+  private readonly routeMap: Record<string, (id: number) => string> = {
+    property: (id) => `/dashboard/properties/${id}`,
+    unit:     (id) => `/dashboard/units/${id}`,
+    owner:    (id) => `/dashboard/owners/detail/${id}`,
+    tenant:   (id) => `/dashboard/tenants/detail/${id}`,
+  };
+
   constructor(
     private sharedService: SharedService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private themeService: ThemeService,
     private translate: TranslateService,
     private permissionService: PermissionService,
   ) {
     this.router.events
       .pipe(
-        filter(
-          (event): event is NavigationEnd => event instanceof NavigationEnd,
-        ),
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.urlAfterRedirects;
+        this.closeSearch();
         if (event.id !== 1 && window.innerWidth <= 767) {
           this.sharedService.toggleSidebar();
         }
@@ -107,6 +125,73 @@ export class SidebarComponent implements OnInit {
     translate.use('en');
   }
 
+  ngOnInit() {
+    this.sharedService.openSidebarValue$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => { this.openSidebarValue = value; });
+
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => { this.currentRole = role; });
+
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((q) => {
+        if (!q || q.length < 2) {
+          this.searchResults = [];
+          this.showSearchDropdown = false;
+          this.isSearching = false;
+          return of(null);
+        }
+        this.isSearching = true;
+        return this.globalSearchService.search(q).pipe(
+          catchError(() => { this.isSearching = false; return of(null); })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe((res: any) => {
+      this.isSearching = false;
+      if (res === null) return;
+      this.searchResults = res?.content?.results ?? [];
+      this.showSearchDropdown = true;
+    });
+  }
+
+  get groupedResults(): { type: string; items: any[] }[] {
+    const map = new Map<string, any[]>();
+    for (const r of this.searchResults) {
+      if (!map.has(r.type)) map.set(r.type, []);
+      map.get(r.type)!.push(r);
+    }
+    return Array.from(map.entries()).map(([type, items]) => ({ type, items }));
+  }
+
+  onSearchInput(value: string): void {
+    this.searchQuery = value;
+    this.searchSubject.next(value);
+  }
+
+  navigateToResult(result: any): void {
+    const buildRoute = this.routeMap[result.type];
+    if (!buildRoute) return;
+    this.closeSearch();
+    this.router.navigate([buildRoute(result.id)]);
+  }
+
+  closeSearch(): void {
+    this.showSearchDropdown = false;
+    this.searchQuery = '';
+    this.searchResults = [];
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    if (!this.el.nativeElement.contains(event.target)) {
+      this.showSearchDropdown = false;
+    }
+  }
+
   setLanguage(lang: string) {
     this.translate.use(lang);
     localStorage.setItem('language', lang);
@@ -114,20 +199,6 @@ export class SidebarComponent implements OnInit {
 
   onOptionSelected(option: string) {
     this.selected = option;
-  }
-
-  ngOnInit() {
-    this.sharedService.openSidebarValue$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => {
-        this.openSidebarValue = value;
-      });
-
-    this.themeService.currentRole$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => {
-        this.currentRole = role;
-      });
   }
 
   handleOpenPopup() {

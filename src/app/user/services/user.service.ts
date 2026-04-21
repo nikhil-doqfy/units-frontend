@@ -77,6 +77,14 @@ export class UserService {
     return this.http.put(`${this.SERVER_ADDRESS}/user/staff_view`, data);
   }
 
+  resetUserPassword(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/user/reset_password`, data);
+  }
+
+  shareProfile(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/user/share_profile`, data);
+  }
+
   getStaffCsv(params: Record<string, any>): Observable<Blob> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(`${this.SERVER_ADDRESS}/user/staff_csv${queryString}`, {

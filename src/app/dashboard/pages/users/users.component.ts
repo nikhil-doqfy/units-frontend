@@ -27,11 +27,17 @@ import { TablePaginationComponent } from '../../component/table-pagination/table
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
+import { TableActionDropdownComponent } from '../../component/table-action-dropdown/table-action-dropdown.component';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
+import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
+import { ShareIconComponent } from '../../component/icons/share-icon/share-icon.component';
+import { ResetIconComponent } from '../../component/icons/reset-icon/reset-icon.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { AddUserFormComponent } from '../../component/forms/add-user-form/add-user-form.component';
+import { ResetPasswordModalComponent } from '../../component/forms/reset-password-modal/reset-password-modal.component';
+import { ShareProfileModalComponent } from '../../component/forms/share-profile-modal/share-profile-modal.component';
 import { UserService } from '../../../user/services/user.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
@@ -59,6 +65,8 @@ import {
     TableSearchComponent,
     TableFilterButtonComponent,
     FilterIconComponent,
+    ExportIconComponent,
+    TableActionDropdownComponent,
     CustomSelectComponent,
     FilterPopupButtonComponent,
     NoDataComponent,
@@ -93,6 +101,11 @@ export class UsersComponent {
   currentPage = 1;
   userTypeList: any[] = [];
   closeResult: WritableSignal<string> = signal('');
+
+  documentActions = [
+    { label: 'Share', icon: ShareIconComponent, action: 'share' },
+    { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
+  ];
 
   constructor() {
     const key = this.route.snapshot.data['titleKey'];
@@ -295,6 +308,57 @@ export class UsersComponent {
     delete this.userData['role'];
     this.currentPage = 1;
     this.getUser();
+  }
+
+  handleDeleteClick(userId: number): void {
+    this.userService
+      .DeleteUser({ user_id: userId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp?.message || 'User deleted successfully');
+          this.currentPage = 1;
+          this.getUser();
+        },
+        error: (err: any) => {
+          this.alertService.error(err?.error?.message || 'Delete failed');
+        },
+      });
+  }
+
+  handleDropdownAction(action: string, user: any): void {
+    const modalOptions = { ariaLabelledBy: 'modal-title', windowClass: 'mdlCommon', centered: true };
+    if (action === 'reset') {
+      const modalRef = this.modalService.open(ResetPasswordModalComponent, modalOptions);
+      modalRef.componentInstance.userId = user.id;
+      modalRef.componentInstance.userName =
+        `${user.first_name || ''} ${user.last_name || ''}`.trim();
+    } else if (action === 'share') {
+      const modalRef = this.modalService.open(ShareProfileModalComponent, modalOptions);
+      modalRef.componentInstance.profileId = user.id;
+      modalRef.componentInstance.profileName =
+        `${user.first_name || ''} ${user.last_name || ''}`.trim();
+    }
+  }
+
+  handleExportClick(): void {
+    this.userService
+      .getStaffCsv(this.userData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: Blob) => {
+          const url = window.URL.createObjectURL(resp);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'users_export.csv';
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('File downloaded successfully!');
+        },
+        error: (err) => {
+          this.alertService.error(err?.error?.message || 'Export failed');
+        },
+      });
   }
 
   // ── Status toggle ─────────────────────────────────────────────────

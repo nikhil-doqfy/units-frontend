@@ -1,0 +1,42 @@
+<div class="modal-header">
+  <h4 class="modal-title">Share Profile — {{ profileName }}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+</div>
+
+<div class="modal-body">
+  <p class="share-desc">
+    Enter an email address to share <strong>{{ profileName }}'s</strong> profile. They will receive a formatted email with the profile details.
+  </p>
+
+  <form [formGroup]="form">
+    <div class="mb-3">
+      <label class="form-label">Recipient Email <span class="text-danger">*</span></label>
+      <input
+        type="email"
+        class="form-control"
+        formControlName="recipient_email"
+        placeholder="Enter email address"
+        [class.is-invalid]="form.get('recipient_email')?.touched && form.get('recipient_email')?.invalid"
+      />
+      @if (form.get('recipient_email')?.touched) {
+        @if (form.get('recipient_email')?.hasError('required')) {
+          <small class="errorMsg">Email address is required</small>
+        } @else if (form.get('recipient_email')?.hasError('email')) {
+          <small class="errorMsg">Please enter a valid email address</small>
+        }
+      }
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btnCommon btnTransparent" (click)="dismiss()">Cancel</button>
+  <button
+    type="button"
+    class="btn btnCommon"
+    (click)="submit()"
+    [disabled]="form.invalid || isLoading"
+  >
+    {{ isLoading ? 'Sending...' : 'Share Profile' }}
+  </button>
+</div>

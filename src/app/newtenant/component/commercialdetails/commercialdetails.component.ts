@@ -12,6 +12,7 @@ import { FormService } from '../../../shared/services/form.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { SharedService } from '../../../shared.service';
+import { ChargesService } from '../../../charges.service';
 
 @Component({
   selector: 'app-commercialdetails',
@@ -36,6 +37,7 @@ export class CommercialdetailsComponent implements OnInit {
   private newTenantService = inject(NewTenantFromService);
   isInvalid: FormService['isInvalid'];
   private sharedService = inject(SharedService);
+  private chargesService = inject(ChargesService);
 
   constructor(
     private toastService: ToastService,
@@ -49,6 +51,26 @@ export class CommercialdetailsComponent implements OnInit {
     this.prefillFromUnit();
     this.setupAutoCalculations();
     this.sharedService.initLanguage();
+    this.loadCharges();
+  }
+
+  private loadCharges() {
+    this.chargesService.charges()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.charges = (resp?.content ?? []).map((c: any) => ({
+            charge_id: c.id,
+            label: c.description,
+            amount: c.amount,
+            tax: c.tax_code ? `VAT @${c.tax_code}%` : 'VAT @Nil',
+            vat: c.vat_amount,
+            total: c.total_amount,
+            checked: true,
+            isEdit: false,
+          }));
+        },
+      });
   }
 
   private prefillFromUnit() {
@@ -141,107 +163,7 @@ export class CommercialdetailsComponent implements OnInit {
     );
   }
 
-  charges = [
-    {
-      label: 'Admin Fee',
-      amount: 32.71,
-      tax: 'VAT @5%',
-      vat: 1.64,
-      total: 34.35,
-      checked: true,
-      isEdit: false,
-    },
-    {
-      label: 'Ejari Charge Disbursement',
-      amount: 175.65,
-      tax: 'VAT @Nil',
-      vat: 0,
-      total: 175.65,
-      checked: true,
-      isEdit: false,
-    },
-    {
-      label: 'Gas Charges',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: true,
-      isEdit: false,
-    },
-    {
-      label: 'COMMISSION- DUBAI',
-      amount: 1200,
-      tax: 'VAT @5%',
-      vat: 60,
-      total: 1260,
-      checked: true,
-      isEdit: false,
-    },
-    {
-      label: 'Security Deposit',
-      amount: 2400,
-      tax: 'VAT @Nil',
-      vat: 0,
-      total: 2400,
-      checked: true,
-      isEdit: false,
-    },
-    {
-      label: 'CAR PARKING',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: true,
-      isEdit: false,
-    },
-    {
-      label: 'TAWTHEEQ REGISTRATION A/C...',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: true,
-      isEdit: false,
-    },
-    {
-      label: 'RENEWAL COMMISSION (DUBAI)',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: false,
-      isEdit: false,
-    },
-    {
-      label: 'RENEWAL COMMISSION (SHARJ...)',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: false,
-      isEdit: false,
-    },
-    {
-      label: 'R COMMISSION- ABU DHABI BL...',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: false,
-      isEdit: false,
-    },
-    {
-      label: 'TAWTHEEQ SERVICE INCOME- A...',
-      amount: 1000,
-      tax: 'VAT @5%',
-      vat: 50,
-      total: 1050,
-      checked: false,
-      isEdit: false,
-    },
-  ];
+  charges: any[] = [];
   get totalAmount(): number {
     return this.charges
       .filter((c) => c.checked)

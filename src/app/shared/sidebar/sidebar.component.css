@@ -149,6 +149,71 @@
   left: 32px;
 }
 
+.globalSearchDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 16px;
+  right: 16px;
+  background: var(--whiteBg);
+  border: 1px solid var(--lightBorder);
+  border-radius: 8px;
+  box-shadow: 4px 8px 20px 0 #00000020;
+  z-index: 1100;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.searchGroupLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--lightText);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px 4px;
+}
+
+.searchResultItem {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin: 0 4px;
+  transition: background 0.15s ease;
+}
+
+.searchResultItem:hover {
+  background: var(--muteBg1);
+}
+
+.resultInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.resultLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blackText);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resultSubLabel {
+  font-size: 11px;
+  color: var(--lightText);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.searchNoResult {
+  padding: 16px 12px;
+  font-size: 13px;
+  color: var(--lightText);
+  text-align: center;
+}
+
 .dashSdbrWdgt + .dashSdbrWdgt {
   margin-top: 22px;
 }

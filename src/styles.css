@@ -4341,6 +4341,7 @@ linearGradient .authBgPatt stop:last-child {
 
 .cmmnTblFixedBody {
   height: calc(100vh - 348px);
+  overflow-y: auto;
 }
 
 .cmmnTblBody table {
@@ -4373,6 +4374,9 @@ linearGradient .authBgPatt stop:last-child {
   color: var(--whiteText);
   font-weight: 600;
   border: 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 /* new screen header color chnages */
 .cmmnTbl table thead tr th,
@@ -4388,6 +4392,9 @@ linearGradient .authBgPatt stop:last-child {
   color: white;
   font-weight: 600;
   border: 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 .cmmnTbl table tbody tr td {
   font-size: 13px;

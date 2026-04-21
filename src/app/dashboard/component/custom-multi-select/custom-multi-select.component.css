@@ -1,0 +1,166 @@
+.customMultiSelect {
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease 0s;
+  width: 100%;
+}
+
+.customSelectInput {
+  background-color: var(--whiteBg);
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 400;
+  padding: 8px 12px;
+  border: 1px solid var(--formBorder);
+  border-radius: 6px;
+  width: 100%;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  z-index: 1;
+}
+
+.customMultiSelect.show {
+  z-index: 1050;
+}
+
+.customMultiSelect.show .customSelectInput,
+.customMultiSelect .customSelectInput:hover {
+  border-color: var(--greyBorder);
+}
+
+.customSelectPlaceholder {
+  color: var(--lightText);
+}
+
+.triggerLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+}
+
+.rightSection i {
+  color: var(--blackText4);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.customSelectDropdown {
+  background-color: var(--whiteBg);
+  position: fixed;
+  padding: 4px;
+  border: 1px solid var(--lightBorder);
+  border-radius: 6px;
+  box-shadow: 4px 4px 15px 0 #00000026;
+  min-width: 160px;
+  max-height: 220px;
+  overflow: auto;
+  z-index: 9999;
+}
+
+.customSelectDropdown li {
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 400;
+  line-height: 20px;
+  padding: 10px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+
+.customSelectDropdown li + li {
+  border-top: 1px solid var(--formBorder);
+}
+
+.customSelectDropdown li:hover {
+  background: var(--muteBg1);
+  color: var(--blackText);
+}
+
+.multiOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.multiOption.active {
+  background: var(--activeExtraLightBg);
+  color: var(--blackText);
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--formBorder);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--whiteBg);
+  transition: all 0.2s ease;
+}
+
+.checkbox.checked {
+  background: var(--activeColor, #3b82f6);
+  border-color: var(--activeColor, #3b82f6);
+}
+
+.customSelectSearch {
+  display: flex;
+  gap: 6px;
+  padding: 8px 8px 6px;
+  border-bottom: 1px solid var(--formBorder);
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.customSelectSearch::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2368868f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  pointer-events: none;
+}
+
+.customSelectSearch input {
+  flex: 1;
+  height: 32px;
+  padding: 4px 10px 4px 28px;
+  border: 1px solid var(--formBorder);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--greyText);
+  background-color: var(--muteBg);
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.customSelectSearch input::placeholder {
+  color: var(--lightText);
+  font-size: 12px;
+}
+
+.customSelectSearch input:focus {
+  border-color: var(--greyBorder, #c9d3d7);
+  background-color: var(--whiteBg);
+}

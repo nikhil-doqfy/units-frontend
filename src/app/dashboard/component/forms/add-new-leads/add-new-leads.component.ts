@@ -58,10 +58,10 @@ export class AddNewLeadsComponent implements OnInit {
   ngOnInit() {
     this.leadForm = this.fb.group({
       unit_id: [null, Validators.required],
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email]],
-      contact_number: ['', Validators.required],
-      amount: [null],
+      contact_number: ['', [Validators.required, Validators.pattern(/^[+\d\s\-()]+$/), Validators.minLength(6), Validators.maxLength(15)]],
+      amount: [null, [Validators.required, Validators.min(0)]],
       status: ['INTERESTED', Validators.required],
       comment: [''],
       platform: ['DIRECT', Validators.required],

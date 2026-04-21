@@ -1,0 +1,47 @@
+.iconInput {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.iconInput i {
+  position: absolute;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.iconInput i.right {
+  left: auto;
+  right: 10px;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.iconInput.password input {
+  padding-left: 36px;
+  padding-right: 36px;
+}
+
+.divider {
+  border-color: var(--lightBorder, #e5e7eb);
+  margin: 4px 0 0;
+}
+
+.errorMsg {
+  color: #dc3545;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  display: block;
+}
+
+.required {
+  color: #dc3545;
+  margin-left: 2px;
+}
+
+.input-invalid {
+  border-radius: 6px;
+  outline: 1px solid #dc3545;
+}

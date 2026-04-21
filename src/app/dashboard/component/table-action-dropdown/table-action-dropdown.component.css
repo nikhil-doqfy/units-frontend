@@ -22,11 +22,7 @@
   border: 1px solid var(--lightBorder2);
   border-radius: 4px;
   box-shadow: 4px 4px 15px 0 var(--dropdown-shadow);
-  min-width: auto;
-  transform: inherit !important;
-  top: 100% !important;
-  right: 0 !important;
-  left: inherit !important;
+  min-width: 160px;
   overflow: hidden;
 }
 

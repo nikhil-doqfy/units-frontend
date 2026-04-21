@@ -1,0 +1,50 @@
+<div
+  class="customMultiSelect"
+  [class.show]="isDropdownOpen"
+  (click)="toggleDropdown()"
+>
+  <div class="customSelectInput">
+    <span *ngIf="!triggerLabel" class="customSelectPlaceholder">{{ placeholder | translate }}</span>
+    <span *ngIf="triggerLabel" class="triggerLabel">{{ triggerLabel }}</span>
+    <div class="rightSection">
+      <i>
+        <app-arrow-down-icon *ngIf="!isDropdownOpen" />
+        <app-arrow-up-icon *ngIf="isDropdownOpen" />
+      </i>
+    </div>
+
+    <ul
+      *ngIf="isDropdownOpen"
+      class="customSelectDropdown"
+      [ngStyle]="dropdownStyle"
+    >
+      <li *ngIf="showFilterInput" class="customSelectSearch">
+        <input
+          type="text"
+          placeholder="Search..."
+          [(ngModel)]="filterText"
+          (ngModelChange)="onFilterChange($event)"
+          (click)="$event.stopPropagation()"
+          (keydown.enter)="$event.preventDefault(); $event.stopPropagation()"
+        />
+      </li>
+
+      @for (option of displayOptions; track option[key]) {
+        <li
+          class="multiOption"
+          [class.active]="isSelected(option)"
+          (click)="toggleOption(option, $event)"
+        >
+          <span class="checkbox" [class.checked]="isSelected(option)">
+            <svg *ngIf="isSelected(option)" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          {{ option[value] }}
+        </li>
+      } @empty {
+        <li>No Data Found</li>
+      }
+    </ul>
+  </div>
+</div>

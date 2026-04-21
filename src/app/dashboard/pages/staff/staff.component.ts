@@ -48,6 +48,8 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { ResetPasswordModalComponent } from '../../component/forms/reset-password-modal/reset-password-modal.component';
+import { ShareProfileModalComponent } from '../../component/forms/share-profile-modal/share-profile-modal.component';
 @Component({
   selector: 'app-staff',
   standalone: true,
@@ -180,16 +182,23 @@ export class StaffComponent {
     this.getStaffRoleDetails();
   }
 
-  handleDropdownAction(action: string) {
-    console.log(`${action} action clicked`);
+  handleDropdownAction(action: string, staff: any): void {
+    const modalOptions = { ariaLabelledBy: 'modal-title', windowClass: 'mdlCommon', centered: true };
+    if (action === 'reset') {
+      const modalRef = this.modalService.open(ResetPasswordModalComponent, modalOptions);
+      modalRef.componentInstance.userId = staff.staff_id;
+      modalRef.componentInstance.userName = staff.staff_name || '';
+    } else if (action === 'share') {
+      const modalRef = this.modalService.open(ShareProfileModalComponent, modalOptions);
+      modalRef.componentInstance.profileId = staff.staff_id;
+      modalRef.componentInstance.profileName = staff.staff_name || '';
+    }
   }
 
   onUserSave(success: boolean, modal: NgbActiveModal) {
-    // component.submitStaffForm();
-
-    // modal.close();
     if (success) {
       modal.close();
+      this.currentPage = 1;
       this.getStaffRoleDetails();
     }
   }
@@ -291,6 +300,8 @@ export class StaffComponent {
   }
 
   openAddStaffModal(addStaffContent: TemplateRef<any>) {
+    this.selectedStaff = null;
+    this.isEditMode = false;
     this.modalService
       .open(addStaffContent, {
         ariaLabelledBy: 'modal-title',

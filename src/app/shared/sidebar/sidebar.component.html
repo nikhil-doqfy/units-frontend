@@ -32,8 +32,32 @@
       id="search"
       placeholder="{{ 'SEARCH_HERE' | translate }}"
       autocomplete="off"
+      [ngModel]="searchQuery"
+      (ngModelChange)="onSearchInput($event)"
+      (keydown.escape)="closeSearch()"
     />
     <button type="button"><app-search-icon /></button>
+
+    <div class="globalSearchDropdown" *ngIf="showSearchDropdown">
+      <ng-container *ngIf="searchResults.length > 0; else noResults">
+        <ng-container *ngFor="let group of groupedResults">
+          <div class="searchGroupLabel">{{ group.type | titlecase }}</div>
+          <div
+            *ngFor="let result of group.items"
+            class="searchResultItem"
+            (click)="navigateToResult(result)"
+          >
+            <div class="resultInfo">
+              <span class="resultLabel">{{ result.label }}</span>
+              <span class="resultSubLabel">{{ result.sub_label }}</span>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-template #noResults>
+        <div class="searchNoResult">No results found</div>
+      </ng-template>
+    </div>
   </div>
   <div class="dashSdbrList">
     <!-- Owner Menus Start -->

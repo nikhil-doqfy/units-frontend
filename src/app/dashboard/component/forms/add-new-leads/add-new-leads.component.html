@@ -50,6 +50,7 @@
         <input
           type="text"
           class="form-control"
+          [class.is-invalid]="isInvalid(leadForm, 'name').status"
           [placeholder]="'ENTER_NAME_HERE' | translate"
           formControlName="name"
         />
@@ -59,14 +60,17 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">{{ "LEASE_AMOUNT_AED" | translate }}</label>
+        <label class="form-label">{{ "LEASE_AMOUNT_AED" | translate }}<span>*</span></label>
         <input
           type="number"
           class="form-control"
+          [class.is-invalid]="isInvalid(leadForm, 'amount').status"
           [placeholder]="'ENTER_AMOUNT' | translate"
           formControlName="amount"
-          readonly
         />
+        @if (isInvalid(leadForm, 'amount').status) {
+          <small class="errorMsg">{{ isInvalid(leadForm, 'amount').msg }}</small>
+        }
       </div>
 
       <!-- Email + Contact -->
@@ -75,6 +79,7 @@
         <input
           type="email"
           class="form-control"
+          [class.is-invalid]="isInvalid(leadForm, 'email').status"
           [placeholder]="'ENTER_EMAIL_HERE' | translate"
           formControlName="email"
         />
@@ -88,6 +93,7 @@
         <input
           type="text"
           class="form-control"
+          [class.is-invalid]="isInvalid(leadForm, 'contact_number').status"
           [placeholder]="'ENTER_HERE' | translate"
           formControlName="contact_number"
         />

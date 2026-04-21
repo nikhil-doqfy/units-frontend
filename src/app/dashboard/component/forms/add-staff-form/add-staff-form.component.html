@@ -1,110 +1,143 @@
 <app-modal-form-card>
   <form [formGroup]="staffForm">
     <div class="row g-3">
-      <div class="col-md-12">
-        <div class="mb-0">
-          <label for="staffName" class="form-label"
-            >{{ "STAFF_NAME" | translate }}<span>*</span></label
-          >
-          <input
-            class="form-control"
-            type="text"
-            name="staffName"
-            formControlName="staffName"
-            [placeholder]="'ENTER_NAME_HERE' | translate"
-          />
-        </div>
-      </div>
       <div class="col-md-6">
-        <div class="mb-0">
-          <label for="email" class="form-label"
-            >{{ "EMAIL_ADDRESS" | translate }}<span>*</span></label
-          >
-          <input
-            class="form-control"
-            type="email"
-            name="email"
-            formControlName="email"
-            [placeholder]="'ENTER_EMAIL_HERE' | translate"
-          />
-        </div>
+        <label class="form-label">{{ "FIRST_NAME" | translate }}<span class="required">*</span></label>
+        <input
+          class="form-control"
+          [class.is-invalid]="hasError('firstName', 'required')"
+          type="text"
+          formControlName="firstName"
+          [placeholder]="'ENTER_HERE' | translate"
+        />
+        <small class="errorMsg" *ngIf="hasError('firstName', 'required')">
+          {{ "FIRST_NAME_REQUIRED" | translate }}
+        </small>
       </div>
+
       <div class="col-md-6">
-        <div class="mb-0">
-          <label for="contact" class="form-label"
-            >{{ "CONTACT_NUMBER" | translate }}<span>*</span></label
-          >
-          <input
-            class="form-control"
-            type="number"
-            name="contact"
-            formControlName="contactNumber"
-            [placeholder]="'ENTER_CONTACT_HERE' | translate"
-          />
-        </div>
+        <label class="form-label">{{ "LAST_NAME" | translate }}<span class="required">*</span></label>
+        <input
+          class="form-control"
+          [class.is-invalid]="hasError('lastName', 'required')"
+          type="text"
+          formControlName="lastName"
+          [placeholder]="'ENTER_HERE' | translate"
+        />
+        <small class="errorMsg" *ngIf="hasError('lastName', 'required')">
+          {{ "LAST_NAME_REQUIRED" | translate }}
+        </small>
       </div>
-      <div class="col-md-12">
-        <div class="mb-0">
-          <label for="staffRole" class="form-label"
-            >{{ "STAFF_ROLE" | translate }}<span>*</span></label
-          >
-          <app-custom-select
-            [options]="staffRole"
-            key="key"
-            value="value"
-            formControlName="role"
-            [placeholder]="'SELECT_USER_TYPE' | translate"
-            [selectedOption]="selectedStffRole"
-            (optionSelected)="onOptionSelectedUserType($event)"
-            (click)="handleStaffRole()"
-          ></app-custom-select>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div class="mb-0">
-          <label for="assignedProperty" class="form-label"
-            >{{ "ASSIGNED_PROPERTY" | translate }}<span>*</span></label
-          >
-          <app-custom-select
-            [options]="assignedPropertyList"
-            key="key"
-            value="value"
-            [placeholder]="'SELECT_PROPERTY' | translate"
-            [selectedOption]="selectedAssignedProperty"
-            (optionSelected)="onAssignedPropertySelected($event)"
-            (click)="handleFilterClick()"
-          >
-          </app-custom-select>
-        </div>
-      </div>
+
       <div class="col-md-6">
-        <div class="mb-0">
-          <label for="password" class="form-label"
-            >{{ "PASSWORD" | translate }}<span>*</span></label
-          >
+        <label class="form-label">{{ "EMAIL_ADDRESS" | translate }}<span class="required">*</span></label>
+        <input
+          class="form-control"
+          [class.is-invalid]="hasError('email', 'required') || hasError('email', 'email')"
+          type="email"
+          formControlName="email"
+          [placeholder]="'ENTER_EMAIL_HERE' | translate"
+        />
+        <small class="errorMsg" *ngIf="hasError('email', 'required')">
+          {{ "EMAIL_REQUIRED" | translate }}
+        </small>
+        <small class="errorMsg" *ngIf="hasError('email', 'email')">
+          {{ "EMAIL_INVALID" | translate }}
+        </small>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">{{ "CONTACT_NUMBER" | translate }}<span class="required">*</span></label>
+        <input
+          class="form-control"
+          [class.is-invalid]="hasError('contactNumber', 'required')"
+          type="number"
+          formControlName="contactNumber"
+          [placeholder]="'ENTER_CONTACT_HERE' | translate"
+        />
+        <small class="errorMsg" *ngIf="hasError('contactNumber', 'required')">
+          {{ "CONTACT_REQUIRED" | translate }}
+        </small>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">{{ "STAFF_ROLE" | translate }}<span class="required">*</span></label>
+        <app-custom-select
+          [options]="staffRoleOptions"
+          key="key"
+          value="value"
+          formControlName="role"
+          [placeholder]="'SELECT_USER_TYPE' | translate"
+          [selectedOption]="selectedRole"
+          (optionSelected)="onRoleSelected($event)"
+        ></app-custom-select>
+        <small class="errorMsg" *ngIf="hasError('role', 'required')">
+          {{ "ROLE_REQUIRED" | translate }}
+        </small>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">{{ "ASSIGNED_PROPERTY" | translate }}</label>
+        <app-custom-multi-select
+          [options]="assignedPropertyList"
+          key="key"
+          value="value"
+          [placeholder]="'SELECT_PROPERTY' | translate"
+          [selectedOptions]="selectedAssignedProperties"
+          (optionsSelected)="onAssignedPropertiesSelected($event)"
+        ></app-custom-multi-select>
+      </div>
+
+      <div class="col-md-12" *ngIf="!editData">
+        <hr class="divider" />
+      </div>
+
+      <div class="col-md-6" *ngIf="!editData">
+        <label class="form-label">{{ "PASSWORD" | translate }}<span class="required">*</span></label>
+        <div class="iconInput password" [class.input-invalid]="hasError('password', 'required') || hasError('password', 'minlength')">
+          <i><app-password-icon /></i>
           <input
+            [type]="showPassword ? 'text' : 'password'"
             class="form-control"
-            type="text"
-            name="password"
             formControlName="password"
-            readonly
             [placeholder]="'ENTER_HERE' | translate"
+            autocomplete="new-password"
           />
+          <i class="right" (click)="showPassword = !showPassword">
+            <app-password-show-icon *ngIf="!showPassword" />
+            <app-password-hide-icon *ngIf="showPassword" />
+          </i>
         </div>
+        <small class="errorMsg" *ngIf="hasError('password', 'required')">
+          {{ "PASSWORD_REQUIRED" | translate }}
+        </small>
+        <small class="errorMsg" *ngIf="hasError('password', 'minlength')">
+          {{ "PASSWORD_MIN_LENGTH" | translate }}
+        </small>
       </div>
-      <div class="col-md-6">
-        <div class="mb-0">
-          <label for="confirmPassword" class="form-label"
-            >{{ "CONFIRM_PASSWORD" | translate }}<span>*</span></label
-          >
+
+      <div class="col-md-6" *ngIf="!editData">
+        <label class="form-label">{{ "CONFIRM_PASSWORD" | translate }}<span class="required">*</span></label>
+        <div class="iconInput password" [class.input-invalid]="hasError('confirmPassword', 'required') || passwordMismatch">
+          <i><app-password-icon /></i>
           <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
             class="form-control"
-            type="text"
-            name="confirmPassword"
             formControlName="confirmPassword"
             [placeholder]="'ENTER_HERE' | translate"
+            autocomplete="new-password"
           />
+          <i class="right" (click)="showConfirmPassword = !showConfirmPassword">
+            <app-password-show-icon *ngIf="!showConfirmPassword" />
+            <app-password-hide-icon *ngIf="showConfirmPassword" />
+          </i>
         </div>
+        <small class="errorMsg" *ngIf="hasError('confirmPassword', 'required')">
+          {{ "CONFIRM_PASSWORD_REQUIRED" | translate }}
+        </small>
+        <small class="errorMsg" *ngIf="passwordMismatch">
+          {{ "PASSWORDS_DO_NOT_MATCH" | translate }}
+        </small>
       </div>
     </div>
   </form>

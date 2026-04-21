@@ -4,25 +4,30 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnInit,
   Output,
 } from '@angular/core';
 
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
 import { CustomSelectComponent } from '../../custom-select/custom-select.component';
+import { CustomMultiSelectComponent } from '../../custom-multi-select/custom-multi-select.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { StaffService } from '../../../services/staff.service';
-import { Router } from '@angular/router';
 import { AlertService } from '../../../../shared/services/alert.service';
 import { CommonModule } from '@angular/common';
-import { FormService } from '../../../../shared/services/form.service';
+import { PasswordIconComponent } from '../../../../auth/component/icons/password-icon/password-icon.component';
+import { PasswordShowIconComponent } from '../../../../auth/component/icons/password-show-icon/password-show-icon.component';
+import { PasswordHideIconComponent } from '../../../../auth/component/icons/password-hide-icon/password-hide-icon.component';
 
 @Component({
   selector: 'app-add-staff-form',
@@ -30,145 +35,166 @@ import { FormService } from '../../../../shared/services/form.service';
   imports: [
     ModalFormCardComponent,
     CustomSelectComponent,
+    CustomMultiSelectComponent,
     TranslateModule,
     CommonModule,
     ReactiveFormsModule,
+    PasswordIconComponent,
+    PasswordShowIconComponent,
+    PasswordHideIconComponent,
   ],
   templateUrl: './add-staff-form.component.html',
   styleUrl: './add-staff-form.component.css',
 })
-export class AddStaffFormComponent {
-  private formService = inject(FormService);
+export class AddStaffFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private sharedApiService = inject(SharedApiService);
   private destroyRef = inject(DestroyRef);
   private alertService = inject(AlertService);
   private staffService = inject(StaffService);
-  private router = inject(Router);
 
-  selectedType: string = '';
-  selectedStffRole: any = null;
+  showPassword = false;
+  showConfirmPassword = false;
+
+  staffRoleOptions: any[] = [];
+  selectedRole: any = null;
+
   assignedPropertyList: any[] = [];
-  selectedAssignedProperty: any = null;
+  selectedAssignedProperties: any[] = [];
 
-  @Input() staffRole: any[] = [];
   @Input() editData: any = null;
-  @Output() formSubmitted: EventEmitter<any> = new EventEmitter();
-  isInvalid = this.formService.isInvalid;
+  @Output() formSubmitted = new EventEmitter<boolean>();
 
   staffForm!: FormGroup;
-  staffRoleList: any[] = [];
-  selectedStaffRole: any = null;
+
+  get isEditMode(): boolean {
+    return !!this.editData?.staff_id;
+  }
 
   constructor() {
-    this.staffForm = this.fb.group({
-      staffName: ['', Validators.required],
-      email: ['', Validators.required],
-      contactNumber: ['', Validators.required],
-      role: [null, Validators.required],
-      assigned_property: [null, Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-    });
+    this.staffForm = this.fb.group(
+      {
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        contactNumber: ['', Validators.required],
+        role: [null, Validators.required],
+        assigned_property: [[]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', Validators.required],
+      },
+      { validators: this.passwordMatchValidator },
+    );
   }
 
   ngOnInit(): void {
-    if (this.editData) {
-      this.patchEditForm();
+    this.loadRoles();
+    this.loadPropertyUnits();
+
+    if (this.isEditMode) {
       this.staffForm.get('password')?.clearValidators();
       this.staffForm.get('confirmPassword')?.clearValidators();
       this.staffForm.get('password')?.updateValueAndValidity();
       this.staffForm.get('confirmPassword')?.updateValueAndValidity();
-      this.staffForm.updateValueAndValidity();
+      this.staffForm.get('email')?.disable();
+      this.patchEditForm();
     }
   }
 
-  getOptionTypes(options: string[]) {
+  private loadRoles(): void {
     this.sharedApiService
-      .getOptions({ option_type: options.join(',') })
+      .getOptions({ option_type: 'ROLE' })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.staffRole = response?.content?.role ?? [];
-          if (this.editData?.staff_role?.key) {
-            this.selectedStaffRole = this.staffRole.find(
-              (r: any) => r.key === this.editData.staff_role.key,
-            ) ?? this.editData.staff_role;
+          this.staffRoleOptions = response?.content?.role ?? [];
+          if (this.isEditMode && this.editData?.staff_role?.key) {
+            this.selectedRole =
+              this.staffRoleOptions.find(
+                (r: any) => r.key === this.editData.staff_role.key,
+              ) ?? this.editData.staff_role;
           }
         },
       });
   }
 
-  getAssignedProperties(options: string[]) {
+  private patchEditForm(): void {
+    this.staffForm.patchValue({
+      firstName: this.editData.first_name || '',
+      lastName: this.editData.last_name || '',
+      email: this.editData.email || '',
+      contactNumber: this.editData.contact_number || '',
+      role: this.editData.staff_role?.key ?? null,
+    });
+  }
+
+  onRoleSelected(option: any): void {
+    this.selectedRole = option;
+    this.staffForm.patchValue({ role: option?.key ?? null });
+  }
+
+  onAssignedPropertiesSelected(options: any[]): void {
+    this.selectedAssignedProperties = options;
+    this.staffForm.patchValue({ assigned_property: options.map((o) => o.key) });
+  }
+
+  private loadPropertyUnits(): void {
     this.sharedApiService
-      .getOptions({ option_type: options.join(',') })
+      .getOptions({ option_type: 'PROPERTY_UNIT' })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp) => {
           this.assignedPropertyList = resp?.content?.property_unit ?? [];
-
-          if (this.editData?.assigned_property) {
-            this.selectedAssignedProperty = this.assignedPropertyList.find(
-              (p) => p.key === this.editData.assigned_property.key,
+          if (this.isEditMode && this.editData?.assigned_unit_ids?.length) {
+            this.selectedAssignedProperties = this.assignedPropertyList.filter((u: any) =>
+              this.editData.assigned_unit_ids.includes(u.key),
             );
+            this.staffForm.patchValue({
+              assigned_property: this.selectedAssignedProperties.map((u: any) => u.key),
+            });
           }
         },
       });
   }
 
-  onAssignedPropertySelected(option: any) {
-    this.selectedAssignedProperty = option;
+  hasError(field: string, error: string): boolean {
+    const ctrl = this.staffForm.get(field);
+    return !!(ctrl?.touched && ctrl?.hasError(error));
+  }
 
-    if (option?.key) {
-      this.staffForm.patchValue({
-        assigned_property: option.key,
-      });
-    } else {
-      this.staffForm.patchValue({ assigned_property: null });
+  get passwordMismatch(): boolean {
+    return !!(
+      this.staffForm.get('confirmPassword')?.touched &&
+      this.staffForm.hasError('passwordMismatch')
+    );
+  }
+
+  private passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const pw = group.get('password')?.value;
+    const cpw = group.get('confirmPassword')?.value;
+    if (pw && cpw && pw !== cpw) {
+      return { passwordMismatch: true };
     }
+    return null;
   }
 
-  handleFilterClick(): void {
-    this.getAssignedProperties(['PROPERTY_UNIT']);
-  }
-  onOptionSelectedUserType(option: any) {
-    this.selectedStffRole = option;
-
-    if (option?.key) {
-      this.staffForm.patchValue({
-        role: option.key,
-      });
-    } else {
-      this.staffForm.patchValue({ role: null });
-    }
-  }
-  onOptionSelected(option: string) {
-    this.selectedType = option;
-  }
-
-  handleStaffRole(): void {
-    this.getOptionTypes(['ROLE']);
-  }
-  submitStaffForm() {
+  submitStaffForm(): void {
     this.staffForm.markAllAsTouched();
     if (!this.staffForm.valid) return;
 
-    const form = this.staffForm.value;
+    const form = this.staffForm.getRawValue();
 
     const data: any = {
-      staff_name: form.staffName,
+      first_name: form.firstName,
+      last_name: form.lastName,
       email: form.email,
       contact_number: form.contactNumber,
       role: form.role,
       assigned_property: form.assigned_property,
-      password: form.password,
-      confirm_password: form.confirmPassword,
     };
 
-    // ---------- EDIT ----------
-    if (this.editData?.staff_id) {
+    if (this.isEditMode) {
       data.staff_id = this.editData.staff_id;
-
       this.staffService
         .editUserStaff(data)
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -182,7 +208,8 @@ export class AddStaffFormComponent {
           },
         });
     } else {
-      // ---------- ADD ----------
+      data.password = form.password;
+      data.confirm_password = form.confirmPassword;
       this.staffService
         .addNewStaff(data)
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -196,19 +223,5 @@ export class AddStaffFormComponent {
           },
         });
     }
-  }
-
-  patchEditForm() {
-    if (!this.editData) return;
-    this.selectedStaffRole = this.editData.staff_role ?? null;
-    this.staffForm.patchValue({
-      staffName: this.editData.staff_name,
-      email: this.editData.email,
-      contactNumber: this.editData.contact_number,
-      role: this.editData.staff_role?.key ?? null,
-      assigned_property: null,
-      password: '********',
-      confirmPassword: '********',
-    });
   }
 }

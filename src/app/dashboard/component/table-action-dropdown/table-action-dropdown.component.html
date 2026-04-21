@@ -1,23 +1,9 @@
-<div
-  ngbDropdown
-  class="dashDrpdwn"
-  #dropdown="ngbDropdown"
-  (openChange)="toggleDropdown($event)"
->
-  <button
-    type="button"
-    class="dashDrpdwnBtn"
-    id="dashDropdown"
-    ngbDropdownToggle
-  >
-    <i><app-dots-icon></app-dots-icon></i>
+<div class="dashDrpdwn" ngbDropdown container="body" placement="bottom-end" (openChange)="onOpenChange($event)">
+  <button type="button" class="dashDrpdwnBtn" ngbDropdownToggle>
+    <i><app-dots-icon /></i>
   </button>
-  <div
-    class="dashDrpdwnMenu"
-    [ngClass]="menuClass"
-    ngbDropdownMenu
-    aria-labelledby="dashDropdown"
-  >
+
+  <div ngbDropdownMenu class="dashDrpdwnMenu">
     <button
       *ngFor="let item of dropdownItems"
       ngbDropdownItem

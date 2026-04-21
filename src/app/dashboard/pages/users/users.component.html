@@ -93,13 +93,20 @@
                 </button>
               </ng-container>
             </app-filter-popup-btn>
-            <button
-              type="button"
-              class="btn btnCommon"
-              (click)="openAddUserModal(addUserContent)"
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+              (clicked)="handleExportClick()"
             >
-              <i><app-plus-icon /></i>{{ "NEW_USER" | translate }}
-            </button>
+              <app-export-icon />
+            </app-table-filter-btn>
+            <app-table-filter-btn
+              [title]="'NEW_USER' | translate"
+              [hasIcon]="true"
+              (clicked)="openAddUserModal(addUserContent)"
+            >
+              <app-plus-icon />
+            </app-table-filter-btn>
           </div>
         </div>
       </div>
@@ -163,6 +170,14 @@
                     <app-table-action-btn
                       type="edit"
                       (clicked)="openEditUserModal(user.id, addUserContent)"
+                    />
+                    <!-- <app-table-action-btn
+                      type="delete"
+                      (clicked)="handleDeleteClick(user.id)"
+                    /> -->
+                    <app-table-action-dropdown
+                      [dropdownItems]="documentActions"
+                      (actionClicked)="handleDropdownAction($event, user)"
                     />
                   </div>
                 </td>
