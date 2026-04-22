@@ -7,6 +7,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -642,18 +643,42 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   //---------------------------------------error-------------------------------------------------
-  tableMaxHeight: string = 'auto';
+  // tableMaxHeight: string = 'auto';
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => {
+  //     this.updateTableHeight();
+  //   });
+  // }
+
+  // updateTableHeight() {
+  //   const height =
+  //     this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
+
+  //   this.tableMaxHeight = height ? `${height - 4}px` : 'auto';
+
+  //   this.cd.detectChanges();
+  // }
+
+  tableMaxHeight: string = '400px';
+
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.updateTableHeight();
+      this.setHeight();
     });
   }
 
-  updateTableHeight() {
-    const height =
-      this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
+  @HostListener('window:resize')
+  onResize() {
+    this.setHeight();
+  }
 
-    this.tableMaxHeight = height ? `${height - 4}px` : 'auto';
+  setHeight() {
+    const OFFSET = 590; // adjust based on your header + spacing
+
+    const height = window.innerHeight - OFFSET;
+
+    // prevents shrinking issue
+    this.tableMaxHeight = `${Math.max(height, 250)}px`;
 
     this.cd.detectChanges();
   }
