@@ -1,4 +1,4 @@
-<div class="custom-dropdown position-relative">
+<!-- <div class="custom-dropdown position-relative">
   <button
     class="cmmnTblFltrBtn"
     [class.cmmnTblFltrIconBtn]="hasIcon"
@@ -49,6 +49,132 @@
       <label for="apr">Apr 2025</label>
     </div>
 
+    <button class="btn generate-btn w-100">Generate</button>
+  </div>
+</div> -->
+
+<!---<div
+  class="custom-dropdown position-relative"
+  ngbDropdown
+  [autoClose]="'outside'"
+  (openChange)="onDropdownOpenChange($event)"
+>
+  <button
+    class="cmmnTblFltrBtn"
+    [class.cmmnTblFltrIconBtn]="hasIcon"
+    type="button"
+    ngbDropdownToggle
+    (click)="toggleDropdown()"
+  >
+    <ng-container *ngIf="hasIcon">
+      <i><ng-content></ng-content></i>
+    </ng-container>
+
+    <span>{{ title }}</span>
+
+    <i class="ms-1">
+      <app-arrow-down-icon *ngIf="!isOpen"></app-arrow-down-icon>
+      <app-arrow-up-icon *ngIf="isOpen"></app-arrow-up-icon>
+    </i>
+  </button>
+
+  <div ngbDropdownMenu class="dropdown-panel-wrapper position-absolute">
+    <div class="menu-card receipt-menu" *ngIf="showReceiptDropdown">
+      <div
+        class="dropdown-item-custom"
+        [class.selected]="selectedReceiptType === 'rental'"
+        (click)="selectReceiptType('rental')"
+      >
+        Rental
+      </div>
+      <div
+        class="dropdown-item-custom"
+        [class.selected]="selectedReceiptType === 'charges'"
+        (click)="selectReceiptType('charges')"
+      >
+        Other Charges
+      </div>
+      <div
+        class="dropdown-item-custom"
+        [class.selected]="selectedReceiptType === 'combined'"
+        (click)="selectReceiptType('combined')"
+      >
+        Combined
+      </div>
+    </div>
+
+    <div class="menu-card month-menu filter-box" *ngIf="showMonthDropdown">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="jan" />
+        <label for="jan" class="form-check-label">Jan 2025</label>
+      </div>
+
+      <div class="form-check mb-2">
+        <input type="checkbox" class="form-check-input" id="feb" checked />
+        <label for="feb" class="form-check-label">Feb 2025</label>
+      </div>
+
+      <div class="form-check mb-2">
+        <input type="checkbox" class="form-check-input" id="mar" checked />
+        <label for="mar" class="form-check-label">Mar 2025</label>
+      </div>
+
+      <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="apr" />
+        <label for="apr" class="form-check-label">Apr 2025</label>
+      </div>
+
+      <button class="btn generate-btn w-100">Generate</button>
+    </div>
+  </div>
+</div> -->
+
+<div class="custom-dropdown position-relative">
+  <button
+    class="cmmnTblFltrBtn"
+    [class.cmmnTblFltrIconBtn]="hasIcon"
+    type="button"
+    (click)="toggleDropdown()"
+  >
+    <ng-container *ngIf="hasIcon">
+      <i><ng-content></ng-content></i>
+    </ng-container>
+
+    <span>{{ title }}</span>
+
+    <i class="ms-1">
+      <app-arrow-down-icon *ngIf="!isOpen"></app-arrow-down-icon>
+      <app-arrow-up-icon *ngIf="isOpen"></app-arrow-up-icon>
+    </i>
+  </button>
+
+  <div class="custom-menu" *ngIf="showReceiptDropdown">
+    <div class="dropdown-item" (click)="selectReceiptType('rental')">
+      Rental
+    </div>
+    <div class="dropdown-item" (click)="selectReceiptType('charges')">
+      Other Charges
+    </div>
+    <div class="dropdown-item" (click)="selectReceiptType('combined')">
+      Combined
+    </div>
+  </div>
+
+  <div class="custom-menu filter-box month-dropdown" *ngIf="showMonthDropdown">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="jan" />
+      <label for="jan">Jan 2025</label>
+    </div>
+
+    <div class="form-check mb-2">
+      <input type="checkbox" class="form-check-input" id="feb" checked />
+      <label for="feb">Feb 2025</label>
+    </div>
+
+    <div class="form-check mb-2">
+      <input type="checkbox" class="form-check-input" id="mar" checked />
+      <label for="mar">Mar 2025</label>
+    </div>
     <button class="btn generate-btn w-100">Generate</button>
   </div>
 </div>

@@ -893,20 +893,20 @@
 }
 
 /* Icons always LEFT */
-.add-card .draw-actions {
+/* .add-card .draw-actions {
   position: absolute !important;
   bottom: 10px;
   left: 10px !important;
   right: auto !important;
-}
+} */
 
 /* Checkbox (optional - left top) */
-.add-card .draw-check {
+/* .add-card .draw-check {
   position: absolute !important;
   top: 10px;
   left: 10px !important;
   right: auto !important;
-}
+} */
 /*--------------------------Search conatct ---------------------------------------------------*/
 .hdrProfileWrapper {
   display: flex;

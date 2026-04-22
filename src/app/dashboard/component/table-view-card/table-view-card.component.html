@@ -48,10 +48,11 @@
           Download
         </button>
 
-        <div class="dropdownWrap" *ngIf="showShare">
+        <!-- <div class="dropdownWrap" *ngIf="showShare">
           <button class="btn btnCommon btnWhite" (click)="toggleShare()">
             <i><app-whatsapp-share-icon></app-whatsapp-share-icon></i>
-            Share<i><app-arrow-down-icon></app-arrow-down-icon></i>
+            Share <app-arrow-down-icon *ngIf="!openShare"></app-arrow-down-icon>
+            <app-arrow-up-icon *ngIf="openShare"></app-arrow-up-icon>
           </button>
 
           <div class="shareDropdown" *ngIf="openShare">
@@ -60,6 +61,42 @@
               <span class="icon whatsapp"
                 ><img src="assets/whatsapp.png"
               /></span>
+              Whatsapp
+            </label>
+
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.mail" />
+              <span class="icon mail">
+                <img src="assets/email.svg" />
+              </span>
+              Mail
+            </label>
+
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.sms" />
+              <span class="icon sms">
+                <img src="assets/text-icon.svg" />
+              </span>
+              Text Message
+            </label>
+
+            <button class="doneBtn" (click)="shareSelected()">Done</button>
+          </div>
+        </div> -->
+        <div ngbDropdown class="dropdownWrap" *ngIf="showShare">
+          <button class="btn btnCommon btnWhite" ngbDropdownToggle>
+            <i><app-whatsapp-share-icon></app-whatsapp-share-icon></i>
+            Share
+            <app-arrow-down-icon *ngIf="!openShare"></app-arrow-down-icon>
+            <app-arrow-up-icon *ngIf="openShare"></app-arrow-up-icon>
+          </button>
+
+          <div ngbDropdownMenu class="shareDropdown">
+            <label class="shareItem">
+              <input type="checkbox" [(ngModel)]="shareOptions.whatsapp" />
+              <span class="icon whatsapp">
+                <img src="assets/whatsapp.png" />
+              </span>
               Whatsapp
             </label>
 
