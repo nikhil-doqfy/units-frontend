@@ -1047,13 +1047,21 @@ app-plus-icon {
 
 .rental-table thead tr th:last-child {
   z-index: 3;
-  background-color: var(--activeBg);
+  background-color: var(--activeBg1);
   box-shadow: none;
 }
 
 .rental-table tbody tr td:last-child {
   background-color: var(--whiteBg);
-  box-shadow: -2px 0 4px var(--shadow-right);
+  box-shadow: -2px 0 4px var(--shadow-sticky);
+}
+
+.cmmnTbl .table tr > *:last-child {
+  border-right: none !important;
+}
+
+.cmmnTbl .table > :not(caption) > tbody > tr:last-child > td:last-child {
+  border-bottom: none !important;
 }
 
 .table td:last-child::before,

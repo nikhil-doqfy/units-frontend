@@ -190,8 +190,20 @@ export class LeaseService {
     return this.http.put(`${this.SERVER_ADDRESS}/api/lease/cheques`, data);
   }
 
+  getChequeById(chequeId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/cheques?cheque_id=${chequeId}`);
+  }
+
   deleteLeaseCheque(chequeId: number): Observable<any> {
     return this.http.delete(`${this.SERVER_ADDRESS}/api/lease/cheques?cheque_id=${chequeId}`);
+  }
+
+  getInvoice(leaseId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/invoice?lease_id=${leaseId}`);
+  }
+
+  getInvoicePdf(leaseId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/invoice-pdf?lease_id=${leaseId}`);
   }
 
   editTemplateData(data: Record<string, any>): Observable<any> {

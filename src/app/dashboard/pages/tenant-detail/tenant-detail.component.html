@@ -36,8 +36,8 @@
         label: getLabel('YEAR_RENT'),
         value: selectedLease?.financials?.rent || '67,000',
       },
-      { label: getLabel('OTHER_CHARGESE'), value: '13,000' },
-      { label: getLabel('VAT'), value: '--' },
+      { label: getLabel('OTHER_CHARGESE'), value: leaseChargesTotalAmount | number: '1.2-2' },
+      { label: getLabel('VAT'), value: leaseChargesVatTotal | number: '1.2-2' },
       {
         label: getLabel('TOTAL_RENT'),
         value: selectedLease?.financials?.annual_amount || '1,00,000',
@@ -63,49 +63,34 @@
       <h5 class="section-title">{{ "OTHER_CHARGES" | translate }}</h5>
       <div class="other-charges-box mt-3">
         <div class="charges-grid">
-          <div class="charge-item">
-            <label>Admin Fee <span>VAT &#64;5%</span></label>
-            <small>32.71 + 1.64</small>
-            <strong>34.35</strong>
-          </div>
-          <div class="charge-item">
-            <label>Ejari Charge Disb... <span>VAT &#64;5%</span></label>
-            <small>175.65 + 1.64</small>
-            <strong>175.65</strong>
-          </div>
-          <div class="charge-item">
-            <label>Gas Charges <span>VAT &#64;5%</span></label>
-            <small>1,000.00 + 50.00</small>
-            <strong>1,050.00</strong>
-          </div>
-          <div class="charge-item">
-            <label>Commission - Dubai <span>VAT &#64;5%</span></label>
-            <small>1,200.00 + 60.00</small>
-            <strong>1,260.00</strong>
-          </div>
-          <div class="charge-item">
-            <label>Security Deposit <span>VAT &#64;nill</span></label>
-            <small>2,400.00 + 0.00</small>
-            <strong>2,400.00</strong>
-          </div>
+          <ng-container *ngIf="leaseCharges.length; else noCharges">
+            <div class="charge-item" *ngFor="let lc of leaseCharges">
+              <label>{{ lc.description }} <span>VAT &#64;{{ lc.tax_code ?? 'Nil' }}%</span></label>
+              <small>{{ lc.amount | number: '1.2-2' }} + {{ lc.vat | number: '1.2-2' }}</small>
+              <strong>{{ lc.total | number: '1.2-2' }}</strong>
+            </div>
+          </ng-container>
+          <ng-template #noCharges>
+            <app-no-data></app-no-data>
+          </ng-template>
         </div>
 
         <div class="payment-info">
           <div>
             <label>{{ "STATUS" | translate }}</label>
-            <span class="paid">Paid</span>
+            <span class="paid">{{ selectedLease?.lease_status || '--' }}</span>
           </div>
           <div>
             <label>{{ "PAYMENT_TYPE" | translate }}</label>
-            <strong>Cheque</strong>
+            <strong>{{ selectedLease?.payment_type || '--' }}</strong>
           </div>
           <div>
             <label>{{ "CHEQUE_NUMBER" | translate }}</label>
-            <strong>6738398268291</strong>
+            <strong>{{ selectedLease?.cheque_number || '--' }}</strong>
           </div>
           <div>
             <label>{{ "TOTAL_AMOUNT" | translate }}</label>
-            <strong>11,260.00</strong>
+            <strong>{{ leaseChargesTotalAmount | number: '1.2-2' }}</strong>
           </div>
           <div *ngIf="showRenewalBlockedMsg">
             <div class="dues-card">
@@ -211,11 +196,7 @@
         <div class="col-md">
           <app-table-title
             [title]="'RENT_TRANSACTIONS' | translate"
-            [subtitle]="
-              '(' +
-              (rentTransactions.length + additionalTransactions.length) +
-              ')'
-            "
+            [subtitle]="'(' + allTransactions.length + ')'"
           >
           </app-table-title>
         </div>
@@ -266,7 +247,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (t of rentTransactions; track t.id) {
+            @for (t of allTransactions; track t.id) {
               <tr>
                 <td>{{ t.code || "—" }}</td>
                 <td>{{ t.origin_bank?.name || "—" }}</td>
@@ -301,32 +282,7 @@
                 </td>
               </tr>
             }
-            @for (t of additionalTransactions; track t.id) {
-              <tr>
-                <td>{{ t.code || "—" }}</td>
-                <td>{{ t.origin_bank?.name || "—" }}</td>
-                <td>{{ t.origin_account_number || "—" }}</td>
-                <td>{{ t.cheque_number || "—" }}</td>
-                <td>{{ t.cheque_date | date: "dd/MM/yyyy" }}</td>
-                <td>{{ t.payment_type || "—" }}</td>
-                <td>Other Charges</td>
-                <td>
-                  <app-status-action-dropdown
-                    [status]="t.status || '—'"
-                  ></app-status-action-dropdown>
-                </td>
-                <td>{{ t.amount | number }}</td>
-                <td>—</td>
-                <td>{{ t.amount | number }}</td>
-                <td align="center">
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-btn type="download" />
-                    <app-table-action-btn type="preview" />
-                  </div>
-                </td>
-              </tr>
-            }
-            @if (!rentTransactions.length && !additionalTransactions.length) {
+            @if (!allTransactions.length) {
               <tr>
                 <td colspan="12" align="center">
                   <app-no-data />
@@ -395,109 +351,100 @@
     [showCloseBtn]="true"
     [showBack]="false"
     (close)="handleCloseClick()"
+    (download)="downloadInvoicePdf()"
   >
+    <!-- Tenant + Property header -->
     <div rental class="other-charges-box mt-3">
       <div class="invoice-info">
         <div class="info-col">
           <h5>Invoice to:</h5>
-          <p class="bold">ABHRAM</p>
-          <p>Addr: P.O. BOX # 95801, Sharjah</p>
-          <p>Phone: +41-827282982</p>
-          <p>TRN: 100300564000003</p>
+          <p class="bold">{{ invoiceData?.tenant?.name || selectedLease?.tenant?.name || '—' }}</p>
+          <p *ngIf="invoiceData?.tenant?.address_line_1">Addr: {{ invoiceData.tenant.address_line_1 }}</p>
+          <p *ngIf="invoiceData?.tenant?.address_line_2">{{ invoiceData.tenant.address_line_2 }}</p>
+          <p *ngIf="invoiceData?.tenant?.contact">Phone: {{ invoiceData.tenant.contact }}</p>
+          <p *ngIf="invoiceData?.tenant?.email">Email: {{ invoiceData.tenant.email }}</p>
+          <p *ngIf="invoiceData?.tenant?.code">Ref: {{ invoiceData.tenant.code }}</p>
         </div>
         <div class="info-col">
           <h5>Property Details:</h5>
-          <p class="bold">KHALEEJA BUILDING | 302</p>
-          <p>Period: 01-Sep-2025 TO 31-Aug-2026</p>
-          <p>Lease No: LV-25-01335</p>
-          <p>Ref No: P48/LGI-25-13230</p>
+          <p class="bold">
+            {{ invoiceData?.property?.property_name || selectedLease?.property?.name || '—' }}
+            <span *ngIf="invoiceData?.property?.unit_name"> | {{ invoiceData.property.unit_name }}</span>
+          </p>
+          <p *ngIf="invoiceData?.property?.start_date || invoiceData?.property?.end_date">
+            Period: {{ invoiceData?.property?.start_date | date:'dd-MMM-yyyy' }}
+            TO {{ invoiceData?.property?.end_date | date:'dd-MMM-yyyy' }}
+          </p>
+          <p *ngIf="invoiceData?.property?.lease_code">Lease No: {{ invoiceData.property.lease_code }}</p>
+          <p *ngIf="invoiceData?.property?.block_name">Block: {{ invoiceData.property.block_name }}</p>
         </div>
       </div>
     </div>
+
+    <!-- Unified transactions table -->
     <div rental class="mt-3">
+      <div class="cmmnTblHdr px-0">
+        <div class="row g-3 align-items-center">
+          <div class="col-md">
+            <app-table-title [title]="'TRANSACTIONS' | translate"></app-table-title>
+          </div>
+        </div>
+      </div>
       <div class="cmmnTbl">
         <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>{{ "SI.No" | translate }}</th>
-                <th>Invoice NO</th>
-                <th>Description</th>
-                <th>Invoice Date</th>
-                <th>Prepared By</th>
-                <th>Payment mode</th>
-                <th>Reference No</th>
-                <th>{{ "STATUS" | translate }}</th>
-                <th>Quantity</th>
-                <th>Rate</th>
-                <th>{{ "AMOUNT" | translate }}</th>
-                <th>Vat</th>
-                <th>Vat Amount</th>
-                <th>Total Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>01</td>
-                <td>LP26272</td>
-                <td>Rent for the period [Feb/2025-Mar/2025]</td>
-                <td>12/02/2025</td>
-                <td>Ali Amir</td>
-                <td>Cheque</td>
-                <td>1234 53635 6537</td>
-                <td><app-badge title="Paid" status="green"></app-badge></td>
-                <td>1</td>
-                <td>14,576.00</td>
-                <td>14,576.00</td>
-                <td>5%</td>
-                <td>728.00</td>
-                <td>15,305.00</td>
-              </tr>
-              <tr>
-                <td rowspan="2">02</td>
-                <td>LP672628</td>
-                <td>Rent for the period [Feb/2025-Mar/2025]</td>
-                <td>12/02/2025</td>
-                <td>Ali Amir</td>
-                <td>Cheque</td>
-                <td>1234 53635 6537</td>
-                <td><app-badge title="Paid" status="green"></app-badge></td>
-                <td>1</td>
-                <td>14,576.00</td>
-                <td>14,576.00</td>
-                <td>5%</td>
-                <td>728.00</td>
-                <td>15,305.00</td>
-              </tr>
-              <tr>
-                <td>LP672628</td>
-                <td>Rent for the period [Feb/2025-Mar/2025]</td>
-                <td>12/02/2025</td>
-                <td>Ali Amir</td>
-                <td>Cheque</td>
-                <td>1234 53635 6537</td>
-                <td><app-badge title="Paid" status="green"></app-badge></td>
-                <td>1</td>
-                <td>14,576.00</td>
-                <td>14,576.00</td>
-                <td>5%</td>
-                <td>728.00</td>
-                <td>15,305.00</td>
-              </tr>
-            </tbody>
-          </table>
+          <table class="table table-bordered transactions-table">
+              <thead>
+                <tr>
+                  <th width="50">{{ "SI.NO" | translate }}</th>
+                  <th width="130">{{ "CHEQUE_NUMBER" | translate }}</th>
+                  <th>{{ "DESCRIPTION" | translate }}</th>
+                  <th width="110">{{ "TYPE" | translate }}</th>
+                  <th width="110">{{ "DATE" | translate }}</th>
+                  <th width="130">{{ "BANK_NAME" | translate }}</th>
+                  <th width="120">{{ "PAYMENT_TYPE" | translate }}</th>
+                  <th width="110">{{ "STATUS" | translate }}</th>
+                  <th width="110">{{ "AMOUNT" | translate }}</th>
+                  <th width="70">VAT %</th>
+                  <th width="110">VAT {{ "AMOUNT" | translate }}</th>
+                  <th width="120">{{ "TOTAL_AMOUNT" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="invoiceData?.transactions?.length; else noTransactions">
+                  <tr *ngFor="let t of invoiceData.transactions; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ t.cheque_number || t.code || '—' }}</td>
+                    <td>{{ t.description }}</td>
+                    <td>{{ t.cheque_type === 'OTHER_CHARGE' ? ('OTHER_CHARGES' | translate) : t.cheque_type === 'RENT_CHEQUE' ? ('RENT' | translate) : ('ADDITIONAL' | translate) }}</td>
+                    <td>{{ t.cheque_date ? (t.cheque_date | date:'dd/MM/yyyy') : '—' }}</td>
+                    <td>{{ t.origin_bank_name || '—' }}</td>
+                    <td>{{ t.payment_type || '—' }}</td>
+                    <td><app-badge [title]="t.status || '—'" status="green"></app-badge></td>
+                    <td>{{ (t.amount ?? 0) | number:'1.2-2' }}</td>
+                    <td>{{ t.tax_code != null ? t.tax_code + '%' : '—' }}</td>
+                    <td>{{ (t.vat ?? 0) | number:'1.2-2' }}</td>
+                    <td>{{ (t.total ?? 0) | number:'1.2-2' }}</td>
+                  </tr>
+                </ng-container>
+                <ng-template #noTransactions>
+                  <tr><td colspan="12" class="text-center py-4"><app-no-data /></td></tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
     </div>
+
+    <!-- Totals -->
     <div rental class="totals">
       <div class="words">
-        <p><strong>Amount in words:</strong></p>
-        <p>Fifteen Thousand Three Hundred Five Dirhams And Zero Fils</p>
+        <span class="words-label">Amount in words:</span>
+        <strong class="words-value">{{ invoiceAmountInWords }}</strong>
       </div>
       <div class="summary">
-        <p>Sub Total: <strong>14,576.20</strong></p>
-        <p>VAT Amount: <strong>728.80</strong></p>
-        <button class="grand">Grand Total: <strong>15,305.00</strong></button>
+        <p>Sub Total: <strong>{{ (invoiceData?.totals?.subtotal ?? 0) | number:'1.2-2' }}</strong></p>
+        <p>VAT Amount: <strong>{{ (invoiceData?.totals?.vat_total ?? 0) | number:'1.2-2' }}</strong></p>
+        <button class="grand">Grand Total: <strong>{{ (invoiceData?.totals?.grand_total ?? 0) | number:'1.2-2' }}</strong></button>
       </div>
     </div>
   </app-table-view-card>

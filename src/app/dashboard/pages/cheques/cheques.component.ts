@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject, TemplateRef } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
@@ -35,6 +36,7 @@ import { AlertService } from '../../../shared/services/alert.service';
   imports: [
     TranslateModule,
     CommonModule,
+    FormsModule,
     WhiteCardComponent,
     CustomSelectComponent,
     SearchIconComponent,
@@ -109,6 +111,176 @@ export class ChequesComponent {
 
   private searchSubject$ = new Subject<string>();
   private searchText = '';
+
+  // ── Edit cheque modal ─────────────────────────────────────────────
+  editingRow: any = null;
+  savingCheque = false;
+  editFile: File | null = null;
+  banks: { key: number; value: string; ifsc_code: string }[] = [];
+
+  editDraft: {
+    payment_type: string;
+    cheque_number: string;
+    amount: number | null;
+    cheque_date: string;
+    start_date: string;
+    end_date: string;
+    origin_bank_id: number | null;
+    origin_account_number: string;
+    origin_ifsc_code: string;
+    settlement_bank_id: number | null;
+    settlement_account_number: string;
+    settlement_ifsc_code: string;
+  } = {
+    payment_type: 'CHEQUE',
+    cheque_number: '',
+    amount: null,
+    cheque_date: '',
+    start_date: '',
+    end_date: '',
+    origin_bank_id: null,
+    origin_account_number: '',
+    origin_ifsc_code: '',
+    settlement_bank_id: null,
+    settlement_account_number: '',
+    settlement_ifsc_code: '',
+  };
+
+  get isEditFormValid(): boolean {
+    return !!(
+      this.editDraft.cheque_number?.trim() &&
+      this.editDraft.cheque_date &&
+      this.editDraft.amount !== null && this.editDraft.amount > 0
+    );
+  }
+
+  loadBanks() {
+    if (this.banks.length) return;
+    this.leaseService
+      .getBanks()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: (resp: any) => { this.banks = resp?.content?.bank ?? []; } });
+  }
+
+  openEditModal(row: any, content: TemplateRef<any>) {
+    this.editingRow = row;
+    this.editFile = null;
+    this.savingCheque = false;
+    this.editDraft = {
+      payment_type: row.cheque.payment_type || 'CHEQUE',
+      cheque_number: row.cheque.cheque_number || '',
+      amount: row.cheque.amount ?? null,
+      cheque_date: row.cheque.cheque_date ? String(row.cheque.cheque_date).substring(0, 10) : '',
+      start_date: '',
+      end_date: '',
+      origin_bank_id: null,
+      origin_account_number: '',
+      origin_ifsc_code: '',
+      settlement_bank_id: null,
+      settlement_account_number: '',
+      settlement_ifsc_code: '',
+    };
+    this.loadBanks();
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-title',
+      windowClass: 'mdlCommon',
+      centered: true,
+      size: 'lg',
+    });
+    this.leaseService
+      .getChequeById(row.cheque.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const c = resp?.content;
+          if (!c) return;
+          this.editDraft = {
+            payment_type: c.payment_type || 'CHEQUE',
+            cheque_number: c.cheque_number || '',
+            amount: c.amount ?? null,
+            cheque_date: c.cheque_date ? String(c.cheque_date).substring(0, 10) : '',
+            start_date: c.start_date ? String(c.start_date).substring(0, 10) : '',
+            end_date: c.end_date ? String(c.end_date).substring(0, 10) : '',
+            origin_bank_id: c.origin_bank?.id ?? null,
+            origin_account_number: c.origin_account_number ? String(c.origin_account_number) : '',
+            origin_ifsc_code: c.origin_bank?.ifsc_code || '',
+            settlement_bank_id: c.selltlement_bank?.id ?? null,
+            settlement_account_number: c.settlement_account_number ? String(c.settlement_account_number) : '',
+            settlement_ifsc_code: c.selltlement_bank?.ifsc_code || '',
+          };
+        },
+      });
+  }
+
+  onEditOriginBankChange() {
+    const bank = this.banks.find(b => b.key === this.editDraft.origin_bank_id);
+    this.editDraft.origin_ifsc_code = bank?.ifsc_code ?? '';
+  }
+
+  onEditSettlementBankChange() {
+    const bank = this.banks.find(b => b.key === this.editDraft.settlement_bank_id);
+    this.editDraft.settlement_ifsc_code = bank?.ifsc_code ?? '';
+  }
+
+  onEditFileSelected(event: Event) {
+    this.editFile = (event.target as HTMLInputElement).files?.[0] ?? null;
+  }
+
+  saveEditModal(modal: any) {
+    if (!this.editingRow || !this.isEditFormValid) return;
+    this.savingCheque = true;
+
+    const payload: Record<string, any> = {
+      cheque_id:                  this.editingRow.cheque.id,
+      payment_type:               this.editDraft.payment_type,
+      cheque_number:              this.editDraft.cheque_number,
+      amount:                     this.editDraft.amount,
+      cheque_date:                this.editDraft.cheque_date,
+      start_date:                 this.editDraft.start_date,
+      end_date:                   this.editDraft.end_date,
+      origin_bank_id:             this.editDraft.origin_bank_id,
+      origin_account_number:      this.editDraft.origin_account_number,
+      selltlement_bank_id:        this.editDraft.settlement_bank_id,
+      settlement_account_number:  this.editDraft.settlement_account_number,
+    };
+
+    const doSave = (fileData?: { data: string; file_name: string }) => {
+      if (fileData) {
+        payload['file_data'] = fileData.data;
+        payload['file_name'] = fileData.file_name;
+      }
+      this.leaseService
+        .updateLeaseCheque(payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.editingRow.cheque.cheque_number = this.editDraft.cheque_number;
+            this.editingRow.cheque.cheque_date   = this.editDraft.cheque_date;
+            this.editingRow.cheque.amount        = this.editDraft.amount;
+            this.editingRow.cheque.payment_type  = this.editDraft.payment_type;
+            this.editingRow = null;
+            this.savingCheque = false;
+            modal.close();
+            this.alertService.success('Cheque updated successfully');
+          },
+          error: () => {
+            this.savingCheque = false;
+            this.alertService.error('Failed to update cheque');
+          },
+        });
+    };
+
+    if (this.editFile) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        doSave({ data: base64, file_name: this.editFile!.name });
+      };
+      reader.readAsDataURL(this.editFile);
+    } else {
+      doSave();
+    }
+  }
 
   // ── Tenant detail view ───────────────────────────────────────────
   showTenantDetail = false;

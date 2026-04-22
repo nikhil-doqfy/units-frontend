@@ -1,3 +1,22 @@
+/* ── Edit Cheque Modal ───────────────────────────────────────────────────── */
+.cheque-form-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--textMuted);
+  margin-bottom: 4px;
+}
+
+.cheque-form-input {
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid var(--borderInput);
+}
+
+.cheque-section-divider {
+  border-color: var(--borderLight);
+  margin: 4px 0;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

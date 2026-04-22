@@ -86,6 +86,7 @@ export class TenantDetailComponent implements OnChanges {
   @Output() back = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
+
   private translate = inject(TranslateService);
   private modalService = inject(NgbModal);
   private tenantsService = inject(TenantsService);
@@ -95,6 +96,10 @@ export class TenantDetailComponent implements OnChanges {
   tenantData: any = null;
   rentTransactions: any[] = [];
   additionalTransactions: any[] = [];
+
+  get allTransactions(): any[] {
+    return [...this.rentTransactions, ...this.additionalTransactions];
+  }
   areaChartData: {
     month: string;
     amount_received: number;
@@ -134,8 +139,8 @@ export class TenantDetailComponent implements OnChanges {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.rentTransactions = resp?.content?.rent_cheques ?? [];
-          this.additionalTransactions = resp?.content?.additional_cheques ?? [];
+          this.rentTransactions = resp?.content?.all_cheques ?? [];
+          this.additionalTransactions = [];
         },
         error: () => {
           this.rentTransactions = [];
@@ -143,6 +148,8 @@ export class TenantDetailComponent implements OnChanges {
         },
       });
   }
+
+  invoiceData: any = null;
 
   // ── view state ──────────────────────────────────────────────────
   showInvoiceDetails = false;
@@ -188,6 +195,18 @@ export class TenantDetailComponent implements OnChanges {
     return this.translate.instant(key);
   }
 
+  get leaseCharges(): any[] {
+    return this.selectedLease?.lease_charges ?? [];
+  }
+
+  get leaseChargesTotalAmount(): number {
+    return this.leaseCharges.reduce((sum: number, lc: any) => sum + (lc.total ?? 0), 0);
+  }
+
+  get leaseChargesVatTotal(): number {
+    return this.leaseCharges.reduce((sum: number, lc: any) => sum + (lc.vat ?? 0), 0);
+  }
+
   transactionStatusClass(status: string): string {
     const s = (status || '').toLowerCase();
     if (s.includes('credit') || s.includes('paid') || s.includes('realiz'))
@@ -222,7 +241,66 @@ export class TenantDetailComponent implements OnChanges {
   onViewInvoiceClick(lease: any, event: Event) {
     event.preventDefault();
     this.selectedLease = lease;
+    this.invoiceData = null;
     this.showInvoiceDetails = true;
+    if (lease?.id) {
+      this.leaseService
+        .getInvoice(lease.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (resp: any) => { this.invoiceData = resp?.content ?? null; },
+          error: () => { this.invoiceData = null; },
+        });
+    }
+  }
+
+  get invoiceAmountInWords(): string {
+    const grand = this.invoiceData?.totals?.grand_total ?? 0;
+    const dirhams = Math.floor(grand);
+    const fils = Math.round((grand - dirhams) * 100);
+    const dirhamWords = this.toWords(dirhams);
+    const filsWords = this.toWords(fils);
+    return `${dirhamWords} Dirhams And ${filsWords} Fils`;
+  }
+
+  private toWords(n: number): string {
+    if (n === 0) return 'Zero';
+    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
+      'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen',
+      'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
+      'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    const chunk = (num: number): string => {
+      if (num === 0) return '';
+      if (num < 20) return ones[num];
+      if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 ? ' ' + ones[num % 10] : '');
+      return ones[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' ' + chunk(num % 100) : '');
+    };
+    const parts: string[] = [];
+    if (n >= 1_000_000) { parts.push(chunk(Math.floor(n / 1_000_000)) + ' Million'); n %= 1_000_000; }
+    if (n >= 1_000)     { parts.push(chunk(Math.floor(n / 1_000))     + ' Thousand'); n %= 1_000; }
+    if (n > 0)          { parts.push(chunk(n)); }
+    return parts.join(' ');
+  }
+
+  downloadInvoicePdf() {
+    const leaseId = this.selectedLease?.id;
+    if (!leaseId) return;
+
+    this.leaseService.getInvoicePdf(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const url = resp?.content?.pdf_url;
+          if (url) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = resp?.content?.file_name ?? 'invoice.pdf';
+            a.target = '_blank';
+            a.click();
+          }
+        },
+      });
   }
 
   handleBackClick() {

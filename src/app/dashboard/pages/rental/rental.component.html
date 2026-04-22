@@ -210,12 +210,12 @@
 
               <div>
                 <label>{{ "OTHER_CHARGES" | translate }}</label>
-                <span>--</span>
+                <span>{{ getOtherChargesTotal(l) | number: "1.2-2" }}</span>
               </div>
 
               <div>
                 <label>{{ "VAT" | translate }}</label>
-                <span>--</span>
+                <span>{{ getOtherChargesVat(l) | number: "1.2-2" }}</span>
               </div>
 
               <div>

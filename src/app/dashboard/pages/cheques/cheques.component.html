@@ -182,10 +182,8 @@
                   {{ "SETTLEMENT_ACC" | translate }}
                 </th>
                 <th width="120">{{ "AMOUNT" | translate }}</th>
-                <th width="80" *ngIf="activeSummary == 'bounce'">
-                  {{ "ACTIONS" | translate }}
-                </th>
                 <th width="110">{{ "STATUS" | translate }}</th>
+                <th width="100">{{ "ACTIONS" | translate }}</th>
               </tr>
             </thead>
 
@@ -279,14 +277,6 @@
                       <span><img src="assets/check.svg" /></span>
                     </span>
                   </td>
-                  <td *ngIf="activeSummary == 'bounce'">
-                    <app-table-action-btn
-                      type="history"
-                      (clicked)="
-                        openChequeBounceHistoryModel(activityHistoryContent)
-                      "
-                    ></app-table-action-btn>
-                  </td>
                   <td>
                     <app-custom-select
                       [options]="statusOptions"
@@ -296,6 +286,20 @@
                       (optionSelected)="onChequeStatusChange(row, $event)"
                       [isFilter]="true"
                     ></app-custom-select>
+                  </td>
+                  <td>
+                    <div class="cmmnTblActnBtnDiv">
+                      <app-table-action-btn
+                        type="edit"
+                        (clicked)="openEditModal(row, editChequeContent)"
+                      ></app-table-action-btn>
+                      @if (activeSummary === 'bounce') {
+                        <app-table-action-btn
+                          type="history"
+                          (clicked)="openChequeBounceHistoryModel(activityHistoryContent)"
+                        ></app-table-action-btn>
+                      }
+                    </div>
                   </td>
                 </tr>
 
@@ -328,6 +332,211 @@
   </div>
 }
 <!-- end @if (!showTenantDetail) -->
+
+<!-- ── Edit Cheque Modal ─────────────────────────────────────────────────────── -->
+<ng-template #editChequeContent let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title" id="modal-title">{{ "Edit Cheque" | translate }}</h6>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-3">
+
+      <!-- Payment Type -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">{{ "PAYMENT_TYPE" | translate }}</label>
+        <select class="form-select cheque-form-input" [(ngModel)]="editDraft.payment_type">
+          <option value="CHEQUE">Cheque</option>
+          <option value="CASH">Cash</option>
+          <option value="BANK_TRANSFER">Bank Transfer</option>
+          <option value="PDC">PDC</option>
+        </select>
+      </div>
+
+      <!-- Cheque Number * -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">
+          {{ "CHEQUE_NUMBER" | translate }} <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          [class.is-invalid]="!editDraft.cheque_number?.trim()"
+          placeholder="Enter cheque number"
+          [(ngModel)]="editDraft.cheque_number"
+        />
+        <div class="invalid-feedback" *ngIf="!editDraft.cheque_number?.trim()">
+          {{ "CHEQUE_NUMBER" | translate }} is required
+        </div>
+      </div>
+
+      <!-- Amount * -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">
+          {{ "AMOUNT" | translate }} <span class="text-danger">*</span>
+        </label>
+        <input
+          type="number"
+          class="form-control cheque-form-input"
+          [class.is-invalid]="!(editDraft.amount !== null && editDraft.amount > 0)"
+          placeholder="0.00"
+          [(ngModel)]="editDraft.amount"
+        />
+        <div class="invalid-feedback" *ngIf="!(editDraft.amount !== null && editDraft.amount > 0)">
+          Valid amount is required
+        </div>
+      </div>
+
+      <!-- Cheque Date * -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">
+          {{ "CHEQUE_DATE" | translate }} <span class="text-danger">*</span>
+        </label>
+        <input
+          type="date"
+          class="form-control cheque-form-input"
+          [class.is-invalid]="!editDraft.cheque_date"
+          [(ngModel)]="editDraft.cheque_date"
+        />
+        <div class="invalid-feedback" *ngIf="!editDraft.cheque_date">
+          {{ "CHEQUE_DATE" | translate }} is required
+        </div>
+      </div>
+
+      <!-- Start Date -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">{{ "START_DATE" | translate }}</label>
+        <input
+          type="date"
+          class="form-control cheque-form-input"
+          [(ngModel)]="editDraft.start_date"
+        />
+      </div>
+
+      <!-- End Date -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">{{ "END_DATE" | translate }}</label>
+        <input
+          type="date"
+          class="form-control cheque-form-input"
+          [(ngModel)]="editDraft.end_date"
+        />
+      </div>
+
+      <div class="col-12"><hr class="cheque-section-divider" /></div>
+
+      <!-- Origin Bank -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">{{ "ORIGIN_BANK" | translate }}</label>
+        <select
+          class="form-select cheque-form-input"
+          [(ngModel)]="editDraft.origin_bank_id"
+          (ngModelChange)="onEditOriginBankChange()"
+        >
+          <option [ngValue]="null" disabled>Select bank</option>
+          <option *ngFor="let b of banks" [ngValue]="b.key">{{ b.value }}</option>
+        </select>
+      </div>
+
+      <!-- Origin Account No. -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">{{ "ORIGIN_ACCOUNT_NO" | translate }}</label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          placeholder="Account number"
+          [(ngModel)]="editDraft.origin_account_number"
+        />
+      </div>
+
+      <!-- Origin IFSC -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">{{ "ORIGIN_IFSC_CODE" | translate }}</label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          [value]="editDraft.origin_ifsc_code || '—'"
+          readonly
+        />
+      </div>
+
+      <div class="col-12"><hr class="cheque-section-divider" /></div>
+
+      <!-- Settlement Bank -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">{{ "SETTLEMENT_BANK" | translate }}</label>
+        <select
+          class="form-select cheque-form-input"
+          [(ngModel)]="editDraft.settlement_bank_id"
+          (ngModelChange)="onEditSettlementBankChange()"
+        >
+          <option [ngValue]="null" disabled>Select bank</option>
+          <option *ngFor="let b of banks" [ngValue]="b.key">{{ b.value }}</option>
+        </select>
+      </div>
+
+      <!-- Settlement Account No. -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">{{ "SETTLEMENT_ACC" | translate }}</label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          placeholder="Account number"
+          [(ngModel)]="editDraft.settlement_account_number"
+        />
+      </div>
+
+      <!-- Settlement IFSC -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">{{ "SETTLEMENT_IFSC_CODE" | translate }}</label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          [value]="editDraft.settlement_ifsc_code || '—'"
+          readonly
+        />
+      </div>
+
+      <div class="col-12"><hr class="cheque-section-divider" /></div>
+
+      <!-- Photo / File -->
+      <div class="col-12">
+        <label class="form-label cheque-form-label">{{ "PHOTO_FILE" | translate }}</label>
+        <input
+          type="file"
+          class="form-control cheque-form-input"
+          accept=".pdf,.jpg,.jpeg,.png"
+          (change)="onEditFileSelected($event)"
+        />
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btnCommon"
+      [disabled]="!isEditFormValid || savingCheque"
+      (click)="saveEditModal(modal)"
+    >
+      {{ savingCheque ? ("SAVING" | translate) + "…" : ("SAVE" | translate) }}
+    </button>
+  </div>
+</ng-template>
 
 <!----------------------------------------------------------Activity history form------------------------------------------------------------------------------>
 <ng-template #activityHistoryContent let-modal>

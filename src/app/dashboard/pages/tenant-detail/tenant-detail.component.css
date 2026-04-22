@@ -198,6 +198,75 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════
+   INVOICE TOTALS ROW
+   ══════════════════════════════════════════════════════════════════ */
+.totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 16px 0 8px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.words {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.words-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.words-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.summary p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-primary);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  min-width: 220px;
+}
+
+.summary p strong {
+  font-weight: 600;
+}
+
+.grand {
+  min-width: 220px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: default;
+}
+
+.grand strong {
+  font-size: 15px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
     RENEWAL ALERT
     ══════════════════════════════════════════════════════════════════ */
 .renewal-alert {
@@ -227,32 +296,61 @@
   display: none;
 }
 
-/* Header — inherits global .cmmnTbl table thead tr th (var(--activeBg)) */
+/* Invoice transactions table header.
+   Override global position:sticky/top:0 — the parent app-table-view-card
+   has overflow:hidden which causes the sticky header to float over the card title. */
 .transactions-table thead tr th {
+  position: relative !important;
+  top: unset !important;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
   vertical-align: middle;
 }
 
-/* Sticky last column (Actions) — same as owner table */
+/* Sticky last column (Total Amount) — same pattern as units/cheques tables */
 .transactions-table thead tr th:last-child,
 .transactions-table tbody tr td:last-child {
-  position: sticky;
+  position: sticky !important;
   right: 0;
   z-index: 2;
-  min-width: 100px;
+  min-width: 120px;
 }
 
 .transactions-table thead tr th:last-child {
   z-index: 3;
-  background-color: var(--activeBg);
+  background-color: var(--activeBg1);
   box-shadow: none;
 }
 
 .transactions-table tbody tr td:last-child {
-  background-color: var(--whiteBg, #fff);
-  box-shadow: var(--shadow-sticky);
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px var(--table-shadow);
+}
+
+.transactions-table td:last-child::before,
+.transactions-table th:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to left,
+    var(--table-fade-shadow),
+    rgba(0, 0, 0, 0.05),
+    transparent
+  );
+}
+
+.cmmnTbl .table tr > *:last-child {
+  border-right: none !important;
+}
+
+.cmmnTbl .table > :not(caption) > tbody > tr:last-child > td:last-child {
+  border-bottom: none !important;
 }
 
 /* ── Receipt / filter toolbar ── */

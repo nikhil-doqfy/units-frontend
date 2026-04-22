@@ -464,6 +464,14 @@ export class RentalComponent {
     this.loadRentAnalytics();
   }
 
+  getOtherChargesTotal(lease: any): number {
+    return (lease.lease_charges ?? []).reduce((sum: number, lc: any) => sum + (lc.total ?? 0), 0);
+  }
+
+  getOtherChargesVat(lease: any): number {
+    return (lease.lease_charges ?? []).reduce((sum: number, lc: any) => sum + (lc.vat ?? 0), 0);
+  }
+
   onLeaseClick(lease: any) {
     this.selectedLease = lease;
     this.showDetailView = true;
