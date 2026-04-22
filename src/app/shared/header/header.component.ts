@@ -11,6 +11,7 @@ import {
   Input,
   WritableSignal,
   signal,
+  HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -129,6 +130,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private alertService: AlertService,
     private userService: UserService,
+    private eRef: ElementRef,
   ) {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
@@ -541,5 +543,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     document.body.classList.remove('light-theme', 'dark-theme');
     document.body.classList.add(themeClass);
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.isOpen = false; // signature dropdown साठी
+    }
   }
 }

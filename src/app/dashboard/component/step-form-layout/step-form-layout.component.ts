@@ -33,6 +33,8 @@ import {
 import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { ViewChild } from '@angular/core';
+
 interface StepGroup {
   main: StepPaneComponent;
   sub: StepPaneComponent[];
@@ -57,10 +59,11 @@ interface StepGroup {
   styleUrls: ['./step-form-layout.component.css'],
 })
 export class StepFormLayoutComponent implements AfterContentInit {
+  @ViewChild('stepper') stepper: any;
   private spinner = inject(NgxSpinnerService);
   private alertService = inject(AlertService);
   @ContentChildren(StepPaneComponent) steps!: QueryList<StepPaneComponent>;
-
+  currentStepIndex: number = 0;
   @Input() leftCardTitle: string = 'Property Details';
   @Input() finishButtonText: string = 'Finish';
 
@@ -80,7 +83,6 @@ export class StepFormLayoutComponent implements AfterContentInit {
   totalBlocks = 10;
   currentStep: number = 0;
   private subs = new Subscription();
-
   ngAfterContentInit() {
     const allSteps = this.steps.toArray();
     let currentGroup: StepGroup | null = null;
@@ -122,6 +124,20 @@ export class StepFormLayoutComponent implements AfterContentInit {
       );
   }
 
+  // currentStep = 0;
+
+  goToPreviousStep() {
+    if (this.currentStep > 0) {
+      this.currentStep--;
+    }
+  }
+  // goToPreviousStep() {
+  //   console.log('clicked'); // 👈 check first
+  //   console.log(this.stepper);
+  //   if (this.stepper && this.stepper.previous) {
+  //     this.stepper.previous();
+  //   }
+  // }
   onBulkDataReady(data: any[]) {
     this.pendingBulkData = data;
   }

@@ -46,13 +46,29 @@
     (back)="handleBackClick()"
     [showCloseBtn]="false"
   >
-    <div class="threeDotWrap" rental-btn>
+    <!-- <div class="threeDotWrap" rental-btn>
       <button class="threeDotBtn" (click)="toggleMenu()">⋮</button>
       <div class="threeDotDropdown" *ngIf="showMenu">
         <button class="dropItem">
           <app-refresh-icon></app-refresh-icon>{{ "RENEW_ACCOUNT" | translate }}
         </button>
         <button class="dropItem danger">
+          <app-disable-icon></app-disable-icon>
+          {{ "TERMINATE_ACCOUNT" | translate }}
+        </button>
+      </div>
+    </div> -->
+
+    <div class="threeDotWrap" ngbDropdown rental-btn>
+      <button class="threeDotBtn" ngbDropdownToggle>⋮</button>
+
+      <div ngbDropdownMenu class="threeDotDropdown">
+        <button ngbDropdownItem class="dropItem">
+          <app-refresh-icon></app-refresh-icon>
+          {{ "RENEW_ACCOUNT" | translate }}
+        </button>
+
+        <button ngbDropdownItem class="dropItem danger">
           <app-disable-icon></app-disable-icon>
           {{ "TERMINATE_ACCOUNT" | translate }}
         </button>

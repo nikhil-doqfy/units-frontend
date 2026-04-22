@@ -48,6 +48,7 @@ import {
   PageChange,
   PageSizeChange,
 } from '../../../shared/model/shared.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-users',
@@ -72,6 +73,7 @@ import {
     NoDataComponent,
     AddUserFormComponent,
     TranslateModule,
+    FormsModule,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
@@ -299,6 +301,7 @@ export class UsersComponent {
   }
 
   applyFilter() {
+    this.selectedUserType = null;
     this.currentPage = 1;
     this.getUser();
   }
@@ -316,7 +319,9 @@ export class UsersComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.alertService.success(resp?.message || 'User deleted successfully');
+          this.alertService.success(
+            resp?.message || 'User deleted successfully',
+          );
           this.currentPage = 1;
           this.getUser();
         },
@@ -327,14 +332,24 @@ export class UsersComponent {
   }
 
   handleDropdownAction(action: string, user: any): void {
-    const modalOptions = { ariaLabelledBy: 'modal-title', windowClass: 'mdlCommon', centered: true };
+    const modalOptions = {
+      ariaLabelledBy: 'modal-title',
+      windowClass: 'mdlCommon',
+      centered: true,
+    };
     if (action === 'reset') {
-      const modalRef = this.modalService.open(ResetPasswordModalComponent, modalOptions);
+      const modalRef = this.modalService.open(
+        ResetPasswordModalComponent,
+        modalOptions,
+      );
       modalRef.componentInstance.userId = user.id;
       modalRef.componentInstance.userName =
         `${user.first_name || ''} ${user.last_name || ''}`.trim();
     } else if (action === 'share') {
-      const modalRef = this.modalService.open(ShareProfileModalComponent, modalOptions);
+      const modalRef = this.modalService.open(
+        ShareProfileModalComponent,
+        modalOptions,
+      );
       modalRef.componentInstance.profileId = user.id;
       modalRef.componentInstance.profileName =
         `${user.first_name || ''} ${user.last_name || ''}`.trim();

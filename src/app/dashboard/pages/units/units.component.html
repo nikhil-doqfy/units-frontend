@@ -24,6 +24,7 @@
                     [options]="propertyOptions"
                     key="key"
                     value="value"
+                    [(ngModel)]="selectedProperty"
                     [placeholder]="'SELECT_PROPERTY' | translate"
                     (optionSelected)="filterPropertyId = $event?.key"
                   >
@@ -37,6 +38,7 @@
                     [options]="bedroomOptions"
                     key="key"
                     value="value"
+                    [(ngModel)]="selectedBedroom"
                     [placeholder]="'SELECT_BEDROOMS' | translate"
                     (optionSelected)="filterBedrooms = $event?.key"
                   >
@@ -48,6 +50,7 @@
                     [options]="floorOptions"
                     key="key"
                     value="value"
+                    [(ngModel)]="selectedFloor"
                     [placeholder]="'SELECT_FLOOR' | translate"
                     (optionSelected)="filterFloor = $event?.key"
                   >
@@ -60,6 +63,7 @@
                   <app-custom-select
                     [options]="areaUnitOptions"
                     key="key"
+                    [(ngModel)]="selectedAreaUnit"
                     value="value"
                     [placeholder]="'SELECT_AREA_UNIT' | translate"
                     (optionSelected)="filterAreaUnit = $event?.key"

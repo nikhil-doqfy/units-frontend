@@ -92,7 +92,7 @@
 
 .customSelectDropdown {
   background-color: var(--whiteBg);
-  position: fixed;
+  position: absolute;
   padding: 4px;
   border: 1px solid var(--lightBorder);
   border-radius: 6px;

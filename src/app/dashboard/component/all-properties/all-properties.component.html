@@ -27,6 +27,7 @@
                       [options]="propertyTypeOptions"
                       key="key"
                       value="value"
+                      [(ngModel)]="selectedPropertyType"
                       [placeholder]="'SELECT_PROPERTY' | translate"
                       (optionSelected)="filterPropertyType = $event?.key"
                     >
@@ -38,6 +39,7 @@
                       [options]="statusOptions"
                       key="key"
                       value="value"
+                      [(ngModel)]="selectedStatus"
                       [placeholder]="'SELECT_STATUS' | translate"
                       (optionSelected)="filterStatus = $event?.key"
                     >
