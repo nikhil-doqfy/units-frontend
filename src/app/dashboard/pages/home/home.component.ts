@@ -7,6 +7,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -451,6 +452,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         params.year = this.duesSelectedYear;
       }
       this.loadDueGraph(Object.keys(params).length ? params : undefined);
+      this.duesSelectedProperty = null;
+      this.duesSelectedUnit = null;
+      this.duesSelectedYear = null;
+      this.duesUnits = [];
       return;
     }
 
@@ -466,8 +471,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (chartType === 'revenue') {
       this.getMonthlyRevenue(Object.keys(params).length ? params : undefined);
+      this.selectedProperty = null;
+      this.selectedUnit = null;
+      this.selectedYear = null;
+      this.units = [];
     } else if (chartType == 'payment') {
       this.loadPayments(Object.keys(params).length ? params : undefined);
+      this.selectedProperty = null;
+      // this.selectedFilter = null;
+      this.selectedUnit = null;
+      this.selectedYear = null;
+      this.units = [];
     }
   }
 
@@ -640,20 +654,55 @@ export class HomeComponent implements OnInit, AfterViewInit {
         },
       });
   }
+  resetChequeFilter() {
+    this.chequeVisSelectedProperty = null;
+    this.chequeVisSelectedUnit = null;
+    this.chequeVisSelectedStatus = null;
+
+    this.chequeVisSelectedPeriodType = 'month';
+    this.chequeVisSelectedMonthly = '';
+    this.chequeVisSelectedYear = null;
+
+    this.chequeVisUnits = [];
+  }
 
   //---------------------------------------error-------------------------------------------------
-  tableMaxHeight: string = 'auto';
+  // tableMaxHeight: string = 'auto';
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => {
+  //     this.updateTableHeight();
+  //   });
+  // }
+
+  // updateTableHeight() {
+  //   const height =
+  //     this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
+
+  //   this.tableMaxHeight = height ? `${height - 4}px` : 'auto';
+
+  //   this.cd.detectChanges();
+  // }
+
+  tableMaxHeight: string = '400px';
+
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.updateTableHeight();
+      this.setHeight();
     });
   }
 
-  updateTableHeight() {
-    const height =
-      this.chequesAgingGraph?.nativeElement?.getBoundingClientRect()?.height;
+  @HostListener('window:resize')
+  onResize() {
+    this.setHeight();
+  }
 
-    this.tableMaxHeight = height ? `${height - 4}px` : 'auto';
+  setHeight() {
+    const OFFSET = 590; // adjust based on your header + spacing
+
+    const height = window.innerHeight - OFFSET;
+
+    // prevents shrinking issue
+    this.tableMaxHeight = `${Math.max(height, 250)}px`;
 
     this.cd.detectChanges();
   }

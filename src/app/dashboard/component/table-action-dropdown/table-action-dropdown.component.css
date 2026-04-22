@@ -22,8 +22,10 @@
   border: 1px solid var(--lightBorder2);
   border-radius: 4px;
   box-shadow: 4px 4px 15px 0 var(--dropdown-shadow);
-  min-width: 160px;
-  overflow: hidden;
+  /* min-width: 160px; */
+  /* overflow: hidden; */
+  min-width: auto;
+  z-index: 9999;
 }
 
 .dashDrpdwnMenu button {

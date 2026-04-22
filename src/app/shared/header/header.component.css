@@ -893,20 +893,20 @@
 }
 
 /* Icons always LEFT */
-.add-card .draw-actions {
+/* .add-card .draw-actions {
   position: absolute !important;
   bottom: 10px;
   left: 10px !important;
   right: auto !important;
-}
+} */
 
 /* Checkbox (optional - left top) */
-.add-card .draw-check {
+/* .add-card .draw-check {
   position: absolute !important;
   top: 10px;
   left: 10px !important;
   right: auto !important;
-}
+} */
 /*--------------------------Search conatct ---------------------------------------------------*/
 .hdrProfileWrapper {
   display: flex;
@@ -1055,4 +1055,21 @@
   padding: 0 !important;
   padding-bottom: 12px !important;
   margin-bottom: 8px;
+}
+
+.arrow .up {
+  display: none;
+}
+
+/* when dropdown open */
+.show .arrow .down {
+  display: none;
+}
+
+.show .arrow .up {
+  display: inline-block;
+}
+/* Remove default Bootstrap dropdown arrow */
+button[ngbDropdownToggle]::after {
+  display: none !important;
 }

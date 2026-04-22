@@ -105,7 +105,7 @@
                       [options]="properties"
                       key="key"
                       value="value"
-                      [selectedOption]="selectedFilter"
+                      [selectedOption]="selectedProperty"
                       (optionSelected)="onPropertySelected($event)"
                     >
                     </app-custom-select>
@@ -482,7 +482,11 @@
           </div>
         </div>
         <div class="cmmnTbl">
-          <div class="table-responsive" [style.max-height]="tableMaxHeight">
+          <div
+            class="table-responsive"
+            [style.height]="tableMaxHeight"
+            style="overflow-y: auto"
+          >
             <!-- [style]="{
               'max-height': computHeight(),
             }" -->
@@ -593,7 +597,7 @@
                     }}</label>
                     <app-custom-select
                       [options]="properties"
-                      [selectedOption]="selectedFilter"
+                      [selectedOption]="selectedProperty"
                       (optionSelected)="onPropertySelected($event)"
                     >
                     </app-custom-select>

@@ -11,7 +11,11 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { NgbModal, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbModal,
+  NgbPopoverModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TenantsService } from '../../services/tenants.service';
 import { LeaseService } from '../../services/lease.service';
@@ -77,6 +81,7 @@ import { CustomDropdownComponent } from '../../../component/custom-dropdown/cust
     ReceiptComponent,
     NoDataComponent,
     CustomDropdownComponent,
+    NgbDropdownModule,
   ],
   templateUrl: './tenant-detail.component.html',
   styleUrl: './tenant-detail.component.css',
@@ -209,6 +214,7 @@ export class TenantDetailComponent implements OnChanges {
     this.showRenewalBlockedMsg = false;
   }
 
+  onRefresh() {}
   toggleReceipt() {
     this.showReceiptDropdown = !this.showReceiptDropdown;
     this.showMonthDropdown = false;

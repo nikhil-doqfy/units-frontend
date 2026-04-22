@@ -13,6 +13,7 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 32px;
+  overflow: visible !important;
 }
 
 .left-controls {
@@ -242,6 +243,7 @@
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overflow: visible !important;
 }
 .table-responsive::-webkit-scrollbar {
   display: none;
@@ -250,6 +252,7 @@
 :host ::ng-deep .custom-select-wrapper .customSelectInput {
   padding: 0 !important;
   border: none !important;
+
   height: 0 !important;
 }
 
