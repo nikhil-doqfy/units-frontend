@@ -69,6 +69,7 @@
                         [options]="userTypeList"
                         [placeholder]="'SELECT_USER_TYPE' | translate"
                         [selectedOption]="selectedUserType"
+                        [(ngModel)]="selectedUserType"
                         (optionSelected)="onOptionSelectedUserType($event)"
                         (click)="handleFilterClick()"
                       />

@@ -24,6 +24,7 @@
                       [options]="statusOptions"
                       key="key"
                       value="value"
+                      [(ngModel)]="selectedStatus"
                       [placeholder]="'SELECT_STATUS' | translate"
                       (optionSelected)="filterStatus = $event?.key"
                     >
@@ -37,6 +38,7 @@
                       [options]="platformOptions"
                       key="key"
                       value="value"
+                      [(ngModel)]="selectedPlatform"
                       [placeholder]="'SELECT_PLATFORM' | translate"
                       (optionSelected)="filterPlatform = $event?.key"
                     >
@@ -50,6 +52,7 @@
                       [options]="leadTypeOptions"
                       key="key"
                       value="value"
+                      [(ngModel)]="selectedLeadType"
                       [placeholder]="'SELECT_LEAD_TYPE' | translate"
                       (optionSelected)="filterLeadType = $event?.key"
                     >

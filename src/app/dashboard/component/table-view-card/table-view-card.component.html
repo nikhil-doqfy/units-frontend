@@ -83,7 +83,12 @@
             <button class="doneBtn" (click)="shareSelected()">Done</button>
           </div>
         </div> -->
-        <div ngbDropdown class="dropdownWrap" *ngIf="showShare">
+        <div
+          ngbDropdown
+          class="dropdownWrap"
+          *ngIf="showShare"
+          (openChange)="openShare = $event"
+        >
           <button class="btn btnCommon btnWhite" ngbDropdownToggle>
             <i><app-whatsapp-share-icon></app-whatsapp-share-icon></i>
             Share

@@ -50,6 +50,7 @@ import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenen
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-all-leads',
@@ -80,6 +81,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     ConvertLeadToTenentFromComponent,
     CustomSelectComponent,
     NoDataComponent,
+    FormsModule,
   ],
   templateUrl: './all-leads.component.html',
   styleUrl: './all-leads.component.css',
@@ -111,6 +113,9 @@ export class AllLeadsComponent implements OnInit {
   filterPlatform: string = '';
   filterLeadType: string = '';
 
+  selectedStatus: any = null;
+  selectedPlatform: any = null;
+  selectedLeadType: any = null;
   // Filter options
   statusOptions = [
     { key: 'INTERESTED', value: 'Interested' },
@@ -202,6 +207,9 @@ export class AllLeadsComponent implements OnInit {
   applyFilter(): void {
     this.currentPage = 1;
     this.loadLeads();
+    this.selectedStatus = null;
+    this.selectedPlatform = null;
+    this.selectedLeadType = null;
   }
 
   removeFilter(): void {
@@ -210,6 +218,9 @@ export class AllLeadsComponent implements OnInit {
     this.filterLeadType = '';
     this.currentPage = 1;
     this.loadLeads();
+    this.selectedStatus = null;
+    this.selectedPlatform = null;
+    this.selectedLeadType = null;
   }
 
   handleExportClick(): void {

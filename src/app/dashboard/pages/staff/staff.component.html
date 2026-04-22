@@ -30,12 +30,23 @@
                       <label class="form-label">{{
                         "STAFF_ROLE" | translate
                       }}</label>
-                      <app-custom-select
+                      <!--- <app-custom-select
                         [options]="staffRole"
                         key="key"
                         value="value"
+                        
                         [placeholder]="'SELECT_STAFF_ROLE' | translate"
                         (optionSelected)="selectedstaffRole = $event"
+                        (click)="onhandleSelectClick()"
+                      >
+                      </app-custom-select> --->
+                      <app-custom-select
+                        [options]="staffRole"
+                        [(ngModel)]="selectedstaffRole"
+                        name="staffRole"
+                        key="key"
+                        value="value"
+                        [placeholder]="'SELECT_STAFF_ROLE' | translate"
                         (click)="onhandleSelectClick()"
                       >
                       </app-custom-select>

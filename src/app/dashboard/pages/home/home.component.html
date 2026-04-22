@@ -105,7 +105,7 @@
                       [options]="properties"
                       key="key"
                       value="value"
-                      [selectedOption]="selectedFilter"
+                      [selectedOption]="selectedProperty"
                       (optionSelected)="onPropertySelected($event)"
                     >
                     </app-custom-select>
@@ -597,7 +597,7 @@
                     }}</label>
                     <app-custom-select
                       [options]="properties"
-                      [selectedOption]="selectedFilter"
+                      [selectedOption]="selectedProperty"
                       (optionSelected)="onPropertySelected($event)"
                     >
                     </app-custom-select>
