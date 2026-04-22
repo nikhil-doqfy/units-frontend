@@ -214,6 +214,7 @@ export class TenantDetailComponent implements OnChanges {
     this.showRenewalBlockedMsg = false;
   }
 
+  onRefresh() {}
   toggleReceipt() {
     this.showReceiptDropdown = !this.showReceiptDropdown;
     this.showMonthDropdown = false;
