@@ -113,19 +113,20 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
 
       this.dropdownStyle = openUpward
         ? {
-            position: 'fixed',
-            bottom:   `${window.innerHeight - rect.top + 4}px`,
-            left:     `${rect.left}px`,
-            width:    `${rect.width}px`,
+            position: 'absolute',
+            bottom:   'calc(100% + 4px)',
+            left:     '0',
+            width:    '100%',
             'z-index': '9999',
           }
         : {
-            position: 'fixed',
-            top:      `${rect.bottom + 4}px`,
-            left:     `${rect.left}px`,
-            width:    `${rect.width}px`,
+            position: 'absolute',
+            top:      'calc(100% + 4px)',
+            left:     '0',
+            width:    '100%',
             'z-index': '9999',
           };
+           
     }
     this.onTouched();
   }

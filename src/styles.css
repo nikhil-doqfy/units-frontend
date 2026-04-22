@@ -4326,6 +4326,7 @@ linearGradient .authBgPatt stop:last-child {
 
 /***Common New Table Css Start***/
 .cmmnTblOuter {
+  
   background-color: var(--whiteBg);
   padding-top: 8px;
   border-radius: 12px;
@@ -4341,6 +4342,7 @@ linearGradient .authBgPatt stop:last-child {
 
 .cmmnTblFixedBody {
   height: calc(100vh - 348px);
+  overflow-y: auto;
 }
 
 .cmmnTblBody table {

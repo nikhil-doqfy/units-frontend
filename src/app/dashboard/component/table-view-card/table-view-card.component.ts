@@ -8,6 +8,7 @@ import {
   ElementRef,
   ContentChild,
   output,
+  HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -20,6 +21,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { WhatsappShareIconComponent } from '../../../icon/whatsapp-share-icon/whatsapp-share-icon.component';
+import { ArrowUpIconComponent } from "../../../shared/component/icons/arrow-up-icon/arrow-up-icon.component";
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-table-view-card',
@@ -28,6 +31,7 @@ import { WhatsappShareIconComponent } from '../../../icon/whatsapp-share-icon/wh
     CommonModule,
     BackIconComponent,
     EditIconComponent,
+    NgbDropdownModule,
     TranslateModule,
     DownloadIconComponent,
     FormsModule,
@@ -35,7 +39,8 @@ import { WhatsappShareIconComponent } from '../../../icon/whatsapp-share-icon/wh
     CircularCrossBtnIconComponent,
     ArrowDownIconComponent,
     WhatsappShareIconComponent,
-  ],
+    ArrowUpIconComponent
+],
   templateUrl: './table-view-card.component.html',
   styleUrls: ['./table-view-card.component.css'],
 })
@@ -113,4 +118,9 @@ export class TableViewCardComponent {
     this.share.emit(this.shareOptions);
     this.openShare = false;
   }
+  closeShare() {
+  this.openShare = false;
+}
+
+
 }

@@ -46,7 +46,7 @@
     (back)="handleBackClick()"
     [showCloseBtn]="false"
   >
-    <div class="threeDotWrap" rental-btn>
+    <!-- <div class="threeDotWrap" rental-btn>
       <button class="threeDotBtn" (click)="toggleMenu()">⋮</button>
       <div class="threeDotDropdown" *ngIf="showMenu">
         <button class="dropItem">
@@ -57,7 +57,28 @@
           {{ "TERMINATE_ACCOUNT" | translate }}
         </button>
       </div>
-    </div>
+    </div> -->
+   <div class="threeDotWrap" ngbDropdown rental-btn>
+
+  <button class="threeDotBtn" ngbDropdownToggle>
+    ⋮
+  </button>
+
+  <div ngbDropdownMenu class="threeDotDropdown">
+
+    <button ngbDropdownItem class="dropItem">
+      <app-refresh-icon></app-refresh-icon>
+      {{ "RENEW_ACCOUNT" | translate }}
+    </button>
+
+    <button ngbDropdownItem class="dropItem danger">
+      <app-disable-icon></app-disable-icon>
+      {{ "TERMINATE_ACCOUNT" | translate }}
+    </button>
+
+  </div>
+
+</div>
 
     <div rental class="mt-3">
       <h5 class="section-title">{{ "OTHER_CHARGES" | translate }}</h5>

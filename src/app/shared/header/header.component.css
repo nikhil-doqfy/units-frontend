@@ -1056,3 +1056,23 @@
   padding-bottom: 12px !important;
   margin-bottom: 8px;
 }
+
+
+/* default state */
+.arrow .up {
+  display: none;
+}
+
+/* when dropdown open */
+.show .arrow .down {
+  display: none;
+}
+
+.show .arrow .up {
+  display: inline-block;
+}
+/* Remove default Bootstrap dropdown arrow */
+button[ngbDropdownToggle]::after {
+  display: none !important;
+}
+
