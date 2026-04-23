@@ -8,18 +8,22 @@ import { Calender1IconComponent } from '../../icons/calender1-icon/calender1-ico
 import { UsersIconsComponent } from '../../icons/users-icons/users-icons.component';
 import { CustomSelectComponent } from '../../dashboard/component/custom-select/custom-select.component';
 import { DashTitleComponent } from '../../shared/component/dash-title/dash-title.component';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BreadCrumb } from '../../shared/model/shared.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../shared.service';
 import { AuditlogService } from '../../auditlog.service';
+import { UserService } from '../services/user.service';
+import { NoDataComponent } from '../../no-data/no-data.component';
 
 @Component({
   selector: 'app-auditlog',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     WhiteCardComponent,
     DownloadIconComponent,
     SearchIconComponent,
@@ -29,6 +33,7 @@ import { AuditlogService } from '../../auditlog.service';
     CustomSelectComponent,
     DashTitleComponent,
     TranslateModule,
+    NoDataComponent,
   ],
   templateUrl: './auditlog.component.html',
   styleUrl: './auditlog.component.css',
@@ -37,6 +42,18 @@ export class AuditlogComponent {
   auditLogList: any[] = [];
   pageTitle: string = '';
   currentLanguage = 'en';
+
+  searchText   = '';
+  selectedUser: any = null;
+  selectedTime: any = null;
+
+  userOptions: any[] = [{ key: '', value: 'All Users', id: '' }];
+  timeOptions  = [
+    { key: '',        value: 'All Time'    },
+    { key: 'today',   value: 'Today'       },
+    { key: '7days',   value: 'Last 7 Days' },
+    { key: '30days',  value: 'Last 30 Days'},
+  ];
   logs = [
     {
       name: 'Amin Usain',
@@ -85,6 +102,7 @@ export class AuditlogComponent {
   ];
   constructor(
     private auditLogService: AuditlogService,
+    private userService: UserService,
     private router: Router,
     private translate: TranslateService,
   ) {
@@ -110,6 +128,7 @@ export class AuditlogComponent {
   ngOnInit() {
     this.loadBreadcrumb();
     this.getAuditLog();
+    this.loadUserOptions();
     this.sharedService.initLanguage();
     this.initLanguageListener();
   }
@@ -147,14 +166,78 @@ export class AuditlogComponent {
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
+  get displayLogs() {
+    const groups = new Map<string, any>();
+    for (const entry of this.auditLogList) {
+      const date = entry.created
+        ? new Date(entry.created).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+        : '';
+      const userName = entry.user?.name || 'Unknown';
+      const key = `${userName}_${date}`;
+
+      if (!groups.has(key)) {
+        groups.set(key, {
+          name:       userName,
+          date,
+          avatar:     entry.user?.profile_image || null,
+          activities: [],
+        });
+      }
+      groups.get(key).activities.push({
+        title:    entry.message    || '',
+        subtitle: `${entry.action_type || ''} on ${date}`,
+      });
+    }
+    return Array.from(groups.values());
+  }
+
+  private buildFilterParams(): Record<string, any> {
+    const params: Record<string, any> = {};
+    if (this.selectedUser?.id) params['user_id']    = this.selectedUser.id;
+    if (this.selectedTime?.key) params['time_range'] = this.selectedTime.key;
+    if (this.searchText.trim()) params['search']     = this.searchText.trim();
+    return params;
+  }
+
+  onFilterChange() {
+    this.getAuditLog();
+  }
+
+  loadUserOptions() {
+    this.userService
+      .getStaffList({ page_number: 1, limit: 1000 })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const staff: any[] = resp?.content ?? [];
+          this.userOptions = [
+            { key: '', value: 'All Users', id: '' },
+            ...staff.map((s: any) => ({ key: s.staff_name, value: s.staff_name, id: s.staff_id })),
+          ];
+        },
+      });
+  }
+
   getAuditLog() {
-    console.log('API method called');
     this.auditLogService
-      .getAuditLog()
+      .getAuditLog(this.buildFilterParams())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((resp: any) => {
-        console.log('API response:', resp);
         this.auditLogList = resp?.content ?? [];
+      });
+  }
+
+  downloadLogs() {
+    this.auditLogService
+      .exportAuditLog(this.buildFilterParams())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((blob: Blob) => {
+        const url  = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href     = url;
+        link.download = 'audit_logs.csv';
+        link.click();
+        URL.revokeObjectURL(url);
       });
   }
 }

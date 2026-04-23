@@ -10,6 +10,11 @@
             <app-custom-select
               class="with-left-icon"
               [placeholder]="'ALL_USERS' | translate"
+              [options]="userOptions"
+              key="key"
+              value="value"
+              [selectedOption]="selectedUser"
+              (optionSelected)="selectedUser = $event; onFilterChange()"
             ></app-custom-select>
           </div>
 
@@ -21,6 +26,11 @@
             <app-custom-select
               class="with-left-icon"
               [placeholder]="'ALL_TIME' | translate"
+              [options]="timeOptions"
+              key="key"
+              value="value"
+              [selectedOption]="selectedTime"
+              (optionSelected)="selectedTime = $event; onFilterChange()"
             ></app-custom-select>
           </div>
         </div>
@@ -28,10 +38,12 @@
       <div class="right-controls">
         <div class="search-box">
           <i><app-search-icon></app-search-icon></i>
-          <input type="text" [placeholder]="'SEARCH_HERE' | translate" />
+          <input type="text" [placeholder]="'SEARCH_HERE' | translate"
+            [(ngModel)]="searchText" (ngModelChange)="onFilterChange()" />
         </div>
       </div>
-      <span class="clear-icon"
+      <span class="clear-icon" style="cursor:pointer"
+        (click)="searchText=''; selectedUser=null; selectedTime=null; onFilterChange()"
         ><app-circular-cross-btn-icon></app-circular-cross-btn-icon
       ></span>
     </div>
@@ -42,18 +54,25 @@
       <!-- Header -->
       <div class="logs-header">
         <h3>{{ "LOGS" | translate }}</h3>
-        <a href="#" class="download-link">
+        <a href="#" class="download-link" (click)="$event.preventDefault(); downloadLogs()">
           <i><app-download-icon></app-download-icon></i>
           {{ "DOWNLOAD_LOG" | translate }}
         </a>
       </div>
 
+      <!-- No data -->
+      <app-no-data *ngIf="!displayLogs.length"></app-no-data>
+
       <!-- Timeline Wrapper -->
-      <div class="timeline">
-        <div class="timeline-item" *ngFor="let log of logs">
+      <div class="timeline" *ngIf="displayLogs.length">
+        <div class="timeline-item" *ngFor="let log of displayLogs">
           <!-- Avatar + Vertical Line -->
           <div class="timeline-left">
-            <img [src]="log.avatar" class="avatar" />
+            <img *ngIf="log.avatar" [src]="log.avatar" class="avatar"
+              (error)="log.avatar = null" />
+            <div *ngIf="!log.avatar" class="avatar avatar-initials">
+              {{ log.name ? (log.name.trim().split(' ')[0][0] + (log.name.trim().split(' ')[1]?.[0] || '')).toUpperCase() : '?' }}
+            </div>
             <span class="vertical-line"></span>
           </div>
 

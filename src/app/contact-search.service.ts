@@ -12,14 +12,13 @@ export class ContactSearchService {
   private sharedService = inject(SharedService);
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
   constructor() {}
-  getUsers(data: Record<string, any>): Observable<any> {
-    return this.http.get(`${this.SERVER_ADDRESS}/user/search_details`, data);
+  getUsers(params: Record<string, any> = {}): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/user/search_details${queryString}`);
   }
+
   searchUsers(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-
-    return this.http.get(
-      `${this.SERVER_ADDRESS}/user/search_details${queryString}`,
-    );
+    return this.http.get(`${this.SERVER_ADDRESS}/user/search_details${queryString}`);
   }
 }
