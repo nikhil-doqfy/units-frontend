@@ -12,67 +12,54 @@
   <app-white-card>
     <div class="top-filter-bar">
       <div class="left-controls">
-        <div class="custom-select">
-          <div class="custom-select-wrapper">
-            <span class="cmmnTblFltrBtn">
-              <app-custom-select
-                class="with-left-icon"
-                [options]="yearOptions"
-                key="key"
-                value="value"
-                [placeholder]="'YEAR_ALL' | translate"
-                (optionSelected)="onYearSelected($event)"
-              ></app-custom-select>
-            </span>
-          </div>
+        <app-custom-select
+          class="with-left-icon"
+          [options]="yearOptions"
+          key="key"
+          value="value"
+          [isFilter]="true"
+          [placeholder]="'YEAR_ALL' | translate"
+          (optionSelected)="onYearSelected($event)"
+        ></app-custom-select>
 
-          <div class="custom-select-wrapper">
-            <span class="cmmnTblFltrBtn">
-              <app-custom-select
-                class="with-left-icon"
-                [options]="propertyOptions"
-                key="key"
-                value="value"
-                [placeholder]="'PROPERTY_ALL' | translate"
-                (optionSelected)="onPropertySelected($event)"
-              ></app-custom-select>
-            </span>
-          </div>
+        <app-custom-select
+          class="with-left-icon"
+          [options]="propertyOptions"
+          key="key"
+          value="value"
+          [isFilter]="true"
+          [placeholder]="'PROPERTY_ALL' | translate"
+          (optionSelected)="onPropertySelected($event)"
+        ></app-custom-select>
 
-          <div class="custom-select-wrapper">
-            <span class="cmmnTblFltrBtn">
-              <app-custom-select
-                class="with-left-icon"
-                [options]="blockOptions"
-                key="key"
-                value="value"
-                [placeholder]="'BLOCK_TOWER_ALL' | translate"
-                (optionSelected)="onBlockSelected($event)"
-              ></app-custom-select>
-            </span>
-          </div>
+        <app-custom-select
+          class="with-left-icon"
+          [options]="blockOptions"
+          key="key"
+          value="value"
+          [isFilter]="true"
+          [placeholder]="'BLOCK_TOWER_ALL' | translate"
+          (optionSelected)="onBlockSelected($event)"
+        ></app-custom-select>
 
-          <div class="custom-select-wrapper">
-            <span class="cmmnTblFltrBtn">
-              <app-custom-select
-                class="with-left-icon"
-                [options]="unitOptions"
-                key="key"
-                value="value"
-                [placeholder]="'UNIT_ALL' | translate"
-                (optionSelected)="onUnitSelected($event)"
-              ></app-custom-select>
-            </span>
-          </div>
-          <button
-            *ngIf="hasActiveFilter"
-            class="cmmnTblFltrBtn"
-            type="button"
-            (click)="clearFilters()"
-          >
-            ✕ {{ "CLEAR_FILTER" | translate }}
-          </button>
-        </div>
+        <app-custom-select
+          class="with-left-icon"
+          [options]="unitOptions"
+          key="key"
+          value="value"
+          [isFilter]="true"
+          [placeholder]="'UNIT_ALL' | translate"
+          (optionSelected)="onUnitSelected($event)"
+        ></app-custom-select>
+
+        <button
+          *ngIf="hasActiveFilter"
+          class="cmmnTblFltrBtn"
+          type="button"
+          (click)="clearFilters()"
+        >
+          ✕ {{ "CLEAR_FILTER" | translate }}
+        </button>
       </div>
       <div class="right-controls">
         <div class="search-box">

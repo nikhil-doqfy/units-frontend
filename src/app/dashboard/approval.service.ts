@@ -34,4 +34,9 @@ export class ApprovalService {
   updateManagerApproval(data: { approval_id: number; action: 'approve' | 'reject' }): Observable<any> {
     return this.http.put(`${this.SERVER_ADDRESS}/api/approval`, data);
   }
+
+  getApprovalByLease(leaseId: number): Observable<any> {
+    const queryString = this.sharedService.getQueryString({ lease_id: leaseId });
+    return this.http.get(`${this.SERVER_ADDRESS}/api/approval${queryString}`);
+  }
 }

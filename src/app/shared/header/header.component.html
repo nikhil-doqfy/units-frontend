@@ -525,13 +525,10 @@
 
             <!------------------------------------------------------notification End here-------------------------------------------------------------->
             <ng-container *ngIf="currentRole === 'property-manager'">
-              <div ngbDropdown class="hdrDrpdwn hdrLanguageDrpdwn">
+              <div class="hdrDrpdwn hdrLanguageDrpdwn">
                 <button
                   type="button"
                   class="hdrDrpdwnBtn btn btnCommon btnWhite d-flex w-200px justify-content-between"
-                  id="userLanguageDropdown"
-                  ngbDropdownToggle
-                  (click)="openNotificationModal(notificationContent)"
                 >
                   <em class="arrow">
                     <span class="down"><app-arrow-down-icon /></span>
@@ -541,40 +538,6 @@
                 </button>
               </div>
             </ng-container>
-            <!-----------------------------------------------------transaction notification------------------------------------------------->
-            <ng-template #notificationContent let-modal>
-              <div class="modal-header">
-                <span><img src="assets/Bell.svg" /></span>
-                <div class="img">
-                  <img src="assets/property/property-list-1.png" />
-                </div>
-                <span class="title">Novatis | Block A | Unit 304</span>
-                <button
-                  type="button"
-                  class="btn-close"
-                  (click)="modal.dismiss()"
-                ></button>
-              </div>
-
-              <div class="modal-body">
-                <app-transaction #transactionComponent />
-              </div>
-
-              <!-- <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btnCommon btnTransparent"
-                  (click)="modal.dismiss()"
-                >
-                  {{ "CANCEL" | translate }}
-                </button>
-
-                <button type="button" class="btn btnCommon">
-                  {{ "SUBMIT_DETAILS" | translate }}
-                </button>
-              </div> -->
-            </ng-template>
-            <!------------------------------------------notification end here------------------------------------------>
             <div ngbDropdown class="hdrDrpdwn hdrLanguageDrpdwn">
               <button
                 type="button"

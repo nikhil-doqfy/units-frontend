@@ -53,7 +53,6 @@ import { UploadDocIconComponent } from '../../dashboard/component/icons/upload-d
 import { TermsconditionIconComponent } from '../../icons/termscondition-icon/termscondition-icon.component';
 import { ChargesIconComponent } from '../../icons/charges-icon/charges-icon.component';
 import { AuditlogIconComponent } from '../../icons/auditlog-icon/auditlog-icon.component';
-import { TransactionComponent } from '../transaction/transaction.component';
 import { NewPropertryIconsComponent } from '../../icons/new-propertry-icons/new-propertry-icons.component';
 import { NewUnitsComponent } from '../../dashboard/pages/new-units/new-units.component';
 import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon.component';
@@ -87,7 +86,6 @@ import { MoonIconComponent } from '../../icons/moon-icon/moon-icon.component';
     TermsconditionIconComponent,
     ChargesIconComponent,
     AuditlogIconComponent,
-    TransactionComponent,
     NewPropertryIconsComponent,
     NewUnitsComponent,
     NewUnitsIconComponent,
@@ -324,6 +322,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     console.log('function clicked');
   }
 
+  closeResult = signal('');
+
   openLogoutModal(logoutContent: TemplateRef<any>) {
     const modalRef = this.modalService.open(logoutContent, {
       windowClass: 'logoutMdl',
@@ -495,25 +495,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isContactSearchOpen = false;
   }
 
-  /*--------------------------notification model------------------------------------------------*/
-  closeResult: WritableSignal<string> = signal('');
-
-  openNotificationModal(addUserContent: TemplateRef<any>) {
-    this.modalService
-      .open(addUserContent, {
-        ariaLabelledBy: 'modal-title',
-        windowClass: 'mdlCommon right-side-modal',
-        centered: true,
-      })
-      .result.then(
-        (result) => {
-          this.closeResult.set(`Closed with: ${result}`);
-        },
-        (reason) => {
-          this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-        },
-      );
-  }
 
   private getDismissReason(reason: any): string {
     switch (reason) {

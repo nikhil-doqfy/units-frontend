@@ -21,10 +21,10 @@ export class NewTenantFromService {
   private activeIndex = signal<number>(0);
   private activeSubIndex = signal<number>(0);
   private leaseId = signal<number | null>(null);
+  private approvalId = signal<number | null>(null);
 
-  getLeaseId() {
-    return this.leaseId;
-  }
+  getLeaseId() { return this.leaseId; }
+  getApprovalId() { return this.approvalId; }
 
   // Commercial data from the selected unit — used to pre-fill the commercial form
   private unitCommercialData = signal<any>(null);
@@ -676,7 +676,8 @@ export class NewTenantFromService {
     this.leaseService
       .sendManagerApproval({ lease_id: leaseId, requested_rent: requestedRent, requested_tenure: requestedTenure })
       .subscribe({
-        next: () => {
+        next: (res: any) => {
+          this.approvalId.set(res?.content?.approval_id ?? null);
           this.msgText.set('Waiting for Manager Approval — a manager must approve the lease terms before you can proceed.');
           this.showMsg.set(true);
           this.alertService.success('Approval request sent to manager');

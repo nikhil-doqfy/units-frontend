@@ -1,10 +1,11 @@
-<div class="user-info"><span>User:</span> Admin officer, Ali Imran</div>
-
-<div class="details">
-  <div><strong>ABHRAM</strong></div>
-  <div>Addr: P.O. BOX # 95801, Sharjah</div>
-  <div>Phone: +41-8272829282</div>
+<div class="user-info" *ngIf="approvalData?.created_by">
+  <span>User:</span> {{ approvalData.created_by }}
 </div>
+
+<div class="details" *ngIf="approvalData?.tenant">
+  <div><strong>{{ approvalData.tenant }}</strong></div>
+</div>
+
 <div class="table-wrapper">
   <table class="validation-table">
     <thead>
@@ -15,21 +16,22 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Lease Duration</td>
-        <td>8 Months</td>
-        <td class="bold">Minimum 12 Months</td>
+      <tr *ngFor="let v of violations">
+        <td>{{ v.validation }}</td>
+        <td>{{ v.entered }}</td>
+        <td class="bold">{{ v.required }}</td>
       </tr>
-      <tr>
-        <td>Annual Rent</td>
-        <td>AED 85,000</td>
-        <td class="bold">Standard AED 95,000</td>
+      <tr *ngIf="violations.length === 0">
+        <td colspan="3" style="text-align:center; color: var(--textMuted);">No violations found</td>
       </tr>
     </tbody>
   </table>
 </div>
+
 <div class="footer mt-3">
   <span class="dot"></span>
-  <button class="reject">Rejact</button>
-  <button class="approve">Approve</button>
+  <button class="reject" [disabled]="isApproving" (click)="rejected.emit()">Reject</button>
+  <button class="approve" [disabled]="isApproving" (click)="approved.emit()">
+    {{ isApproving ? 'Approving…' : 'Approve' }}
+  </button>
 </div>

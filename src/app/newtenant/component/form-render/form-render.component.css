@@ -383,6 +383,39 @@
   color: var(--alert-text-waiting);
 }
 
+.btn-review-approve {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.btn-review-approve:hover:not(:disabled) { opacity: 1; }
+.btn-review-approve:disabled { cursor: not-allowed; opacity: 0.5; }
+
+/* ── Approval panel rows ── */
+.approval-panel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--muteBorder1);
+}
+.approval-panel-row:last-of-type { border-bottom: none; }
+.approval-panel-label { color: var(--textMuted); font-weight: 500; }
+.approval-panel-value { color: var(--textPrimary); font-weight: 600; }
+.approval-panel-highlight { color: var(--orange, #d97706); }
+.approval-panel-divider { border-color: var(--muteBorder1); margin: 4px 0; }
+
 .success-alert {
   background-color: var(--alert-bg-success);
   color: var(--alert-text-success);
