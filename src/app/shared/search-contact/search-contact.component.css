@@ -1,8 +1,9 @@
+/* ── Search bar ─────────────────────────────────────────────── */
 .search-wrapper {
   position: relative;
   width: 100%;
-  height: 50px;
   max-width: 750px;
+  height: 50px;
 }
 
 .search-box {
@@ -13,31 +14,24 @@
   width: 680px;
   height: 50px;
   background-color: var(--whiteBg);
-  padding: 0px 10px;
-}
-
-.search-input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 14px;
+  padding: 0 10px;
 }
 
 .inner-search {
   display: flex;
-  width: 664px;
-  max-width: 100%;
+  width: 100%;
   height: 38px;
   align-items: center;
   background-color: var(--inputBg);
   border-radius: 8px;
-  padding: 10px 10px;
+  padding: 0 10px;
+  gap: 8px;
 }
 
 .inner-search i {
   display: flex;
   align-items: center;
-  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .search-input {
@@ -50,167 +44,212 @@
   padding: 4px 0;
 }
 
+.search-input::placeholder {
+  color: var(--textMuted);
+  opacity: 1;
+}
+
+.search-input:focus {
+  outline: none;
+  color: var(--textPrimary);
+}
+
 .close-btn {
   border: none;
   background: none;
   cursor: pointer;
   font-size: 16px;
-  margin-right: 6px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
+/* ── Dropdown panel ─────────────────────────────────────────── */
 .search-dropdown {
   position: absolute;
   top: 60px;
-  width: 100%;
-  width: 680;
-  height: 470px;
-  background: var(--textPrimary1);
-  border-radius: 12px;
-  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
+  width: 680px;
+  max-height: 500px;
+  background: var(--whiteBg);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   z-index: 999;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
+/* ── Filter tabs ────────────────────────────────────────────── */
 .filter-tabs {
   display: flex;
   gap: 10px;
-  padding: 16px;
-  padding-bottom: 10px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--borderLight);
-  margin-bottom: 20px;
 }
 
 .filter-tabs button {
-  padding-bottom: 10px;
-  padding: 6px 14px;
+  padding: 6px 18px;
   border-radius: 10px;
   border: 1px solid var(--borderSoft);
   background: var(--inputBg);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  color: var(--textSecondary);
+  transition: all 0.15s ease;
 }
 
 .filter-tabs .active {
-  border-radius: 10px;
-  border: 1px solid var(--borderPrimary);
-  color: var(--textPrimary);
+  border-color: var(--borderPrimary);
+  color: var(--primaryColor);
+  background: var(--whiteBg);
 }
 
+/* ── Section title ──────────────────────────────────────────── */
 .recent-title {
-  color: var(--textPrimary);
+  color: var(--textSecondary);
   font-weight: 500;
-  font-size: 14px;
-  margin-bottom: 10px;
-  padding-left: 16px;
+  font-size: 13px;
+  padding: 12px 16px 6px;
+  margin: 0;
 }
 
+/* ── Contact row ────────────────────────────────────────────── */
 .contact-item {
   display: flex;
-  justify-content: space-between;
-  padding: 16px;
-}
-
-.contact-list {
-  flex: 1;
-}
-
-.contact-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 16px;
-  height: 70px;
-  box-sizing: border-box;
-}
-
-.left {
-  display: flex;
-  gap: 10px;
   align-items: center;
-}
-.left h6 {
-  font-weight: 500;
-  font-size: medium;
-  color: var(--textPrimary);
-}
-
-.badge {
-  width: 63px;
-  height: 19px;
-  font-size: 11px;
-  background: var(--badgeBg);
-  padding: 2px 8px;
-  font-weight: normal;
-  border-radius: 20px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--borderLight);
+  gap: 12px;
+  transition: background 0.15s ease;
 }
 
-.contact-info {
-  display: flex;
-  gap: 20px;
-  font-size: 13px;
-}
-.badge.tenant {
-  background-color: var(--badgeTenantBg);
-  color: var(--badgeTenantText);
-}
-.badge.team {
-  background-color: var(--badgeTeamBg);
-  color: var(--badgeTeamText);
+.contact-item:last-child {
+  border-bottom: none;
 }
 
-.contact-info {
-  /* display: flex; */
-  gap: 20px;
-  font-size: 13px;
-  align-items: center;
-  align-items: flex-start;
+.contact-item:nth-child(even) {
+  background-color: var(--rowAltBg, #f8f9fa);
 }
 
-.info-item {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  gap: 6px;
-  flex-direction: column;
-  color: var(--textPrimary);
-}
-
-.info-item svg {
-  flex-shrink: 0;
-}
 .contact-item:hover {
   background-color: var(--hoverBg);
 }
 
-.info-item app-phone-icon,
-.info-item app-search-mail-icon,
-.info-item app-search-whatsapp-icon {
-  margin-bottom: 4px;
+/* ── Left: avatar + name + badge ────────────────────────────── */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 180px;
+  flex: 0 0 180px;
 }
 
-/* Placeholder text color */
-.search-input::placeholder {
-  color: var(--textMuted); /* gray placeholder */
-  opacity: 1; /* ensure it’s fully visible */
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.search-input:focus {
-  outline: none;
-  color: var(--blackText); /* keep typed text black on focus */
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+.avatar-initials {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--primaryColor, #3b5bdb);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.left h6 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--textPrimary);
+  white-space: nowrap;
+}
+
+/* ── Role badge ─────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--badgeBg);
+  color: var(--textSecondary);
+}
+
+.badge.tenant {
+  background-color: var(--badgeTenantBg, #e8f0fe);
+  color: var(--badgeTenantText, #1a56db);
+}
+
+.badge.team {
+  background-color: var(--badgeTeamBg, #fff3e0);
+  color: var(--badgeTeamText, #e65100);
+}
+
+.badge.landlord {
+  background-color: var(--badgeLandlordBg, #e8f5e9);
+  color: var(--badgeLandlordText, #2e7d32);
+}
+
+/* ── Contact info columns ───────────────────────────────────── */
+.contact-info {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  flex: 1;
+  font-size: 12px;
+  color: var(--textPrimary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.info-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: center;
+}
+
+/* ── No results ─────────────────────────────────────────────── */
 .no-results-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  padding: 40px 16px;
   text-align: center;
   color: var(--textSecondary);
 }
 
 .no-results-wrapper img {
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   margin-bottom: 10px;
+  opacity: 0.5;
 }
 
 .no-results-wrapper .no-results {
@@ -218,6 +257,7 @@
   font-weight: 500;
 }
 
+/* ── RTL support ────────────────────────────────────────────── */
 :host-context(.arabic) .close-btn {
   right: auto !important;
   left: 16px !important;

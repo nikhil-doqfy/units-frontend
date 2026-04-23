@@ -21,11 +21,12 @@
     </div>
   </div>
 
-  <div class="search-dropdown" *ngIf="isFocused">
+  <div class="search-dropdown" *ngIf="isFocused" (mousedown)="$event.preventDefault()">
     <div class="filter-tabs">
-      <button class="active">{{ "All" | translate }}</button>
-      <button class="btnWhite btnCommon">{{ "TENANTS" | translate }}</button>
-      <button class="btnWhite btnCommon">{{ "TEAM" | translate }}</button>
+      <button [class.active]="activeFilter === 'All'"      (click)="setFilter('All')">{{ "All" | translate }}</button>
+      <button [class.active]="activeFilter === 'Tenant'"   (click)="setFilter('Tenant')">{{ "TENANTS" | translate }}</button>
+      <button [class.active]="activeFilter === 'Team'"     (click)="setFilter('Team')">{{ "TEAM" | translate }}</button>
+      <button [class.active]="activeFilter === 'Landlord'" (click)="setFilter('Landlord')">{{ "LANDLORD" | translate }}</button>
     </div>
 
     <p class="recent-title">Recent search's ({{ contacts.length }})</p>
@@ -39,9 +40,14 @@
     </div>
     <div class="contact-item" *ngFor="let contact of contacts">
       <div class="left">
-        <div class="avatar"><img [src]="contact.img" /></div>
+        <div class="avatar">
+          <img *ngIf="contact.profile_image" [src]="contact.profile_image" [alt]="contact.full_name" />
+          <div *ngIf="!contact.profile_image" class="avatar-initials">
+            {{ contact.full_name ? (contact.full_name.trim().split(' ')[0][0] + (contact.full_name.trim().split(' ')[1]?.[0] || '')).toUpperCase() : '?' }}
+          </div>
+        </div>
         <div>
-          <h6>{{ contact.name }}</h6>
+          <h6>{{ contact.full_name }}</h6>
           <span
             class="badge"
             [ngClass]="{
@@ -55,19 +61,18 @@
       </div>
 
       <div class="contact-info">
-        <span class="info-item">
+        <div class="info-item">
           <app-phone-icon></app-phone-icon>
-
-          {{ contact.phone }}
-        </span>
-        <span class="info-item">
+          <span>{{ contact.phone || '—' }}</span>
+        </div>
+        <div class="info-item">
           <app-search-mail-icon></app-search-mail-icon>
-          {{ contact.email }}
-        </span>
-        <span class="info-item whatsapp">
+          <span>{{ contact.email || '—' }}</span>
+        </div>
+        <div class="info-item">
           <app-search-whatsapp-icon></app-search-whatsapp-icon>
-          {{ contact.phone }}
-        </span>
+          <span>{{ contact.phone || '—' }}</span>
+        </div>
       </div>
     </div>
   </div>

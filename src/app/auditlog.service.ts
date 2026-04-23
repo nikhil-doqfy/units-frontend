@@ -16,4 +16,9 @@ export class AuditlogService {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(`${this.SERVER_ADDRESS}/audit_log${queryString}`);
   }
+
+  exportAuditLog(params: Record<string, any> = {}): Observable<Blob> {
+    const queryString = this.sharedService.getQueryString({ ...params, export: 'true' });
+    return this.http.get(`${this.SERVER_ADDRESS}/audit_log${queryString}`, { responseType: 'blob' });
+  }
 }

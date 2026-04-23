@@ -152,6 +152,17 @@
   z-index: 2;
 }
 
+.avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primaryColor, #3b5bdb);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
 /* Vertical Line */
 .vertical-line {
   position: absolute;

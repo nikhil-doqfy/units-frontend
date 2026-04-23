@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -12,7 +13,7 @@ import { CircularCrossBtnIconComponent } from '../../icons/circular-cross-btn-ic
 import { PhoneIconComponent } from '../../icons/phone-icon/phone-icon.component';
 import { SearchMailIconComponent } from '../../icons/search-mail-icon/search-mail-icon.component';
 import { SearchWhatsappIconComponent } from '../../icons/search-whatsapp-icon/search-whatsapp-icon.component';
-import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ContactSearchService } from '../../contact-search.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -34,46 +35,61 @@ import { SharedService } from '../../shared.service';
   templateUrl: './search-contact.component.html',
   styleUrl: './search-contact.component.css',
 })
-export class SearchContactComponent {
+export class SearchContactComponent implements AfterViewInit {
   private contactSearchService = inject(ContactSearchService);
   private sharedService = inject(SharedService);
   @ViewChild('searchInput') searchInput!: ElementRef;
   @Output() close = new EventEmitter<void>();
 
-  isFocused = false;
+  isFocused    = false;
+  activeFilter: 'All' | 'Tenant' | 'Team' | 'Landlord' = 'All';
   searchControl = new FormControl('');
   contacts: any[] = [];
 
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.searchInput?.nativeElement?.focus();
+      this.isFocused = true;
+    }, 50);
+  }
+
   ngOnInit(): void {
-    this.contactSearchService.getUsers({}).subscribe({
-      next: (res) => (this.contacts = res || []),
-      error: (err) => console.error('Initial fetch error', err),
-    });
+    this.fetchContacts();
 
     this.searchControl.valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(400),
         distinctUntilChanged(),
-        filter((term): term is string => !!term),
-        switchMap((term) =>
-          this.contactSearchService.searchUsers({ search: term }),
-        ),
+        switchMap((term) => this.contactSearchService.searchUsers(this.buildParams(term ?? ''))),
       )
-      .subscribe((res) => (this.contacts = res || []));
+      .subscribe((res) => (this.contacts = res?.content || []));
+
     this.sharedService.initLanguage();
   }
 
-  onFocus() {
-    this.isFocused = true;
+  private buildParams(search = ''): Record<string, any> {
+    const p: Record<string, any> = {};
+    if (search)                        p['search'] = search;
+    if (this.activeFilter !== 'All')   p['role']   = this.activeFilter;
+    return p;
   }
 
-  onBlur() {
-    setTimeout(() => {
-      this.isFocused = false;
-    }, 200);
+  fetchContacts(): void {
+    this.contactSearchService
+      .getUsers(this.buildParams(this.searchControl.value ?? ''))
+      .subscribe({ next: (res) => (this.contacts = res?.content || []) });
   }
 
-  closeSearch() {
-    this.close.emit();
+  setFilter(f: 'All' | 'Tenant' | 'Team' | 'Landlord'): void {
+    this.activeFilter = f;
+    this.fetchContacts();
   }
+
+  onFocus(): void  { this.isFocused = true; }
+
+  onBlur(): void {
+    setTimeout(() => { this.isFocused = false; }, 200);
+  }
+
+  closeSearch(): void { this.close.emit(); }
 }
