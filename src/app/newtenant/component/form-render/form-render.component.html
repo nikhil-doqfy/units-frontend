@@ -166,6 +166,14 @@
   >
     <span class="icon"><app-warning-icon /></span>
     <span class="text">{{ msgText$() }}</span>
+    <button
+      *ngIf="canApprove"
+      class="btn-review-approve"
+      [disabled]="isLoadingApproval"
+      (click)="openApprovalPanel()"
+    >
+      {{ isLoadingApproval ? 'Loading…' : 'Review & Approve' }}
+    </button>
   </div>
   <div
     class="top-alert success-alert"
@@ -200,6 +208,28 @@
     </div>
   </ng-container>
 </div>
+
+<!-- PMC Approval Review Panel -->
+<ng-template #approvalPanelTemplate let-modal>
+  <div class="modal-header">
+    <span><img src="assets/Bell.svg" /></span>
+    <div class="img">
+      <img [src]="approvalDetails?.property_image || 'assets/property/property-list-1.png'" />
+    </div>
+    <span class="title">
+      {{ approvalDetails?.property }} | {{ approvalDetails?.block }} | {{ approvalDetails?.unit }}
+    </span>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <app-transaction
+      [approvalData]="approvalDetails"
+      [isApproving]="isApprovingFromPanel"
+      (approved)="approveFromPanel(modal)"
+      (rejected)="rejectFromPanel(modal)"
+    />
+  </div>
+</ng-template>
 
 <!-- Manager Approval Modal -->
 <ng-template #approvalModal let-modal>

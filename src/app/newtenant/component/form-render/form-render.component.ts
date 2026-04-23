@@ -29,6 +29,9 @@ import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-sig
 import { EjarimodelService } from '../../../ejarimodel.service';
 import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.component';
 import { SignedSuccessfullyIconComponent } from '../../../icons/signed-successfully-icon/signed-successfully-icon.component';
+import { PermissionService } from '../../../services/permission.service';
+import { ApprovalService } from '../../../dashboard/approval.service';
+import { TransactionComponent } from '../../../shared/transaction/transaction.component';
 
 @Component({
   selector: 'app-form-render',
@@ -36,6 +39,7 @@ import { SignedSuccessfullyIconComponent } from '../../../icons/signed-successfu
   imports: [
     CommonModule,
     WhiteCardComponent,
+    TransactionComponent,
     CircularCrossBtnIconComponent,
     LeftArrowIconComponent,
     SendInviteIconComponent,
@@ -51,10 +55,13 @@ import { SignedSuccessfullyIconComponent } from '../../../icons/signed-successfu
 export class FormRenderComponent {
   @Output() negotiationClick = new EventEmitter<void>();
   @ViewChild('approvalModal') approvalModal!: TemplateRef<any>;
+  @ViewChild('approvalPanelTemplate') approvalPanelTemplate!: TemplateRef<any>;
 
   @Input() steps: any;
   @Input() activeIndex: any;
   private modalService = inject(NgbModal);
+  private permissionService = inject(PermissionService);
+  private approvalService = inject(ApprovalService);
 
   approvalViolations: { validation: string; entered: string; required: string }[] = [];
   isSendingApproval = false;
@@ -65,6 +72,15 @@ export class FormRenderComponent {
   isDropdownOpen = false;
   showInviteMsg = false;
   subIndex = this.formService.getActiveSubIndex();
+
+  approvalDetails: any = null;
+  isLoadingApproval = false;
+  isApprovingFromPanel = false;
+
+  get canApprove(): boolean {
+    return this.permissionService.isPropertyManager() &&
+      this.permissionService.canAccessModule('Approval');
+  }
   ProfileComponent = ProfileComponent;
   OnboardingComponent = OnboardingComponent;
   AgreementComponent = AgreementComponent;
@@ -359,12 +375,12 @@ export class FormRenderComponent {
     }
 
     const annualAmount = parseFloat(v.annualAmount) || 0;
-    const standardRent = unit?.rent ? parseFloat(unit.rent) : 0;
-    if (standardRent > 0 && annualAmount < standardRent) {
+    const actualAnnualAmount = parseFloat(v.actualAnnualAmount) || 0;
+    if (actualAnnualAmount > 0 && annualAmount < actualAnnualAmount) {
       violations.push({
         validation: 'Annual Rent',
         entered: `AED ${annualAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-        required: `AED ${standardRent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        required: `AED ${actualAnnualAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       });
     }
 
@@ -448,6 +464,61 @@ export class FormRenderComponent {
         return `with: ${reason}`;
     }
   }
+  openApprovalPanel(): void {
+    const leaseId = this.formService.getLeaseId()();
+    if (!leaseId) return;
+    this.approvalDetails = null;
+    this.isLoadingApproval = true;
+    this.approvalService.getApprovalByLease(leaseId).subscribe({
+      next: (res: any) => {
+        this.approvalDetails = res?.content ?? null;
+        this.isLoadingApproval = false;
+        this.modalService.open(this.approvalPanelTemplate, {
+          ariaLabelledBy: 'approval-panel-title',
+          windowClass: 'mdlCommon right-side-modal',
+          centered: true,
+        });
+      },
+      error: () => {
+        this.isLoadingApproval = false;
+        this.alertService.error('Could not load approval details.');
+      },
+    });
+  }
+
+  approveFromPanel(modal: any): void {
+    if (!this.approvalDetails?.id || this.isApprovingFromPanel) return;
+    this.isApprovingFromPanel = true;
+    this.approvalService.updateManagerApproval({ approval_id: this.approvalDetails.id, action: 'approve' }).subscribe({
+      next: (res: any) => {
+        this.isApprovingFromPanel = false;
+        this.alertService.success(res?.message ?? 'Approved successfully');
+        this.formService.restoreStepFromStage('MANAGER_APPROVED');
+        modal.dismiss();
+      },
+      error: () => {
+        this.isApprovingFromPanel = false;
+        this.alertService.error('Failed to approve. Please try again.');
+      },
+    });
+  }
+
+  rejectFromPanel(modal: any): void {
+    if (!this.approvalDetails?.id || this.isApprovingFromPanel) return;
+    this.isApprovingFromPanel = true;
+    this.approvalService.updateManagerApproval({ approval_id: this.approvalDetails.id, action: 'reject' }).subscribe({
+      next: (res: any) => {
+        this.isApprovingFromPanel = false;
+        this.alertService.success(res?.message ?? 'Rejected');
+        modal.dismiss();
+      },
+      error: () => {
+        this.isApprovingFromPanel = false;
+        this.alertService.error('Failed to reject. Please try again.');
+      },
+    });
+  }
+
   openAddTenantModal(addTenantContent: TemplateRef<any>) {
     const modalRef = this.modalService.open(addTenantContent, {
       ariaLabelledBy: 'modal-title',

@@ -1,38 +1,10 @@
-/* ── Edit Cheque Modal ───────────────────────────────────────────────────── */
-.cheque-form-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--textMuted);
-  margin-bottom: 4px;
-}
-
-.cheque-form-input {
-  font-size: 13px;
-  border-radius: 8px;
-  border: 1px solid var(--borderInput);
-}
-
-.cheque-section-divider {
-  border-color: var(--borderLight);
-  margin: 4px 0;
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
+/* ── Top filter bar ─────────────────────────────────────────── */
 .top-filter-bar {
   display: flex;
   align-items: center;
-  border-radius: 10px;
-  /* background: var(--bg-white); */
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 32px;
-  overflow: visible !important;
 }
 
 .left-controls {
@@ -41,50 +13,23 @@
   flex-wrap: wrap;
 }
 
+
 .right-controls {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   margin-left: auto;
 }
-.filter-select {
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: var(--bg-white);
-  font-size: 14px;
-  cursor: pointer;
-  min-width: 130px;
-}
-.custom-select {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 11px;
-}
-
-.custom-select .icon {
-  position: absolute;
-  left: 10px;
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-}
-
-.filter-select.with-icon {
-  padding-left: 36px;
-}
 
 .search-box {
   display: flex;
-  width: 197px;
   height: 34px;
   align-items: center;
-  background: var(--bg-light);
+  background: var(--searchBg);
   border-radius: 10px;
   padding: 6px 10px;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--borderColor);
   min-width: 230px;
-  border: none;
 }
 
 .search-box input {
@@ -96,36 +41,23 @@
   width: 100%;
 }
 
-.search-icon {
-  margin-right: 6px;
-  color: var(--text-muted);
-}
-
-.clear-icon {
-  margin-left: 6px;
-  cursor: pointer;
-}
-
 @media (max-width: 768px) {
-  .top-filter-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .left-controls {
-    justify-content: space-between;
-  }
-
-  .search-box {
-    width: 100%;
-  }
+  .top-filter-bar { flex-direction: column; align-items: stretch; }
+  .left-controls   { justify-content: space-between; }
+  .search-box      { width: 100%; }
 }
+
+/* ── Summary cards ──────────────────────────────────────────── */
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 18px;
   margin-bottom: 24px;
 }
+
+@media (max-width: 1200px) { .summary-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px)  { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .summary-grid { grid-template-columns: 1fr; } }
 
 .summary-card {
   padding: 18px 18px 22px;
@@ -136,21 +68,22 @@
   border: 2px solid transparent;
 }
 
-.summary-card.active {
-  background: var(--card-active-bg);
-}
+.summary-card.active { background: var(--card-active-bg); }
 
 .top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
   margin-bottom: 6px;
 }
 
 .main-value {
   font-size: 18px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--textPrimary);
+  white-space: nowrap;
 }
 
 .tag {
@@ -161,140 +94,92 @@
   white-space: nowrap;
 }
 
-.grey {
-  background: var(--tag-grey-bg);
-  /* color: var(--tag-grey-bg); */
-  border: 1px solid var(--tag-grey-border);
-}
+.grey   { background: var(--tag-grey-bg);   border: 1px solid var(--tag-grey-border); }
+.purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.green  { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.orange { background: var(--tag-orange-bg); color: var(--tag-orange-text); }
+.blue   { background: var(--tag-blue-bg);   color: var(--tag-blue-text); }
 
-.purple {
-  background: var(--tag-purple-bg);
-  color: var(--tag-purple-text);
-}
-
-.green {
-  background: var(--tag-purple-bg);
-  color: var(--tag-purple-text);
-}
-
-.orange {
-  background: var(--tag-orange-bg);
-  color: var(--tag-orange-text);
-}
-
-.blue {
-  background: var(--tag-blue-bg);
-  color: var(--tag-blue-text);
-}
-
-.title {
-  font-size: 14px;
-  font-weight: 600;
-  margin-top: 8px;
-  color: var(--text-secondary);
-}
-
-.subtitle {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
+.title    { font-size: 14px; font-weight: 600; margin-top: 8px;  color: var(--textSecondary); }
+.subtitle { font-size: 12px; color: var(--textMuted);           margin-top: 4px; }
 
 .arrow {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 0;
-  height: 0;
+  width: 0; height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 10px solid transparent;
   display: none;
 }
+.summary-card.active .arrow { display: block; border-top-color: var(--arrow-color); }
 
-.summary-card.active .arrow {
-  display: block;
-  border-top-color: var(--arrow-color);
+/* ── Edit cheque modal ──────────────────────────────────────── */
+.cheque-form-label   { font-size: 12px; font-weight: 500; color: var(--textMuted); margin-bottom: 4px; }
+.cheque-form-input   { font-size: 13px; border-radius: 8px; border: 1px solid var(--borderInput); }
+.cheque-section-divider { border-color: var(--borderLight); margin: 4px 0; }
+
+/* ── Table tweaks ───────────────────────────────────────────── */
+.bounce-highlight {
+  background: linear-gradient(to bottom, transparent 6px, var(--highlight-bg) 6px);
 }
 
-@media (max-width: 1200px) {
-  .summary-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .summary-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.top-row {
+.amount-cell {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  gap: 8px;
+  gap: 40px;
 }
 
-.main-value {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-dark);
-  white-space: nowrap;
-}
-
-.tag {
-  font-size: 11px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
+/* ── Scrollable table with hidden scrollbar ─────────────────── */
 .table-responsive {
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  overflow: visible !important;
 }
 .table-responsive::-webkit-scrollbar {
   display: none;
 }
 
-:host ::ng-deep .custom-select-wrapper .customSelectInput {
-  padding: 0 !important;
-  border: none !important;
-
-  height: 0 !important;
+/* ── Sticky Actions column ──────────────────────────────────── */
+.cheques-table thead tr th:last-child,
+.cheques-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 100px;
 }
 
-/*----------------------------*/
-.bounce-highlight {
+.cheques-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg1);
+  box-shadow: none;
+}
+
+.cheques-table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px var(--shadowLeft);
+}
+
+/* Gradient shadow on sticky column */
+.cheques-table td:last-child::before,
+.cheques-table th:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
   background: linear-gradient(
-    to bottom,
-    transparent 6px,
-    var(--highlight-bg) 6px
+    to left,
+    var(--gradientShadowStart),
+    var(--gradientShadowMid),
+    transparent
   );
 }
-.amount-cell {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-.cmmnTbl .table tr > *:last-child {
-  border-right: none !important;
-}
-/* .cmmnTbl .table tr > *:last-child {
-  border-bottom: none !important;
-} */
-.cmmnTbl .table > :not(caption) > tbody > tr:last-child > td:last-child {
-  border-bottom: none !important;
-}
+
+/* Remove right border on last column */
+.cmmnTbl .table tr > *:last-child { border-right: none !important; }
+.cmmnTbl .table > :not(caption) > tbody > tr:last-child > td:last-child { border-bottom: none !important; }
