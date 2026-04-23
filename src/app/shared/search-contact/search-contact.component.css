@@ -126,9 +126,9 @@
   border-bottom: none;
 }
 
-.contact-item:nth-child(even) {
+/* .contact-item:nth-child(even) {
   background-color: var(--rowAltBg, #f8f9fa);
-}
+} */
 
 .contact-item:hover {
   background-color: var(--hoverBg);
