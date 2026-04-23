@@ -70,7 +70,7 @@
       <div class="cmmnTblOuter">
         <div class="cmmnTbl">
           <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered approval-table">
               <thead>
                 <tr>
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
@@ -89,76 +89,40 @@
                   <th>{{ "TENURE" | translate }}</th>
                   <th>{{ "RENT" | translate }}</th>
                   <th>{{ "ACTUAL_RENT" | translate }}</th>
-                  <th width="200"></th>
+                  <th width="200">{{ "ACTION" | translate }}</th>
                 </tr>
               </thead>
 
               <tbody>
-                @for (
-                  approval of [
-                    {
-                      tenant_id: 1,
-                      name: "John Doe",
-                      profile_image: "",
-                      date_request: "07-03-2026",
-                      requested_by: "Aisha",
-                      property_name: "Novatis AG",
-                      tower: "Tower A",
-                      unit: "204",
-                      tenant_name: "Jensi",
-                      tenure: "--",
-                      rent: "AED 350.00",
-                      actual_rent: "AED 380.00",
-                    },
-                  ];
-                  track $index
-                ) {
+                @for (approval of managerApprovalList; track approval.id) {
                   <tr>
+                    <td>{{ approval.date_request }}</td>
+                    <td>{{ approval.requested_by }}</td>
                     <td>
-                      {{
-                        approval?.date_request ? approval.date_request : "N/A"
-                      }}
-                    </td>
-                    <td>{{ approval?.name ? approval.name : "N/A" }}</td>
-                    <td>
-                      <!-- ? approval?.profile_image -->
                       <app-table-img-item
-                        [img]="
-                          approval?.profile_image ||
-                          '../../../../assets/userDefaultProImg.png'
-                        "
-                        [clickable]="true"
-                        (clicked)="handleViewClick(approval.tenant_id)"
+                        [img]="approval.property_image"
                         [title]="approval.property_name"
+                        size="md"
+                        [showInitialsFallback]="true"
                       />
                     </td>
                     <td>{{ approval.tower }}</td>
                     <td>{{ approval.unit }}</td>
                     <td>
-                      <!-- ? approval?.profile_image -->
                       <app-table-img-item
-                        [img]="
-                          approval?.profile_image ||
-                          '../../../../assets/userDefaultProImg.png'
-                        "
-                        [clickable]="true"
-                        (clicked)="handleViewClick(approval.tenant_id)"
-                        [title]="approval.name"
+                        [img]="approval.profile_image"
+                        [title]="approval.tenant_name"
+                        size="md"
+                        [showInitialsFallback]="true"
                       />
                     </td>
                     <td>{{ approval.tenure }}</td>
-
                     <td>{{ approval.rent }}</td>
-
                     <td>{{ approval.actual_rent }}</td>
-
                     <td align="center">
                       <div class="cmmnTblActnBtnDiv">
-                        <app-table-action-btn type="reject" />
-                        <!-- (clicked)="handleRejectClick(approval.lease_id)" -->
-
-                        <app-table-action-btn type="approve" />
-                        <!-- (clicked)="handleApproveClick(approval.lease_id)" -->
+                        <app-table-action-btn type="reject" (clicked)="rejectManagerItem(approval.id)" />
+                        <app-table-action-btn type="approve" (clicked)="approveManagerItem(approval.id)" />
                       </div>
                     </td>
                   </tr>
@@ -197,95 +161,52 @@
       aria-labelledby="accepted-tab"
       tabindex="0"
     >
-      <!-- accepted  -->
       <div class="cmmnTblOuter">
         <div class="cmmnTbl">
           <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered approval-table">
               <thead>
                 <tr>
-                  <th>
-                    <button type="button">
-                      {{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i>
-                    </button>
-                  </th>
-                  <th>{{ "EMIRATES_ID" | translate }}</th>
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
-                  <th>{{ "CONTACT_NUMBER" | translate }}</th>
-                  <th>{{ "EMAIL_ADDRESS" | translate }}</th>
-                  <!-- <th width="200"></th> -->
+                  <th>{{ "REQUESTED_BY" | translate }}</th>
+                  <th>{{ "PROPERTY_NAME" | translate }}</th>
+                  <th>{{ "BLOCK_TOWER" | translate }}<i><app-sorting-icon /></i></th>
+                  <th>{{ "UNIT" | translate }}</th>
+                  <th>{{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i></th>
+                  <th>{{ "TENURE" | translate }}</th>
+                  <th>{{ "RENT" | translate }}</th>
+                  <th>{{ "ACTUAL_RENT" | translate }}</th>
                 </tr>
               </thead>
-              @for (approval of tenantList; track $index) {
-                <tbody>
+              <tbody>
+                @for (approval of managerApprovalList; track approval.id) {
                   <tr>
+                    <td>{{ approval.date_request }}</td>
+                    <td>{{ approval.requested_by }}</td>
                     <td>
-                      <app-table-img-item
-                        [img]="
-                          approval?.profile_image
-                            ? approval?.profile_image
-                            : '../../../../assets/userDefaultProImg.png'
-                        "
-                        [clickable]="true"
-                        [title]="approval.name"
-                      />
-                      <!-- (clicked)="handleViewClick()" -->
+                      <app-table-img-item [img]="approval.property_image" [title]="approval.property_name" size="md" [showInitialsFallback]="true" />
                     </td>
+                    <td>{{ approval.tower }}</td>
+                    <td>{{ approval.unit }}</td>
                     <td>
-                      {{ approval?.emirates_id ? approval.emirates_id : "N/A" }}
+                      <app-table-img-item [img]="approval.profile_image" [title]="approval.tenant_name" size="md" [showInitialsFallback]="true" />
                     </td>
-                    <td>
-                      {{
-                        approval?.date_request ? approval.date_request : "N/A"
-                      }}
-                    </td>
-                    <td>
-                      {{
-                        approval.contact_number
-                          ? approval.contact_number
-                          : "N/A"
-                      }}
-                    </td>
-                    <td>{{ approval.email }}</td>
-                    <!-- 
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick(approval.lease_id)"
-                      />
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick(approval.lease_id)"
-                      />
-                    </div>
-                  </td> -->
+                    <td>{{ approval.tenure }}</td>
+                    <td>{{ approval.rent }}</td>
+                    <td>{{ approval.actual_rent }}</td>
                   </tr>
-                </tbody>
-              } @empty {
-                <tr>
-                  <td colspan="20" align="center">
-                    <app-no-data></app-no-data>
-                  </td>
-                </tr>
-              }
+                } @empty {
+                  <tr>
+                    <td colspan="20" align="center"><app-no-data></app-no-data></td>
+                  </tr>
+                }
+              </tbody>
             </table>
           </div>
         </div>
         <div class="cmmnTblFtr">
-          <app-table-select
-            [componentName]="componentName"
-            [rowsPerPage]="rowsPerPage"
-            [rowsPerPageOptions]="rowsPerPageOptions"
-            (rowsPerPageChange)="onPageSizeChange($event)"
-          />
-          <app-table-pagination
-            [componentName]="componentName"
-            [currentPage]="currentPage"
-            [totalRecords]="totalRecords"
-            [rowsPerPage]="rowsPerPage"
-            (pageChange)="onPageChange($event)"
-          />
+          <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
+          <app-table-pagination [componentName]="componentName" [currentPage]="currentPage" [totalRecords]="totalRecords" [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
         </div>
       </div>
     </div>
@@ -299,75 +220,43 @@
       <div class="cmmnTblOuter">
         <div class="cmmnTbl">
           <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered approval-table">
               <thead>
                 <tr>
-                  <th>
-                    <button type="button">
-                      {{ "TENANT_NAME" | translate }}
-                      <i><app-sorting-icon /></i>
-                    </button>
-                  </th>
-                  <th>{{ "EMIRATES_ID" | translate }}</th>
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
-                  <th>{{ "CONTACT_NUMBER" | translate }}</th>
-                  <th>{{ "EMAIL_ADDRESS" | translate }}</th>
-                  <!-- <th width="200"></th> -->
+                  <th>{{ "REQUESTED_BY" | translate }}</th>
+                  <th>{{ "PROPERTY_NAME" | translate }}</th>
+                  <th>{{ "BLOCK_TOWER" | translate }}<i><app-sorting-icon /></i></th>
+                  <th>{{ "UNIT" | translate }}</th>
+                  <th>{{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i></th>
+                  <th>{{ "TENURE" | translate }}</th>
+                  <th>{{ "RENT" | translate }}</th>
+                  <th>{{ "ACTUAL_RENT" | translate }}</th>
                 </tr>
               </thead>
-              @for (approval of tenantList; track $index) {
-                <tbody>
+              <tbody>
+                @for (approval of managerApprovalList; track approval.id) {
                   <tr>
+                    <td>{{ approval.date_request }}</td>
+                    <td>{{ approval.requested_by }}</td>
                     <td>
-                      <app-table-img-item
-                        [img]="
-                          approval?.profile_image
-                            ? approval?.profile_image
-                            : '../../../../assets/userDefaultProImg.png'
-                        "
-                        [clickable]="true"
-                        [title]="approval.name"
-                      />
+                      <app-table-img-item [img]="approval.property_image" [title]="approval.property_name" size="md" [showInitialsFallback]="true" />
                     </td>
+                    <td>{{ approval.tower }}</td>
+                    <td>{{ approval.unit }}</td>
                     <td>
-                      {{ approval?.emirates_id ? approval.emirates_id : "N/A" }}
+                      <app-table-img-item [img]="approval.profile_image" [title]="approval.tenant_name" size="md" [showInitialsFallback]="true" />
                     </td>
-                    <td>
-                      {{
-                        approval?.date_request ? approval.date_request : "N/A"
-                      }}
-                    </td>
-                    <td>
-                      {{
-                        approval.contact_number
-                          ? approval.contact_number
-                          : "N/A"
-                      }}
-                    </td>
-                    <td>{{ approval.email }}</td>
-                    <!-- 
-                  <td align="center">
-                    <div class="cmmnTblActnBtnDiv">
-                      <app-table-action-btn
-                        type="reject"
-                        (clicked)="handleRejectClick(approval.lease_id)"
-                      />
-
-                      <app-table-action-btn
-                        type="approve"
-                        (clicked)="handleApproveClick(approval.lease_id)"
-                      />
-                    </div>
-                  </td> -->
+                    <td>{{ approval.tenure }}</td>
+                    <td>{{ approval.rent }}</td>
+                    <td>{{ approval.actual_rent }}</td>
                   </tr>
-                </tbody>
-              } @empty {
-                <tr>
-                  <td colspan="20" align="center">
-                    <app-no-data></app-no-data>
-                  </td>
-                </tr>
-              }
+                } @empty {
+                  <tr>
+                    <td colspan="20" align="center"><app-no-data></app-no-data></td>
+                  </tr>
+                }
+              </tbody>
             </table>
           </div>
         </div>

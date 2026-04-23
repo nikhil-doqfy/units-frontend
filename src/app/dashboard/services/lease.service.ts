@@ -255,4 +255,8 @@ export class LeaseService {
   submitLeaseSignature(payload: any): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/submit-signature`, payload);
   }
+
+  sendManagerApproval(data: { lease_id: number; requested_rent?: number; requested_tenure?: string }): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/manager-approval`, data);
+  }
 }

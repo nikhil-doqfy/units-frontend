@@ -89,6 +89,7 @@ export class ApprovalComponent {
     BANK_STATEMENT: [],
   };
   tenantList: any[] = [];
+  managerApprovalList: any[] = [];
   currentStatus: 'APPROVED' | 'REJECTED' | 'PENDING' = 'PENDING';
   approvalData: Record<string, any> = {};
   totalRecords: number = 0;
@@ -115,7 +116,6 @@ export class ApprovalComponent {
       this.getApprovalDetails(+id);
     } else {
       this.showDetailView = false;
-      this.loadApprovalList();
     }
   }
 
@@ -215,9 +215,70 @@ export class ApprovalComponent {
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
     this.initLanguageListener();
-
+    this.loadManagerApprovals();
     this.refreshDetailsView();
     this.initLanguageListener();
+  }
+
+  loadManagerApprovals(): void {
+    const params: Record<string, any> = {
+      status: this.currentStatus,
+      page: this.currentPage,
+      page_size: this.rowsPerPage,
+    };
+    this.approvalService
+      .getManagerApprovals(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.managerApprovalList = (resp?.content ?? []).map((a: any) => ({
+            id: a.id,
+            date_request: a.requested_date
+              ? new Date(a.requested_date).toLocaleDateString('en-GB')
+              : 'N/A',
+            requested_by: a.created_by ?? '—',
+            property_name: a.property ?? 'N/A',
+            tower: a.block ?? 'N/A',
+            unit: a.unit ?? 'N/A',
+            tenant_name: a.tenant ?? 'N/A',
+            tenure: a.requested_tenure ?? '—',
+            rent: a.requested_rent != null ? `AED ${parseFloat(a.requested_rent).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—',
+            actual_rent: a.actual_rent != null ? `AED ${parseFloat(a.actual_rent).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—',
+            approved: a.approved,
+            status: a.status ?? (a.approved ? 'APPROVED' : 'PENDING'),
+            profile_image: a.tenant_image ?? '',
+            property_image: a.property_image ?? null,
+          }));
+          this.totalRecords = resp?.pagination?.total_records ?? 0;
+          this.totalPages = Math.ceil(this.totalRecords / this.rowsPerPage);
+        },
+      });
+  }
+
+  approveManagerItem(id: number): void {
+    this.approvalService
+      .updateManagerApproval({ approval_id: id, action: 'approve' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp?.message ?? 'Approved successfully');
+          this.loadManagerApprovals();
+        },
+        error: () => this.alertService.error('Failed to approve. Please try again.'),
+      });
+  }
+
+  rejectManagerItem(id: number): void {
+    this.approvalService
+      .updateManagerApproval({ approval_id: id, action: 'reject' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.alertService.success(resp?.message ?? 'Rejected');
+          this.loadManagerApprovals();
+        },
+        error: () => this.alertService.error('Failed to reject. Please try again.'),
+      });
   }
 
   get totalAmount(): number {
@@ -282,20 +343,20 @@ export class ApprovalComponent {
   changeStatus(status: 'APPROVED' | 'REJECTED' | 'PENDING') {
     this.currentStatus = status;
     this.currentPage = 1;
-    this.loadApprovalList();
+    this.loadManagerApprovals();
   }
 
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
-    // this.loadApprovalList();
+    this.loadManagerApprovals();
   }
 
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
-    // this.loadApprovalList();
+    this.loadManagerApprovals();
   }
 
   initOwnerSearchLisner() {

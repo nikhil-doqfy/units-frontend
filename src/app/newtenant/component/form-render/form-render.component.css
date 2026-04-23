@@ -355,6 +355,153 @@
   cursor: pointer;
 }
 
+/* ── Status message banner (shared pattern with onboarding / agreement) */
+.top-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.top-alert .icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.top-alert .text {
+  line-height: 1.55;
+  color: inherit;
+}
+
+.waiting-alert {
+  background-color: var(--alert-bg-waiting);
+  color: var(--alert-text-waiting);
+}
+
+.success-alert {
+  background-color: var(--alert-bg-success);
+  color: var(--alert-text-success);
+}
+
+/* ── Blurred step content (awaiting manager approval) */
+.blur {
+  filter: blur(1.5px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.45;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+/* ── Approval Modal Styles ──────────────────────── */
+::ng-deep .approval-modal-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+::ng-deep .approval-modal-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+::ng-deep .approval-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+::ng-deep .approval-modal-desc {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+::ng-deep .approval-modal-body {
+  padding: 20px 24px;
+}
+
+::ng-deep .approval-violations-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+::ng-deep .approval-violations-table thead tr {
+  background: #f9fafb;
+}
+
+::ng-deep .approval-violations-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+::ng-deep .approval-violations-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+}
+
+::ng-deep .entered-val {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+::ng-deep .required-val {
+  color: #059669;
+  font-weight: 500;
+}
+
+::ng-deep .approval-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 24px 20px;
+  border-top: 1px solid #f3f4f6;
+}
+
+::ng-deep .btn-proceed-without {
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+::ng-deep .btn-proceed-without:hover {
+  background: #e5e7eb;
+}
+
+::ng-deep .btn-send-approval {
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  color: #fff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+::ng-deep .btn-send-approval:hover {
+  opacity: 0.9;
+}
+
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 992px) {
   .sub-stepper {

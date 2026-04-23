@@ -105,7 +105,7 @@
         }"
         (click)="next()"
       >
-        {{ getNextBtnLabel() }}
+        {{ getNextBtnLabel() === 'Send Invite' && isSendingInvite$() ? 'Sending…' : getNextBtnLabel() }}
       </button>
 
       <div
@@ -115,14 +115,16 @@
         <button
           class="send-negotiation-btn"
           [disabled]="
-            btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()
+            (btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()) ||
+            (btnTitle$() === 'Send Negotiation' && isSendingNegotiation$())
           "
           [class.btn-disabled]="
-            btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()
+            (btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()) ||
+            (btnTitle$() === 'Send Negotiation' && isSendingNegotiation$())
           "
           (click)="onMainClick()"
         >
-          {{ btnTitle$() }}
+          {{ btnTitle$() === 'Send Negotiation' && isSendingNegotiation$() ? 'Sending…' : btnTitle$() }}
 
           <span
             *ngIf="btnTitle$() === 'Send Negotiation'"
@@ -158,6 +160,20 @@
   </div>
 </app-white-card>
 <div class="step-content">
+  <div
+    class="top-alert waiting-alert"
+    *ngIf="currentSubStep?.component === CommercialdetailsComponent && leaseStage$()?.toUpperCase() === 'MANAGER_APPROVAL_REQUIRED'"
+  >
+    <span class="icon"><app-warning-icon /></span>
+    <span class="text">{{ msgText$() }}</span>
+  </div>
+  <div
+    class="top-alert success-alert"
+    *ngIf="currentSubStep?.component === CommercialdetailsComponent && leaseStage$()?.toUpperCase() === 'MANAGER_APPROVED'"
+  >
+    <span class="icon"><app-signed-successfully-icon /></span>
+    <span class="text">{{ msgText$() }}</span>
+  </div>
   <ng-container *ngIf="currentSubStep">
     <div *ngIf="showDummyLink" style="text-align: right; margin-bottom: 6px">
       <a
@@ -172,11 +188,56 @@
         >Fill dummy data</a
       >
     </div>
-    <ng-container
-      *ngComponentOutlet="
-        currentSubStep.component;
-        inputs: getComponentInputs(currentSubStep)
-      "
-    ></ng-container>
+    <div
+      [class.blur]="currentSubStep?.component === CommercialdetailsComponent && leaseStage$()?.toUpperCase() === 'MANAGER_APPROVAL_REQUIRED'"
+    >
+      <ng-container
+        *ngComponentOutlet="
+          currentSubStep.component;
+          inputs: getComponentInputs(currentSubStep)
+        "
+      ></ng-container>
+    </div>
   </ng-container>
 </div>
+
+<!-- Manager Approval Modal -->
+<ng-template #approvalModal let-modal>
+  <div class="modal-header approval-modal-header">
+    <div class="approval-modal-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="12" fill="#fef3c7"/>
+        <path d="M12 8v4m0 4h.01" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <h5 class="modal-title approval-modal-title" id="approval-modal-title">Lease Terms Require Manager Approval</h5>
+      <p class="approval-modal-desc">The following lease terms fall below the standard thresholds and require manager approval before proceeding.</p>
+    </div>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body approval-modal-body">
+    <table class="approval-violations-table">
+      <thead>
+        <tr>
+          <th>Validation</th>
+          <th>Entered Value</th>
+          <th>Required Standard</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of approvalViolations">
+          <td>{{ v.validation }}</td>
+          <td class="entered-val">{{ v.entered }}</td>
+          <td class="required-val">{{ v.required }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer approval-modal-footer">
+    <button class="btn-proceed-without" (click)="proceedWithoutApproval(modal)">Proceed without approval</button>
+    <button class="btn-send-approval" [disabled]="isSendingApproval" (click)="sendForManagerApproval(modal)">
+      {{ isSendingApproval ? 'Sending…' : 'Send for approval' }}
+    </button>
+  </div>
+</ng-template>

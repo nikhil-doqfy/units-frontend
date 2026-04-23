@@ -6,6 +6,7 @@ import {
   Output,
   signal,
   TemplateRef,
+  ViewChild,
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -26,6 +27,8 @@ import { AgreementComponent } from '../agreement/agreement.component';
 import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
 import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
 import { EjarimodelService } from '../../../ejarimodel.service';
+import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.component';
+import { SignedSuccessfullyIconComponent } from '../../../icons/signed-successfully-icon/signed-successfully-icon.component';
 
 @Component({
   selector: 'app-form-render',
@@ -39,16 +42,23 @@ import { EjarimodelService } from '../../../ejarimodel.service';
     RefreshIconComponent,
     ArrowDownIconComponent,
     TranslateModule,
+    WarningIconComponent,
+    SignedSuccessfullyIconComponent,
   ],
   templateUrl: './form-render.component.html',
   styleUrl: './form-render.component.css',
 })
 export class FormRenderComponent {
   @Output() negotiationClick = new EventEmitter<void>();
+  @ViewChild('approvalModal') approvalModal!: TemplateRef<any>;
 
   @Input() steps: any;
   @Input() activeIndex: any;
   private modalService = inject(NgbModal);
+
+  approvalViolations: { validation: string; entered: string; required: string }[] = [];
+  isSendingApproval = false;
+  private _pendingCommercialSave?: () => void;
   closeResult: WritableSignal<string> = signal('');
   btnTitle = signal<string>('Save & Next');
   agreementPhase = signal<string>('');
@@ -80,6 +90,9 @@ export class FormRenderComponent {
   msgText$ = this.formService.getMsgText();
   showRefresh$ = this.formService.showRefresh$;
   chequeConfirmed$ = this.formService.getChequeConfirmed();
+  leaseStage$ = this.formService.currentLeaseStage;
+  isSendingInvite$ = this.formService.isSendingInvite;
+  isSendingNegotiation$ = this.formService.isSendingNegotiation;
   constructor(
     private ejariModelService: EjarimodelService,
     private formService: NewTenantFromService,
@@ -116,10 +129,15 @@ export class FormRenderComponent {
 
   get isSaveDisabled(): boolean {
     const c = this.currentSubStep?.component;
+    const stage = this.leaseStage$()?.toUpperCase();
     if (
       c === this.EjariComponent &&
-      this.formService.getCurrentLeaseStage()?.toUpperCase() === 'EJARI'
+      stage === 'EJARI'
     )
+      return true;
+    if (c === this.CommercialdetailsComponent && stage === 'MANAGER_APPROVAL_REQUIRED')
+      return true;
+    if (c === this.CommercialdetailsComponent && this.isSendingInvite$())
       return true;
     if (
       c === this.ProfileComponent ||
@@ -208,6 +226,21 @@ export class FormRenderComponent {
         this.alertService.error(
           'Please fill all required fields before proceeding.',
         );
+        return;
+      }
+      const violations = this.checkApprovalViolations(this.currentSubStep.formGroup);
+      if (violations.length > 0) {
+        this.approvalViolations = violations;
+        this._pendingCommercialSave = () =>
+          this.formService.saveCommercialStep(this.currentSubStep!.formGroup, () => {
+            setTimeout(() => this.goToNextStep(), 1000);
+          });
+        this.modalService.open(this.approvalModal, {
+          ariaLabelledBy: 'approval-modal-title',
+          windowClass: 'mdlCommon',
+          centered: true,
+          size: 'lg',
+        });
         return;
       }
       this.formService.saveCommercialStep(this.currentSubStep.formGroup, () => {
@@ -301,6 +334,78 @@ export class FormRenderComponent {
         emiratesId: '784-1980-9876543-1',
       });
     }
+  }
+
+  private checkApprovalViolations(form: any): { validation: string; entered: string; required: string }[] {
+    const v = form.value;
+    const unit = this.formService.getUnitCommercialData()();
+    const violations: { validation: string; entered: string; required: string }[] = [];
+
+    const start: string = v.startDate || '';
+    const end: string = v.endDate || '';
+    const cycleMonths = unit?.cycle ? parseInt(unit.cycle, 10) : 0;
+
+    if (start && end && cycleMonths > 0) {
+      const [sy, sm] = start.split('-').map(Number);
+      const [ey, em] = end.split('-').map(Number);
+      const durationMonths = (ey - sy) * 12 + (em - sm);
+      if (durationMonths < cycleMonths) {
+        violations.push({
+          validation: 'Lease Duration',
+          entered: `${durationMonths} month${durationMonths !== 1 ? 's' : ''}`,
+          required: `Min. ${cycleMonths} month${cycleMonths !== 1 ? 's' : ''}`,
+        });
+      }
+    }
+
+    const annualAmount = parseFloat(v.annualAmount) || 0;
+    const standardRent = unit?.rent ? parseFloat(unit.rent) : 0;
+    if (standardRent > 0 && annualAmount < standardRent) {
+      violations.push({
+        validation: 'Annual Rent',
+        entered: `AED ${annualAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        required: `AED ${standardRent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      });
+    }
+
+    return violations;
+  }
+
+  proceedWithoutApproval(modal: any) {
+    modal.dismiss();
+    this._pendingCommercialSave?.();
+    this._pendingCommercialSave = undefined;
+  }
+
+  sendForManagerApproval(modal: any) {
+    if (this.isSendingApproval) return;
+    const leaseId = this.formService.getLeaseId()();
+    if (!leaseId) {
+      this.alertService.error('Lease not found. Please save the lease first.');
+      return;
+    }
+    const form = this.currentSubStep?.formGroup;
+    const v = form?.value ?? {};
+    const requestedRent = parseFloat(v.annualAmount) || 0;
+
+    const start: string = v.startDate || '';
+    const end: string = v.endDate || '';
+    let tenure = '';
+    if (start && end) {
+      const [sy, sm] = start.split('-').map(Number);
+      const [ey, em] = end.split('-').map(Number);
+      const months = (ey - sy) * 12 + (em - sm);
+      tenure = `${months} months`;
+    }
+
+    this.isSendingApproval = true;
+    this.formService.saveCommercialData(form, () => {
+      this.formService.sendManagerApproval(leaseId, requestedRent, tenure, () => {
+        this.isSendingApproval = false;
+      });
+    });
+    modal.dismiss();
+    this._pendingCommercialSave = undefined;
   }
 
   private readonly STAGE_MAP: Record<number, string> = {

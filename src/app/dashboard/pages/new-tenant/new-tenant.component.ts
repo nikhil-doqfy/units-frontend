@@ -9,6 +9,7 @@ import { FormRenderComponent } from '../../../newtenant/component/form-render/fo
 import { NewTenantFromService } from '../../../newtenant/component/service/new-tenant-from.service';
 import { LeadsService } from '../../services/leads.service';
 import { LeaseService } from '../../services/lease.service';
+import { LEASE_STAGE } from '../../../shared/constants/lease-stage.constants';
 
 @Component({
   selector: 'app-new-tenant',
@@ -133,26 +134,26 @@ export class NewTenantComponent {
               const s = stage?.toUpperCase();
 
               const isAgreementOrLater =
-                s === 'AGREEMENT'        || s === 'AGREEMENT_SIGNING' ||
-                s === 'AGREEMENT_SIGNED' || s === 'EJARI'             ||
-                s === 'EJARI_SIGNING'    || s === 'ACTIVATED';
+                s === LEASE_STAGE.AGREEMENT        || s === LEASE_STAGE.AGREEMENT_SIGNING ||
+                s === LEASE_STAGE.AGREEMENT_SIGNED || s === LEASE_STAGE.EJARI             ||
+                s === LEASE_STAGE.EJARI_SIGNING    || s === LEASE_STAGE.ACTIVATED;
 
-              if (s === 'WAITING_FOR_SIGNUP') {
+              if (s === LEASE_STAGE.WAITING_FOR_SIGNUP) {
                 // Always show the "Waiting for Tenant" page (sub-step 0)
                 // regardless of is_onboarding flag
                 this.newTenantService.getActiveIndex().set(1);
                 this.newTenantService.getActiveSubIndex().set(0);
-              } else if (s === 'COMMERCIAL_DETAILS') {
-                // Property details saved — resume on Commercial Details (step 1-2)
+              } else if (s === LEASE_STAGE.COMMERCIAL_DETAILS || s === LEASE_STAGE.MANAGER_APPROVAL_REQUIRED || s === LEASE_STAGE.MANAGER_APPROVED) {
+                // Resume on Commercial Details sub-step
                 this.newTenantService.getActiveIndex().set(0);
                 this.newTenantService.getActiveSubIndex().set(1);
               } else if (!isAgreementOrLater && (
-                  t.is_onboarding          ||
-                  s === 'ONBOARDING'       ||
-                  s === 'NEGOTIATION_SENT' || s === 'PENDING_APPROVAL' ||
-                  s === 'OWNER_APPROVED'   || s === 'TENANT_APPROVED'  ||
-                  s === 'WAITING_CHEQUE'   || s === 'CHEQUE_REQUESTED' ||
-                  s === 'CHEQUE_COLLECTED')) {
+                  t.is_onboarding                        ||
+                  s === LEASE_STAGE.ONBOARDING           ||
+                  s === LEASE_STAGE.NEGOTIATION_SENT     || s === LEASE_STAGE.PENDING_APPROVAL ||
+                  s === LEASE_STAGE.OWNER_APPROVED       || s === LEASE_STAGE.TENANT_APPROVED  ||
+                  s === LEASE_STAGE.WAITING_CHEQUE       || s === LEASE_STAGE.CHEQUE_REQUESTED ||
+                  s === LEASE_STAGE.CHEQUE_COLLECTED)) {
                 this.newTenantService.getActiveIndex().set(1);
                 this.newTenantService.getActiveSubIndex().set(1);
               } else {
@@ -201,10 +202,10 @@ export class NewTenantComponent {
                     this.newTenantService.getLeaseId().set(lease.id);
                     const stage = lease.lease_stage ?? '';
                     this.newTenantService.restoreStepFromStage(stage);
-                    if (stage === 'COMMERCIAL_DETAILS') {
+                    if (stage === LEASE_STAGE.COMMERCIAL_DETAILS || stage === LEASE_STAGE.MANAGER_APPROVAL_REQUIRED || stage === LEASE_STAGE.MANAGER_APPROVED) {
                       this.newTenantService.getActiveIndex().set(0);
                       this.newTenantService.getActiveSubIndex().set(1);
-                    } else if (stage && stage !== 'BASIC_DETAILS') {
+                    } else if (stage && stage !== LEASE_STAGE.BASIC_DETAILS) {
                       this.newTenantService.getActiveIndex().set(this.leaseStageToStepIndex(stage));
                       this.newTenantService.getActiveSubIndex().set(0);
                     }
@@ -278,27 +279,26 @@ export class NewTenantComponent {
 
   private leaseStageToStepIndex(stage: string): number {
     switch (stage?.toUpperCase()) {
-      case 'WAITING_FOR_SIGNUP': // invite sent, waiting for tenant to register
-      case 'ONBOARDING':
-        return 1; // → Onboarding step, sub-step 0 (waiting page)
-      case 'NEGOTIATION_SENT':
-      case 'PENDING_APPROVAL':
-      case 'OWNER_APPROVED':
-      case 'TENANT_APPROVED':
-      case 'WAITING_CHEQUE':
-      case 'CHEQUE_REQUESTED':
-      case 'CHEQUE_COLLECTED':
+      case LEASE_STAGE.WAITING_FOR_SIGNUP:
+      case LEASE_STAGE.ONBOARDING:
+      case LEASE_STAGE.NEGOTIATION_SENT:
+      case LEASE_STAGE.PENDING_APPROVAL:
+      case LEASE_STAGE.OWNER_APPROVED:
+      case LEASE_STAGE.TENANT_APPROVED:
+      case LEASE_STAGE.WAITING_CHEQUE:
+      case LEASE_STAGE.CHEQUE_REQUESTED:
+      case LEASE_STAGE.CHEQUE_COLLECTED:
         return 1;
-      case 'AGREEMENT':
-      case 'AGREEMENT_SIGNING':
-      case 'AGREEMENT_SIGNED':
+      case LEASE_STAGE.AGREEMENT:
+      case LEASE_STAGE.AGREEMENT_SIGNING:
+      case LEASE_STAGE.AGREEMENT_SIGNED:
         return 2;
-      case 'EJARI':
-      case 'EJARI_SIGNING':
-      case 'ACTIVATED':
+      case LEASE_STAGE.EJARI:
+      case LEASE_STAGE.EJARI_SIGNING:
+      case LEASE_STAGE.ACTIVATED:
         return 3;
       default:
-        return 0; // INVITE or unknown
+        return 0;
     }
   }
 
