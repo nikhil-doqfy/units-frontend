@@ -33,7 +33,7 @@
   padding: 10px 12px;
   border-radius: 8px;
   text-decoration: none;
-  color: #444;
+  color: var(--textDark);
   font-weight: 500;
   transition: 0.2s ease;
   font-size: 14px;

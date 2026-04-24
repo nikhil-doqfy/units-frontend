@@ -118,7 +118,7 @@
               #searchComp
               (onValueChange)="searchTextChange($event)"
             />
-            <app-filter-popup-btn #filterPopup>
+            <app-filter-popup-btn #ticketFilterPopup>
               <app-table-filter-btn
                 [title]="'FILTER' | translate"
                 [hasIcon]="true"
@@ -150,7 +150,7 @@
                 <button
                   type="button"
                   class="btn btnCommon"
-                  (click)="removeFilter(); filterPopup.closePopup()"
+                  (click)="removeFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>

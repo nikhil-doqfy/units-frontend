@@ -647,7 +647,7 @@
 
 .add-btn {
   border-radius: 50%;
-  border: 1px solid var(--borderLight);
+  border: 1px solid var(--borderLight1);
   padding: 10px 16px;
   cursor: pointer;
   font-size: 14px;
@@ -886,6 +886,7 @@
   cursor: pointer;
   font-size: 14px;
   transition: background 0.2s;
+  color: var(--iconColor1);
 }
 
 .dropdown-item:hover {

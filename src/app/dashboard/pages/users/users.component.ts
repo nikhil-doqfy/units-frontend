@@ -4,6 +4,7 @@ import {
   inject,
   signal,
   TemplateRef,
+  ViewChild,
   WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -103,7 +104,7 @@ export class UsersComponent {
   currentPage = 1;
   userTypeList: any[] = [];
   closeResult: WritableSignal<string> = signal('');
-
+  @ViewChild('filterPopup') filterPopup!: FilterPopupButtonComponent;
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -300,12 +301,26 @@ export class UsersComponent {
     }
   }
 
+  // applyFilter() {
+  //   this.selectedUserType = null;
+  //   this.currentPage = 1;
+  //   this.getUser();
+  // }
+
   applyFilter() {
     this.selectedUserType = null;
+    if (this.selectedUserType?.key) {
+      this.userData['role'] = this.selectedUserType.key;
+    } else {
+      delete this.userData['role'];
+    }
+
     this.currentPage = 1;
     this.getUser();
-  }
 
+    // ✅ CLOSE POPUP
+    this.filterPopup?.closePopup(); // 👈 IMPORTANT
+  }
   removeFilter() {
     this.selectedUserType = null;
     delete this.userData['role'];

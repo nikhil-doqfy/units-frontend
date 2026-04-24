@@ -10,6 +10,7 @@
   --whiteBg: #ffffff;
   --blackBg: #000000;
   --greyBg: #344046;
+  --iconColor1: #000;
   --greyLightBg: #68868f;
   --greyDarkBg: #3d3d3d;
   --greyDarkBg1: #536c76;
@@ -44,6 +45,7 @@
   --greyText1: #454545;
   --greyText2: #292929;
   --greyText3: #333232;
+  --icon-color: #344046;
   --greyLightText: #3b4a51;
   --greyDarkText: #3d3d3d;
   --greyDarkText1: #232b2e;
@@ -148,7 +150,7 @@
   --textPrimary: #1f2937;
   --textSecondary: #6b7280;
   --axis-text-color: #333;
-  --textDark: #444444;
+  --textDark1: #444444;
   --textBlack: #111827;
   --textMuted: #4b5563;
   --borderLight: #eeeeee;
@@ -188,7 +190,7 @@
     #d9f3ff 54.04%,
     #f5f8ff 99.08%
   );
-  --borderLight: #e5e7eb;
+  --borderLight1: #e5e7eb;
   --borderExtraLight: #eeeeee;
   --borderSoft: #eceff4;
   --textSecondary: #6b7280;
@@ -1495,10 +1497,14 @@
   --tenantGradientBg: linear-gradient(90deg, #4a1bb0 0%, #1c1c8f 100%);
   --whiteBg: #1f1f1f;
   --ownerBg: #2a3f8f;
+  --icon-color: #ffffff;
   --managerBg: #5a2fb0;
+  --iconColor1: #fff;
+
   --tenantBg: #2c2c8f;
   --activeBg1: #1f2937;
   --whiteBg: #121212;
+  --textDark1: #fff;
   --blackBg: #ffffff;
   --greyBg: #1e1e1e;
   --color-black: #ffffff;
@@ -3968,6 +3974,7 @@ linearGradient .authBgPatt stop:last-child {
 /* Property Manager theme */
 .theme-manager .btnCommon {
   background: var(--managerGradientBg);
+  color: white;
 }
 
 /* Tenant theme */
@@ -5607,9 +5614,9 @@ a .simple {
   cursor: pointer;
 }
 
-.dropdown-item:hover {
+/* .dropdown-item:hover {
   background: #f3f4f6;
-}
+} */
 
 .filter-box {
   width: 230px;
@@ -6249,6 +6256,7 @@ app-plus-icon {
 .btnCommonsx {
   background-color: #fff;
   box-shadow: 0 0 6px 0 #00000026;
+  border-color: white;
   border-radius: 10px;
   padding: 6px 14px;
 }

@@ -17,6 +17,7 @@ import { SharedService } from '../../shared.service';
 import { AuditlogService } from '../../auditlog.service';
 import { UserService } from '../services/user.service';
 import { NoDataComponent } from '../../no-data/no-data.component';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'app-auditlog',
@@ -43,16 +44,16 @@ export class AuditlogComponent {
   pageTitle: string = '';
   currentLanguage = 'en';
 
-  searchText   = '';
+  searchText = '';
   selectedUser: any = null;
   selectedTime: any = null;
-
+  private alertService = inject(AlertService);
   userOptions: any[] = [{ key: '', value: 'All Users', id: '' }];
-  timeOptions  = [
-    { key: '',        value: 'All Time'    },
-    { key: 'today',   value: 'Today'       },
-    { key: '7days',   value: 'Last 7 Days' },
-    { key: '30days',  value: 'Last 30 Days'},
+  timeOptions = [
+    { key: '', value: 'All Time' },
+    { key: 'today', value: 'Today' },
+    { key: '7days', value: 'Last 7 Days' },
+    { key: '30days', value: 'Last 30 Days' },
   ];
   logs = [
     {
@@ -168,23 +169,28 @@ export class AuditlogComponent {
   }
   get displayLogs() {
     const groups = new Map<string, any>();
+
     for (const entry of this.auditLogList) {
       const date = entry.created
-        ? new Date(entry.created).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+        ? new Date(entry.created).toLocaleDateString('en-US', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+          })
         : '';
       const userName = entry.user?.name || 'Unknown';
       const key = `${userName}_${date}`;
 
       if (!groups.has(key)) {
         groups.set(key, {
-          name:       userName,
+          name: userName,
           date,
-          avatar:     entry.user?.profile_image || null,
+          avatar: entry.user?.profile_image || null,
           activities: [],
         });
       }
       groups.get(key).activities.push({
-        title:    entry.message    || '',
+        title: entry.message || '',
         subtitle: `${entry.action_type || ''} on ${date}`,
       });
     }
@@ -193,9 +199,9 @@ export class AuditlogComponent {
 
   private buildFilterParams(): Record<string, any> {
     const params: Record<string, any> = {};
-    if (this.selectedUser?.id) params['user_id']    = this.selectedUser.id;
+    if (this.selectedUser?.id) params['user_id'] = this.selectedUser.id;
     if (this.selectedTime?.key) params['time_range'] = this.selectedTime.key;
-    if (this.searchText.trim()) params['search']     = this.searchText.trim();
+    if (this.searchText.trim()) params['search'] = this.searchText.trim();
     return params;
   }
 
@@ -212,32 +218,82 @@ export class AuditlogComponent {
           const staff: any[] = resp?.content ?? [];
           this.userOptions = [
             { key: '', value: 'All Users', id: '' },
-            ...staff.map((s: any) => ({ key: s.staff_name, value: s.staff_name, id: s.staff_id })),
+            ...staff.map((s: any) => ({
+              key: s.staff_name,
+              value: s.staff_name,
+              id: s.staff_id,
+            })),
           ];
         },
       });
   }
 
+  // getAuditLog() {
+  //   this.auditLogService
+  //     .getAuditLog(this.buildFilterParams())
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((resp: any) => {
+  //       this.auditLogList = resp?.content ?? [];
+  //     });
+  // }
+
   getAuditLog() {
     this.auditLogService
       .getAuditLog(this.buildFilterParams())
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((resp: any) => {
-        this.auditLogList = resp?.content ?? [];
+      .subscribe({
+        next: (resp: any) => {
+          this.auditLogList = resp?.content ?? [];
+        },
+
+        error: (err: any) => {
+          console.error('Audit log fetch failed', err);
+
+          this.auditLogList = [];
+
+          this.alertService.error(
+            err?.error?.message || 'Failed to load audit logs',
+          );
+        },
       });
   }
 
+  // downloadLogs() {
+  //   this.auditLogService
+  //     .exportAuditLog(this.buildFilterParams())
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((blob: Blob) => {
+  //       const url = URL.createObjectURL(blob);
+  //       const link = document.createElement('a');
+  //       link.href = url;
+  //       link.download = 'audit_logs.csv';
+  //       link.click();
+  //       URL.revokeObjectURL(url);
+  //     });
+  // }
   downloadLogs() {
     this.auditLogService
       .exportAuditLog(this.buildFilterParams())
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((blob: Blob) => {
-        const url  = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href     = url;
-        link.download = 'audit_logs.csv';
-        link.click();
-        URL.revokeObjectURL(url);
+      .subscribe({
+        next: (blob: Blob) => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'audit_logs.csv';
+          link.click();
+          URL.revokeObjectURL(url);
+
+          this.alertService.success('File downloaded successfully');
+        },
+
+        error: (err: any) => {
+          console.error('Download failed', err);
+
+          this.alertService.error(
+            err?.error?.message || 'Failed to download audit logs',
+          );
+        },
       });
   }
 }

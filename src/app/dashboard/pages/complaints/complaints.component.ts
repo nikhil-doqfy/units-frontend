@@ -90,7 +90,8 @@ export class ComplaintsComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   selectedProperty: any = null;
-
+  @ViewChild('ticketFilterPopup')
+  ticketFilterPopup!: FilterPopupButtonComponent;
   showDetailView: boolean = false;
   showMenu = false;
   complaintsStatus: any = [];
@@ -261,9 +262,19 @@ export class ComplaintsComponent {
   onHandleComplaintsStatusClick(): void {
     this.getOptionTypes(['COMPLAINT_STATUS']);
   }
+  // applyFilter() {
+  //   this.currentPage = 1;
+  //   this.getTickets();
+  // }
+
   applyFilter() {
     this.currentPage = 1;
+
     this.getTickets();
+
+    setTimeout(() => {
+      this.ticketFilterPopup?.closePopup();
+    });
   }
 
   removeFilter() {
