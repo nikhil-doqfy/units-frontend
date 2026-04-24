@@ -117,7 +117,7 @@ export class ChargesComponent {
           description: c.description,
           amount: c.amount,
           tax_code: c.tax_code,
-          vat_amount: c.vat,
+          vat_amount: c.vat_amount,
           total: c.total_amount,
           editable: c.is_editable,
         };

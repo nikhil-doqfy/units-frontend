@@ -93,7 +93,7 @@
         customClass="pb-0"
       >
         <ng-container card-actions>
-          <app-filter-popup-btn>
+          <app-filter-popup-btn #revenueFilterPopup>
             <ng-container form>
               <form>
                 <div class="row g-3">
@@ -182,6 +182,15 @@
               <button
                 type="button"
                 class="btn btnCommon"
+                (click)="
+                  removeFilter('revenue'); revenueFilterPopup.closePopup()
+                "
+              >
+                {{ "REMOVE_ALL" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btnCommon"
                 (click)="handleFilterClick('revenue')"
               >
                 {{ "APPLY" | translate }}
@@ -227,7 +236,7 @@
         customClass="pb-0"
       >
         <ng-container card-actions>
-          <app-filter-popup-btn>
+          <app-filter-popup-btn #duesFilterPopup>
             <ng-container form>
               <form>
                 <div class="row g-3">
@@ -272,6 +281,13 @@
               </form>
             </ng-container>
             <ng-container action>
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="removeFilter('dues'); duesFilterPopup.closePopup()"
+              >
+                {{ "REMOVE_ALL" | translate }}
+              </button>
               <button
                 type="button"
                 class="btn btnCommon"
@@ -345,7 +361,7 @@
             </div>
             <div class="col-auto">
               <ng-container card-actions>
-                <app-filter-popup-btn>
+                <app-filter-popup-btn #chequeVisFilterPopup>
                   <ng-container form>
                     <form>
                       <div class="row g-3">
@@ -471,6 +487,15 @@
                     <button
                       type="button"
                       class="btn btnCommon"
+                      (click)="
+                        handleRemoveFilter(); chequeVisFilterPopup.closePopup()
+                      "
+                    >
+                      {{ "REMOVE_ALL" | translate }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btnCommon"
                       (click)="handleApplyFilter()"
                     >
                       {{ "APPLY" | translate }}
@@ -587,7 +612,7 @@
         customClass="pb-0"
       >
         <ng-container card-actions>
-          <app-filter-popup-btn>
+          <app-filter-popup-btn #paymentFilterPopup>
             <ng-container form>
               <form>
                 <div class="row g-3">
@@ -655,6 +680,15 @@
               </form>
             </ng-container>
             <ng-container action>
+              <button
+                type="button"
+                class="btn btnCommon"
+                (click)="
+                  removeFilter('payment'); paymentFilterPopup.closePopup()
+                "
+              >
+                {{ "REMOVE_ALL" | translate }}
+              </button>
               <button
                 type="button"
                 class="btn btnCommon"

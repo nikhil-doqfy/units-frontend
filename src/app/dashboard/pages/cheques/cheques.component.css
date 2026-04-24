@@ -13,7 +13,6 @@
   flex-wrap: wrap;
 }
 
-
 .right-controls {
   display: flex;
   gap: 10px;
@@ -42,9 +41,16 @@
 }
 
 @media (max-width: 768px) {
-  .top-filter-bar { flex-direction: column; align-items: stretch; }
-  .left-controls   { justify-content: space-between; }
-  .search-box      { width: 100%; }
+  .top-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .left-controls {
+    justify-content: space-between;
+  }
+  .search-box {
+    width: 100%;
+  }
 }
 
 /* ── Summary cards ──────────────────────────────────────────── */
@@ -55,9 +61,21 @@
   margin-bottom: 24px;
 }
 
-@media (max-width: 1200px) { .summary-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 768px)  { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px)  { .summary-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1200px) {
+  .summary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 .summary-card {
   padding: 18px 18px 22px;
@@ -68,7 +86,9 @@
   border: 2px solid transparent;
 }
 
-.summary-card.active { background: var(--card-active-bg); }
+.summary-card.active {
+  background: var(--card-active-bg);
+}
 
 .top-row {
   display: flex;
@@ -94,36 +114,80 @@
   white-space: nowrap;
 }
 
-.grey   { background: var(--tag-grey-bg);   border: 1px solid var(--tag-grey-border); }
-.purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
-.green  { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
-.orange { background: var(--tag-orange-bg); color: var(--tag-orange-text); }
-.blue   { background: var(--tag-blue-bg);   color: var(--tag-blue-text); }
+.grey {
+  background: var(--tag-grey-bg);
+  border: 1px solid var(--tag-grey-border);
+}
+.purple {
+  background: var(--tag-purple-bg);
+  color: var(--tag-purple-text);
+}
+.green {
+  background: var(--tag-purple-bg);
+  color: var(--tag-purple-text);
+}
+.orange {
+  background: var(--tag-orange-bg);
+  color: var(--tag-orange-text);
+}
+.blue {
+  background: var(--tag-blue-bg);
+  color: var(--tag-blue-text);
+}
 
-.title    { font-size: 14px; font-weight: 600; margin-top: 8px;  color: var(--textSecondary); }
-.subtitle { font-size: 12px; color: var(--textMuted);           margin-top: 4px; }
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+  color: var(--textSecondary);
+}
+.subtitle {
+  font-size: 12px;
+  color: var(--textMuted);
+  margin-top: 4px;
+}
 
 .arrow {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 0; height: 0;
+  width: 0;
+  height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 10px solid transparent;
   display: none;
 }
-.summary-card.active .arrow { display: block; border-top-color: var(--arrow-color); }
+.summary-card.active .arrow {
+  display: block;
+  border-top-color: var(--arrow-color);
+}
 
 /* ── Edit cheque modal ──────────────────────────────────────── */
-.cheque-form-label   { font-size: 12px; font-weight: 500; color: var(--textMuted); margin-bottom: 4px; }
-.cheque-form-input   { font-size: 13px; border-radius: 8px; border: 1px solid var(--borderInput); }
-.cheque-section-divider { border-color: var(--borderLight); margin: 4px 0; }
+.cheque-form-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--textMuted);
+  margin-bottom: 4px;
+}
+.cheque-form-input {
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid var(--borderInput);
+}
+.cheque-section-divider {
+  border-color: var(--borderLight);
+  margin: 4px 0;
+}
 
 /* ── Table tweaks ───────────────────────────────────────────── */
 .bounce-highlight {
-  background: linear-gradient(to bottom, transparent 6px, var(--highlight-bg) 6px);
+  background: linear-gradient(
+    to bottom,
+    transparent 6px,
+    var(--highlight-bg) 6px
+  );
 }
 
 .amount-cell {
@@ -181,5 +245,9 @@
 }
 
 /* Remove right border on last column */
-.cmmnTbl .table tr > *:last-child { border-right: none !important; }
-.cmmnTbl .table > :not(caption) > tbody > tr:last-child > td:last-child { border-bottom: none !important; }
+.cmmnTbl .table tr > *:last-child {
+  border-right: none !important;
+}
+.cmmnTbl .table > :not(caption) > tbody > tr:last-child > td:last-child {
+  border-bottom: none !important;
+}

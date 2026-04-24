@@ -76,6 +76,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
   private homeService = inject(HomeService);
+  @ViewChild('chequeVisFilterPopup')
+  chequeVisFilterPopup!: FilterPopupButtonComponent;
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
   private sharedApiService = inject(SharedApiService);
@@ -442,25 +444,84 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.duesSelectedUnit = unit;
   }
 
+  // handleFilterClick(chartType: 'revenue' | 'dues' | 'payment'): void {
+  //   if (chartType === 'dues') {
+  //     const params: any = {};
+  //     if (this.duesSelectedUnit?.key) {
+  //       params.property_unit_id = this.duesSelectedUnit.key;
+  //     }
+  //     if (this.duesSelectedYear) {
+  //       params.year = this.duesSelectedYear;
+  //     }
+  //     this.loadDueGraph(Object.keys(params).length ? params : undefined);
+  //     this.duesSelectedProperty = null;
+  //     this.duesSelectedUnit = null;
+  //     this.duesSelectedYear = null;
+  //     this.duesUnits = [];
+  //     return;
+  //   }
+
+  //   const params: any = {};
+
+  //   if (this.selectedUnit?.key) {
+  //     params.property_unit_id = this.selectedUnit.key;
+  //   }
+
+  //   if (this.selectedYear) {
+  //     params.year = this.selectedYear;
+  //   }
+
+  //   if (chartType === 'revenue') {
+  //     this.getMonthlyRevenue(Object.keys(params).length ? params : undefined);
+  //     this.selectedProperty = null;
+  //     this.selectedUnit = null;
+  //     this.selectedYear = null;
+  //     this.units = [];
+  //   } else if (chartType == 'payment') {
+  //     this.loadPayments(Object.keys(params).length ? params : undefined);
+  //     this.selectedProperty = null;
+  //     // this.selectedFilter = null;
+  //     this.selectedUnit = null;
+  //     this.selectedYear = null;
+  //     this.units = [];
+  //   }
+  // }
+
+  //------------------------------------filter cheques visibility ---------------------------------------------
+
+  @ViewChild('revenueFilterPopup') revenueFilterPopup: any;
+  @ViewChild('paymentFilterPopup') paymentFilterPopup: any;
+  @ViewChild('duesFilterPopup') duesFilterPopup: any;
   handleFilterClick(chartType: 'revenue' | 'dues' | 'payment'): void {
+    const params: any = {};
+
+    // ─────────────────────────────
+    // DUES FILTER
+    // ─────────────────────────────
     if (chartType === 'dues') {
-      const params: any = {};
       if (this.duesSelectedUnit?.key) {
         params.property_unit_id = this.duesSelectedUnit.key;
       }
+
       if (this.duesSelectedYear) {
         params.year = this.duesSelectedYear;
       }
+
       this.loadDueGraph(Object.keys(params).length ? params : undefined);
+
       this.duesSelectedProperty = null;
       this.duesSelectedUnit = null;
       this.duesSelectedYear = null;
       this.duesUnits = [];
+
+      this.duesFilterPopup?.closePopup();
+
       return;
     }
 
-    const params: any = {};
-
+    // ─────────────────────────────
+    // COMMON FILTER PARAMS
+    // ─────────────────────────────
     if (this.selectedUnit?.key) {
       params.property_unit_id = this.selectedUnit.key;
     }
@@ -469,24 +530,67 @@ export class HomeComponent implements OnInit, AfterViewInit {
       params.year = this.selectedYear;
     }
 
+    // ─────────────────────────────
+    // REVENUE
+    // ─────────────────────────────
     if (chartType === 'revenue') {
       this.getMonthlyRevenue(Object.keys(params).length ? params : undefined);
+
       this.selectedProperty = null;
       this.selectedUnit = null;
       this.selectedYear = null;
       this.units = [];
-    } else if (chartType == 'payment') {
+
+      this.revenueFilterPopup?.closePopup();
+    }
+
+    // ─────────────────────────────
+    // PAYMENT
+    // ─────────────────────────────
+    else if (chartType === 'payment') {
       this.loadPayments(Object.keys(params).length ? params : undefined);
+
       this.selectedProperty = null;
-      // this.selectedFilter = null;
       this.selectedUnit = null;
       this.selectedYear = null;
       this.units = [];
+
+      this.paymentFilterPopup?.closePopup();
     }
   }
 
-  //------------------------------------filter cheques visibility ---------------------------------------------
+  removeFilter(chartType: 'revenue' | 'dues' | 'payment'): void {
+    // ───────────── DUES RESET ─────────────
+    if (chartType === 'dues') {
+      this.duesSelectedProperty = null;
+      this.duesSelectedUnit = null;
+      this.duesSelectedYear = null;
+      this.duesUnits = [];
 
+      this.loadDueGraph();
+
+      this.duesFilterPopup?.closePopup();
+      return;
+    }
+
+    // ───────────── COMMON RESET ─────────────
+    this.selectedProperty = null;
+    this.selectedUnit = null;
+    this.selectedYear = null;
+    this.units = [];
+
+    // ───────────── REVENUE RESET ─────────────
+    if (chartType === 'revenue') {
+      this.getMonthlyRevenue(); // default data
+      this.revenueFilterPopup?.closePopup();
+    }
+
+    // ───────────── PAYMENT RESET ─────────────
+    else if (chartType === 'payment') {
+      this.loadPayments(); // default data
+      this.paymentFilterPopup?.closePopup();
+    }
+  }
   selectPeriod(type: 'month' | 'last6' | 'year') {
     this.selectedPeriodType = type;
   }
@@ -602,7 +706,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         59,
       ).getTime();
     } else {
-      // default: current month
       fromDate = new Date(
         now.getFullYear(),
         now.getMonth(),
@@ -624,7 +727,44 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return { fromDate, toDate };
   }
 
+  // handleApplyFilter() {
+  //   const { fromDate, toDate } = this.getChequeVisDateRange();
+
+  //   const params: any = { from_date: fromDate, to_date: toDate };
+
+  //   if (
+  //     this.chequeVisSelectedProperty?.key &&
+  //     this.chequeVisSelectedProperty.key !== 'ALL'
+  //   ) {
+  //     params.property_id = this.chequeVisSelectedProperty.key;
+  //   }
+  //   if (this.chequeVisSelectedUnit?.key) {
+  //     params.property_unit_id = this.chequeVisSelectedUnit.key;
+  //   }
+  //   if (this.chequeVisSelectedStatus?.key) {
+  //     params.cheque_status = this.chequeVisSelectedStatus.key;
+  //   }
+
+  //   this.homeService
+  //     .getChequeVisibility(params)
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe({
+  //       next: (res) => {
+  //         this.chequeList = res?.content?.cheques ?? [];
+  //       },
+  //       error: () => {
+  //         this.chequeList = [];
+  //       },
+  //     });
+  // }
+
   handleApplyFilter() {
+    this.chequeVisSelectedProperty = null;
+    this.chequeVisSelectedUnit = null;
+    this.chequeVisSelectedStatus = null;
+    this.chequeVisSelectedPeriodType = 'month';
+    // this.chequeVisSelectedMonthly = null;
+    this.chequeVisSelectedYear = null;
     const { fromDate, toDate } = this.getChequeVisDateRange();
 
     const params: any = { from_date: fromDate, to_date: toDate };
@@ -635,9 +775,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     ) {
       params.property_id = this.chequeVisSelectedProperty.key;
     }
+
     if (this.chequeVisSelectedUnit?.key) {
       params.property_unit_id = this.chequeVisSelectedUnit.key;
     }
+
     if (this.chequeVisSelectedStatus?.key) {
       params.cheque_status = this.chequeVisSelectedStatus.key;
     }
@@ -648,9 +790,38 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (res) => {
           this.chequeList = res?.content?.cheques ?? [];
+
+          this.chequeVisFilterPopup?.closePopup();
         },
         error: () => {
           this.chequeList = [];
+
+          this.chequeVisFilterPopup?.closePopup();
+        },
+      });
+  }
+
+  handleRemoveFilter() {
+    this.chequeVisSelectedProperty = null;
+    this.chequeVisSelectedUnit = null;
+    this.chequeVisSelectedStatus = null;
+    this.chequeVisSelectedPeriodType = 'month';
+    // this.chequeVisSelectedMonthly = null;
+    this.chequeVisSelectedYear = null;
+
+    this.homeService
+      .getChequeVisibility({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.chequeList = res?.content?.cheques ?? [];
+
+          this.chequeVisFilterPopup?.closePopup();
+        },
+        error: () => {
+          this.chequeList = [];
+
+          this.chequeVisFilterPopup?.closePopup();
         },
       });
   }
