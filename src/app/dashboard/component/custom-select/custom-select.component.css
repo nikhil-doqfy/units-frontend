@@ -217,7 +217,7 @@
   background-color: var(--orangeLightBg);
 }
 .customSelectDropdown {
-  position: fixed; /* 🔥 CHANGE (absolute नाही) */
+  position: fixed;
   z-index: 9999;
   min-width: 180px;
   max-height: 200px;

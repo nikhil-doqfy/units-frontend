@@ -67,7 +67,7 @@
 
 .fltrPopupWrap {
   position: relative;
-  overflow: visible; /* 🔥 important */
+  overflow: visible;
 }
 
 .fltrPopup {
@@ -75,7 +75,7 @@
   position: absolute;
   top: 0;
 
-  right: 100%; /* default: left ला open */
+  right: 100%;
   margin-right: 16px;
 
   width: 338px;

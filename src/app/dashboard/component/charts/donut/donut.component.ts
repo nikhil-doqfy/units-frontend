@@ -214,12 +214,12 @@ export class DonutChartComponent {
       states: {
         hover: {
           filter: {
-            type: 'none', // 👈 hover effect बंद
+            type: 'none',
           },
         },
         active: {
           filter: {
-            type: 'none', // 👈 click केल्यावरही change नको
+            type: 'none',
           },
         },
       },

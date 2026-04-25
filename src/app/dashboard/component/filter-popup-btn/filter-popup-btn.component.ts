@@ -61,7 +61,6 @@ export class FilterPopupButtonComponent {
 
       const rect = popup.getBoundingClientRect();
 
-      // 👉 जर popup left side ला जाऊन screen बाहेर जात असेल
       if (rect.left < 0) {
         popup.classList.add('open-right');
       } else {
