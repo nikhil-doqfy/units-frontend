@@ -288,6 +288,7 @@
   color: var(--done-btn-text);
   font-weight: 500;
   cursor: pointer;
+  color: var(--text-color);
   background: var(--done-btn-gradient);
 }
 .column {
