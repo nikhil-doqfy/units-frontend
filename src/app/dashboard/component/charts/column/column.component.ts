@@ -33,6 +33,7 @@ export type ChartOptions = {
   fill: ApexFill;
   theme?: any;
   grid?: any;
+  tooltip?: ApexTooltip | any;
 };
 
 @Component({
@@ -63,6 +64,10 @@ export class ColumnChartComponent
         toolbar: { show: false },
       },
       colors: ['#2C7AFF'],
+      tooltip: {
+        theme: false,
+      },
+
       plotOptions: {
         bar: {
           borderRadius: 2,
@@ -86,7 +91,6 @@ export class ColumnChartComponent
     };
   }
 
-  // ✅ THEME HANDLE (SAFE WAY)
   ngOnInit() {
     const theme = localStorage.getItem('theme');
     const isDark = theme === 'dark';
@@ -97,11 +101,8 @@ export class ColumnChartComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe((isDark) => {
         const axisColor = isDark ? '#FFFFFF' : '#000000';
-        const gridColor = isDark
-          ? '#e8e1e114' // 👈 VERY faint (HEX with opacity)
-          : '#0000001a';
+        const gridColor = isDark ? '#e8e1e114' : '#0000001a';
 
-        // ✅ Update options for initial render
         this.chartOptions = {
           ...this.chartOptions,
           xaxis: {
@@ -123,7 +124,6 @@ export class ColumnChartComponent
           },
         };
 
-        // ✅ If chart is ready → update UI instantly
         if (this.viewReady && this.chart) {
           this.chart.updateOptions(
             {
@@ -138,7 +138,6 @@ export class ColumnChartComponent
       });
   }
 
-  // ✅ DATA HANDLE
   ngOnChanges() {
     if (this.data?.length) {
       const values = this.data.map((d) => d.value);
@@ -161,7 +160,6 @@ export class ColumnChartComponent
     this.viewReady = true;
   }
 
-  // ✅ MEMORY SAFE
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

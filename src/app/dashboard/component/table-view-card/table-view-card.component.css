@@ -297,3 +297,7 @@
   gap: 8px;
   flex-wrap: nowrap;
 }
+
+.shareText {
+  color: var(--share-text-color);
+}

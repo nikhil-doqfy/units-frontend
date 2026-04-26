@@ -142,11 +142,9 @@ export class DonutChartComponent {
 
   private observer!: MutationObserver;
 
-  // 🔥 INIT
   ngOnInit() {
     this.updateChart();
 
-    // 👇 Detect theme change (dark/light)
     this.observer = new MutationObserver(() => {
       this.updateChart();
     });
@@ -157,12 +155,10 @@ export class DonutChartComponent {
     });
   }
 
-  // 🔥 CLEANUP
   ngOnDestroy() {
     this.observer.disconnect();
   }
 
-  // 🔥 INPUT CHANGE
   ngOnChanges(changes: SimpleChanges) {
     if (changes['vacancy'] || changes['occupied']) {
       this.updateChart();
@@ -174,7 +170,6 @@ export class DonutChartComponent {
     this.updateChart();
   }
 
-  // 🔥 MAIN LOGIC
   updateChart() {
     const isDark = document.body.classList.contains('dark-theme');
 
@@ -196,9 +191,16 @@ export class DonutChartComponent {
       labels = ['Occupied', 'Remaining'];
       chartHeight = 240;
     } else {
-      series = [this.vacancy, this.occupied];
-      colors = ['#3D7BFF', '#FF8A41'];
-      labels = ['Vacancy', 'Occupied'];
+      if (this.vacancy === 0 && this.occupied === 0) {
+        series = [1];
+        colors = ['#E0E0E0'];
+        labels = ['No Data'];
+      } else {
+        series = [this.vacancy, this.occupied];
+        colors = ['#3D7BFF', '#FF8A41'];
+        labels = ['Vacancy', 'Occupied'];
+      }
+
       chartHeight = 220;
     }
 
@@ -246,12 +248,21 @@ export class DonutChartComponent {
                 label: '',
                 color: textColor,
                 fontSize: '16px',
-                formatter: () =>
-                  this.selectedMode === 'vacancy'
-                    ? `${this.vacancy}%`
-                    : this.selectedMode === 'occupied'
-                      ? `${this.occupied}%`
-                      : `${100}%`,
+                formatter: () => {
+                  if (this.vacancy === 0 && this.occupied === 0) {
+                    return '0%';
+                  }
+
+                  if (this.selectedMode === 'vacancy') {
+                    return `${this.vacancy}%`;
+                  }
+
+                  if (this.selectedMode === 'occupied') {
+                    return `${this.occupied}%`;
+                  }
+
+                  return `${this.vacancy + this.occupied}%`;
+                },
               },
             },
           },
@@ -275,10 +286,26 @@ export class DonutChartComponent {
         },
       },
 
+      // tooltip: {
+      //   theme: isDark ? 'dark' : 'light',
+      //   y: {
+      //     formatter: (val: number) => `${val}%`,
+      //   },
+      // },
       tooltip: {
-        theme: isDark ? 'dark' : 'light',
-        y: {
-          formatter: (val: number) => `${val}%`,
+        custom: ({ series, seriesIndex, w }) => {
+          if (!series || seriesIndex === undefined) return '';
+
+          const value = series[seriesIndex];
+          const label = w?.globals?.labels?.[seriesIndex] || '';
+
+          const isDark = document.body.classList.contains('dark-theme');
+          return `
+  <div class="donut-tooltip-fix ${isDark ? 'dark' : ''}">
+    <span class="tooltip-title">${label}</span>
+    <span class="tooltip-value">${value}%</span>
+  </div>
+`;
         },
       },
     };

@@ -8,6 +8,7 @@
   --managerBg: #8c3bfb;
   --tenantBg: #382cff;
   --whiteBg: #ffffff;
+  --share-text-color: #000;
   --blackBg: #000000;
   --greyBg: #344046;
   --tooltip-bg: #ffffff;
@@ -1499,6 +1500,7 @@
   --whiteBg: #1f1f1f;
   --ownerBg: #2a3f8f;
   --tooltip-bg: #1f2937;
+  --share-text-color: #fff;
   --tooltip-text: #ffffff;
   --icon-color: #ffffff;
   --managerBg: #5a2fb0;
@@ -6398,4 +6400,61 @@ select {
 .dark-theme select option {
   background-color: #1e293b;
   color: #ffffff;
+}
+
+.dark-theme .apexcharts-tooltip {
+  background: #1a2a3a !important;
+  color: #ffffff !important;
+  border: 1px solid #444 !important;
+}
+
+.dark-theme .apexcharts-tooltip-title {
+  background: #1a2a3a !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #e8e1e114 !important;
+}
+
+.prgrsBarTbl .table thead th {
+  border-bottom: 1px solid #e5e5e5 !important;
+}
+.dark-theme .prgrsBarTbl .table thead th {
+  border-bottom: 1px solid #e8e1e114 !important;
+}
+.dark-theme .prgrsBarTbl .table tbody tr {
+  border-bottom: 1px solid #e8e1e114 !important;
+}
+
+.apexcharts-pie-area:hover {
+  opacity: 1 !important;
+  filter: none !important;
+}
+.donut-tooltip-fix {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+
+  white-space: nowrap;
+  min-width: fit-content;
+
+  background: #ffffff;
+  color: #000;
+  border: 1px solid #e0e0e0;
+}
+
+.dark-theme .donut-tooltip-fix.dark {
+  background: #1a2a3a;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+.tooltip-title {
+  font-weight: 600;
+}
+
+.tooltip-value {
+  font-weight: 500;
 }
