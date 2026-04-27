@@ -11,6 +11,7 @@
   --share-text-color: #000;
   --blackBg: #000000;
   --greyBg: #344046;
+  --table-header-border: none;
   --tooltip-bg: #ffffff;
   --tooltip-text: #000000;
   --iconColor1: #000;
@@ -1503,6 +1504,7 @@
   --share-text-color: #fff;
   --tooltip-text: #ffffff;
   --icon-color: #ffffff;
+  --table-header-border: 1px solid var(--muteBorder1);
   --managerBg: #5a2fb0;
   --muteText5: #fff;
   --iconColor1: #fff;

@@ -91,7 +91,6 @@ export class TenantDetailComponent implements OnChanges {
   @Output() back = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
-
   private translate = inject(TranslateService);
   private modalService = inject(NgbModal);
   private tenantsService = inject(TenantsService);
@@ -205,11 +204,17 @@ export class TenantDetailComponent implements OnChanges {
   }
 
   get leaseChargesTotalAmount(): number {
-    return this.leaseCharges.reduce((sum: number, lc: any) => sum + (lc.total ?? 0), 0);
+    return this.leaseCharges.reduce(
+      (sum: number, lc: any) => sum + (lc.total ?? 0),
+      0,
+    );
   }
 
   get leaseChargesVatTotal(): number {
-    return this.leaseCharges.reduce((sum: number, lc: any) => sum + (lc.vat ?? 0), 0);
+    return this.leaseCharges.reduce(
+      (sum: number, lc: any) => sum + (lc.vat ?? 0),
+      0,
+    );
   }
 
   transactionStatusClass(status: string): string {
@@ -233,7 +238,9 @@ export class TenantDetailComponent implements OnChanges {
     this.showRenewalBlockedMsg = false;
   }
 
-  onRefresh() {}
+  onRefresh() {
+    this.loadTransactions(this.selectedLease.id);
+  }
   toggleReceipt() {
     this.showReceiptDropdown = !this.showReceiptDropdown;
     this.showMonthDropdown = false;
@@ -254,8 +261,12 @@ export class TenantDetailComponent implements OnChanges {
         .getInvoice(lease.id)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (resp: any) => { this.invoiceData = resp?.content ?? null; },
-          error: () => { this.invoiceData = null; },
+          next: (resp: any) => {
+            this.invoiceData = resp?.content ?? null;
+          },
+          error: () => {
+            this.invoiceData = null;
+          },
         });
     }
   }
@@ -271,21 +282,65 @@ export class TenantDetailComponent implements OnChanges {
 
   private toWords(n: number): string {
     if (n === 0) return 'Zero';
-    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
-      'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen',
-      'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
-      'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    const ones = [
+      '',
+      'One',
+      'Two',
+      'Three',
+      'Four',
+      'Five',
+      'Six',
+      'Seven',
+      'Eight',
+      'Nine',
+      'Ten',
+      'Eleven',
+      'Twelve',
+      'Thirteen',
+      'Fourteen',
+      'Fifteen',
+      'Sixteen',
+      'Seventeen',
+      'Eighteen',
+      'Nineteen',
+    ];
+    const tens = [
+      '',
+      '',
+      'Twenty',
+      'Thirty',
+      'Forty',
+      'Fifty',
+      'Sixty',
+      'Seventy',
+      'Eighty',
+      'Ninety',
+    ];
     const chunk = (num: number): string => {
       if (num === 0) return '';
       if (num < 20) return ones[num];
-      if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 ? ' ' + ones[num % 10] : '');
-      return ones[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' ' + chunk(num % 100) : '');
+      if (num < 100)
+        return (
+          tens[Math.floor(num / 10)] + (num % 10 ? ' ' + ones[num % 10] : '')
+        );
+      return (
+        ones[Math.floor(num / 100)] +
+        ' Hundred' +
+        (num % 100 ? ' ' + chunk(num % 100) : '')
+      );
     };
     const parts: string[] = [];
-    if (n >= 1_000_000) { parts.push(chunk(Math.floor(n / 1_000_000)) + ' Million'); n %= 1_000_000; }
-    if (n >= 1_000)     { parts.push(chunk(Math.floor(n / 1_000))     + ' Thousand'); n %= 1_000; }
-    if (n > 0)          { parts.push(chunk(n)); }
+    if (n >= 1_000_000) {
+      parts.push(chunk(Math.floor(n / 1_000_000)) + ' Million');
+      n %= 1_000_000;
+    }
+    if (n >= 1_000) {
+      parts.push(chunk(Math.floor(n / 1_000)) + ' Thousand');
+      n %= 1_000;
+    }
+    if (n > 0) {
+      parts.push(chunk(n));
+    }
     return parts.join(' ');
   }
 
@@ -293,7 +348,8 @@ export class TenantDetailComponent implements OnChanges {
     const leaseId = this.selectedLease?.id;
     if (!leaseId) return;
 
-    this.leaseService.getInvoicePdf(leaseId)
+    this.leaseService
+      .getInvoicePdf(leaseId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {

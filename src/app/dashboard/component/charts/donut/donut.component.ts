@@ -294,18 +294,26 @@ export class DonutChartComponent {
       // },
       tooltip: {
         custom: ({ series, seriesIndex, w }) => {
-          if (!series || seriesIndex === undefined) return '';
-
-          const value = series[seriesIndex];
           const label = w?.globals?.labels?.[seriesIndex] || '';
+          const value = series?.[seriesIndex] ?? 0;
 
           const isDark = document.body.classList.contains('dark-theme');
+
+          if (this.vacancy === 0 && this.occupied === 0) {
+            return `
+        <div class="donut-tooltip-fix ${isDark ? 'dark' : ''}">
+          <span class="tooltip-title">No Data</span>
+          <span class="tooltip-value">0%</span>
+        </div>
+      `;
+          }
+
           return `
-  <div class="donut-tooltip-fix ${isDark ? 'dark' : ''}">
-    <span class="tooltip-title">${label}</span>
-    <span class="tooltip-value">${value}%</span>
-  </div>
-`;
+      <div class="donut-tooltip-fix ${isDark ? 'dark' : ''}">
+        <span class="tooltip-title">${label}</span>
+        <span class="tooltip-value">${value}%</span>
+      </div>
+    `;
         },
       },
     };
