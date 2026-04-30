@@ -1117,3 +1117,53 @@ app-plus-icon {
   cursor: pointer;
   margin-left: 6px;
 }
+
+/* @media (max-width: 767px) {
+  .cmmnTblHdr .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cmmnTblHdr .col-md-auto {
+    width: 100%;
+  }
+
+  .cmmnTblHdr .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .cmmnTblHdr .d-flex > * {
+    width: 100%;
+  }
+} */
+.cmmnTblHdr .d-flex {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.cmmnTblHdr .d-flex > * {
+  flex: 0 0 auto;
+}
+@media (max-width: 767px) {
+  .cmmnTblHdr .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cmmnTblHdr .col-md-auto {
+    width: 100%;
+  }
+
+  .cmmnTblHdr .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .cmmnTblHdr .d-flex > * {
+    width: 100%;
+  }
+}

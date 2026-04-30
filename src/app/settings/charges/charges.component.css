@@ -105,3 +105,8 @@
 .edit-underline {
   border-bottom: 2px solid var(--borderAccent);
 }
+@media (hover: hover) {
+  .charges-row:hover .hover-actions {
+    display: flex;
+  }
+}

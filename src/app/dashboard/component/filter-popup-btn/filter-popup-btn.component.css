@@ -1,66 +1,66 @@
 .fltrPopupWrap {
-    position: relative;
+  position: relative;
 }
 
 .fltrPopup {
-    background-color: var(--whiteBg);
-    position: absolute;
-    top: 0;
-    right: 100%;
-    width: 338px;
-    margin-right: 16px;
-    border: 1px solid var(--lightBorder);
-    border-radius: 6px;
-    box-shadow: 4px 4px 15px 0 #00000040;
-    display: none;
-    z-index: 1000;
+  background-color: var(--whiteBg);
+  position: absolute;
+  top: 0;
+  right: 100%;
+  width: 338px;
+  margin-right: 16px;
+  border: 1px solid var(--lightBorder);
+  border-radius: 6px;
+  box-shadow: 4px 4px 15px 0 #00000040;
+  display: none;
+  z-index: 1000;
 }
 
 .show .fltrPopup {
-    display: block;
+  display: block;
 }
 
 .fltrPopupHdr {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--lightBorder);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--lightBorder);
 }
 
 .fltrPopupHdr h5 {
-    font-size: 16px;
-    color: var(--greyText3);
-    font-weight: 600;
-    line-height: 20px;
-    margin: 0;
+  font-size: 16px;
+  color: var(--greyText3);
+  font-weight: 600;
+  line-height: 20px;
+  margin: 0;
 }
 
 .fltrPopupHdr button {
-    background-color: transparent;
-    color: var(--greyDarkText4);
-    padding: 0;
-    border: 0;
+  background-color: transparent;
+  color: var(--greyDarkText4);
+  padding: 0;
+  border: 0;
 }
 
 .fltrPopupBdy {
-    padding: 24px 16px;
+  padding: 24px 16px;
 }
 
 .fltrPopupFtr {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 16px;
-    padding: 8px 16px;
-    border-top: 1px solid var(--lightBorder);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--lightBorder);
 }
 
 @media (max-width: 767px) {
-    .fltrPopup {
-        right: 0;
-        width: 280px;
-        margin-right: 0;
-    }
+  .fltrPopup {
+    right: 0;
+    width: 280px;
+    margin-right: 0;
+  }
 }

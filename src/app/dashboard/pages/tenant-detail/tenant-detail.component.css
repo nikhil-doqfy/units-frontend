@@ -5,6 +5,18 @@
   grid-template-columns: repeat(8, 1fr) !important;
 }
 
+@media (max-width: 767px) {
+  :host ::ng-deep .cmmnTblViewBdy ul {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  :host ::ng-deep .cmmnTblViewBdy ul {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
 /* ══════════════════════════════════════════════════════════════════
    FINANCIAL SUMMARY CARD
    ══════════════════════════════════════════════════════════════════ */
@@ -438,4 +450,29 @@
 .additional.tax {
   background: var(--tax-bg);
   color: var(--tax-text);
+}
+
+@media (max-width: 767px) {
+  .invoice-section {
+    width: 100%; /* full width */
+    border-radius: 20px;
+    font-size: 12px; /* text small */
+    padding: 8px 10px;
+  }
+
+  .invoice-section span {
+    display: block; /* text wrap */
+  }
+
+  .invoice-section a {
+    display: inline-block;
+    margin-top: 4px;
+  }
+}
+@media (max-width: 767px) {
+  .invoice-section {
+    height: auto; /* 👈 fixed height काढ */
+    min-height: 30px; /* 👈 base height ठेव */
+    padding: 8px 12px; /* 👈 थोडी space वाढव */
+  }
 }
