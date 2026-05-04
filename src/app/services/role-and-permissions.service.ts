@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { SharedService } from '../shared.service';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,10 +19,16 @@ export class RoleAndPermissionsService {
 
   getRoles(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/user/role_table${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/user/role_table${queryString}`,
+    );
   }
 
-  updateRole(data: { role_id: number; name: string; permissions?: any[] }): Observable<any> {
+  updateRole(data: {
+    role_id: number;
+    name: string;
+    permissions?: any[];
+  }): Observable<any> {
     return this.http.put(`${this.SERVER_ADDRESS}/user/role_table`, data);
   }
 }
