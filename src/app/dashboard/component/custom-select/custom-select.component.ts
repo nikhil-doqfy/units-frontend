@@ -115,33 +115,33 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   //     const openUpward =
   //       spaceBelow < dropdownHeight && rect.top > dropdownHeight;
 
-  //     // this.dropdownStyle = openUpward
-  //     //   ? {
-  //     //       position: 'fixed',
-  //     //       bottom:   `${window.innerHeight - rect.top + 4}px`,
-  //     //       left:     `${rect.left}px`,
-  //     //       width:    `${rect.width}px`,
-  //     //       'z-index': '9999',
-  //     //     }
-  //     //   : {
-  //     //       position: 'fixed',
-  //     //       top:      `${rect.bottom + 4}px`,
-  //     //       left:     `${rect.left}px`,
-  //     //       width:    `${rect.width}px`,
-  //     //       'z-index': '9999',
-  //     //     };
+  // this.dropdownStyle = openUpward
+  //   ? {
+  //       position: 'fixed',
+  //       bottom:   `${window.innerHeight - rect.top + 4}px`,
+  //       left:     `${rect.left}px`,
+  //       width:    `${rect.width}px`,
+  //       'z-index': '9999',
+  //     }
+  //   : {
+  //       position: 'fixed',
+  //       top:      `${rect.bottom + 4}px`,
+  //       left:     `${rect.left}px`,
+  //       width:    `${rect.width}px`,
+  //       'z-index': '9999',
+  //     };
   //     this.dropdownStyle = openUpward
   //       ? {
   //           position: 'absolute',
   //           bottom: 'calc(100% + 4px)',
-  //           left: '0',
+  //           right: '0',
   //           width: '100%',
   //           'z-index': '9999',
   //         }
   //       : {
   //           position: 'absolute',
   //           top: 'calc(100% + 4px)',
-  //           left: '0',
+  //           right: '0',
   //           width: '100%',
   //           'z-index': '9999',
   //         };
@@ -158,26 +158,40 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
       this.dropdownService.notifyOpen(this);
 
       const rect = this.el.nativeElement.getBoundingClientRect();
+
       const dropdownHeight = 224;
+      const dropdownWidth = 200;
+
       const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      const spaceRight = window.innerWidth - rect.right;
+      const spaceLeft = rect.left;
 
       const openUpward =
-        spaceBelow < dropdownHeight && rect.top > dropdownHeight;
+        spaceBelow < dropdownHeight && spaceAbove > dropdownHeight;
 
-      // ✅ EXISTING LOGIC (keep)
+      let positionStyle: any = {};
+
+      if (spaceRight >= dropdownWidth) {
+        positionStyle = { left: '0' };
+      } else if (spaceLeft >= dropdownWidth) {
+        positionStyle = { right: '0' };
+      } else {
+        positionStyle = { left: '0', right: '0' };
+      }
+
       this.dropdownStyle = openUpward
         ? {
             position: 'absolute',
             bottom: 'calc(100% + 4px)',
-            left: '0',
-            width: '100%',
+            ...positionStyle,
             'z-index': '9999',
           }
         : {
             position: 'absolute',
             top: 'calc(100% + 4px)',
-            left: '0',
-            width: '100%',
+            ...positionStyle,
             'z-index': '9999',
           };
 
@@ -212,8 +226,6 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
         }
       });
     }
-
-    this.onTouched();
   }
   selectOption(option: any) {
     this.selectedOption = option;

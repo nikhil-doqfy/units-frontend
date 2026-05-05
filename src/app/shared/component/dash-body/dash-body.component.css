@@ -1,71 +1,72 @@
 .dashMainBody {
-    position: relative;
-    margin-left: 240px;
-    margin-top: 115px;
-    height: calc(100vh - 165px);
-    padding: 16px;
-    overflow: auto;
-    transition: all 0s ease-in-out 0s;
-    z-index: 1;
+  position: relative;
+  margin-left: 240px;
+  margin-top: 115px;
+  height: calc(100vh - 165px);
+  padding: 16px;
+  overflow: auto;
+  transition: all 0s ease-in-out 0s;
+  z-index: 1;
 }
 
 .arabic.dashMainBody {
-    margin-left: 0;
-    margin-right: 240px;
+  margin-left: 0;
+  margin-right: 240px;
 }
 
 .dashMainSmallBody.dashMainBody {
-    margin-left: 70px;
+  margin-left: 70px;
 }
 
 .arabic.dashMainSmallBody.dashMainBody {
-    margin-left: 0;
-    margin-right: 70px;
+  margin-left: 0;
+  margin-right: 70px;
 }
 
 .dashMainRightCloseBody.dashMainBody {
-    margin-right: 70px;
+  margin-right: 70px;
 }
 
 .dashMainRightOpenBody.dashMainBody {
-    margin-right: 290px;
+  margin-right: 290px;
 }
 
-@media (max-width: 1699px) {}
+@media (max-width: 1699px) {
+}
 
 @media (max-width: 1199px) {
-    .dashMainBody {
-        margin-left: 0;
-    }
+  .dashMainBody {
+    margin-left: 0;
+  }
 
-    .arabic.dashMainBody {
-        margin-right: 0;
-    }
+  .arabic.dashMainBody {
+    margin-right: 0;
+  }
 
-    .dashMainSmallBody.dashMainBody {
-        margin-left: 0;
-        overflow: hidden;
-    }
+  .dashMainSmallBody.dashMainBody {
+    margin-left: 0;
+    overflow: hidden;
+  }
 
-    .arabic.dashMainSmallBody.dashMainBody {
-        margin-right: 0;
-    }
+  .arabic.dashMainSmallBody.dashMainBody {
+    margin-right: 0;
+  }
 }
 
 @media (max-width: 991px) {
-    .dashMainRightOpenBody.dashMainBody {
-        margin-right: 70px;
-    }
+  .dashMainRightOpenBody.dashMainBody {
+    margin-right: 70px;
+  }
 }
 
 @media (max-width: 767px) {
-    .dashMainBody {
-        margin-top: 100px;
-        height: calc(100vh - 150px);
-        padding: 16px;
-    }
+  .dashMainBody {
+    margin-top: 100px;
+    height: calc(100vh - 150px);
+    padding: 16px;
+  }
 
-    .dashMainRightCloseBody.dashMainBody {
-        margin-right: 0;
-    }
+  .dashMainRightCloseBody.dashMainBody {
+    margin-right: 0;
+  }
 }

@@ -87,6 +87,7 @@
 
 .hdrDrpdwnMenu {
   padding: 0;
+  max-height: 300px;
   border: 1px solid var(--muteBorder1);
   border-radius: 12px;
   box-shadow: 4px 4px 15px 0 #00000040;
@@ -1073,4 +1074,42 @@
 /* Remove default Bootstrap dropdown arrow */
 button[ngbDropdownToggle]::after {
   display: none !important;
+}
+/* Responsive adjustments for smaller screens */
+
+@media (max-width: 991px) {
+  .hdrOptns {
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    max-width: 100%;
+  }
+
+  .hdrOptns::-webkit-scrollbar {
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+  .hdrOptns {
+    gap: 6px;
+  }
+
+  .hdrDrpdwn .hdrDrpdwnBtn {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .hdrDrpdwn .hdrDrpdwnBtn > span {
+    display: none;
+  }
+}
+@media (max-width: 991px) {
+  .dashHdrTop .row {
+    flex-wrap: nowrap;
+    overflow: visible !important;
+  }
+
+  .dashHdrTop .col:last-child {
+    overflow: visible !important;
+  }
 }
