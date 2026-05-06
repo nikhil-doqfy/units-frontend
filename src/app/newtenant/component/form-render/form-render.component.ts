@@ -244,20 +244,24 @@ export class FormRenderComponent {
         );
         return;
       }
-      const violations = this.checkApprovalViolations(this.currentSubStep.formGroup);
-      if (violations.length > 0) {
-        this.approvalViolations = violations;
-        this._pendingCommercialSave = () =>
-          this.formService.saveCommercialStep(this.currentSubStep!.formGroup, () => {
-            setTimeout(() => this.goToNextStep(), 1000);
+      const stage = this.leaseStage$()?.toUpperCase();
+      const alreadyApproved = stage === 'MANAGER_APPROVED';
+      if (!alreadyApproved) {
+        const violations = this.checkApprovalViolations(this.currentSubStep.formGroup);
+        if (violations.length > 0) {
+          this.approvalViolations = violations;
+          this._pendingCommercialSave = () =>
+            this.formService.saveCommercialStep(this.currentSubStep!.formGroup, () => {
+              setTimeout(() => this.goToNextStep(), 1000);
+            });
+          this.modalService.open(this.approvalModal, {
+            ariaLabelledBy: 'approval-modal-title',
+            windowClass: 'mdlCommon',
+            centered: true,
+            size: 'lg',
           });
-        this.modalService.open(this.approvalModal, {
-          ariaLabelledBy: 'approval-modal-title',
-          windowClass: 'mdlCommon',
-          centered: true,
-          size: 'lg',
-        });
-        return;
+          return;
+        }
       }
       this.formService.saveCommercialStep(this.currentSubStep.formGroup, () => {
         setTimeout(() => this.goToNextStep(), 1000);

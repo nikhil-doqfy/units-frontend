@@ -188,8 +188,16 @@ export class NewTenantComponent {
             this.steps = this.newTenantService.PropertySteps(leadData);
 
             if (leadData?.unit_id) {
+              // Only look up an existing lease if this lead already has a tenant
+              // (invite was sent). Without tenant_id, filtering by unit_id alone
+              // would return a different lead's lease on the same unit.
+              if (!leadData.tenant_id) {
+                this.loading.set(false);
+                return;
+              }
+
               this.leaseService
-                .getLeases({ unit_id: leadData.unit_id, page_size: 1 })
+                .getLeases({ unit_id: leadData.unit_id, tenant_id: leadData.tenant_id, page_size: 1 })
                 .pipe(takeUntilDestroyed(this.destroyRef))
                 .subscribe({
                   next: (leaseResp: any) => {
@@ -201,9 +209,20 @@ export class NewTenantComponent {
 
                     this.newTenantService.getLeaseId().set(lease.id);
                     const stage = lease.lease_stage ?? '';
+                    const s = stage?.toUpperCase();
                     this.newTenantService.restoreStepFromStage(stage);
-                    if (stage === LEASE_STAGE.COMMERCIAL_DETAILS || stage === LEASE_STAGE.MANAGER_APPROVAL_REQUIRED || stage === LEASE_STAGE.MANAGER_APPROVED) {
+                    if (s === LEASE_STAGE.COMMERCIAL_DETAILS || s === LEASE_STAGE.MANAGER_APPROVAL_REQUIRED || s === LEASE_STAGE.MANAGER_APPROVED) {
                       this.newTenantService.getActiveIndex().set(0);
+                      this.newTenantService.getActiveSubIndex().set(1);
+                    } else if (s === LEASE_STAGE.WAITING_FOR_SIGNUP) {
+                      this.newTenantService.getActiveIndex().set(1);
+                      this.newTenantService.getActiveSubIndex().set(0);
+                    } else if (s === LEASE_STAGE.ONBOARDING           ||
+                               s === LEASE_STAGE.NEGOTIATION_SENT     || s === LEASE_STAGE.PENDING_APPROVAL ||
+                               s === LEASE_STAGE.OWNER_APPROVED       || s === LEASE_STAGE.TENANT_APPROVED  ||
+                               s === LEASE_STAGE.WAITING_CHEQUE       || s === LEASE_STAGE.CHEQUE_REQUESTED ||
+                               s === LEASE_STAGE.CHEQUE_COLLECTED) {
+                      this.newTenantService.getActiveIndex().set(1);
                       this.newTenantService.getActiveSubIndex().set(1);
                     } else if (stage && stage !== LEASE_STAGE.BASIC_DETAILS) {
                       this.newTenantService.getActiveIndex().set(this.leaseStageToStepIndex(stage));

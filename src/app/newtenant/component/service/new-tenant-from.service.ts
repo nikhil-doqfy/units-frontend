@@ -678,6 +678,7 @@ export class NewTenantFromService {
       .subscribe({
         next: (res: any) => {
           this.approvalId.set(res?.content?.approval_id ?? null);
+          this.currentLeaseStage.set('MANAGER_APPROVAL_REQUIRED');
           this.msgText.set('Waiting for Manager Approval — a manager must approve the lease terms before you can proceed.');
           this.showMsg.set(true);
           this.alertService.success('Approval request sent to manager');
