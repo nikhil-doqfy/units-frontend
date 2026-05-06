@@ -732,6 +732,9 @@ export class NewTenantFromService {
       })
       .subscribe({
         next: () => {
+          this.currentLeaseStage.set(LEASE_STAGE.WAITING_FOR_SIGNUP);
+          this.showMsg.set(false);
+          this.msgText.set('');
           this.leaseService.sendLeaseInvite(existingId).subscribe({
             next: () => {
               this.isSendingInvite.set(false);

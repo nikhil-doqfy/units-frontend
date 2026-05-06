@@ -187,109 +187,91 @@ export class NewTenantComponent {
             const leadData = resp?.content ?? null;
             this.steps = this.newTenantService.PropertySteps(leadData);
 
-            if (leadData?.unit_id) {
-              // Only look up an existing lease if this lead already has a tenant
-              // (invite was sent). Without tenant_id, filtering by unit_id alone
-              // would return a different lead's lease on the same unit.
-              if (!leadData.tenant_id) {
-                this.loading.set(false);
-                return;
-              }
+            const leaseId = leadData?.lease_id ?? null;
+            const stage   = (leadData?.lease_stage ?? '') as string;
+            const s       = stage.toUpperCase();
 
-              this.leaseService
-                .getLeases({ unit_id: leadData.unit_id, tenant_id: leadData.tenant_id, page_size: 1 })
-                .pipe(takeUntilDestroyed(this.destroyRef))
-                .subscribe({
-                  next: (leaseResp: any) => {
-                    const lease = leaseResp?.content?.[0] ?? null;
-                    if (!lease) {
-                      this.loading.set(false);
-                      return;
-                    }
-
-                    this.newTenantService.getLeaseId().set(lease.id);
-                    const stage = lease.lease_stage ?? '';
-                    const s = stage?.toUpperCase();
-                    this.newTenantService.restoreStepFromStage(stage);
-                    if (s === LEASE_STAGE.COMMERCIAL_DETAILS || s === LEASE_STAGE.MANAGER_APPROVAL_REQUIRED || s === LEASE_STAGE.MANAGER_APPROVED) {
-                      this.newTenantService.getActiveIndex().set(0);
-                      this.newTenantService.getActiveSubIndex().set(1);
-                    } else if (s === LEASE_STAGE.WAITING_FOR_SIGNUP) {
-                      this.newTenantService.getActiveIndex().set(1);
-                      this.newTenantService.getActiveSubIndex().set(0);
-                    } else if (s === LEASE_STAGE.ONBOARDING           ||
-                               s === LEASE_STAGE.NEGOTIATION_SENT     || s === LEASE_STAGE.PENDING_APPROVAL ||
-                               s === LEASE_STAGE.OWNER_APPROVED       || s === LEASE_STAGE.TENANT_APPROVED  ||
-                               s === LEASE_STAGE.WAITING_CHEQUE       || s === LEASE_STAGE.CHEQUE_REQUESTED ||
-                               s === LEASE_STAGE.CHEQUE_COLLECTED) {
-                      this.newTenantService.getActiveIndex().set(1);
-                      this.newTenantService.getActiveSubIndex().set(1);
-                    } else if (stage && stage !== LEASE_STAGE.BASIC_DETAILS) {
-                      this.newTenantService.getActiveIndex().set(this.leaseStageToStepIndex(stage));
-                      this.newTenantService.getActiveSubIndex().set(0);
-                    }
-
-                    // Fetch full lease details to pre-fill forms (needed on page refresh)
-                    this.leaseService
-                      .getLeaseById(lease.id)
-                      .pipe(takeUntilDestroyed(this.destroyRef))
-                      .subscribe({
-                        next: (detailResp: any) => {
-                          const fullLease = detailResp?.content ?? null;
-                          if (fullLease) {
-                            const u = fullLease.unit     ?? {};
-                            const t = fullLease.tenant   ?? {};
-                            const d = fullLease.dates    ?? {};
-                            const f = fullLease.financials ?? {};
-
-                            this.newTenantService.setUnitCommercialData(u);
-
-                            const basicFormGroup = this.steps()?.[0]?.subSteps?.[0]?.formGroup;
-                            if (basicFormGroup) {
-                              basicFormGroup.patchValue({
-                                nationality:    t.nationality      ?? '',
-                                emiratesId:     t.emirates_id      ?? '',
-                                passportNo:     t.passport_number  ?? '',
-                                passportExpiry: t.passport_expiry  ?? '',
-                                visaNo:         t.visa_number      ?? '',
-                                visaExpiry:     t.visa_expiry      ?? '',
-                                addressLine1:   t.address_line_1   ?? '',
-                                addressLine2:   t.address_line_2   ?? '',
-                              });
-                            }
-
-                            const commercialFormGroup = this.steps()?.[0]?.subSteps?.[1]?.formGroup;
-                            if (commercialFormGroup) {
-                              commercialFormGroup.patchValue({
-                                startDate:             d.start_date             ?? '',
-                                endDate:               d.end_date               ?? '',
-                                graceStartDate:        d.grace_start_date       ?? '',
-                                graceEndDate:          d.grace_end_date         ?? '',
-                                annualAmount:          f.annual_amount          ?? '',
-                                actualAnnualAmount:    f.actual_annual_amount   ?? '',
-                                securityBookingAmount: f.booking_amount         ?? '',
-                                maintenanceCharges:    f.maintenance_charges    ?? '',
-                                rent:                  f.rent                   ?? '',
-                                securityDeposit:       f.security_deposit       ?? '',
-                                commissionPercent:     f.commission             ?? '',
-                                noticePeriod:          f.notice_period          ?? '',
-                                contractAmount:        f.contract_amount        ?? '',
-                                discount:              f.discount               ?? '',
-                                shellAndCore:          fullLease.shell_and_core ?? false,
-                                paymentCount:          f.payment_count          ?? '',
-                              });
-                            }
-                          }
-                          this.loading.set(false);
-                        },
-                        error: () => this.loading.set(false),
-                      });
-                  },
-                  error: () => this.loading.set(false),
-                });
-            } else {
+            if (!leaseId) {
               this.loading.set(false);
+              return;
             }
+
+            this.newTenantService.getLeaseId().set(leaseId);
+            this.newTenantService.restoreStepFromStage(stage);
+
+            if (s === LEASE_STAGE.COMMERCIAL_DETAILS || s === LEASE_STAGE.MANAGER_APPROVAL_REQUIRED || s === LEASE_STAGE.MANAGER_APPROVED) {
+              this.newTenantService.getActiveIndex().set(0);
+              this.newTenantService.getActiveSubIndex().set(1);
+            } else if (s === LEASE_STAGE.WAITING_FOR_SIGNUP) {
+              this.newTenantService.getActiveIndex().set(1);
+              this.newTenantService.getActiveSubIndex().set(0);
+            } else if (s === LEASE_STAGE.ONBOARDING           ||
+                       s === LEASE_STAGE.NEGOTIATION_SENT     || s === LEASE_STAGE.PENDING_APPROVAL ||
+                       s === LEASE_STAGE.OWNER_APPROVED       || s === LEASE_STAGE.TENANT_APPROVED  ||
+                       s === LEASE_STAGE.WAITING_CHEQUE       || s === LEASE_STAGE.CHEQUE_REQUESTED ||
+                       s === LEASE_STAGE.CHEQUE_COLLECTED) {
+              this.newTenantService.getActiveIndex().set(1);
+              this.newTenantService.getActiveSubIndex().set(1);
+            } else if (stage && stage !== LEASE_STAGE.BASIC_DETAILS) {
+              this.newTenantService.getActiveIndex().set(this.leaseStageToStepIndex(stage));
+              this.newTenantService.getActiveSubIndex().set(0);
+            }
+
+            // Fetch full lease details to pre-fill forms
+            this.leaseService
+              .getLeaseById(leaseId)
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: (detailResp: any) => {
+                  const fullLease = detailResp?.content ?? null;
+                  if (fullLease) {
+                    const u = fullLease.unit      ?? {};
+                    const t = fullLease.tenant    ?? {};
+                    const d = fullLease.dates     ?? {};
+                    const f = fullLease.financials ?? {};
+
+                    this.newTenantService.setUnitCommercialData(u);
+
+                    const basicFormGroup = this.steps()?.[0]?.subSteps?.[0]?.formGroup;
+                    if (basicFormGroup) {
+                      basicFormGroup.patchValue({
+                        nationality:    t.nationality      ?? '',
+                        emiratesId:     t.emirates_id      ?? '',
+                        passportNo:     t.passport_number  ?? '',
+                        passportExpiry: t.passport_expiry  ?? '',
+                        visaNo:         t.visa_number      ?? '',
+                        visaExpiry:     t.visa_expiry      ?? '',
+                        addressLine1:   t.address_line_1   ?? '',
+                        addressLine2:   t.address_line_2   ?? '',
+                      });
+                    }
+
+                    const commercialFormGroup = this.steps()?.[0]?.subSteps?.[1]?.formGroup;
+                    if (commercialFormGroup) {
+                      commercialFormGroup.patchValue({
+                        startDate:             d.start_date             ?? '',
+                        endDate:               d.end_date               ?? '',
+                        graceStartDate:        d.grace_start_date       ?? '',
+                        graceEndDate:          d.grace_end_date         ?? '',
+                        annualAmount:          f.annual_amount          ?? '',
+                        actualAnnualAmount:    f.actual_annual_amount   ?? '',
+                        securityBookingAmount: f.booking_amount         ?? '',
+                        maintenanceCharges:    f.maintenance_charges    ?? '',
+                        rent:                  f.rent                   ?? '',
+                        securityDeposit:       f.security_deposit       ?? '',
+                        commissionPercent:     f.commission             ?? '',
+                        noticePeriod:          f.notice_period          ?? '',
+                        contractAmount:        f.contract_amount        ?? '',
+                        discount:              f.discount               ?? '',
+                        shellAndCore:          fullLease.shell_and_core ?? false,
+                        paymentCount:          f.payment_count          ?? '',
+                      });
+                    }
+                  }
+                  this.loading.set(false);
+                },
+                error: () => this.loading.set(false),
+              });
           },
           error: () => this.loading.set(false),
         });
