@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../environments/environment.development';
 import { SharedService } from './shared.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,12 @@ export class AuditlogService {
   }
 
   exportAuditLog(params: Record<string, any> = {}): Observable<Blob> {
-    const queryString = this.sharedService.getQueryString({ ...params, export: 'true' });
-    return this.http.get(`${this.SERVER_ADDRESS}/audit_log${queryString}`, { responseType: 'blob' });
+    const queryString = this.sharedService.getQueryString({
+      ...params,
+      export: 'true',
+    });
+    return this.http.get(`${this.SERVER_ADDRESS}/audit_log${queryString}`, {
+      responseType: 'blob',
+    });
   }
 }
