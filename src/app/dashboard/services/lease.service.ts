@@ -259,4 +259,28 @@ export class LeaseService {
   sendManagerApproval(data: { lease_id: number; requested_rent?: number; requested_tenure?: string }): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/manager-approval`, data);
   }
+
+  verifyChecque(leaseId: number): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/verify-cheque`, { lease_id: leaseId });
+  }
+
+  sendEjariForSignature(leaseId: number): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/ejari-send-signature`, { lease_id: leaseId });
+  }
+
+  sendEjariSignatureOtp(leaseId: number, email: string): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/ejari-signature-otp`, { lease_id: leaseId, email });
+  }
+
+  verifyEjariSignatureOtp(leaseId: number, email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/ejari-signature-otp-verify`, { lease_id: leaseId, email, otp });
+  }
+
+  submitEjariSignature(payload: { lease_id: number; email: string; signature_data: string }): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/ejari-submit-signature`, payload);
+  }
+
+  activateLease(leaseId: number): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/activate`, { lease_id: leaseId });
+  }
 }

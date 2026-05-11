@@ -289,12 +289,14 @@ export class NewTenantComponent {
       case LEASE_STAGE.WAITING_CHEQUE:
       case LEASE_STAGE.CHEQUE_REQUESTED:
       case LEASE_STAGE.CHEQUE_COLLECTED:
+      case LEASE_STAGE.CHEQUE_VERIFIED:
         return 1;
       case LEASE_STAGE.AGREEMENT:
       case LEASE_STAGE.AGREEMENT_SIGNING:
       case LEASE_STAGE.AGREEMENT_SIGNED:
         return 2;
       case LEASE_STAGE.EJARI:
+      case LEASE_STAGE.EJARI_DOCUMENT_UPLOAD:
       case LEASE_STAGE.EJARI_SIGNING:
       case LEASE_STAGE.ACTIVATED:
         return 3;
