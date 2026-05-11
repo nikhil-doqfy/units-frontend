@@ -36,6 +36,13 @@ export class NewTenantFromService {
     this.prefillCommercialFromUnit(data);
   }
 
+  // Other charges selected on the commercial-details step
+  private selectedCharges = signal<{ charge_id: number; amount: number }[]>([]);
+  getSelectedCharges() { return this.selectedCharges; }
+  setSelectedCharges(charges: { charge_id: number; amount: number }[]) {
+    this.selectedCharges.set(charges);
+  }
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -664,6 +671,7 @@ export class NewTenantFromService {
       discount: v.discount || null,
       shell_and_core: !!v.shellAndCore,
       payment_count: v.paymentCount || null,
+      other_charges: this.selectedCharges(),
     };
 
     this.leaseService.updateLease(payload).subscribe({
@@ -720,6 +728,7 @@ export class NewTenantFromService {
       discount: v.discount || null,
       shell_and_core: !!v.shellAndCore,
       payment_count: v.paymentCount || null,
+      other_charges: this.selectedCharges(),
     };
 
     if (!existingId) {
