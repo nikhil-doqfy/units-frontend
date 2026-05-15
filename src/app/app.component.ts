@@ -24,7 +24,7 @@ import { WhatsappQrCodeComponent } from './whatsapp-qr-code/whatsapp-qr-code.com
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'Doqfy';
+  title = 'Units';
   private sharedService = inject(SharedService);
   globalMessage: string | null = null;
 

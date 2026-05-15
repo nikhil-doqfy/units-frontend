@@ -7,12 +7,12 @@ export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
   {
     path: 'lease-approval',
-    title: 'Lease Approval | Doqfy',
+    title: 'Lease Approval | Units',
     component: LeaseApprovalComponent,
   },
   {
     path: 'lease-sign',
-    title: 'Sign Lease Agreement | Doqfy',
+    title: 'Sign Lease Agreement | Units',
     component: LeaseSignatureComponent,
   },
   {
@@ -40,7 +40,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    title: 'Page Not Found | Doqfy',
+    title: 'Page Not Found | Units',
     component: PageNotFoundComponent,
   },
 ];

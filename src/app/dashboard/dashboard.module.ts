@@ -46,7 +46,7 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'home',
-        title: 'Dashboard | Doqfy',
+        title: 'Dashboard | Units',
         pathMatch: 'full',
       },
 
