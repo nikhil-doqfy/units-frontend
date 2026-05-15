@@ -3205,6 +3205,7 @@ button:disabled {
     rgba(244, 82, 16, 1) 100%
   );
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline;
 }
@@ -3219,6 +3220,7 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .form-control::placeholder {
@@ -4332,6 +4334,40 @@ linearGradient .authBgPatt stop:last-child {
 /***Swiper Custom Navigation Css End***/
 
 /***Common New Table Css Start***/
+/* ── Dual scrollbar (top + bottom) for every .table-responsive ── */
+
+/* Hide the native scrollbar — custom DOM thumbs replace it */
+.table-responsive {
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+/* Track containers injected above/below each .table-responsive */
+.dual-scroll-top,
+.dual-scroll-bottom {
+  height: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The draggable thumb — sized & translated by JS */
+.dual-scroll-thumb {
+  height: 5px;
+  background-color: var(--activeBg1);
+  border-radius: 4px;
+  min-width: 40px;
+  cursor: grab;
+  position: relative;
+  user-select: none;
+}
+.dual-scroll-thumb:active {
+  cursor: grabbing;
+}
+/* ─────────────────────────────────────────────────────────────── */
+
 .cmmnTblOuter {
   background-color: var(--whiteBg);
   padding-top: 8px;

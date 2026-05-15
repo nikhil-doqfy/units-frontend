@@ -250,40 +250,6 @@ export class NewUnitsComponent implements OnInit {
     });
   }
 
-  fillDummyData(): void {
-    this.basicDetailsForm.patchValue({
-      unitName: 'Unit A-101',
-      unitSize: 1200,
-      area: '120',
-      dmNo: 'DM-12345',
-      noOfBedrooms: { key: 2, value: '2' },
-      floorNo: { key: 5, value: '5' },
-      parkingNo: 'P-02',
-      noOfBalcony: { key: 1, value: '1' },
-      landNo: 'PLT-001',
-      unitUsage: { key: 'RESIDENTIAL', value: 'Residential' },
-      unitType: { key: 'APARTMENT', value: 'Apartment' },
-      subType: '2BHK',
-      makaniNo: '20437733',
-      dewaNo: '9988776655',
-    });
-    this.commercialsForm.patchValue({
-      rent: 80000,
-      securityDeposit: 10000,
-      bookingAmount: 5000,
-      maintenanceCharges: 2000,
-      cycle: 12,
-      noticePeriod: 3,
-      commissionPercent: 5,
-    });
-    this.ownerForms.at(0).patchValue({
-      ownerName: 'John Doe',
-      ownerEmail: 'john.doe@example.com',
-      ownerContact: '+971501234567',
-      ownerEmiratesId: '784-1990-1234567-1',
-    });
-  }
-
   submitUnit(): void {
     this.router.navigate(['/dashboard/properties'], {
       queryParams: { tab: 'units' },

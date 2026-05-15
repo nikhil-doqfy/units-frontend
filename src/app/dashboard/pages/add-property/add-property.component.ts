@@ -252,25 +252,6 @@ export class AddPropertyComponent {
     });
   }
 
-  fillDummyData(): void {
-    this.pmDetailsForm.patchValue({
-      propertyName: 'Sunrise Tower',
-      noOfBlocks: { key: 1, value: '1' },
-      noOfUnits: { key: 10, value: '10' },
-      propertyType: { key: 'APARTMENT', value: 'Apartment' },
-      landArea: 5000,
-      landAreaUnit: { key: 'SQ_FT', value: 'Sq Ft' },
-      landDmNo: 'DM-2024-001',
-      plotNo: 'PLT-101',
-      makaniNo: '21345678',
-      dewaNo: 'DEWA-9876543',
-      addressLane1: '15 Sheikh Zayed Road',
-      addressLane2: 'Business Bay',
-      landmark: 'Near Dubai Mall',
-      pincode: '500001',
-    });
-  }
-
   onMapLocationSelected(location: MapLocation): void {
     this.pmDetailsForm.patchValue({
       latitude: location.latitude,
@@ -358,8 +339,8 @@ export class AddPropertyComponent {
     );
   }
   /*-----totalUnit and block-------------*/
-  blockCount = 10;
-  unitCount = 456;
+  blockCount = 0;
+  unitCount = 0;
 
   getPageTitle() {
     return `

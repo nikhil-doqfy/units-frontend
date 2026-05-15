@@ -16,19 +16,6 @@
         [description]="'FILL_ALL_THE_FIELDS_TO_ADD_YOUR_PROPERTY' | translate"
         [showEditButton]="true"
       >
-        <div style="text-align: right; margin-bottom: 8px">
-          <a
-            href="javascript:void(0)"
-            (click)="fillDummyData()"
-            style="
-              font-size: 12px;
-              color: #aaa;
-              text-decoration: underline;
-              cursor: pointer;
-            "
-            >Fill dummy data</a
-          >
-        </div>
         <form class="row g-3" [formGroup]="pmDetailsForm">
           <div class="col-md-3">
             <label class="form-label">{{ "PROPERTY_NAME" | translate }}</label>
