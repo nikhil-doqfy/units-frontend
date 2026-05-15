@@ -1,4 +1,4 @@
-const HOSTNAME = 'units-api.getunits.ai';
+const HOSTNAME = 'units-api.doqfy.in';
 export const environment = {
   production: false,
   enableLogging: true,
