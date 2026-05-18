@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-property-accordian-card',
@@ -10,10 +11,16 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './property-accordian-card.component.css',
 })
 export class PropertyAccordianCardComponent {
+  private router = inject(Router);
   @Input() accordianData:
     | {
         title: string;
-        items: { label: string; value: string }[];
+        items: {
+          label: string;
+          value: string;
+          isLink?: boolean;
+          unitId?: number;
+        }[];
         tableColumns?: { key: string; label: string }[];
         tableRows?: Record<string, string>[];
       }[]
@@ -40,5 +47,11 @@ export class PropertyAccordianCardComponent {
   updateAccordionIndex(index: number): void {
     this.openAccordionIndex = index;
     this.accordionIndexChange.emit(this.openAccordionIndex);
+  }
+  /*------units navigation------*/
+  navigateToUnit(unitId?: number): void {
+    if (!unitId) return;
+
+    this.router.navigate(['/dashboard/units', unitId]);
   }
 }

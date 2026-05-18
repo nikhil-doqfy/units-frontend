@@ -33,10 +33,15 @@
               </thead>
               <tbody>
                 <tr *ngFor="let row of item.tableRows">
-                  <td *ngFor="let col of item.tableColumns">{{ row[col.key] ?? '--' }}</td>
+                  <td *ngFor="let col of item.tableColumns">
+                    {{ row[col.key] ?? "--" }}
+                  </td>
                 </tr>
                 <tr *ngIf="!item.tableRows?.length">
-                  <td [attr.colspan]="item.tableColumns?.length" style="text-align:center; color:#9ca3af; font-size:13px">
+                  <td
+                    [attr.colspan]="item.tableColumns?.length"
+                    style="text-align: center; color: #9ca3af; font-size: 13px"
+                  >
                     No data available
                   </td>
                 </tr>
@@ -49,7 +54,16 @@
           <ul>
             <li *ngFor="let content of item.items">
               <span>{{ content.label | translate }}</span>
-              <p>{{ content.value }}</p>
+              <p
+                *ngIf="content.isLink"
+                class="unit-link"
+                (click)="navigateToUnit(content.unitId)"
+              >
+                {{ content.value }}
+              </p>
+              <p *ngIf="!content.isLink">
+                {{ content.value }}
+              </p>
             </li>
           </ul>
         </ng-template>

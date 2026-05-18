@@ -93,3 +93,13 @@
   vertical-align: middle;
   padding: 8px 12px;
 }
+
+.unit-link {
+  color: #4f46e5;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.unit-link:hover {
+  opacity: 0.8;
+}

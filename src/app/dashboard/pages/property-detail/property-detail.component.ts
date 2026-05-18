@@ -39,7 +39,12 @@ export class PropertyDetailComponent implements OnInit {
   propertyRent = '';
   propertySections: {
     title: string;
-    items: { label: string; value: string }[];
+    items: {
+      label: string;
+      value: string;
+      unitId?: number;
+      isLink?: boolean;
+    }[];
     tableColumns?: { key: string; label: string }[];
     tableRows?: Record<string, string>[];
   }[] = [];
@@ -78,8 +83,11 @@ export class PropertyDetailComponent implements OnInit {
       documents: this.propertyService.getPropertyDocuments({
         property_id: this.propertyId,
       }),
+      units: this.propertyService.getUnits({
+        property_id: this.propertyId,
+      }),
     }).subscribe({
-      next: ({ property, blocks, images, documents }) => {
+      next: ({ property, blocks, images, units, documents }) => {
         const prop = property?.content || null;
 
         if (prop) {
@@ -98,7 +106,7 @@ export class PropertyDetailComponent implements OnInit {
             imgSrc: img.url,
           }));
           const blockList: any[] = blocks?.content || [];
-
+          const unitList: any[] = units?.content || [];
           this.propertySections = [
             {
               title: 'PEROPERTY_DETAILS',
@@ -180,6 +188,36 @@ export class PropertyDetailComponent implements OnInit {
                     {
                       label: this.getLabel('BLOCKS'),
                       value: 'No blocks added',
+                    },
+                  ],
+            },
+            {
+              title: 'UNIT_DETAILS',
+              items: unitList.length
+                ? unitList.flatMap((u: any, i: number) => [
+                    {
+                      label: `${this.getLabel('UNIT')} ${i + 1}`,
+                      value: u.unit_name || '--',
+                      unitId: u.id,
+                      isLink: true,
+                    },
+                    {
+                      label: this.getLabel('UNIT_CODE'),
+                      value: u.code || '--',
+                    },
+                    {
+                      label: this.getLabel('BLOCK_NAME'),
+                      value: u.block_name || '--',
+                    },
+                    {
+                      label: this.getLabel('UNIT_TYPE'),
+                      value: u.unit_type || '--',
+                    },
+                  ])
+                : [
+                    {
+                      label: this.getLabel('UNITS'),
+                      value: 'No units added',
                     },
                   ],
             },
