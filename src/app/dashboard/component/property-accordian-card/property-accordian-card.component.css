@@ -65,31 +65,21 @@
   line-height: 16px;
   margin: 0;
 }
-
-/* Table layout inside accordion */
-.acrd-table-wrap {
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.acrd-table-wrap::-webkit-scrollbar {
-  display: none;
+.prprtyAcrdn .accordion-button::after {
+  background-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-left: 0 !important;
 }
 
-.acrd-table thead th {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--tableHeaderText);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  background: var(--tableHeaderBg);
-  white-space: nowrap;
-  padding: 8px 12px;
+::ng-deep .arabic .prprtyAcrdn .accordion-button::after {
+  background-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-left: 0 !important;
 }
-
-.acrd-table tbody td {
-  font-size: 13px;
-  color: var(--tableBodyText);
-  vertical-align: middle;
-  padding: 8px 12px;
+@media (max-width: 576px) {
+  .prprtyAcrdn .accordion-body ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

@@ -68,3 +68,16 @@
     margin-left: -60px;
   }
 }
+
+@media (max-width: 767px) {
+  ::ng-deep .arabic .dashBrdcrmbOuter {
+    margin-left: 0 !important;
+    margin-right: -50px !important;
+    padding: 6px 12px;
+  }
+
+  ::ng-deep .arabic .breadcrumb {
+    font-size: 11px;
+    justify-content: flex-start;
+  }
+}

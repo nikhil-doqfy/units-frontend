@@ -59,19 +59,33 @@ export class FilterPopupButtonComponent {
       const popup = this.eRef.nativeElement.querySelector('.fltrPopup');
       if (!popup) return;
 
-      const rect = popup.getBoundingClientRect();
+      // reset styles
+      popup.style.left = '';
+      popup.style.right = '';
+      popup.style.transform = '';
+      popup.classList.remove('open-right');
 
+      const rect = popup.getBoundingClientRect();
+      const screenWidth = window.innerWidth;
+
+      // 👉 If going outside right → shift left
+      if (rect.right > screenWidth) {
+        const overflow = rect.right - screenWidth;
+        popup.style.transform = `translateX(-${overflow + 10}px)`;
+      }
+
+      // 👉 If going outside left → shift right
       if (rect.left < 0) {
-        popup.classList.add('open-right');
-      } else {
-        popup.classList.remove('open-right');
+        const overflow = Math.abs(rect.left);
+        popup.style.transform = `translateX(${overflow + 10}px)`;
       }
     });
   }
   @HostListener('window:resize')
   onResize() {
+    // 🔥 Do nothing (or just close)
     if (this.isOpen) {
-      this.handleFilterOpenClick();
+      this.closePopup(); // safest
     }
   }
 }

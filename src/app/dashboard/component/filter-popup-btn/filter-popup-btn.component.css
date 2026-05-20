@@ -64,3 +64,38 @@
     margin-right: 0;
   }
 }
+
+/* .fltrPopup.open-right {
+  right: auto;
+  left: 100%;
+  margin-right: 0;
+  margin-left: 16px;
+} */
+
+/* @media (max-width: 767px) {
+  [dir="rtl"] .fltrPopup {
+    position: fixed;
+
+    top: 70px;
+    left: 10px;
+    right: 10px;
+
+    width: auto;
+    max-width: calc(100vw - 20px);
+
+    margin: 0;
+    box-sizing: border-box;
+
+    z-index: 2000;
+  }
+
+  [dir="rtl"] .fltrPopup.open-right {
+    left: 10px;
+    right: 10px;
+  }
+} */
+@media (max-width: 767px) {
+  .fltrPopup {
+    max-width: calc(100vw - 20px);
+  }
+}

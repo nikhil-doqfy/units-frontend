@@ -414,3 +414,21 @@ img {
 .cmmnPrprtyViewTop > div {
   flex-wrap: wrap;
 }
+
+@media (max-width: 767px) {
+  ::ng-deep .arabic .sharePopup {
+    width: 186px !important;
+    min-width: 186px !important;
+    max-width: 186px !important;
+
+    right: 0 !important;
+    left: auto !important;
+  }
+
+  ::ng-deep .arabic .shareBtn {
+    width: 111px !important;
+    min-width: 172px !important;
+    max-width: 162px !important;
+    margin-left: 0;
+  }
+}

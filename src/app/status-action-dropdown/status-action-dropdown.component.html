@@ -1,7 +1,14 @@
 <div class="statusWrapper">
-  <div class="statusText" [ngClass]="statusColorClass" (click)="toggleDropdown()">
+  <div
+    class="statusText"
+    [ngClass]="statusColorClass"
+    (click)="toggleDropdown()"
+  >
     {{ status }}
-    <i class="arrowIcon"><app-arrow-down-icon></app-arrow-down-icon></i>
+    <i class="arrowIcon"
+      ><app-arrow-down-icon *ngIf="!isOpen"></app-arrow-down-icon>
+    </i>
+    <app-arrow-up-icon *ngIf="isOpen"></app-arrow-up-icon>
   </div>
 
   <div class="dropdownMenu" *ngIf="isOpen">

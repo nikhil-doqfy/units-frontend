@@ -87,7 +87,7 @@
 
 .hdrDrpdwnMenu {
   padding: 0;
-  max-height: 300px;
+  max-height: 328px;
   border: 1px solid var(--muteBorder1);
   border-radius: 12px;
   box-shadow: 4px 4px 15px 0 #00000040;
@@ -166,7 +166,7 @@
 }
 
 .hdrUserDrpdwn .hdrDrpdwnBtn i {
-  background-color: var(--greyBg);
+  /* background-color: var(--greyBg); */
   color: var(--whiteText);
   font-style: normal;
   width: 38px;

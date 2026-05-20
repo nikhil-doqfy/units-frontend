@@ -70,3 +70,33 @@
   top: 45px;
   left: 142px;
 }
+@media (max-width: 768px) {
+  ::ng-deep .arabic .custom-menu {
+    left: auto !important;
+    right: 0 !important;
+  }
+
+  ::ng-deep .arabic .month-dropdown {
+    left: auto !important;
+    right: 142px !important;
+  }
+}
+@media (max-width: 768px) {
+  ::ng-deep .arabic .month-dropdown {
+    right: 0 !important;
+    top: 45px;
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  ::ng-deep .arabic .month-dropdown {
+    left: auto !important;
+    right: 142px !important;
+  }
+}
+@media (max-width: 768px) {
+  ::ng-deep .arabic .custom-btn {
+    font-size: 14px;
+    min-width: max-content;
+  }
+}
