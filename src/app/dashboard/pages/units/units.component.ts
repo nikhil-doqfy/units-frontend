@@ -150,10 +150,10 @@ export class UnitsComponent implements OnInit {
   applyFilter(): void {
     this.currentPage = 1;
     this.loadUnits();
-    this.selectedProperty = null;
-    this.selectedBedroom = null;
-    this.selectedFloor = null;
-    this.selectedAreaUnit = null;
+    // this.selectedProperty = null;
+    // this.selectedBedroom = null;
+    // this.selectedFloor = null;
+    // this.selectedAreaUnit = null;
   }
 
   removeFilter(): void {
@@ -161,10 +161,10 @@ export class UnitsComponent implements OnInit {
     this.filterBedrooms = '';
     this.filterFloor = '';
     this.filterAreaUnit = '';
-    this.selectedProperty = null;
-    this.selectedBedroom = null;
-    this.selectedFloor = null;
-    this.selectedAreaUnit = null;
+    // this.selectedProperty = null;
+    // this.selectedBedroom = null;
+    // this.selectedFloor = null;
+    // this.selectedAreaUnit = null;
     this.currentPage = 1;
     this.loadUnits();
   }
@@ -196,5 +196,28 @@ export class UnitsComponent implements OnInit {
 
   onViewClick(id: number) {
     this.router.navigate(['/dashboard/units', id]);
+  }
+  clearProperty() {
+    this.selectedProperty = null;
+    this.filterPropertyId = '';
+    this.loadUnits();
+  }
+
+  clearBedroom() {
+    this.selectedBedroom = null;
+    this.filterBedrooms = '';
+    this.loadUnits();
+  }
+
+  clearFloor() {
+    this.selectedFloor = null;
+    this.filterFloor = '';
+    this.loadUnits();
+  }
+
+  clearAreaUnit() {
+    this.selectedAreaUnit = null;
+    this.filterAreaUnit = '';
+    this.loadUnits();
   }
 }

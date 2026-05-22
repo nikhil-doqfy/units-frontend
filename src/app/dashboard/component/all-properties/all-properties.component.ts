@@ -62,12 +62,15 @@ export class AllPropertiesComponent implements OnInit {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   searchText: string = '';
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
   private search$ = new Subject<string>();
 
   // Active filters
-  filterPropertyType: string = '';
-  filterStatus: string = '';
-
+  // filterPropertyType: string = '';
+  // filterStatus: string = '';
+  filterPropertyType: string | null = null;
+  filterStatus: string | null = null;
   propertyTypeOptions = [
     { key: 'APARTMENT', value: 'Apartment' },
     { key: 'VILLA', value: 'Villa' },
@@ -122,6 +125,19 @@ export class AllPropertiesComponent implements OnInit {
     });
   }
 
+  clearPropertyType() {
+    this.selectedPropertyType = null;
+    this.filterPropertyType = null;
+
+    this.applyFilter();
+  }
+
+  clearStatus() {
+    this.selectedStatus = null;
+    this.filterStatus = null;
+
+    this.applyFilter();
+  }
   onRefresh() {
     this.loadProperties();
   }
@@ -142,8 +158,6 @@ export class AllPropertiesComponent implements OnInit {
   applyFilter(): void {
     this.currentPage = 1;
     this.loadProperties();
-    this.selectedPropertyType = null;
-    this.selectedStatus = null;
   }
 
   removeFilter(): void {
@@ -178,6 +192,25 @@ export class AllPropertiesComponent implements OnInit {
 
   onViewClick(id: number) {
     this.router.navigate(['/dashboard/properties', id]);
+  }
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.properties.sort((a: any, b: any) => {
+      const valueA = (a[field] || '').toString().toLowerCase();
+      const valueB = (b[field] || '').toString().toLowerCase();
+
+      if (this.sortOrder === 'asc') {
+        return valueA.localeCompare(valueB);
+      } else {
+        return valueB.localeCompare(valueA);
+      }
+    });
   }
 
   onEditClick(id: number) {

@@ -10,6 +10,31 @@
       </div>
       <div class="col-md-auto">
         <div class="d-flex align-items-center gap-2 gap-md-3">
+          <div class="selected-filters d-flex gap-2 flex-wrap">
+            <!-- Property -->
+            <div class="filter-chip" *ngIf="selectedProperty">
+              {{ selectedProperty?.value }}
+              <span class="cross-icon" (click)="clearProperty()">✕</span>
+            </div>
+
+            <!-- Bedrooms -->
+            <div class="filter-chip" *ngIf="selectedBedroom">
+              {{ selectedBedroom?.value }}
+              <span class="cross-icon" (click)="clearBedroom()">✕</span>
+            </div>
+
+            <!-- Floor -->
+            <div class="filter-chip" *ngIf="selectedFloor">
+              {{ selectedFloor?.value }}
+              <span class="cross-icon" (click)="clearFloor()">✕</span>
+            </div>
+
+            <!-- Area Unit -->
+            <div class="filter-chip" *ngIf="selectedAreaUnit">
+              {{ selectedAreaUnit?.value }}
+              <span class="cross-icon" (click)="clearAreaUnit()">✕</span>
+            </div>
+          </div>
           <app-table-search
             [placeholder]="'SEARCH_HERE' | translate"
             (onValueChange)="searchTextChange($event)"

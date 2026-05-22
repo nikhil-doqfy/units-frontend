@@ -203,13 +203,32 @@ export class AllLeadsComponent implements OnInit {
   searchTextChange(text: string): void {
     this.search$.next(text);
   }
+  clearStatus(): void {
+    this.selectedStatus = null;
+    this.filterStatus = '';
+    this.currentPage = 1;
+    this.loadLeads();
+  }
 
+  clearPlatform(): void {
+    this.selectedPlatform = null;
+    this.filterPlatform = '';
+    this.currentPage = 1;
+    this.loadLeads();
+  }
+
+  clearLeadType(): void {
+    this.selectedLeadType = null;
+    this.filterLeadType = '';
+    this.currentPage = 1;
+    this.loadLeads();
+  }
   applyFilter(): void {
     this.currentPage = 1;
     this.loadLeads();
-    this.selectedStatus = null;
-    this.selectedPlatform = null;
-    this.selectedLeadType = null;
+    // this.selectedStatus = null;
+    // this.selectedPlatform = null;
+    // this.selectedLeadType = null;
   }
 
   removeFilter(): void {

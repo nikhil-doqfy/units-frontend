@@ -11,6 +11,25 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
+            <div class="selected-filters d-flex gap-2 flex-wrap">
+              <!-- Property -->
+              <div class="filter-chip" *ngIf="selectedStatus">
+                {{ selectedStatus?.value }}
+                <span class="cross-icon" (click)="clearStatus()">✕</span>
+              </div>
+
+              <!-- Bedrooms -->
+              <div class="filter-chip" *ngIf="selectedPlatform">
+                {{ selectedPlatform?.value }}
+                <span class="cross-icon" (click)="clearPlatform()">✕</span>
+              </div>
+
+              <!-- Floor -->
+              <div class="filter-chip" *ngIf="selectedLeadType">
+                {{ selectedLeadType?.value }}
+                <span class="cross-icon" (click)="clearLeadType()">✕</span>
+              </div>
+            </div>
             <app-table-search
               placeholder="{{ 'SEARCH_HERE' | translate }}"
               (onValueChange)="searchTextChange($event)"

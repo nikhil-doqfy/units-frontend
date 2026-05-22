@@ -6411,3 +6411,25 @@ table.charges-table tbody td {
   right: 10px;
   left: auto;
 }
+.selected-filters {
+  display: flex;
+  align-items: center;
+}
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  background-color: rgb(151, 151, 248);
+  padding: 1px 5px;
+  border-radius: 6px;
+  font-size: 10px;
+  width: fit-content;
+}
+
+.cross-icon {
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 600;
+}

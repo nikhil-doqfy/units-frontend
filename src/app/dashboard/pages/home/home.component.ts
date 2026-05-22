@@ -208,7 +208,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   paymentTotalRevenue = 0;
+  showStatsDropdown = false;
 
+  showMonthlyCommission = true;
+  showProperties = true;
+  showTenants = true;
+
+  toggleStatsDropdown() {
+    this.showStatsDropdown = !this.showStatsDropdown;
+  }
   loadPayments(params?: any) {
     this.homeService.getOtherTypePayments(params).subscribe((res) => {
       this.monthlyData = res.content.monthly_data || [];

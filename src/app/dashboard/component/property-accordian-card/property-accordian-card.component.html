@@ -56,13 +56,28 @@
               <span>{{ content.label | translate }}</span>
               <p
                 *ngIf="content.isLink"
-                class="unit-link"
+                class="unit-link truncate-text custom-tooltip"
+                [matTooltip]="content.value"
+                matTooltipPosition="above"
                 (click)="navigateToUnit(content.unitId)"
               >
                 {{ content.value }}
               </p>
-              <p *ngIf="!content.isLink">
+              <p
+                *ngIf="!content.isLink"
+                class="truncate-text custom-tooltip"
+                [matTooltip]="content.value"
+                matTooltipPosition="above"
+              >
                 {{ content.value }}
+              </p>
+              <!-- Action Icon -->
+              <p *ngIf="content.isAction">
+                <app-preview-icon
+                  style="cursor: pointer"
+                  (click)="navigateToUnit(content.unitId)"
+                >
+                </app-preview-icon>
               </p>
             </li>
           </ul>

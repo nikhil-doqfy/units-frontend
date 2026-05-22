@@ -198,8 +198,6 @@ export class PropertyDetailComponent implements OnInit {
                     {
                       label: `${this.getLabel('UNIT')} ${i + 1}`,
                       value: u.unit_name || '--',
-                      unitId: u.id,
-                      isLink: true,
                     },
                     {
                       label: this.getLabel('UNIT_CODE'),
@@ -212,6 +210,12 @@ export class PropertyDetailComponent implements OnInit {
                     {
                       label: this.getLabel('UNIT_TYPE'),
                       value: u.unit_type || '--',
+                    },
+                    {
+                      label: this.getLabel('ACTION'),
+                      value: '',
+                      unitId: u.id,
+                      isAction: true,
                     },
                   ])
                 : [

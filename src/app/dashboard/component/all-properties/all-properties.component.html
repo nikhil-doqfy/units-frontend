@@ -11,6 +11,21 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
+            <div class="selected-filters d-flex gap-2 flex-wrap">
+              <div class="filter-chip" *ngIf="selectedPropertyType">
+                {{ selectedPropertyType?.value }}
+
+                <span class="cross-icon" (click)="clearPropertyType()">
+                  ✕
+                </span>
+              </div>
+
+              <div class="filter-chip" *ngIf="selectedStatus">
+                {{ selectedStatus?.value }}
+
+                <span class="cross-icon" (click)="clearStatus()"> ✕ </span>
+              </div>
+            </div>
             <app-table-search
               [placeholder]="'SEARCH_HERE' | translate"
               (onValueChange)="searchTextChange($event)"
@@ -83,7 +98,7 @@
           <thead>
             <tr>
               <th>{{ "PROPERTY_ID" | translate }}</th>
-              <th>
+              <th style="cursor: pointer" (click)="sortBy('property_name')">
                 {{ "PROPERTY_NAME" | translate
                 }}<i><app-sorting-icon></app-sorting-icon></i>
               </th>

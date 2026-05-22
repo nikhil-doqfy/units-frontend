@@ -95,15 +95,7 @@
               formControlName="plotNo"
             />
           </div>
-          <div class="col-md-3">
-            <label class="form-label">{{ "MAKANI_NO" | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              [placeholder]="'ENTER_HERE' | translate"
-              formControlName="makaniNo"
-            />
-          </div>
+
           <div class="col-md-3">
             <label class="form-label">{{ "DEWA_NO" | translate }}</label>
             <input
@@ -398,6 +390,15 @@
                   [bindToControl]="true"
                   controlName="noOfUnits"
                 ></app-form-select-field>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">{{ "MAKANI_NO" | translate }}</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [placeholder]="'ENTER_HERE' | translate"
+                  formControlName="makaniNo"
+                />
               </div>
             </div>
           </div>
