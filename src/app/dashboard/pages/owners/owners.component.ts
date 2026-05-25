@@ -297,4 +297,20 @@ export class OwnersComponent {
         return `with: ${reason}`;
     }
   }
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.owners = this.sharedService.sortData(
+      this.owners,
+      field,
+      this.sortOrder,
+    );
+  }
 }

@@ -114,11 +114,11 @@
           <thead>
             <tr>
               <th>{{ "LEAD_ID" | translate }}</th>
-              <th>
+              <th (click)="sort('created_at')" style="cursor: pointer">
                 {{ "CREATION_DATE" | translate
                 }}<i><app-sorting-icon></app-sorting-icon></i>
               </th>
-              <th>
+              <th (click)="sort('property_name')" style="cursor: pointer">
                 {{ "PROPERTY_NAME" | translate
                 }}<i><app-sorting-icon></app-sorting-icon></i>
               </th>
@@ -127,7 +127,7 @@
               <th>{{ "TENANT_NAME" | translate }}</th>
               <th>{{ "CONTACT_NUMBER" | translate }}</th>
               <th>{{ "EMAIL" | translate }}</th>
-              <th>
+              <th (click)="sort('status')" style="cursor: pointer">
                 {{ "STATUS" | translate
                 }}<i><app-sorting-icon></app-sorting-icon></i>
               </th>

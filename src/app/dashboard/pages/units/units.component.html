@@ -95,6 +95,34 @@
                   >
                   </app-custom-select>
                 </div>
+                <div class="col-12">
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <label class="form-label">{{
+                        "Min value" | translate
+                      }}</label>
+
+                      <input
+                        type="number"
+                        class="form-control"
+                        [(ngModel)]="filterMinFloor"
+                        placeholder="Min Floor"
+                      />
+                    </div>
+
+                    <div class="col-6">
+                      <label class="form-label">{{
+                        "Max value" | translate
+                      }}</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        [(ngModel)]="filterMaxFloor"
+                        placeholder="Max Floor"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </ng-container>
             <ng-container action>

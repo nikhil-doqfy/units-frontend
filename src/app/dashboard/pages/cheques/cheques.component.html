@@ -121,13 +121,13 @@
               <tr>
                 <th width="60">{{ "SI.NO" | translate }}</th>
                 <th width="90">{{ "UNIT_ID" | translate }}</th>
-                <th>
+                <th (click)="sort('property_ name')" style="cursor: pointer">
                   {{ "PROPERTY_NAME" | translate }}
                   <i><app-sorting-icon></app-sorting-icon></i>
                 </th>
                 <th width="120">{{ "BLOCK_TOWER" | translate }}</th>
                 <th width="70">{{ "UNIT" | translate }}</th>
-                <th>
+                <th (click)="sort('tenant_name')" style="cursor: pointer">
                   {{ "TENANT_NAME" | translate }}
                   <i><app-sorting-icon></app-sorting-icon></i>
                 </th>
@@ -280,10 +280,12 @@
                         type="edit"
                         (clicked)="openEditModal(row, editChequeContent)"
                       ></app-table-action-btn>
-                      @if (activeSummary === 'bounce') {
+                      @if (activeSummary === "bounce") {
                         <app-table-action-btn
                           type="history"
-                          (clicked)="openChequeBounceHistoryModel(activityHistoryContent)"
+                          (clicked)="
+                            openChequeBounceHistoryModel(activityHistoryContent)
+                          "
                         ></app-table-action-btn>
                       }
                     </div>
@@ -323,7 +325,9 @@
 <!-- ── Edit Cheque Modal ─────────────────────────────────────────────────────── -->
 <ng-template #editChequeContent let-modal>
   <div class="modal-header">
-    <h6 class="modal-title" id="modal-title">{{ "Edit Cheque" | translate }}</h6>
+    <h6 class="modal-title" id="modal-title">
+      {{ "Edit Cheque" | translate }}
+    </h6>
     <button
       type="button"
       class="btn-close"
@@ -334,11 +338,15 @@
 
   <div class="modal-body">
     <div class="row g-3">
-
       <!-- Payment Type -->
       <div class="col-md-4">
-        <label class="form-label cheque-form-label">{{ "PAYMENT_TYPE" | translate }}</label>
-        <select class="form-select cheque-form-input" [(ngModel)]="editDraft.payment_type">
+        <label class="form-label cheque-form-label">{{
+          "PAYMENT_TYPE" | translate
+        }}</label>
+        <select
+          class="form-select cheque-form-input"
+          [(ngModel)]="editDraft.payment_type"
+        >
           <option value="CHEQUE">Cheque</option>
           <option value="CASH">Cash</option>
           <option value="BANK_TRANSFER">Bank Transfer</option>
@@ -371,11 +379,16 @@
         <input
           type="number"
           class="form-control cheque-form-input"
-          [class.is-invalid]="!(editDraft.amount !== null && editDraft.amount > 0)"
+          [class.is-invalid]="
+            !(editDraft.amount !== null && editDraft.amount > 0)
+          "
           placeholder="0.00"
           [(ngModel)]="editDraft.amount"
         />
-        <div class="invalid-feedback" *ngIf="!(editDraft.amount !== null && editDraft.amount > 0)">
+        <div
+          class="invalid-feedback"
+          *ngIf="!(editDraft.amount !== null && editDraft.amount > 0)"
+        >
           Valid amount is required
         </div>
       </div>
@@ -398,7 +411,9 @@
 
       <!-- Start Date -->
       <div class="col-md-4">
-        <label class="form-label cheque-form-label">{{ "START_DATE" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "START_DATE" | translate
+        }}</label>
         <input
           type="date"
           class="form-control cheque-form-input"
@@ -408,7 +423,9 @@
 
       <!-- End Date -->
       <div class="col-md-4">
-        <label class="form-label cheque-form-label">{{ "END_DATE" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "END_DATE" | translate
+        }}</label>
         <input
           type="date"
           class="form-control cheque-form-input"
@@ -420,20 +437,26 @@
 
       <!-- Origin Bank -->
       <div class="col-md-6">
-        <label class="form-label cheque-form-label">{{ "ORIGIN_BANK" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "ORIGIN_BANK" | translate
+        }}</label>
         <select
           class="form-select cheque-form-input"
           [(ngModel)]="editDraft.origin_bank_id"
           (ngModelChange)="onEditOriginBankChange()"
         >
           <option [ngValue]="null" disabled>Select bank</option>
-          <option *ngFor="let b of banks" [ngValue]="b.key">{{ b.value }}</option>
+          <option *ngFor="let b of banks" [ngValue]="b.key">
+            {{ b.value }}
+          </option>
         </select>
       </div>
 
       <!-- Origin Account No. -->
       <div class="col-md-6">
-        <label class="form-label cheque-form-label">{{ "ORIGIN_ACCOUNT_NO" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "ORIGIN_ACCOUNT_NO" | translate
+        }}</label>
         <input
           type="text"
           class="form-control cheque-form-input"
@@ -444,7 +467,9 @@
 
       <!-- Origin IFSC -->
       <div class="col-md-6">
-        <label class="form-label cheque-form-label">{{ "ORIGIN_IFSC_CODE" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "ORIGIN_IFSC_CODE" | translate
+        }}</label>
         <input
           type="text"
           class="form-control cheque-form-input"
@@ -457,20 +482,26 @@
 
       <!-- Settlement Bank -->
       <div class="col-md-6">
-        <label class="form-label cheque-form-label">{{ "SETTLEMENT_BANK" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "SETTLEMENT_BANK" | translate
+        }}</label>
         <select
           class="form-select cheque-form-input"
           [(ngModel)]="editDraft.settlement_bank_id"
           (ngModelChange)="onEditSettlementBankChange()"
         >
           <option [ngValue]="null" disabled>Select bank</option>
-          <option *ngFor="let b of banks" [ngValue]="b.key">{{ b.value }}</option>
+          <option *ngFor="let b of banks" [ngValue]="b.key">
+            {{ b.value }}
+          </option>
         </select>
       </div>
 
       <!-- Settlement Account No. -->
       <div class="col-md-6">
-        <label class="form-label cheque-form-label">{{ "SETTLEMENT_ACC" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "SETTLEMENT_ACC" | translate
+        }}</label>
         <input
           type="text"
           class="form-control cheque-form-input"
@@ -481,7 +512,9 @@
 
       <!-- Settlement IFSC -->
       <div class="col-md-6">
-        <label class="form-label cheque-form-label">{{ "SETTLEMENT_IFSC_CODE" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "SETTLEMENT_IFSC_CODE" | translate
+        }}</label>
         <input
           type="text"
           class="form-control cheque-form-input"
@@ -494,7 +527,9 @@
 
       <!-- Photo / File -->
       <div class="col-12">
-        <label class="form-label cheque-form-label">{{ "PHOTO_FILE" | translate }}</label>
+        <label class="form-label cheque-form-label">{{
+          "PHOTO_FILE" | translate
+        }}</label>
         <input
           type="file"
           class="form-control cheque-form-input"
@@ -502,7 +537,6 @@
           (change)="onEditFileSelected($event)"
         />
       </div>
-
     </div>
   </div>
 

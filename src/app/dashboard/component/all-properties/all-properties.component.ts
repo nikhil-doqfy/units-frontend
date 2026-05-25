@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { SharedService } from '../../../shared.service';
 
 @Component({
   selector: 'app-all-properties',
@@ -62,8 +63,7 @@ export class AllPropertiesComponent implements OnInit {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   searchText: string = '';
-  sortField: string = '';
-  sortOrder: 'asc' | 'desc' = 'asc';
+
   private search$ = new Subject<string>();
 
   // Active filters
@@ -92,7 +92,10 @@ export class AllPropertiesComponent implements OnInit {
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private sharedService: SharedService,
+  ) {}
 
   ngOnInit(): void {
     this.search$.pipe(debounceTime(400)).subscribe((text) => {
@@ -193,27 +196,29 @@ export class AllPropertiesComponent implements OnInit {
   onViewClick(id: number) {
     this.router.navigate(['/dashboard/properties', id]);
   }
-  sortBy(field: string): void {
+
+  onEditClick(id: number) {
+    this.router.navigate(['/dashboard/edit-property', id]);
+  }
+  sortField: string = '';
+
+  sortOrder: 'asc' | 'desc' = 'asc';
+
+  sort(field: string) {
     if (this.sortField === field) {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortField = field;
+
       this.sortOrder = 'asc';
     }
 
-    this.properties.sort((a: any, b: any) => {
-      const valueA = (a[field] || '').toString().toLowerCase();
-      const valueB = (b[field] || '').toString().toLowerCase();
+    this.properties = this.sharedService.sortData(
+      this.properties,
 
-      if (this.sortOrder === 'asc') {
-        return valueA.localeCompare(valueB);
-      } else {
-        return valueB.localeCompare(valueA);
-      }
-    });
-  }
+      field,
 
-  onEditClick(id: number) {
-    this.router.navigate(['/dashboard/edit-property', id]);
+      this.sortOrder,
+    );
   }
 }

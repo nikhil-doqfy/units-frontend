@@ -69,7 +69,8 @@ export class UnitsComponent implements OnInit {
   selectedBedroom: any = null;
   selectedFloor: any = null;
   selectedAreaUnit: any = null;
-
+  filterMinFloor: number | null = null;
+  filterMaxFloor: number | null = null;
   // Filter options
   propertyOptions: { key: string; value: string }[] = [];
   bedroomOptions = Array.from({ length: 10 }, (_, i) => ({
@@ -125,6 +126,12 @@ export class UnitsComponent implements OnInit {
     if (this.filterPropertyId) params['property_id'] = this.filterPropertyId;
     if (this.filterBedrooms) params['no_of_bedrooms'] = this.filterBedrooms;
     if (this.filterFloor) params['floor_no'] = this.filterFloor;
+    if (this.filterMinFloor != null)
+      params['min_floor_no'] = this.filterMinFloor;
+
+    if (this.filterMaxFloor != null)
+      params['max_floor_no'] = this.filterMaxFloor;
+
     if (this.filterAreaUnit) params['land_area_unit'] = this.filterAreaUnit;
     return params;
   }
@@ -148,6 +155,14 @@ export class UnitsComponent implements OnInit {
   }
 
   applyFilter(): void {
+    if (
+      this.filterMinFloor != null &&
+      this.filterMaxFloor != null &&
+      this.filterMinFloor > this.filterMaxFloor
+    ) {
+      alert('Min Floor cannot be greater than Max Floor');
+      return;
+    }
     this.currentPage = 1;
     this.loadUnits();
     // this.selectedProperty = null;
