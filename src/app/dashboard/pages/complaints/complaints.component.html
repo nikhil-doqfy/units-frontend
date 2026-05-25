@@ -113,6 +113,16 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
+            <div class="selected-filters d-flex gap-2 flex-wrap mb-2">
+              <!-- Complaint Status -->
+              <div class="filter-chip" *ngIf="selectedComplaintstatus?.value">
+                {{ selectedComplaintstatus?.value }}
+
+                <span class="cross-icon" (click)="clearComplaintStatus()">
+                  ✕
+                </span>
+              </div>
+            </div>
             <app-table-search
               placeholder="{{ 'SEARCH_HERE' | translate }}"
               #searchComp

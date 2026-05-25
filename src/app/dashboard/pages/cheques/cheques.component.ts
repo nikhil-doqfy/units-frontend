@@ -150,7 +150,8 @@ export class ChequesComponent {
     return !!(
       this.editDraft.cheque_number?.trim() &&
       this.editDraft.cheque_date &&
-      this.editDraft.amount !== null && this.editDraft.amount > 0
+      this.editDraft.amount !== null &&
+      this.editDraft.amount > 0
     );
   }
 
@@ -159,7 +160,11 @@ export class ChequesComponent {
     this.leaseService
       .getBanks()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: (resp: any) => { this.banks = resp?.content?.bank ?? []; } });
+      .subscribe({
+        next: (resp: any) => {
+          this.banks = resp?.content?.bank ?? [];
+        },
+      });
   }
 
   openEditModal(row: any, content: TemplateRef<any>) {
@@ -170,7 +175,9 @@ export class ChequesComponent {
       payment_type: row.cheque.payment_type || 'CHEQUE',
       cheque_number: row.cheque.cheque_number || '',
       amount: row.cheque.amount ?? null,
-      cheque_date: row.cheque.cheque_date ? String(row.cheque.cheque_date).substring(0, 10) : '',
+      cheque_date: row.cheque.cheque_date
+        ? String(row.cheque.cheque_date).substring(0, 10)
+        : '',
       start_date: '',
       end_date: '',
       origin_bank_id: null,
@@ -198,14 +205,22 @@ export class ChequesComponent {
             payment_type: c.payment_type || 'CHEQUE',
             cheque_number: c.cheque_number || '',
             amount: c.amount ?? null,
-            cheque_date: c.cheque_date ? String(c.cheque_date).substring(0, 10) : '',
-            start_date: c.start_date ? String(c.start_date).substring(0, 10) : '',
+            cheque_date: c.cheque_date
+              ? String(c.cheque_date).substring(0, 10)
+              : '',
+            start_date: c.start_date
+              ? String(c.start_date).substring(0, 10)
+              : '',
             end_date: c.end_date ? String(c.end_date).substring(0, 10) : '',
             origin_bank_id: c.origin_bank?.id ?? null,
-            origin_account_number: c.origin_account_number ? String(c.origin_account_number) : '',
+            origin_account_number: c.origin_account_number
+              ? String(c.origin_account_number)
+              : '',
             origin_ifsc_code: c.origin_bank?.ifsc_code || '',
             settlement_bank_id: c.selltlement_bank?.id ?? null,
-            settlement_account_number: c.settlement_account_number ? String(c.settlement_account_number) : '',
+            settlement_account_number: c.settlement_account_number
+              ? String(c.settlement_account_number)
+              : '',
             settlement_ifsc_code: c.selltlement_bank?.ifsc_code || '',
           };
         },
@@ -213,12 +228,16 @@ export class ChequesComponent {
   }
 
   onEditOriginBankChange() {
-    const bank = this.banks.find(b => b.key === this.editDraft.origin_bank_id);
+    const bank = this.banks.find(
+      (b) => b.key === this.editDraft.origin_bank_id,
+    );
     this.editDraft.origin_ifsc_code = bank?.ifsc_code ?? '';
   }
 
   onEditSettlementBankChange() {
-    const bank = this.banks.find(b => b.key === this.editDraft.settlement_bank_id);
+    const bank = this.banks.find(
+      (b) => b.key === this.editDraft.settlement_bank_id,
+    );
     this.editDraft.settlement_ifsc_code = bank?.ifsc_code ?? '';
   }
 
@@ -231,17 +250,17 @@ export class ChequesComponent {
     this.savingCheque = true;
 
     const payload: Record<string, any> = {
-      cheque_id:                  this.editingRow.cheque.id,
-      payment_type:               this.editDraft.payment_type,
-      cheque_number:              this.editDraft.cheque_number,
-      amount:                     this.editDraft.amount,
-      cheque_date:                this.editDraft.cheque_date,
-      start_date:                 this.editDraft.start_date,
-      end_date:                   this.editDraft.end_date,
-      origin_bank_id:             this.editDraft.origin_bank_id,
-      origin_account_number:      this.editDraft.origin_account_number,
-      selltlement_bank_id:        this.editDraft.settlement_bank_id,
-      settlement_account_number:  this.editDraft.settlement_account_number,
+      cheque_id: this.editingRow.cheque.id,
+      payment_type: this.editDraft.payment_type,
+      cheque_number: this.editDraft.cheque_number,
+      amount: this.editDraft.amount,
+      cheque_date: this.editDraft.cheque_date,
+      start_date: this.editDraft.start_date,
+      end_date: this.editDraft.end_date,
+      origin_bank_id: this.editDraft.origin_bank_id,
+      origin_account_number: this.editDraft.origin_account_number,
+      selltlement_bank_id: this.editDraft.settlement_bank_id,
+      settlement_account_number: this.editDraft.settlement_account_number,
     };
 
     const doSave = (fileData?: { data: string; file_name: string }) => {
@@ -255,9 +274,9 @@ export class ChequesComponent {
         .subscribe({
           next: () => {
             this.editingRow.cheque.cheque_number = this.editDraft.cheque_number;
-            this.editingRow.cheque.cheque_date   = this.editDraft.cheque_date;
-            this.editingRow.cheque.amount        = this.editDraft.amount;
-            this.editingRow.cheque.payment_type  = this.editDraft.payment_type;
+            this.editingRow.cheque.cheque_date = this.editDraft.cheque_date;
+            this.editingRow.cheque.amount = this.editDraft.amount;
+            this.editingRow.cheque.payment_type = this.editDraft.payment_type;
             this.editingRow = null;
             this.savingCheque = false;
             modal.close();
@@ -577,5 +596,21 @@ export class ChequesComponent {
       windowClass: 'mdlCommon',
       centered: true,
     });
+  }
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.tableData = this.sharedService.sortData(
+      this.tableData,
+      field,
+      this.sortOrder,
+    );
   }
 }

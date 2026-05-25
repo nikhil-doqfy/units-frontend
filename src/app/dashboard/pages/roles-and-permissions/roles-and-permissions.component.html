@@ -39,7 +39,7 @@
           <thead>
             <tr>
               <th>{{ "ROLE" | translate }}</th>
-              <th>
+              <th (click)="sort('created_on')" style="cursor: pointer">
                 {{ "CREATED_ON" | translate }} <i><app-sorting-icon /></i>
               </th>
               <th></th>
@@ -48,7 +48,7 @@
           <tbody>
             <tr *ngFor="let role of roles">
               <td>{{ role.role_name }}</td>
-              <td>{{ role.created_on | date:'dd MMM yyyy' }}</td>
+              <td>{{ role.created_on | date: "dd MMM yyyy" }}</td>
               <td>
                 <div class="cmmnTblActnBtnDiv">
                   <app-table-action-btn
@@ -94,7 +94,11 @@
           <app-card-title [title]="selectedRole.role_name" />
         </div>
         <div class="col-auto">
-          <button type="button" class="btn btnCommon btnWhite" (click)="handleBackClick()">
+          <button
+            type="button"
+            class="btn btnCommon btnWhite"
+            (click)="handleBackClick()"
+          >
             <i><app-back-icon /></i> {{ "BACK" | translate }}
           </button>
         </div>
@@ -127,17 +131,53 @@
           </thead>
           <tbody>
             @for (perm of selectedRole.permissions; track $index) {
-            <tr>
-              <td>{{ perm.module_name }}</td>
-              <td class="text-center"><div class="cmmnCheckbox"><label><input type="checkbox" [checked]="perm.create" disabled /><span></span></label></div></td>
-              <td class="text-center"><div class="cmmnCheckbox"><label><input type="checkbox" [checked]="perm.edit" disabled /><span></span></label></div></td>
-              <td class="text-center"><div class="cmmnCheckbox"><label><input type="checkbox" [checked]="perm.delete" disabled /><span></span></label></div></td>
-              <td class="text-center"><div class="cmmnCheckbox"><label><input type="checkbox" [checked]="perm.view" disabled /><span></span></label></div></td>
-            </tr>
+              <tr>
+                <td>{{ perm.module_name }}</td>
+                <td class="text-center">
+                  <div class="cmmnCheckbox">
+                    <label
+                      ><input
+                        type="checkbox"
+                        [checked]="perm.create"
+                        disabled /><span></span
+                    ></label>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <div class="cmmnCheckbox">
+                    <label
+                      ><input
+                        type="checkbox"
+                        [checked]="perm.edit"
+                        disabled /><span></span
+                    ></label>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <div class="cmmnCheckbox">
+                    <label
+                      ><input
+                        type="checkbox"
+                        [checked]="perm.delete"
+                        disabled /><span></span
+                    ></label>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <div class="cmmnCheckbox">
+                    <label
+                      ><input
+                        type="checkbox"
+                        [checked]="perm.view"
+                        disabled /><span></span
+                    ></label>
+                  </div>
+                </td>
+              </tr>
             } @empty {
-            <tr>
-              <td colspan="5" align="center"><app-no-data /></td>
-            </tr>
+              <tr>
+                <td colspan="5" align="center"><app-no-data /></td>
+              </tr>
             }
           </tbody>
         </table>
@@ -171,7 +211,12 @@
     >
       {{ "CANCEL" | translate }}
     </button>
-    <button type="button" class="btn btnCommon" (click)="saveRole()" [disabled]="roleForm.invalid || isLoading">
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="saveRole()"
+      [disabled]="roleForm.invalid || isLoading"
+    >
       <!-- (click)="modal.close('Save click')" -->
 
       {{ (isEditMode ? "UPDATE_ROLE" : "CREATE_ROLE") | translate }}

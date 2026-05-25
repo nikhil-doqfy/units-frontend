@@ -137,7 +137,11 @@ export class AddPropertyComponent {
 
   ngOnInit() {
     this.sharedService.initLanguage();
+    this.blockForms.valueChanges.subscribe(() => {
+      this.updateCounts();
+    });
 
+    this.updateCounts();
     const options: OptionsParams[] = [
       {
         param: 'PROPERTY_TYPE',
@@ -218,11 +222,13 @@ export class AddPropertyComponent {
 
   addBlock(): void {
     this.blockForms.push(this.propertyFormService.createBlockGroup());
+    this.updateCounts();
   }
 
   removeBlock(index: number): void {
     if (this.blockForms.length > 1) {
       this.blockForms.removeAt(index);
+      this.updateCounts();
     }
   }
 
@@ -347,7 +353,19 @@ export class AddPropertyComponent {
     ${this.translate.instant('TOTAL_BLOCKS_TOWERS')}
     <span class="blockCount">${this.blockCount}</span>
     ${this.translate.instant('TOTAL_UNITS')}
-    <span class="unitCount">${this.unitCount}/</span>
+    <span class="unitCount">${this.unitCount}</span>
   `;
+  }
+  updateCounts(): void {
+    this.blockCount = this.blockForms.length;
+
+    this.unitCount = this.blockForms.controls.reduce(
+      (total: number, block: any) => {
+        const units = block.get('noOfUnits')?.value;
+
+        return total + (units?.key || 0);
+      },
+      0,
+    );
   }
 }
