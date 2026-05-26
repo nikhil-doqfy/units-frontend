@@ -36,6 +36,13 @@ export class NewTenantFromService {
     this.prefillCommercialFromUnit(data);
   }
 
+  // Other charges selected on the commercial-details step
+  private selectedCharges = signal<{ charge_id: number; amount: number }[]>([]);
+  getSelectedCharges() { return this.selectedCharges; }
+  setSelectedCharges(charges: { charge_id: number; amount: number }[]) {
+    this.selectedCharges.set(charges);
+  }
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -321,6 +328,7 @@ export class NewTenantFromService {
   private btnTitle = signal<
     | 'Send Negotiation'
     | 'Cheque Request'
+    | 'Verify Cheque'
     | 'Save & Next'
     | 'Send for Signature'
     | 'Submit for Ejari'
@@ -330,7 +338,7 @@ export class NewTenantFromService {
   currentLeaseStage = signal<string>('');
   private showRefresh = signal(false);
   showRefresh$ = computed(() => this.showRefresh());
-  private stepPhase = signal<'NEGOTIATION' | 'CHEQUE' | 'COLLECTED' | 'FINAL'>(
+  private stepPhase = signal<'NEGOTIATION' | 'CHEQUE' | 'COLLECTED' | 'VERIFIED' | 'FINAL'>(
     'NEGOTIATION',
   );
   private agreementPhase = signal<'INIT' | 'SIGNING' | 'SIGNED'>('INIT');
@@ -478,20 +486,24 @@ export class NewTenantFromService {
 
   triggerEjariSignature(goNext?: () => void) {
     if (this.ejariPhase() === 'INIT') {
-      this.updateLeaseStage('EJARI_SIGNING');
-      this.msgText.set('Waiting for Signature');
+      const id = this.leaseId();
+      if (!id) return;
+
+      this.msgText.set('Sending Ejari for signature…');
       this.showMsg.set(true);
-      this.btnTitle.set('Approval & Generate Invoice');
-      this.ejariPhase.set('SIGNING');
 
-      setTimeout(() => {
-        this.msgText.set('Signed Successfully');
-        this.ejariPhase.set('SIGNED');
-
-        setTimeout(() => {
-          this.showMsg.set(false);
-        }, 2000);
-      }, 3000);
+      this.leaseService.sendEjariForSignature(id).subscribe({
+        next: () => {
+          this.updateLeaseStage(LEASE_STAGE.EJARI_SIGNING);
+          this.msgText.set('Ejari sent for signature. Waiting for tenant to sign…');
+          this.btnTitle.set('Approval & Generate Invoice');
+          this.ejariPhase.set('SIGNING');
+        },
+        error: () => {
+          this.msgText.set('Failed to send Ejari for signature. Please try again.');
+          setTimeout(() => this.showMsg.set(false), 3000);
+        },
+      });
     } else if (this.ejariPhase() === 'SIGNED') {
       goNext?.();
     }
@@ -659,6 +671,7 @@ export class NewTenantFromService {
       discount: v.discount || null,
       shell_and_core: !!v.shellAndCore,
       payment_count: v.paymentCount || null,
+      other_charges: this.selectedCharges(),
     };
 
     this.leaseService.updateLease(payload).subscribe({
@@ -678,6 +691,7 @@ export class NewTenantFromService {
       .subscribe({
         next: (res: any) => {
           this.approvalId.set(res?.content?.approval_id ?? null);
+          this.currentLeaseStage.set('MANAGER_APPROVAL_REQUIRED');
           this.msgText.set('Waiting for Manager Approval — a manager must approve the lease terms before you can proceed.');
           this.showMsg.set(true);
           this.alertService.success('Approval request sent to manager');
@@ -714,6 +728,7 @@ export class NewTenantFromService {
       discount: v.discount || null,
       shell_and_core: !!v.shellAndCore,
       payment_count: v.paymentCount || null,
+      other_charges: this.selectedCharges(),
     };
 
     if (!existingId) {
@@ -731,6 +746,9 @@ export class NewTenantFromService {
       })
       .subscribe({
         next: () => {
+          this.currentLeaseStage.set(LEASE_STAGE.WAITING_FOR_SIGNUP);
+          this.showMsg.set(false);
+          this.msgText.set('');
           this.leaseService.sendLeaseInvite(existingId).subscribe({
             next: () => {
               this.isSendingInvite.set(false);
@@ -832,11 +850,19 @@ export class NewTenantFromService {
       this.btnTitle.set('Cheque Request');
       this.stepPhase.set('CHEQUE');
 
-      // Cheque collected — show rent cheques section
+      // Cheque collected — show rent cheques section, awaiting PM verification
     } else if (s === LEASE_STAGE.CHEQUE_COLLECTED) {
       this.showCheckSection.set(true);
-      this.btnTitle.set('Proceed to Agreement');
+      this.btnTitle.set('Verify Cheque');
       this.stepPhase.set('COLLECTED');
+
+      // PM verified cheque documents — ready to proceed to Agreement
+    } else if (s === LEASE_STAGE.CHEQUE_VERIFIED) {
+      this.showCheckSection.set(true);
+      this.msgText.set('Cheque documents verified ✓  You can now proceed to the Agreement step.');
+      this.showMsg.set(true);
+      this.btnTitle.set('Proceed to Agreement');
+      this.stepPhase.set('VERIFIED');
 
       // Agreement stage — show Send for Signature button
     } else if (s === LEASE_STAGE.AGREEMENT) {
@@ -855,12 +881,17 @@ export class NewTenantFromService {
       this.btnTitle.set('Submit for Ejari');
       this.agreementPhase.set('SIGNED');
 
-      // Ejari sent for signature
+      // Ejari sent for signature — waiting for tenant to sign
     } else if (s === LEASE_STAGE.EJARI_SIGNING) {
       this.btnTitle.set('Approval & Generate Invoice');
       this.ejariPhase.set('SIGNING');
-      this.msgText.set('Waiting for Signature');
+      this.msgText.set('Ejari sent for signature. Waiting for tenant to sign…');
       this.showMsg.set(true);
+
+      // Ejari document uploaded — ready to send for signature
+    } else if (s === LEASE_STAGE.EJARI_DOCUMENT_UPLOAD || s === LEASE_STAGE.EJARI) {
+      this.btnTitle.set('Send for Signature');
+      this.ejariPhase.set('INIT');
     }
   }
 

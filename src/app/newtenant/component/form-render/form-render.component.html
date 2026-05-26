@@ -57,7 +57,7 @@
         <app-refresh-icon></app-refresh-icon>
       </button>
 
-      <button
+      <!-- <button
         class="cmmnTblFltrBtn"
         *ngIf="
           !(
@@ -70,7 +70,7 @@
         "
       >
         Add / Edit Fields
-      </button>
+      </button> -->
 
       <button
         class="reject-btn"
@@ -105,7 +105,11 @@
         }"
         (click)="next()"
       >
-        {{ getNextBtnLabel() === 'Send Invite' && isSendingInvite$() ? 'Sending…' : getNextBtnLabel() }}
+        {{
+          getNextBtnLabel() === "Send Invite" && isSendingInvite$()
+            ? "Sending…"
+            : getNextBtnLabel()
+        }}
       </button>
 
       <div
@@ -124,7 +128,11 @@
           "
           (click)="onMainClick()"
         >
-          {{ btnTitle$() === 'Send Negotiation' && isSendingNegotiation$() ? 'Sending…' : btnTitle$() }}
+          {{
+            btnTitle$() === "Send Negotiation" && isSendingNegotiation$()
+              ? "Sending…"
+              : btnTitle$()
+          }}
 
           <span
             *ngIf="btnTitle$() === 'Send Negotiation'"
@@ -162,7 +170,10 @@
 <div class="step-content">
   <div
     class="top-alert waiting-alert"
-    *ngIf="currentSubStep?.component === CommercialdetailsComponent && leaseStage$()?.toUpperCase() === 'MANAGER_APPROVAL_REQUIRED'"
+    *ngIf="
+      currentSubStep?.component === CommercialdetailsComponent &&
+      leaseStage$()?.toUpperCase() === 'MANAGER_APPROVAL_REQUIRED'
+    "
   >
     <span class="icon"><app-warning-icon /></span>
     <span class="text">{{ msgText$() }}</span>
@@ -172,12 +183,15 @@
       [disabled]="isLoadingApproval"
       (click)="openApprovalPanel()"
     >
-      {{ isLoadingApproval ? 'Loading…' : 'Review & Approve' }}
+      {{ isLoadingApproval ? "Loading…" : "Review & Approve" }}
     </button>
   </div>
   <div
     class="top-alert success-alert"
-    *ngIf="currentSubStep?.component === CommercialdetailsComponent && leaseStage$()?.toUpperCase() === 'MANAGER_APPROVED'"
+    *ngIf="
+      currentSubStep?.component === CommercialdetailsComponent &&
+      leaseStage$()?.toUpperCase() === 'MANAGER_APPROVED'
+    "
   >
     <span class="icon"><app-signed-successfully-icon /></span>
     <span class="text">{{ msgText$() }}</span>
@@ -197,7 +211,10 @@
       >
     </div>
     <div
-      [class.blur]="currentSubStep?.component === CommercialdetailsComponent && leaseStage$()?.toUpperCase() === 'MANAGER_APPROVAL_REQUIRED'"
+      [class.blur]="
+        currentSubStep?.component === CommercialdetailsComponent &&
+        leaseStage$()?.toUpperCase() === 'MANAGER_APPROVAL_REQUIRED'
+      "
     >
       <ng-container
         *ngComponentOutlet="
@@ -214,10 +231,16 @@
   <div class="modal-header">
     <span><img src="assets/Bell.svg" /></span>
     <div class="img">
-      <img [src]="approvalDetails?.property_image || 'assets/property/property-list-1.png'" />
+      <img
+        [src]="
+          approvalDetails?.property_image ||
+          'assets/property/property-list-1.png'
+        "
+      />
     </div>
     <span class="title">
-      {{ approvalDetails?.property }} | {{ approvalDetails?.block }} | {{ approvalDetails?.unit }}
+      {{ approvalDetails?.property }} | {{ approvalDetails?.block }} |
+      {{ approvalDetails?.unit }}
     </span>
     <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
   </div>
@@ -235,14 +258,30 @@
 <ng-template #approvalModal let-modal>
   <div class="modal-header approval-modal-header">
     <div class="approval-modal-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="12" fill="#fef3c7"/>
-        <path d="M12 8v4m0 4h.01" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle cx="12" cy="12" r="12" fill="#fef3c7" />
+        <path
+          d="M12 8v4m0 4h.01"
+          stroke="#d97706"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
       </svg>
     </div>
     <div>
-      <h5 class="modal-title approval-modal-title" id="approval-modal-title">Lease Terms Require Manager Approval</h5>
-      <p class="approval-modal-desc">The following lease terms fall below the standard thresholds and require manager approval before proceeding.</p>
+      <h5 class="modal-title approval-modal-title" id="approval-modal-title">
+        Lease Terms Require Manager Approval
+      </h5>
+      <p class="approval-modal-desc">
+        The following lease terms fall below the standard thresholds and require
+        manager approval before proceeding.
+      </p>
     </div>
     <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
   </div>
@@ -265,9 +304,15 @@
     </table>
   </div>
   <div class="modal-footer approval-modal-footer">
-    <button class="btn-proceed-without" (click)="proceedWithoutApproval(modal)">Proceed without approval</button>
-    <button class="btn-send-approval" [disabled]="isSendingApproval" (click)="sendForManagerApproval(modal)">
-      {{ isSendingApproval ? 'Sending…' : 'Send for approval' }}
+    <button class="btn-proceed-without" (click)="proceedWithoutApproval(modal)">
+      Proceed without approval
+    </button>
+    <button
+      class="btn-send-approval"
+      [disabled]="isSendingApproval"
+      (click)="sendForManagerApproval(modal)"
+    >
+      {{ isSendingApproval ? "Sending…" : "Send for approval" }}
     </button>
   </div>
 </ng-template>

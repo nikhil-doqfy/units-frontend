@@ -103,7 +103,7 @@ export class LineChartComponent
           },
         },
       },
-      colors: ['#1988FD', '#00B7AD', '#4B9C5E'],
+      colors: ['#1988FD', '#00BEDB', '#7C3AED'],
       legend: {
         position: 'top',
         horizontalAlign: 'center',

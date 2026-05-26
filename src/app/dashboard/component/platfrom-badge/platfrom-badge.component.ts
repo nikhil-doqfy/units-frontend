@@ -4,7 +4,7 @@ import { CallIconsNewComponent } from '../../../icons/call-icons-new/call-icons-
 import { DoubleCopyIconComponent } from '../../../icons/double-copy-icon/double-copy-icon.component';
 
 export type PlatformType = 'direct' | 'referral' | 'company';
-export type CompanyName = 'OPTIEX' | 'DOQFY';
+export type CompanyName = 'OPTIEX' | 'UNITS';
 @Component({
   selector: 'app-platfrom-badge',
   standalone: true,

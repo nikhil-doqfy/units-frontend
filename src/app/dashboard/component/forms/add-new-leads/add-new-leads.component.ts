@@ -100,20 +100,6 @@ export class AddNewLeadsComponent implements OnInit {
     });
   }
 
-  fillDummyData(): void {
-    this.leadForm.patchValue({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      contact_number: '+971501234567',
-      amount: 75000,
-      status: 'INTERESTED',
-      comment: 'Interested in 2BHK unit',
-      platform: 'PROPERTY_FINDER',
-      lead_type: 'EMAIL',
-      sendAppLink: true,
-    });
-  }
-
   submitForm(): void {
     if (this.leadForm.invalid) {
       this.leadForm.markAllAsTouched();

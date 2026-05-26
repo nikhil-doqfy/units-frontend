@@ -76,7 +76,7 @@
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
                   <th>{{ "REQUESTED_BY" | translate }}</th>
                   <th>{{ "PROPERTY_NAME" | translate }}</th>
-                  <th>
+                  <th (click)="sort('block_tower')" style="cursor: pointer">
                     {{ "BLOCK_TOWER" | translate
                     }}<i><app-sorting-icon></app-sorting-icon></i>
                   </th>
@@ -121,8 +121,14 @@
                     <td>{{ approval.actual_rent }}</td>
                     <td align="center">
                       <div class="cmmnTblActnBtnDiv">
-                        <app-table-action-btn type="reject" (clicked)="rejectManagerItem(approval.id)" />
-                        <app-table-action-btn type="approve" (clicked)="approveManagerItem(approval.id)" />
+                        <app-table-action-btn
+                          type="reject"
+                          (clicked)="rejectManagerItem(approval.id)"
+                        />
+                        <app-table-action-btn
+                          type="approve"
+                          (clicked)="approveManagerItem(approval.id)"
+                        />
                       </div>
                     </td>
                   </tr>
@@ -170,9 +176,13 @@
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
                   <th>{{ "REQUESTED_BY" | translate }}</th>
                   <th>{{ "PROPERTY_NAME" | translate }}</th>
-                  <th>{{ "BLOCK_TOWER" | translate }}<i><app-sorting-icon /></i></th>
+                  <th>
+                    {{ "BLOCK_TOWER" | translate }}<i><app-sorting-icon /></i>
+                  </th>
                   <th>{{ "UNIT" | translate }}</th>
-                  <th>{{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i></th>
+                  <th>
+                    {{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i>
+                  </th>
                   <th>{{ "TENURE" | translate }}</th>
                   <th>{{ "RENT" | translate }}</th>
                   <th>{{ "ACTUAL_RENT" | translate }}</th>
@@ -184,12 +194,22 @@
                     <td>{{ approval.date_request }}</td>
                     <td>{{ approval.requested_by }}</td>
                     <td>
-                      <app-table-img-item [img]="approval.property_image" [title]="approval.property_name" size="md" [showInitialsFallback]="true" />
+                      <app-table-img-item
+                        [img]="approval.property_image"
+                        [title]="approval.property_name"
+                        size="md"
+                        [showInitialsFallback]="true"
+                      />
                     </td>
                     <td>{{ approval.tower }}</td>
                     <td>{{ approval.unit }}</td>
                     <td>
-                      <app-table-img-item [img]="approval.profile_image" [title]="approval.tenant_name" size="md" [showInitialsFallback]="true" />
+                      <app-table-img-item
+                        [img]="approval.profile_image"
+                        [title]="approval.tenant_name"
+                        size="md"
+                        [showInitialsFallback]="true"
+                      />
                     </td>
                     <td>{{ approval.tenure }}</td>
                     <td>{{ approval.rent }}</td>
@@ -197,7 +217,9 @@
                   </tr>
                 } @empty {
                   <tr>
-                    <td colspan="20" align="center"><app-no-data></app-no-data></td>
+                    <td colspan="20" align="center">
+                      <app-no-data></app-no-data>
+                    </td>
                   </tr>
                 }
               </tbody>
@@ -205,8 +227,19 @@
           </div>
         </div>
         <div class="cmmnTblFtr">
-          <app-table-select [componentName]="componentName" [rowsPerPage]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions" (rowsPerPageChange)="onPageSizeChange($event)" />
-          <app-table-pagination [componentName]="componentName" [currentPage]="currentPage" [totalRecords]="totalRecords" [rowsPerPage]="rowsPerPage" (pageChange)="onPageChange($event)" />
+          <app-table-select
+            [componentName]="componentName"
+            [rowsPerPage]="rowsPerPage"
+            [rowsPerPageOptions]="rowsPerPageOptions"
+            (rowsPerPageChange)="onPageSizeChange($event)"
+          />
+          <app-table-pagination
+            [componentName]="componentName"
+            [currentPage]="currentPage"
+            [totalRecords]="totalRecords"
+            [rowsPerPage]="rowsPerPage"
+            (pageChange)="onPageChange($event)"
+          />
         </div>
       </div>
     </div>
@@ -226,9 +259,13 @@
                   <th>{{ "DATE_REQUESTED" | translate }}</th>
                   <th>{{ "REQUESTED_BY" | translate }}</th>
                   <th>{{ "PROPERTY_NAME" | translate }}</th>
-                  <th>{{ "BLOCK_TOWER" | translate }}<i><app-sorting-icon /></i></th>
+                  <th>
+                    {{ "BLOCK_TOWER" | translate }}<i><app-sorting-icon /></i>
+                  </th>
                   <th>{{ "UNIT" | translate }}</th>
-                  <th>{{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i></th>
+                  <th>
+                    {{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i>
+                  </th>
                   <th>{{ "TENURE" | translate }}</th>
                   <th>{{ "RENT" | translate }}</th>
                   <th>{{ "ACTUAL_RENT" | translate }}</th>
@@ -240,12 +277,22 @@
                     <td>{{ approval.date_request }}</td>
                     <td>{{ approval.requested_by }}</td>
                     <td>
-                      <app-table-img-item [img]="approval.property_image" [title]="approval.property_name" size="md" [showInitialsFallback]="true" />
+                      <app-table-img-item
+                        [img]="approval.property_image"
+                        [title]="approval.property_name"
+                        size="md"
+                        [showInitialsFallback]="true"
+                      />
                     </td>
                     <td>{{ approval.tower }}</td>
                     <td>{{ approval.unit }}</td>
                     <td>
-                      <app-table-img-item [img]="approval.profile_image" [title]="approval.tenant_name" size="md" [showInitialsFallback]="true" />
+                      <app-table-img-item
+                        [img]="approval.profile_image"
+                        [title]="approval.tenant_name"
+                        size="md"
+                        [showInitialsFallback]="true"
+                      />
                     </td>
                     <td>{{ approval.tenure }}</td>
                     <td>{{ approval.rent }}</td>
@@ -253,7 +300,9 @@
                   </tr>
                 } @empty {
                   <tr>
-                    <td colspan="20" align="center"><app-no-data></app-no-data></td>
+                    <td colspan="20" align="center">
+                      <app-no-data></app-no-data>
+                    </td>
                   </tr>
                 }
               </tbody>

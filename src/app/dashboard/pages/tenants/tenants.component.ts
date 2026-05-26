@@ -268,4 +268,20 @@ export class TenantsComponent {
         return 'badge-draft';
     }
   }
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.tenants = this.sharedService.sortData(
+      this.tenants,
+      field,
+      this.sortOrder,
+    );
+  }
 }

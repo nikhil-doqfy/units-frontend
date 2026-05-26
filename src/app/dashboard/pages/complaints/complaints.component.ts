@@ -171,6 +171,9 @@ export class ComplaintsComponent {
     }
   }
 
+  clearComplaintStatus(): void {
+    this.selectedComplaintstatus = null;
+  }
   getLabel(key: string): string {
     return this.translate.instant(key);
   }

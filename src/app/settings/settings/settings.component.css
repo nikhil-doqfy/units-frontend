@@ -157,3 +157,60 @@
 .sidebar-link.active app-charges-icon {
   color: var(--accentColor);
 }
+@media (max-width: 768px) {
+  .settings-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-left: 0;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .sidebar-nav {
+    overflow-x: auto;
+    gap: 8px;
+  }
+
+  .sidebar-link {
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .settings-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .sidebar-link.active {
+    background: #e6f0ff; /* blue bg */
+    width: 100%; /* ✅ full line */
+  }
+
+  .sidebar-nav {
+    flex-direction: column; /* ✅ vertical kara */
+    overflow-x: hidden; /* ❗ scroll kadhun taka */
+  }
+
+  .sidebar-link {
+    width: 100%; /* full width */
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 768px) {
+  .sidebar {
+    height: auto !important; /* ❗ main fix */
+    padding: 8px 10px; /* thoda compact */
+  }
+}

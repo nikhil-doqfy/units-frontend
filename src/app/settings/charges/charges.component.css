@@ -141,18 +141,8 @@
 .edit-underline {
   border-bottom: 2px solid var(--borderAccent);
 }
-
-.charges-table {
-  table-layout: fixed;
-  width: 100%;
-}
-
-.total-cell > span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-[dir="rtl"] .total-cell {
-  flex-direction: row-reverse;
+@media (hover: hover) {
+  .charges-row:hover .hover-actions {
+    display: flex;
+  }
 }

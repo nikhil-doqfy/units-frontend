@@ -306,6 +306,7 @@
                   type="checkbox"
                   [(ngModel)]="c.checked"
                   [ngModelOptions]="{ standalone: true }"
+                  (change)="onChargeToggle()"
                 />
                 {{ c.label }}
               </label>

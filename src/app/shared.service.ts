@@ -135,7 +135,7 @@ export class SharedService {
 
   setTitle(key: string) {
     this.translate.stream(key).subscribe((translated: string) => {
-      this.title.setTitle(`${translated} | Doqfy`);
+      this.title.setTitle(`${translated} | Units`);
     });
   }
 
@@ -213,5 +213,16 @@ export class SharedService {
   private setDirection(lang: string) {
     const dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.setAttribute('dir', dir);
+  }
+  sortData(arr: any[], field: string, order: 'asc' | 'desc') {
+    return [...arr].sort((a, b) => {
+      const valA = a?.[field] ?? '';
+
+      const valB = b?.[field] ?? '';
+
+      return order === 'asc'
+        ? valA.toString().localeCompare(valB.toString())
+        : valB.toString().localeCompare(valA.toString());
+    });
   }
 }

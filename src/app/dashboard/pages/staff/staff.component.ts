@@ -183,6 +183,9 @@ export class StaffComponent {
   onRefresh() {
     this.getStaffRoleDetails();
   }
+  clearUserStatus() {
+    this.selectedstaffRole = null;
+  }
 
   handleDropdownAction(action: string, staff: any): void {
     const modalOptions = {
@@ -318,9 +321,9 @@ export class StaffComponent {
     }
     this.currentPage = 1;
     this.getStaffRoleDetails();
-    setTimeout(() => {
-      this.selectedstaffRole = null;
-    });
+    // setTimeout(() => {
+    //   this.selectedstaffRole = null;
+    // });
   }
 
   openAddStaffModal(addStaffContent: TemplateRef<any>) {
@@ -482,5 +485,21 @@ export class StaffComponent {
           console.error(err);
         },
       });
+  }
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.staffRoles = this.sharedService.sortData(
+      this.staffRoles,
+      field,
+      this.sortOrder,
+    );
   }
 }

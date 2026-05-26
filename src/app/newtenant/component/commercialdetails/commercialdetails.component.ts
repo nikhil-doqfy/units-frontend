@@ -82,9 +82,18 @@ export class CommercialdetailsComponent implements OnInit {
             checked: true,
             isEdit: false,
           }));
+          this.syncChargesToService();
         },
         error: () => { this.charges = []; },
       });
+  }
+
+  private syncChargesToService() {
+    this.newTenantService.setSelectedCharges(
+      this.charges
+        .filter(c => c.checked)
+        .map(c => ({ charge_id: c.charge_id, amount: c.amount }))
+    );
   }
 
   private prefillFromUnit() {
@@ -181,7 +190,11 @@ export class CommercialdetailsComponent implements OnInit {
   }
 
   saveRow(row: any) {
-    console.log('saved', row);
     row.isEdit = false;
+    this.syncChargesToService();
+  }
+
+  onChargeToggle() {
+    this.syncChargesToService();
   }
 }

@@ -137,7 +137,11 @@ export class AddPropertyComponent {
 
   ngOnInit() {
     this.sharedService.initLanguage();
+    this.blockForms.valueChanges.subscribe(() => {
+      this.updateCounts();
+    });
 
+    this.updateCounts();
     const options: OptionsParams[] = [
       {
         param: 'PROPERTY_TYPE',
@@ -218,11 +222,13 @@ export class AddPropertyComponent {
 
   addBlock(): void {
     this.blockForms.push(this.propertyFormService.createBlockGroup());
+    this.updateCounts();
   }
 
   removeBlock(index: number): void {
     if (this.blockForms.length > 1) {
       this.blockForms.removeAt(index);
+      this.updateCounts();
     }
   }
 
@@ -249,25 +255,6 @@ export class AddPropertyComponent {
             : '',
       });
       this.blockForms.push(group);
-    });
-  }
-
-  fillDummyData(): void {
-    this.pmDetailsForm.patchValue({
-      propertyName: 'Sunrise Tower',
-      noOfBlocks: { key: 1, value: '1' },
-      noOfUnits: { key: 10, value: '10' },
-      propertyType: { key: 'APARTMENT', value: 'Apartment' },
-      landArea: 5000,
-      landAreaUnit: { key: 'SQ_FT', value: 'Sq Ft' },
-      landDmNo: 'DM-2024-001',
-      plotNo: 'PLT-101',
-      makaniNo: '21345678',
-      dewaNo: 'DEWA-9876543',
-      addressLane1: '15 Sheikh Zayed Road',
-      addressLane2: 'Business Bay',
-      landmark: 'Near Dubai Mall',
-      pincode: '500001',
     });
   }
 
@@ -358,15 +345,27 @@ export class AddPropertyComponent {
     );
   }
   /*-----totalUnit and block-------------*/
-  blockCount = 10;
-  unitCount = 456;
+  blockCount = 0;
+  unitCount = 0;
 
   getPageTitle() {
     return `
     ${this.translate.instant('TOTAL_BLOCKS_TOWERS')}
     <span class="blockCount">${this.blockCount}</span>
     ${this.translate.instant('TOTAL_UNITS')}
-    <span class="unitCount">${this.unitCount}/</span>
+    <span class="unitCount">${this.unitCount}</span>
   `;
+  }
+  updateCounts(): void {
+    this.blockCount = this.blockForms.length;
+
+    this.unitCount = this.blockForms.controls.reduce(
+      (total: number, block: any) => {
+        const units = block.get('noOfUnits')?.value;
+
+        return total + (units?.key || 0);
+      },
+      0,
+    );
   }
 }

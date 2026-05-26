@@ -170,6 +170,9 @@ export class UsersComponent {
         return this.getLabel('ALL_USERS');
     }
   }
+  clearUserStatus() {
+    this.selectedUserType = null;
+  }
 
   onRefresh() {
     this.getUser();
@@ -308,7 +311,7 @@ export class UsersComponent {
   // }
 
   applyFilter() {
-    this.selectedUserType = null;
+    // this.selectedUserType = null;
     if (this.selectedUserType?.key) {
       this.userData['role'] = this.selectedUserType.key;
     } else {
@@ -402,5 +405,17 @@ export class UsersComponent {
           this.getUser();
         }
       });
+  }
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.users = this.sharedService.sortData(this.users, field, this.sortOrder);
   }
 }

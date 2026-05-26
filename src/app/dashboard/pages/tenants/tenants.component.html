@@ -94,7 +94,7 @@
           <table class="table table-bordered tenants-table">
             <thead>
               <tr>
-                <th>
+                <th (click)="sort('tenant_name')" style="cursor: pointer">
                   {{ "TENANT_NAME" | translate }}<i><app-sorting-icon /></i>
                 </th>
                 <th>{{ "TENANT_CODE" | translate }}</th>

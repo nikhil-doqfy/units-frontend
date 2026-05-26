@@ -3213,6 +3213,7 @@ button:disabled {
     rgba(244, 82, 16, 1) 100%
   );
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline;
 }
@@ -3227,6 +3228,7 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .form-control::placeholder {
@@ -4340,6 +4342,40 @@ linearGradient .authBgPatt stop:last-child {
 /***Swiper Custom Navigation Css End***/
 
 /***Common New Table Css Start***/
+/* ── Dual scrollbar (top + bottom) for every .table-responsive ── */
+
+/* Hide the native scrollbar — custom DOM thumbs replace it */
+.table-responsive {
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+/* Track containers injected above/below each .table-responsive */
+.dual-scroll-top,
+.dual-scroll-bottom {
+  height: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The draggable thumb — sized & translated by JS */
+.dual-scroll-thumb {
+  height: 5px;
+  background-color: var(--activeBg1);
+  border-radius: 4px;
+  min-width: 40px;
+  cursor: grab;
+  position: relative;
+  user-select: none;
+}
+.dual-scroll-thumb:active {
+  cursor: grabbing;
+}
+/* ─────────────────────────────────────────────────────────────── */
+
 .cmmnTblOuter {
   background-color: var(--whiteBg);
   padding-top: 8px;
@@ -6383,80 +6419,25 @@ table.charges-table tbody td {
   right: 10px;
   left: auto;
 }
-
-.dark-theme input[type="date"] {
-  /* background-color: #2a2a2a; */
-  color-scheme: #1e293b;
-  border: 1px solid #444;
-}
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0);
-  cursor: pointer;
+.selected-filters {
+  display: flex;
+  align-items: center;
 }
 
-select {
-  background-color: initial;
-  color: initial;
-}
-
-.dark-theme select option {
-  background-color: #1e293b;
-  color: #ffffff;
-}
-
-.dark-theme .apexcharts-tooltip {
-  background: #1a2a3a !important;
-  color: #ffffff !important;
-  border: 1px solid #444 !important;
-}
-
-.dark-theme .apexcharts-tooltip-title {
-  background: #1a2a3a !important;
-  color: #ffffff !important;
-  border-bottom: 1px solid #e8e1e114 !important;
-}
-
-.prgrsBarTbl .table thead th {
-  border-bottom: 1px solid #e5e5e5 !important;
-}
-.dark-theme .prgrsBarTbl .table thead th {
-  border-bottom: 1px solid #e8e1e114 !important;
-}
-.dark-theme .prgrsBarTbl .table tbody tr {
-  border-bottom: 1px solid #e8e1e114 !important;
-}
-
-.apexcharts-pie-area:hover {
-  opacity: 1 !important;
-  filter: none !important;
-}
-.donut-tooltip-fix {
+.filter-chip {
   display: flex;
   align-items: center;
   gap: 8px;
-
-  padding: 8px 12px;
+  color: white;
+  background-color: rgb(151, 151, 248);
+  padding: 1px 5px;
   border-radius: 6px;
-  font-size: 12px;
-
-  white-space: nowrap;
-  min-width: fit-content;
-
-  background: #ffffff;
-  color: #000;
-  border: 1px solid #e0e0e0;
+  font-size: 10px;
+  width: fit-content;
 }
 
-.dark-theme .donut-tooltip-fix.dark {
-  background: #1a2a3a;
-  color: #fff;
-  border: 1px solid #444;
-}
-
-.tooltip-title {
+.cross-icon {
+  cursor: pointer;
+  font-size: 9px;
   font-weight: 600;
-}
-
-.tooltip-value {
-  font-weight: 500;
 }
