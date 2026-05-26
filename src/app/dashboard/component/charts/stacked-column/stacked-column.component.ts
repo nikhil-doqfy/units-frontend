@@ -20,6 +20,7 @@ import {
   ApexYAxis,
   ApexTooltip,
   NgApexchartsModule,
+  ApexGrid,
 } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
 import { ThemeService } from '../../../../theme.service';
