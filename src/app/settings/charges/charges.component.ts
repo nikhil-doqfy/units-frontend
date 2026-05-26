@@ -55,7 +55,7 @@ export class ChargesComponent {
   showSave = false;
   showDetailView: boolean = false;
   breadcrumbData: BreadCrumb[] = [];
-
+  activeRow: number | null = null;
   chargesForm!: FormGroup;
   ngOnInit() {
     this.chargesForm = this.fb.group({

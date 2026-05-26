@@ -489,3 +489,31 @@
   border: none !important;
   height: 0 !important;
 }
+
+.cmmnTblHdr .d-flex {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.cmmnTblHdr .d-flex > * {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .priority-inline {
+    width: 100%;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .upload-box {
+    height: auto;
+    padding: 20px;
+  }
+}
