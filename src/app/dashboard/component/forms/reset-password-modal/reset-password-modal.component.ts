@@ -86,11 +86,15 @@ export class ResetPasswordModalComponent implements OnInit {
           })
           .subscribe({
             next: (resp: any) => {
-              this.alertService.success(resp?.message || 'Password reset successfully');
+              this.alertService.success(
+                resp?.message || 'Password reset successfully',
+              );
               this.activeModal.close(true);
             },
             error: (err: any) => {
-              this.alertService.error(err?.error?.message || 'Password reset failed');
+              this.alertService.error(
+                err?.error?.message || 'Password reset failed',
+              );
             },
           });
       }

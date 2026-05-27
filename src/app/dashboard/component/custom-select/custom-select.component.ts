@@ -194,6 +194,37 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
             ...positionStyle,
             'z-index': '9999',
           };
+
+      // ✅ 🔥 ADD THIS (RTL SUPPORT)
+      const isRTL = document.dir === 'rtl';
+
+      if (isRTL) {
+        delete this.dropdownStyle['left'];
+        this.dropdownStyle['right'] = '0';
+      }
+
+      // ✅ 🔥 ADD THIS (SCREEN OVERFLOW FIX)
+      requestAnimationFrame(() => {
+        const dropdownEl = this.el.nativeElement.querySelector(
+          '.customSelectDropdown',
+        );
+        if (!dropdownEl) return;
+
+        const rect = dropdownEl.getBoundingClientRect();
+        const screenWidth = window.innerWidth;
+
+        // LEFT overflow fix
+        if (rect.left < 0) {
+          this.dropdownStyle['left'] = '8px';
+          delete this.dropdownStyle['right'];
+        }
+
+        // RIGHT overflow fix
+        else if (rect.right > screenWidth) {
+          this.dropdownStyle['right'] = '8px';
+          delete this.dropdownStyle['left'];
+        }
+      });
     }
   }
   selectOption(option: any) {

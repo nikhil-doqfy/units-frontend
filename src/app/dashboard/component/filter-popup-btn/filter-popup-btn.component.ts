@@ -32,9 +32,9 @@ export class FilterPopupButtonComponent {
   @Output() popupClosed = new EventEmitter<void>();
   constructor(private eRef: ElementRef) {}
 
-  handleFilterOpenClick(): void {
-    this.isOpen = true;
-  }
+  // handleFilterOpenClick(): void {
+  //   this.isOpen = true;
+  // }
 
   handleFilterCloseClick(): void {
     this.isOpen = false;
@@ -49,6 +49,29 @@ export class FilterPopupButtonComponent {
   clickOutside(event: Event) {
     if (this.isOpen && !this.eRef.nativeElement.contains(event.target)) {
       this.isOpen = false;
+    }
+  }
+
+  handleFilterOpenClick(): void {
+    this.isOpen = true;
+
+    setTimeout(() => {
+      const popup = this.eRef.nativeElement.querySelector('.fltrPopup');
+      if (!popup) return;
+
+      const rect = popup.getBoundingClientRect();
+
+      if (rect.left < 0) {
+        popup.classList.add('open-right');
+      } else {
+        popup.classList.remove('open-right');
+      }
+    });
+  }
+  @HostListener('window:resize')
+  onResize() {
+    if (this.isOpen) {
+      this.handleFilterOpenClick();
     }
   }
 }

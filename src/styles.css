@@ -8,8 +8,12 @@
   --managerBg: #8c3bfb;
   --tenantBg: #382cff;
   --whiteBg: #ffffff;
+  --share-text-color: #000;
   --blackBg: #000000;
   --greyBg: #344046;
+  --table-header-border: none;
+  --tooltip-bg: #ffffff;
+  --tooltip-text: #000000;
   --iconColor1: #000;
   --greyLightBg: #68868f;
   --greyDarkBg: #3d3d3d;
@@ -1353,8 +1357,7 @@
   --tableBorder: #e5e5e5;
   --tableHeaderBg: #0c6ce9;
   --tableHeaderText: #ffffff;
-
-  --dotColor: #ff6a00;
+  --muteText5: #000 --dotColor: #ff6a00;
   --dotGlow: rgba(255, 165, 0, 0.3);
 
   --status-green: #16a34a;
@@ -1497,10 +1500,15 @@
   --tenantGradientBg: linear-gradient(90deg, #4a1bb0 0%, #1c1c8f 100%);
   --whiteBg: #1f1f1f;
   --ownerBg: #2a3f8f;
+  --tooltip-bg: #1f2937;
+  --share-text-color: #fff;
+  --tooltip-text: #ffffff;
   --icon-color: #ffffff;
+  --table-header-border: 1px solid var(--muteBorder1);
   --managerBg: #5a2fb0;
+  --muteText5: #fff;
   --iconColor1: #fff;
-
+  color-scheme: dark;
   --tenantBg: #2c2c8f;
   --activeBg1: #1f2937;
   --whiteBg: #121212;
@@ -4414,7 +4422,7 @@ linearGradient .authBgPatt stop:last-child {
 .cmmnTblBody table thead tr th {
   background-color: var(--lightDarkBg);
   font-size: 14px;
-  color: var(--whiteText);
+  color: white;
   font-weight: 600;
   border: 0;
   position: sticky;
@@ -6357,7 +6365,7 @@ body.dark-theme .modal-content {
 }
 body.dark-theme .table > :not(caption) > * > * {
   box-shadow: none !important;
-  background-color: transparent;
+  background-color: var(--activeBg1);
 }
 
 body.dark-theme .text-muted {

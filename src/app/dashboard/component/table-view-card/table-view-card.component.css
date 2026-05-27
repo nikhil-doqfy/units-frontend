@@ -311,6 +311,7 @@
   color: var(--done-btn-text);
   font-weight: 500;
   cursor: pointer;
+  color: var(--text-color);
   background: var(--done-btn-gradient);
 }
 .column {
@@ -318,4 +319,8 @@
   align-items: center;
   gap: 8px;
   flex-wrap: nowrap;
+}
+
+.shareText {
+  color: var(--share-text-color);
 }

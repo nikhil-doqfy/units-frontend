@@ -1,9 +1,14 @@
-.cmmnTblBody table thead tr th {
+/* .cmmnTblBody table thead tr th {
   background-color: var(--table-header-bg1);
   color: white;
   border-right: 1px solid var(--muteBorder1);
-}
+} */
 
+.cmmnTblBody table thead tr th {
+  background-color: var(--table-header-bg1);
+  color: white;
+  border-right: var(--table-header-border);
+}
 .announcement-page {
   min-height: 100vh;
 }

@@ -1,0 +1,11 @@
+.role-permission-table thead th {
+  /* background-color: var(--table-header-bg); */
+  color: var(--table-header-text);
+  font-weight: 600;
+}
+
+/* Module name column */
+.role-permission-table tbody td:first-child {
+  color: var(--module-text-color);
+  font-weight: 500;
+}

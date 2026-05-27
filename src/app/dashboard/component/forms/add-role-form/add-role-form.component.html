@@ -1,7 +1,9 @@
 <app-modal-form-card>
   <form [formGroup]="form">
     <div class="mb-3">
-      <label for="roleName" class="form-label">{{ "ROLE_NAME" | translate }}<span>*</span></label>
+      <label for="roleName" class="form-label"
+        >{{ "ROLE_NAME" | translate }}<span>*</span></label
+      >
       <input
         id="roleName"
         formControlName="name"
@@ -9,15 +11,20 @@
         type="text"
         [placeholder]="'ENTER_HERE' | translate"
       />
-      <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-danger small mt-1">
+      <div
+        *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+        class="text-danger small mt-1"
+      >
         {{ "ROLE_NAME_REQUIRED" | translate }}
       </div>
     </div>
 
     <div *ngIf="permissionsArray?.length">
-      <label class="form-label fw-semibold">{{ "PERMISSIONS" | translate }}</label>
+      <label class="form-label fw-semibold">{{
+        "PERMISSIONS" | translate
+      }}</label>
       <div class="table-responsive">
-        <table class="table table-bordered table-sm mb-0">
+        <table class="table table-bordered table-sm mb-0 role-permission-table">
           <colgroup>
             <col style="width: 30%" />
             <col style="width: 14%" />
@@ -33,7 +40,12 @@
                 {{ "ALL" | translate }}
                 <div class="cmmnCheckbox d-flex justify-content-center mt-1">
                   <label>
-                    <input type="checkbox" [checked]="isAllSelected()" [indeterminate]="isSomeSelected()" (change)="toggleAll($event)" />
+                    <input
+                      type="checkbox"
+                      [checked]="isAllSelected()"
+                      [indeterminate]="isSomeSelected()"
+                      (change)="toggleAll($event)"
+                    />
                     <span></span>
                   </label>
                 </div>
@@ -41,25 +53,49 @@
               <th class="text-center">
                 {{ "CREATE" | translate }}
                 <div class="cmmnCheckbox d-flex justify-content-center mt-1">
-                  <label><input type="checkbox" [checked]="isColAllSelected('create')" [indeterminate]="isColSomeSelected('create')" (change)="toggleCol('create', $event)" /><span></span></label>
+                  <label
+                    ><input
+                      type="checkbox"
+                      [checked]="isColAllSelected('create')"
+                      [indeterminate]="isColSomeSelected('create')"
+                      (change)="toggleCol('create', $event)" /><span></span
+                  ></label>
                 </div>
               </th>
               <th class="text-center">
                 {{ "EDIT" | translate }}
                 <div class="cmmnCheckbox d-flex justify-content-center mt-1">
-                  <label><input type="checkbox" [checked]="isColAllSelected('edit')" [indeterminate]="isColSomeSelected('edit')" (change)="toggleCol('edit', $event)" /><span></span></label>
+                  <label
+                    ><input
+                      type="checkbox"
+                      [checked]="isColAllSelected('edit')"
+                      [indeterminate]="isColSomeSelected('edit')"
+                      (change)="toggleCol('edit', $event)" /><span></span
+                  ></label>
                 </div>
               </th>
               <th class="text-center">
                 {{ "DELETE" | translate }}
                 <div class="cmmnCheckbox d-flex justify-content-center mt-1">
-                  <label><input type="checkbox" [checked]="isColAllSelected('delete')" [indeterminate]="isColSomeSelected('delete')" (change)="toggleCol('delete', $event)" /><span></span></label>
+                  <label
+                    ><input
+                      type="checkbox"
+                      [checked]="isColAllSelected('delete')"
+                      [indeterminate]="isColSomeSelected('delete')"
+                      (change)="toggleCol('delete', $event)" /><span></span
+                  ></label>
                 </div>
               </th>
               <th class="text-center">
                 {{ "VIEW" | translate }}
                 <div class="cmmnCheckbox d-flex justify-content-center mt-1">
-                  <label><input type="checkbox" [checked]="isColAllSelected('view')" [indeterminate]="isColSomeSelected('view')" (change)="toggleCol('view', $event)" /><span></span></label>
+                  <label
+                    ><input
+                      type="checkbox"
+                      [checked]="isColAllSelected('view')"
+                      [indeterminate]="isColSomeSelected('view')"
+                      (change)="toggleCol('view', $event)" /><span></span
+                  ></label>
                 </div>
               </th>
             </tr>
@@ -68,25 +104,58 @@
             <tr *ngIf="!permissionsArray.controls.length">
               <td colspan="6" align="center"><app-no-data /></td>
             </tr>
-            <tr *ngFor="let _ of permissionsArray.controls; let i = index" [formGroup]="permGroup(i)">
-              <td>{{ permGroup(i).get('module_name')?.value }}</td>
+            <tr
+              *ngFor="let _ of permissionsArray.controls; let i = index"
+              [formGroup]="permGroup(i)"
+            >
+              <td>{{ permGroup(i).get("module_name")?.value }}</td>
               <td class="text-center">
-                <div class="cmmnCheckbox"><label>
-                  <input type="checkbox" [checked]="isRowAllSelected(i)" (change)="toggleRow(i, $event)" />
-                  <span></span>
-                </label></div>
+                <div class="cmmnCheckbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      [checked]="isRowAllSelected(i)"
+                      (change)="toggleRow(i, $event)"
+                    />
+                    <span></span>
+                  </label>
+                </div>
               </td>
               <td class="text-center">
-                <div class="cmmnCheckbox"><label><input type="checkbox" formControlName="create" /><span></span></label></div>
+                <div class="cmmnCheckbox">
+                  <label
+                    ><input
+                      type="checkbox"
+                      formControlName="create" /><span></span
+                  ></label>
+                </div>
               </td>
               <td class="text-center">
-                <div class="cmmnCheckbox"><label><input type="checkbox" formControlName="edit" /><span></span></label></div>
+                <div class="cmmnCheckbox">
+                  <label
+                    ><input
+                      type="checkbox"
+                      formControlName="edit" /><span></span
+                  ></label>
+                </div>
               </td>
               <td class="text-center">
-                <div class="cmmnCheckbox"><label><input type="checkbox" formControlName="delete" /><span></span></label></div>
+                <div class="cmmnCheckbox">
+                  <label
+                    ><input
+                      type="checkbox"
+                      formControlName="delete" /><span></span
+                  ></label>
+                </div>
               </td>
               <td class="text-center">
-                <div class="cmmnCheckbox"><label><input type="checkbox" formControlName="view" /><span></span></label></div>
+                <div class="cmmnCheckbox">
+                  <label
+                    ><input
+                      type="checkbox"
+                      formControlName="view" /><span></span
+                  ></label>
+                </div>
               </td>
             </tr>
           </tbody>

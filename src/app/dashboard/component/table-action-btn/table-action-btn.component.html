@@ -3,10 +3,10 @@
   [ngClass]="type + 'Btn'"
   type="button"
   (click)="onClick()"
-  placement="top"
   [ngbTooltip]="getTooltip(type)"
   tooltipClass="tltpCommon"
   container="body"
+  [triggers]="'hover'"
 >
   <ng-container [ngSwitch]="type">
     <i *ngSwitchCase="'up-arrow'">
