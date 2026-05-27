@@ -1,6 +1,62 @@
 <div class="customSelect" [ngStyle]="{ width: width }" [class.customSelectFilter]="isFilter"
   [class.customSelectPlain]="isPlain" [class.customSelectSmall]="isSmall" [class.customSelectGrey]="isGrey"
   [class.show]="isDropdownOpen" (click)="toggleDropdown()">
+  <div class="customSelectInput" [class.highlight]="highlight"> <span *ngIf="!selectedOption"
+      class="customSelectPlaceholder" [innerHTML]="placeholder | translate">{{ placeholder |
+      translate }}</span>
+    <span *ngIf="selectedOption">{{ selectedOption[value] }}</span>
+    <i *ngIf="!isDropdownOpen">
+      <app-arrow-down-icon />
+    </i>
+    <i *ngIf="isDropdownOpen">
+      <app-arrow-up-icon />
+    </i>
+    <div class="rightSection">
+      <span *ngIf="unitText" class="unitText">
+        {{ unitText }}
+      </span>
+      <i *ngIf="iconType === 'default'">
+        <app-arrow-down-icon *ngIf="!isDropdownOpen" />
+        <app-arrow-up-icon *ngIf="isDropdownOpen" />
+      </i>
+
+      <i *ngIf="iconType === 'custom'">
+        <app-calender-icon *ngIf="!isDropdownOpen" />
+        <app-calender-icon *ngIf="isDropdownOpen" />
+      </i>
+    </div>
+    <ul *ngIf="isDropdownOpen" class="customSelectDropdown" [ngStyle]="dropdownStyle">
+      <li *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
+        <input type="text" [placeholder]="allowAddOption ? 'Search or add...' : 'Search...'" [(ngModel)]="filterText"
+          (ngModelChange)="onInputChange($event)" (click)="$event.stopPropagation()"
+          (keydown.enter)="$event.preventDefault(); $event.stopPropagation()" />
+
+        <button *ngIf="allowAddOption" class="addBtn" (click)="addOption(); $event.stopPropagation()">
+          Add
+        </button>
+      </li>
+      @for (option of displayOptions; track option[key]) {
+      <li (click)="selectOption(option); $event.stopPropagation()"
+        [class.active]="option[key] === selectedOption?.[key]">
+        {{ option[value] }}
+      </li>
+      } @empty {
+      <li>No Data Found</li>
+      }
+    </ul>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="customSelect" [ngStyle]="{ width: width }" [class.customSelectFilter]="isFilter"
+  [class.customSelectPlain]="isPlain" [class.customSelectSmall]="isSmall" [class.customSelectGrey]="isGrey"
+  [class.show]="isDropdownOpen" (click)="toggleDropdown()">
   <div class="customSelectInput" [class.highlight]="highlight">
     <span *ngIf="!selectedOption" class="customSelectPlaceholder">
       {{ placeholder | translate }}
