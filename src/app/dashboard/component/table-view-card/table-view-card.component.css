@@ -131,6 +131,7 @@
   color: var(--greyDarkText1);
   font-weight: 500;
   line-height: 16px;
+  word-break: break-word;
   margin: 0;
 }
 
@@ -147,6 +148,28 @@
 
   .cmmnTblViewBdy ul {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+/* Tablet */
+@media (max-width: 1024px) {
+  .cmmnTblViewBdy ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Small Tablet */
+@media (max-width: 768px) {
+  .cmmnTblViewBdy ul {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .cmmnTblViewBdy ul {
+    grid-template-columns: repeat(1, 1fr);
     gap: 10px;
   }
 }
@@ -288,6 +311,7 @@
   color: var(--done-btn-text);
   font-weight: 500;
   cursor: pointer;
+  color: var(--text-color);
   background: var(--done-btn-gradient);
 }
 .column {
@@ -295,4 +319,8 @@
   align-items: center;
   gap: 8px;
   flex-wrap: nowrap;
+}
+
+.shareText {
+  color: var(--share-text-color);
 }

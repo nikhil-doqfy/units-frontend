@@ -43,21 +43,59 @@
 }
 
 .total-cell {
-  position: relative;
-  padding-right: 50px;
+  /* position: relative;
+  padding-right: 50px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 180px;
 }
 
-.hover-actions {
+/* .hover-actions {
   display: none;
-  position: absolute;
+  /* position: absolute;
   right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 50%;*/
+/* transform: translateY(-50%); 
   gap: 6px;
+  align-items: center;
+  display: flex;
+  gap: 6px;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: all 0.2s ease;
 }
 
 .charges-row:hover .hover-actions {
   display: flex;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+} */
+.hover-actions {
+  display: flex;
+  gap: 6px;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, -4px, 0);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  will-change: opacity, transform;
+
+  pointer-events: none;
+}
+
+.charges-row:hover .hover-actions {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+  pointer-events: auto;
 }
 
 .btn-edit,
@@ -72,14 +110,12 @@
   background-color: var(--primaryBlue) !important;
   border-color: var(--primaryBlue) !important;
 }
-/* underline clickable text */
 .edit-text {
   border-bottom: 2px solid var(--borderAccent);
   cursor: pointer;
   padding-bottom: 2px;
 }
 
-/* edit input */
 .edit-input {
   border: none;
   border-bottom: 2px solid var(--borderAccent);
@@ -104,4 +140,9 @@
 
 .edit-underline {
   border-bottom: 2px solid var(--borderAccent);
+}
+@media (hover: hover) {
+  .charges-row:hover .hover-actions {
+    display: flex;
+  }
 }

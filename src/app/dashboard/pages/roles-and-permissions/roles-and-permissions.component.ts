@@ -1,9 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  TemplateRef,
-} from '@angular/core';
+import { Component, DestroyRef, inject, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
@@ -86,7 +81,7 @@ export class RolesAndPermissionsComponent {
 
   constructor(
     private roleService: RoleAndPermissionsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.roleForm = this.buildForm([]);
     const key = this.route.snapshot.data['titleKey'];
@@ -102,7 +97,9 @@ export class RolesAndPermissionsComponent {
 
   buildForm(existingPermissions: any[]): FormGroup {
     const permArray = this.MODULES.map((module) => {
-      const existing = existingPermissions.find((p) => p.module_name === module);
+      const existing = existingPermissions.find(
+        (p) => p.module_name === module,
+      );
       return this.fb.group({
         module_name: [module],
         create: [existing?.create ?? false],
@@ -150,29 +147,49 @@ export class RolesAndPermissionsComponent {
     const payload = this.roleForm.value;
     if (this.isEditMode && this.selectedRole) {
       this.roleService
-        .updateRole({ role_id: this.selectedRole.role_id, name: payload.name, permissions: payload.permissions })
+        .updateRole({
+          role_id: this.selectedRole.role_id,
+          name: payload.name,
+          permissions: payload.permissions,
+        })
         .subscribe({
-          next: () => { this.isLoading = false; this.modalService.dismissAll(); this.fetchRoles(); },
-          error: () => { this.isLoading = false; },
+          next: () => {
+            this.isLoading = false;
+            this.modalService.dismissAll();
+            this.fetchRoles();
+          },
+          error: () => {
+            this.isLoading = false;
+          },
         });
     } else {
       this.roleService.createRole(payload).subscribe({
-        next: () => { this.isLoading = false; this.modalService.dismissAll(); this.fetchRoles(); },
-        error: () => { this.isLoading = false; },
+        next: () => {
+          this.isLoading = false;
+          this.modalService.dismissAll();
+          this.fetchRoles();
+        },
+        error: () => {
+          this.isLoading = false;
+        },
       });
     }
   }
 
   fetchRoles(): void {
     this.tableLoading = true;
-    this.roleService.getRoles({ page: this.currentPage, limit: this.pageSize }).subscribe({
-      next: (res) => {
-        this.roles = res?.content || [];
-        this.totalRecords = res?.pagination?.total_records ?? 0;
-        this.tableLoading = false;
-      },
-      error: () => { this.tableLoading = false; },
-    });
+    this.roleService
+      .getRoles({ page: this.currentPage, limit: this.pageSize })
+      .subscribe({
+        next: (res) => {
+          this.roles = res?.content || [];
+          this.totalRecords = res?.pagination?.total_records ?? 0;
+          this.tableLoading = false;
+        },
+        error: () => {
+          this.tableLoading = false;
+        },
+      });
   }
 
   onPageChange(event: any) {
@@ -188,13 +205,21 @@ export class RolesAndPermissionsComponent {
     this.fetchRoles();
   }
 
-  openAddRoleModal(addRoleContent: TemplateRef<any>, editMode = false, role: any = null) {
+  openAddRoleModal(
+    addRoleContent: TemplateRef<any>,
+    editMode = false,
+    role: any = null,
+  ) {
     this.isEditMode = editMode;
     this.selectedRole = role;
     this.roleForm = this.buildForm(role?.permissions ?? []);
     this.roleForm.patchValue({ name: role?.role_name ?? '' });
     this.modalService
-      .open(addRoleContent, { ariaLabelledBy: 'modal-title', windowClass: 'mdlCommon mdlLarge', centered: true })
+      .open(addRoleContent, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon mdlLarge',
+        centered: true,
+      })
       .result.then(null, () => {});
   }
 
@@ -205,5 +230,17 @@ export class RolesAndPermissionsComponent {
 
   handleBackClick(): void {
     this.showDetailView = false;
+  }
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.roles = this.sharedService.sortData(this.roles, field, this.sortOrder);
   }
 }

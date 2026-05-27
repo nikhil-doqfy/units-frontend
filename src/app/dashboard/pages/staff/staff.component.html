@@ -11,6 +11,14 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
+            <div class="selected-filters d-flex gap-2 flex-wrap mb-2">
+              <!-- Complaint Status -->
+              <div class="filter-chip" *ngIf="selectedstaffRole?.value">
+                {{ selectedstaffRole?.value }}
+
+                <span class="cross-icon" (click)="clearUserStatus()"> ✕ </span>
+              </div>
+            </div>
             <app-table-search
               placeholder="Search here..."
               (onValueChange)="searchTextChange($event)"
@@ -94,7 +102,7 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>
+              <th (click)="sort('staff_name')" style="cursor: pointer">
                 {{ "STAFF_NAME" | translate }} <i><app-sorting-icon /></i>
               </th>
               <th>{{ "CODE" | translate }}</th>

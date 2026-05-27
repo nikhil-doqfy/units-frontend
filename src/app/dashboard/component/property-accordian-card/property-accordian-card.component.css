@@ -1,7 +1,7 @@
 .prprtyAcrdn .accordion-item {
   border: 1px solid var(--muteBorder1);
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .prprtyAcrdn .accordion-item + .accordion-item {
@@ -40,8 +40,11 @@
 
 .prprtyAcrdn .accordion-body ul {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
+
+  column-gap: 4px;
+  row-gap: 8px;
 }
 
 .prprtyAcrdn .accordion-body ul li {
@@ -92,4 +95,56 @@
   color: var(--tableBodyText);
   vertical-align: middle;
   padding: 8px 12px;
+}
+
+.unit-link {
+  color: #4f46e5;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.unit-link:hover {
+  opacity: 0.8;
+}
+.truncate-text {
+  display: inline-block;
+  max-width: 70px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  cursor: pointer;
+}
+.custom-tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Tooltip box */
+.custom-tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 9999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Arrow */
+.custom-tooltip:hover::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #111 transparent;
 }

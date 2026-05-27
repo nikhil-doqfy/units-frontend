@@ -44,6 +44,7 @@
                 *ngFor="let c of chargesArray.controls; let i = index"
                 [formGroupName]="i"
                 class="charges-row"
+                (click)="activeRow = activeRow === i ? null : i"
               >
                 <td>
                   {{ i + 1 }}
@@ -117,7 +118,10 @@
                     {{ c.value.total | number: "1.2-2" }}
                   </span>
 
-                  <div class="hover-actions">
+                  <div
+                    class="hover-actions"
+                    [class.show-actions]="activeRow === i"
+                  >
                     <button class="btn btn-sm btn-edit" *ngIf="!c.value.isEdit">
                       <app-edit-icon (click)="editRow(i)"></app-edit-icon>
                     </button>

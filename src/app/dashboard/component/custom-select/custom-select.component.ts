@@ -103,52 +103,130 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
       });
   }
 
+  // toggleDropdown() {
+  //   if (this.isDisabled) return;
+
+  //   this.isDropdownOpen = !this.isDropdownOpen;
+  //   if (this.isDropdownOpen) {
+  //     this.dropdownService.notifyOpen(this);
+  //     const rect = this.el.nativeElement.getBoundingClientRect();
+  //     const dropdownHeight = 224;
+  //     const spaceBelow = window.innerHeight - rect.bottom;
+  //     const openUpward =
+  //       spaceBelow < dropdownHeight && rect.top > dropdownHeight;
+
+  // this.dropdownStyle = openUpward
+  //   ? {
+  //       position: 'fixed',
+  //       bottom:   `${window.innerHeight - rect.top + 4}px`,
+  //       left:     `${rect.left}px`,
+  //       width:    `${rect.width}px`,
+  //       'z-index': '9999',
+  //     }
+  //   : {
+  //       position: 'fixed',
+  //       top:      `${rect.bottom + 4}px`,
+  //       left:     `${rect.left}px`,
+  //       width:    `${rect.width}px`,
+  //       'z-index': '9999',
+  //     };
+  //     this.dropdownStyle = openUpward
+  //       ? {
+  //           position: 'absolute',
+  //           bottom: 'calc(100% + 4px)',
+  //           right: '0',
+  //           width: '100%',
+  //           'z-index': '9999',
+  //         }
+  //       : {
+  //           position: 'absolute',
+  //           top: 'calc(100% + 4px)',
+  //           right: '0',
+  //           width: '100%',
+  //           'z-index': '9999',
+  //         };
+  //   }
+  //   this.onTouched();
+  // }
+
   toggleDropdown() {
     if (this.isDisabled) return;
 
     this.isDropdownOpen = !this.isDropdownOpen;
+
     if (this.isDropdownOpen) {
       this.dropdownService.notifyOpen(this);
-      const rect = this.el.nativeElement.getBoundingClientRect();
-      const dropdownHeight = 224;
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const openUpward =
-        spaceBelow < dropdownHeight && rect.top > dropdownHeight;
 
-      // this.dropdownStyle = openUpward
-      //   ? {
-      //       position: 'fixed',
-      //       bottom:   `${window.innerHeight - rect.top + 4}px`,
-      //       left:     `${rect.left}px`,
-      //       width:    `${rect.width}px`,
-      //       'z-index': '9999',
-      //     }
-      //   : {
-      //       position: 'fixed',
-      //       top:      `${rect.bottom + 4}px`,
-      //       left:     `${rect.left}px`,
-      //       width:    `${rect.width}px`,
-      //       'z-index': '9999',
-      //     };
+      const rect = this.el.nativeElement.getBoundingClientRect();
+
+      const dropdownHeight = 224;
+      const dropdownWidth = 200;
+
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      const spaceRight = window.innerWidth - rect.right;
+      const spaceLeft = rect.left;
+
+      const openUpward =
+        spaceBelow < dropdownHeight && spaceAbove > dropdownHeight;
+
+      let positionStyle: any = {};
+
+      if (spaceRight >= dropdownWidth) {
+        positionStyle = { left: '0' };
+      } else if (spaceLeft >= dropdownWidth) {
+        positionStyle = { right: '0' };
+      } else {
+        positionStyle = { left: '0', right: '0' };
+      }
+
       this.dropdownStyle = openUpward
         ? {
             position: 'absolute',
             bottom: 'calc(100% + 4px)',
-            left: '0',
-            width: '100%',
+            ...positionStyle,
             'z-index': '9999',
           }
         : {
             position: 'absolute',
             top: 'calc(100% + 4px)',
-            left: '0',
-            width: '100%',
+            ...positionStyle,
             'z-index': '9999',
           };
-    }
-    this.onTouched();
-  }
 
+      // ✅ 🔥 ADD THIS (RTL SUPPORT)
+      const isRTL = document.dir === 'rtl';
+
+      if (isRTL) {
+        delete this.dropdownStyle['left'];
+        this.dropdownStyle['right'] = '0';
+      }
+
+      // ✅ 🔥 ADD THIS (SCREEN OVERFLOW FIX)
+      requestAnimationFrame(() => {
+        const dropdownEl = this.el.nativeElement.querySelector(
+          '.customSelectDropdown',
+        );
+        if (!dropdownEl) return;
+
+        const rect = dropdownEl.getBoundingClientRect();
+        const screenWidth = window.innerWidth;
+
+        // LEFT overflow fix
+        if (rect.left < 0) {
+          this.dropdownStyle['left'] = '8px';
+          delete this.dropdownStyle['right'];
+        }
+
+        // RIGHT overflow fix
+        else if (rect.right > screenWidth) {
+          this.dropdownStyle['right'] = '8px';
+          delete this.dropdownStyle['left'];
+        }
+      });
+    }
+  }
   selectOption(option: any) {
     this.selectedOption = option;
     this.onChange(option);

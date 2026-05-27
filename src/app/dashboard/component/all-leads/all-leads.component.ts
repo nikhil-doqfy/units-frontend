@@ -203,13 +203,32 @@ export class AllLeadsComponent implements OnInit {
   searchTextChange(text: string): void {
     this.search$.next(text);
   }
+  clearStatus(): void {
+    this.selectedStatus = null;
+    this.filterStatus = '';
+    this.currentPage = 1;
+    this.loadLeads();
+  }
 
+  clearPlatform(): void {
+    this.selectedPlatform = null;
+    this.filterPlatform = '';
+    this.currentPage = 1;
+    this.loadLeads();
+  }
+
+  clearLeadType(): void {
+    this.selectedLeadType = null;
+    this.filterLeadType = '';
+    this.currentPage = 1;
+    this.loadLeads();
+  }
   applyFilter(): void {
     this.currentPage = 1;
     this.loadLeads();
-    this.selectedStatus = null;
-    this.selectedPlatform = null;
-    this.selectedLeadType = null;
+    // this.selectedStatus = null;
+    // this.selectedPlatform = null;
+    // this.selectedLeadType = null;
   }
 
   removeFilter(): void {
@@ -364,5 +383,17 @@ export class AllLeadsComponent implements OnInit {
     } else {
       this.alertService.error('Failed to save lead');
     }
+  }
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.leads = this.sharedService.sortData(this.leads, field, this.sortOrder);
   }
 }

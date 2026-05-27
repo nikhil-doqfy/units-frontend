@@ -242,8 +242,14 @@ export class ApprovalComponent {
             unit: a.unit ?? 'N/A',
             tenant_name: a.tenant ?? 'N/A',
             tenure: a.requested_tenure ?? '—',
-            rent: a.requested_rent != null ? `AED ${parseFloat(a.requested_rent).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—',
-            actual_rent: a.actual_rent != null ? `AED ${parseFloat(a.actual_rent).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—',
+            rent:
+              a.requested_rent != null
+                ? `AED ${parseFloat(a.requested_rent).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : '—',
+            actual_rent:
+              a.actual_rent != null
+                ? `AED ${parseFloat(a.actual_rent).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : '—',
             approved: a.approved,
             status: a.status ?? (a.approved ? 'APPROVED' : 'PENDING'),
             profile_image: a.tenant_image ?? '',
@@ -264,7 +270,8 @@ export class ApprovalComponent {
           this.alertService.success(resp?.message ?? 'Approved successfully');
           this.loadManagerApprovals();
         },
-        error: () => this.alertService.error('Failed to approve. Please try again.'),
+        error: () =>
+          this.alertService.error('Failed to approve. Please try again.'),
       });
   }
 
@@ -277,7 +284,8 @@ export class ApprovalComponent {
           this.alertService.success(resp?.message ?? 'Rejected');
           this.loadManagerApprovals();
         },
-        error: () => this.alertService.error('Failed to reject. Please try again.'),
+        error: () =>
+          this.alertService.error('Failed to reject. Please try again.'),
       });
   }
 
@@ -487,5 +495,21 @@ export class ApprovalComponent {
   saveRow(row: any) {
     console.log('saved', row);
     row.isEdit = false;
+  }
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.managerApprovalList = this.sharedService.sortData(
+      this.managerApprovalList,
+      field,
+      this.sortOrder,
+    );
   }
 }

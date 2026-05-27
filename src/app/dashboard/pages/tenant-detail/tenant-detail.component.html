@@ -36,7 +36,10 @@
         label: getLabel('YEAR_RENT'),
         value: selectedLease?.financials?.rent || '67,000',
       },
-      { label: getLabel('OTHER_CHARGESE'), value: leaseChargesTotalAmount | number: '1.2-2' },
+      {
+        label: getLabel('OTHER_CHARGESE'),
+        value: leaseChargesTotalAmount | number: '1.2-2',
+      },
       { label: getLabel('VAT'), value: leaseChargesVatTotal | number: '1.2-2' },
       {
         label: getLabel('TOTAL_RENT'),
@@ -81,9 +84,15 @@
         <div class="charges-grid">
           <ng-container *ngIf="leaseCharges.length; else noCharges">
             <div class="charge-item" *ngFor="let lc of leaseCharges">
-              <label>{{ lc.description }} <span>VAT &#64;{{ lc.tax_code ?? 'Nil' }}%</span></label>
-              <small>{{ lc.amount | number: '1.2-2' }} + {{ lc.vat | number: '1.2-2' }}</small>
-              <strong>{{ lc.total | number: '1.2-2' }}</strong>
+              <label
+                >{{ lc.description }}
+                <span>VAT &#64;{{ lc.tax_code ?? "Nil" }}%</span></label
+              >
+              <small
+                >{{ lc.amount | number: "1.2-2" }} +
+                {{ lc.vat | number: "1.2-2" }}</small
+              >
+              <strong>{{ lc.total | number: "1.2-2" }}</strong>
             </div>
           </ng-container>
           <ng-template #noCharges>
@@ -94,19 +103,19 @@
         <div class="payment-info">
           <div>
             <label>{{ "STATUS" | translate }}</label>
-            <span class="paid">{{ selectedLease?.lease_status || '--' }}</span>
+            <span class="paid">{{ selectedLease?.lease_status || "--" }}</span>
           </div>
           <div>
             <label>{{ "PAYMENT_TYPE" | translate }}</label>
-            <strong>{{ selectedLease?.payment_type || '--' }}</strong>
+            <strong>{{ selectedLease?.payment_type || "--" }}</strong>
           </div>
           <div>
             <label>{{ "CHEQUE_NUMBER" | translate }}</label>
-            <strong>{{ selectedLease?.cheque_number || '--' }}</strong>
+            <strong>{{ selectedLease?.cheque_number || "--" }}</strong>
           </div>
           <div>
             <label>{{ "TOTAL_AMOUNT" | translate }}</label>
-            <strong>{{ leaseChargesTotalAmount | number: '1.2-2' }}</strong>
+            <strong>{{ leaseChargesTotalAmount | number: "1.2-2" }}</strong>
           </div>
           <div *ngIf="showRenewalBlockedMsg">
             <div class="dues-card">
@@ -213,6 +222,7 @@
           <app-table-title
             [title]="'RENT_TRANSACTIONS' | translate"
             [subtitle]="'(' + allTransactions.length + ')'"
+            (onRefresh)="onRefresh()"
           >
           </app-table-title>
         </div>
@@ -374,25 +384,55 @@
       <div class="invoice-info">
         <div class="info-col">
           <h5>Invoice to:</h5>
-          <p class="bold">{{ invoiceData?.tenant?.name || selectedLease?.tenant?.name || '—' }}</p>
-          <p *ngIf="invoiceData?.tenant?.address_line_1">Addr: {{ invoiceData.tenant.address_line_1 }}</p>
-          <p *ngIf="invoiceData?.tenant?.address_line_2">{{ invoiceData.tenant.address_line_2 }}</p>
-          <p *ngIf="invoiceData?.tenant?.contact">Phone: {{ invoiceData.tenant.contact }}</p>
-          <p *ngIf="invoiceData?.tenant?.email">Email: {{ invoiceData.tenant.email }}</p>
-          <p *ngIf="invoiceData?.tenant?.code">Ref: {{ invoiceData.tenant.code }}</p>
+          <p class="bold">
+            {{
+              invoiceData?.tenant?.name || selectedLease?.tenant?.name || "—"
+            }}
+          </p>
+          <p *ngIf="invoiceData?.tenant?.address_line_1">
+            Addr: {{ invoiceData.tenant.address_line_1 }}
+          </p>
+          <p *ngIf="invoiceData?.tenant?.address_line_2">
+            {{ invoiceData.tenant.address_line_2 }}
+          </p>
+          <p *ngIf="invoiceData?.tenant?.contact">
+            Phone: {{ invoiceData.tenant.contact }}
+          </p>
+          <p *ngIf="invoiceData?.tenant?.email">
+            Email: {{ invoiceData.tenant.email }}
+          </p>
+          <p *ngIf="invoiceData?.tenant?.code">
+            Ref: {{ invoiceData.tenant.code }}
+          </p>
         </div>
         <div class="info-col">
           <h5>Property Details:</h5>
           <p class="bold">
-            {{ invoiceData?.property?.property_name || selectedLease?.property?.name || '—' }}
-            <span *ngIf="invoiceData?.property?.unit_name"> | {{ invoiceData.property.unit_name }}</span>
+            {{
+              invoiceData?.property?.property_name ||
+                selectedLease?.property?.name ||
+                "—"
+            }}
+            <span *ngIf="invoiceData?.property?.unit_name">
+              | {{ invoiceData.property.unit_name }}</span
+            >
           </p>
-          <p *ngIf="invoiceData?.property?.start_date || invoiceData?.property?.end_date">
-            Period: {{ invoiceData?.property?.start_date | date:'dd-MMM-yyyy' }}
-            TO {{ invoiceData?.property?.end_date | date:'dd-MMM-yyyy' }}
+          <p
+            *ngIf="
+              invoiceData?.property?.start_date ||
+              invoiceData?.property?.end_date
+            "
+          >
+            Period:
+            {{ invoiceData?.property?.start_date | date: "dd-MMM-yyyy" }} TO
+            {{ invoiceData?.property?.end_date | date: "dd-MMM-yyyy" }}
           </p>
-          <p *ngIf="invoiceData?.property?.lease_code">Lease No: {{ invoiceData.property.lease_code }}</p>
-          <p *ngIf="invoiceData?.property?.block_name">Block: {{ invoiceData.property.block_name }}</p>
+          <p *ngIf="invoiceData?.property?.lease_code">
+            Lease No: {{ invoiceData.property.lease_code }}
+          </p>
+          <p *ngIf="invoiceData?.property?.block_name">
+            Block: {{ invoiceData.property.block_name }}
+          </p>
         </div>
       </div>
     </div>
@@ -402,53 +442,76 @@
       <div class="cmmnTblHdr px-0">
         <div class="row g-3 align-items-center">
           <div class="col-md">
-            <app-table-title [title]="'TRANSACTIONS' | translate"></app-table-title>
+            <app-table-title
+              [title]="'TRANSACTIONS' | translate"
+            ></app-table-title>
           </div>
         </div>
       </div>
       <div class="cmmnTbl">
         <div class="table-responsive">
           <table class="table table-bordered transactions-table">
-              <thead>
-                <tr>
-                  <th width="50">{{ "SI.NO" | translate }}</th>
-                  <th width="130">{{ "CHEQUE_NUMBER" | translate }}</th>
-                  <th>{{ "DESCRIPTION" | translate }}</th>
-                  <th width="110">{{ "TYPE" | translate }}</th>
-                  <th width="110">{{ "DATE" | translate }}</th>
-                  <th width="130">{{ "BANK_NAME" | translate }}</th>
-                  <th width="120">{{ "PAYMENT_TYPE" | translate }}</th>
-                  <th width="110">{{ "STATUS" | translate }}</th>
-                  <th width="110">{{ "AMOUNT" | translate }}</th>
-                  <th width="70">VAT %</th>
-                  <th width="110">VAT {{ "AMOUNT" | translate }}</th>
-                  <th width="120">{{ "TOTAL_AMOUNT" | translate }}</th>
+            <thead>
+              <tr>
+                <th width="50">{{ "SI.NO" | translate }}</th>
+                <th width="130">{{ "CHEQUE_NUMBER" | translate }}</th>
+                <th>{{ "DESCRIPTION" | translate }}</th>
+                <th width="110">{{ "TYPE" | translate }}</th>
+                <th width="110">{{ "DATE" | translate }}</th>
+                <th width="130">{{ "BANK_NAME" | translate }}</th>
+                <th width="120">{{ "PAYMENT_TYPE" | translate }}</th>
+                <th width="110">{{ "STATUS" | translate }}</th>
+                <th width="110">{{ "AMOUNT" | translate }}</th>
+                <th width="70">VAT %</th>
+                <th width="110">VAT {{ "AMOUNT" | translate }}</th>
+                <th width="120">{{ "TOTAL_AMOUNT" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container
+                *ngIf="invoiceData?.transactions?.length; else noTransactions"
+              >
+                <tr *ngFor="let t of invoiceData.transactions; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ t.cheque_number || t.code || "—" }}</td>
+                  <td>{{ t.description }}</td>
+                  <td>
+                    {{
+                      t.cheque_type === "OTHER_CHARGE"
+                        ? ("OTHER_CHARGES" | translate)
+                        : t.cheque_type === "RENT_CHEQUE"
+                          ? ("RENT" | translate)
+                          : ("ADDITIONAL" | translate)
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      t.cheque_date ? (t.cheque_date | date: "dd/MM/yyyy") : "—"
+                    }}
+                  </td>
+                  <td>{{ t.origin_bank_name || "—" }}</td>
+                  <td>{{ t.payment_type || "—" }}</td>
+                  <td>
+                    <app-badge
+                      [title]="t.status || '—'"
+                      status="green"
+                    ></app-badge>
+                  </td>
+                  <td>{{ t.amount ?? 0 | number: "1.2-2" }}</td>
+                  <td>{{ t.tax_code != null ? t.tax_code + "%" : "—" }}</td>
+                  <td>{{ t.vat ?? 0 | number: "1.2-2" }}</td>
+                  <td>{{ t.total ?? 0 | number: "1.2-2" }}</td>
                 </tr>
-              </thead>
-              <tbody>
-                <ng-container *ngIf="invoiceData?.transactions?.length; else noTransactions">
-                  <tr *ngFor="let t of invoiceData.transactions; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ t.cheque_number || t.code || '—' }}</td>
-                    <td>{{ t.description }}</td>
-                    <td>{{ t.cheque_type === 'OTHER_CHARGE' ? ('OTHER_CHARGES' | translate) : t.cheque_type === 'RENT_CHEQUE' ? ('RENT' | translate) : ('ADDITIONAL' | translate) }}</td>
-                    <td>{{ t.cheque_date ? (t.cheque_date | date:'dd/MM/yyyy') : '—' }}</td>
-                    <td>{{ t.origin_bank_name || '—' }}</td>
-                    <td>{{ t.payment_type || '—' }}</td>
-                    <td><app-badge [title]="t.status || '—'" status="green"></app-badge></td>
-                    <td>{{ (t.amount ?? 0) | number:'1.2-2' }}</td>
-                    <td>{{ t.tax_code != null ? t.tax_code + '%' : '—' }}</td>
-                    <td>{{ (t.vat ?? 0) | number:'1.2-2' }}</td>
-                    <td>{{ (t.total ?? 0) | number:'1.2-2' }}</td>
-                  </tr>
-                </ng-container>
-                <ng-template #noTransactions>
-                  <tr><td colspan="12" class="text-center py-4"><app-no-data /></td></tr>
-                </ng-template>
-              </tbody>
-            </table>
-          </div>
+              </ng-container>
+              <ng-template #noTransactions>
+                <tr>
+                  <td colspan="12" class="text-center py-4"><app-no-data /></td>
+                </tr>
+              </ng-template>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
 
     <!-- Totals -->
@@ -458,9 +521,24 @@
         <strong class="words-value">{{ invoiceAmountInWords }}</strong>
       </div>
       <div class="summary">
-        <p>Sub Total: <strong>{{ (invoiceData?.totals?.subtotal ?? 0) | number:'1.2-2' }}</strong></p>
-        <p>VAT Amount: <strong>{{ (invoiceData?.totals?.vat_total ?? 0) | number:'1.2-2' }}</strong></p>
-        <button class="grand">Grand Total: <strong>{{ (invoiceData?.totals?.grand_total ?? 0) | number:'1.2-2' }}</strong></button>
+        <p>
+          Sub Total:
+          <strong>{{
+            invoiceData?.totals?.subtotal ?? 0 | number: "1.2-2"
+          }}</strong>
+        </p>
+        <p>
+          VAT Amount:
+          <strong>{{
+            invoiceData?.totals?.vat_total ?? 0 | number: "1.2-2"
+          }}</strong>
+        </p>
+        <button class="grand">
+          Grand Total:
+          <strong>{{
+            invoiceData?.totals?.grand_total ?? 0 | number: "1.2-2"
+          }}</strong>
+        </button>
       </div>
     </div>
   </app-table-view-card>

@@ -127,7 +127,6 @@
               [type]="hidePassword ? 'password' : 'text'"
               [placeholder]="'ENTER_HERE' | translate"
               formControlName="password"
-              readonly
             />
             <i class="right" (click)="togglePasswordHidden()">
               <app-password-show-icon *ngIf="hidePassword" />

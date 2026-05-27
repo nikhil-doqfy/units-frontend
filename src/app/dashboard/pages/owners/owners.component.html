@@ -31,7 +31,7 @@
       <table class="table table-bordered owners-table">
         <thead>
           <tr>
-            <th>
+            <th (click)="('name')" style="cursor: pointer">
               {{ "OWNER_NAME" | translate }} <i><app-sorting-icon /></i>
             </th>
             <th>{{ "CODE" | translate }}</th>

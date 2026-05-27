@@ -66,7 +66,6 @@ export class LineChartComponent
     this.chartOptions = this.getBaseOptions();
   }
 
-  // ✅ BASE OPTIONS
   private getBaseOptions(): Partial<ChartOptions> {
     return {
       series: [
@@ -104,7 +103,7 @@ export class LineChartComponent
           },
         },
       },
-      colors: ['#1988FD', '#00B7AD', '#4B9C5E'],
+      colors: ['#1988FD', '#00BEDB', '#7C3AED'],
       legend: {
         position: 'top',
         horizontalAlign: 'center',
@@ -126,7 +125,6 @@ export class LineChartComponent
     };
   }
 
-  // ✅ NGONINIT (DARK MODE HANDLING)
   ngOnInit() {
     this.themeService.isDarkMode$
       .pipe(takeUntil(this.destroy$))
@@ -137,7 +135,7 @@ export class LineChartComponent
 
   private applyTheme(isDark: boolean) {
     const axisColor = isDark ? '#FFFFFF' : '#344046';
-    const gridColor = isDark ? '#2c2c2c' : '#e0e0e0';
+    const gridColor = isDark ? '#e8e1e114' : '#0000001a';
 
     this.chartOptions = {
       ...this.chartOptions,
@@ -195,7 +193,6 @@ export class LineChartComponent
     }
   }
 
-  // ✅ DATA UPDATE
   ngOnChanges() {
     const data = this.monthlyData || [];
 

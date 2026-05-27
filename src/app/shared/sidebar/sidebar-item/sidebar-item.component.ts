@@ -21,7 +21,7 @@ export class SidebarItemComponent {
   @Input() count?: number;
 
   openSidebarValue = true;
-
+  tooltipPlacement: 'start' | 'end' = 'end';
   constructor(private sharedService: SharedService) {}
 
   ngOnInit() {
@@ -30,5 +30,10 @@ export class SidebarItemComponent {
       .subscribe((value) => {
         this.openSidebarValue = value;
       });
+    this.setTooltipDirection();
+  }
+  private setTooltipDirection() {
+    const dir = document.documentElement.getAttribute('dir');
+    this.tooltipPlacement = dir === 'rtl' ? 'start' : 'end';
   }
 }

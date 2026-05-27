@@ -1,4 +1,33 @@
-<app-white-card title="{{ 'YOUR_STATISTICS' | translate }}">
+<!-- <app-white-card title="{{ 'YOUR_STATISTICS' | translate }}"> -->
+<app-white-card>
+  <div class="stats-header">
+    <div class="stats-title">
+      {{ "YOUR_STATISTICS" | translate }}
+    </div>
+
+    <div class="stats-actions position-relative">
+      <button class="stats-filter-btn" (click)="toggleStatsDropdown()">
+        Statistics
+      </button>
+
+      <div class="stats-dropdown" *ngIf="showStatsDropdown">
+        <label>
+          <input type="checkbox" [(ngModel)]="showMonthlyCommission" />
+          Monthly Commission
+        </label>
+
+        <label>
+          <input type="checkbox" [(ngModel)]="showProperties" />
+          Properties
+        </label>
+
+        <label>
+          <input type="checkbox" [(ngModel)]="showTenants" />
+          Tenants
+        </label>
+      </div>
+    </div>
+  </div>
   <div class="row g-3">
     <div class="col-lg-3">
       <app-stats-card
@@ -583,7 +612,7 @@
         [showActions]="true"
         customClass="pb-0"
       >
-        <ng-container card-actions>
+        <!--<ng-container card-actions>
           <app-custom-select
             [options]="[
               'All',
@@ -598,13 +627,13 @@
             [isFilter]="true"
           >
           </app-custom-select>
-        </ng-container>
+        </ng-container> -->
         <app-group-bar-chart></app-group-bar-chart>
       </app-white-card>
     </div>
     <div class="col-lg-7">
       <app-white-card
-        title="{{ 'OTHER TYPE PAYMENTS' | translate }}"
+        title="{{ 'Other Payment Types' | translate }}"
         subtitle="Total Revenue - AED {{
           paymentTotalRevenue | number: '1.0-0'
         }}"

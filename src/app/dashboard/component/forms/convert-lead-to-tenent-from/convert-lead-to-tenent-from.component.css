@@ -84,3 +84,36 @@
   gap: 15px;
   padding: 20px;
 }
+
+@media (max-width: 1024px) {
+  .details-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+@media (max-width: 767px) {
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .item label {
+    font-size: 12px;
+  }
+
+  .item p {
+    font-size: 13px;
+  }
+}
+@media (max-width: 767px) {
+  .platform-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}

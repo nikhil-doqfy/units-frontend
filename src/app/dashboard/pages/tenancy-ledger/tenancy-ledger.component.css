@@ -41,7 +41,6 @@
   text-align: center;
   padding: 12px;
 }
-
 .chargesTooltip {
   min-width: 119px;
   padding: 5px 0;
@@ -49,7 +48,7 @@
 
 .chargesRow .value {
   font-weight: 600;
-  color: var(--bg-light);
+  color: inherit;
 }
 .charges-info {
   cursor: pointer;
@@ -133,4 +132,19 @@
   width: 200px !important;
   max-width: 130px !important;
   padding: 6px 8px !important;
+}
+
+::ng-deep .popover {
+  background: var(--tooltip-bg) !important;
+  color: var(--tooltip-text) !important;
+  border: 1px solid var(--fade-light) !important;
+}
+
+::ng-deep .popover-body {
+  /* background: var(--tooltip-bg) !important; */
+  color: white !important;
+}
+
+::ng-deep .chargesRow {
+  color: var(--text-color);
 }

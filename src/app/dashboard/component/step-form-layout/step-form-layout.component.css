@@ -102,7 +102,7 @@
   }
 
   .cmnStepFrmHdr button {
-    position: absolute;
+    /* position: absolute; */
     right: 16px;
     top: 16px;
   }
@@ -154,4 +154,23 @@
   padding: 4px 12px;
   border-radius: 8px;
   font-weight: 600;
+}
+@media (max-width: 767px) {
+  .cmnStepFrmHdr {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%; /* full width */
+  }
+
+  .stepActionBtns {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .stepActionBtns button {
+    flex: 1 1 auto; /* buttons expand hotil */
+    white-space: nowrap;
+  }
 }

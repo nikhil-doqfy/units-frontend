@@ -464,8 +464,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   isModalOpen = false;
 
-  // New Property dropdown functions
-
   showDropdown = false;
 
   togglePropertyDropdown() {
@@ -474,16 +472,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   openProperty() {
     this.showDropdown = false;
-    this.goToAddProperty(); // tumcha existing method
+    this.goToAddProperty();
   }
 
   openUnit() {
     this.showDropdown = false;
-    this.goToAddUnit(); // new function
+    this.goToAddUnit();
   }
 
   goToAddUnit() {
-    this.router.navigate(['/dashboard/new-units']); // route tumchya project nusar change kara
+    this.router.navigate(['/dashboard/new-units']);
   }
   isContactSearchOpen = false;
 
@@ -494,7 +492,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   closeSearch() {
     this.isContactSearchOpen = false;
   }
-
 
   private getDismissReason(reason: any): string {
     switch (reason) {
@@ -513,7 +510,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     const theme = this.isDark ? 'dark' : 'light';
 
-    this.storage.setTheme(theme); // 👈 save in localStorage
+    this.storage.setTheme(theme);
 
     this.applyTheme();
     this.themeService.setDarkMode(this.isDark);

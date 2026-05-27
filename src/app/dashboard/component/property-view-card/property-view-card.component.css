@@ -319,14 +319,17 @@ img {
 .sharePopup {
   position: absolute;
   top: -30px;
-  right: 90px;
   background: var(--popup-bg);
   padding: 15px;
   width: 186px;
   height: 88px;
+  width: 180px;
+  min-width: 190px;
+  max-width: calc(100vw - 20px);
   gap: 12px;
   border-radius: 12px;
   box-shadow: 0 0px 20px var(--popup-shadow);
+  isolation: isolate;
 }
 
 .shareItem {
@@ -383,4 +386,31 @@ img {
   font-size: 14px;
   font-weight: 600;
   color: var(--rera-text);
+}
+@media (max-width: 767px) {
+  .sharePopup {
+    left: -36px;
+    right: 12px;
+    top: 40px;
+    bottom: 20px;
+    width: 175px;
+    min-width: 186px;
+    max-width: calc(100% - 10px);
+
+    border-radius: 14px;
+    z-index: 99999;
+  }
+}
+.clickIcon {
+  max-width: 100%;
+  height: auto;
+}
+.statusIcons .clickIcon,
+.shareIconWrapper .clickIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+.cmmnPrprtyViewTop > div {
+  flex-wrap: wrap;
 }
