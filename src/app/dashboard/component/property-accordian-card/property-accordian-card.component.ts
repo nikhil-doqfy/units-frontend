@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
 import { PreviewIconComponent } from '../icons/preview-icon/preview-icon.component';
 @Component({
@@ -11,7 +10,6 @@ import { PreviewIconComponent } from '../icons/preview-icon/preview-icon.compone
   imports: [
     CommonModule,
     TranslateModule,
-    MatTooltipModule,
     EditIconComponent,
     PreviewIconComponent,
   ],

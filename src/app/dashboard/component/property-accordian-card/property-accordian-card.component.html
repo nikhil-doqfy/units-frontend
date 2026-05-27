@@ -1,26 +1,15 @@
 <div class="accordion prprtyAcrdn" id="propertyExample">
   <div class="accordion-item" *ngFor="let item of accordianData; let i = index">
     <h2 class="accordion-header">
-      <button
-        class="accordion-button"
-        [ngClass]="{ collapsed: !isAccordionOpen(i) }"
-        type="button"
-        [attr.data-bs-target]="'#collapse' + i"
-        [attr.aria-expanded]="isAccordionOpen(i)"
-        [attr.aria-controls]="'collapse' + i"
-        data-bs-toggle="collapse"
-        (click)="toggleAccordion(i)"
-      >
+      <button class="accordion-button" [ngClass]="{ collapsed: !isAccordionOpen(i) }" type="button"
+        [attr.data-bs-target]="'#collapse' + i" [attr.aria-expanded]="isAccordionOpen(i)"
+        [attr.aria-controls]="'collapse' + i" data-bs-toggle="collapse" (click)="toggleAccordion(i)">
         {{ item.title | translate }}
       </button>
     </h2>
 
-    <div
-      class="accordion-collapse collapse"
-      [class.show]="isAccordionOpen(i)"
-      [attr.id]="'collapse' + i"
-      data-bs-parent="#propertyExample"
-    >
+    <div class="accordion-collapse collapse" [class.show]="isAccordionOpen(i)" [attr.id]="'collapse' + i"
+      data-bs-parent="#propertyExample">
       <div class="accordion-body">
         <!-- Table layout -->
         <ng-container *ngIf="item.tableColumns?.length; else listLayout">
@@ -38,10 +27,8 @@
                   </td>
                 </tr>
                 <tr *ngIf="!item.tableRows?.length">
-                  <td
-                    [attr.colspan]="item.tableColumns?.length"
-                    style="text-align: center; color: #9ca3af; font-size: 13px"
-                  >
+                  <td [attr.colspan]="item.tableColumns?.length"
+                    style="text-align: center; color: #9ca3af; font-size: 13px">
                     No data available
                   </td>
                 </tr>
@@ -54,29 +41,16 @@
           <ul>
             <li *ngFor="let content of item.items">
               <span>{{ content.label | translate }}</span>
-              <p
-                *ngIf="content.isLink"
-                class="unit-link truncate-text custom-tooltip"
-                [matTooltip]="content.value"
-                matTooltipPosition="above"
-                (click)="navigateToUnit(content.unitId)"
-              >
+              <p *ngIf="content.isLink" class="unit-link truncate-text custom-tooltip"
+                (click)="navigateToUnit(content.unitId)">
                 {{ content.value }}
               </p>
-              <p
-                *ngIf="!content.isLink"
-                class="truncate-text custom-tooltip"
-                [matTooltip]="content.value"
-                matTooltipPosition="above"
-              >
+              <p *ngIf="!content.isLink" class="truncate-text custom-tooltip">
                 {{ content.value }}
               </p>
               <!-- Action Icon -->
               <p *ngIf="content.isAction">
-                <app-preview-icon
-                  style="cursor: pointer"
-                  (click)="navigateToUnit(content.unitId)"
-                >
+                <app-preview-icon style="cursor: pointer" (click)="navigateToUnit(content.unitId)">
                 </app-preview-icon>
               </p>
             </li>
