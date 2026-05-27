@@ -38,7 +38,7 @@ export type ChartOptions = {
   styleUrls: ['./donut.component.css'],
 })
 export class DonutChartComponent {
-  // @Input() vacancy = 88;
+ // @Input() vacancy = 88;
   // @Input() occupied = 12;
 
   // selectedMode: 'vacancy' | 'occupied' | 'both' = 'vacancy';
@@ -286,7 +286,7 @@ export class DonutChartComponent {
         },
       },
 
-      // tooltip: {
+     // tooltip: {
       //   theme: isDark ? 'dark' : 'light',
       //   y: {
       //     formatter: (val: number) => `${val}%`,
