@@ -1,0 +1,76 @@
+.summary-container .card.red h2 {
+  color: #ef4444;
+}
+
+.chart-container {
+  min-height: 288px;
+  overflow: visible;
+}
+
+.chart-container apx-chart {
+  display: block;
+  width: 100%;
+}
+
+.chart-container ::ng-deep .apexcharts-legend {
+  padding-top: 0;
+}
+
+@media (max-width: 768px) {
+  .summary-container {
+    flex-direction: column;
+  }
+
+  .summary-container .card {
+    width: 100%;
+  }
+
+  .chart-container {
+    min-height: 330px;
+  }
+}
+.chart-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.page-btn {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 6px;
+  border: 1px solid #ddd;
+
+  background: #fff;
+  color: #333;
+
+  font-size: 16px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.2s;
+}
+
+.page-btn:hover {
+  background: #f2f2f2;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 12px;
+  font-weight: 500;
+  color: #555;
+
+  padding: 3px 8px;
+  border-radius: 12px;
+}
