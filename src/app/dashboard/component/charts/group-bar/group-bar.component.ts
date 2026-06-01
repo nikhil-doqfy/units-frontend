@@ -1,45 +1,32 @@
-import {
-  AfterViewInit,
-  Component,
-  OnChanges,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
-  ChartComponent,
-  ApexDataLabels,
   ApexXAxis,
-  ApexPlotOptions,
-  ApexStroke,
-  ApexTitleSubtitle,
   ApexYAxis,
-  ApexTooltip,
-  ApexFill,
-  ApexGrid,
+  ApexTitleSubtitle,
+  ApexDataLabels,
   ApexLegend,
+  ApexPlotOptions,
+  ApexGrid,
+  ApexTooltip,
   NgApexchartsModule,
 } from 'ng-apexcharts';
-import { Subject, takeUntil } from 'rxjs';
-import { ThemeService } from '../../../../theme.service';
+import { HomeService } from '../../../services/home.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
   xaxis: ApexXAxis;
   yaxis: ApexYAxis;
-  stroke: ApexStroke;
   title: ApexTitleSubtitle;
-  tooltip: ApexTooltip;
-  fill: ApexFill;
+  dataLabels: ApexDataLabels;
   legend: ApexLegend;
+  plotOptions: ApexPlotOptions;
   grid: ApexGrid;
-  colors?: string[];
+  tooltip: ApexTooltip;
+  colors: string[];
 };
-
 @Component({
   selector: 'app-group-bar-chart',
   standalone: true,
@@ -47,136 +34,205 @@ export type ChartOptions = {
   templateUrl: './group-bar.component.html',
   styleUrl: './group-bar.component.css',
 })
-export class GroupBarChartComponent implements OnInit, AfterViewInit {
-  @ViewChild('chart') chart!: ChartComponent;
+export class GroupBarChartComponent {
+  constructor(private homeService: HomeService) {}
 
-  private destroy$ = new Subject<void>();
-  private viewReady = false;
+  properties: any[] = [];
 
-  public chartOptions: Partial<ChartOptions>;
+  totalRecords = 0;
 
-  constructor(private themeService: ThemeService) {
-    this.chartOptions = {
-      colors: ['#1988FD', '#00C9D7'],
-      series: [
-        { name: 'Owner', data: [780, 456, 890, 789, 456, 345, 800] },
-        { name: 'Third Party', data: [670, 390, 290, 249, 790, 249, 123] },
-      ],
-      chart: {
-        type: 'bar',
-        height: 240,
-        toolbar: { show: false },
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 2,
-          borderRadiusApplication: 'end',
-          borderRadiusWhenStacked: 'last',
-          horizontal: true,
-          barHeight: '85%',
-          dataLabels: { position: 'right' },
-        },
-      },
-      grid: { show: false },
-      tooltip: {
-        shared: true,
-        intersect: false,
-        y: { formatter: (val: number) => `${val}` },
-      },
-      stroke: {
-        width: 1,
-        colors: ['#fff'],
-      },
-      xaxis: {
-        categories: [
-          'Unit 1',
-          'Unit 2',
-          'Unit 3',
-          'Unit 4',
-          'Unit 5',
-          'Unit 6',
-          'Unit 7',
-        ],
-        labels: { show: false },
-        axisBorder: { show: false },
-        axisTicks: { show: false },
-      },
-      dataLabels: {
-        enabled: true,
-        offsetX: 10,
-        style: {
-          fontSize: '10px',
-          colors: ['#445860'],
-        },
-      },
-      yaxis: {
-        axisBorder: { show: false },
-        axisTicks: { show: false },
-      },
-      fill: { opacity: 1 },
-      legend: {
-        position: 'top',
-        markers: { size: 8, height: 8, radius: 8 } as any,
-        labels: { colors: '#344046' },
-      },
+  chartSeries: ApexAxisChartSeries = [];
+
+  chartCategories: string[] = [];
+
+  private readonly maxCategoryLabelLength = 13;
+
+  private formatCategoryLabel = (value: any): string => {
+    const label = `${value ?? ''}`;
+
+    if (label.length <= this.maxCategoryLabelLength) {
+      return label;
+    }
+
+    return `${label.slice(0, this.maxCategoryLabelLength)}...`;
+  };
+
+  private getYAxisMax(data: any[]): number {
+    const maxValue = data.reduce((max, property) => {
+      const rentedUnits = Number(property.rented_units) || 0;
+      const vacantUnits = Number(property.vacant_units) || 0;
+
+      return Math.max(max, rentedUnits + vacantUnits);
+    }, 0);
+
+    return Math.max(20, Math.ceil(maxValue / 20) * 20);
+  }
+
+  get summary() {
+    return {
+      totalProperties: this.totalRecords,
+
+      totalRented: this.properties.reduce((sum, p) => sum + p.rented_units, 0),
+
+      totalVacant: this.properties.reduce((sum, p) => sum + p.vacant_units, 0),
     };
   }
 
-  // ✅ THEME HANDLE
-  ngOnInit() {
-    this.themeService.isDarkMode$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((isDark) => {
-        const textColor = isDark ? '#FFFFFF' : '#000000';
+  chartOptions: Partial<ChartOptions> = {
+    chart: {
+      type: 'bar',
+      height: 245,
+      stacked: true,
+      parentHeightOffset: 0,
+      toolbar: {
+        show: false,
+      },
+    },
 
-        this.chartOptions = {
-          ...this.chartOptions,
-          dataLabels: {
-            ...this.chartOptions.dataLabels,
-            style: {
-              ...this.chartOptions.dataLabels?.style,
-              colors: [textColor],
-            },
-          },
-          yaxis: {
-            ...this.chartOptions.yaxis,
-            labels: {
-              style: { colors: textColor },
-            },
-          },
-          legend: {
-            ...this.chartOptions.legend,
-            labels: { colors: textColor },
-          },
-        };
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '40%',
+        borderRadius: 6,
+      },
+    },
 
-        // ✅ LIVE UPDATE
-        if (this.viewReady && this.chart) {
-          this.chart.updateOptions(
-            {
-              dataLabels: {
-                style: { colors: [textColor] },
-              },
-              yaxis: {
-                labels: { style: { colors: textColor } },
-              },
-              legend: {
-                labels: { colors: textColor },
-              },
-            },
-            true,
-            true,
-          );
-        }
-      });
+    dataLabels: {
+      enabled: false,
+    },
+
+    grid: {
+      show: true,
+      borderColor: '#e5e7eb',
+      strokeDashArray: 0,
+      xaxis: {
+        lines: {
+          show: false,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+    },
+
+    tooltip: {
+      enabled: true,
+      x: {
+        formatter: (value: any) => `${value ?? ''}`,
+      },
+    },
+
+    xaxis: {
+      categories: [],
+      labels: {
+        rotate: -35,
+        rotateAlways: true,
+        trim: true,
+        maxHeight: 60,
+        formatter: this.formatCategoryLabel,
+        style: {
+          fontSize: '11px',
+        },
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
+
+    yaxis: {
+      min: 0,
+      max: 20,
+      tickAmount: 1,
+      labels: {
+        formatter: (value: number) => `${Math.round(value)}`,
+      },
+    },
+
+    colors: ['#2C7AFF', '#00BEDB'],
+
+    legend: {
+      position: 'top',
+      horizontalAlign: 'center',
+    },
+  };
+
+  currentPage = 1;
+  totalPages = 1;
+  limit = 5;
+
+  ngOnInit(): void {
+    this.getDashboardPropertyOwned();
   }
 
-  ngAfterViewInit() {
-    this.viewReady = true;
+  getDashboardPropertyOwned(): void {
+    const params = {
+      page: this.currentPage,
+      limit: this.limit,
+    };
+
+    this.homeService.getDashboardPropertyOwned(params).subscribe({
+      next: (res: any) => {
+        const content = res?.content;
+        const data = content?.properties ?? [];
+
+        this.totalPages = content?.pagination?.total_pages ?? 1;
+        this.totalRecords = content?.pagination?.total_records ?? 0;
+
+        this.properties = [...data];
+
+        // chart update
+        this.chartCategories = data.map((x: any) => x.property_name);
+
+        this.chartSeries = [
+          {
+            name: 'Rented Units',
+            data: data.map((x: any) => x.rented_units),
+          },
+          {
+            name: 'Vacant Units',
+            data: data.map((x: any) => x.vacant_units),
+          },
+        ];
+
+        setTimeout(() => {
+          const yAxisMax = this.getYAxisMax(data);
+
+          this.chartSeries = [...this.chartSeries];
+          this.chartCategories = [...this.chartCategories];
+          this.chartOptions = {
+            ...this.chartOptions,
+            xaxis: {
+              ...this.chartOptions.xaxis,
+              categories: this.chartCategories,
+            },
+            yaxis: {
+              ...this.chartOptions.yaxis,
+              min: 0,
+              max: yAxisMax,
+              tickAmount: yAxisMax / 20,
+            },
+          };
+        }, 0);
+      },
+
+      error: (err) => {
+        console.error('API error:', err);
+      },
+    });
+  }
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.getDashboardPropertyOwned();
+    }
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.getDashboardPropertyOwned();
+    }
   }
 }
