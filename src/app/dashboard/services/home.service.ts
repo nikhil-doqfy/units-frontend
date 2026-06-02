@@ -45,6 +45,18 @@ export class HomeService {
       params,
     });
   }
+  getDashboardVisualization(params?: any): Observable<any> {
+    return this.http.get<any>(
+      `${this.SERVER_ADDRESS}/dashboard_visualization`,
+      { params },
+    );
+  }
+  saveDashboardVisualization(payload: any) {
+    return this.http.post(
+      `${this.SERVER_ADDRESS}/dashboard_visualization`,
+      payload,
+    );
+  }
 
   getDashboardPropertyOwned(params?: any): Observable<any> {
     return this.http.get<any>(

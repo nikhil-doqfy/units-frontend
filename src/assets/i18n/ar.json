@@ -790,5 +790,14 @@
   "NO_UNREAD_NOTIFICATIONS": "لا توجد إشعارات غير مقروءة",
   "CLEARED": "مسح",
   "NO_CLEARED_NOTIFICATIONS": "لا توجد دعوات مُعتمدة",
-  "CLEARED_INVITATIONS": "سيتم سيتم الاحتفاظ بالدعوات التي تمت الموافقة عليها لمدة 30 يومًا"
+  "CLEARED_INVITATIONS": "سيتم سيتم الاحتفاظ بالدعوات التي تمت الموافقة عليها لمدة 30 يومًا",
+  "STATISTICS": "إحصائيات",
+  "OVERVIEW": "نظرة عامة",
+  "TOP_REVENUE_PROPERTIES": "أفضل العقارات من حيث الإيرادات",
+  "MONTHLY_REVENUE": "الإيرادات الشهرية",
+  "CHEQUE_VISIBILITY": "رؤية الشيكات",
+  "OTHER_TYPE_PAYMENTS": "أنواع أخرى من المدفوعات",
+  "YEARLY_DUES": "الرسوم السنوية",
+  "PROPERTY_OWNED": "العقارات المملوكة",
+  "CHEQUE_AGING": "شيخوخة الشيكات"
 }
