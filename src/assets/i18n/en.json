@@ -794,5 +794,14 @@
   "NO_UNREAD_NOTIFICATIONS": "No unread notifications",
   "CLEARED": "Cleared",
   "NO_CLEARED_NOTIFICATIONS": "No cleared Invitations",
-  "CLEARED_INVITATIONS": "Cleared invitations will be retained for 30 days from the date of rejection."
+  "CLEARED_INVITATIONS": "Cleared invitations will be retained for 30 days from the date of rejection.",
+  "STATISTICS": "Statistics",
+  "OVERVIEW": "Overview",
+  "TOP_REVENUE_PROPERTIES": "Top Revenue Properties",
+  "MONTHLY_REVENUE": "Monthly Revenue",
+  "CHEQUE_VISIBILITY": "Cheque Visibility",
+  "OTHER_TYPE_PAYMENTS": "Other Types Payments",
+  "YEARLY_DUES": "Yearly Dues",
+  "PROPERTY_OWNED": "Property Owned",
+  "CHEQUE_AGING": "Cheque Aging"
 }

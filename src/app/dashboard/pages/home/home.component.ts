@@ -66,6 +66,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
     LineChartComponent,
     TranslateModule,
     NoDataComponent,
+    FormsModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -93,10 +94,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
   chequeList: any[] = [];
   selectedProperty: any = null;
   selectedUnit: any = null;
-
+  visualizations: any[] = [];
+  dashboardVisualizationData: any;
   monthlyRevenue: any[] = [];
   totalRevenue = 0;
   totalAmount = 0;
+  paymentTotalRevenue = 0;
+  showStatsDropdown = false;
+
+  showMonthlyCommission = true;
+  showProperties = true;
+  showTenants = true;
+
   duesOverall = { total_amount: 0, received_amount: 0, due_amount: 0 };
   mrr = 0;
   occupancyOptions: any[] = [];
@@ -207,16 +216,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .subscribe((data) => (this.breadcrumbData = data));
   }
 
-  paymentTotalRevenue = 0;
-  showStatsDropdown = false;
-
-  showMonthlyCommission = true;
-  showProperties = true;
-  showTenants = true;
-
-  toggleStatsDropdown() {
-    this.showStatsDropdown = !this.showStatsDropdown;
-  }
   loadPayments(params?: any) {
     this.homeService.getOtherTypePayments(params).subscribe((res) => {
       this.monthlyData = res.content.monthly_data || [];
@@ -884,5 +883,49 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.tableMaxHeight = `${Math.max(height, 250)}px`;
 
     this.cd.detectChanges();
+  }
+
+  // is visualization part
+  toggleStatsDropdown() {
+    this.showStatsDropdown = !this.showStatsDropdown;
+
+    if (this.showStatsDropdown) {
+      this.getDashboardVisualization();
+    }
+  }
+  getDashboardVisualization() {
+    this.homeService.getDashboardVisualization().subscribe({
+      next: (res) => {
+        console.log('Dashboard Visualization:', res);
+        this.dashboardVisualizationData = res;
+        this.visualizations = res.content.all_visualizations;
+      },
+      error: (err) => {
+        console.error('Error:', err);
+      },
+    });
+  }
+
+  updateVisualization() {
+    console.log('Visualizations before payload:', this.visualizations);
+
+    const payload = {
+      visualizations: this.visualizations
+        .filter((item) => item.is_visible)
+        .map((item) => item.key),
+    };
+
+    console.log('Payload:', payload);
+
+    this.homeService.saveDashboardVisualization(payload).subscribe({
+      next: (res) => {
+        console.log('Save Response:', res);
+      },
+    });
+  }
+  isVisible(key: string): boolean {
+    return this.visualizations.some(
+      (item) => item.key === key && item.is_visible,
+    );
   }
 }
