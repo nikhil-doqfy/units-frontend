@@ -154,7 +154,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     console.log('monthlyRevenue:', this.monthlyRevenue);
-
+    this.getDashboardVisualization();
     this.totalRevenue = this.monthlyRevenue.reduce(
       (sum, item) => sum + (item.total_revenue || 0),
       0,
@@ -888,10 +888,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // is visualization part
   toggleStatsDropdown() {
     this.showStatsDropdown = !this.showStatsDropdown;
-
-    if (this.showStatsDropdown) {
-      this.getDashboardVisualization();
-    }
   }
   getDashboardVisualization() {
     this.homeService.getDashboardVisualization().subscribe({
