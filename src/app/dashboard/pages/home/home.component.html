@@ -11,7 +11,7 @@
       </button>
 
       <div class="stats-dropdown" *ngIf="showStatsDropdown">
-        <label *ngFor="let item of visualizations">
+        <label *ngFor="let item of visualization">
           <input
             type="checkbox"
             [(ngModel)]="item.is_visible"

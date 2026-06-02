@@ -94,7 +94,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   chequeList: any[] = [];
   selectedProperty: any = null;
   selectedUnit: any = null;
-  visualizations: any[] = [];
+  visualization: any[] = [];
   dashboardVisualizationData: any;
   monthlyRevenue: any[] = [];
   totalRevenue = 0;
@@ -898,7 +898,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       next: (res) => {
         console.log('Dashboard Visualization:', res);
         this.dashboardVisualizationData = res;
-        this.visualizations = res.content.all_visualizations;
+        this.visualization = res.content.all_visualizations;
       },
       error: (err) => {
         console.error('Error:', err);
@@ -907,10 +907,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   updateVisualization() {
-    console.log('Visualizations before payload:', this.visualizations);
+    console.log('Visualizations before payload:', this.visualization);
 
     const payload = {
-      visualizations: this.visualizations
+      visualization: this.visualization
         .filter((item) => item.is_visible)
         .map((item) => item.key),
     };
@@ -920,11 +920,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.homeService.saveDashboardVisualization(payload).subscribe({
       next: (res) => {
         console.log('Save Response:', res);
+        this.getDashboardVisualization();
       },
     });
   }
   isVisible(key: string): boolean {
-    return this.visualizations.some(
+    return this.visualization.some(
       (item) => item.key === key && item.is_visible,
     );
   }
