@@ -1,9 +1,22 @@
-import { Component, DestroyRef, ElementRef, HostListener, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  HostListener,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subject, of } from 'rxjs';
-import { filter, debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import {
+  filter,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  catchError,
+} from 'rxjs/operators';
 import { ThemeService, UserRole } from '../../theme.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -84,7 +97,7 @@ export class SidebarComponent implements OnInit {
   openSidebarValue = true;
   currentRoute: string = '/';
   currentLanguage = 'en';
-
+  complaintCount = 0;
   searchQuery = '';
   searchResults: any[] = [];
   isSearching = false;
@@ -93,9 +106,9 @@ export class SidebarComponent implements OnInit {
 
   private readonly routeMap: Record<string, (id: number) => string> = {
     property: (id) => `/dashboard/properties/${id}`,
-    unit:     (id) => `/dashboard/units/${id}`,
-    owner:    (id) => `/dashboard/owners/detail/${id}`,
-    tenant:   (id) => `/dashboard/tenants/detail/${id}`,
+    unit: (id) => `/dashboard/units/${id}`,
+    owner: (id) => `/dashboard/owners/detail/${id}`,
+    tenant: (id) => `/dashboard/tenants/detail/${id}`,
   };
 
   constructor(
@@ -107,7 +120,9 @@ export class SidebarComponent implements OnInit {
   ) {
     this.router.events
       .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((event: NavigationEnd) => {
@@ -126,36 +141,51 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sharedService.complaintCount$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((count) => {
+        this.complaintCount = count;
+      });
+
     this.sharedService.openSidebarValue$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => { this.openSidebarValue = value; });
+      .subscribe((value) => {
+        this.openSidebarValue = value;
+      });
 
     this.themeService.currentRole$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((role) => { this.currentRole = role; });
+      .subscribe((role) => {
+        this.currentRole = role;
+      });
 
-    this.searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap((q) => {
-        if (!q || q.length < 2) {
-          this.searchResults = [];
-          this.showSearchDropdown = false;
-          this.isSearching = false;
-          return of(null);
-        }
-        this.isSearching = true;
-        return this.globalSearchService.search(q).pipe(
-          catchError(() => { this.isSearching = false; return of(null); })
-        );
-      }),
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe((res: any) => {
-      this.isSearching = false;
-      if (res === null) return;
-      this.searchResults = res?.content?.results ?? [];
-      this.showSearchDropdown = true;
-    });
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((q) => {
+          if (!q || q.length < 2) {
+            this.searchResults = [];
+            this.showSearchDropdown = false;
+            this.isSearching = false;
+            return of(null);
+          }
+          this.isSearching = true;
+          return this.globalSearchService.search(q).pipe(
+            catchError(() => {
+              this.isSearching = false;
+              return of(null);
+            }),
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((res: any) => {
+        this.isSearching = false;
+        if (res === null) return;
+        this.searchResults = res?.content?.results ?? [];
+        this.showSearchDropdown = true;
+      });
   }
 
   get groupedResults(): { type: string; items: any[] }[] {

@@ -1,0 +1,116 @@
+<form class="commonForm" [formGroup]="complaintForm">
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Unit ID<span>*</span></label>
+      <input
+        type="number"
+        class="form-control"
+        [class.is-invalid]="isInvalid(complaintForm, 'unit_id').status"
+        placeholder="1"
+        formControlName="unit_id"
+      />
+      @if (isInvalid(complaintForm, "unit_id").status) {
+        <small class="errorMsg">{{
+          isInvalid(complaintForm, "unit_id").msg
+        }}</small>
+      }
+    </div>
+
+    <div class="col-md-6">
+      <app-form-select-field
+        label="Service Type"
+        [required]="true"
+        [options]="serviceTypeOptions"
+        [form]="complaintForm"
+        controlName="service_type"
+        [placeholder]="'SELECT_OPTION' | translate"
+        (optionSelected)="
+          complaintForm.patchValue({ service_type: $event?.key })
+        "
+      ></app-form-select-field>
+    </div>
+
+    <div class="col-md-6">
+      <app-form-select-field
+        label="Priority"
+        [required]="true"
+        [options]="priorityOptions"
+        [form]="complaintForm"
+        controlName="priority"
+        [placeholder]="'SELECT_OPTION' | translate"
+        (optionSelected)="complaintForm.patchValue({ priority: $event?.key })"
+      ></app-form-select-field>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Note</label>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Please bring tools"
+        formControlName="note"
+      />
+    </div>
+
+    <div class="col-12">
+      <label class="form-label"
+        >{{ "DESCRIPTION" | translate }}<span>*</span></label
+      >
+      <textarea
+        rows="3"
+        class="form-control"
+        [class.is-invalid]="isInvalid(complaintForm, 'description').status"
+        placeholder="Electrical wiring issue"
+        formControlName="description"
+      ></textarea>
+      @if (isInvalid(complaintForm, "description").status) {
+        <small class="errorMsg">{{
+          isInvalid(complaintForm, "description").msg
+        }}</small>
+      }
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Slot 1<span>*</span></label>
+      <input
+        type="date"
+        class="form-control"
+        [class.is-invalid]="isInvalid(complaintForm, 'slot_1').status"
+        formControlName="slot_1"
+      />
+      @if (isInvalid(complaintForm, "slot_1").status) {
+        <small class="errorMsg">{{
+          isInvalid(complaintForm, "slot_1").msg
+        }}</small>
+      }
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Slot 2</label>
+      <input type="date" class="form-control" formControlName="slot_2" />
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Slot 3</label>
+      <input type="date" class="form-control" formControlName="slot_3" />
+    </div>
+
+    <div class="col-12">
+      <label class="form-label">Upload Images</label>
+      <app-upload-document
+        [isMultipleFiles]="true"
+        [fileTypes]="['jpg', 'jpeg', 'png']"
+        [maxSize]="20"
+        (uploadProgress)="onImageUpload($event)"
+      ></app-upload-document>
+
+      <div class="uploads-list mt-3" *ngIf="uploadedImages.length">
+        <app-file-upload-item
+          *ngFor="let image of uploadedImages"
+          [item]="image"
+          (remove)="removeImage(image.tempId)"
+        ></app-file-upload-item>
+      </div>
+    </div>
+  </div>
+</form>

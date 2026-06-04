@@ -799,5 +799,8 @@
   "OTHER_TYPE_PAYMENTS": "أنواع أخرى من المدفوعات",
   "YEARLY_DUES": "الرسوم السنوية",
   "PROPERTY_OWNED": "العقارات المملوكة",
-  "CHEQUE_AGING": "شيخوخة الشيكات"
+  "CHEQUE_AGING": "شيخوخة الشيكات",
+  "ADD_COMPLAINT": "إضافة شكوى",
+  "EDIT_COMPLAINT": "تحرير الشكوى",
+  "UPDATE_COMPLAINT": "تحديث الشكوى"
 }

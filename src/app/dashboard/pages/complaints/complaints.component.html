@@ -25,6 +25,12 @@
           <h4>{{ summary.total_rejected }}</h4>
           <h6>{{ "REJECTED" | translate }}</h6>
         </div>
+        <button
+          class="btn btnCommon btnPrimary complaintBtn"
+          (click)="openComplaintModal()"
+        >
+          {{ "NEW_COMPLAINT" | translate }}
+        </button>
       </div>
 
       <ng-container *ngIf="isOwnerOrPmc" card-actions>
@@ -200,14 +206,14 @@
             @for (item of complaints; track $index) {
               <tr>
                 <td>{{ $index + 1 }}</td>
-                <td>{{ item.complaint_id || "N/A" }}</td>
+                <td>{{ item.id || "N/A" }}</td>
                 <td>
                   <app-table-img-item
                     [img]="
                       item?.raised_by_image ??
                       '../../../../assets/userDefaultProImg.png'
                     "
-                    [title]="item.property_unit_name || 'N/A'"
+                    [title]="item.unit?.property_name || 'N/A'"
                     [clickable]="true"
                     (clicked)="handleViewClick(item)"
                   />
@@ -216,19 +222,25 @@
                 <td>
                   <app-table-img-item
                     [img]="
-                      item?.raised_by_image ??
+                      item?.raised_by?.profile_image ??
                       '../../../../assets/userDefaultProImg.png'
                     "
-                    [title]="item.raised_by_name || 'N/A'"
+                    [title]="item.raised_by?.name || 'N/A'"
                   />
                 </td>
-                <td>{{ item.raised_date | date: "dd/mm/yyyy" : "-" }}</td>
+                <td>
+                  {{
+                    item.created
+                      ? (item.created * 1000 | date: "dd/MM/yyyy")
+                      : "N/A"
+                  }}
+                </td>
                 <td>
                   {{ item.description || "N/A" }}
                 </td>
                 <td>
                   <app-ticket-aging
-                    [duration]="'3d, 6hr:30sec'"
+                    [duration]="item.ticket_aging || '0d, 0hr'"
                     status="success"
                   >
                   </app-ticket-aging>
@@ -237,7 +249,9 @@
                 </td>
                 <td>
                   <app-table-multi-img-item
-                    [images]="[item.property_image || 'N/A']"
+                    [images]="
+                      item.images && item.images[0] ? [item.images[0].url] : []
+                    "
                     size="md"
                   ></app-table-multi-img-item>
                 </td>
@@ -254,6 +268,13 @@
 
                     <app-table-action-btn type="preview" />
                     <app-table-action-btn type="disable" />
+                    <app-edit-icon
+                      type="edit"
+                      (click)="openEditComplaint(item)"
+                    ></app-edit-icon>
+                    <app-delete-icon
+                      (click)="onDeleteClick(item)"
+                    ></app-delete-icon>
                   </div>
                 </td>
               </tr>
@@ -596,3 +617,52 @@
     </div>
   </div>
 </ng-container>
+<!--ADD Complint Model -->
+<ng-template #addComplaintContent let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title">
+      {{
+        isEditMode
+          ? ("EDIT_COMPLAINT" | translate)
+          : ("ADD_COMPLAINT" | translate)
+      }}
+    </h6>
+
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <app-add-complaints
+      #addComplaintComponent
+      [complaintData]="selectedComplaint"
+      (formSubmitted)="onComplaintCreated($event, modal)"
+    >
+    </app-add-complaints>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss()"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="addComplaintComponent.submitForm()"
+    >
+      {{
+        isEditMode
+          ? ("UPDATE_COMPLAINT" | translate)
+          : ("CREATE_COMPLAINT" | translate)
+      }}
+    </button>
+  </div>
+</ng-template>

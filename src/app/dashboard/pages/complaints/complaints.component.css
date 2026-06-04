@@ -18,8 +18,14 @@
   align-items: center;
   gap: 48px;
   flex-wrap: wrap;
+  flex: 1;
+  width: 100%;
 }
 
+.complaintBtn {
+  margin-left: auto;
+  white-space: nowrap;
+}
 .statItem h4 {
   font-size: 18px;
   font-weight: 600;
