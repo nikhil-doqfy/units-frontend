@@ -26,6 +26,9 @@ export class SharedService {
 
   breadcrumb$ = new BehaviorSubject<{ label: string; link: string }[]>([]);
   http: any;
+  private complaintCountSubject = new BehaviorSubject<number>(0);
+
+  complaintCount$ = this.complaintCountSubject.asObservable();
 
   constructor() {
     const lang = this.getCurrentLanguage();
@@ -65,6 +68,9 @@ export class SharedService {
     }
   }
 
+  setComplaintCount(count: number) {
+    this.complaintCountSubject.next(count);
+  }
   // Toggle the sidebar open/close
   toggleSidebar() {
     const currentValue = this.openSidebarValueSource.value;

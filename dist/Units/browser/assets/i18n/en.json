@@ -803,5 +803,8 @@
   "OTHER_TYPE_PAYMENTS": "Other Types Payments",
   "YEARLY_DUES": "Yearly Dues",
   "PROPERTY_OWNED": "Property Owned",
-  "CHEQUE_AGING": "Cheque Aging"
+  "CHEQUE_AGING": "Cheque Aging",
+  "ADD_COMPLAINT": "Add Complaint",
+  "EDIT_COMPLAINT": "Edit Complaint",
+  "UPDATE_COMPLAINT": "Update Complaint"
 }

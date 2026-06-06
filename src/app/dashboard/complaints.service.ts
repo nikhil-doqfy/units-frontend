@@ -32,10 +32,27 @@ export class ComplaintsService {
 
     return this.http.get(`${this.SERVER_ADDRESS}/complaint`, { params });
   }
+  createComplaint(payload: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/complaint`, payload);
+  }
   getTicketsDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
       `${this.SERVER_ADDRESS}/admin/tickets/detail/${queryString}`,
     );
+  }
+  updateComplaint(code: string, payload: any): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/complaint`, payload, {
+      params: {
+        code: code,
+      },
+    });
+  }
+  deleteComplaint(code: string): Observable<any> {
+    return this.http.delete(`${this.SERVER_ADDRESS}/complaint`, {
+      params: {
+        code: code,
+      },
+    });
   }
 }
