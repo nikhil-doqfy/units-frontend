@@ -1004,9 +1004,10 @@
   color: var(--textPrimary);
 }
 .modal-header {
-  padding: 0;
+  padding: 13px;
   gap: 8px;
 }
+
 .right-side-modal .modal-content {
   height: 100vh;
   border-radius: 12px 0 0 12px;

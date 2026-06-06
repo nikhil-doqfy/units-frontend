@@ -41,6 +41,10 @@ import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.co
 import { RefreshIconComponent } from '../../component/icons/refresh-icon/refresh-icon.component';
 import { SortingIconComponent } from '../../component/icons/sorting-icon/sorting-icon.component';
 import { TicketAgingComponent } from '../../../ticket-aging/ticket-aging.component';
+import { AddComplaintsComponent } from '../../component/forms/add-complaints/add-complaints.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
+import { DeleteIconComponent } from '../../component/icons/delete-icon/delete-icon.component';
 
 @Component({
   selector: 'app-complaints',
@@ -71,24 +75,37 @@ import { TicketAgingComponent } from '../../../ticket-aging/ticket-aging.compone
     SortingIconComponent,
     TranslateModule,
     TicketAgingComponent,
+    AddComplaintsComponent,
+    CommonModule,
+    EditIconComponent,
+    DeleteIconComponent,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',
 })
 export class ComplaintsComponent {
   @ViewChild('searchComp') searchComp!: any;
+  @ViewChild('addComplaintContent')
+  addComplaintContent!: AddComplaintsComponent;
+  @ViewChild(AddComplaintsComponent)
+  addComplaintComponent!: AddComplaintsComponent;
   private sharedService = inject(SharedService);
   private alertService = inject(AlertService);
   private complaintService = inject(ComplaintsService);
+
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private sharedApiService = inject(SharedApiService);
   private onComplaintsSearch$ = new Subject<string>();
   private USER_ROLE = 'userRole';
+  private modalService = inject(NgbModal);
   totalRecords: number = 0;
   rowsPerPage: number = 10;
   currentPage: number = 1;
+  selectedComplaintForEdit: any = null;
+  isEditMode = false;
+  selectedComplaint: any = null;
   selectedProperty: any = null;
   @ViewChild('ticketFilterPopup')
   ticketFilterPopup!: FilterPopupButtonComponent;
@@ -222,8 +239,9 @@ export class ComplaintsComponent {
 
     this.complaintService.getTickets(params).subscribe({
       next: (res) => {
-        this.complaints = res.content?.complaints || [];
+        this.complaints = res.content || [];
         this.totalRecords = res?.pagination?.total_records ?? 0;
+        this.sharedService.setComplaintCount(this.totalRecords);
         if (res?.content?.summary) {
           this.summary = res.content.summary;
         }
@@ -320,12 +338,25 @@ export class ComplaintsComponent {
     return this.role === 'TENANT';
   }
 
-  openComplaintModal() {
-    this.showComplaintModal = true;
-  }
-
   closeComplaintModal() {
     this.showComplaintModal = false;
+  }
+  openComplaintModal() {
+    this.isEditMode = false;
+    this.selectedComplaint = null;
+
+    const modalRef = this.modalService.open(this.addComplaintContent, {
+      centered: true,
+      size: 'lg',
+      backdrop: true,
+    });
+  }
+
+  onComplaintCreated(success: boolean, modal: any): void {
+    if (!success) return;
+
+    modal.close('Complaint created');
+    this.getTickets();
   }
 
   //--------------------------------------------complaint details--------------------------------------------------------------------
@@ -340,4 +371,31 @@ export class ComplaintsComponent {
         error: (err) => console.error('Detail API Error:', err),
       });
   }
+  //------Edit Complaint model--------------
+
+  openEditComplaint(item: any) {
+    this.isEditMode = true;
+    this.selectedComplaint = item;
+
+    const modalRef = this.modalService.open(this.addComplaintContent, {
+      centered: true,
+      size: 'lg',
+      backdrop: true,
+      windowClass: 'complaint-modal-window',
+    });
+  }
+  onDeleteClick(item: any): void {
+    if (!item?.code) return;
+
+    if (!confirm('Are you sure you want to delete this complaint?')) return;
+
+    this.complaintService.deleteComplaint(item.code).subscribe({
+      next: () => {
+        this.getTickets(); // refresh list
+      },
+      error: (err) => console.error(err),
+    });
+  }
 }
+
+/*------complait-detail-----*/

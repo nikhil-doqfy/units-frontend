@@ -102,7 +102,7 @@
         <app-sidebar-item
           title="{{ 'PAGE_TITLE.COMPLAINTS' | translate }}"
           href="/dashboard/complaints"
-          [count]="243"
+          [count]="complaintCount"
         >
           <app-raise-complaint-icon></app-raise-complaint-icon>
         </app-sidebar-item>
@@ -180,7 +180,7 @@
           *ngIf="canAccess('Complaints')"
           title="{{ 'PAGE_TITLE.COMPLAINTS' | translate }}"
           href="/dashboard/complaints"
-          [count]="243"
+          [count]="complaintCount"
         >
           <app-raise-complaint-icon></app-raise-complaint-icon>
         </app-sidebar-item>
