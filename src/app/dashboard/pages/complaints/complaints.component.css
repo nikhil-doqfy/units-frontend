@@ -433,12 +433,6 @@ a .simple {
   position: absolute;
   right: 16px;
   top: 15px;
-  background: var(--timeline-bg);
-  color: var(--timeline-text);
-  font-size: 12px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-weight: 500;
 }
 
 .timeline-line {

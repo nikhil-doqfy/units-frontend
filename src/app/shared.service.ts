@@ -29,6 +29,9 @@ export class SharedService {
   private complaintCountSubject = new BehaviorSubject<number>(0);
 
   complaintCount$ = this.complaintCountSubject.asObservable();
+  private leadsCountSubject = new BehaviorSubject<number>(0);
+
+  leadsCount$ = this.leadsCountSubject.asObservable();
 
   constructor() {
     const lang = this.getCurrentLanguage();
@@ -68,6 +71,9 @@ export class SharedService {
     }
   }
 
+  setLeadsCount(count: number) {
+    this.leadsCountSubject.next(count);
+  }
   setComplaintCount(count: number) {
     this.complaintCountSubject.next(count);
   }

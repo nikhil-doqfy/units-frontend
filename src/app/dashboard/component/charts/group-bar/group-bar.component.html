@@ -14,8 +14,8 @@
   <div class="chart-pagination">
     <button
       class="page-btn"
-      (click)="previousPage()"
       [disabled]="currentPage === 1"
+      (click)="previousPage()"
     >
       ‹
     </button>
@@ -24,8 +24,8 @@
 
     <button
       class="page-btn"
-      (click)="nextPage()"
       [disabled]="currentPage === totalPages"
+      (click)="nextPage()"
     >
       ›
     </button>

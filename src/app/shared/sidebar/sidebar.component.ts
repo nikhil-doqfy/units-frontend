@@ -98,6 +98,7 @@ export class SidebarComponent implements OnInit {
   currentRoute: string = '/';
   currentLanguage = 'en';
   complaintCount = 0;
+  leadsCount = 0;
   searchQuery = '';
   searchResults: any[] = [];
   isSearching = false;
@@ -141,6 +142,9 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sharedService.leadsCount$.subscribe((count) => {
+      this.leadsCount = count;
+    });
     this.sharedService.complaintCount$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((count) => {
