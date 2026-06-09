@@ -250,8 +250,8 @@
           </app-custom-select>
         </ng-container>
         <app-donut-chart
-          [vacancy]="stats?.occupancy_data?.vacant_percent || 0"
-          [occupied]="stats?.occupancy_data?.occupied_percent || 0"
+          [vacancy]="occupancyVacancy"
+          [occupied]="occupancyOccupied"
         ></app-donut-chart>
       </app-white-card>
     </div>
@@ -625,7 +625,12 @@
           >
           </app-custom-select>
         </ng-container> -->
-        <app-group-bar-chart></app-group-bar-chart>
+        <app-group-bar-chart
+          [properties]="propertyOwnedData"
+          [currentPage]="currentPage"
+          [totalPages]="totalPages"
+          (pageChange)="onPageChange($event)"
+        ></app-group-bar-chart>
       </app-white-card>
     </div>
     <div class="col-lg-7" *ngIf="isVisible('OTHER_TYPE_PAYMENTS')">

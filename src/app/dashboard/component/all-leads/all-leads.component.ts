@@ -164,6 +164,7 @@ export class AllLeadsComponent implements OnInit {
     this.leadsService.getLeads(this.buildParams()).subscribe({
       next: (resp: any) => {
         this.leads = resp?.content || [];
+        this.sharedService.setLeadsCount(this.leads.length);
         this.totalRecords =
           resp?.pagination?.total_records ?? this.leads.length;
       },

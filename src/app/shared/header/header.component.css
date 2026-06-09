@@ -87,7 +87,7 @@
 
 .hdrDrpdwnMenu {
   padding: 0;
-  max-height: 300px;
+  max-height: 319px;
   border: 1px solid var(--muteBorder1);
   border-radius: 12px;
   box-shadow: 4px 4px 15px 0 #00000040;
@@ -258,7 +258,7 @@
   font-size: 14px;
   color: var(--greyText);
   font-weight: 400;
-  line-height: 40px;
+  line-height: 38px;
   display: flex;
   align-items: center;
   gap: 16px;

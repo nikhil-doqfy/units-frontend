@@ -111,10 +111,12 @@ export class ComplaintsComponent {
   ticketFilterPopup!: FilterPopupButtonComponent;
   showDetailView: boolean = false;
   showMenu = false;
+  timelineSummary: any[] = [];
   complaintsStatus: any = [];
   uploadedImages: any[] = [];
   complaints: any[] = [];
   searchTerm: string = '';
+  previousComplaints: any[] = [];
   selectedComplaintstatus: any = null;
   complaintFilter: Record<string, any> = {};
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
@@ -123,6 +125,8 @@ export class ComplaintsComponent {
   selected: string = 'Property: All';
   role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
   showComplaintModal = false;
+  showAllPhotos = false;
+
   complaintStats = [
     {
       value: '12000',
@@ -148,9 +152,9 @@ export class ComplaintsComponent {
 
   summary = {
     total_complaints: 0,
-    total_completed: 0,
-    total_in_progress: 0,
-    total_rejected: 0,
+    completed: 0,
+    in_progress: 0,
+    rejected: 0,
   };
   photos: string[] = [
     '../assets/complaint/complaint-3.png',
@@ -182,6 +186,14 @@ export class ComplaintsComponent {
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
+    } else {
+      this.showDetailView = false;
+      this.getTickets();
+    }
+    const code = this.route.snapshot.paramMap.get('code');
+    if (code) {
+      this.showDetailView = true;
+      this.loadComplaintDetailView(code);
     } else {
       this.showDetailView = false;
       this.getTickets();
@@ -242,18 +254,18 @@ export class ComplaintsComponent {
         this.complaints = res.content || [];
         this.totalRecords = res?.pagination?.total_records ?? 0;
         this.sharedService.setComplaintCount(this.totalRecords);
-        if (res?.content?.summary) {
-          this.summary = res.content.summary;
+        if (res?.pagination?.stats) {
+          this.summary = res?.pagination?.stats ?? this.summary;
         }
       },
 
       error: (err) => console.error('Error fetching complaints:', err),
     });
   }
-  handleViewClick(item: any): void {
-    this.selectedProperty = item;
-    this.showDetailView = true;
-  }
+  // handleViewClick(item: any): void {
+  //   this.selectedProperty = item;
+  //   this.showDetailView = true;
+  // }
   // handleViewClick(ticketID: number): void {
   //   // this.showDetailView = true;
   //   this.router.navigate(['/dashboard/ticket/detail/', ticketID]);
@@ -261,6 +273,7 @@ export class ComplaintsComponent {
   handleBackClick(): void {
     this.showDetailView = false;
     this.selectedProperty = null;
+    this.router.navigate(['/dashboard/complaints']);
   }
   searchTextChange(search: string): void {
     this.searchTerm = search;
@@ -396,6 +409,55 @@ export class ComplaintsComponent {
       error: (err) => console.error(err),
     });
   }
-}
+  /*------complait-detail-----*/
 
-/*------complait-detail-----*/
+  loadComplaintDetailView(code: string): void {
+    this.complaintService
+      .getComplaintDetails(code)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.selectedComplaint = resp?.content;
+          this.photos =
+            this.selectedComplaint?.images?.map(
+              (img: any) => img.image || img.url || img,
+            ) || [];
+          this.previousComplaints =
+            this.selectedComplaint?.previous_complaints || [];
+
+          this.timelineSummary = this.selectedComplaint?.timeline_summary || [];
+        },
+        error: (err) => console.error('Detail API Error:', err),
+      });
+  }
+  handleViewClick(item: any): void {
+    this.router.navigate(['/dashboard/complaints/detail', item.code]);
+  }
+  viewAllPhotos(): void {
+    this.showAllPhotos = true;
+  }
+  loadPreviousComplaints(): void {
+    this.loadComplaintDetailView(this.selectedComplaint.code);
+  }
+
+  buildParams(): Record<string, any> {
+    const params: Record<string, any> = {
+      page: this.currentPage,
+      limit: this.rowsPerPage,
+    };
+
+    if (this.searchTerm) {
+      params['search'] = this.searchTerm;
+    }
+
+    if (this.selectedComplaintstatus?.key) {
+      params['status'] = this.selectedComplaintstatus.key;
+    }
+
+    return params;
+  }
+  handleExport(): void {
+    const params = this.buildParams();
+    this.complaintService.exportPreviousComplaints(this.buildParams());
+  }
+}
