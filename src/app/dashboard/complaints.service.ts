@@ -42,10 +42,9 @@ export class ComplaintsService {
     );
   }
   updateComplaint(code: string, payload: any): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/complaint`, payload, {
-      params: {
-        code: code,
-      },
+    return this.http.put(`${this.SERVER_ADDRESS}/complaint`, {
+      ...payload,
+      code: code,
     });
   }
   deleteComplaint(code: string): Observable<any> {
@@ -54,5 +53,23 @@ export class ComplaintsService {
         code: code,
       },
     });
+  }
+  getComplaintDetails(code: string): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/complaint/detail`, {
+      params: { code },
+    });
+  }
+  exportPreviousComplaints(params: Record<string, any> = {}): void {
+    const queryString = this.sharedService.getQueryString({
+      ...params,
+      export: 'csv',
+    });
+    this.http
+      .get(`${this.SERVER_ADDRESS}/complaint${queryString}`, {
+        responseType: 'blob',
+      })
+      .subscribe((blob) => {
+        this.sharedService.downloadBlob(blob, 'complaints.csv');
+      });
   }
 }

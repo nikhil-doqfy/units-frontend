@@ -177,7 +177,10 @@ export const routes: Routes = [
       {
         path: 'rental',
         component: RentalComponent,
-        data: { titleKey: 'PAGE_TITLE.RENTAL_PORTFOLIO', module: 'Rental Portfolio' },
+        data: {
+          titleKey: 'PAGE_TITLE.RENTAL_PORTFOLIO',
+          module: 'Rental Portfolio',
+        },
         canActivate: [permissionGuard],
       },
       {
@@ -198,7 +201,7 @@ export const routes: Routes = [
         canActivate: [permissionGuard],
       },
       {
-        path: 'complaints/detail/:ticket_id',
+        path: 'complaints/detail/:code',
         component: ComplaintsComponent,
         data: { titleKey: 'PAGE_TITLE.COMPLAINTS', module: 'Complaints' },
         canActivate: [permissionGuard],
@@ -254,7 +257,10 @@ export const routes: Routes = [
       {
         path: 'roles-and-permissions',
         component: RolesAndPermissionsComponent,
-        data: { titleKey: 'PAGE_TITLE.ROLES_PERMISSIONS', module: 'Roles and Permission' },
+        data: {
+          titleKey: 'PAGE_TITLE.ROLES_PERMISSIONS',
+          module: 'Roles and Permission',
+        },
         canActivate: [permissionGuard],
       },
       {

@@ -64,4 +64,14 @@ export class HomeService {
       { params },
     );
   }
+  getTopRevenueProperties(params?: any): Observable<any> {
+    return this.http.get<any>(`${this.SERVER_ADDRESS}/top_revenue_properties`, {
+      params,
+    });
+  }
+  getOccupancyData(params?: any): Observable<any> {
+    return this.http.get<any>(`${this.SERVER_ADDRESS}/occupancy`, {
+      params,
+    });
+  }
 }
