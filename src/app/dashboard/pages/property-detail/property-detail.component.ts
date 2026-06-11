@@ -141,10 +141,7 @@ export class PropertyDetailComponent implements OnInit {
                   label: this.getLabel('PLOT_NO'),
                   value: prop.plot_no || '--',
                 },
-                {
-                  label: this.getLabel('MAKANI_NO'),
-                  value: prop.makani_no || '--',
-                },
+
                 {
                   label: this.getLabel('DEWA_NO'),
                   value: prop.dewa_no || '--',
@@ -178,6 +175,10 @@ export class PropertyDetailComponent implements OnInit {
                     {
                       label: this.getLabel('NO_OF_PARKING'),
                       value: String(b.no_of_parking ?? '--'),
+                    },
+                    {
+                      label: this.getLabel('MAKANI_NO'),
+                      value: b.makani_no || '--',
                     },
                     {
                       label: this.getLabel('NO_OF_UNITS'),

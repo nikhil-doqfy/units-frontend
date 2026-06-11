@@ -71,6 +71,8 @@ export class UnitsComponent implements OnInit {
   selectedAreaUnit: any = null;
   filterMinFloor: number | null = null;
   filterMaxFloor: number | null = null;
+  sortField: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
   // Filter options
   propertyOptions: { key: string; value: string }[] = [];
   bedroomOptions = Array.from({ length: 10 }, (_, i) => ({
@@ -234,5 +236,29 @@ export class UnitsComponent implements OnInit {
     this.selectedAreaUnit = null;
     this.filterAreaUnit = '';
     this.loadUnits();
+  }
+
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortOrder = 'asc';
+    }
+
+    this.units.sort((a: any, b: any) => {
+      const valueA = (a[field] || '').toString().toLowerCase();
+      const valueB = (b[field] || '').toString().toLowerCase();
+
+      if (valueA < valueB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+
+      if (valueA > valueB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
   }
 }
