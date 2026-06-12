@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
 import { PreviewIconComponent } from '../icons/preview-icon/preview-icon.component';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-property-accordian-card',
   standalone: true,
@@ -12,6 +13,7 @@ import { PreviewIconComponent } from '../icons/preview-icon/preview-icon.compone
     TranslateModule,
     EditIconComponent,
     PreviewIconComponent,
+    NgbTooltipModule,
   ],
   templateUrl: './property-accordian-card.component.html',
   styleUrl: './property-accordian-card.component.css',
