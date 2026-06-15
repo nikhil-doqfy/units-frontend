@@ -379,8 +379,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         error: (err) => console.error(err),
       });
   }
-  loadOccupancyData() {
-    this.homeService.getOccupancyData().subscribe({
+  loadOccupancyData(propertyId?: string) {
+    const params = propertyId ? { property_id: propertyId } : {};
+    this.homeService.getOccupancyData(params).subscribe({
       next: (res) => {
         const data = res?.content?.occupancy_data;
 
@@ -464,9 +465,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.selectedOccupancy = option;
 
     if (option.key === 'ALL') {
-      this.getStats();
+      this.loadOccupancyData();
     } else {
-      this.getStats(option.key);
+      this.loadOccupancyData(option.key);
     }
   }
 
@@ -948,7 +949,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
         console.log('Dashboard Visualization:', res);
         this.dashboardVisualizationData = res;
         this.visualization = res.content.all_visualizations || [];
+        this.cd.detectChanges();
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 50);
       },
+
       error: (err) => {
         console.error('Error:', err);
         this.visualization = [];

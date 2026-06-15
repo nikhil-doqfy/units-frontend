@@ -78,6 +78,7 @@ export class GroupBarChartComponent {
   }
 
   chartOptions: Partial<ChartOptions> = {
+    series: [],
     chart: {
       type: 'bar',
       height: 245,
@@ -163,6 +164,7 @@ export class GroupBarChartComponent {
     }
   }
   updateChart(data: any[]) {
+    if (!data || data.length === 0) return;
     this.totalRecords = data.length;
 
     this.chartCategories = data.map((x) => x.property_name);
@@ -170,11 +172,11 @@ export class GroupBarChartComponent {
     this.chartSeries = [
       {
         name: 'Rented Units',
-        data: data.map((x) => x.rented_units),
+        data: data.map((x) => Number(x.rented_units) || 0),
       },
       {
         name: 'Vacant Units',
-        data: data.map((x) => x.vacant_units),
+        data: data.map((x) => Number(x.vacant_units) || 0),
       },
     ];
 
@@ -182,6 +184,7 @@ export class GroupBarChartComponent {
 
     this.chartOptions = {
       ...this.chartOptions,
+      series: this.chartSeries,
       xaxis: {
         ...this.chartOptions.xaxis,
         categories: this.chartCategories,

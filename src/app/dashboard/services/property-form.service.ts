@@ -95,6 +95,7 @@ export class PropertyFormService {
       noOfFloors: [''],
       noOfParking: [''],
       noOfUnits: [''],
+      makaniNo: [''],
     });
   }
 
@@ -202,7 +203,8 @@ export class PropertyFormService {
         title: 'Commercial Details',
         formGroup: this.propertyCommercialsForm,
         load: (context) => this.getCommercialDetails(context),
-        save: (payload, context) => this.saveCommercialDetails(payload, context),
+        save: (payload, context) =>
+          this.saveCommercialDetails(payload, context),
         mapIn: (response) => this.patchCommercialDetails(response),
         mapOut: (value) => this.mapOutCommercialDetails(value),
       },
@@ -248,11 +250,15 @@ export class PropertyFormService {
   }
 
   getImageDetails(context: any) {
-    return this.propertyService.getPropertyImages({ property_id: context.formId });
+    return this.propertyService.getPropertyImages({
+      property_id: context.formId,
+    });
   }
 
   getDocumentDetails(context: any) {
-    return this.propertyService.getPropertyDocuments({ property_id: context.formId });
+    return this.propertyService.getPropertyDocuments({
+      property_id: context.formId,
+    });
   }
 
   saveBasicDetails(
@@ -291,10 +297,15 @@ export class PropertyFormService {
   }
 
   getBlocksDetails(context: any) {
-    return this.propertyService.getPropertyBlocks({ property_id: context.formId });
+    return this.propertyService.getPropertyBlocks({
+      property_id: context.formId,
+    });
   }
 
-  saveBlocksDetails(payload: Record<string, any>, context: any): Observable<any> {
+  saveBlocksDetails(
+    payload: Record<string, any>,
+    context: any,
+  ): Observable<any> {
     payload['property_id'] = context.formId;
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
@@ -330,6 +341,7 @@ export class PropertyFormService {
       no_of_floors: b.noOfFloors?.key ?? b.noOfFloors,
       no_of_parking: b.noOfParking?.key ?? b.noOfParking,
       no_of_units: b.noOfUnits?.key ?? b.noOfUnits,
+      makani_no: b.makaniNo,
     }));
     return { blocks };
   }
@@ -339,11 +351,23 @@ export class PropertyFormService {
 
     return {
       propertyName: content?.property_name,
-      noOfBlocks: { key: content?.no_of_blocks, value: String(content?.no_of_blocks ?? '') },
-      noOfUnits: { key: content?.no_of_units, value: String(content?.no_of_units ?? '') },
-      propertyType: { key: content?.property_type, value: content?.property_type },
+      noOfBlocks: {
+        key: content?.no_of_blocks,
+        value: String(content?.no_of_blocks ?? ''),
+      },
+      noOfUnits: {
+        key: content?.no_of_units,
+        value: String(content?.no_of_units ?? ''),
+      },
+      propertyType: {
+        key: content?.property_type,
+        value: content?.property_type,
+      },
       landArea: content?.land_area,
-      landAreaUnit: { key: content?.land_area_unit, value: content?.land_area_unit },
+      landAreaUnit: {
+        key: content?.land_area_unit,
+        value: content?.land_area_unit,
+      },
       landDmNo: content?.land_dm_no,
       plotNo: content?.plot_no,
       makaniNo: content?.makani_no,
