@@ -206,7 +206,7 @@
   cursor: pointer;
   transition: background 0.2s ease;
 }
-
+/* 
 .customSelectSearch .addBtn:hover {
   background: var(--addBtnHoverBg);
 }
@@ -230,7 +230,6 @@
   align-items: center;
 }
 
-/* input */
 .customSelectInput {
   background: var(--whiteBg);
   border: 1px solid var(--formBorder);
@@ -291,4 +290,4 @@
   height: 32px;
   border: 1px solid var(--formBorder);
   border-radius: 4px;
-}
+} */

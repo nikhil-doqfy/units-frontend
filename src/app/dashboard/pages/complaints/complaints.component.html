@@ -12,19 +12,25 @@
         </div>
 
         <div class="statItem">
-          <h4>{{ summary.total_completed }}</h4>
+          <h4>{{ summary.completed }}</h4>
           <h6>{{ "COMPLETED" | translate }}</h6>
         </div>
 
         <div class="statItem">
-          <h4>{{ summary.total_in_progress }}</h4>
+          <h4>{{ summary.in_progress }}</h4>
           <h6>{{ "IN-PROGRESS" | translate }}</h6>
         </div>
 
         <div class="statItem">
-          <h4>{{ summary.total_rejected }}</h4>
+          <h4>{{ summary.rejected }}</h4>
           <h6>{{ "REJECTED" | translate }}</h6>
         </div>
+        <button
+          class="btn btnCommon btnPrimary complaintBtn"
+          (click)="openComplaintModal()"
+        >
+          {{ "NEW_COMPLAINT" | translate }}
+        </button>
       </div>
 
       <ng-container *ngIf="isOwnerOrPmc" card-actions>
@@ -200,14 +206,14 @@
             @for (item of complaints; track $index) {
               <tr>
                 <td>{{ $index + 1 }}</td>
-                <td>{{ item.complaint_id || "N/A" }}</td>
+                <td>{{ item.id || "N/A" }}</td>
                 <td>
                   <app-table-img-item
                     [img]="
                       item?.raised_by_image ??
                       '../../../../assets/userDefaultProImg.png'
                     "
-                    [title]="item.property_unit_name || 'N/A'"
+                    [title]="item.unit?.property_name || 'N/A'"
                     [clickable]="true"
                     (clicked)="handleViewClick(item)"
                   />
@@ -216,19 +222,25 @@
                 <td>
                   <app-table-img-item
                     [img]="
-                      item?.raised_by_image ??
+                      item?.raised_by?.profile_image ??
                       '../../../../assets/userDefaultProImg.png'
                     "
-                    [title]="item.raised_by_name || 'N/A'"
+                    [title]="item.raised_by?.name || 'N/A'"
                   />
                 </td>
-                <td>{{ item.raised_date | date: "dd/mm/yyyy" : "-" }}</td>
+                <td>
+                  {{
+                    item.created
+                      ? (item.created * 1000 | date: "dd/MM/yyyy")
+                      : "N/A"
+                  }}
+                </td>
                 <td>
                   {{ item.description || "N/A" }}
                 </td>
                 <td>
                   <app-ticket-aging
-                    [duration]="'3d, 6hr:30sec'"
+                    [duration]="item.ticket_aging || '0d, 0hr'"
                     status="success"
                   >
                   </app-ticket-aging>
@@ -237,7 +249,9 @@
                 </td>
                 <td>
                   <app-table-multi-img-item
-                    [images]="[item.property_image || 'N/A']"
+                    [images]="
+                      item.images && item.images[0] ? [item.images[0].url] : []
+                    "
                     size="md"
                   ></app-table-multi-img-item>
                 </td>
@@ -254,6 +268,13 @@
 
                     <app-table-action-btn type="preview" />
                     <app-table-action-btn type="disable" />
+                    <app-edit-icon
+                      type="edit"
+                      (click)="openEditComplaint(item)"
+                    ></app-edit-icon>
+                    <app-delete-icon
+                      (click)="onDeleteClick(item)"
+                    ></app-delete-icon>
                   </div>
                 </td>
               </tr>
@@ -284,23 +305,49 @@
     </div>
   </div>
 </ng-container>
-<ng-container *ngIf="showDetailView">
+<ng-container *ngIf="showDetailView && selectedComplaint">
   <app-table-view-card
-    title=" Abhram | Khaleeja Building | 302 "
-    [imgSrc]="'assets/user/user-2.png'"
+    [title]="
+      (selectedComplaint?.raised_by?.name || '--') +
+      ' | ' +
+      (selectedComplaint?.unit?.property_name || '--') +
+      ' | ' +
+      (selectedComplaint?.unit?.unit_name || '--')
+    "
+    [imgSrc]="
+      selectedComplaint?.raised_by?.profile_image || 'assets/user/user-2.png'
+    "
     [items]="[
-      { label: getLabel('COMPLAINT_ID'), value: '#LP92201' },
-      { label: getLabel('RAISED_DATE'), value: '12/02/2024' },
-      { label: getLabel('ISSUE_CLOSED_ON'), value: '15/02/2024' },
-      { label: getLabel('LOCALITY'), value: '--' },
-      { label: getLabel('STATUS'), value: 'Completed' },
+      {
+        label: getLabel('COMPLAINT_ID'),
+        value: selectedComplaint?.code || '--',
+      },
+      {
+        label: getLabel('RAISED_DATE'),
+        value: (selectedComplaint?.created * 1000 | date: 'dd/MM/yyyy'),
+      },
+      {
+        label: getLabel('ISSUE_CLOSED_ON'),
+        value: selectedComplaint?.summary?.issue_closed_on
+          ? (selectedComplaint.summary.issue_closed_on * 1000
+            | date: 'dd/MM/yyyy')
+          : '--',
+      },
+      {
+        label: getLabel('LOCALITY'),
+        value: selectedComplaint?.locality || '--',
+      },
+      {
+        label: getLabel('STATUS'),
+        value: selectedComplaint?.status?.value || '--',
+      },
     ]"
     (back)="handleBackClick()"
   >
     <div rental class="other-charges-box mt-3">
       <p class="complaint-title">{{ "DESCRIPTION" | translate }}</p>
       <p class="complaint-description">
-        Faulty faucet in Kitchen, dripping constantly and needs repair
+        {{ selectedComplaint?.description || "--" }}
       </p>
     </div>
   </app-table-view-card>
@@ -308,41 +355,22 @@
   <div class="mt-3">
     <app-white-card title="Timeline">
       <div class="timeline-duration">
-        {{ "DURATION" | translate }}: 3d, 6hr:30sec
+        <app-ticket-aging
+          [duration]="selectedComplaint?.ticket_aging || '0d, 0hr'"
+          status="success"
+        ></app-ticket-aging>
       </div>
       <div class="timeline-wrapper">
         <div class="timeline-line">
-          <div class="timeline-step completed">
+          <div
+            class="timeline-step completed"
+            *ngFor="let item of timelineSummary"
+          >
             <span class="dot"></span>
             <div class="content">
-              <h6>{{ "ISSUE_RAISED" | translate }}</h6>
-              <p>13/02/2024 | 09:32pm</p>
-              <small>Abhram</small>
-            </div>
-          </div>
-
-          <div class="timeline-step completed">
-            <span class="dot"></span>
-            <div class="content">
-              <h6>{{ "ASSIGNED_ENGINEER" | translate }}</h6>
-              <p>13/02/2024 | 09:32pm</p>
-              <small>Mohammed Ibrahim</small>
-            </div>
-          </div>
-
-          <div class="timeline-step completed">
-            <span class="dot"></span>
-            <div class="content">
-              <h6>{{ "IN_PROGRESS" | translate }}</h6>
-              <p>13/02/2024 | 09:32pm</p>
-            </div>
-          </div>
-
-          <div class="timeline-step completed">
-            <span class="dot"></span>
-            <div class="content">
-              <h6>{{ "COMPLETED" | translate }}</h6>
-              <p>12/02/2024 | 09:32pm</p>
+              <h6>{{ item.title | translate }}</h6>
+              <p>{{ item.formatted_date }} | {{ item.formatted_time }}</p>
+              <small> {{ item.name }}</small>
             </div>
           </div>
         </div>
@@ -353,13 +381,23 @@
   <div class="mt-3">
     <app-white-card [title]="'PHOTOS' | translate">
       <div class="photos-row">
-        <div class="photo-thumb" *ngFor="let img of photos">
-          <img [src]="img" alt="photo" />
-        </div>
+        <ng-container *ngIf="!showAllPhotos">
+          <div class="photo-thumb" *ngFor="let img of photos | slice: 0 : 2">
+            <img [src]="img" alt="photo" />
+          </div>
 
-        <a class="view-all" href="javascript:void(0)">{{
-          "VIEW_ALL" | translate
-        }}</a>
+          <a class="view-all" (click)="viewAllPhotos()">{{
+            "VIEW_ALL" | translate
+          }}</a>
+        </ng-container>
+        <ng-container *ngIf="showAllPhotos">
+          <div class="photo-thumb" *ngFor="let img of photos">
+            <img [src]="img" alt="photo" />
+          </div>
+        </ng-container>
+        <ng-template #noPhotos>
+          <p class="text-muted mb-0">No Photos Available</p>
+        </ng-template>
       </div>
     </app-white-card>
   </div>
@@ -403,19 +441,63 @@
         <div class="col-md">
           <app-table-title
             [title]="'PREVIOUS_COMPLAINTS' | translate"
-            subtitle="(5)"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="loadPreviousComplaints()"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="Search here..." />
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-              (clicked)="handleExportClick()"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
+            <app-table-search
+              placeholder="Search here..."
+              #searchComp
+              (onValueChange)="searchTextChange($event)"
+            />
+            <app-filter-popup-btn #ticketFilterPopup>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{
+                        "COMPLAINT_STATUS" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="complaintsStatus"
+                        key="key"
+                        value="value"
+                        [placeholder]="'SELECT_COMPLAINTS_STATUS' | translate"
+                        (optionSelected)="selectedComplaintstatus = $event"
+                        (click)="onHandleComplaintsStatusClick()"
+                      >
+                      </app-custom-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter(); ticketFilterPopup.closePopup()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
+
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
@@ -446,135 +528,40 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>01</td>
-              <td>LP9021</td>
-              <td>12/02/2024</td>
-              <td>
-                Faulty faucet in kitchen, dripping constantly and needs repair
-              </td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    'assets/complaint/complaint-1.png',
-                    'assets/complaint/complaint-2.png',
-                    'assets/complaint/complaint-3.png',
-                    'assets/complaint/complaint-4.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge [title]="'Completed'" status="green"></app-badge>
-              </td>
-            </tr>
-
-            <tr>
-              <td>02</td>
-              <td>LP8021</td>
-              <td>01/01/2024</td>
-              <td>
-                Heating not working properly, thermostat issues, house is cold
-              </td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    'assets/complaint/complaint-3.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-4.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge [title]="'Completed'" status="green"></app-badge>
-              </td>
-            </tr>
-            <tr>
-              <td>03</td>
-              <td>VC79021</td>
-              <td>22/12/2023</td>
-              <td>
-                Leak in the bathroom, causing water damage to the ceiling below
-              </td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    'assets/complaint/complaint-1.png',
-                    'assets/complaint/complaint-2.png',
-                    'assets/complaint/complaint-3.png',
-                    'assets/complaint/complaint-4.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge [title]="'In Progress'" status="orange"></app-badge>
-              </td>
-            </tr>
-
-            <tr>
-              <td>04</td>
-              <td>VC69021</td>
-              <td>11/12/2023</td>
-              <td>
-                Broken window in bedroom, glass shattered, needs replacement
-              </td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    'assets/complaint/complaint-1.png',
-                    'assets/complaint/complaint-2.png',
-                    'assets/complaint/complaint-3.png',
-                    'assets/complaint/complaint-4.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge
-                  [title]="'Assigned to Engineer'"
-                  status="blue"
-                ></app-badge>
-              </td>
-            </tr>
-            <tr>
-              <td>05</td>
-              <td>VC59021</td>
-              <td>01/12/2023</td>
-              <td>Pest control needed, ants in kitchen, spiders in basement</td>
-              <td>
-                <app-table-multi-img-item
-                  [images]="[
-                    'assets/complaint/complaint-1.png',
-                    'assets/complaint/complaint-2.png',
-                    'assets/complaint/complaint-3.png',
-                    'assets/complaint/complaint-4.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-4.png',
-                    'assets/complaint/complaint-5.png',
-                    'assets/complaint/complaint-5.png',
-                  ]"
-                  size="md"
-                ></app-table-multi-img-item>
-              </td>
-              <td>
-                <app-badge [title]="'Rejected'" status="red"></app-badge>
-              </td>
-            </tr>
+            @for (item of previousComplaints; track item.id) {
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ item.code || "N/A" }}</td>
+                <td>
+                  {{
+                    item.created
+                      ? (item.created * 1000 | date: "dd/MM/yyyy")
+                      : "N/A"
+                  }}
+                </td>
+                <td>
+                  {{ item.description || "N/A" }}
+                </td>
+                <td>
+                  <app-table-multi-img-item
+                    [images]="
+                      item.images && item.images[0] ? [item.images[0].url] : []
+                    "
+                    size="md"
+                  ></app-table-multi-img-item>
+                </td>
+                <td>
+                  <app-badge
+                    [title]="item?.status.value"
+                    status="green"
+                  ></app-badge>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="20" align="center">No data found</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -596,3 +583,52 @@
     </div>
   </div>
 </ng-container>
+<!--ADD Complint Model -->
+<ng-template #addComplaintContent let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title">
+      {{
+        isEditMode
+          ? ("EDIT_COMPLAINT" | translate)
+          : ("ADD_COMPLAINT" | translate)
+      }}
+    </h6>
+
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <app-add-complaints
+      #addComplaintComponent
+      [complaintData]="selectedComplaint"
+      (formSubmitted)="onComplaintCreated($event, modal)"
+    >
+    </app-add-complaints>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss()"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+
+    <button
+      type="button"
+      class="btn btnCommon"
+      (click)="addComplaintComponent.submitForm()"
+    >
+      {{
+        isEditMode
+          ? ("UPDATE_COMPLAINT" | translate)
+          : ("CREATE_COMPLAINT" | translate)
+      }}
+    </button>
+  </div>
+</ng-template>

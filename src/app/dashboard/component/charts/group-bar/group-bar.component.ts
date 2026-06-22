@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -37,11 +43,14 @@ export type ChartOptions = {
 export class GroupBarChartComponent {
   constructor(private homeService: HomeService) {}
 
-  properties: any[] = [];
+  @Input() properties: any[] = [];
 
-  totalRecords = 0;
+  @Input() currentPage: number = 1;
+  @Input() totalPages: number = 1;
+  @Output() pageChange = new EventEmitter<'next' | 'prev'>();
 
   chartSeries: ApexAxisChartSeries = [];
+  totalRecords = 0;
 
   chartCategories: string[] = [];
 
@@ -68,17 +77,8 @@ export class GroupBarChartComponent {
     return Math.max(20, Math.ceil(maxValue / 20) * 20);
   }
 
-  get summary() {
-    return {
-      totalProperties: this.totalRecords,
-
-      totalRented: this.properties.reduce((sum, p) => sum + p.rented_units, 0),
-
-      totalVacant: this.properties.reduce((sum, p) => sum + p.vacant_units, 0),
-    };
-  }
-
   chartOptions: Partial<ChartOptions> = {
+    series: [],
     chart: {
       type: 'bar',
       height: 245,
@@ -158,81 +158,50 @@ export class GroupBarChartComponent {
     },
   };
 
-  currentPage = 1;
-  totalPages = 1;
-  limit = 5;
-
-  ngOnInit(): void {
-    this.getDashboardPropertyOwned();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['properties'] && this.properties?.length) {
+      this.updateChart(this.properties);
+    }
   }
+  updateChart(data: any[]) {
+    if (!data || data.length === 0) return;
+    this.totalRecords = data.length;
 
-  getDashboardPropertyOwned(): void {
-    const params = {
-      page: this.currentPage,
-      limit: this.limit,
+    this.chartCategories = data.map((x) => x.property_name);
+
+    this.chartSeries = [
+      {
+        name: 'Rented Units',
+        data: data.map((x) => Number(x.rented_units) || 0),
+      },
+      {
+        name: 'Vacant Units',
+        data: data.map((x) => Number(x.vacant_units) || 0),
+      },
+    ];
+
+    const yAxisMax = this.getYAxisMax(data);
+
+    this.chartOptions = {
+      ...this.chartOptions,
+      series: this.chartSeries,
+      xaxis: {
+        ...this.chartOptions.xaxis,
+        categories: this.chartCategories,
+      },
+      yaxis: {
+        ...this.chartOptions.yaxis,
+        min: 0,
+        max: yAxisMax,
+        tickAmount: yAxisMax / 20,
+      },
     };
-
-    this.homeService.getDashboardPropertyOwned(params).subscribe({
-      next: (res: any) => {
-        const content = res?.content;
-        const data = content?.properties ?? [];
-
-        this.totalPages = content?.pagination?.total_pages ?? 1;
-        this.totalRecords = content?.pagination?.total_records ?? 0;
-
-        this.properties = [...data];
-
-        // chart update
-        this.chartCategories = data.map((x: any) => x.property_name);
-
-        this.chartSeries = [
-          {
-            name: 'Rented Units',
-            data: data.map((x: any) => x.rented_units),
-          },
-          {
-            name: 'Vacant Units',
-            data: data.map((x: any) => x.vacant_units),
-          },
-        ];
-
-        setTimeout(() => {
-          const yAxisMax = this.getYAxisMax(data);
-
-          this.chartSeries = [...this.chartSeries];
-          this.chartCategories = [...this.chartCategories];
-          this.chartOptions = {
-            ...this.chartOptions,
-            xaxis: {
-              ...this.chartOptions.xaxis,
-              categories: this.chartCategories,
-            },
-            yaxis: {
-              ...this.chartOptions.yaxis,
-              min: 0,
-              max: yAxisMax,
-              tickAmount: yAxisMax / 20,
-            },
-          };
-        }, 0);
-      },
-
-      error: (err) => {
-        console.error('API error:', err);
-      },
-    });
   }
   nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.getDashboardPropertyOwned();
-    }
+    this.pageChange.emit('next');
   }
 
   previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.getDashboardPropertyOwned();
-    }
+    this.pageChange.emit('prev');
   }
 }

@@ -1,7 +1,7 @@
 <div class="ticket-aging-column">
   <div class="cell">
     <span *ngIf="duration; else emptyState" class="badge" [ngClass]="status">
-      Duration: {{ duration }}
+      {{ duration }}
     </span>
 
     <ng-template #emptyState>

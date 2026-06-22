@@ -367,7 +367,6 @@
   "NEGOTIATION": "Negotiation",
   "FILL_IN_THE_BELOW_TEMPLATE": "املأ النموذج أدناه",
   "BY_AND_BETWEEN": "بين وبين",
-  "UNITS": "UNITS",
   "AND": "و",
   "ZEN": "زين",
   "LOCATION": "موقع",
@@ -799,5 +798,8 @@
   "OTHER_TYPE_PAYMENTS": "أنواع أخرى من المدفوعات",
   "YEARLY_DUES": "الرسوم السنوية",
   "PROPERTY_OWNED": "العقارات المملوكة",
-  "CHEQUE_AGING": "شيخوخة الشيكات"
+  "CHEQUE_AGING": "شيخوخة الشيكات",
+  "ADD_COMPLAINT": "إضافة شكوى",
+  "EDIT_COMPLAINT": "تحرير الشكوى",
+  "UPDATE_COMPLAINT": "تحديث الشكوى"
 }

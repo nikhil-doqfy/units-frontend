@@ -86,6 +86,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   selectedFilter: string = '';
   occupiedPercent = 0;
   vacantPercent = 0;
+  occupancyVacancy = 0;
+  occupancyOccupied = 0;
+  propertyOwnedData: any[] = [];
   selectedChequesAging: string = 'All';
   selectedPropertiesOwned: string = 'Falcon city of wonders';
   properties: any[] = [];
@@ -101,7 +104,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   totalAmount = 0;
   paymentTotalRevenue = 0;
   showStatsDropdown = false;
-
+  currentPage: number = 1;
+  totalPages: number = 1;
+  limit: number = 5;
   showMonthlyCommission = true;
   showProperties = true;
   showTenants = true;
@@ -153,15 +158,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log('monthlyRevenue:', this.monthlyRevenue);
-    this.getDashboardVisualization();
-    this.totalRevenue = this.monthlyRevenue.reduce(
-      (sum, item) => sum + (item.total_revenue || 0),
-      0,
-    );
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
     this.initLanguageListener();
+    this.getDashboardVisualization();
 
     this.getStats();
     this.getMonthlyRevenue();
@@ -169,6 +169,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.loadDueGraph();
     this.getChequeVisibility();
     this.loadPayments();
+    this.loadTopRevenueProperties();
+    this.loadPropertyOwned();
+    this.loadOccupancyData();
   }
   changeLanguage(lang: string) {
     this.sharedService.setLanguage(lang);
@@ -329,6 +332,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
         );
       });
   }
+  loadTopRevenueProperties(): void {
+    this.homeService.getTopRevenueProperties().subscribe({
+      next: (response) => {
+        console.log('Before:', this.propertyData);
+        this.propertyData =
+          response.content.top_revenue_properties?.map(
+            (item: any, index: number) => ({
+              id: item.rank || index + 1,
+              name: item.name,
+              value: item.revenue_percent,
+              displayValue: item.total_revenue,
+            }),
+          ) || [];
+        console.log('After:', this.propertyData);
+      },
+      error: (error) => {
+        console.error(error);
+        this.propertyData = [];
+      },
+    });
+  }
 
   getMonthlyRevenue(params?: any) {
     this.homeService
@@ -347,11 +371,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
               value: item.amount,
             }),
           );
+          this.totalRevenue = this.monthlyRevenue.reduce(
+            (sum, item) => sum + (item.total_revenue || 0),
+            0,
+          );
         },
         error: (err) => console.error(err),
       });
   }
+  loadOccupancyData(propertyId?: string) {
+    const params = propertyId ? { property_id: propertyId } : {};
+    this.homeService.getOccupancyData(params).subscribe({
+      next: (res) => {
+        const data = res?.content?.occupancy_data;
 
+        this.occupancyOccupied = data?.occupied_percent || 0;
+        this.occupancyVacancy = data?.vacant_percent || 0;
+      },
+      error: (err) => {
+        console.error('Occupancy API error', err);
+      },
+    });
+  }
   getChequeVisibility() {
     this.homeService
       .getChequeVisibility()
@@ -399,6 +440,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  loadPropertyOwned() {
+    const params = {
+      page: this.currentPage,
+      limit: this.limit,
+    };
+
+    this.homeService.getDashboardPropertyOwned(params).subscribe({
+      next: (res: any) => {
+        this.propertyOwnedData = res?.content?.properties ?? [];
+        this.totalPages = res?.content?.pagination?.total_pages ?? 1;
+      },
+    });
+  }
   onOptionSelectedMonthly(option: string) {
     this.selectedMonthly = option;
   }
@@ -411,9 +465,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.selectedOccupancy = option;
 
     if (option.key === 'ALL') {
-      this.getStats();
+      this.loadOccupancyData();
     } else {
-      this.getStats(option.key);
+      this.loadOccupancyData(option.key);
     }
   }
 
@@ -894,10 +948,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       next: (res) => {
         console.log('Dashboard Visualization:', res);
         this.dashboardVisualizationData = res;
-        this.visualization = res.content.all_visualizations;
+        this.visualization = res.content.all_visualizations || [];
+        this.cd.detectChanges();
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 50);
       },
+
       error: (err) => {
         console.error('Error:', err);
+        this.visualization = [];
       },
     });
   }
@@ -924,5 +984,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return this.visualization.some(
       (item) => item.key === key && item.is_visible,
     );
+  }
+  onPageChange(type: 'next' | 'prev') {
+    if (type === 'next' && this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+
+    if (type === 'prev' && this.currentPage > 1) {
+      this.currentPage--;
+    }
+
+    this.loadPropertyOwned(); // API call here
   }
 }
