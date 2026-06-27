@@ -102,7 +102,9 @@
 .stats-actions {
   position: relative;
 }
-
+.stats-actions button + button {
+  margin-left: 12px;
+}
 .stats-filter-btn {
   background: #fff;
   border: 1px solid #dcdcdc;
@@ -142,4 +144,17 @@
 :host ::ng-deep .other-payment-card {
   height: 350px;
   overflow: hidden;
+}
+
+.decrypt-dropdown-wrapper {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 99999;
+  width: 320px;
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e0e0e0;
 }

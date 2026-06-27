@@ -41,6 +41,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { DecryptToolComponent } from '../../../decrypt-tool/decrypt-tool.component';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -67,6 +68,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
     TranslateModule,
     NoDataComponent,
     FormsModule,
+    DecryptToolComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -995,5 +997,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
 
     this.loadPropertyOwned(); // API call here
+  }
+  showDecrypt = false;
+
+  openDecrypt() {
+    this.showDecrypt = !this.showDecrypt;
   }
 }

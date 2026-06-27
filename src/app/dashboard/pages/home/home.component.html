@@ -5,11 +5,20 @@
       {{ "YOUR_STATISTICS" | translate }}
     </div>
 
-    <div class="stats-actions position-relative">
+    <div class="stats-actions position-relative d-flex gap-2">
       <button class="stats-filter-btn" (click)="toggleStatsDropdown()">
         {{ "STATISTICS" | translate }}
       </button>
 
+      <div style="position: relative">
+        <button class="stats-filter-btn" (click)="openDecrypt()">
+          Decrypt Data
+        </button>
+
+        <div class="decrypt-dropdown-wrapper" *ngIf="showDecrypt">
+          <app-decrypt-tool></app-decrypt-tool>
+        </div>
+      </div>
       <div class="stats-dropdown" *ngIf="showStatsDropdown">
         <label *ngFor="let item of visualization">
           <input
