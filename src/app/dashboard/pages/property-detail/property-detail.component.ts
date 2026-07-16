@@ -117,7 +117,10 @@ export class PropertyDetailComponent implements OnInit {
                 },
                 {
                   label: this.getLabel('PROPERTY_TYPE'),
-                  value: prop.property_type || '--',
+                  value:
+                    prop.property_type
+                      ?.map((item: any) => item.name)
+                      .join(', ') || '--',
                 },
                 {
                   label: this.getLabel('NO_OF_BLOCKS'),
