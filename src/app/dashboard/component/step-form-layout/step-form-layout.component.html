@@ -134,6 +134,7 @@
     <app-bulk-upload
       [columns]="bulkColumns"
       (dataImported)="onBulkDataReady($event)"
+      (fileSelected)="onBulkFileSelected($event)"
     />
   </div>
   <div class="modal-footer">

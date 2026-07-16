@@ -9,7 +9,10 @@ export interface BulkColumn {
   key: string;
   label: string;
 }
-
+export interface BulkFilePayload {
+  file_name: string;
+  file: string;
+}
 @Component({
   selector: 'app-bulk-upload',
   standalone: true,
@@ -20,7 +23,7 @@ export interface BulkColumn {
 export class BulkUploadComponent {
   @Input() columns: BulkColumn[] = [];
   @Output() dataImported = new EventEmitter<any[]>();
-
+  @Output() fileSelected = new EventEmitter<BulkFilePayload>();
   uploadedFile?: UploadFileModel;
   parsedRows: any[] = [];
   parseError: string = '';
@@ -39,7 +42,7 @@ export class BulkUploadComponent {
     this.uploadedFile = event;
     this.parseError = '';
     this.parsedRows = [];
-
+    const rawFile = (event as any).file as File;
     const base64 = event.base64 as string;
     if (!base64) return;
 
@@ -80,6 +83,10 @@ export class BulkUploadComponent {
         });
 
       this.dataImported.emit(this.parsedRows);
+      this.fileSelected.emit({
+        file_name: rawFile?.name ?? 'bulk_upload.xlsx',
+        file: base64,
+      });
     } catch {
       this.parseError = 'Failed to parse file. Please use the sample template.';
     }

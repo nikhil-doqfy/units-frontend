@@ -1,6 +1,10 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlContainer, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  ControlContainer,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CustomSelectComponent } from '../../../dashboard/component/custom-select/custom-select.component';
 import { FormService } from '../../services/form.service';
 
@@ -13,13 +17,14 @@ import { FormService } from '../../services/form.service';
   viewProviders: [
     {
       provide: ControlContainer,
-      useFactory: () => inject(ControlContainer, { skipSelf: true, optional: true }),
+      useFactory: () =>
+        inject(ControlContainer, { skipSelf: true, optional: true }),
     },
   ],
 })
 export class FormSelectFieldComponent {
   private formService = inject(FormService);
-
+  @Input() multiple = false;
   @Input() label: string = '';
   @Input() required: boolean = false;
   @Input() options: any[] = [];
