@@ -28,12 +28,14 @@ import { InviteOwnerBtnComponent } from '../invite-owner-btn/invite-owner-btn.co
 import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 import {
   BulkColumn,
+  BulkFilePayload,
   BulkUploadComponent,
 } from '../../../from/bulk-upload/bulk-upload.component';
 import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ViewChild } from '@angular/core';
+import { PropertyService } from '../../services/property.service';
 
 interface StepGroup {
   main: StepPaneComponent;
@@ -75,7 +77,10 @@ export class StepFormLayoutComponent implements AfterContentInit {
 
   @Output() finish = new EventEmitter<void>();
   @Output() bulkImported = new EventEmitter<any[]>();
-
+  private propertyService = inject(PropertyService);
+  selectedBulkFile?: BulkFilePayload;
+  bulkUploadData: any[] = [];
+  bulkUploadError: string = '';
   pendingBulkData: any[] = [];
 
   stepGroups: StepGroup[] = [];
@@ -132,23 +137,42 @@ export class StepFormLayoutComponent implements AfterContentInit {
     }
   }
   // goToPreviousStep() {
-  //   console.log('clicked'); // 👈 check first
-  //   console.log(this.stepper);
   //   if (this.stepper && this.stepper.previous) {
   //     this.stepper.previous();
   //   }
   // }
   onBulkDataReady(data: any[]) {
     this.pendingBulkData = data;
+    this.bulkUploadError = '';
+  }
+  onBulkFileSelected(payload: BulkFilePayload) {
+    this.selectedBulkFile = payload;
+  }
+  onBulkUploadConfirm(modal: any) {
+    if (!this.selectedBulkFile) {
+      this.bulkUploadError = 'Please upload a valid file first.';
+      return;
+    }
+
+    const payload = {
+      file_name: this.selectedBulkFile.file_name,
+      file: this.selectedBulkFile.file,
+    };
+    this.propertyService.bulkUploadProperty(payload).subscribe({
+      next: (res) => {
+        modal.close('Uploaded');
+        this.selectedBulkFile = undefined;
+        this.bulkUploadData = [];
+        this.showAlert(res.message || 'Bulk upload successful');
+      },
+      error: (err) => {
+        console.error('Bulk upload failed', err);
+        this.bulkUploadError =
+          err?.error?.message || 'Upload failed. Please try again.';
+      },
+    });
   }
 
-  onBulkUploadConfirm(modal: any) {
-    if (this.pendingBulkData.length > 0) {
-      this.bulkImported.emit(this.pendingBulkData);
-      this.pendingBulkData = [];
-    }
-    modal.close('Upload click');
-  }
   private getDismissReason(reason: any): string {
     switch (reason) {
       case ModalDismissReasons.ESC:

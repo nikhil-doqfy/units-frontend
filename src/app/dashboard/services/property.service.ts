@@ -21,10 +21,17 @@ export class PropertyService {
   }
 
   exportProperties(params: Record<string, any> = {}): void {
-    const queryString = this.sharedService.getQueryString({ ...params, export: 'csv' });
-    this.http.get(`${this.SERVER_ADDRESS}/property${queryString}`, { responseType: 'blob' }).subscribe((blob) => {
-      this.sharedService.downloadBlob(blob, 'properties.csv');
+    const queryString = this.sharedService.getQueryString({
+      ...params,
+      export: 'csv',
     });
+    this.http
+      .get(`${this.SERVER_ADDRESS}/property${queryString}`, {
+        responseType: 'blob',
+      })
+      .subscribe((blob) => {
+        this.sharedService.downloadBlob(blob, 'properties.csv');
+      });
   }
 
   addProperty(data: Record<string, any>): Observable<any> {
@@ -38,7 +45,9 @@ export class PropertyService {
   // ── Property Units ────────────────────────────────────────────────────────
   getPropertyUnits(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/property/details${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/details${queryString}`,
+    );
   }
 
   getPropertyUnit(params: Record<string, any>): Observable<any> {
@@ -57,7 +66,9 @@ export class PropertyService {
   // ── Property Blocks ───────────────────────────────────────────────────────
   getPropertyBlocks(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/property/blocks${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/blocks${queryString}`,
+    );
   }
 
   addPropertyBlocks(data: Record<string, any>): Observable<any> {
@@ -71,7 +82,9 @@ export class PropertyService {
   // ── Images ────────────────────────────────────────────────────────────────
   getPropertyImages(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/property/images${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/images${queryString}`,
+    );
   }
 
   addPropertyImages(data: Record<string, any>) {
@@ -83,7 +96,9 @@ export class PropertyService {
   }
 
   deletePropertyImage(imageId: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_ADDRESS}/property/images?image_id=${imageId}`);
+    return this.http.delete(
+      `${this.SERVER_ADDRESS}/property/images?image_id=${imageId}`,
+    );
   }
 
   // ── Documents ─────────────────────────────────────────────────────────────
@@ -93,7 +108,9 @@ export class PropertyService {
 
   getPropertyDocuments(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/property/documents${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/documents${queryString}`,
+    );
   }
 
   addPropertyDocuments(data: Record<string, any>) {
@@ -105,7 +122,9 @@ export class PropertyService {
   }
 
   deletePropertyDocument(documentId: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_ADDRESS}/property/documents?document_id=${documentId}`);
+    return this.http.delete(
+      `${this.SERVER_ADDRESS}/property/documents?document_id=${documentId}`,
+    );
   }
 
   // ── Misc ──────────────────────────────────────────────────────────────────
@@ -117,12 +136,16 @@ export class PropertyService {
 
   getParentPropertyData(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/parent/property${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/parent/property${queryString}`,
+    );
   }
 
   getPropertyDetailsForLease(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/property_owner_compny_lease${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property_owner_compny_lease${queryString}`,
+    );
   }
 
   // ── Units ─────────────────────────────────────────────────────────────────
@@ -132,10 +155,17 @@ export class PropertyService {
   }
 
   exportUnits(params: Record<string, any> = {}): void {
-    const queryString = this.sharedService.getQueryString({ ...params, export: 'csv' });
-    this.http.get(`${this.SERVER_ADDRESS}/property/unit${queryString}`, { responseType: 'blob' }).subscribe((blob) => {
-      this.sharedService.downloadBlob(blob, 'units.csv');
+    const queryString = this.sharedService.getQueryString({
+      ...params,
+      export: 'csv',
     });
+    this.http
+      .get(`${this.SERVER_ADDRESS}/property/unit${queryString}`, {
+        responseType: 'blob',
+      })
+      .subscribe((blob) => {
+        this.sharedService.downloadBlob(blob, 'units.csv');
+      });
   }
 
   addUnit(data: Record<string, any>): Observable<any> {
@@ -149,7 +179,9 @@ export class PropertyService {
   // ── Unit Images ───────────────────────────────────────────────────────────
   getUnitImages(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/property/unit/images${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/unit/images${queryString}`,
+    );
   }
 
   addUnitImages(data: Record<string, any>): Observable<any> {
@@ -157,7 +189,9 @@ export class PropertyService {
   }
 
   deleteUnitImage(imageId: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_ADDRESS}/property/unit/images?image_id=${imageId}`);
+    return this.http.delete(
+      `${this.SERVER_ADDRESS}/property/unit/images?image_id=${imageId}`,
+    );
   }
 
   // ── Unit Documents ────────────────────────────────────────────────────────
@@ -167,14 +201,25 @@ export class PropertyService {
 
   getUnitDocuments(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/property/unit/documents${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/property/unit/documents${queryString}`,
+    );
   }
 
   addUnitDocuments(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/property/unit/documents`, data);
+    return this.http.post(
+      `${this.SERVER_ADDRESS}/property/unit/documents`,
+      data,
+    );
   }
 
   deleteUnitDocument(documentId: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_ADDRESS}/property/unit/documents?document_id=${documentId}`);
+    return this.http.delete(
+      `${this.SERVER_ADDRESS}/property/unit/documents?document_id=${documentId}`,
+    );
+  }
+  // ── Bulk Upload ───────────────────────────────────────────────────────────
+  bulkUploadProperty(data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/bulk_upload_property`, data);
   }
 }
