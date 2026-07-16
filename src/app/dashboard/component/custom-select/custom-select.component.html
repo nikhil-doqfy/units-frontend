@@ -47,23 +47,32 @@
   </div>
 </div> -->
 
-
-
-
-
-
-
-
-<div class="customSelect" [ngStyle]="{ width: width }" [class.customSelectFilter]="isFilter"
-  [class.customSelectPlain]="isPlain" [class.customSelectSmall]="isSmall" [class.customSelectGrey]="isGrey"
-  [class.show]="isDropdownOpen" (click)="toggleDropdown()">
+<div
+  class="customSelect"
+  [ngStyle]="{ width: width }"
+  [class.customSelectFilter]="isFilter"
+  [class.customSelectPlain]="isPlain"
+  [class.customSelectSmall]="isSmall"
+  [class.customSelectGrey]="isGrey"
+  [class.show]="isDropdownOpen"
+  (click)="toggleDropdown()"
+>
   <div class="customSelectInput" [class.highlight]="highlight">
-    <span *ngIf="!selectedOption" class="customSelectPlaceholder">
+    <span
+      *ngIf="
+        (!multiple && !selectedOption) || (multiple && !selectedOptions?.length)
+      "
+      class="customSelectPlaceholder"
+    >
       {{ placeholder | translate }}
     </span>
 
-    <span *ngIf="selectedOption">
+    <span *ngIf="!multiple && selectedOption">
       {{ selectedOption[value] }}
+    </span>
+    <!-- Multiple Select -->
+    <span *ngIf="multiple && selectedOptions?.length">
+      {{ getSelectedLabels() }}
     </span>
 
     <div class="rightSection">
@@ -78,19 +87,52 @@
     </div>
   </div>
 
-  <ul *ngIf="isDropdownOpen" class="customSelectDropdown" [ngStyle]="dropdownStyle">
+  <ul
+    *ngIf="isDropdownOpen"
+    class="customSelectDropdown"
+    [ngStyle]="dropdownStyle"
+  >
     <li *ngIf="showFilterInput || allowAddOption" class="customSelectSearch">
-      <input type="text" [(ngModel)]="filterText" (ngModelChange)="onInputChange($event)"
-        (click)="$event.stopPropagation()" placeholder="Search..." />
+      <input
+        type="text"
+        [(ngModel)]="filterText"
+        (ngModelChange)="onInputChange($event)"
+        (click)="$event.stopPropagation()"
+        placeholder="Search..."
+      />
 
-      <button *ngIf="allowAddOption" (click)="addOption(); $event.stopPropagation()">
+      <button
+        *ngIf="allowAddOption"
+        (click)="addOption(); $event.stopPropagation()"
+      >
         Add
       </button>
     </li>
 
-    <li *ngFor="let option of displayOptions" (click)="selectOption(option); $event.stopPropagation()"
-      [class.active]="option[key] === selectedOption?.[key]">
-      {{ option[value] }}
+    <li
+      *ngFor="let option of displayOptions"
+      (click)="
+        multiple ? toggleSelection(option) : selectOption(option);
+        $event.stopPropagation()
+      "
+      [class.active]="!multiple && option[key] === selectedOption?.[key]"
+    >
+      <ng-container *ngIf="multiple; else singleOption">
+        <label class="d-flex align-items-center w-100 mb-0">
+          <input
+            type="checkbox"
+            class="form-check-input me-2"
+            [checked]="isSelected(option)"
+            (change)="toggleSelection(option)"
+            (click)="$event.stopPropagation()"
+          />
+          <span>{{ option[value] }}</span>
+        </label>
+      </ng-container>
+
+      <ng-template #singleOption>
+        {{ option[value] }}
+      </ng-template>
     </li>
 
     <li *ngIf="!displayOptions.length">No Data Found</li>

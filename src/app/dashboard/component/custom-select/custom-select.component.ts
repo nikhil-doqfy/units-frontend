@@ -69,8 +69,9 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   @Input() iconType: 'default' | 'custom' = 'default';
   @Output() optionSelected = new EventEmitter<any>();
   @Output() onOptionAdded = new EventEmitter<any>();
-
+  @Input() multiple = false;
   isDropdownOpen = false;
+
   filterText: string = '';
   displayOptions: any[] = [];
   dropdownStyle: Record<string, string> = {};
@@ -78,7 +79,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   private onChange = (_: any) => {};
   private onTouched = () => {};
   isDisabled = false;
-
+  selectedOptions: any[] = [];
   constructor(
     private dropdownService: CustomSelectService,
     private el: ElementRef,
@@ -103,8 +104,33 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
       });
   }
 
- 
+  getSelectedLabels(): string {
+    return this.selectedOptions.map((item) => item[this.value]).join(', ');
+  }
+  toggleSelection(option: any) {
+    const index = this.selectedOptions.findIndex(
+      (x) => x[this.key] === option[this.key],
+    );
 
+    if (index > -1) {
+      this.selectedOptions.splice(index, 1);
+    } else {
+      this.selectedOptions.push(option);
+    }
+
+    this.selectedOptions = [...this.selectedOptions];
+
+    this.onChange(this.selectedOptions);
+
+    this.optionSelected.emit(this.selectedOptions);
+
+    this.onTouched();
+  }
+  isSelected(option: any): boolean {
+    return this.selectedOptions.some(
+      (item) => item[this.key] === option[this.key],
+    );
+  }
   // toggleDropdown() {
   //   if (this.isDisabled) return;
 
@@ -214,9 +240,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
         if (rect.left < 0) {
           this.dropdownStyle['left'] = '8px';
           delete this.dropdownStyle['right'];
-        }
-
-        else if (rect.right > screenWidth) {
+        } else if (rect.right > screenWidth) {
           this.dropdownStyle['right'] = '8px';
           delete this.dropdownStyle['left'];
         }
@@ -239,7 +263,11 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(value: any): void {
-    this.selectedOption = value;
+    if (this.multiple) {
+      this.selectedOptions = Array.isArray(value) ? [...value] : [];
+    } else {
+      this.selectedOption = value;
+    }
   }
 
   registerOnChange(fn: any): void {
