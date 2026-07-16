@@ -25,6 +25,10 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './custom-dropdown.component.css',
 })
 export class CustomDropdownComponent {
+  @HostListener('document:click', ['$event'])
+  @Output()
+  detailViewChanges = new EventEmitter<boolean>();
+
   isOpen = false;
   @Input() title: string = '';
   @Input() hasIcon: boolean = true;
@@ -34,7 +38,6 @@ export class CustomDropdownComponent {
 
   selectedReceiptType = '';
 
-  @Output() detailViewChanges = new EventEmitter<boolean>();
   constructor(private eRef: ElementRef) {}
 
   selectReceiptType(type: string) {
@@ -68,8 +71,7 @@ export class CustomDropdownComponent {
     this.showReceiptDropdown = false;
     this.showMonthDropdown = false;
   }
-  // 👉 OUTSIDE CLICK DETECTION (MAIN LOGIC)
-  @HostListener('document:click', ['$event'])
+
   onDocumentClick(event: Event) {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.closeDropdown();

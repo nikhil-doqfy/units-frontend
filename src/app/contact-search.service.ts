@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../environments/environment.development';
 import { SharedService } from './shared.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,11 +14,15 @@ export class ContactSearchService {
   constructor() {}
   getUsers(params: Record<string, any> = {}): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/user/search_details${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/user/search_details${queryString}`,
+    );
   }
 
   searchUsers(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
-    return this.http.get(`${this.SERVER_ADDRESS}/user/search_details${queryString}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/user/search_details${queryString}`,
+    );
   }
 }

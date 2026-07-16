@@ -91,6 +91,12 @@ export class DonutChartComponent {
       chart: {
         type: 'donut',
         height: chartHeight,
+        events: {
+          dataPointMouseEnter: function (event: any) {
+            event.target.style.opacity = '1';
+            event.target.style.filter = 'none';
+          },
+        },
       },
       plotOptions: {
         pie: {

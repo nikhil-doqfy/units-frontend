@@ -160,7 +160,7 @@
         <thead>
           <tr>
             <th>{{ "UNIT_ID" | translate }}</th>
-            <th>
+            <th style="cursor: pointer" (click)="sort('unit_name')">
               {{ "UNIT_NAME" | translate }}
               <i><app-sorting-icon></app-sorting-icon></i>
             </th>

@@ -3960,7 +3960,6 @@ linearGradient .authBgPatt stop:last-child {
 .btnCommon:hover,
 .btnCommon:active,
 .btnCommon.show {
-  color: var(--whiteText) !important;
   opacity: 0.9;
 }
 
