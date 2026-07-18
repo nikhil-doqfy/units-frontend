@@ -3732,7 +3732,7 @@ body.dark-theme .form-control {
 }
 
 .cmmnCheckbox label span::before {
-  background-image: url("./assets/uncheck-icon.svg");
+  background-image: url("/assets/uncheck-icon.svg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
@@ -3745,7 +3745,7 @@ body.dark-theme .form-control {
 }
 
 .cmmnCheckbox label input:checked ~ span::before {
-  background-image: url("./assets/checked-icon.svg");
+  background-image: url("/assets/checked-icon.svg");
 }
 
 /***Common Checkbox Css End***/
