@@ -310,6 +310,8 @@ export class UnitFormService {
 
     return {
       unit_owners: unitOwners,
+      parent_property_id: value.property?.key ?? value.property,
+
       block_id: value.blockId?.key ?? value.blockId,
       unit_name: value.unitName,
       unit_size: value.unitSize || null,
