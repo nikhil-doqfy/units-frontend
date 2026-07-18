@@ -33,7 +33,7 @@ export class UnitFormService {
     this.unitBasicDetailsForm = this.formBuilder.group({
       unitOwners: this.formBuilder.array([this.createOwnerGroup()]),
       property: ['', [Validators.required]],
-      blockId: ['', [Validators.required]],
+      blockId: [''],
       unitName: ['', [Validators.required]],
       unitSize: [''],
       area: [''],
@@ -112,7 +112,8 @@ export class UnitFormService {
         title: 'Commercials',
         formGroup: this.unitCommercialsForm,
         load: (context) => this.getUnitForEdit(context),
-        save: (payload, context) => this.saveUnitCommercialsDetails(payload, context),
+        save: (payload, context) =>
+          this.saveUnitCommercialsDetails(payload, context),
         mapIn: (response) => this.patchUnitCommercialsDetails(response),
         mapOut: (value) => this.mapOutUnitCommercialsDetails(value),
       },
@@ -141,7 +142,10 @@ export class UnitFormService {
     return this.propertyService.getUnits({ unit_id: context.formId });
   }
 
-  saveUnitBasicDetails(payload: Record<string, any>, context: any): Observable<any> {
+  saveUnitBasicDetails(
+    payload: Record<string, any>,
+    context: any,
+  ): Observable<any> {
     const mode = this.engine.value?.getCurrentStepFormMode();
     if (mode === 'EDIT') {
       payload['unit_id'] = context.formId;
@@ -157,7 +161,10 @@ export class UnitFormService {
     }
   }
 
-  saveUnitCommercialsDetails(payload: Record<string, any>, context: any): Observable<any> {
+  saveUnitCommercialsDetails(
+    payload: Record<string, any>,
+    context: any,
+  ): Observable<any> {
     payload['unit_id'] = context.formId;
     return this.propertyService.editUnit(payload);
   }
@@ -175,7 +182,10 @@ export class UnitFormService {
     return this.propertyService.getUnitDocuments({ unit_id: context.formId });
   }
 
-  saveUnitDocuments(payload: Record<string, any>, context: any): Observable<any> {
+  saveUnitDocuments(
+    payload: Record<string, any>,
+    context: any,
+  ): Observable<any> {
     payload['unit_id'] = context.formId;
     return this.propertyService.addUnitDocuments(payload);
   }
@@ -187,7 +197,8 @@ export class UnitFormService {
     const owners: any[] = content?.unit_owners || [];
     while (this.unitOwnersArray.length > 0) this.unitOwnersArray.removeAt(0);
     const count = owners.length > 0 ? owners.length : 1;
-    for (let i = 0; i < count; i++) this.unitOwnersArray.push(this.createOwnerGroup());
+    for (let i = 0; i < count; i++)
+      this.unitOwnersArray.push(this.createOwnerGroup());
     owners.forEach((o: any, i: number) => {
       this.unitOwnersArray.at(i).patchValue({
         ownerId: o.owner_id ?? null,
@@ -198,7 +209,9 @@ export class UnitFormService {
         ownerNumber: o.owner_number,
         tradeLicenseNumber: o.trade_license_number,
         licenseNumber: o.license_number,
-        licenseExpiryDate: o.license_expiry_date ? String(o.license_expiry_date).slice(0, 10) : '',
+        licenseExpiryDate: o.license_expiry_date
+          ? String(o.license_expiry_date).slice(0, 10)
+          : '',
         licenseIssuer: o.license_issuer,
         faxNumber: o.fax_number,
         poBoxNumber: o.po_box_number,
@@ -212,10 +225,19 @@ export class UnitFormService {
       unitSize: content?.unit_size,
       area: content?.area,
       dmNo: content?.dm_no,
-      noOfBedrooms: { key: content?.no_of_bedrooms, value: String(content?.no_of_bedrooms ?? '') },
-      floorNo: { key: content?.floor_no, value: String(content?.floor_no ?? '') },
+      noOfBedrooms: {
+        key: content?.no_of_bedrooms,
+        value: String(content?.no_of_bedrooms ?? ''),
+      },
+      floorNo: {
+        key: content?.floor_no,
+        value: String(content?.floor_no ?? ''),
+      },
       parkingNo: content?.parking_no,
-      noOfBalcony: { key: content?.no_of_balcony, value: String(content?.no_of_balcony ?? '') },
+      noOfBalcony: {
+        key: content?.no_of_balcony,
+        value: String(content?.no_of_balcony ?? ''),
+      },
       landNo: content?.land_no,
       unitUsage: { key: content?.unit_usage, value: content?.unit_usage },
       unitType: { key: content?.unit_type, value: content?.unit_type },
