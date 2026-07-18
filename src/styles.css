@@ -4737,19 +4737,19 @@ linearGradient .authBgPatt stop:last-child {
 }
 
 .cmmnTblPgntn .pagination .page-link[aria-label="First"] {
-  background-image: url("assets/paginationArrowLeftLast.svg");
+  background-image: url("/assets/paginationArrowLeftLast.svg");
 }
 
 .cmmnTblPgntn .pagination .page-link[aria-label="Previous"] {
-  background-image: url("assets/paginationArrowLeft.svg");
+  background-image: url("/assets/paginationArrowLeft.svg");
 }
 
 .cmmnTblPgntn .pagination .page-link[aria-label="Next"] {
-  background-image: url("assets/paginationArrowRight.svg");
+  background-image: url("/assets/paginationArrowRight.svg");
 }
 
 .cmmnTblPgntn .pagination .page-link[aria-label="Last"] {
-  background-image: url("assets/paginationArrowRightLast.svg");
+  background-image: url("/assets/paginationArrowRightLast.svg");
 }
 
 .cmmnTblPgntn .pagination .page-item.disabled .page-link {
