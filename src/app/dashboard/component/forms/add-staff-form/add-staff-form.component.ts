@@ -58,7 +58,8 @@ export class AddStaffFormComponent implements OnInit {
 
   staffRoleOptions: any[] = [];
   selectedRole: any = null;
-
+  pmcOptions: any[] = [];
+  selectedPMC: any[] = [];
   assignedPropertyList: any[] = [];
   selectedAssignedProperties: any[] = [];
 
@@ -79,6 +80,7 @@ export class AddStaffFormComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         contactNumber: ['', Validators.required],
         role: [null, Validators.required],
+        pmc: [null, Validators.required],
         assigned_property: [[]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
@@ -89,6 +91,7 @@ export class AddStaffFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadRoles();
+    this.loadPMCs();
     this.loadPropertyUnits();
 
     if (this.isEditMode) {
@@ -125,6 +128,7 @@ export class AddStaffFormComponent implements OnInit {
       email: this.editData.email || '',
       contactNumber: this.editData.contact_number || '',
       role: this.editData.staff_role?.key ?? null,
+      pmc: this.editData.pmc?.key ?? null,
     });
   }
 
@@ -132,7 +136,13 @@ export class AddStaffFormComponent implements OnInit {
     this.selectedRole = option;
     this.staffForm.patchValue({ role: option?.key ?? null });
   }
+  onPMCSelected(options: any[]): void {
+    this.selectedPMC = options;
 
+    this.staffForm.patchValue({
+      pmc: options.map((o: any) => o.key),
+    });
+  }
   onAssignedPropertiesSelected(options: any[]): void {
     this.selectedAssignedProperties = options;
     this.staffForm.patchValue({ assigned_property: options.map((o) => o.key) });
@@ -146,11 +156,13 @@ export class AddStaffFormComponent implements OnInit {
         next: (resp) => {
           this.assignedPropertyList = resp?.content?.property_unit ?? [];
           if (this.isEditMode && this.editData?.assigned_unit_ids?.length) {
-            this.selectedAssignedProperties = this.assignedPropertyList.filter((u: any) =>
-              this.editData.assigned_unit_ids.includes(u.key),
+            this.selectedAssignedProperties = this.assignedPropertyList.filter(
+              (u: any) => this.editData.assigned_unit_ids.includes(u.key),
             );
             this.staffForm.patchValue({
-              assigned_property: this.selectedAssignedProperties.map((u: any) => u.key),
+              assigned_property: this.selectedAssignedProperties.map(
+                (u: any) => u.key,
+              ),
             });
           }
         },
@@ -169,7 +181,9 @@ export class AddStaffFormComponent implements OnInit {
     );
   }
 
-  private passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+  private passwordMatchValidator(
+    group: AbstractControl,
+  ): ValidationErrors | null {
     const pw = group.get('password')?.value;
     const cpw = group.get('confirmPassword')?.value;
     if (pw && cpw && pw !== cpw) {
@@ -190,6 +204,7 @@ export class AddStaffFormComponent implements OnInit {
       email: form.email,
       contact_number: form.contactNumber,
       role: form.role,
+      pmcs: form.pmc,
       assigned_property: form.assigned_property,
     };
 
@@ -200,7 +215,9 @@ export class AddStaffFormComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (resp: any) => {
-            this.alertService.success(resp?.message || 'Staff updated successfully');
+            this.alertService.success(
+              resp?.message || 'Staff updated successfully',
+            );
             this.formSubmitted.emit(true);
           },
           error: (err: any) => {
@@ -215,7 +232,9 @@ export class AddStaffFormComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (resp: any) => {
-            this.alertService.success(resp?.message || 'Staff added successfully');
+            this.alertService.success(
+              resp?.message || 'Staff added successfully',
+            );
             this.formSubmitted.emit(true);
           },
           error: (err: any) => {
@@ -223,5 +242,25 @@ export class AddStaffFormComponent implements OnInit {
           },
         });
     }
+  }
+  private loadPMCs(): void {
+    this.sharedApiService
+      .getOptions({ option_type: 'PMCS' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: any) => {
+          this.pmcOptions = response?.content?.pmcs ?? [];
+
+          if (this.isEditMode && this.editData?.selected_pmcs?.length) {
+            this.selectedPMC = this.pmcOptions.filter((pmc: any) =>
+              this.editData.selected_pmcs.includes(pmc.key),
+            );
+
+            this.staffForm.patchValue({
+              pmc: this.selectedPMC.map((pmc: any) => pmc.key),
+            });
+          }
+        },
+      });
   }
 }

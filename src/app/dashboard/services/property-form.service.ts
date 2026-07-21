@@ -359,10 +359,14 @@ export class PropertyFormService {
         key: content?.no_of_units,
         value: String(content?.no_of_units ?? ''),
       },
-      propertyType: {
-        key: content?.property_type,
-        value: content?.property_type,
-      },
+      propertyType: Array.isArray(content?.property_type)
+        ? content.property_type.map((t: any) => ({
+            key: t.key ?? t.id ?? t,
+            value: t.value ?? t.name ?? t,
+          }))
+        : content?.property_type
+          ? [{ key: content.property_type, value: content.property_type }]
+          : [],
       landArea: content?.land_area,
       landAreaUnit: {
         key: content?.land_area_unit,
@@ -388,7 +392,9 @@ export class PropertyFormService {
       property_name: value.propertyName,
       no_of_blocks: value.noOfBlocks?.key ?? value.noOfBlocks,
       no_of_units: value.noOfUnits?.key ?? value.noOfUnits,
-      property_type: value.propertyType?.key ?? value.propertyType,
+      property_type: Array.isArray(value.propertyType)
+        ? value.propertyType.map((item: any) => item.key ?? item)
+        : (value.propertyType?.key ?? value.propertyType),
       land_area: value.landArea,
       land_area_unit: value.landAreaUnit?.key ?? value.landAreaUnit,
       land_dm_no: value.landDmNo,

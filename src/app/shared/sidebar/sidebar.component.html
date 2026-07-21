@@ -197,6 +197,9 @@
     <div class="dashSdbrWdgt" *ngIf="currentRole === 'property-manager'">
       <app-sidebar-heading title="{{ 'USER_MANAGEMENT' | translate }}" />
       <div class="dashSdbrItemList">
+         <app-sidebar-item title="{{ 'PMC' | translate }}" href="/dashboard/pmc">
+          <app-pmc-icon></app-pmc-icon>
+        </app-sidebar-item>
         <app-sidebar-item
           *ngIf="canAccess('Users')"
           title="{{ 'USERS' | translate }}"

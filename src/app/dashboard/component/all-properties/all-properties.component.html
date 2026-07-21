@@ -60,6 +60,18 @@
                     >
                     </app-custom-select>
                   </div>
+                  <div class="col-12">
+                    <label class="form-label">{{ "PMC" | translate }}</label>
+                    <app-custom-select
+                      [options]="pmcOptions"
+                      key="key"
+                      value="value"
+                      [(ngModel)]="selectedPMC"
+                      [placeholder]="'SELECT_PMC' | translate"
+                      (optionSelected)="filterPMC = $event?.key"
+                    >
+                    </app-custom-select>
+                  </div>
                 </div>
               </ng-container>
               <ng-container action>
