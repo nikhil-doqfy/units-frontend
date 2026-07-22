@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { HelpIconComponent } from '../icons/help-icon/help-icon.component';
 
@@ -7,7 +7,8 @@ import { HelpIconComponent } from '../icons/help-icon/help-icon.component';
   selector: 'app-auth-header',
   standalone: true,
   imports: [
-    HelpIconComponent
+    HelpIconComponent,
+    RouterLink
   ],
   templateUrl: './auth-header.component.html',
   styleUrls: ['./auth-header.component.css']
