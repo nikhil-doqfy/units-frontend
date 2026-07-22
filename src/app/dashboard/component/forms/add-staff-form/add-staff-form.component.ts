@@ -128,7 +128,6 @@ export class AddStaffFormComponent implements OnInit {
       email: this.editData.email || '',
       contactNumber: this.editData.contact_number || '',
       role: this.editData.staff_role?.key ?? null,
-      pmc: this.editData.pmc?.key ?? null,
     });
   }
 
@@ -251,14 +250,18 @@ export class AddStaffFormComponent implements OnInit {
         next: (response: any) => {
           this.pmcOptions = response?.content?.pmcs ?? [];
 
-          if (this.isEditMode && this.editData?.selected_pmcs?.length) {
-            this.selectedPMC = this.pmcOptions.filter((pmc: any) =>
-              this.editData.selected_pmcs.includes(pmc.key),
-            );
+          if (this.isEditMode) {
+            const editPmcKeys: any[] =
+              this.editData?.pmcs?.map((p: any) => p.key) ?? [];
 
-            this.staffForm.patchValue({
-              pmc: this.selectedPMC.map((pmc: any) => pmc.key),
-            });
+            if (editPmcKeys.length) {
+              this.selectedPMC = this.pmcOptions.filter((option: any) =>
+                editPmcKeys.includes(option.key),
+              );
+              this.staffForm.patchValue({
+                pmc: this.selectedPMC.map((p: any) => p.key),
+              });
+            }
           }
         },
       });

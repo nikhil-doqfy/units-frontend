@@ -39,7 +39,8 @@
     "ADD_UNIT": "إضافة وحدة",
     "AUDIT_LOG": "سجل التدقيق",
     "CHARGES": "الرسوم",
-    "TEAM": "الفريق"
+    "TEAM": "الفريق",
+    "ORGANIZATION": "منظمة"
   },
   "ADD_PROPERTY": "إضافة عقار",
   "NEW_LEASE": "عقد جديد",
@@ -802,5 +803,12 @@
   "CHEQUE_AGING": "شيخوخة الشيكات",
   "ADD_COMPLAINT": "إضافة شكوى",
   "EDIT_COMPLAINT": "تحرير الشكوى",
-  "UPDATE_COMPLAINT": "تحديث الشكوى"
+  "UPDATE_COMPLAINT": "تحديث الشكوى",
+  "ORGANIZATION": "منظمة",
+  "ORGANIZATION_DETAILS": "تفاصيل المنظمة",
+  "ORGANIZATION_DETAILS_DESC": "إدارة جميع معلومات مؤسستك في مكان واحد.",
+  "ORGANIZATION_NAME": "اسم المنظمة",
+  "ORGANIZATION_TYPE": "نوع المنظمة",
+  "REGISTRATION_NO": "رقم التسجيل",
+  "WEBSITE": "موقع إلكتروني"
 }

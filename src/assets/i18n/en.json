@@ -39,7 +39,8 @@
     "NEW_TENANT": "New Tenant",
     "TEAM": "Team",
     "BROADCAST": "Broadcast",
-    "ADD_UNIT": "Add Unit"
+    "ADD_UNIT": "Add Unit",
+    "ORGANIZATION": "Organization"
   },
 
   "NEW_LEASE": "New Lease",
@@ -805,5 +806,12 @@
   "CHEQUE_AGING": "Cheque Aging",
   "ADD_COMPLAINT": "Add Complaint",
   "EDIT_COMPLAINT": "Edit Complaint",
-  "UPDATE_COMPLAINT": "Update Complaint"
+  "UPDATE_COMPLAINT": "Update Complaint",
+  "ORGANIZATION": "Organization",
+  "ORGANIZATION_DETAILS": "Organization details",
+  "ORGANIZATION_DETAILS_DESC": "Manage all your organization information in one place.",
+  "ORGANIZATION_NAME": "Organization Name",
+  "ORGANIZATION_TYPE": "Organization Type",
+  "REGISTRATION_NO": "Registration No",
+  "WEBSITE": "Website"
 }
