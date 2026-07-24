@@ -119,7 +119,7 @@ export class PropertyDetailComponent implements OnInit {
                   label: this.getLabel('PROPERTY_TYPE'),
                   value:
                     prop.property_type
-                      ?.map((item: any) => item.name)
+                      ?.map((item: any) => item.name ?? item.value ?? item)
                       .join(', ') || '--',
                 },
                 {

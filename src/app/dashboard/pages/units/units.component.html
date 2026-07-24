@@ -164,6 +164,7 @@
               {{ "UNIT_NAME" | translate }}
               <i><app-sorting-icon></app-sorting-icon></i>
             </th>
+            <th>{{ "PMC" | translate }}</th>
             <th>{{ "PROPERTY_NAME" | translate }}</th>
             <th>{{ "BLOCK_TOWER" | translate }}</th>
             <th>{{ "FLOOR_NO" | translate }}</th>
@@ -193,6 +194,7 @@
                   [clickable]="true"
                 />
               </td>
+              <td>Ayllc</td>
               <td>{{ unit.property_name }}</td>
               <td>{{ unit.block_name || "--" }}</td>
               <td>{{ unit.floor_no ?? "--" }}</td>

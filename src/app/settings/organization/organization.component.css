@@ -1,0 +1,72 @@
+/* Reuse same styling as my-profile */
+.profileSection {
+  padding: 8px 16px 16px;
+}
+
+.profilePhotoRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.profilePhotoWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profilePhoto {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--muteBorder1, #e0e0e0);
+}
+
+.orgLogo {
+  border-radius: 8px;
+}
+
+.profileEditBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--muteBg, #f5f5f5);
+  border: 1px solid var(--greyBorder, #ccc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.profileName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--blackText);
+  margin: 0 0 2px;
+}
+
+.profileRole {
+  font-size: 13px;
+  color: var(--greyText);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.form-control:disabled,
+.form-control[disabled] {
+  background-color: var(--muteBg, #f8f9fa);
+  color: var(--blackText);
+  border-color: transparent;
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .profileSection {
+    padding: 8px 0;
+  }
+}

@@ -55,6 +55,7 @@ export class AllPropertiesComponent implements OnInit {
   private propertyService = inject(PropertyService);
   selectedPropertyType: any = null;
   selectedStatus: any = null;
+  selectedPMC: any = null;
   showDetailView: boolean = false;
   properties: any[] = [];
   totalRecords: number = 0;
@@ -71,6 +72,7 @@ export class AllPropertiesComponent implements OnInit {
   // filterStatus: string = '';
   filterPropertyType: string | null = null;
   filterStatus: string | null = null;
+  filterPMC: string | null = null;
   propertyTypeOptions = [
     { key: 'APARTMENT', value: 'Apartment' },
     { key: 'VILLA', value: 'Villa' },
@@ -87,6 +89,11 @@ export class AllPropertiesComponent implements OnInit {
     { key: 'DRAFT', value: 'Draft' },
   ];
 
+  pmcOptions = [
+    { key: 'PMC1', value: 'PMC 1' },
+    { key: 'PMC2', value: 'PMC 2' },
+    { key: 'PMC3', value: 'PMC 3' },
+  ];
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },

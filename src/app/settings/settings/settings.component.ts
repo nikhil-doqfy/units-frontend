@@ -9,7 +9,7 @@ import { ChargesIconComponent } from '../../icons/charges-icon/charges-icon.comp
 import { TermsconditionIconComponent } from '../../icons/termscondition-icon/termscondition-icon.component';
 import { UserIconComponent } from '../../auth/component/icons/user-icon/user-icon.component';
 import { ProfileIconComponent } from '../../icons/profile-icon/profile-icon.component';
-import { translate } from 'ol/transform';
+import { OrganizationIconComponent } from '../../icons/organization-icon/organization-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -27,6 +27,7 @@ import { TranslateModule } from '@ngx-translate/core';
     TermsconditionIconComponent,
     UserIconComponent,
     ProfileIconComponent,
+    OrganizationIconComponent,
     TranslateModule,
   ],
   templateUrl: './settings.component.html',

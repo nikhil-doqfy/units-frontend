@@ -6,7 +6,8 @@
 
 .sidebar {
   width: 220px;
-  height: 411px;
+  height: auto;
+  min-height: 411px;
   background: var(--whiteBg);
   border: 1px solid #ecf0f2;
   border-radius: 12px;

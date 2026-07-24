@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MyProfileComponent } from '../my-profile/my-profile.component';
 import { TermsconditionsComponent } from '../termsconditions/termsconditions.component';
 import { ChargesComponent } from '../charges/charges.component';
+import { OrganizationComponent } from '../organization/organization.component';
 import { SettingsComponent } from './settings.component';
 import { AuditlogComponent } from '../../user/auditlog/auditlog.component';
 
@@ -14,7 +15,6 @@ const routes: Routes = [
     children: [
       {
         path: 'profile',
-
         component: MyProfileComponent,
         data: { titleKey: 'PAGE_TITLE.MY_PROFILE' },
       },
@@ -28,7 +28,11 @@ const routes: Routes = [
         component: ChargesComponent,
         data: { titleKey: 'PAGE_TITLE.CHARGES' },
       },
-
+      {
+        path: 'organization',
+        component: OrganizationComponent,
+        data: { titleKey: 'PAGE_TITLE.ORGANIZATION' },
+      },
       { path: '', redirectTo: 'profile', pathMatch: 'full' },
     ],
   },

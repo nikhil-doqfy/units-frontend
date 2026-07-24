@@ -60,6 +60,18 @@
                     >
                     </app-custom-select>
                   </div>
+                  <div class="col-12">
+                    <label class="form-label">{{ "PMC" | translate }}</label>
+                    <app-custom-select
+                      [options]="pmcOptions"
+                      key="key"
+                      value="value"
+                      [(ngModel)]="selectedPMC"
+                      [placeholder]="'SELECT_PMC' | translate"
+                      (optionSelected)="filterPMC = $event?.key"
+                    >
+                    </app-custom-select>
+                  </div>
                 </div>
               </ng-container>
               <ng-container action>
@@ -102,6 +114,9 @@
                 {{ "PROPERTY_NAME" | translate
                 }}<i><app-sorting-icon></app-sorting-icon></i>
               </th>
+              <th style="cursor: pointer" (click)="sort('property_name')">
+                {{ "PMC" | translate }}
+              </th>
               <th>{{ "LOCATION" | translate }}</th>
               <th>{{ "TOTAL_BLOCKS_TOWERS" | translate }}</th>
               <th>{{ "TOTAL_UNITS" | translate }}</th>
@@ -123,6 +138,7 @@
                   [title]="prop.property_name"
                 />
               </td>
+              <td>Ayllc</td>
               <td>{{ prop.address_line_1 || "--" }}</td>
               <td>{{ prop.no_of_blocks }}</td>
               <td>{{ prop.no_of_units }}</td>
