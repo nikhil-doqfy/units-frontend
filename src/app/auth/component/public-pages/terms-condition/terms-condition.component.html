@@ -1,0 +1,59 @@
+<app-public-layout>
+  <!-- Sidebar -->
+
+  <div sidebar>
+    <!-- Top Links -->
+
+    <div class="sidebar-menu">
+      <a class="active">
+        <i class="bi bi-file-text"></i>
+        Terms & Conditions
+      </a>
+
+      <a routerLink="/auth/privacy-policy">
+        <i class="bi bi-shield-check"></i>
+        Privacy Policy
+      </a>
+    </div>
+
+    <hr />
+
+    <!-- TOC -->
+
+    <span class="sidebar-title"> ON THIS PAGE </span>
+    <div class="toc-links">
+      <a *ngFor="let item of page?.sections" (click)="scrollToSection(item.id)">
+        {{ item.title }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Content -->
+
+  <div class="doc-content">
+    <p class="doc-category">LEGAL</p>
+    <h1 class="doc-title">
+      {{ page?.title }}
+    </h1>
+    <p class="doc-date">Effective Date: {{ page?.effectiveDate }}</p>
+    <div class="doc-info">
+      <i class="bi bi-info-circle"></i>
+      <p>
+        Please read these terms carefully before using Units Property Management
+        platform.
+      </p>
+    </div>
+
+    <!-- Dynamic Content Sections -->
+
+    <section class="doc-section" *ngFor="let item of page?.sections" [id]="item.id">
+      <h2>
+        {{ item.title }}
+      </h2>
+
+      <p>
+        {{ item.content }}
+      </p>
+    </section>
+  </div>
+</app-public-layout>

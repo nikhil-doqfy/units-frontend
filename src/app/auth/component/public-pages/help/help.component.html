@@ -1,0 +1,80 @@
+<div class="close-wrapper">
+  <button class="close-btn" (click)="closePage()">
+    <span>Close</span>
+
+    <i class="bi bi-x-lg"></i>
+  </button>
+</div>
+
+<div class="help-page">
+  <!-- Header -->
+  <div class="help-header">
+    <h1>Need Help?</h1>
+
+    <p>Find answers or contact our support team.</p>
+  </div>
+
+  <!-- Support Cards -->
+
+  <div class="row g-4">
+    <div class="col-lg-4 col-md-6" *ngFor="let card of helpCards">
+      <div class="help-card">
+        <div class="help-icon">
+          <i class="bi {{ card.icon }}"></i>
+        </div>
+
+        <h3>
+          {{ card.title }}
+        </h3>
+        <p>
+          {{ card.description }}
+        </p>
+
+        <button class="link-btn">
+          {{ card.action }}
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Support -->
+
+  <div class="contact-box">
+    <div class="contact-item">
+      <i class="bi bi-envelope"></i>
+      <a href="mailto:help&#64;units.com" class="text-dark text-decoration-none">
+        help&#64;units.com
+      </a>
+    </div>
+
+    <div class="contact-item">
+      <i class="bi bi-telephone"></i>
+      <a href="tel:+919876543210" class="text-dark text-decoration-none">
+        +91 98765 43210
+      </a>
+    </div>
+
+    <div class="contact-item">
+      <i class="bi bi-clock"></i>
+      <span> Mon-Fri, 9 AM - 6 PM IST </span>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-wrapper">
+    <h2>Frequently asked questions</h2>
+
+    <div class="faq-card" *ngFor="let faq of faqs; let i = index">
+      <div class="faq-question" (click)="toggleFaq(i)">
+        <span>
+          {{ faq.question }}
+        </span>
+        <i class="bi" [ngClass]="activeFaq === i ? 'bi-dash' : 'bi-plus'"> </i>
+      </div>
+      <div class="faq-answer" *ngIf="activeFaq === i">
+        {{ faq.answer }}
+      </div>
+    </div>
+  </div>
+</div>

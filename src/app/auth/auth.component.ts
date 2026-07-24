@@ -42,6 +42,8 @@ export class AuthComponent implements OnInit {
 
   currentRole: UserRole = 'owner';
   currentRole$ = this.themeService.currentRole$;
+  isFullPage = false;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -63,6 +65,17 @@ export class AuthComponent implements OnInit {
       .subscribe(() => {
         this.pageType =
           this.activatedRoute.snapshot.firstChild?.routeConfig?.path || '';
+
+        this.checkLayout(this.router.url);
       });
+
+    this.checkLayout(this.router.url);
+  }
+
+  checkLayout(url: string) {
+    this.isFullPage =
+      url.includes('terms-conditions') ||
+      url.includes('privacy-policy') ||
+      url.includes('help');
   }
 }
