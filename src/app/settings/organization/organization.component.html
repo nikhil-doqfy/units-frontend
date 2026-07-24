@@ -1,0 +1,337 @@
+<div class="mb-4" [ngClass]="{ arabic: currentLanguage === 'ar' }">
+  <!-- ── Organization Details ─────────────────────────────────────── -->
+  <app-dash-form>
+    <form>
+      <app-white-card
+        [title]="'ORGANIZATION_DETAILS' | translate"
+        [description]="'ORGANIZATION_DETAILS_DESC' | translate"
+        [showActions]="true"
+      >
+        <div class="profileSection">
+          <!-- Logo row -->
+          <div class="profilePhotoRow">
+            <div class="profilePhotoWrap" [class.editMode]="editOrgMode">
+              <img
+                [src]="orgLogo"
+                class="profilePhoto orgLogo"
+                alt="Organization Logo"
+              />
+              <button
+                type="button"
+                class="profileEditBtn"
+                *ngIf="editOrgMode"
+                (click)="triggerLogoInput()"
+              >
+                <i><app-edit-icon /></i>
+              </button>
+              <input
+                type="file"
+                #logoInput
+                (change)="onLogoSelected($event)"
+                accept=".png,.jpg,.jpeg"
+                hidden
+              />
+            </div>
+            <div class="profilePhotoMeta">
+              <p class="profileName">
+                {{ orgDetails.name || ("ORGANIZATION_NAME" | translate) }}
+              </p>
+              <p class="profileRole">{{ orgDetails.type || "" }}</p>
+            </div>
+          </div>
+
+          <!-- Fields -->
+          <div class="row g-3 mt-1">
+            <div class="col-md-4">
+              <label class="form-label">{{
+                "ORGANIZATION_NAME" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="orgDetails.name"
+                name="orgName"
+                [disabled]="!editOrgMode"
+                (input)="onFieldChange('name')"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{
+                "PRIMARY_EMAIL_ID" | translate
+              }}</label>
+              <input
+                type="email"
+                class="form-control"
+                [(ngModel)]="orgDetails.email"
+                name="orgEmail"
+                [disabled]="!editOrgMode"
+                (input)="onFieldChange('email')"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ "CONTACT" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="orgDetails.contact"
+                name="orgContact"
+                [disabled]="!editOrgMode"
+                (input)="onFieldChange('contact')"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{
+                "ORGANIZATION_TYPE" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="orgDetails.type"
+                name="orgType"
+                [disabled]="!editOrgMode"
+                (input)="onFieldChange('type')"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{
+                "REGISTRATION_NO" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="orgDetails.registrationNo"
+                name="orgRegNo"
+                [disabled]="!editOrgMode"
+                (input)="onFieldChange('registrationNo')"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">{{ "WEBSITE" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="orgDetails.website"
+                name="orgWebsite"
+                [disabled]="!editOrgMode"
+                (input)="onFieldChange('website')"
+              />
+            </div>
+          </div>
+        </div>
+
+        <ng-container card-actions>
+          <button
+            *ngIf="!editOrgMode"
+            type="button"
+            class="btn btnCommon btnWhite"
+            (click)="enableOrgEdit()"
+          >
+            <i><app-edit-icon /></i>{{ "EDIT" | translate }}
+          </button>
+          <button
+            *ngIf="editOrgMode"
+            type="submit"
+            class="btn btnCommon btnActive"
+            (click)="saveOrgDetails()"
+          >
+            {{ "SAVE_CHANGES" | translate }}
+          </button>
+          <button
+            *ngIf="editOrgMode"
+            type="button"
+            class="btn btnCommon btnDarkGrey"
+            (click)="cancelOrg()"
+          >
+            {{ "CANCEL" | translate }}
+          </button>
+        </ng-container>
+      </app-white-card>
+    </form>
+  </app-dash-form>
+
+  <!-- ── Organization Address ──────────────────────────────────────── -->
+  <app-dash-form class="mt-4">
+    <form>
+      <app-white-card
+        [title]="'OTHER_DETAILS' | translate"
+        [showActions]="true"
+      >
+        <div class="profileSection">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">{{ "COUNTRY" | translate }}</label>
+              <ng-container *ngIf="!editAddressMode; else editCountryTpl">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="addressDetails.country"
+                  name="country"
+                  [disabled]="true"
+                />
+              </ng-container>
+              <ng-template #editCountryTpl>
+                <app-custom-select
+                  [options]="countryList"
+                  key="key"
+                  value="value"
+                  placeholder="Select Country"
+                  [selectedOption]="selectedCountry"
+                  (optionSelected)="onCountrySelected($event)"
+                  (click)="loadCountries()"
+                />
+              </ng-template>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{ "STATE" | translate }}</label>
+              <ng-container *ngIf="!editAddressMode; else editStateTpl">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="addressDetails.state"
+                  name="state"
+                  [disabled]="true"
+                />
+              </ng-container>
+              <ng-template #editStateTpl>
+                <app-custom-select
+                  [options]="stateList"
+                  key="key"
+                  value="value"
+                  placeholder="Select State"
+                  [selectedOption]="selectedState"
+                  (optionSelected)="onStateSelected($event)"
+                  (click)="loadStates()"
+                />
+              </ng-template>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{ "CITY" | translate }}</label>
+              <ng-container *ngIf="!editAddressMode; else editCityTpl">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="addressDetails.city"
+                  name="city"
+                  [disabled]="true"
+                />
+              </ng-container>
+              <ng-template #editCityTpl>
+                <app-custom-select
+                  [options]="cityList"
+                  key="key"
+                  value="value"
+                  placeholder="Select City"
+                  [selectedOption]="selectedCity"
+                  (optionSelected)="onCitySelected($event)"
+                  (click)="loadCities()"
+                />
+              </ng-template>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{ "LOCALITY" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="addressDetails.locality"
+                name="locality"
+                [disabled]="!editAddressMode"
+                (input)="onAddressFieldChange('locality')"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{ "POSTAL_CODE" | translate }}</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="addressDetails.postalCode"
+                name="postalCode"
+                [disabled]="!editAddressMode"
+                (input)="onAddressFieldChange('postalCode')"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{ "TIME_ZONE" | translate }}</label>
+              <ng-container *ngIf="!editAddressMode; else editTimezoneTpl">
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="addressDetails.timeZone"
+                  [disabled]="true"
+                />
+              </ng-container>
+              <ng-template #editTimezoneTpl>
+                <app-custom-select
+                  [options]="timezoneList"
+                  placeholder="Select Timezone"
+                  [selectedOption]="selectedTimezone"
+                  (optionSelected)="onTimezoneSelected($event)"
+                  (click)="loadTimezones()"
+                />
+              </ng-template>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{
+                "ADDRESS LINE 1" | translate
+              }}</label>
+              <textarea
+                class="form-control"
+                rows="2"
+                [(ngModel)]="addressDetails.address"
+                name="address"
+                [disabled]="!editAddressMode"
+                (input)="onAddressFieldChange('address')"
+              ></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{
+                "ADDRESS LINE 2" | translate
+              }}</label>
+              <textarea
+                class="form-control"
+                rows="2"
+                [(ngModel)]="addressDetails.additionalAddress"
+                name="additionalAddress"
+                [disabled]="!editAddressMode"
+                (input)="onAddressFieldChange('additionalAddress')"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <ng-container card-actions>
+          <button
+            *ngIf="!editAddressMode"
+            type="button"
+            class="btn btnCommon btnWhite"
+            (click)="enableAddressEdit()"
+          >
+            <i><app-edit-icon /></i>{{ "EDIT" | translate }}
+          </button>
+          <button
+            *ngIf="editAddressMode"
+            type="submit"
+            class="btn btnCommon btnActive"
+            (click)="saveAddressDetails()"
+          >
+            {{ "SAVE_CHANGES" | translate }}
+          </button>
+          <button
+            *ngIf="editAddressMode"
+            type="button"
+            class="btn btnCommon btnDarkGrey"
+            (click)="cancelAddress()"
+          >
+            {{ "CANCEL" | translate }}
+          </button>
+        </ng-container>
+      </app-white-card>
+    </form>
+  </app-dash-form>
+</div>

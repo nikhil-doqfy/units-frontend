@@ -1,39 +1,67 @@
-<app-auth-header></app-auth-header>
-<section class="authPageBlock">
-  <div class="authBgPatt">
-    <app-auth-patt-icon />
-  </div>
-  <div class="authPageContainer">
-    <div class="authInfoText">
-      <h3>PROPERTY MANAGEMENT</h3>
-      <div>
-        <!-- Owner -->
-        <p *ngIf="currentRole === 'owner'">
-          Manage Your Properties With <span>Ease And Transparency</span>
-        </p>
-        <!-- Property Manager -->
-        <p *ngIf="currentRole === 'property-manager'">
-          Streamline Your Property Operations With
-          <span>Efficiency And Control</span>
-        </p>
-        <!-- Tenant -->
-        <p *ngIf="currentRole === 'tenant'">
-          Experience Hassle-Free Living With <span>Trust And Convenience</span>
-        </p>
-      </div>
+<ng-container *ngIf="isFullPage; else authPages">
+
+  <app-auth-header></app-auth-header>
+
+
+  <main class="fullPageContent">
+    <router-outlet></router-outlet>
+  </main>
+
+
+  <app-auth-footer></app-auth-footer>
+
+</ng-container>
+
+
+<ng-template #authPages>
+
+  <app-auth-header></app-auth-header>
+
+  <section class="authPageBlock">
+
+    <div class="authBgPatt">
+      <app-auth-patt-icon />
     </div>
-    <app-auth-form-card>
-      <router-outlet></router-outlet>
-    </app-auth-form-card>
-    <ng-container *ngIf="pageType === 'new-user'">
-      <div class="authFrmText">
-        <p>
-          By Signing up I agree to the
-          <a href="javascript:void(0);">Terms of Service</a> and acknowledge
-          you’ve read our <a href="javascript:void(0);">Privacy Policy</a>
-        </p>
+
+
+    <div class="authPageContainer">
+
+      <div class="authInfoText">
+
+        <h3>PROPERTY MANAGEMENT</h3>
+
+        <div>
+
+          <p *ngIf="currentRole === 'owner'">
+            Manage Your Properties With
+            <span>Ease And Transparency</span>
+          </p>
+
+          <p *ngIf="currentRole === 'property-manager'">
+            Streamline Your Property Operations With
+            <span>Efficiency And Control</span>
+          </p>
+
+          <p *ngIf="currentRole === 'tenant'">
+            Experience Hassle-Free Living With
+            <span>Trust And Convenience</span>
+          </p>
+
+        </div>
+
       </div>
-    </ng-container>
-  </div>
-</section>
-<app-auth-footer></app-auth-footer>
+
+
+      <app-auth-form-card>
+        <router-outlet></router-outlet>
+      </app-auth-form-card>
+
+
+    </div>
+
+  </section>
+
+
+  <app-auth-footer></app-auth-footer>
+
+</ng-template>

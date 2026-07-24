@@ -2,7 +2,9 @@
   <form [formGroup]="staffForm">
     <div class="row g-3">
       <div class="col-md-6">
-        <label class="form-label">{{ "FIRST_NAME" | translate }}<span class="required">*</span></label>
+        <label class="form-label"
+          >{{ "FIRST_NAME" | translate }}<span class="required">*</span></label
+        >
         <input
           class="form-control"
           [class.is-invalid]="hasError('firstName', 'required')"
@@ -16,7 +18,9 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">{{ "LAST_NAME" | translate }}<span class="required">*</span></label>
+        <label class="form-label"
+          >{{ "LAST_NAME" | translate }}<span class="required">*</span></label
+        >
         <input
           class="form-control"
           [class.is-invalid]="hasError('lastName', 'required')"
@@ -30,10 +34,15 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">{{ "EMAIL_ADDRESS" | translate }}<span class="required">*</span></label>
+        <label class="form-label"
+          >{{ "EMAIL_ADDRESS" | translate
+          }}<span class="required">*</span></label
+        >
         <input
           class="form-control"
-          [class.is-invalid]="hasError('email', 'required') || hasError('email', 'email')"
+          [class.is-invalid]="
+            hasError('email', 'required') || hasError('email', 'email')
+          "
           type="email"
           formControlName="email"
           [placeholder]="'ENTER_EMAIL_HERE' | translate"
@@ -47,7 +56,10 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">{{ "CONTACT_NUMBER" | translate }}<span class="required">*</span></label>
+        <label class="form-label"
+          >{{ "CONTACT_NUMBER" | translate
+          }}<span class="required">*</span></label
+        >
         <input
           class="form-control"
           [class.is-invalid]="hasError('contactNumber', 'required')"
@@ -61,7 +73,9 @@
       </div>
 
       <div class="col-md-12">
-        <label class="form-label">{{ "STAFF_ROLE" | translate }}<span class="required">*</span></label>
+        <label class="form-label"
+          >{{ "STAFF_ROLE" | translate }}<span class="required">*</span></label
+        >
         <app-custom-select
           [options]="staffRoleOptions"
           key="key"
@@ -73,6 +87,23 @@
         ></app-custom-select>
         <small class="errorMsg" *ngIf="hasError('role', 'required')">
           {{ "ROLE_REQUIRED" | translate }}
+        </small>
+      </div>
+      <div class="col-md-12">
+        <label class="form-label"
+          >{{ "SELECT_PMC" | translate }}<span class="required">*</span></label
+        >
+        <app-custom-multi-select
+          [options]="pmcOptions"
+          key="key"
+          value="value"
+          formControlName="pmc"
+          [placeholder]="'SELECT_PMC' | translate"
+          [selectedOptions]="selectedPMC"
+          (optionsSelected)="onPMCSelected($event)"
+        ></app-custom-multi-select>
+        <small class="errorMsg" *ngIf="hasError('pmc', 'required')">
+          {{ "PMC_REQUIRED" | translate }}
         </small>
       </div>
 
@@ -93,8 +124,16 @@
       </div>
 
       <div class="col-md-6" *ngIf="!editData">
-        <label class="form-label">{{ "PASSWORD" | translate }}<span class="required">*</span></label>
-        <div class="iconInput password" [class.input-invalid]="hasError('password', 'required') || hasError('password', 'minlength')">
+        <label class="form-label"
+          >{{ "PASSWORD" | translate }}<span class="required">*</span></label
+        >
+        <div
+          class="iconInput password"
+          [class.input-invalid]="
+            hasError('password', 'required') ||
+            hasError('password', 'minlength')
+          "
+        >
           <i><app-password-icon /></i>
           <input
             [type]="showPassword ? 'text' : 'password'"
@@ -117,8 +156,16 @@
       </div>
 
       <div class="col-md-6" *ngIf="!editData">
-        <label class="form-label">{{ "CONFIRM_PASSWORD" | translate }}<span class="required">*</span></label>
-        <div class="iconInput password" [class.input-invalid]="hasError('confirmPassword', 'required') || passwordMismatch">
+        <label class="form-label"
+          >{{ "CONFIRM_PASSWORD" | translate
+          }}<span class="required">*</span></label
+        >
+        <div
+          class="iconInput password"
+          [class.input-invalid]="
+            hasError('confirmPassword', 'required') || passwordMismatch
+          "
+        >
           <i><app-password-icon /></i>
           <input
             [type]="showConfirmPassword ? 'text' : 'password'"

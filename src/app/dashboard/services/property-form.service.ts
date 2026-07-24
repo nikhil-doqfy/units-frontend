@@ -117,6 +117,7 @@ export class PropertyFormService {
       makaniNo: [''],
       dewaNo: [''],
       approxRent: [''],
+      pmc: [''],
       // Location / Address
       addressLane1: [''],
       addressLane2: [''],
@@ -359,10 +360,14 @@ export class PropertyFormService {
         key: content?.no_of_units,
         value: String(content?.no_of_units ?? ''),
       },
-      propertyType: {
-        key: content?.property_type,
-        value: content?.property_type,
-      },
+      propertyType: Array.isArray(content?.property_type)
+        ? content.property_type.map((t: any) => ({
+            key: t.key ?? t.id ?? t,
+            value: t.value ?? t.name ?? t,
+          }))
+        : content?.property_type
+          ? [{ key: content.property_type, value: content.property_type }]
+          : [],
       landArea: content?.land_area,
       landAreaUnit: {
         key: content?.land_area_unit,
@@ -373,6 +378,12 @@ export class PropertyFormService {
       makaniNo: content?.makani_no,
       dewaNo: content?.dewa_no,
       approxRent: content?.approx_rent,
+      pmc: content?.pmc
+        ? {
+            key: content.pmc.key ?? content.pmc.id,
+            value: content.pmc.value ?? content.pmc.name,
+          }
+        : null,
       addressLane1: content?.address_line_1,
       addressLane2: content?.address_line_2,
       landmark: content?.landmark,
@@ -388,7 +399,9 @@ export class PropertyFormService {
       property_name: value.propertyName,
       no_of_blocks: value.noOfBlocks?.key ?? value.noOfBlocks,
       no_of_units: value.noOfUnits?.key ?? value.noOfUnits,
-      property_type: value.propertyType?.key ?? value.propertyType,
+      property_type: Array.isArray(value.propertyType)
+        ? value.propertyType.map((item: any) => item.key ?? item)
+        : (value.propertyType?.key ?? value.propertyType),
       land_area: value.landArea,
       land_area_unit: value.landAreaUnit?.key ?? value.landAreaUnit,
       land_dm_no: value.landDmNo,
@@ -403,6 +416,7 @@ export class PropertyFormService {
       latitude: value.latitude || null,
       longitude: value.longitude || null,
       map_address: value.mapAddress || null,
+      ...(value.pmc?.key ? { pmc_id: value.pmc.key } : {}),
     };
   }
 

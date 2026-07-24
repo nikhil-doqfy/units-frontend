@@ -105,6 +105,7 @@
               <th (click)="sort('staff_name')" style="cursor: pointer">
                 {{ "STAFF_NAME" | translate }} <i><app-sorting-icon /></i>
               </th>
+              <th>{{ "PMC" | translate }}</th>
               <th>{{ "CODE" | translate }}</th>
               <th>{{ "CONTACT_NUMBER" | translate }}</th>
               <th>
@@ -127,7 +128,7 @@
                   >
                   </app-table-img-item>
                 </td>
-
+                <td>{{ staff.pmc?.value || "--" }}</td>
                 <td>{{ staff.code || "_" }}</td>
                 <td>{{ staff.contact_number | maskPhone }}</td>
 

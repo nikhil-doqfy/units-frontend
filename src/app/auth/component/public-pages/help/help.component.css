@@ -1,0 +1,163 @@
+/* ===============================
+   HELP PAGE
+================================ */
+
+.help-page {
+  max-width: 1000px;
+  margin: auto;
+  padding: 45px 20px;
+}
+
+/* Header */
+
+.help-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.help-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--textPrimary);
+  margin-bottom: 10px;
+}
+
+.help-header p {
+  color: var(--textSecondary);
+  font-size: 15px;
+}
+
+/* Cards */
+
+.help-card {
+  height: 100%;
+  padding: 25px;
+  border: 1px solid var(--borderLight);
+  border-radius: 14px;
+  background: var(--whiteBg);
+  transition: 0.3s ease;
+}
+
+.help-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px var(--shadowLight);
+}
+
+/* Icon */
+
+.help-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primaryLight);
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+
+.help-icon i {
+  font-size: 24px;
+  color: var(--primaryColor);
+}
+
+.help-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--textPrimary);
+}
+
+.help-card p {
+  color: var(--textSecondary);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 50px;
+}
+
+/* Link button */
+
+.link-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--primaryColor);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Contact */
+
+.contact-box {
+  display: flex;
+  gap: 35px;
+  flex-wrap: wrap;
+  margin-top: 45px;
+  padding: 20px 0;
+  border-top: 1px solid var(--borderLight);
+  border-bottom: 1px solid var(--borderLight);
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--greyText);
+  font-size: 14px;
+}
+
+.contact-item i {
+  color: var(--primaryColor);
+  font-size: 18px;
+}
+
+/* FAQ */
+
+.faq-wrapper {
+  margin-top: 50px;
+}
+
+.faq-wrapper h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.faq-card {
+  border: 1px solid var(--borderLight);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.faq-answer {
+  padding: 0 16px 16px;
+  color: var(--textSecondary);
+  font-size: 14px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .help-page {
+    padding: 30px 15px;
+  }
+
+  .help-header h1 {
+    font-size: 26px;
+  }
+
+  .contact-box {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

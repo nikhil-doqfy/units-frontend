@@ -10,11 +10,18 @@
     <div class="col-auto">
       <div class="authHdrOptns">
         <div class="authHdrLinks">
-          <a href="javascript:void(0);">Terms & Conditions</a>
-          <a href="javascript:void(0);">Privacy Policy</a>
+
+          <a class="cursor-pointer" routerLink='/auth/terms-conditions'>
+            Terms & Conditions
+          </a>
+
+          <a class="cursor-pointer" routerLink='/auth/privacy-policy'>
+            Privacy Policy
+          </a>
+
         </div>
         <div class="needHlpBtn">
-          <button type="button">
+          <button type="button" routerLink='/auth/help'>
             Need Help
             <i>
               <app-help-icon></app-help-icon>

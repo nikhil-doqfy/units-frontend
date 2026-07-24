@@ -171,4 +171,11 @@
     font-size: 13px;
     padding: 0 12px;
   }
+
+}
+
+.fullPageContent {
+  min-height: calc(100vh - 120px);
+  padding-top: 64px;
+  padding-bottom: 30px;
 }

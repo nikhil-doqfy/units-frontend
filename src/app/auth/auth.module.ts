@@ -11,6 +11,10 @@ import { NewUserComponent } from './pages/new-user/new-user.component';
 import { FormValidationComponent } from './pages/form-validation/form-validation.component';
 import { UploadDocumentComponent } from './pages/upload-document/upload-document.component';
 
+import { PrivacyPolicyComponent } from './component/public-pages/privacy-policy/privacy-policy.component';
+import { TermsConditionComponent } from './component/public-pages/terms-condition/terms-condition.component';
+import { Helpcomponent } from './component/public-pages/help/help.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -26,7 +30,7 @@ export const routes: Routes = [
         path: 'login',
         title: 'Sign In | Units',
         component: LoginComponent,
-        data: { login: true },
+        data: { login: true, pageType: 'login' },
       },
       {
         path: 'forgot-password',
@@ -38,14 +42,14 @@ export const routes: Routes = [
         path: 'reset-password',
         title: 'Reset Password | Units',
         component: ResetPasswordComponent,
-        data: { login: true },
+        data: { login: true, pageType: 'login' },
       },
 
       {
         path: 'new-user',
         title: 'Sign Up | Units',
         component: NewUserComponent,
-        data: { newUser: true },
+        data: { newUser: true, pageType: 'new-user' },
       },
       {
         path: 'validation',
@@ -58,6 +62,33 @@ export const routes: Routes = [
         title: 'uploadDocument | Units',
         component: UploadDocumentComponent,
         data: { uploadDocument: true },
+      },
+
+      {
+        path: 'terms-conditions',
+        title: 'Terms & Conditions | Units',
+        component: TermsConditionComponent,
+        data: {
+          layout: 'full-page',
+        },
+      },
+
+      {
+        path: 'privacy-policy',
+        title: 'Privacy Policy | Units',
+        component: PrivacyPolicyComponent,
+        data: {
+          layout: 'full-page',
+        },
+      },
+
+      {
+        path: 'help',
+        title: 'Need Help | Units',
+        component: Helpcomponent,
+        data: {
+          layout: 'full-page',
+        },
       },
     ],
   },
