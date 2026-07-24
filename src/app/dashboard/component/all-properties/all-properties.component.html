@@ -14,7 +14,6 @@
             <div class="selected-filters d-flex gap-2 flex-wrap">
               <div class="filter-chip" *ngIf="selectedPropertyType">
                 {{ selectedPropertyType?.value }}
-
                 <span class="cross-icon" (click)="clearPropertyType()">
                   ✕
                 </span>
@@ -22,8 +21,12 @@
 
               <div class="filter-chip" *ngIf="selectedStatus">
                 {{ selectedStatus?.value }}
-
                 <span class="cross-icon" (click)="clearStatus()"> ✕ </span>
+              </div>
+
+              <div class="filter-chip" *ngIf="selectedPMC">
+                {{ selectedPMC?.value }}
+                <span class="cross-icon" (click)="clearPMC()"> ✕ </span>
               </div>
             </div>
             <app-table-search
@@ -68,7 +71,9 @@
                       value="value"
                       [(ngModel)]="selectedPMC"
                       [placeholder]="'SELECT_PMC' | translate"
-                      (optionSelected)="filterPMC = $event?.key"
+                      (optionSelected)="
+                        selectedPMC = $event; filterPMC = $event?.key
+                      "
                     >
                     </app-custom-select>
                   </div>
@@ -138,7 +143,7 @@
                   [title]="prop.property_name"
                 />
               </td>
-              <td>Ayllc</td>
+              <td>{{ prop.pmc?.value || "--" }}</td>
               <td>{{ prop.address_line_1 || "--" }}</td>
               <td>{{ prop.no_of_blocks }}</td>
               <td>{{ prop.no_of_units }}</td>

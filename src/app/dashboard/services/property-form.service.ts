@@ -117,6 +117,7 @@ export class PropertyFormService {
       makaniNo: [''],
       dewaNo: [''],
       approxRent: [''],
+      pmc: [''],
       // Location / Address
       addressLane1: [''],
       addressLane2: [''],
@@ -377,6 +378,12 @@ export class PropertyFormService {
       makaniNo: content?.makani_no,
       dewaNo: content?.dewa_no,
       approxRent: content?.approx_rent,
+      pmc: content?.pmc
+        ? {
+            key: content.pmc.key ?? content.pmc.id,
+            value: content.pmc.value ?? content.pmc.name,
+          }
+        : null,
       addressLane1: content?.address_line_1,
       addressLane2: content?.address_line_2,
       landmark: content?.landmark,
@@ -409,6 +416,7 @@ export class PropertyFormService {
       latitude: value.latitude || null,
       longitude: value.longitude || null,
       map_address: value.mapAddress || null,
+      ...(value.pmc?.key ? { pmc_id: value.pmc.key } : {}),
     };
   }
 

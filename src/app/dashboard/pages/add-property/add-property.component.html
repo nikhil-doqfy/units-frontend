@@ -118,6 +118,18 @@
               formControlName="approxRent"
             />
           </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ "SELECT_PMC" | translate }}</label>
+            <app-custom-select
+              [options]="pmcList"
+              key="key"
+              value="value"
+              formControlName="pmc"
+              [placeholder]="'SELECT_PMC' | translate"
+              [selectedOption]="selectedPmc"
+              (optionSelected)="onPmcSelected($event)"
+            ></app-custom-select>
+          </div>
         </form>
       </app-step-pane>
     </ng-container>
