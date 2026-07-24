@@ -85,6 +85,8 @@ export class AddPropertyComponent {
   areaUnit: any[] = [];
   floorsCount: any[] = [];
   parkingCount: any[] = [];
+  pmcList: any[] = [];
+  selectedPmc: any = null;
 
   commercialsForm = this.propertyFormService.propertyCommercialsForm;
   imagesForm = this.propertyFormService.propertyImagesForm;
@@ -197,6 +199,18 @@ export class AddPropertyComponent {
 
     this.sharedAPIService.getOptionsType(options);
 
+    this.sharedAPIService
+      .getOptions({ option_type: 'PMC_BY_PM' })
+      .subscribe((resp: any) => {
+        this.pmcList = resp?.content?.pmc ?? [];
+
+        const existing = this.pmDetailsForm.get('pmc')?.value;
+        if (existing?.key) {
+          this.selectedPmc =
+            this.pmcList.find((p: any) => p.key === existing.key) ?? existing;
+        }
+      });
+
     this.propertyService.getPropertyDocumentTypes().subscribe((resp: any) => {
       const types = resp?.content || [];
       this.documetUploadTypes = types.map((dt: any) => ({
@@ -264,6 +278,11 @@ export class AddPropertyComponent {
       longitude: location.longitude,
       mapAddress: location.address,
     });
+  }
+
+  onPmcSelected(option: any): void {
+    this.selectedPmc = option;
+    this.pmDetailsForm.patchValue({ pmc: option });
   }
 
   submitProperty(): void {

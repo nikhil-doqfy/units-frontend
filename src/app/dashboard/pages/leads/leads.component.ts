@@ -4,6 +4,7 @@ import {
   inject,
   signal,
   TemplateRef,
+  ViewChild,
   WritableSignal,
 } from '@angular/core';
 import {
@@ -26,7 +27,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
@@ -55,6 +55,8 @@ export class LeadsComponent {
   private modalService = inject(NgbModal);
   closeResult: WritableSignal<string> = signal('');
 
+  @ViewChild(AllLeadsComponent) allLeadsRef!: AllLeadsComponent;
+
   selectedLead: any = null;
   activeLeadTab: string = 'all';
   isEditMode: boolean = false;
@@ -62,7 +64,6 @@ export class LeadsComponent {
     this.loadBreadcrumb();
   }
   private sharedService = inject(SharedService);
-  private router = inject(Router);
   private alertService = inject(AlertService);
   breadcrumbData: BreadCrumb[] = [];
 
@@ -127,7 +128,11 @@ export class LeadsComponent {
     if (success) {
       this.alertService.success('Lead saved successfully');
       modal.close();
-      this.router.navigate(['/dashboard/leads']);
+
+      this.activeLeadTab = 'all';
+      setTimeout(() => {
+        this.allLeadsRef?.loadLeads();
+      });
     } else {
       this.alertService.error('Failed to save lead');
     }

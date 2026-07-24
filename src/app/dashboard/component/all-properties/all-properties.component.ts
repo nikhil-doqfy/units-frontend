@@ -24,6 +24,7 @@ import { PropertyService } from '../../services/property.service';
 import { debounceTime, Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SharedService } from '../../../shared.service';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-all-properties',
@@ -53,6 +54,7 @@ import { SharedService } from '../../../shared.service';
 })
 export class AllPropertiesComponent implements OnInit {
   private propertyService = inject(PropertyService);
+  private sharedApiService = inject(SharedApiService);
   selectedPropertyType: any = null;
   selectedStatus: any = null;
   selectedPMC: any = null;
@@ -67,12 +69,10 @@ export class AllPropertiesComponent implements OnInit {
 
   private search$ = new Subject<string>();
 
-  // Active filters
-  // filterPropertyType: string = '';
-  // filterStatus: string = '';
   filterPropertyType: string | null = null;
   filterStatus: string | null = null;
   filterPMC: string | null = null;
+
   propertyTypeOptions = [
     { key: 'APARTMENT', value: 'Apartment' },
     { key: 'VILLA', value: 'Villa' },
@@ -89,11 +89,9 @@ export class AllPropertiesComponent implements OnInit {
     { key: 'DRAFT', value: 'Draft' },
   ];
 
-  pmcOptions = [
-    { key: 'PMC1', value: 'PMC 1' },
-    { key: 'PMC2', value: 'PMC 2' },
-    { key: 'PMC3', value: 'PMC 3' },
-  ];
+  // Loaded from API: GET /options?option_type=PMC_BY_PM
+  pmcOptions: any[] = [];
+
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -111,6 +109,15 @@ export class AllPropertiesComponent implements OnInit {
       this.loadProperties();
     });
     this.loadProperties();
+    this.loadPmcOptions();
+  }
+
+  loadPmcOptions(): void {
+    this.sharedApiService
+      .getOptions({ option_type: 'PMC_BY_PM' })
+      .subscribe((resp: any) => {
+        this.pmcOptions = resp?.content?.pmc ?? [];
+      });
   }
 
   buildParams(): Record<string, any> {
@@ -122,6 +129,7 @@ export class AllPropertiesComponent implements OnInit {
     if (this.filterPropertyType)
       params['property_type'] = this.filterPropertyType;
     if (this.filterStatus) params['status'] = this.filterStatus;
+    if (this.filterPMC) params['pmc_id'] = this.filterPMC;
     return params;
   }
 
@@ -138,14 +146,18 @@ export class AllPropertiesComponent implements OnInit {
   clearPropertyType() {
     this.selectedPropertyType = null;
     this.filterPropertyType = null;
-
     this.applyFilter();
   }
 
   clearStatus() {
     this.selectedStatus = null;
     this.filterStatus = null;
+    this.applyFilter();
+  }
 
+  clearPMC() {
+    this.selectedPMC = null;
+    this.filterPMC = null;
     this.applyFilter();
   }
   onRefresh() {
@@ -171,10 +183,12 @@ export class AllPropertiesComponent implements OnInit {
   }
 
   removeFilter(): void {
-    this.filterPropertyType = '';
-    this.filterStatus = '';
+    this.filterPropertyType = null;
+    this.filterStatus = null;
+    this.filterPMC = null;
     this.selectedPropertyType = null;
     this.selectedStatus = null;
+    this.selectedPMC = null;
     this.currentPage = 1;
     this.loadProperties();
   }
