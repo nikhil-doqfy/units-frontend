@@ -128,7 +128,7 @@
                   >
                   </app-table-img-item>
                 </td>
-                <td>{{ staff.pmc?.value || "--" }}</td>
+                <td>{{ staff?.pmcs?.[0]?.value || "--" }}</td>
                 <td>{{ staff.code || "_" }}</td>
                 <td>{{ staff.contact_number | maskPhone }}</td>
 
