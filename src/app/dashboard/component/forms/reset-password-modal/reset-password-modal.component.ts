@@ -67,6 +67,8 @@ export class ResetPasswordModalComponent implements OnInit {
       return;
     }
 
+    this.activeModal.dismiss('confirm');
+
     Swal.fire({
       title: 'Are you sure?',
       text: `Do you want to reset password for ${this.userName}?`,
@@ -89,7 +91,6 @@ export class ResetPasswordModalComponent implements OnInit {
               this.alertService.success(
                 resp?.message || 'Password reset successfully',
               );
-              this.activeModal.close(true);
             },
             error: (err: any) => {
               this.alertService.error(
