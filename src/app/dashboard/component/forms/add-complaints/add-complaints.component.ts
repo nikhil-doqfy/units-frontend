@@ -14,7 +14,7 @@ import { FormService } from '../../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
-
+import { CustomSelectComponent } from '../../custom-select/custom-select.component';
 @Component({
   selector: 'app-add-complaints',
   standalone: true,
@@ -25,6 +25,7 @@ import { SharedApiService } from '../../../../shared/services/shared-api.service
     TranslateModule,
     ReactiveFormsModule,
     CommonModule,
+    CustomSelectComponent,
   ],
   templateUrl: './add-complaints.component.html',
   styleUrl: './add-complaints.component.css',
@@ -60,6 +61,8 @@ export class AddComplaintsComponent {
 
   ngOnInit(): void {
     this.complaintForm = this.fb.group({
+      property: [null, Validators.required],
+      pmc: [null],
       unit_id: [null, [Validators.required, Validators.min(1)]],
       description: ['', [Validators.required, Validators.maxLength(1000)]],
       service_type: ['PLUMBER', Validators.required],
@@ -76,6 +79,18 @@ export class AddComplaintsComponent {
         setter: (v) => (this.propertyOptions = v),
       },
     ]);
+    this.sharedApiService
+      .getOptions({ option_type: 'PMC_BY_PM' })
+      .subscribe((resp: any) => {
+        this.pmcOptions = resp?.content?.pmc ?? [];
+
+        const existing = this.complaintForm.get('pmc')?.value;
+        if (existing?.key) {
+          this.selectedPmc =
+            this.pmcOptions.find((p: any) => p.key === existing.key) ??
+            existing;
+        }
+      });
     if (this.complaintData) {
       this.patchForm(this.complaintData);
     }
@@ -95,6 +110,7 @@ export class AddComplaintsComponent {
   onPropertySelect(option: any): void {
     this.unitOptions = [];
     this.complaintForm.patchValue({
+      property: option,
       unit_id: null,
     });
 
@@ -110,7 +126,7 @@ export class AddComplaintsComponent {
   }
 
   onUnitSelect(option: any): void {
-    this.leadForm.patchValue({
+    this.complaintForm.patchValue({
       unit_id: option?.key ?? null,
     });
   }
@@ -155,6 +171,8 @@ export class AddComplaintsComponent {
     const val = this.complaintForm.value;
 
     const payload = {
+      property_id: val.property?.key,
+      pmc_id: val.pmc?.key ?? null,
       unit_id: Number(val.unit_id),
       description: val.description,
       service_type: val.service_type,

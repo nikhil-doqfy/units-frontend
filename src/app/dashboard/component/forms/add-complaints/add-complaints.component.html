@@ -1,7 +1,7 @@
 <form class="commonForm" [formGroup]="complaintForm">
   <div class="row g-3">
     <!-- Link Property + Unit -->
-    <!-- <div class="col-md-6">
+    <div class="col-md-6">
       <label class="form-label">{{ "SELECT_PMC" | translate }}</label>
       <app-custom-select
         [options]="pmcOptions"
@@ -12,7 +12,7 @@
         [selectedOption]="selectedPmc"
         (optionSelected)="onPmcSelected($event)"
       ></app-custom-select>
-    </div> -->
+    </div>
     <div class="col-md-6">
       <app-form-select-field
         [label]="'LINK_PROPERTY' | translate"
