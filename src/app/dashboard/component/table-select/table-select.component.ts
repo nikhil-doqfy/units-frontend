@@ -13,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class TableSelectComponent {
   @Input() componentName: string | undefined;
+  @Input() totalRecords: number = 1;
   @Input() rowsPerPage: number = 10;
   @Input() rowsPerPageOptions: number[] = [10, 25, 50, 100];
   @Output() rowsPerPageChange = new EventEmitter<PageSizeChange>();

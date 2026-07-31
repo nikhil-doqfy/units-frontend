@@ -1,3 +1,52 @@
+/* ── Table styling ──────────────────────────────────────────────────────── */
+.table-responsive {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+.complaints-table thead tr th:last-child,
+.complaints-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 120px;
+}
+
+.complaints-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg1);
+  box-shadow: none;
+}
+
+.complaints-table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+.complaints-table td:last-child::before,
+.complaints-table th:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to left,
+    var(--gradientShadowStart),
+    var(--gradientShadowMid),
+    transparent
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 .dashboardStatWrap {
   margin-bottom: 15px;
 }

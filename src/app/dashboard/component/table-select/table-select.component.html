@@ -1,3 +1,4 @@
+@if (totalRecords > 0) {
 <div class="cmmnTblSlct">
   <span>{{ "SHOWING" | translate }}</span>
   <select [(ngModel)]="rowsPerPage" (ngModelChange)="onSelect($event)">
@@ -6,3 +7,4 @@
     }
   </select>
 </div>
+}
