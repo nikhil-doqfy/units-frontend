@@ -10,7 +10,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ModalFormCardComponent } from '../../modal-form-card/modal-form-card.component';
@@ -55,28 +60,31 @@ export class AddUserFormComponent implements OnInit {
   private alertService = inject(AlertService);
 
   isInvalid = this.formService.isInvalid;
-
+  pmcList: any[] = [];
   hidePassword = false;
   hideConfirmPassword = false;
   userForm!: FormGroup;
   selectedUserType: any = null;
-
+  selectedPmc: any = null;
   readonly userTypeList = [
-    { key: 'OWNER',        value: 'Owner' },
-    { key: 'TENANT',       value: 'Tenant' },
+    { key: 'OWNER', value: 'Owner' },
+    { key: 'TENANT', value: 'Tenant' },
     { key: 'COMPANY_USER', value: 'Property Manager' },
   ];
 
   constructor() {
     this.userForm = this.formBuilder.group({
-      firstName:      ['', Validators.required],
-      lastName:       ['', Validators.required],
-      email:          ['', [Validators.required, Validators.email]],
-      contactNumber:  ['', [Validators.required, Validators.pattern(/^\+?\d{6,15}$/)]],
-      role:           ['', Validators.required],
-      password:       ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword:['', [Validators.required, Validators.minLength(8)]],
-      imageBase64:    [''],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      contactNumber: [
+        '',
+        [Validators.required, Validators.pattern(/^\+?\d{6,15}$/)],
+      ],
+      role: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
+      imageBase64: [''],
     });
   }
 
@@ -85,7 +93,9 @@ export class AddUserFormComponent implements OnInit {
       this.patchEditUserForm();
     }
   }
-
+  onPmcSelected(option: any): void {
+    this.selectedPmc = option;
+  }
   onOptionSelectedUserType(option: any) {
     this.selectedUserType = option;
     this.userForm.patchValue({ role: option?.key ?? '' });
@@ -118,14 +128,14 @@ export class AddUserFormComponent implements OnInit {
 
     const v = this.userForm.value;
     const data: any = {
-      first_name:      v.firstName,
-      last_name:       v.lastName,
-      email:           v.email,
-      contact_number:  v.contactNumber,
-      role:            v.role,
-      profile_image:   v.imageBase64 || null,
-      password:        v.password,
-      confirm_password:v.confirmPassword,
+      first_name: v.firstName,
+      last_name: v.lastName,
+      email: v.email,
+      contact_number: v.contactNumber,
+      role: v.role,
+      profile_image: v.imageBase64 || null,
+      password: v.password,
+      confirm_password: v.confirmPassword,
     };
 
     if (this.editData?.id) {
@@ -162,14 +172,15 @@ export class AddUserFormComponent implements OnInit {
 
   private patchEditUserForm() {
     if (!this.editData) return;
-    this.selectedUserType = this.userTypeList.find(t => t.key === this.editData.role?.key) ?? null;
+    this.selectedUserType =
+      this.userTypeList.find((t) => t.key === this.editData.role?.key) ?? null;
     this.userForm.patchValue({
-      firstName:      this.editData.first_name  ?? '',
-      lastName:       this.editData.last_name   ?? '',
-      email:          this.editData.email        ?? '',
-      contactNumber:  this.editData.contact_number ?? '',
-      role:           this.editData.role?.key   ?? '',
-      imageBase64:    this.editData.profile_image ?? '',
+      firstName: this.editData.first_name ?? '',
+      lastName: this.editData.last_name ?? '',
+      email: this.editData.email ?? '',
+      contactNumber: this.editData.contact_number ?? '',
+      role: this.editData.role?.key ?? '',
+      imageBase64: this.editData.profile_image ?? '',
     });
     this.userForm.get('password')?.clearValidators();
     this.userForm.get('password')?.updateValueAndValidity();

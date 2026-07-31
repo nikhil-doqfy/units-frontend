@@ -13,6 +13,7 @@ import { ComplaintsService } from '../../../complaints.service';
 import { FormService } from '../../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { SharedApiService } from '../../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-add-complaints',
@@ -34,9 +35,11 @@ export class AddComplaintsComponent {
   private fb = inject(FormBuilder);
   private formService = inject(FormService);
   private complaintsService = inject(ComplaintsService);
-
+  private sharedApiService = inject(SharedApiService);
   isInvalid = this.formService.isInvalid.bind(this.formService);
-
+  propertyOptions: { key: number; value: string }[] = [];
+  unitOptions: { key: number; value: string; rent?: string }[] = [];
+  leadForm!: FormGroup;
   complaintForm!: FormGroup;
   uploadedImages: UploadFileModel[] = [];
 
@@ -75,6 +78,27 @@ export class AddComplaintsComponent {
         this.patchForm(this.complaintData);
       });
     }
+  }
+
+  onPropertySelect(option: any): void {
+    this.unitOptions = [];
+    this.leadForm.patchValue({ unit_id: null, amount: null });
+    if (!option?.key) return;
+    this.sharedApiService.getOptionsType([
+      {
+        param: 'PROPERTY_UNIT_BY_PROPERTY',
+        key: 'property_unit',
+        setter: (v) => (this.unitOptions = v),
+        params: { property_id: option.key },
+      },
+    ]);
+  }
+  onUnitSelect(option: any): void {
+    const unit = this.unitOptions.find((u) => u.key === option?.key);
+    this.leadForm.patchValue({
+      unit_id: option?.key ?? null,
+      amount: unit?.rent ? parseFloat(unit.rent) : null,
+    });
   }
 
   onImageUpload(event: UploadFileModel): void {
