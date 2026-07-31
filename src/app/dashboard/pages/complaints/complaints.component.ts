@@ -79,6 +79,7 @@ import { DeleteIconComponent } from '../../component/icons/delete-icon/delete-ic
     CommonModule,
     EditIconComponent,
     DeleteIconComponent,
+    NoDataComponent,
   ],
   templateUrl: './complaints.component.html',
   styleUrl: './complaints.component.css',

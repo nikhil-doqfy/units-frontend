@@ -418,17 +418,15 @@
   gap: 10px;
   transition: all 0.3s ease 0s;
 }
+
 .hdrNotiDrpdwnMenu.hdrDrpdwnMenu {
   width: 400px;
   right: -30px !important;
-  border: 1px solid var(--greyBorder6);
+  border: 1px solid var(--muteBorder1);
   overflow: hidden;
 }
 
 .hdrNotiDrpdwnMenu.hdrDrpdwnMenu::before {
-  left: 100%;
-  top: -10px;
-  margin-left: -47px;
   display: none;
 }
 
@@ -438,18 +436,22 @@
   justify-content: space-between;
   gap: 1rem;
   width: 100%;
-  padding: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--muteBorder1);
 }
 
 .hdrNotiDrpdwnHdr h5 {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--greyDarkText1);
   font-weight: 600;
   line-height: 22px;
   margin: 0;
+}
+
+.hdrNotiDrpdwnHdrActions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 12px;
 }
 
 .hdrNotiDrpdwnHdr button {
@@ -459,6 +461,16 @@
   font-weight: 600;
   padding: 0;
   border: 0;
+  cursor: pointer;
+}
+
+.hdrNotiDrpdwnHdr button:hover {
+  color: var(--activeDarkText);
+}
+
+.hdrNotiDrpdwnBody {
+  display: flex;
+  flex-direction: column;
 }
 
 .hdrNotiDrpdwnList {
@@ -466,13 +478,9 @@
   overflow: auto;
 }
 
-.hdrNotiDrpdwnList + .hdrNotiDrpdwnList {
-  margin-top: 20px;
-}
-
 .hdrNotiDrpdwnLbl {
   font-size: 11px;
-  color: var(--greyText);
+  color: var(--lightText);
   font-weight: 400;
   margin-bottom: 10px;
 }
@@ -484,25 +492,25 @@
 .hdrNotiDrpdwnCol {
   position: relative;
   background-color: var(--whiteBg);
-  padding: 16px 60px 16px 16px;
-  transition: all 0.4s ease 0s;
+  padding: 14px 52px 14px 16px;
+  transition: background-color 0.2s ease;
 }
 
 .hdrNotiDrpdwnCol + .hdrNotiDrpdwnCol {
-  border-top: 1px solid var(--greyBorder6);
+  border-top: 1px solid var(--muteBorder1);
 }
 
 .unread.hdrNotiDrpdwnCol {
-  background-color: var(--primaryLightBg);
+  background-color: var(--muteBg2);
 }
 
 .hdrNotiDrpdwnCol:hover {
-  background-color: var(--primaryLightBg1);
+  background-color: var(--muteBg);
 }
 
 .hdrNotiDrpdwnTtl h5 {
-  font-size: 16px;
-  color: var(--blackText);
+  font-size: 14px;
+  color: var(--greyDarkText1);
   font-weight: 600;
   line-height: 18px;
   margin: 0;
@@ -512,12 +520,13 @@
 }
 
 .hdrNotiDrpdwnTtl h5 span {
-  background-color: var(--primaryBg);
+  background-color: var(--ownerBg);
   width: 8px;
   min-width: 8px;
   height: 8px;
-  border-radius: 8px;
+  border-radius: 50%;
   display: none;
+  flex-shrink: 0;
 }
 
 .unread .hdrNotiDrpdwnTtl h5 span {
@@ -526,33 +535,37 @@
 
 .hdrNotiDrpdwnTtl p {
   font-size: 13px;
-  color: var(--blackText2);
+  color: var(--greyText);
   font-weight: 400;
-  margin: 5px 0 0 0;
+  line-height: 18px;
+  margin: 4px 0 0 0;
 }
 
 .hdrNotiDrpdwnTime {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .hdrNotiDrpdwnTime span {
-  font-size: 12px;
-  color: var(--greyText4);
+  font-size: 11px;
+  color: var(--lightText);
   font-weight: 400;
 }
 
 .hdrNotiDrpdwnDlt {
-  background-color: var(--redLightBg2);
+  background-color: var(--redLightBg);
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   width: 40px;
   opacity: 0;
-  transition: all 0.4s ease 0s;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hdrNotiDrpdwnCol:hover .hdrNotiDrpdwnDlt {
@@ -566,6 +579,7 @@
   border: 0;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 
 .hdrNotiEmptyCol {
@@ -573,8 +587,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 352px;
+  min-height: 300px;
   padding: 24px;
+  gap: 0;
 }
 
 .hdrNotiEmptyInfo {
@@ -582,17 +597,30 @@
 }
 
 .hdrNotiEmptyIcon {
-  width: 32px;
-  height: 32px;
-  margin: 0 auto;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--muteBg2);
+  border-radius: 50%;
+  padding: 16px;
+}
+
+.hdrNotiEmptyIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.7;
 }
 
 .hdrNotiEmptyInfo h4 {
-  font-size: 14px;
-  color: var(--greyDarkText);
+  font-size: 13px;
+  color: var(--lightText);
   font-weight: 500;
   line-height: 18px;
-  margin: 10px 0 0 0;
+  margin: 0;
 }
 
 .hdrNotiEmptyNote {
@@ -600,32 +628,40 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 30px;
+  margin-top: 16px;
+  padding: 0 8px;
 }
 
 .hdrNotiEmptyNote p {
-  font-size: 13px;
-  color: var(--blackText8);
-  font-weight: 500;
+  font-size: 12px;
+  color: var(--lightText);
+  font-weight: 400;
   line-height: 18px;
   margin: 0;
+  text-align: center;
 }
 
 /***Notification Dropdown Css End***/
 /***Notification Offcanvas Css Start***/
 .notificationOffcanvas .offcanvas-header {
-  padding-bottom: 8px;
+  padding: 0;
 }
 
 .notificationOffcanvas .hdrNotiDrpdwnHdr {
-  padding: 0;
+  padding: 14px 16px;
+  width: 100%;
+  border-bottom: 1px solid var(--muteBorder1);
 }
 
 .notificationOffcanvas .btn-close {
   box-shadow: none;
+  padding: 0;
+  margin: 0;
+  opacity: 0.5;
+}
+
+.notificationOffcanvas .btn-close:hover {
+  opacity: 1;
 }
 
 .notificationOffcanvas .offcanvas-body {
@@ -633,11 +669,11 @@
 }
 
 .notificationOffcanvas .hdrNotiDrpdwnList {
-  max-height: calc(100vh - 90px);
+  max-height: calc(100vh - 120px);
 }
 
 .notificationOffcanvas .hdrNotiDrpdwnTtl h5 {
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /*------------------------------------------------------ Signature-----------------------------------------------------------------------------------------------------*/
