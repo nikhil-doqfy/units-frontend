@@ -452,7 +452,7 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="4">
-                        <button ngbNavLink>{{ "CLEARED" }}</button>
+                        <button ngbNavLink>{{ "CLEARED" | translate }}</button>
                         <ng-template ngbNavContent>
                           <div
                             class="hdrNotiEmptyCol"
@@ -675,295 +675,137 @@
 <ng-template #content let-offcanvas>
   <div class="offcanvas-header">
     <div class="hdrNotiDrpdwnHdr">
-      <h5>Notifications</h5>
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        (click)="offcanvas.dismiss('Cross click')"
-      ></button>
+      <h5>{{ "NOTIFICATIONS" | translate }}</h5>
+      <div class="hdrNotiDrpdwnHdrActions">
+        <button type="button" (click)="clearAllClearedNotifications()">
+          {{ "CLEAR_ALL" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="offcanvas.dismiss('Cross click')"
+        ></button>
+      </div>
     </div>
   </div>
   <div class="offcanvas-body">
     <div class="hdrNotiDrpdwnBody">
-      <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="commonTabs">
+      <ul ngbNav #navOffcanvas="ngbNav" [(activeId)]="active" class="commonTabs">
         <li [ngbNavItem]="1">
-          <button ngbNavLink>All <span>07</span></button>
+          <button ngbNavLink>
+            {{ "ALL" | translate }} <span>{{ allCount }}</span>
+          </button>
           <ng-template ngbNavContent>
-            <div class="hdrNotiDrpdwnCol unread">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Payment Reminders <span></span></h5>
-                <p>
-                  Your EMI payment is due tomorrow. Please pay to avoid
-                  penalties. Free from stress
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>1 Jun 2024</span>
-                  <span>|</span>
-                  <span>03.24pm</span>
+            <div
+              *ngIf="unDeletedNotifications.length === 0"
+              class="hdrNotiEmptyCol"
+            >
+              <div class="hdrNotiEmptyInfo">
+                <div class="hdrNotiEmptyIcon">
+                  <img src="assets/Bell.svg" />
                 </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
+                <h4>{{ "NO_READ_NOTIFICATIONS" | translate }}</h4>
               </div>
             </div>
-            <div class="hdrNotiDrpdwnCol">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Account Activity Alerts <span></span></h5>
-                <p>
-                  A new device logged into your account. If this wasn’t you,
-                  please report us immediately.
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>2 Jun 2024</span>
+            <div
+              class="hdrNotiDrpdwnCol"
+              [class.unread]="!notification.is_read"
+              *ngFor="let notification of unDeletedNotifications"
+            >
+              <div
+                class="hdrNotiDrpdwnTtl"
+                (click)="markNotiFicationAsRead(notification.id)"
+              >
+                <h5>{{ notification.notification_type }}<span></span></h5>
+                <p>{{ notification.message }}</p>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
+                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
                   <span>|</span>
-                  <span>06.23am</span>
+                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
-              </div>
-            </div>
-            <div class="hdrNotiDrpdwnCol">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Repayment Confirmation <span></span></h5>
-                <p>
-                  Thank you! Your payment of $10,000 has been received
-                  successfully.
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>2 Jun 2024</span>
-                  <span>|</span>
-                  <span>06.23am</span>
-                </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
-              </div>
-            </div>
-            <div class="hdrNotiDrpdwnCol unread">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Payment Reminders <span></span></h5>
-                <p>
-                  Your EMI payment is due tomorrow. Please pay to avoid
-                  penalties. Free from stress
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>1 Jun 2024</span>
-                  <span>|</span>
-                  <span>03.24pm</span>
-                </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
-              </div>
-            </div>
-            <div class="hdrNotiDrpdwnCol">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Account Activity Alerts <span></span></h5>
-                <p>
-                  A new device logged into your account. If this wasn’t you,
-                  please report us immediately.
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>2 Jun 2024</span>
-                  <span>|</span>
-                  <span>06.23am</span>
-                </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
-              </div>
-            </div>
-            <div class="hdrNotiDrpdwnCol unread">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Repayment Confirmation <span></span></h5>
-                <p>
-                  Thank you! Your payment of $10,000 has been received
-                  successfully.
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>2 Jun 2024</span>
-                  <span>|</span>
-                  <span>06.23am</span>
-                </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
-              </div>
-            </div>
-            <div class="hdrNotiDrpdwnCol">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Payment Reminders <span></span></h5>
-                <p>
-                  Your EMI payment is due tomorrow. Please pay to avoid
-                  penalties. Free from stress
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>1 Jun 2024</span>
-                  <span>|</span>
-                  <span>03.24pm</span>
-                </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
+                <button
+                  type="button"
+                  (click)="deleteNotification(notification.id)"
+                ></button>
               </div>
             </div>
           </ng-template>
         </li>
         <li [ngbNavItem]="2">
-          <button ngbNavLink>Read <span>03</span></button>
+          <button ngbNavLink>
+            {{ "READ" | translate }}<span>{{ readCount }}</span>
+          </button>
           <ng-template ngbNavContent>
-            <div class="hdrNotiDrpdwnCol">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Payment Reminders <span></span></h5>
-                <p>
-                  Your EMI payment is due tomorrow. Please pay to avoid
-                  penalties. Free from stress
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>1 Jun 2024</span>
-                  <span>|</span>
-                  <span>03.24pm</span>
+            <div
+              *ngIf="readNotifications.length === 0"
+              class="hdrNotiEmptyCol"
+            >
+              <div class="hdrNotiEmptyInfo">
+                <div class="hdrNotiEmptyIcon">
+                  <img src="assets/Bell.svg" />
                 </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
+                <h4>{{ "NO_READ_NOTIFICATIONS" | translate }}</h4>
               </div>
             </div>
-            <div class="hdrNotiDrpdwnCol">
+            <div
+              class="hdrNotiDrpdwnCol"
+              *ngFor="let notification of readNotifications"
+            >
               <div class="hdrNotiDrpdwnTtl">
-                <h5>Account Activity Alerts <span></span></h5>
-                <p>
-                  A new device logged into your account. If this wasn’t you,
-                  please report us immediately.
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>2 Jun 2024</span>
+                <h5>{{ notification.notification_type }}<span></span></h5>
+                <p>{{ notification.message }}</p>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
+                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
                   <span>|</span>
-                  <span>06.23am</span>
+                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
-              </div>
-            </div>
-            <div class="hdrNotiDrpdwnCol">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Repayment Confirmation <span></span></h5>
-                <p>
-                  Thank you! Your payment of $10,000 has been received
-                  successfully.
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>2 Jun 2024</span>
-                  <span>|</span>
-                  <span>06.23am</span>
-                </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
+                <button
+                  type="button"
+                  (click)="deleteNotification(notification.id)"
+                ></button>
               </div>
             </div>
           </ng-template>
         </li>
         <li [ngbNavItem]="3">
-          <button ngbNavLink>Unread <span>04</span></button>
+          <button ngbNavLink>
+            {{ "UNREAD" | translate }}<span>{{ unreadCount }}</span>
+          </button>
           <ng-template ngbNavContent>
-            <div class="hdrNotiDrpdwnCol unread">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Payment Reminders <span></span></h5>
-                <p>
-                  Your EMI payment is due tomorrow. Please pay to avoid
-                  penalties. Free from stress
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>1 Jun 2024</span>
-                  <span>|</span>
-                  <span>03.24pm</span>
+            <div
+              *ngIf="unreadNotifications.length === 0"
+              class="hdrNotiEmptyCol"
+            >
+              <div class="hdrNotiEmptyInfo">
+                <div class="hdrNotiEmptyIcon">
+                  <img src="assets/Bell.svg" />
                 </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
+                <h4>{{ "NO_UNREAD_NOTIFICATIONS" | translate }}</h4>
               </div>
             </div>
-            <div class="hdrNotiDrpdwnCol unread">
+            <div
+              class="hdrNotiDrpdwnCol unread"
+              *ngFor="let notification of unreadNotifications"
+            >
               <div class="hdrNotiDrpdwnTtl">
-                <h5>Account Activity Alerts <span></span></h5>
-                <p>
-                  A new device logged into your account. If this wasn’t you,
-                  please report us immediately.
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>2 Jun 2024</span>
+                <h5>{{ notification.notification_type }}<span></span></h5>
+                <p>{{ notification.message }}</p>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
+                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
                   <span>|</span>
-                  <span>06.23am</span>
+                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
-              </div>
-            </div>
-            <div class="hdrNotiDrpdwnCol unread">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Repayment Confirmation <span></span></h5>
-                <p>
-                  Thank you! Your payment of $10,000 has been received
-                  successfully.
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>2 Jun 2024</span>
-                  <span>|</span>
-                  <span>06.23am</span>
-                </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
-              </div>
-            </div>
-            <div class="hdrNotiDrpdwnCol unread">
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>Payment Reminders <span></span></h5>
-                <p>
-                  Your EMI payment is due tomorrow. Please pay to avoid
-                  penalties. Free from stress
-                </p>
-                <div class="hdrNotiDrpdwnTime">
-                  <span>1 Jun 2024</span>
-                  <span>|</span>
-                  <span>03.24pm</span>
-                </div>
-              </div>
-              <div class="hdrNotiDrpdwnDlt">
-                <button type="button">
-                  <!-- <app-delete-icon /> -->
-                </button>
+                <button
+                  type="button"
+                  (click)="deleteNotification(notification.id)"
+                ></button>
               </div>
             </div>
           </ng-template>
@@ -971,30 +813,42 @@
         <li [ngbNavItem]="4">
           <button ngbNavLink>{{ "CLEARED" | translate }}</button>
           <ng-template ngbNavContent>
-            <div class="hdrNotiEmptyCol">
+            <div
+              class="hdrNotiEmptyCol"
+              *ngIf="deletedNotifications.length === 0"
+            >
               <div class="hdrNotiEmptyInfo">
-                <div class="hdrNotiEmptyIcon">
-                  <!-- <img
-                    src="../../../assets/notificationBell.gif"
-                    alt="Notification Bell"
-                  /> -->
-                </div>
-                <h4>No cleared Invitations</h4>
+                <div class="hdrNotiEmptyIcon"></div>
+                <h4>{{ "NO_CLEARED_NOTIFICATIONS" | translate }}</h4>
               </div>
               <div class="hdrNotiEmptyNote">
-                <i>
-                  <!-- <app-info-icon /> -->
-                </i>
-                <p>
-                  Cleared invitations will be retained for 30 days from the date
-                  of rejection.
-                </p>
+                <p>{{ "CLEARED_INVITATIONS" | translate }}</p>
+              </div>
+            </div>
+            <div
+              class="hdrNotiDrpdwnCol"
+              *ngFor="let notification of deletedNotifications"
+            >
+              <div class="hdrNotiDrpdwnTtl">
+                <h5>{{ notification.notification_type }}<span></span></h5>
+                <p>{{ notification.message }}</p>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
+                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                  <span>|</span>
+                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                </div>
+              </div>
+              <div class="hdrNotiDrpdwnDlt">
+                <button
+                  type="button"
+                  (click)="clearSingleNotifications(notification.id)"
+                ></button>
               </div>
             </div>
           </ng-template>
         </li>
       </ul>
-      <div [ngbNavOutlet]="nav" class="hdrNotiDrpdwnList"></div>
+      <div [ngbNavOutlet]="navOffcanvas" class="hdrNotiDrpdwnList"></div>
     </div>
   </div>
 </ng-template>

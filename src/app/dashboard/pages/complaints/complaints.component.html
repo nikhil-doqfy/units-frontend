@@ -112,7 +112,7 @@
       <div class="row g-3 align-items-center">
         <div class="col-md">
           <app-table-title
-            [title]="'COMPLAINTS' | translate"
+            [title]="'PAGE_TITLE.COMPLAINTS' | translate"
             [subtitle]="'(' + totalRecords + ')'"
             (onRefresh)="onRefresh()"
           ></app-table-title>
@@ -280,7 +280,7 @@
               </tr>
             } @empty {
               <tr>
-                <td colspan="20" align="center">No data found</td>
+                <td colspan="20" align="center"><app-no-data></app-no-data></td>
               </tr>
             }
           </tbody>
@@ -559,7 +559,7 @@
               </tr>
             } @empty {
               <tr>
-                <td colspan="20" align="center">No data found</td>
+                <td colspan="20" align="center"><app-no-data></app-no-data></td>
               </tr>
             }
           </tbody>
