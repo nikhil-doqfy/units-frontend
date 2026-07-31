@@ -16,6 +16,7 @@ import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BreadCrumb } from '../../../shared/model/shared.model';
+import { TenantDocumentUploadComponent } from '../../../tenant-document-upload/tenant-document-upload.component';
 
 @Component({
   selector: 'app-documentations',
@@ -32,6 +33,7 @@ import { BreadCrumb } from '../../../shared/model/shared.model';
     TablePaginationComponent,
     TranslateModule,
     NoDataComponent,
+    TenantDocumentUploadComponent,
   ],
   templateUrl: './documentations.component.html',
   styleUrl: './documentations.component.css',
@@ -48,7 +50,10 @@ export class DocumentationsComponent {
     { label: 'Documentations', link: '' },
   ];
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private modalService: NgbModal,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
@@ -92,5 +97,21 @@ export class DocumentationsComponent {
 
   handlePreviewClick(): void {
     console.log('Preview button clicked');
+  }
+  isTenantUploadVisible = false;
+
+  showTenantUpload(): void {
+    this.isTenantUploadVisible = true;
+  }
+  onDocumentUploaded(event: any, modal: any): void {
+    console.log(event);
+    modal.close();
+  }
+  openTenantDocumentUpload(content: any): void {
+    this.modalService.open(content, {
+      centered: true,
+      size: 'lg',
+      backdrop: 'static',
+    });
   }
 }

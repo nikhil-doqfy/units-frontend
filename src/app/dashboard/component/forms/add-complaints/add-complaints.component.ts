@@ -42,7 +42,8 @@ export class AddComplaintsComponent {
   leadForm!: FormGroup;
   complaintForm!: FormGroup;
   uploadedImages: UploadFileModel[] = [];
-
+  pmcOptions: { key: number; value: string }[] = [];
+  selectedPmc: any = null;
   serviceTypeOptions = [
     { key: 'PLUMBER', value: 'Plumber' },
     { key: 'ELECTRICIAN', value: 'Electrician' },
@@ -68,6 +69,13 @@ export class AddComplaintsComponent {
       slot_2: [''],
       slot_3: [''],
     });
+    this.sharedApiService.getOptionsType([
+      {
+        param: 'PARENT_PROPERTY',
+        key: 'property',
+        setter: (v) => (this.propertyOptions = v),
+      },
+    ]);
     if (this.complaintData) {
       this.patchForm(this.complaintData);
     }
@@ -79,10 +87,17 @@ export class AddComplaintsComponent {
       });
     }
   }
+  onPmcSelected(option: any): void {
+    this.selectedPmc = option;
+    this.complaintForm.patchValue({ pmc: option });
+  }
 
   onPropertySelect(option: any): void {
     this.unitOptions = [];
-    this.leadForm.patchValue({ unit_id: null, amount: null });
+    this.complaintForm.patchValue({
+      unit_id: null,
+    });
+
     if (!option?.key) return;
     this.sharedApiService.getOptionsType([
       {
@@ -93,11 +108,10 @@ export class AddComplaintsComponent {
       },
     ]);
   }
+
   onUnitSelect(option: any): void {
-    const unit = this.unitOptions.find((u) => u.key === option?.key);
     this.leadForm.patchValue({
       unit_id: option?.key ?? null,
-      amount: unit?.rent ? parseFloat(unit.rent) : null,
     });
   }
 

@@ -31,6 +31,12 @@
           >
             <app-export-icon />
           </app-table-filter-btn>
+          <button
+            class="btn btn-primary"
+            (click)="openTenantDocumentUpload(uploadTenantDocumentModal)"
+          >
+            Upload
+          </button>
         </div>
       </div>
     </div>
@@ -162,4 +168,44 @@
     <app-table-select />
     <app-table-pagination />
   </div>
+  <ng-template #uploadTenantDocumentModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title">
+        {{ "UPLOAD_TENANT_DOCUMENT" | translate }}
+      </h6>
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+      <app-tenant-document-upload
+        #tenantDocumentUploadComponent
+        (documentUploaded)="onDocumentUploaded($event, modal)"
+      >
+      </app-tenant-document-upload>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btnCommon btnTransparent"
+        (click)="modal.dismiss('Cancel click')"
+      >
+        {{ "CANCEL" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btnCommon"
+        (click)="tenantDocumentUploadComponent.uploadDocument()"
+      >
+        {{ "UPLOAD_DOCUMENT" | translate }}
+      </button>
+    </div>
+  </ng-template>
 </div>
