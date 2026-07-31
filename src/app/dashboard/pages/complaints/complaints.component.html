@@ -186,7 +186,7 @@
 
     <div class="cmmnTbl">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered complaints-table">
           <thead>
             <tr>
               <th>{{ "SI_NO" | translate }}</th>
@@ -291,6 +291,7 @@
     <div class="cmmnTblFtr">
       <app-table-select
         [componentName]="componentName"
+        [totalRecords]="totalRecords"
         [rowsPerPage]="rowsPerPage"
         [rowsPerPageOptions]="rowsPerPageOptions"
         (rowsPerPageChange)="onPageSizeChange($event)"
@@ -511,7 +512,7 @@
     </div>
     <div class="cmmnTbl">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered complaints-table">
           <thead>
             <tr>
               <th>{{ "SI_NO" | translate }}</th>
@@ -569,6 +570,7 @@
     <div class="cmmnTblFtr">
       <app-table-select
         [componentName]="componentName"
+        [totalRecords]="totalRecords"
         [rowsPerPage]="rowsPerPage"
         [rowsPerPageOptions]="rowsPerPageOptions"
         (rowsPerPageChange)="onPageSizeChange($event)"

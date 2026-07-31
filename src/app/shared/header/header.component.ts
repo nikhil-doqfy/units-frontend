@@ -504,7 +504,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
   /*----------------------------Toggle mode--------------------------------*/
-  isDark: boolean = false;
+  isDark: boolean = localStorage.getItem('theme') === 'dark';
   toggleTheme() {
     this.isDark = !this.isDark;
 
@@ -517,10 +517,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   applyTheme() {
-    const themeClass = this.isDark ? 'dark-theme' : 'light-theme';
-
-    document.body.classList.remove('light-theme', 'dark-theme');
-    document.body.classList.add(themeClass);
+    document.body.classList.toggle('dark-theme', this.isDark);
   }
 
   @HostListener('document:click', ['$event'])

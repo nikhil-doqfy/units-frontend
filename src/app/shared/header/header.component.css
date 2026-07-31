@@ -37,6 +37,12 @@
 
 .dashHdrLogo img {
   height: 32px;
+  mix-blend-mode: multiply;
+}
+
+:host-context(.dark-theme) .dashHdrLogo img {
+  mix-blend-mode: normal;
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .hdrOptns {
