@@ -17,6 +17,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { TenantDocumentUploadComponent } from '../../../tenant-document-upload/tenant-document-upload.component';
+import { DocumenattionService } from '../../../service/documenattion.service';
+import { ThemeService, UserRole } from '../../../theme.service';
 
 @Component({
   selector: 'app-documentations',
@@ -43,8 +45,12 @@ export class DocumentationsComponent {
   private translate = inject(TranslateService);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
+  private documenattionService = inject(DocumenattionService);
+  private themeService = inject(ThemeService);
   selected: string = 'Falcom city';
   currentLanguage = 'en';
+  currentRole: UserRole = 'tenant';
+  tenantDocuments: any[] = [];
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Documentations', link: '' },
@@ -58,10 +64,18 @@ export class DocumentationsComponent {
     this.sharedService.setTitle(key);
   }
   ngOnInit() {
+    console.log('Current Role =>', this.currentRole);
+    this.themeService.currentRole$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((role) => {
+        this.currentRole = role;
+        console.log('Current Role:', role);
+      });
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
 
     this.initLanguageListener();
+    this.getTenantDocuments();
   }
 
   loadBreadcrumb() {
@@ -103,9 +117,18 @@ export class DocumentationsComponent {
   showTenantUpload(): void {
     this.isTenantUploadVisible = true;
   }
+  getTenantDocuments(): void {
+    this.documenattionService.getTenantDocuments().subscribe({
+      next: (resp: any) => {
+        this.tenantDocuments = resp.content;
+      },
+    });
+  }
   onDocumentUploaded(event: any, modal: any): void {
     console.log(event);
     modal.close();
+
+    this.getTenantDocuments();
   }
   openTenantDocumentUpload(content: any): void {
     this.modalService.open(content, {
@@ -113,5 +136,11 @@ export class DocumentationsComponent {
       size: 'lg',
       backdrop: 'static',
     });
+  }
+  downloadDocument(document: any): void {
+    window.open(document.url, '_blank');
+  }
+  previewDocument(document: any): void {
+    window.open(document.url, '_blank');
   }
 }

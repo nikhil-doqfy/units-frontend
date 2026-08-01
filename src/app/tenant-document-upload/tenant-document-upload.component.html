@@ -19,9 +19,17 @@
   </app-upload-document>
 
   <!-- Uploaded File -->
-  <div class="uploadedFile mt-3" *ngIf="uploadedFile">
+  <!-- <div class="uploadedFile mt-3" *ngIf="uploadedFile">
     <span>{{ uploadedFile.file.name }}</span>
     <span class="successText ms-2"> Document uploaded successfully. </span>
+  </div> -->
+  <div class="uploads-list mt-3" *ngIf="uploadedFiles.length">
+    <app-file-upload-item
+      *ngFor="let file of uploadedFiles"
+      [item]="file"
+      (remove)="removeFile(file)"
+    >
+    </app-file-upload-item>
   </div>
 
   <!-- Error -->
