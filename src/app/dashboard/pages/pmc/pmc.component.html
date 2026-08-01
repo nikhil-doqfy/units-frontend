@@ -48,7 +48,11 @@
             @for (pmc of pmcList; track $index) {
               <tr>
                 <td>{{ pmc?.company_code || "N/A" }}</td>
-                <td>
+                <td
+                  [ngbTooltip]="pmc?.property_handling_names || 'N/A'"
+                  placement="top"
+                  container="body"
+                >
                   {{
                     pmc?.property_handling_names
                       ? pmc.property_handling_names

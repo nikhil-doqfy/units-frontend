@@ -13,6 +13,7 @@ import {
   ModalDismissReasons,
   NgbActiveModal,
   NgbModal,
+  NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
@@ -70,6 +71,7 @@ import { AlertService } from '../../../shared/services/alert.service';
     TableImgItemComponent,
     TranslateModule,
     NoDataComponent,
+    NgbTooltipModule,
   ],
   templateUrl: './pmc.component.html',
   styleUrl: './pmc.component.css',
