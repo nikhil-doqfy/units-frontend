@@ -29,6 +29,7 @@ import { FormService } from '../../../../shared/services/form.service';
 import { FileService } from '../../../../shared/services/file.service';
 import { UserService } from '../../../../user/services/user.service';
 import { AlertService } from '../../../../shared/services/alert.service';
+import { SharedApiService } from '../../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-add-user-form',
@@ -58,14 +59,15 @@ export class AddUserFormComponent implements OnInit {
   private fileService = inject(FileService);
   private userService = inject(UserService);
   private alertService = inject(AlertService);
+  private sharedApiService = inject(SharedApiService);
 
   isInvalid = this.formService.isInvalid;
-  pmcList: any[] = [];
+  pmcOptions: { key: number; value: string }[] = [];
+  selectedPmc: any = null;
   hidePassword = false;
   hideConfirmPassword = false;
   userForm!: FormGroup;
   selectedUserType: any = null;
-  selectedPmc: any = null;
   readonly userTypeList = [
     { key: 'OWNER', value: 'Owner' },
     { key: 'TENANT', value: 'Tenant' },
@@ -82,6 +84,7 @@ export class AddUserFormComponent implements OnInit {
         [Validators.required, Validators.pattern(/^\+?\d{6,15}$/)],
       ],
       role: ['', Validators.required],
+      pmc: [null],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
       imageBase64: [''],
@@ -89,12 +92,28 @@ export class AddUserFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sharedApiService
+      .getOptions({ option_type: 'PMC_BY_PM' })
+      .subscribe((resp: any) => {
+        this.pmcOptions = resp?.content?.pmc ?? [];
+
+        const existing = this.userForm.get('pmc')?.value;
+
+        if (existing?.key) {
+          this.selectedPmc =
+            this.pmcOptions.find((p: any) => p.key === existing.key) ??
+            existing;
+        }
+      });
     if (this.editData) {
       this.patchEditUserForm();
     }
   }
   onPmcSelected(option: any): void {
     this.selectedPmc = option;
+    this.userForm.patchValue({
+      pmc: option,
+    });
   }
   onOptionSelectedUserType(option: any) {
     this.selectedUserType = option;
@@ -133,6 +152,7 @@ export class AddUserFormComponent implements OnInit {
       email: v.email,
       contact_number: v.contactNumber,
       role: v.role,
+      pmc_id: v.pmc?.key ?? null,
       profile_image: v.imageBase64 || null,
       password: v.password,
       confirm_password: v.confirmPassword,
@@ -180,6 +200,7 @@ export class AddUserFormComponent implements OnInit {
       email: this.editData.email ?? '',
       contactNumber: this.editData.contact_number ?? '',
       role: this.editData.role?.key ?? '',
+      pmc: this.editData.pmc ?? null,
       imageBase64: this.editData.profile_image ?? '',
     });
     this.userForm.get('password')?.clearValidators();
