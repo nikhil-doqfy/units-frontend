@@ -48,7 +48,22 @@
             @for (pmc of pmcList; track $index) {
               <tr>
                 <td>{{ pmc?.company_code || "N/A" }}</td>
-                <td>{{ pmc?.property_handling || "N/A" }}</td>
+                <td>
+                  {{
+                    pmc?.property_handling_names
+                      ? pmc.property_handling_names
+                          .split(",")
+                          .slice(0, 2)
+                          .join(", ")
+                      : "N/A"
+                  }}
+
+                  <span
+                    *ngIf="pmc?.property_handling_names?.split(',').length > 2"
+                  >
+                    +{{ pmc.property_handling_names.split(",").length - 2 }}
+                  </span>
+                </td>
                 <td>
                   <app-table-img-item
                     [title]="pmc?.company_name || 'N/A'"

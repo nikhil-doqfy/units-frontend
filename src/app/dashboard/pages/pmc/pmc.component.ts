@@ -154,6 +154,12 @@ export class PMCComponent {
       .subscribe((resp: any) => {
         this.pmcList = resp?.content ?? [];
         this.totalRecords = resp?.pagination?.total_records ?? 0;
+        this.pmcList = (resp?.content ?? []).map((item: any) => ({
+          ...item,
+          property_handling_names: item.property_handling
+            ?.map((x: any) => x.name)
+            .join(', '),
+        }));
       });
   }
 
