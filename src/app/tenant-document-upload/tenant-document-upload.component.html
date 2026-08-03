@@ -1,0 +1,39 @@
+<div class="tenantDocumentWrapper">
+  <!-- Info Box -->
+  <div class="infoBox mb-3">
+    <ul class="mb-0">
+      <li>Upload the tenant document in PDF, JPG, JPEG, or PNG format.</li>
+      <li>Ensure the document is clear and readable before uploading.</li>
+      <li>Maximum file size allowed: 20 MB.</li>
+    </ul>
+  </div>
+
+  <!-- Upload -->
+  <app-upload-document
+    [title]="'Drop Tenant Document Here'"
+    [isMultipleFiles]="false"
+    [fileTypes]="['pdf', 'jpg', 'jpeg', 'png']"
+    [maxSize]="20"
+    (uploadProgress)="onDocumentUpload($event)"
+  >
+  </app-upload-document>
+
+  <!-- Uploaded File -->
+  <!-- <div class="uploadedFile mt-3" *ngIf="uploadedFile">
+    <span>{{ uploadedFile.file.name }}</span>
+    <span class="successText ms-2"> Document uploaded successfully. </span>
+  </div> -->
+  <div class="uploads-list mt-3" *ngIf="uploadedFiles.length">
+    <app-file-upload-item
+      *ngFor="let file of uploadedFiles"
+      [item]="file"
+      (remove)="removeFile(file)"
+    >
+    </app-file-upload-item>
+  </div>
+
+  <!-- Error -->
+  <div class="errorMsg mt-2" *ngIf="uploadError">
+    {{ uploadError }}
+  </div>
+</div>

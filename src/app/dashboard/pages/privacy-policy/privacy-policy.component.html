@@ -10,22 +10,31 @@
 
 <app-white-card>
   <div class="infrmtnBody">
+    <!-- <div class="infrmtnLft">
+      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
+      <p>
+        {{ "LOREM_IPSUM_TEXT" | translate }}
+      </p>
+
+      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
+      <p>
+        {{ "LOREM_IPSUM_TEXT" | translate }}
+      </p>
+
+      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
+
+      <p>
+        {{ "LOREM_IPSUM_TEXT" | translate }}
+      </p>
+    </div> -->
     <div class="infrmtnLft">
-      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
-      <p>
-        {{ "LOREM_IPSUM_TEXT" | translate }}
-      </p>
+      <ng-container *ngFor="let item of privacyPolicies">
+        <h4>{{ item.title }}</h4>
 
-      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
-      <p>
-        {{ "LOREM_IPSUM_TEXT" | translate }}
-      </p>
-
-      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
-
-      <p>
-        {{ "LOREM_IPSUM_TEXT" | translate }}
-      </p>
+        <p>
+          {{ item.content }}
+        </p>
+      </ng-container>
     </div>
     <div class="infrmtnRght">
       <h4>{{ "OTHER_POLICY" | translate }}</h4>

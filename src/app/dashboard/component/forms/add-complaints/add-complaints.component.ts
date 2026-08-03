@@ -13,7 +13,8 @@ import { ComplaintsService } from '../../../complaints.service';
 import { FormService } from '../../../../shared/services/form.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
-
+import { SharedApiService } from '../../../../shared/services/shared-api.service';
+import { CustomSelectComponent } from '../../custom-select/custom-select.component';
 @Component({
   selector: 'app-add-complaints',
   standalone: true,
@@ -24,6 +25,7 @@ import { CommonModule } from '@angular/common';
     TranslateModule,
     ReactiveFormsModule,
     CommonModule,
+    CustomSelectComponent,
   ],
   templateUrl: './add-complaints.component.html',
   styleUrl: './add-complaints.component.css',
@@ -34,12 +36,15 @@ export class AddComplaintsComponent {
   private fb = inject(FormBuilder);
   private formService = inject(FormService);
   private complaintsService = inject(ComplaintsService);
-
+  private sharedApiService = inject(SharedApiService);
   isInvalid = this.formService.isInvalid.bind(this.formService);
-
+  propertyOptions: { key: number; value: string }[] = [];
+  unitOptions: { key: number; value: string; rent?: string }[] = [];
+  leadForm!: FormGroup;
   complaintForm!: FormGroup;
   uploadedImages: UploadFileModel[] = [];
-
+  pmcOptions: { key: number; value: string }[] = [];
+  selectedPmc: any = null;
   serviceTypeOptions = [
     { key: 'PLUMBER', value: 'Plumber' },
     { key: 'ELECTRICIAN', value: 'Electrician' },
@@ -56,6 +61,8 @@ export class AddComplaintsComponent {
 
   ngOnInit(): void {
     this.complaintForm = this.fb.group({
+      property: [null, Validators.required],
+      pmc: [null],
       unit_id: [null, [Validators.required, Validators.min(1)]],
       description: ['', [Validators.required, Validators.maxLength(1000)]],
       service_type: ['PLUMBER', Validators.required],
@@ -65,6 +72,25 @@ export class AddComplaintsComponent {
       slot_2: [''],
       slot_3: [''],
     });
+    this.sharedApiService.getOptionsType([
+      {
+        param: 'PARENT_PROPERTY',
+        key: 'property',
+        setter: (v) => (this.propertyOptions = v),
+      },
+    ]);
+    this.sharedApiService
+      .getOptions({ option_type: 'PMC_BY_PM' })
+      .subscribe((resp: any) => {
+        this.pmcOptions = resp?.content?.pmc ?? [];
+
+        const existing = this.complaintForm.get('pmc')?.value;
+        if (existing?.key) {
+          this.selectedPmc =
+            this.pmcOptions.find((p: any) => p.key === existing.key) ??
+            existing;
+        }
+      });
     if (this.complaintData) {
       this.patchForm(this.complaintData);
     }
@@ -75,6 +101,34 @@ export class AddComplaintsComponent {
         this.patchForm(this.complaintData);
       });
     }
+  }
+  onPmcSelected(option: any): void {
+    this.selectedPmc = option;
+    this.complaintForm.patchValue({ pmc: option });
+  }
+
+  onPropertySelect(option: any): void {
+    this.unitOptions = [];
+    this.complaintForm.patchValue({
+      property: option,
+      unit_id: null,
+    });
+
+    if (!option?.key) return;
+    this.sharedApiService.getOptionsType([
+      {
+        param: 'PROPERTY_UNIT_BY_PROPERTY',
+        key: 'property_unit',
+        setter: (v) => (this.unitOptions = v),
+        params: { property_id: option.key },
+      },
+    ]);
+  }
+
+  onUnitSelect(option: any): void {
+    this.complaintForm.patchValue({
+      unit_id: option?.key ?? null,
+    });
   }
 
   onImageUpload(event: UploadFileModel): void {
@@ -117,6 +171,8 @@ export class AddComplaintsComponent {
     const val = this.complaintForm.value;
 
     const payload = {
+      property_id: val.property?.key,
+      pmc_id: val.pmc?.key ?? null,
       unit_id: Number(val.unit_id),
       description: val.description,
       service_type: val.service_type,

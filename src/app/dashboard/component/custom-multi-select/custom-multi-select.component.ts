@@ -13,7 +13,11 @@ import {
   ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import {
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  ControlValueAccessor,
+} from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -41,7 +45,9 @@ import { CustomSelectService } from '../custom-select/custom-select.service';
     },
   ],
 })
-export class CustomMultiSelectComponent implements OnInit, OnChanges, ControlValueAccessor {
+export class CustomMultiSelectComponent
+  implements OnInit, OnChanges, ControlValueAccessor
+{
   private destroyRef = inject(DestroyRef);
 
   @Input() options: any[] = [];
@@ -87,9 +93,22 @@ export class CustomMultiSelectComponent implements OnInit, OnChanges, ControlVal
   }
 
   get triggerLabel(): string {
-    if (!this.selectedOptions?.length) return '';
-    if (this.selectedOptions.length === 1) return this.selectedOptions[0][this.value];
-    return `${this.selectedOptions.length} selected`;
+    if (!this.selectedOptions?.length) {
+      return '';
+    }
+
+    if (this.selectedOptions.length <= 2) {
+      return this.selectedOptions
+        .map((option) => option[this.value])
+        .join(', ');
+    }
+
+    const firstTwo = this.selectedOptions
+      .slice(0, 2)
+      .map((option) => option[this.value])
+      .join(', ');
+
+    return `${firstTwo} +${this.selectedOptions.length - 2}`;
   }
 
   isSelected(option: any): boolean {
@@ -117,10 +136,23 @@ export class CustomMultiSelectComponent implements OnInit, OnChanges, ControlVal
       const rect = this.el.nativeElement.getBoundingClientRect();
       const dropdownHeight = 224;
       const spaceBelow = window.innerHeight - rect.bottom;
-      const openUpward = spaceBelow < dropdownHeight && rect.top > dropdownHeight;
+      const openUpward =
+        spaceBelow < dropdownHeight && rect.top > dropdownHeight;
       this.dropdownStyle = openUpward
-        ? { position: 'fixed', bottom: `${window.innerHeight - rect.top + 4}px`, left: `${rect.left}px`, width: `${rect.width}px`, 'z-index': '9999' }
-        : { position: 'fixed', top: `${rect.bottom + 4}px`, left: `${rect.left}px`, width: `${rect.width}px`, 'z-index': '9999' };
+        ? {
+            position: 'fixed',
+            bottom: `${window.innerHeight - rect.top + 4}px`,
+            left: `${rect.left}px`,
+            width: `${rect.width}px`,
+            'z-index': '9999',
+          }
+        : {
+            position: 'fixed',
+            top: `${rect.bottom + 4}px`,
+            left: `${rect.left}px`,
+            width: `${rect.width}px`,
+            'z-index': '9999',
+          };
     }
     this.onTouched();
   }
@@ -129,7 +161,9 @@ export class CustomMultiSelectComponent implements OnInit, OnChanges, ControlVal
     this.filterText = value;
     const search = value.toLowerCase();
     this.displayOptions = value.trim()
-      ? this.options.filter((o) => String(o[this.value]).toLowerCase().includes(search))
+      ? this.options.filter((o) =>
+          String(o[this.value]).toLowerCase().includes(search),
+        )
       : [...this.options];
   }
 
@@ -143,13 +177,21 @@ export class CustomMultiSelectComponent implements OnInit, OnChanges, ControlVal
   writeValue(value: any[]): void {
     // value is array of keys — map back to full option objects when options are available
     if (Array.isArray(value) && value.length && this.options.length) {
-      this.selectedOptions = this.options.filter((o) => value.includes(o[this.key]));
+      this.selectedOptions = this.options.filter((o) =>
+        value.includes(o[this.key]),
+      );
     } else {
       this.selectedOptions = [];
     }
   }
 
-  registerOnChange(fn: any): void { this.onChange = fn; }
-  registerOnTouched(fn: any): void { this.onTouched = fn; }
-  setDisabledState(isDisabled: boolean): void { this.isDisabled = isDisabled; }
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
+  }
 }
