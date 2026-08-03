@@ -8,13 +8,10 @@
         [(ngModel)]="message"
         placeholder="{{ 'HELP_PROMPT' | translate }}"
       ></textarea>
-      <button
-        type="button"
-        class="btn btnCommon btnWhite btnExtraSmall"
-        (click)="sendComplaint()"
-      >
+      <button type="button" class="btn btnCommon btnWhite btnExtraSmall">
         <i><app-send-icon /></i>{{ "SEND" | translate }}
       </button>
+      <!-- (click)="sendComplaint()" -->
     </div>
   </ng-container>
   <ng-container accordion-content>

@@ -13,6 +13,7 @@ import {
   ModalDismissReasons,
   NgbActiveModal,
   NgbModal,
+  NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
@@ -70,6 +71,7 @@ import { AlertService } from '../../../shared/services/alert.service';
     TableImgItemComponent,
     TranslateModule,
     NoDataComponent,
+    NgbTooltipModule,
   ],
   templateUrl: './pmc.component.html',
   styleUrl: './pmc.component.css',
@@ -154,6 +156,12 @@ export class PMCComponent {
       .subscribe((resp: any) => {
         this.pmcList = resp?.content ?? [];
         this.totalRecords = resp?.pagination?.total_records ?? 0;
+        this.pmcList = (resp?.content ?? []).map((item: any) => ({
+          ...item,
+          property_handling_names: item.property_handling
+            ?.map((x: any) => x.name)
+            .join(', '),
+        }));
       });
   }
 

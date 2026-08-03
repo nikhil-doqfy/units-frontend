@@ -810,5 +810,6 @@
   "ORGANIZATION_NAME": "اسم المنظمة",
   "ORGANIZATION_TYPE": "نوع المنظمة",
   "REGISTRATION_NO": "رقم التسجيل",
-  "WEBSITE": "موقع إلكتروني"
+  "WEBSITE": "موقع إلكتروني",
+  "UPLOAD_TENANT_DOCUMENT": "تحميل مستند المستأجر"
 }

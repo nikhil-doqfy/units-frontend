@@ -813,5 +813,6 @@
   "ORGANIZATION_NAME": "Organization Name",
   "ORGANIZATION_TYPE": "Organization Type",
   "REGISTRATION_NO": "Registration No",
-  "WEBSITE": "Website"
+  "WEBSITE": "Website",
+  "UPLOAD_TENANT_DOCUMENT": "Upload Tenant Document"
 }

@@ -31,6 +31,13 @@
           >
             <app-export-icon />
           </app-table-filter-btn>
+          <button
+            *ngIf="currentRole === 'tenant'"
+            class="btn btn-primary"
+            (click)="openTenantDocumentUpload(uploadTenantDocumentModal)"
+          >
+            Upload
+          </button>
         </div>
       </div>
     </div>
@@ -48,7 +55,41 @@
         </thead>
         <tbody>
           <!-- @for (property of documentationList; track $index){ -->
-          <tr>
+
+          <tr *ngFor="let document of tenantDocuments; let i = index">
+            <td>{{ document.tenant_code }}</td>
+
+            <td>{{ document.file_name }}</td>
+
+            <td>
+              <app-badge [title]="document.document_type_name" status="green">
+              </app-badge>
+            </td>
+
+            <td align="center">
+              <div class="cmmnTblActnBtnDiv">
+                <app-table-action-btn
+                  type="download"
+                  (clicked)="downloadDocument(document)"
+                >
+                </app-table-action-btn>
+
+                <app-table-action-btn
+                  type="preview"
+                  (clicked)="previewDocument(document)"
+                >
+                </app-table-action-btn>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="!tenantDocuments.length">
+            <td colspan="4" align="center">
+              <app-no-data></app-no-data>
+            </td>
+          </tr>
+        </tbody>
+        <!-- <tr >
             <td>LP9021</td>
             <td>Lease-Purchase Agreement</td>
             <td>
@@ -147,14 +188,14 @@
               </div>
             </td>
           </tr>
-          <!-- }@empty {
+           }@empty {
           <tr>
             <td colspan="20" align="center">
               <app-no-data></app-no-data>
             </td>
           </tr>
-          } -->
-        </tbody>
+          } 
+        </tbody> -->
       </table>
     </div>
   </div>
@@ -162,4 +203,44 @@
     <app-table-select />
     <app-table-pagination />
   </div>
+  <ng-template #uploadTenantDocumentModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title">
+        {{ "UPLOAD_TENANT_DOCUMENT" | translate }}
+      </h6>
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+      <app-tenant-document-upload
+        #tenantDocumentUploadComponent
+        (documentUploaded)="onDocumentUploaded($event, modal)"
+      >
+      </app-tenant-document-upload>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btnCommon btnTransparent"
+        (click)="modal.dismiss('Cancel click')"
+      >
+        {{ "CANCEL" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btnCommon"
+        (click)="tenantDocumentUploadComponent.uploadDocument()"
+      >
+        {{ "UPLOAD_DOCUMENT" | translate }}
+      </button>
+    </div>
+  </ng-template>
 </div>
