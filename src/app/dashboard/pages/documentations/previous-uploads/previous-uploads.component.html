@@ -22,9 +22,15 @@
           class="vhFileImg"
         />
         <img
-          *ngIf="!isPdfFile(doc.file_name)"
+          *ngIf="isImageFile(doc.file_name)"
           src="assets/pngIcon.png"
           alt="Image"
+          class="vhFileImg"
+        />
+        <img
+          *ngIf="!isPdfFile(doc.file_name) && !isImageFile(doc.file_name)"
+          src="assets/pngIcon.png"
+          alt="File"
           class="vhFileImg"
         />
       </div>
@@ -38,7 +44,7 @@
 
         <div class="vhMeta">
           <!-- Upload date -->
-          <span>{{ formatDate(doc.uploaded_at) }}</span>
+          <!-- <span>{{ formatDate(doc.uploaded_at) }}</span> -->
 
           <!-- Never expires -->
           <ng-container *ngIf="doc.never_expire">

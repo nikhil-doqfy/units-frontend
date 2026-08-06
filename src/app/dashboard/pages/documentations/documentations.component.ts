@@ -133,7 +133,23 @@ export class DocumentationsComponent {
     this.selected = option;
   }
 
-  handleExportClick(): void {}
+  handleExportClick(): void {
+    this.documenattionService.exportTenantDocuments().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'tenant-documents.csv';
+        link.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Export failed', err);
+      },
+    });
+  }
 
   getTenantDocuments(): void {
     this.documenattionService.getTenantDocuments().subscribe({
@@ -159,6 +175,7 @@ export class DocumentationsComponent {
         this.selectedDocument = {
           document_id: fetched.document_id ?? fetched.id ?? docId,
           title: fetched.title ?? fetched.file_name ?? '',
+          document_type_id: fetched.document_type_id,
           file_name: fetched.file_name ?? fetched.title ?? '',
           status: fetched.status ?? '',
           never_expire:

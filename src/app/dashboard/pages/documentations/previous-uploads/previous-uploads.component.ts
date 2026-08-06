@@ -72,17 +72,31 @@ export class PreviousUploadsComponent implements OnInit, OnChanges {
   }
 
   private buildList(raw: any[]): void {
-    const normalised: PreviousUploadDoc[] = raw.map((d) => ({
-      id: d.id ?? d.document_id ?? 0,
-      document_id: d.document_id ?? d.id ?? 0,
-      title: d.title ?? d.file_name ?? '',
-      file_name: d.file_name ?? d.title ?? '',
-      status: d.status ?? '',
-      never_expire: d.never_expire ?? d.does_not_expire ?? false,
-      expiry_date: d.expiry_date ?? '',
-      uploaded_at: d.uploaded_at ?? d.created_at ?? d.start_date ?? '',
-      url: d.url ?? d.file_url ?? d.document_url ?? '',
-    }));
+    const normalised: PreviousUploadDoc[] = raw.map((d) => {
+      const url = d.url ?? d.file_url ?? d.document_url ?? '';
+      let fileName = d.file_name ?? d.title ?? '';
+
+      // If fileName has no extension, try to extract from URL
+      if (fileName && !fileName.includes('.') && url) {
+        const cleanUrl = url.split('?')[0];
+        const ext = cleanUrl.substring(cleanUrl.lastIndexOf('.'));
+        if (ext && ext.length >= 2 && ext.length <= 5) {
+          fileName = fileName + ext;
+        }
+      }
+
+      return {
+        id: d.id ?? d.document_id ?? 0,
+        document_id: d.document_id ?? d.id ?? 0,
+        title: d.title ?? d.file_name ?? '',
+        file_name: fileName,
+        status: d.status ?? '',
+        never_expire: d.never_expire ?? d.does_not_expire ?? false,
+        expiry_date: d.expiry_date ?? '',
+        uploaded_at: d.uploaded_at ?? d.created_at ?? d.start_date ?? '',
+        url,
+      };
+    });
 
     normalised.sort(
       (a, b) =>
@@ -186,7 +200,18 @@ export class PreviousUploadsComponent implements OnInit, OnChanges {
   // ── Template helpers ──────────────────────────────────────────────────
 
   isPdfFile(fileName: string): boolean {
-    return fileName?.split('.').pop()?.toLowerCase() === 'pdf';
+    return this.getExtension(fileName) === 'pdf';
+  }
+
+  isImageFile(fileName: string): boolean {
+    return ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(
+      this.getExtension(fileName),
+    );
+  }
+
+  private getExtension(fileName: string): string {
+    if (!fileName) return '';
+    return fileName.split('.').pop()?.toLowerCase() ?? '';
   }
 
   formatDate(dateStr: string): string {

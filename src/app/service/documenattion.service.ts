@@ -34,4 +34,12 @@ export class DocumenattionService {
   getTenantDocuments(): Observable<any> {
     return this.http.get(`${this.SERVER_ADDRESS}/user/tenant_documents`);
   }
+  exportTenantDocuments(): Observable<Blob> {
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/user/tenant_documents?export=csv`,
+      {
+        responseType: 'blob',
+      },
+    );
+  }
 }

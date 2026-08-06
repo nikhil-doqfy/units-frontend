@@ -15,27 +15,14 @@
     </label>
 
     <!-- Dropdown from API -->
-    <select
-      *ngIf="documentTypeOptions.length"
-      class="form-select"
-      [(ngModel)]="documentTitle"
-      (ngModelChange)="clearError()"
-    >
-      <option value="">{{ "ENTER_DOC_TITLE" | translate }}</option>
-      <option *ngFor="let opt of documentTypeOptions" [value]="opt.value">
-        {{ opt.label }}
-      </option>
-    </select>
-
-    <!-- Fallback text input if API returns nothing -->
-    <input
-      *ngIf="!documentTypeOptions.length"
-      type="text"
-      class="form-control"
+    <app-custom-select
+      [options]="documentTypeOptions"
+      key="key"
+      value="value"
       [placeholder]="'ENTER_DOC_TITLE' | translate"
-      [(ngModel)]="documentTitle"
-      (ngModelChange)="clearError()"
-    />
+      [selectedOption]="selectedDocumentType"
+      (optionSelected)="onDocumentTypeSelected($event)"
+    ></app-custom-select>
 
     <div class="errorMsg mt-1" *ngIf="titleError">{{ titleError }}</div>
   </div>
@@ -64,6 +51,7 @@
 
     <!-- Date + Days inputs side by side -->
     <div class="expiryRow">
+      <!-- Date picker -->
       <input
         type="date"
         class="form-control expiryDateInput"

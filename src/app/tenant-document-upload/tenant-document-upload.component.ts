@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { LeaseService } from '../dashboard/services/lease.service';
-
+import { CustomSelectComponent } from '../dashboard/component/custom-select/custom-select.component';
 @Component({
   selector: 'app-tenant-document-upload',
   standalone: true,
@@ -28,6 +28,7 @@ import { LeaseService } from '../dashboard/services/lease.service';
     CommonModule,
     FormsModule,
     TranslateModule,
+    CustomSelectComponent,
   ],
   templateUrl: './tenant-document-upload.component.html',
   styleUrl: './tenant-document-upload.component.css',
@@ -40,7 +41,7 @@ export class TenantDocumentUploadComponent implements OnChanges, OnInit {
   uploadTenantDocumentModal!: TemplateRef<any>;
 
   documentTypeOptions: { label: string; value: string }[] = [];
-
+  selectedDocumentType: any = null;
   documentTitle: string = '';
   documentStatus: string = '';
   neverExpire: boolean = false;
@@ -50,12 +51,10 @@ export class TenantDocumentUploadComponent implements OnChanges, OnInit {
   daysLabel: string = '';
   daysPillClass: string = '';
 
-  // Validation errors
   titleError: string = '';
   statusError: string = '';
   expiryError: string = '';
 
-  // File state
   uploadedFile: any = null;
   uploadError: string = '';
   uploadedFiles: UploadFileModel[] = [];
@@ -82,21 +81,32 @@ export class TenantDocumentUploadComponent implements OnChanges, OnInit {
   private loadDocumentTypes(): void {
     this.leaseService.getTenantDocumentTypes().subscribe({
       next: (resp: any) => {
-        const list = resp?.content ?? resp ?? [];
-        this.documentTypeOptions = (Array.isArray(list) ? list : []).map(
-          (item: any) => ({
-            label: item.label ?? item.name ?? item.value ?? item,
-            value: item.value ?? item.label ?? item.name ?? item,
-          }),
-        );
+        this.documentTypeOptions = resp?.content?.tenant_document_type ?? [];
+
+        if (this.document) {
+          this.selectedDocumentType =
+            this.documentTypeOptions.find(
+              (item: any) => item.key === this.document.document_type_id,
+            ) ?? null;
+
+          if (this.selectedDocumentType) {
+            this.documentTitle = this.selectedDocumentType.value ?? '';
+          }
+        }
       },
-      error: (err) => console.error('Failed to load document types:', err),
+
+      error: (err) => console.error(err),
     });
   }
   get todayStr(): string {
     return new Date().toISOString().split('T')[0];
   }
 
+  onDocumentTypeSelected(option: any): void {
+    this.selectedDocumentType = option;
+    this.documentTitle = option.value;
+    this.clearError();
+  }
   clearError(): void {
     this.titleError = '';
     this.uploadError = '';
@@ -213,6 +223,7 @@ export class TenantDocumentUploadComponent implements OnChanges, OnInit {
             ? (this.uploadedFile.base64?.split(',')[1] ??
               this.uploadedFile.base64)
             : null,
+          document_type_id: this.selectedDocumentType?.key,
           title: this.documentTitle,
           never_expire: this.neverExpire,
           expiry_date: this.neverExpire ? null : this.expiryDate,
@@ -287,7 +298,7 @@ export class TenantDocumentUploadComponent implements OnChanges, OnInit {
   setDocument(document: any): void {
     if (!document) return;
 
-    this.documentTitle = document.title ?? '';
+    this.document = document;
     this.documentStatus = document.status ?? '';
 
     this.neverExpire =
@@ -303,9 +314,29 @@ export class TenantDocumentUploadComponent implements OnChanges, OnInit {
       this.daysPillClass = '';
     }
 
+    if (this.documentTypeOptions.length > 0) {
+      this.selectedDocumentType =
+        this.documentTypeOptions.find(
+          (item: any) => item.key === document.document_type_id,
+        ) ?? null;
+
+      this.documentTitle =
+        this.selectedDocumentType?.value ?? document.title ?? '';
+    } else {
+      this.documentTitle = document.title ?? '';
+    }
+
     this.uploadedFile = null;
 
-    const fileName = document.file_name ?? document.title ?? 'Document';
+    let fileName = document.file_name ?? document.title ?? 'Document';
+
+    if (!fileName.includes('.') && document.url) {
+      const cleanUrl = document.url.split('?')[0];
+      const ext = cleanUrl.substring(cleanUrl.lastIndexOf('.'));
+      if (ext && ext.length >= 2 && ext.length <= 5) {
+        fileName = fileName + ext;
+      }
+    }
 
     this.uploadedFiles = [
       {
