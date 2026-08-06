@@ -814,5 +814,21 @@
   "ORGANIZATION_TYPE": "Organization Type",
   "REGISTRATION_NO": "Registration No",
   "WEBSITE": "Website",
-  "UPLOAD_TENANT_DOCUMENT": "Upload Tenant Document"
+  "UPLOAD_TENANT_DOCUMENT": "Upload Tenant Document",
+  "DOC_TITLE": "Document Title",
+  "ENTER_DOC_TITLE": "Enter document title",
+  "DOC_STATUS": "Document Status",
+  "STATUS_ACTIVE": "Active",
+  "STATUS_INACTIVE": "Inactive",
+  "STATUS_EXPIRED": "Expired",
+  "NEVER_EXPIRE": "Never Expire",
+  "DAYS_LEFT": "days left",
+  "DAYS_STATUS": "Days Status",
+  "UPLOADED_ON": "Uploaded On",
+  "VERSION_HISTORY": "Version History",
+  "NO_VERSION_HISTORY": "No version history found.",
+  "ALL_YEARS": "All Years",
+  "ALL_MONTHS": "All Months",
+  "PREVIOUS_UPLOADS": "Previous Uploads",
+  "RENEW_DOCUMENT": "Renew Document"
 }

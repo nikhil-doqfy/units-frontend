@@ -1,0 +1,127 @@
+<!-- Version history list -->
+<div class="vhWrapper">
+  <div *ngIf="!isLoading && !allVersions.length" class="vhEmpty">
+    <app-no-data></app-no-data>
+  </div>
+
+  <!-- Version rows -->
+  <div class="vhList" *ngIf="!isLoading && allVersions.length">
+    <div
+      class="vhRow"
+      *ngFor="let doc of allVersions"
+      (click)="openPreview(doc, previewModal)"
+      role="button"
+      tabindex="0"
+    >
+      <!-- PDF / Image icon -->
+      <div class="vhIcon">
+        <img
+          *ngIf="isPdfFile(doc.file_name)"
+          src="assets/pdfIcon.png"
+          alt="PDF"
+          class="vhFileImg"
+        />
+        <img
+          *ngIf="isImageFile(doc.file_name)"
+          src="assets/pngIcon.png"
+          alt="Image"
+          class="vhFileImg"
+        />
+        <img
+          *ngIf="!isPdfFile(doc.file_name) && !isImageFile(doc.file_name)"
+          src="assets/pngIcon.png"
+          alt="File"
+          class="vhFileImg"
+        />
+      </div>
+
+      <!-- File info -->
+      <div class="vhInfo">
+        <div class="vhFileName">
+          {{ doc.file_name || doc.title || "—" }}
+          <span *ngIf="doc.isLatest" class="vhCurrentBadge">CURRENT</span>
+        </div>
+
+        <div class="vhMeta">
+          <!-- Upload date -->
+          <!-- <span>{{ formatDate(doc.uploaded_at) }}</span> -->
+
+          <!-- Never expires -->
+          <ng-container *ngIf="doc.never_expire">
+            <span class="vhDot">·</span>
+            <span class="vhNeverExpire">Never Expires</span>
+          </ng-container>
+
+          <!-- Expiry date + days pill -->
+          <ng-container *ngIf="!doc.never_expire && doc.expiry_date">
+            <span class="vhDot">·</span>
+            <span>Expires {{ formatDate(doc.expiry_date) }}</span>
+            <span class="vhDot">·</span>
+            <!-- Expired pill -->
+            <span *ngIf="isExpiredDoc(doc)" class="vhExpiredPill">Expired</span>
+            <!-- Days left / expires today pill -->
+            <span *ngIf="!isExpiredDoc(doc)" [ngClass]="getDaysClass(doc)">
+              {{ getDaysLabel(doc) }}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Download button -->
+      <button
+        class="vhDownloadBtn"
+        type="button"
+        (click)="$event.stopPropagation(); downloadDoc(doc)"
+        title="Download"
+      >
+        <i class="bi bi-download"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Preview Modal ══ -->
+<ng-template #previewModal let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title">{{ previewFileName }}</h6>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body p-0 vhPreviewBody">
+    <ng-container *ngIf="isPdf && previewUrl">
+      <pdf-viewer
+        [src]="previewUrl"
+        [render-text]="true"
+        [original-size]="false"
+        [fit-to-page]="true"
+        [zoom]="1"
+        [zoom-scale]="'page-width'"
+        style="width: 100%; height: 75vh; display: block"
+      ></pdf-viewer>
+    </ng-container>
+    <ng-container *ngIf="!isPdf && previewUrl">
+      <div class="vhImgWrap">
+        <img [src]="previewUrl" [alt]="previewFileName" class="img-fluid" />
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!previewUrl">
+      <div class="vhNoUrl">
+        <i class="bi bi-exclamation-circle"></i>
+        <p>Document URL not available.</p>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btnCommon btnTransparent" (click)="modal.dismiss()">
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      *ngIf="previewUrl"
+      class="btn btnCommon"
+      (click)="downloadPreview()"
+    >
+      <i class="bi bi-download"></i> {{ "DOWNLOAD" | translate }}
+    </button>
+  </div>
+</ng-template>
