@@ -15,6 +15,28 @@
   min-width: 100px;
 }
 
+:host-context([dir="rtl"]) .leads-table thead tr th:last-child,
+:host-context([dir="rtl"]) .leads-table tbody tr td:last-child {
+  right: auto;
+  left: 0;
+}
+
+:host-context([dir="rtl"]) .leads-table tbody tr td:last-child {
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+:host-context([dir="rtl"]) .table td:last-child::before,
+:host-context([dir="rtl"]) .table th:last-child::before {
+  left: auto;
+  right: -12px;
+  background: linear-gradient(
+    to right,
+    var(--gradientShadowStart),
+    var(--gradientShadowMid),
+    transparent
+  );
+}
+
 .leads-table thead tr th:last-child {
   z-index: 3;
   background-color: var(--activeBg1);

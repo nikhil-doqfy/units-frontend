@@ -4508,6 +4508,10 @@ linearGradient .authBgPatt stop:last-child {
   padding: 8px 16px 10px 16px;
 }
 
+[dir="rtl"] .cmmnTblFtr {
+  flex-direction: row-reverse;
+}
+
 /***Table Action Css Start***/
 .cmmnTblActnBtnDiv {
   display: flex;
@@ -4625,6 +4629,25 @@ linearGradient .authBgPatt stop:last-child {
   top: 9px;
   pointer-events: none;
   transition: all 0.3s ease 0s;
+}
+
+[dir="rtl"] .cmmnTblSrch button {
+  left: auto;
+  right: 12px;
+}
+
+[dir="rtl"] .cmmnTblSrch.expanded button {
+  left: auto;
+  right: 8px;
+}
+
+[dir="rtl"] .cmmnTblSrch input {
+  padding: 8px 30px 8px 8px;
+}
+
+[dir="rtl"] .cmmnTblSrch.expanded input {
+  padding-right: 32px;
+  padding-left: 8px;
 }
 
 .charges-table thead td {
@@ -4774,6 +4797,28 @@ linearGradient .authBgPatt stop:last-child {
 
 .cmmnTblPgntnItem label span {
   color: var(--blackText);
+}
+
+/***Table Pagination RTL Fix***/
+[dir="rtl"] .cmmnTblPgntn .pagination .page-link[aria-label="First"] {
+  background-image: url("/assets/paginationArrowRightLast.svg");
+}
+
+[dir="rtl"] .cmmnTblPgntn .pagination .page-link[aria-label="Previous"] {
+  background-image: url("/assets/paginationArrowRight.svg");
+}
+
+[dir="rtl"] .cmmnTblPgntn .pagination .page-link[aria-label="Next"] {
+  background-image: url("/assets/paginationArrowLeft.svg");
+}
+
+[dir="rtl"] .cmmnTblPgntn .pagination .page-link[aria-label="Last"] {
+  background-image: url("/assets/paginationArrowLeftLast.svg");
+}
+
+[dir="rtl"] .cmmnTblPgntnItem label {
+  direction: rtl;
+  unicode-bidi: embed;
 }
 
 /***Table Pagination Css End***/

@@ -1,0 +1,5 @@
+/* Ensure label text flows correctly in RTL */
+:host-context([dir="rtl"]) .cmmnTblPgntnItem label {
+  direction: rtl;
+  unicode-bidi: embed;
+}
