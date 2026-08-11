@@ -34,7 +34,6 @@
           </app-table-filter-btn>
 
           <button
-            *ngIf="currentRole === 'tenant'"
             class="btn btnCommon"
             (click)="openTenantDocumentUpload(uploadTenantDocumentModal)"
           >
@@ -278,7 +277,7 @@
   <!-- ====================== DOCUMENT HISTORY MODAL (per document) ====================== -->
   <ng-template #docHistoryModal let-modal>
     <div class="modal-header">
-      <h6 class="modal-title">Previous Uploads</h6>
+      <h6 class="modal-title">{{ "PREVIOUS_UPLOADS" | translate }}</h6>
       <button
         type="button"
         class="btn-close"

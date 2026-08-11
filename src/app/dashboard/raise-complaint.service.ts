@@ -11,8 +11,10 @@ export class RaiseComplaintService {
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
 
   constructor() {}
-  raiseComplaint(message: string) {
-    return this.http.post(`${this.SERVER_ADDRESS}/complaint`, { message });
+  raiseComplaint(description: string) {
+    return this.http.post(`${this.SERVER_ADDRESS}/support-ticket`, {
+      description,
+    });
   }
   getFaqList(): Observable<any> {
     return this.http.get(`${this.SERVER_ADDRESS}/faq_api`);

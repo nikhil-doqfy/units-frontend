@@ -72,13 +72,7 @@ export class AddComplaintsComponent {
       slot_2: [''],
       slot_3: [''],
     });
-    this.sharedApiService.getOptionsType([
-      {
-        param: 'PARENT_PROPERTY',
-        key: 'property',
-        setter: (v) => (this.propertyOptions = v),
-      },
-    ]);
+
     this.sharedApiService
       .getOptions({ option_type: 'PMC_BY_PM' })
       .subscribe((resp: any) => {
@@ -102,11 +96,37 @@ export class AddComplaintsComponent {
       });
     }
   }
+
   onPmcSelected(option: any): void {
     this.selectedPmc = option;
-    this.complaintForm.patchValue({ pmc: option });
-  }
 
+    this.complaintForm.patchValue({
+      pmc: option,
+      property: null,
+      unit_id: null,
+    });
+
+    this.propertyOptions = [];
+    this.unitOptions = [];
+
+    if (!option?.key) {
+      return;
+    }
+
+    this.loadPropertiesByPmc(option.key);
+  }
+  loadPropertiesByPmc(pmcId: number): void {
+    this.sharedApiService.getOptionsType([
+      {
+        param: 'PROPERTY_BY_PMC',
+        key: 'property',
+        setter: (v) => (this.propertyOptions = v),
+        params: {
+          pmc_id: pmcId,
+        },
+      },
+    ]);
+  }
   onPropertySelect(option: any): void {
     this.unitOptions = [];
     this.complaintForm.patchValue({

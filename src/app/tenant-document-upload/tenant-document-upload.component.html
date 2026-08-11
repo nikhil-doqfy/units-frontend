@@ -2,9 +2,9 @@
   <!-- Info Box -->
   <div class="infoBox mb-3">
     <ul class="mb-0">
-      <li>Upload the tenant document in PDF, JPG, JPEG, or PNG format.</li>
-      <li>Ensure the document is clear and readable before uploading.</li>
-      <li>Maximum file size allowed: 20 MB.</li>
+      <li>{{ "UPLOAD_TENANT_DOCUMENT_IN_PDF" | translate }}</li>
+      <li>{{ "UPLOAD_TENANT_DOCUMENT_INSTRUCTIONS" | translate }}</li>
+      <li>{{ "MAXIMUM_FILE_SIZE" | translate }}</li>
     </ul>
   </div>
 
@@ -60,19 +60,19 @@
       />
 
       <!-- Separator -->
-      <span class="expirySep">or</span>
+      <span class="expirySep">{{ "OR" | translate }}</span>
 
       <!-- Days input -->
       <div class="daysInputWrap">
         <input
           type="number"
           class="form-control daysInput"
-          [placeholder]="'e.g. 34'"
+          [placeholder]="'e.g. 34'|translate"
           [(ngModel)]="expiryDays"
           min="0"
           (ngModelChange)="onDaysInputChange()"
         />
-        <span class="daysInputSuffix">days</span>
+        <span class="daysInputSuffix">{{ "DAYS" | translate }}</span>
       </div>
     </div>
 
@@ -88,7 +88,7 @@
 
   <!-- Upload -->
   <app-upload-document
-    [title]="'Drop Tenant Document Here'"
+    [title]="'DROP_TENANT_DOCUMENT_HERE' | translate"
     [isMultipleFiles]="false"
     [fileTypes]="['pdf', 'jpg', 'jpeg', 'png']"
     [maxSize]="20"

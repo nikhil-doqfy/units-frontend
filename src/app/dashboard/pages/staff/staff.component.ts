@@ -13,6 +13,7 @@ import {
   ModalDismissReasons,
   NgbActiveModal,
   NgbModal,
+  NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
@@ -78,6 +79,7 @@ import { FormsModule } from '@angular/forms';
     CustomSelectComponent,
     NoDataComponent,
     FormsModule,
+    NgbTooltipModule,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',
@@ -187,6 +189,9 @@ export class StaffComponent {
     this.selectedstaffRole = null;
   }
 
+  getRemainingPmcNames(staff: any): string {
+    return staff?.pmcs?.map((pmc: any) => pmc.value)?.join(', ') || '';
+  }
   handleDropdownAction(action: string, staff: any): void {
     const modalOptions = {
       ariaLabelledBy: 'modal-title',

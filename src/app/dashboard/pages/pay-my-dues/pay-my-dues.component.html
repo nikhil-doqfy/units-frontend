@@ -90,18 +90,24 @@
     </app-white-card>
   </div>
   <div class="col-md-6 col-xxl-5">
-    <app-white-card title="Plan info" size="md">
+    <app-white-card [title]="'PLAN_INFO' | translate" size="md">
       <div class="pmntPlanOuter">
         <div class="pmntPlanHdr">
           <ul>
-            <li><span>Rent:</span> AED32,99</li>
-            <li><span>Maintenance:</span> AED120</li>
-            <li><span></span>Others: --</li>
+            <li>
+              <span>{{ "RENT" | translate }}:</span> AED32,99
+            </li>
+            <li>
+              <span>{{ "MAINTENANCE" | translate }}:</span> AED120
+            </li>
+            <li>
+              <span>{{ "OTHERS" | translate }}:</span> --
+            </li>
           </ul>
         </div>
         <div class="pmntPlanBdy">
           <div>
-            <p>No of Tenants</p>
+            <p>{{ "NO_OF_TENANTS" | translate }}</p>
             <div class="pmntPlanQty">
               <button type="button" (click)="decreaseQty()">
                 <app-minus-icon />
@@ -119,10 +125,12 @@
           </div>
           <div>
             <div>
-              <p><b>Billing</b></p>
-              <p>Monthly Yearly</p>
+              <p>
+                <b>{{ "BILLING" | translate }}</b>
+              </p>
+              <p>{{ "MONTHLY_YEARLY" | translate }}</p>
             </div>
-            <h5>AED13.89 / Year</h5>
+            <h5>AED13.89 /{{ "YEAR" | translate }}</h5>
           </div>
           <div class="commonForm">
             <div class="w-100">
@@ -130,17 +138,27 @@
                 class="form-control"
                 type="text"
                 name="promoCode"
-                placeholder=" Have Promo Code"
+                [placeholder]="' HAVE_PROMO_CODE' | translate"
               />
             </div>
-            <button type="button" class="btn btnCommon btnBorder">Apply</button>
+            <button type="button" class="btn btnCommon btnBorder">
+              {{ "APPLY" | translate }}
+            </button>
           </div>
           <div>
             <div>
-              <p><b>Charged today</b></p>
-              <p><small>Taxes included (18%): 3,645.00 AED/year</small></p>
+              <p>
+                <b>{{ "CHARGED_TODAY" | translate }}</b>
+              </p>
+              <p>
+                <small
+                  >{{ "TAXES_INCLUDED" | translate }} (18%): 3,645.00 AED/{{
+                    "YEAR" | translate
+                  }}</small
+                >
+              </p>
             </div>
-            <h4>AED123.89 / Year</h4>
+            <h4>AED123.89 / {{ "YEAR" | translate }}</h4>
           </div>
         </div>
         <div class="pmntPlanFtr">
@@ -149,10 +167,10 @@
             class="btn btnCommon btnBorder"
             (click)="goToPaymentsAndInvoice()"
           >
-            Cancel
+            {{ "  CANCEL" | translate }}
           </button>
           <button type="button" class="btn btnCommon w-100">
-            Confirm & Pay
+            {{ "CONFIRM_AND_PAY" | translate }}
           </button>
         </div>
       </div>

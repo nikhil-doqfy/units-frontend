@@ -26,6 +26,7 @@
           <h6>{{ "REJECTED" | translate }}</h6>
         </div>
         <button
+          *ngIf="currentRole === 'property-manager' || currentRole === 'tenant'"
           class="btn btnCommon btnPrimary complaintBtn"
           (click)="openComplaintModal()"
         >
@@ -48,11 +49,6 @@
           [isFilter]="true"
         >
         </app-custom-select>
-      </ng-container>
-      <ng-container *ngIf="isTenant" card-actions>
-        <button class="btn btnCommon btnPrimary" (click)="openComplaintModal()">
-          {{ "NEW_COMPLAINT" | translate }}
-        </button>
       </ng-container>
 
       <!-- MODAL -->

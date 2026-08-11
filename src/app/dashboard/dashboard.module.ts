@@ -281,7 +281,7 @@ export const routes: Routes = [
       {
         path: 'raise-complaint',
         component: RaiseComplaintComponent,
-        data: { titleKey: 'PAGE_TITLE.RAISE_COMPLAINT' },
+        data: { titleKey: 'PAGE_TITLE.SUPPORT' },
       },
       {
         path: 'privacy-policy',

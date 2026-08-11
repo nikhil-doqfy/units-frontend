@@ -258,6 +258,14 @@
           <app-raise-complaint-icon></app-raise-complaint-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          *ngIf="canAccess('Complaints')"
+          title="{{ 'PAGE_TITLE.COMPLAINTS' | translate }}"
+          href="/dashboard/complaints"
+          [count]="complaintCount"
+        >
+          <app-raise-complaint-icon></app-raise-complaint-icon>
+        </app-sidebar-item>
+        <app-sidebar-item
           title="{{ 'PRIVACY_POLICY' | translate }}"
           href="/dashboard/privacy-policy"
         >

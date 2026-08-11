@@ -45,6 +45,7 @@ import { AddComplaintsComponent } from '../../component/forms/add-complaints/add
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
 import { DeleteIconComponent } from '../../component/icons/delete-icon/delete-icon.component';
+import { UserRole } from '../../../theme.service';
 
 @Component({
   selector: 'app-complaints',
@@ -127,7 +128,7 @@ export class ComplaintsComponent {
   role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
   showComplaintModal = false;
   showAllPhotos = false;
-
+  currentRole: UserRole = 'property-manager';
   complaintStats = [
     {
       value: '12000',
