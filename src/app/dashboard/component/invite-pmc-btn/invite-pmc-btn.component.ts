@@ -75,11 +75,7 @@ export class InvitePMCButtonComponent {
   invitePmc(modal: NgbActiveModal, component: InvitePMCFormComponent) {
     const form = component.invitePmcForm;
     const payload = component.getPayload();
-    if (
-      !payload.email ||
-      !payload.invitation_type ||
-      !payload.property_unit_id
-    ) {
+    if (!payload.email || !payload.pmc_id) {
       this.alertService.error('All fields are required');
       return;
     }
@@ -92,8 +88,7 @@ export class InvitePMCButtonComponent {
 
     const data = {
       email: values.email,
-      invitation_type: values.invitation_type,
-      property_unit_id: values.property_unit_id,
+      pmc_id: values.pmc_id,
     };
 
     this.pmcService
