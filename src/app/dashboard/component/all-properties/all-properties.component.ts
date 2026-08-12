@@ -25,6 +25,8 @@ import { debounceTime, Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SharedService } from '../../../shared.service';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ShareProfileModalComponent } from '../forms/share-profile-modal/share-profile-modal.component';
 
 @Component({
   selector: 'app-all-properties',
@@ -100,6 +102,7 @@ export class AllPropertiesComponent implements OnInit {
   constructor(
     private router: Router,
     private sharedService: SharedService,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
@@ -197,8 +200,17 @@ export class AllPropertiesComponent implements OnInit {
     this.propertyService.exportProperties(this.buildParams());
   }
 
-  handleDropdownAction(action: string) {
-    console.log(`${action} action clicked`);
+  handleDropdownAction(action: string, prop?: any) {
+    if (action === 'share' && prop) {
+      const modalRef = this.modalService.open(ShareProfileModalComponent, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon',
+        centered: true,
+      });
+      modalRef.componentInstance.profileId = prop.id;
+      modalRef.componentInstance.profileName = prop.property_name || '';
+      modalRef.componentInstance.apiType = 'property';
+    }
   }
 
   onPageSizeChange(event: PageSizeChange): void {
