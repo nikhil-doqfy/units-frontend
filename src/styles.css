@@ -5894,7 +5894,7 @@ app-plus-icon {
 
 .charges-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* grid-template-columns: repeat(5, 1fr); */
   gap: 16px;
   margin-bottom: 16px;
 }
@@ -5956,7 +5956,7 @@ app-plus-icon {
 
 @media (max-width: 1024px) {
   .charges-grid {
-    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(3, 1fr); */
   }
 
   .payment-info {
@@ -5966,7 +5966,7 @@ app-plus-icon {
 
 @media (max-width: 600px) {
   .charges-grid {
-    grid-template-columns: repeat(1, 1fr);
+    /* grid-template-columns: repeat(1, 1fr); */
   }
 
   .payment-info {
