@@ -3,16 +3,43 @@
     <i>
       <img
         src="../../../../assets/pdfIcon.png"
+        class="file-type-icon"
         *ngIf="
-          getFileExtension(item.file?.name || item.fileName || item.name) ===
-          'pdf'
+          getFileExtension(
+            item.file?.name || item.file_name || item.fileName || item.name
+          ) === 'pdf'
         "
       />
       <img
         src="../../../../assets/pngIcon.png"
+        class="file-type-icon"
         *ngIf="
           ['png', 'jpg', 'jpeg'].includes(
-            getFileExtension(item.file?.name || item.fileName || item.name)
+            getFileExtension(
+              item.file?.name || item.file_name || item.fileName || item.name
+            )
+          )
+        "
+      />
+      <img
+        src="../../../../assets/XlsIcon.svg"
+        class="file-type-icon"
+        *ngIf="
+          ['xls', 'xlsx', 'csv'].includes(
+            getFileExtension(
+              item.file?.name || item.file_name || item.fileName || item.name
+            )
+          )
+        "
+      />
+      <img
+        src="../../../../assets/text-icon.svg"
+        class="file-type-icon"
+        *ngIf="
+          !['pdf', 'png', 'jpg', 'jpeg', 'xls', 'xlsx', 'csv'].includes(
+            getFileExtension(
+              item.file?.name || item.file_name || item.fileName || item.name
+            )
           )
         "
       />
@@ -21,7 +48,9 @@
 
   <div class="info">
     <div class="name">
-      {{ item.file?.name || item.fileName || item.name || "—" }}
+      {{
+        item.file?.name || item.file_name || item.fileName || item.name || "—"
+      }}
     </div>
     <div class="subInfo">
       <small class="size">
