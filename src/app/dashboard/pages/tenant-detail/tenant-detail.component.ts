@@ -47,6 +47,7 @@ import { ReplaceChequeComponent } from '../../component/forms/replace-cheque/rep
 import { ReceiptComponent } from '../../component/forms/receipt/receipt.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-tenant-detail',
@@ -96,7 +97,7 @@ export class TenantDetailComponent implements OnChanges {
   private tenantsService = inject(TenantsService);
   private leaseService = inject(LeaseService);
   private destroyRef = inject(DestroyRef);
-
+  private alertService = inject(AlertService);
   tenantData: any = null;
   rentTransactions: any[] = [];
   additionalTransactions: any[] = [];
@@ -271,6 +272,27 @@ export class TenantDetailComponent implements OnChanges {
     }
   }
 
+  handleExportClick(leaseId: number) {
+    const params = {
+      lease_id: leaseId,
+    };
+
+    this.tenantsService
+      .exportCheque(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+
+        a.href = url;
+        a.download = `RentTransactionCheques.csv`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+
+        this.alertService.success('Exported successfully');
+      });
+  }
   get invoiceAmountInWords(): string {
     const grand = this.invoiceData?.totals?.grand_total ?? 0;
     const dirhams = Math.floor(grand);

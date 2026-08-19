@@ -15,7 +15,9 @@ export class TenantsService {
   constructor() {}
 
   getTenantByEmail(email: string): Observable<any> {
-    return this.http.get(`${this.SERVER_ADDRESS}/user/tenant?email=${encodeURIComponent(email)}`);
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/user/tenant?email=${encodeURIComponent(email)}`,
+    );
   }
 
   getTenantsByTab(params: Record<string, any>): Observable<any> {
@@ -24,8 +26,13 @@ export class TenantsService {
   }
 
   exportTenantsByTab(params: Record<string, any>): Observable<Blob> {
-    const queryString = this.sharedService.getQueryString({ ...params, export: 'csv' });
-    return this.http.get(`${this.SERVER_ADDRESS}/user/tenant${queryString}`, { responseType: 'blob' });
+    const queryString = this.sharedService.getQueryString({
+      ...params,
+      export: 'csv',
+    });
+    return this.http.get(`${this.SERVER_ADDRESS}/user/tenant${queryString}`, {
+      responseType: 'blob',
+    });
   }
 
   getTenants(params: Record<string, any>): Observable<any> {
@@ -40,7 +47,13 @@ export class TenantsService {
       responseType: 'blob',
     });
   }
+  exportCheque(params: any): Observable<Blob> {
+    const query = this.sharedService.getQueryString(params);
 
+    return this.http.get(`${this.SERVER_ADDRESS}/lease/cheque/export${query}`, {
+      responseType: 'blob',
+    });
+  }
   getTenantDetails(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(`${this.SERVER_ADDRESS}/user/tenant${queryString}`);
@@ -66,7 +79,7 @@ export class TenantsService {
   getTenantsDetailsView(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/tenant/details/${queryString}`
+      `${this.SERVER_ADDRESS}/tenant/details/${queryString}`,
     );
   }
 }

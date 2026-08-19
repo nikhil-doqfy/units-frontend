@@ -245,6 +245,7 @@
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
+              (clicked)="handleExportClick( selectedLease.id)"
             >
               <app-export-icon />
             </app-table-filter-btn>
