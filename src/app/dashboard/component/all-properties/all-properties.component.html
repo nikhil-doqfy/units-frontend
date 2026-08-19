@@ -165,7 +165,9 @@
                   {{ prop.status === "PUBLIC" ? "Public" : "Draft" }}
                 </span>
               </td>
-              <td>--</td>
+              <td>
+                {{ prop.platforms?.join(", ") || "--" }}
+              </td>
               <td align="center">
                 <div class="tbl-action-inline">
                   <app-edit-icon (click)="onEditClick(prop.id)"></app-edit-icon>

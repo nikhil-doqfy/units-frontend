@@ -41,6 +41,7 @@ export class PropertyFormService {
       property: ['', [Validators.required]],
       propertyUnitName: ['', [Validators.required]],
       propertyType: ['', [Validators.required]],
+      platforms: ['', [Validators.required]],
       landArea: ['', [Validators.required]],
       landDMNo: ['', [Validators.required]],
       apartmentNo: ['', [Validators.required]],
@@ -110,6 +111,7 @@ export class PropertyFormService {
       noOfBlocks: ['', [Validators.required]],
       noOfUnits: ['', [Validators.required]],
       propertyType: ['', [Validators.required]],
+      platforms: ['', [Validators.required]],
       landArea: [''],
       landAreaUnit: [''],
       landDmNo: [''],
@@ -368,6 +370,14 @@ export class PropertyFormService {
         : content?.property_type
           ? [{ key: content.property_type, value: content.property_type }]
           : [],
+      platforms: Array.isArray(content?.platforms)
+        ? content.platforms.map((p: any) => ({
+            key: p.key ?? p.id ?? p,
+            value: p.value ?? p.name ?? p,
+          }))
+        : content?.platforms
+          ? [{ key: content.platforms, value: content.platforms }]
+          : [],
       landArea: content?.land_area,
       landAreaUnit: {
         key: content?.land_area_unit,
@@ -402,6 +412,9 @@ export class PropertyFormService {
       property_type: Array.isArray(value.propertyType)
         ? value.propertyType.map((item: any) => item.key ?? item)
         : (value.propertyType?.key ?? value.propertyType),
+      platforms: Array.isArray(value.platforms)
+        ? value.platforms.map((item: any) => item.key ?? item)
+        : (value.platforms?.key ?? value.platforms),
       land_area: value.landArea,
       land_area_unit: value.landAreaUnit?.key ?? value.landAreaUnit,
       land_dm_no: value.landDmNo,
@@ -449,6 +462,7 @@ export class PropertyFormService {
       },
       propertyUnitName: content?.property_unit_name,
       propertyType: content?.property?.property_type,
+      platforms: content?.property?.platforms,
       landArea: content.land_area,
       landDMNo: content.land_dm_no,
       apartmentNo: content.apartment_no,
@@ -524,6 +538,7 @@ export class PropertyFormService {
       makani_no: value.makaniNo,
       dewa_no: value.dewaNo,
       property_type: value.propertyType.key,
+      platforms: value.platform.key,
       land_area: value.landArea,
       apartment_no: value.apartmentNo,
       bedrooms: value.NoOfBedrooms,
