@@ -27,7 +27,7 @@
         { label: 'Email', value: owner?.email || '' },
       ]"
       [items]="[
-        { label: getLabel('EMIRATES_ID'), value: owner?.emirates_id || '—' },
+        { label: getLabel('EMIRATES_ID'), value: owner?.emirate_id || '—' },
         { label: getLabel('RESIDENCE_VISA'), value: owner?.visa_number || '—' },
         {
           label: getLabel('TRADE_LICENSE'),
@@ -63,6 +63,7 @@
               <app-table-filter-btn
                 [title]="'EXPORT' | translate"
                 [hasIcon]="true"
+                (clicked)="handleExportClick()"
               >
                 <app-export-icon />
               </app-table-filter-btn>
