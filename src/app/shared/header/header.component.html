@@ -289,7 +289,7 @@
                       class="commonTabs"
                     >
                       <li [ngbNavItem]="1">
-                        <button ngbNavLink>
+                        <button ngbNavLink (click)="onNotificationTabChange('all')">
                           {{ "ALL" | translate }} <span>{{ allCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
@@ -347,7 +347,7 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="2">
-                        <button ngbNavLink>
+                        <button ngbNavLink (click)="onNotificationTabChange('read')">
                           {{ "READ" | translate }}<span>{{ readCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
@@ -400,7 +400,7 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="3">
-                        <button ngbNavLink>
+                        <button ngbNavLink (click)="onNotificationTabChange('unread')">
                           {{ "UNREAD" | translate
                           }}<span>{{ unreadCount }}</span>
                         </button>
@@ -422,7 +422,10 @@
                             class="hdrNotiDrpdwnCol unread"
                             *ngFor="let notification of unreadNotifications"
                           >
-                            <div class="hdrNotiDrpdwnTtl">
+                            <div
+                              class="hdrNotiDrpdwnTtl"
+                              (click)="markNotiFicationAsRead(notification.id)"
+                            >
                               <h5>
                                 {{ notification.title }}
                                 <span></span>
@@ -456,7 +459,7 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="4">
-                        <button ngbNavLink>{{ "CLEARED" | translate }}</button>
+                        <button ngbNavLink (click)="onNotificationTabChange('cleared')">{{ "CLEARED" | translate }}</button>
                         <ng-template ngbNavContent>
                           <div
                             class="hdrNotiEmptyCol"
@@ -703,7 +706,7 @@
         class="commonTabs"
       >
         <li [ngbNavItem]="1">
-          <button ngbNavLink>
+          <button ngbNavLink (click)="onNotificationTabChange('all')">
             {{ "ALL" | translate }} <span>{{ allCount }}</span>
           </button>
           <ng-template ngbNavContent>
@@ -749,7 +752,7 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="2">
-          <button ngbNavLink>
+          <button ngbNavLink (click)="onNotificationTabChange('read')">
             {{ "READ" | translate }}<span>{{ readCount }}</span>
           </button>
           <ng-template ngbNavContent>
@@ -788,7 +791,7 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="3">
-          <button ngbNavLink>
+          <button ngbNavLink (click)="onNotificationTabChange('unread')">
             {{ "UNREAD" | translate }}<span>{{ unreadCount }}</span>
           </button>
           <ng-template ngbNavContent>
@@ -807,7 +810,10 @@
               class="hdrNotiDrpdwnCol unread"
               *ngFor="let notification of unreadNotifications"
             >
-              <div class="hdrNotiDrpdwnTtl">
+              <div
+                class="hdrNotiDrpdwnTtl"
+                (click)="markNotiFicationAsRead(notification.id)"
+              >
                 <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
                 <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
@@ -830,7 +836,7 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="4">
-          <button ngbNavLink>{{ "CLEARED" | translate }}</button>
+          <button ngbNavLink (click)="onNotificationTabChange('cleared')">{{ "CLEARED" | translate }}</button>
           <ng-template ngbNavContent>
             <div
               class="hdrNotiEmptyCol"

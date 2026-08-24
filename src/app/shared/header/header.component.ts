@@ -59,7 +59,6 @@ import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon
 import { SearchContactIconComponent } from '../../icon/search-contact-icon/search-contact-icon.component';
 import { SearchContactComponent } from '../search-contact/search-contact.component';
 import { MoonIconComponent } from '../../icons/moon-icon/moon-icon.component';
-import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-header',
@@ -118,7 +117,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('searchContainer') searchContainer!: ElementRef;
   private offcanvasService = inject(NgbOffcanvas);
   private modalService = inject(NgbModal);
-  private notificationService = inject(NotificationService);
   currentbreadcrumb: { label: string; link?: string }[] = [];
   constructor(
     private renderer: Renderer2,
@@ -384,40 +382,63 @@ export class HeaderComponent implements OnInit, OnDestroy {
   unDeletedNotifications: any[] = [];
 
   allCount: number = 0;
-
   notifications: any[] = [];
 
-  getNotifications() {
-    this.subscriptions.add(
-      this.notificationService.getNotifications().subscribe({
-        next: (resp: any) => {
-          this.notifications = resp.content.results ?? [];
+  currentNotificationType: string = 'all';
 
-          // API uses is_cleared instead of is_deleted
-          this.unDeletedNotifications = this.notifications.filter(
-            (n: any) => !n.is_cleared,
-          );
-          this.readNotifications = this.notifications.filter(
-            (n: any) => n.is_read && !n.is_cleared,
-          );
-          this.unreadNotifications = this.notifications.filter(
-            (n: any) => !n.is_read && !n.is_cleared,
-          );
-          this.deletedNotifications = this.notifications.filter(
-            (n: any) => n.is_cleared,
-          );
+  getNotifications(type: string = this.currentNotificationType) {
+    const params: Record<string, any> = {};
+    if (type && type !== 'all') {
+      params['type'] = type;
+    }
+    this.subscriptions.add(
+      this.sharedService.getNotifications(params).subscribe({
+        next: (resp: any) => {
+          const results = resp?.content?.results ?? resp?.content ?? [];
+          this.notifications = Array.isArray(results) ? results : [];
+
+          if (type === 'read') {
+            this.readNotifications = this.notifications.filter(
+              (n: any) => !n.is_cleared,
+            );
+          } else if (type === 'unread') {
+            this.unreadNotifications = this.notifications.filter(
+              (n: any) => !n.is_cleared,
+            );
+          } else if (type === 'cleared') {
+            this.deletedNotifications = this.notifications;
+          } else {
+            // 'all'
+            this.unDeletedNotifications = this.notifications.filter(
+              (n: any) => !n.is_cleared,
+            );
+            this.readNotifications = this.notifications.filter(
+              (n: any) => n.is_read && !n.is_cleared,
+            );
+            this.unreadNotifications = this.notifications.filter(
+              (n: any) => !n.is_read && !n.is_cleared,
+            );
+            this.deletedNotifications = this.notifications.filter(
+              (n: any) => n.is_cleared,
+            );
+          }
 
           // counts come from content.counts object
-          const counts = resp.content.counts ?? {};
-          this.allCount = counts.all ?? 0;
-          this.readCount = counts.read ?? 0;
-          this.unreadCount = counts.unread ?? 0;
+          const counts = resp?.content?.counts ?? {};
+          if (counts.all !== undefined) this.allCount = counts.all ?? 0;
+          if (counts.read !== undefined) this.readCount = counts.read ?? 0;
+          if (counts.unread !== undefined) this.unreadCount = counts.unread ?? 0;
         },
         error: () => {
           // fail silently — badge stays at previous value
         },
       }),
     );
+  }
+
+  onNotificationTabChange(type: string) {
+    this.currentNotificationType = type;
+    this.getNotifications(type);
   }
 
   openNotificaion(content: TemplateRef<any>) {
@@ -431,14 +452,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   clearAllClearedNotifications() {
     this.subscriptions.add(
-      this.notificationService.clearAll().subscribe({
+      this.sharedService.clearAllNotifications().subscribe({
         next: (resp: any) => {
           if (resp.status === 200) {
             this.alertService.success(resp.message);
           } else {
             this.alertService.error(resp.message);
           }
-          this.getNotifications();
+          this.getNotifications(this.currentNotificationType);
         },
         error: (err: any) => {
           this.alertService.error(
@@ -451,15 +472,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   markNotiFicationAsRead(id: number) {
     this.subscriptions.add(
-      this.notificationService.markAsRead(id).subscribe({
+      this.sharedService.readNotification(id).subscribe({
         next: (resp: any) => {
-          if (resp.status === 200) {
-            this.alertService.success(resp.message);
+          if (resp?.status === 200 || resp?.message) {
+            this.alertService.success(resp.message ?? 'Marked as read');
           }
-          this.getNotifications();
+          this.getNotifications(this.currentNotificationType);
         },
         error: () => {
-          this.getNotifications();
+          this.getNotifications(this.currentNotificationType);
         },
       }),
     );
@@ -467,14 +488,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   clearSingleNotifications(id: number) {
     this.subscriptions.add(
-      this.notificationService.clearOne(id).subscribe({
+      this.sharedService.clearOneNotification(id).subscribe({
         next: (resp: any) => {
           if (resp.status === 200) {
             this.alertService.success(resp.message);
           } else {
             this.alertService.error(resp.message);
           }
-          this.getNotifications();
+          this.getNotifications(this.currentNotificationType);
         },
         error: (err: any) => {
           this.alertService.error(
@@ -487,15 +508,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   deleteNotification(id: number) {
     this.subscriptions.add(
-      this.notificationService.deleteOne(id).subscribe({
+      this.sharedService.deleteOneNotification(id).subscribe({
         next: (resp: any) => {
           if (resp.status === 200) {
             this.alertService.success(resp.message);
           }
-          this.getNotifications();
+          this.getNotifications(this.currentNotificationType);
         },
         error: () => {
-          this.getNotifications();
+          this.getNotifications(this.currentNotificationType);
         },
       }),
     );

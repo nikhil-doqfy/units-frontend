@@ -299,6 +299,7 @@
           <app-table-title
             [title]="'PROPERTIES_ASSIGNED' | translate"
             [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
           ></app-table-title>
         </div>
         <div class="col-md-auto">

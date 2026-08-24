@@ -168,20 +168,40 @@ export class SharedService {
 
   //------------------notification----------------------------------------------------
 
-  getNotifications(queryParams: any) {
-    var queryString = this.getQueryString(queryParams);
+  getNotifications(queryParams: Record<string, any> = {}) {
+    const queryString = this.getQueryString(queryParams);
     return this.http.get(
       `${environment.SERVER_ADDRESS}/notification` + queryString,
     );
   }
-  readNotification(data: any) {
-    return this.http.put(
-      `${environment.SERVER_ADDRESS}/notification/read/`,
-      data,
+
+  readNotification(notificationId: number) {
+    return this.http.patch(
+      `${environment.SERVER_ADDRESS}/notification/id=${notificationId}/read`,
+      {},
     );
   }
-  deleteNotification(queryParams: any) {
-    var queryString = this.getQueryString(queryParams);
+
+  clearOneNotification(notificationId: number) {
+    return this.http.delete(
+      `${environment.SERVER_ADDRESS}/notification?clear_notification_id=${notificationId}`,
+    );
+  }
+
+  deleteOneNotification(notificationId: number) {
+    return this.http.delete(
+      `${environment.SERVER_ADDRESS}/notification?notification_id=${notificationId}`,
+    );
+  }
+
+  clearAllNotifications() {
+    return this.http.delete(
+      `${environment.SERVER_ADDRESS}/notification?clear_all=true`,
+    );
+  }
+
+  deleteNotification(queryParams: Record<string, any> = {}) {
+    const queryString = this.getQueryString(queryParams);
     return this.http.delete(
       `${environment.SERVER_ADDRESS}/notification` + queryString,
     );
