@@ -228,7 +228,21 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="Search here..." />
+            <div
+              class="selected-filters d-flex gap-2 flex-wrap"
+              *ngIf="appliedPaymentType || appliedStatus"
+            >
+              <div class="filter-chip" *ngIf="appliedPaymentType">
+                {{ appliedPaymentType.value }}
+                <span class="cross-icon" (click)="clearPaymentTypeFilter()"> ✕ </span>
+              </div>
+              <div class="filter-chip" *ngIf="appliedStatus">
+                {{ appliedStatus.value }}
+                <span class="cross-icon" (click)="clearStatusFilter()"> ✕ </span>
+              </div>
+            </div>
+
+            <app-table-search placeholder="Search here..." (onValueChange)="onSearchChange($event)" />
             <app-custom-dropdown
               [title]="'RECEIPT' | translate"
               [hasIcon]="true"
@@ -236,12 +250,63 @@
               <app-receipt-icon></app-receipt-icon>
             </app-custom-dropdown>
 
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
+            <app-filter-popup-btn #filterPopup>
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-12">
+                      <label class="form-label">{{
+                        "PAYMENT_TYPE" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="paymentTypeOptions"
+                        key="key"
+                        value="value"
+                        [placeholder]="'SELECT_PAYMENT_TYPE' | translate"
+                        [selectedOption]="selectedPaymentType"
+                        [(ngModel)]="selectedPaymentType"
+                        name="paymentType"
+                        (optionSelected)="onPaymentTypeSelect($event)"
+                      >
+                      </app-custom-select>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">{{
+                        "STATUS" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="statusOptions"
+                        key="key"
+                        value="value"
+                        [placeholder]="'SELECT_STATUS' | translate"
+                        [selectedOption]="selectedStatus"
+                        [(ngModel)]="selectedStatus"
+                        name="status"
+                        (optionSelected)="onStatusSelect($event)"
+                      >
+                      </app-custom-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter(); filterPopup.closePopup()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter(); filterPopup.closePopup()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
+
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"

@@ -482,6 +482,7 @@
   "RENEW_ACCOUNT": "تجديد الحساب",
   "TERMINATE_ACCOUNT": "إنهاء الحساب",
   "PAYMENT_TYPE": "نوع الدفع",
+  "SELECT_PAYMENT_TYPE": "حدد نوع الدفع",
   "CHEQUE_NUMBER": "رقم التحقق",
   "TOTAL_AMOUNT": "المبلغ الإجمالي",
   "RENT_TRANSACTIONS": "معاملات الإيجار",

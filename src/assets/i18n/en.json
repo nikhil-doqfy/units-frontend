@@ -503,6 +503,7 @@
   "RENEW_ACCOUNT": "Renew Account",
   "TERMINATE_ACCOUNT": "Terminate Account",
   "PAYMENT_TYPE": "Payment type",
+  "SELECT_PAYMENT_TYPE": "Select Payment Type",
   "CHEQUE_NUMBER": "Cheque Number",
   "TOTAL_AMOUNT": "Total Amount",
   "RENT_TRANSACTIONS": "Rent Transactions",
