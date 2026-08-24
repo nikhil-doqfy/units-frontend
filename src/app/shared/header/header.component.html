@@ -295,7 +295,7 @@
                         <ng-template ngbNavContent>
                           <!-- Empty state first -->
                           <div
-                            *ngIf="readNotifications.length === 0"
+                            *ngIf="unDeletedNotifications.length === 0"
                             class="hdrNotiEmptyCol"
                           >
                             <div class="hdrNotiEmptyInfo">
@@ -315,7 +315,7 @@
                               (click)="markNotiFicationAsRead(notification.id)"
                             >
                               <h5>
-                                {{ notification.notification_type }}
+                                {{ notification.title }}
                                 <span></span>
                               </h5>
                               <p>
@@ -323,14 +323,15 @@
                               </p>
                               <div
                                 class="hdrNotiDrpdwnTime"
-                                *ngIf="notification.timestamp"
+                                *ngIf="notification.created"
                               >
                                 <span>{{
-                                  notification.timestamp | date: "d MMM yyyy"
+                                  notification.created * 1000
+                                    | date: "d MMM yyyy"
                                 }}</span>
                                 <span>|</span>
                                 <span>{{
-                                  notification.timestamp | date: "hh.mma"
+                                  notification.created * 1000 | date: "hh.mma"
                                 }}</span>
                               </div>
                             </div>
@@ -367,7 +368,7 @@
                           >
                             <div class="hdrNotiDrpdwnTtl">
                               <h5>
-                                {{ notification.notification_type }}
+                                {{ notification.title }}
                                 <span></span>
                               </h5>
                               <p>
@@ -375,14 +376,15 @@
                               </p>
                               <div
                                 class="hdrNotiDrpdwnTime"
-                                *ngIf="notification.timestamp"
+                                *ngIf="notification.created"
                               >
                                 <span>{{
-                                  notification.timestamp | date: "d MMM yyyy"
+                                  notification.created * 1000
+                                    | date: "d MMM yyyy"
                                 }}</span>
                                 <span>|</span>
                                 <span>{{
-                                  notification.timestamp | date: "hh.mma"
+                                  notification.created * 1000 | date: "hh.mma"
                                 }}</span>
                               </div>
                             </div>
@@ -422,7 +424,7 @@
                           >
                             <div class="hdrNotiDrpdwnTtl">
                               <h5>
-                                {{ notification.notification_type }}
+                                {{ notification.title }}
                                 <span></span>
                               </h5>
                               <p>
@@ -430,14 +432,15 @@
                               </p>
                               <div
                                 class="hdrNotiDrpdwnTime"
-                                *ngIf="notification.timestamp"
+                                *ngIf="notification.created"
                               >
                                 <span>{{
-                                  notification.timestamp | date: "d MMM yyyy"
+                                  notification.created * 1000
+                                    | date: "d MMM yyyy"
                                 }}</span>
                                 <span>|</span>
                                 <span>{{
-                                  notification.timestamp | date: "hh.mma"
+                                  notification.created * 1000 | date: "hh.mma"
                                 }}</span>
                               </div>
                             </div>
@@ -487,20 +490,21 @@
                           >
                             <div class="hdrNotiDrpdwnTtl">
                               <h5>
-                                {{ notification.notification_type }}
+                                {{ notification.title }}
                                 <span></span>
                               </h5>
                               <p>{{ notification.message }}</p>
                               <div
                                 class="hdrNotiDrpdwnTime"
-                                *ngIf="notification.timestamp"
+                                *ngIf="notification.created"
                               >
                                 <span>{{
-                                  notification.timestamp | date: "d MMM yyyy"
+                                  notification.created * 1000
+                                    | date: "d MMM yyyy"
                                 }}</span>
                                 <span>|</span>
                                 <span>{{
-                                  notification.timestamp | date: "hh.mma"
+                                  notification.created * 1000 | date: "hh.mma"
                                 }}</span>
                               </div>
                             </div>
@@ -723,12 +727,16 @@
                 class="hdrNotiDrpdwnTtl"
                 (click)="markNotiFicationAsRead(notification.id)"
               >
-                <h5>{{ notification.notification_type }}<span></span></h5>
+                <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
-                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
-                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
+                  <span>{{
+                    notification.created * 1000 | date: "d MMM yyyy"
+                  }}</span>
                   <span>|</span>
-                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                  <span>{{
+                    notification.created * 1000 | date: "hh.mma"
+                  }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
@@ -758,12 +766,16 @@
               *ngFor="let notification of readNotifications"
             >
               <div class="hdrNotiDrpdwnTtl">
-                <h5>{{ notification.notification_type }}<span></span></h5>
+                <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
-                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
-                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
+                  <span>{{
+                    notification.created * 1000 | date: "d MMM yyyy"
+                  }}</span>
                   <span>|</span>
-                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                  <span>{{
+                    notification.created * 1000 | date: "hh.mma"
+                  }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
@@ -796,12 +808,16 @@
               *ngFor="let notification of unreadNotifications"
             >
               <div class="hdrNotiDrpdwnTtl">
-                <h5>{{ notification.notification_type }}<span></span></h5>
+                <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
-                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
-                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
+                  <span>{{
+                    notification.created * 1000 | date: "d MMM yyyy"
+                  }}</span>
                   <span>|</span>
-                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                  <span>{{
+                    notification.created * 1000 | date: "hh.mma"
+                  }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
@@ -833,12 +849,16 @@
               *ngFor="let notification of deletedNotifications"
             >
               <div class="hdrNotiDrpdwnTtl">
-                <h5>{{ notification.notification_type }}<span></span></h5>
+                <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
-                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
-                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
+                  <span>{{
+                    notification.created * 1000 | date: "d MMM yyyy"
+                  }}</span>
                   <span>|</span>
-                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                  <span>{{
+                    notification.created * 1000 | date: "hh.mma"
+                  }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">

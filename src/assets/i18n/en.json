@@ -861,5 +861,9 @@
   "HAVE_PROMO_CODE": "Have Promo Code",
   "CHARGED_TODAY": "Charged Today",
   "TAXES_INCLUDED": "Taxes Included",
-  "CONFIRM_AND_PAY": "Confirm and Pay"
+  "CONFIRM_AND_PAY": "Confirm and Pay",
+  "MY_TICKETS": "My Tickets",
+  "TICKET_STATUS": "Ticket Status",
+  "SELECT_TICKET_STATUS": "Select Ticket Status",
+  "COMMISSION_PERCENT": "Commission Percent"
 }

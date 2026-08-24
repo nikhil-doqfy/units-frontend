@@ -19,4 +19,7 @@ export class RaiseComplaintService {
   getFaqList(): Observable<any> {
     return this.http.get(`${this.SERVER_ADDRESS}/faq_api`);
   }
+  getSupportTickets(): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/support-ticket`);
+  }
 }

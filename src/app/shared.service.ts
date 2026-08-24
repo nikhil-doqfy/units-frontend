@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, forkJoin, map, tap } from 'rxjs';
@@ -16,6 +17,7 @@ export class SharedService {
   private showDetailSource = new BehaviorSubject<boolean>(false);
 
   private storageService = inject(StorageService);
+  private http = inject(HttpClient);
 
   private openSidebarValueSource = new BehaviorSubject<boolean>(false); // Default to closed
   openSidebarValue$ = this.openSidebarValueSource.asObservable();
@@ -25,7 +27,6 @@ export class SharedService {
   currentbreadcrumb: BreadCrumb[] = [];
 
   breadcrumb$ = new BehaviorSubject<{ label: string; link: string }[]>([]);
-  http: any;
   private complaintCountSubject = new BehaviorSubject<number>(0);
 
   complaintCount$ = this.complaintCountSubject.asObservable();
@@ -170,19 +171,19 @@ export class SharedService {
   getNotifications(queryParams: any) {
     var queryString = this.getQueryString(queryParams);
     return this.http.get(
-      `${environment.SERVER_ADDRESS}/notifications/` + queryString,
+      `${environment.SERVER_ADDRESS}/notification` + queryString,
     );
   }
   readNotification(data: any) {
     return this.http.put(
-      `${environment.SERVER_ADDRESS}/notifications/read/`,
+      `${environment.SERVER_ADDRESS}/notification/read/`,
       data,
     );
   }
   deleteNotification(queryParams: any) {
     var queryString = this.getQueryString(queryParams);
     return this.http.delete(
-      `${environment.SERVER_ADDRESS}/notifications/` + queryString,
+      `${environment.SERVER_ADDRESS}/notification` + queryString,
     );
   }
 

@@ -1,0 +1,410 @@
+/* ══════════════════════════════════════
+   TICKET LIST – table (matches project cmmnTbl pattern)
+══════════════════════════════════════ */
+
+/* Sticky last column – same as complaints-table */
+.st-ticket-table thead tr th:last-child,
+.st-ticket-table tbody tr td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 100px;
+}
+
+.st-ticket-table thead tr th:last-child {
+  z-index: 3;
+  background-color: var(--activeBg1);
+  box-shadow: none;
+}
+
+.st-ticket-table tbody tr td:last-child {
+  background-color: var(--whiteBg);
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.06);
+}
+
+.st-ticket-table td:last-child::before,
+.st-ticket-table th:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to left,
+    var(--gradientShadowStart),
+    var(--gradientShadowMid),
+    transparent
+  );
+}
+
+/* ── Header ── */
+.stListTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blackText, #111827);
+  margin: 0;
+}
+
+.stListCount {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--greyLightText, #6b7280);
+}
+
+/* ── Search ── */
+.stSearchWrap {
+  position: relative;
+}
+
+.stSearchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--greyLightText, #9ca3af);
+  pointer-events: none;
+}
+
+.stSearchInput {
+  height: 36px;
+  width: 200px;
+  padding: 0 10px 0 32px;
+  font-size: 13px;
+  border: 1px solid var(--greyLightBorder, #d1d5db);
+  border-radius: 7px;
+  color: var(--blackText, #111827);
+  outline: none;
+  transition: border-color 0.2s;
+  background: transparent;
+}
+
+.stSearchInput:focus {
+  border-color: var(--primaryColor, #2563eb);
+}
+
+/* ── Status filter ── */
+.stSelect {
+  height: 36px;
+  padding: 0 10px;
+  font-size: 13px;
+  border: 1px solid var(--greyLightBorder, #d1d5db);
+  border-radius: 7px;
+  color: var(--blackText, #374151);
+  cursor: pointer;
+  outline: none;
+  min-width: 120px;
+  background: transparent;
+}
+
+/* ── Ticket ID ── */
+.stTicketCode {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primaryColor, #2563eb);
+}
+
+/* ── Status badges ── */
+.stStatusBadge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.stBadgeOpen {
+  background: #d1fae5;
+  color: #065f46;
+}
+.stBadgeInProgress {
+  background: #fef3c7;
+  color: #92400e;
+}
+.stBadgeResolved {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.stBadgeClosed {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* ── View button ── */
+.btnSmall {
+  all: unset;
+  cursor: pointer;
+}
+
+/* ── Empty row ── */
+.stEmptyCell {
+  font-size: 13px;
+  color: var(--greyLightText, #9ca3af);
+}
+
+/* ── Footer ── */
+.cmmnTblFtr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--greyLightBorder, #e5e7eb);
+}
+
+.stListCountFtr {
+  font-size: 12px;
+  color: var(--greyLightText, #6b7280);
+}
+
+.stPaginationBtns {
+  display: flex;
+  gap: 4px;
+}
+
+.stPageBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--greyLightBorder, #d1d5db);
+  background: transparent;
+  font-size: 12px;
+  color: var(--greyDarkText1, #374151);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.stPageBtn:hover:not(:disabled) {
+  background: var(--greyLightBg, #f3f4f6);
+}
+.stPageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.stPageBtnActive {
+  background: var(--primaryColor, #2563eb);
+  color: #fff;
+  border-color: var(--primaryColor, #2563eb);
+}
+
+/* ══════════════════════════════════════
+   TICKET DETAIL
+══════════════════════════════════════ */
+.stDetailOuter {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--greyLightBorder, #e5e7eb);
+  border-radius: 12px;
+  background: var(--whiteBg, #fff);
+  overflow: visible;
+}
+
+/* ── Sticky header ── */
+.stDetailHeader {
+  flex-shrink: 0;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--greyLightBorder, #e5e7eb);
+  background: var(--whiteBg, #fff);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 12px 12px 0 0;
+}
+
+.stDetailHeaderTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.stBackBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--greyDarkText1, #374151);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.stBackBtn:hover {
+  color: var(--primaryColor, #2563eb);
+}
+
+.stDetailInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.stDetailInfoLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stDetailCode {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primaryColor, #2563eb);
+}
+
+.stDetailCreated {
+  font-size: 12px;
+  color: var(--greyLightText, #6b7280);
+}
+
+.stDetailSubject {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blackText, #111827);
+  margin-bottom: 3px;
+}
+
+.stDetailProperty {
+  font-size: 12px;
+  color: var(--greyLightText, #6b7280);
+}
+
+/* ── Conversation body ── */
+.stConvBody {
+  padding: 16px 20px;
+}
+
+.stConvLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--greyDarkText1, #374151);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ── Messages ── */
+.stMessages {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stMsgRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.stMsgRowTenant {
+  flex-direction: row-reverse;
+}
+
+.stMsgAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.stMsgBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 68%;
+}
+
+.stMsgMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stMsgMetaRight {
+  flex-direction: row-reverse;
+}
+
+.stMsgSender {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blackText, #111827);
+}
+.stMsgTime {
+  font-size: 11px;
+  color: var(--greyLightText, #9ca3af);
+}
+
+.stMsgBubble {
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 9px 13px;
+  word-break: break-word;
+  border-radius: 8px;
+}
+
+.stBubbleTenant {
+  background: var(--primaryColor, #2563eb);
+  color: #fff;
+  border-radius: 10px 0 10px 10px;
+}
+
+.stBubblePM {
+  background: var(--greyLightBg, #f0f2f5);
+  color: var(--greyDarkText1, #374151);
+  border-radius: 0 10px 10px 10px;
+}
+
+/* ── Reply bar ── */
+.stReplyBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--greyLightBorder, #e5e7eb);
+  background: var(--whiteBg, #fff);
+}
+
+.stReplyInput {
+  flex: 1;
+  height: 38px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+.stSendBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 18px;
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 767px) {
+  .stSearchInput {
+    width: 140px;
+  }
+  .stMsgBody {
+    max-width: 86%;
+  }
+  .stReplyBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .stSendBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { MailIconComponent } from '../icons/mail-icon/mail-icon.component';
 import { CallIconComponent } from '../icons/call-icon/call-icon.component';
@@ -13,8 +13,11 @@ import { Router } from '@angular/router';
   styleUrl: './raise-complaint-card.component.css',
 })
 export class RaiseComplaintCardComponent {
+  @Output() onMyTickets = new EventEmitter<void>();
+
   constructor(private router: Router) {}
-  onCreateComplaint() {
-    this.router.navigate(['/dashboard/complaints']);
+
+  openMyTickets() {
+    this.onMyTickets.emit();
   }
 }

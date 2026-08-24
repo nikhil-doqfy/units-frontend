@@ -846,5 +846,9 @@
   "HAVE_PROMO_CODE": "هل لديك رمز ترويجي؟",
   "CHARGED_TODAY": "تم تحصيل الرسوم اليوم",
   "TAXES_AND_FEES": "الضرائب والرسوم",
-  "CONFIRM_AND_PAY": "تأكيد والدفع"
+  "CONFIRM_AND_PAY": "تأكيد والدفع",
+  "MY_TICKETS": "تذاكرى",
+  "TICKET_STATUS": "حالة التذكرة",
+  "SELECT_TICKET_STATUS": "حدد حالة التذكرة",
+  "COMMISION_PERCENT": "نسبة العمولة"
 }

@@ -47,9 +47,10 @@ import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn
 import { SortingIconComponent } from '../icons/sorting-icon/sorting-icon.component';
 import { CheckIconComponent } from '../../../icons/check-icon/check-icon.component';
 import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenent-from/convert-lead-to-tenent-from.component';
-import { NoDataComponent } from '../../../no-data/no-data.component';
+import { ScheduleMeetingModalComponent } from '../forms/schedule-meeting-modal/schedule-meeting-modal.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -319,6 +320,25 @@ export class AllLeadsComponent implements OnInit {
         },
       );
   }
+  openScheduleMeetingModal(lead: any): void {
+    const modalRef = this.modalService.open(ScheduleMeetingModalComponent, {
+      ariaLabelledBy: 'modal-title',
+      windowClass: 'mdlCommon',
+      centered: true,
+    });
+    modalRef.componentInstance.leadId = lead?.id;
+    modalRef.componentInstance.leadName = lead?.name || '';
+    modalRef.result.then(
+      (result) => {
+        if (result === true) {
+          // refresh the activity history if modal is already open
+          this.selectedLead = { ...this.selectedLead };
+        }
+      },
+      () => {},
+    );
+  }
+
   openLeadToTenantModel(
     convertLeadToTenentContent: TemplateRef<any>,
     lead: any = null,

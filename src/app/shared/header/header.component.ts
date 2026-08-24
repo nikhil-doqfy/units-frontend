@@ -59,6 +59,7 @@ import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon
 import { SearchContactIconComponent } from '../../icon/search-contact-icon/search-contact-icon.component';
 import { SearchContactComponent } from '../search-contact/search-contact.component';
 import { MoonIconComponent } from '../../icons/moon-icon/moon-icon.component';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-header',
@@ -117,6 +118,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('searchContainer') searchContainer!: ElementRef;
   private offcanvasService = inject(NgbOffcanvas);
   private modalService = inject(NgbModal);
+  private notificationService = inject(NotificationService);
   currentbreadcrumb: { label: string; link?: string }[] = [];
   constructor(
     private renderer: Renderer2,
@@ -133,20 +135,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
 
+    // Read current language — SharedService already called translate.use() on init
     const savedLang = this.storage.getLanguage() || 'en';
-
     this.currentLang = savedLang;
-    this.translate.use(savedLang);
+    this.currentLanguage = savedLang;
     this.updateDirection();
+
     this.subscriptions.add(
       this.translate.onLangChange.subscribe((event: any) => {
+        this.currentLang = event.lang;
         this.currentLanguage = event.lang;
+        this.updateDirection();
         this.pageTitle = this.getRouteTitle(this.router.routerState.root);
       }),
     );
-
-    translate.use(storage.getLanguage());
-    this.updateDirection();
   }
 
   ngOnInit() {
@@ -219,6 +221,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.currentRole = role;
       }),
     );
+
+    // Load notifications on init so badge count is populated
+    this.getNotifications();
   }
 
   onUpload(event: UploadFileModel) {}
@@ -380,80 +385,120 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   allCount: number = 0;
 
-  notifications: any = [];
+  notifications: any[] = [];
 
   getNotifications() {
-    this.sharedService.getNotifications({}).subscribe((resp: any) => {
-      this.notifications = resp.content.notifications_data;
-      this.unDeletedNotifications = this.notifications.filter(
-        (n: any) => !n.is_deleted,
-      );
-      this.readNotifications = this.notifications.filter(
-        (n: any) => n.is_read && !n.is_deleted,
-      );
-      this.unreadNotifications = this.notifications.filter(
-        (n: any) => !n.is_read && !n.is_deleted,
-      );
-      this.deletedNotifications = this.notifications.filter(
-        (n: any) => n.is_deleted,
-      );
-      this.allCount = resp.content.notification_count;
-      this.readCount = resp.content.read_notifications;
-      this.unreadCount = resp.content.unread_notifications;
-    });
+    this.subscriptions.add(
+      this.notificationService.getNotifications().subscribe({
+        next: (resp: any) => {
+          this.notifications = resp.content.results ?? [];
+
+          // API uses is_cleared instead of is_deleted
+          this.unDeletedNotifications = this.notifications.filter(
+            (n: any) => !n.is_cleared,
+          );
+          this.readNotifications = this.notifications.filter(
+            (n: any) => n.is_read && !n.is_cleared,
+          );
+          this.unreadNotifications = this.notifications.filter(
+            (n: any) => !n.is_read && !n.is_cleared,
+          );
+          this.deletedNotifications = this.notifications.filter(
+            (n: any) => n.is_cleared,
+          );
+
+          // counts come from content.counts object
+          const counts = resp.content.counts ?? {};
+          this.allCount = counts.all ?? 0;
+          this.readCount = counts.read ?? 0;
+          this.unreadCount = counts.unread ?? 0;
+        },
+        error: () => {
+          // fail silently — badge stays at previous value
+        },
+      }),
+    );
   }
 
   openNotificaion(content: TemplateRef<any>) {
+    this.getNotifications();
     this.offcanvasService.open(content, {
       position: 'end',
       scroll: false,
       panelClass: 'notificationOffcanvas',
     });
   }
+
   clearAllClearedNotifications() {
-    this.sharedService
-      .deleteNotification({ clear_all: true })
-      .subscribe((resp: any) => {
-        if (resp.status === 200) {
-          this.alertService.success(resp.message);
+    this.subscriptions.add(
+      this.notificationService.clearAll().subscribe({
+        next: (resp: any) => {
+          if (resp.status === 200) {
+            this.alertService.success(resp.message);
+          } else {
+            this.alertService.error(resp.message);
+          }
           this.getNotifications();
-        } else {
-          this.alertService.error(resp.message);
-        }
-      });
+        },
+        error: (err: any) => {
+          this.alertService.error(
+            err?.error?.message ?? 'Failed to clear notifications',
+          );
+        },
+      }),
+    );
   }
+
   markNotiFicationAsRead(id: number) {
-    this.sharedService
-      .readNotification({ notification_id: id })
-      .subscribe((resp: any) => {
-        if (resp.status === 200) {
-          this.alertService.success(resp.message);
+    this.subscriptions.add(
+      this.notificationService.markAsRead(id).subscribe({
+        next: (resp: any) => {
+          if (resp.status === 200) {
+            this.alertService.success(resp.message);
+          }
           this.getNotifications();
-        }
-      });
+        },
+        error: () => {
+          this.getNotifications();
+        },
+      }),
+    );
   }
+
   clearSingleNotifications(id: number) {
-    this.sharedService
-      .deleteNotification({ clear_notification_id: id })
-      .subscribe((resp: any) => {
-        if (resp.status === 200) {
-          this.alertService.success(resp.message);
+    this.subscriptions.add(
+      this.notificationService.clearOne(id).subscribe({
+        next: (resp: any) => {
+          if (resp.status === 200) {
+            this.alertService.success(resp.message);
+          } else {
+            this.alertService.error(resp.message);
+          }
           this.getNotifications();
-        } else {
-          this.alertService.error(resp.message);
-        }
-      });
+        },
+        error: (err: any) => {
+          this.alertService.error(
+            err?.error?.message ?? 'Failed to clear notification',
+          );
+        },
+      }),
+    );
   }
 
   deleteNotification(id: number) {
-    this.sharedService
-      .deleteNotification({ notification_id: id })
-      .subscribe((resp: any) => {
-        if (resp.status === 200) {
-          this.alertService.success(resp.message);
+    this.subscriptions.add(
+      this.notificationService.deleteOne(id).subscribe({
+        next: (resp: any) => {
+          if (resp.status === 200) {
+            this.alertService.success(resp.message);
+          }
           this.getNotifications();
-        }
-      });
+        },
+        error: () => {
+          this.getNotifications();
+        },
+      }),
+    );
   }
 
   goToCharges() {

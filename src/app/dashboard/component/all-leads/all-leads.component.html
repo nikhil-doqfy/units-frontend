@@ -267,7 +267,11 @@
     <div class="headerRight justify-content-between">
       <!-- <button class="scheduleBtn"></button> -->
       <div class="justify-content-between">
-        <button type="button" class="scheduleBtn">
+        <button
+          type="button"
+          class="scheduleBtn"
+          (click)="openScheduleMeetingModal(selectedLead)"
+        >
           <app-calender-icon></app-calender-icon>
           {{ "SCHEDULE_MEETING" | translate }}
         </button>

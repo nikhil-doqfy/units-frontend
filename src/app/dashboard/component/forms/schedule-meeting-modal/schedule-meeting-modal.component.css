@@ -1,0 +1,114 @@
+/* ── Header ─────────────────────────────── */
+.smHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.smIconWrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--primaryLight, #eff6ff);
+  color: var(--primaryColor, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px;
+  color: var(--blackText, #111827);
+}
+
+.smSubtitle {
+  font-size: 12px;
+  color: var(--greyLightText, #6b7280);
+  margin: 0;
+}
+
+/* ── Google Calendar badge ──────────────── */
+.gcBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #1e40af;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.gcBadge strong {
+  font-weight: 600;
+}
+
+/* ── Form elements ──────────────────────── */
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--greyDarkText1, #374151);
+  margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+  font-size: 13px;
+  border-radius: 8px;
+  border-color: var(--greyLightBorder, #d1d5db);
+  color: var(--blackText, #111827);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primaryColor, #2563eb);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+.smTextarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ── Error messages ─────────────────────── */
+.errorMsg {
+  font-size: 11px;
+  color: #dc2626;
+  margin-top: 3px;
+  display: block;
+}
+
+/* ── Submit button ──────────────────────── */
+.smSubmitBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  padding: 8px 18px;
+  white-space: nowrap;
+}
+
+/* ── Loading spinner ────────────────────── */
+.smSpinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
