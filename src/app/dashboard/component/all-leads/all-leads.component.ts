@@ -320,7 +320,12 @@ export class AllLeadsComponent implements OnInit {
         },
       );
   }
-  openScheduleMeetingModal(lead: any): void {
+  openScheduleMeetingModal(
+    lead: any,
+    activityHistoryModal?: NgbActiveModal,
+  ): void {
+    activityHistoryModal?.dismiss('Schedule meeting opened');
+
     const modalRef = this.modalService.open(ScheduleMeetingModalComponent, {
       ariaLabelledBy: 'modal-title',
       windowClass: 'mdlCommon',
