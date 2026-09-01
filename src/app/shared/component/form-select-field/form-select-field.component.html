@@ -13,6 +13,7 @@
     [showFilterInput]="showFilterInput"
     [formControlName]="controlName"
     [multiple]="multiple"
+    [selectedOption]="selectedOption"
     (optionSelected)="optionSelected.emit($event)"
   ></app-custom-select>
 
@@ -24,6 +25,7 @@
       [value]="value"
       [placeholder]="placeholder"
       [showFilterInput]="showFilterInput"
+      [selectedOption]="selectedOption"
       (optionSelected)="optionSelected.emit($event)"
     ></app-custom-select>
   </ng-template>

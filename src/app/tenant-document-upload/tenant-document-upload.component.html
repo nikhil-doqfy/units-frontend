@@ -2,15 +2,93 @@
   <!-- Info Box -->
   <div class="infoBox mb-3">
     <ul class="mb-0">
-      <li>Upload the tenant document in PDF, JPG, JPEG, or PNG format.</li>
-      <li>Ensure the document is clear and readable before uploading.</li>
-      <li>Maximum file size allowed: 20 MB.</li>
+      <li>{{ "UPLOAD_TENANT_DOCUMENT_IN_PDF" | translate }}</li>
+      <li>{{ "UPLOAD_TENANT_DOCUMENT_INSTRUCTIONS" | translate }}</li>
+      <li>{{ "MAXIMUM_FILE_SIZE" | translate }}</li>
     </ul>
+  </div>
+
+  <!-- Document Title -->
+  <div class="mb-3">
+    <label class="form-label fw-semibold">
+      {{ "DOC_TITLE" | translate }} <span class="text-danger">*</span>
+    </label>
+
+    <!-- Dropdown from API -->
+    <app-custom-select
+      [options]="documentTypeOptions"
+      key="key"
+      value="value"
+      [placeholder]="'ENTER_DOC_TITLE' | translate"
+      [selectedOption]="selectedDocumentType"
+      (optionSelected)="onDocumentTypeSelected($event)"
+    ></app-custom-select>
+
+    <div class="errorMsg mt-1" *ngIf="titleError">{{ titleError }}</div>
+  </div>
+
+  <!-- Never Expire Toggle -->
+  <div class="mb-3 d-flex align-items-center gap-3">
+    <div class="form-check form-switch mb-0">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="neverExpireToggle"
+        [(ngModel)]="neverExpire"
+        (ngModelChange)="onNeverExpireChange()"
+      />
+      <label class="form-check-label fw-semibold" for="neverExpireToggle">
+        {{ "NEVER_EXPIRE" | translate }}
+      </label>
+    </div>
+  </div>
+
+  <!-- Expiry Date + Days — hidden when neverExpire is true -->
+  <div class="mb-3" *ngIf="!neverExpire">
+    <label class="form-label fw-semibold">
+      {{ "EXPIRY_DATE" | translate }} <span class="text-danger">*</span>
+    </label>
+
+    <!-- Date + Days inputs side by side -->
+    <div class="expiryRow">
+      <!-- Date picker -->
+      <input
+        type="date"
+        class="form-control expiryDateInput"
+        [(ngModel)]="expiryDate"
+        (ngModelChange)="onDatePickedChange()"
+      />
+
+      <!-- Separator -->
+      <span class="expirySep">{{ "OR" | translate }}</span>
+
+      <!-- Days input -->
+      <div class="daysInputWrap">
+        <input
+          type="number"
+          class="form-control daysInput"
+          [placeholder]="'e.g. 34'|translate"
+          [(ngModel)]="expiryDays"
+          min="0"
+          (ngModelChange)="onDaysInputChange()"
+        />
+        <span class="daysInputSuffix">{{ "DAYS" | translate }}</span>
+      </div>
+    </div>
+
+    <!-- Days countdown pill -->
+    <div class="daysCountBadge mt-2" *ngIf="daysLabel">
+      <span class="daysPillUpload" [ngClass]="daysPillClass">
+        {{ daysLabel }}
+      </span>
+    </div>
+
+    <div class="errorMsg mt-1" *ngIf="expiryError">{{ expiryError }}</div>
   </div>
 
   <!-- Upload -->
   <app-upload-document
-    [title]="'Drop Tenant Document Here'"
+    [title]="'DROP_TENANT_DOCUMENT_HERE' | translate"
     [isMultipleFiles]="false"
     [fileTypes]="['pdf', 'jpg', 'jpeg', 'png']"
     [maxSize]="20"
@@ -18,11 +96,6 @@
   >
   </app-upload-document>
 
-  <!-- Uploaded File -->
-  <!-- <div class="uploadedFile mt-3" *ngIf="uploadedFile">
-    <span>{{ uploadedFile.file.name }}</span>
-    <span class="successText ms-2"> Document uploaded successfully. </span>
-  </div> -->
   <div class="uploads-list mt-3" *ngIf="uploadedFiles.length">
     <app-file-upload-item
       *ngFor="let file of uploadedFiles"

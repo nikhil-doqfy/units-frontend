@@ -149,8 +149,9 @@ export class LeaseService {
 
   // ── LeaseCheque CRUD ──────────────────────────────────────────────────────
 
-  getLeaseCheques(leaseId: number): Observable<any> {
-    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/cheques?lease_id=${leaseId}`);
+  getLeaseCheques(params: Record<string, any> = {}): Observable<any> {
+    const queryString = this.sharedService.getQueryString(params);
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/cheques${queryString}`);
   }
 
   getAllCheques(params: Record<string, any> = {}): Observable<any> {

@@ -1,57 +1,134 @@
 <div class="infrmtnHdr mb-3">
-  <h3>{{ "PRIVACY_POLICY" | translate }}</h3>
-  <p>
-    {{ "PRIVACY_POLICY_UPDATE" | translate }}
-  </p>
-  <p>
-    {{ "PRIVACY_POLICY_SUMMARY_NOTE" | translate }}
-  </p>
+  <div
+    class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+  >
+    <div>
+      <h3>{{ "PRIVACY_POLICY" | translate }}</h3>
+      <p>{{ "PRIVACY_POLICY_UPDATE" | translate }}</p>
+      <p>{{ "PRIVACY_POLICY_SUMMARY_NOTE" | translate }}</p>
+    </div>
+  </div>
 </div>
 
-<app-white-card>
+<app-white-card *ngIf="showAddForm">
+  <div class="addPolicyForm">
+    <h5 class="addPolicyTitle mb-3">New Policy</h5>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">
+        Policy Title <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="e.g. Privacy Policy"
+        [(ngModel)]="formTitle"
+      />
+    </div>
+
+    <div
+      class="policySection mb-3"
+      *ngFor="let section of formSections; let i = index"
+    >
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <label class="fw-semibold mb-0">Section {{ i + 1 }}</label>
+        <button
+          *ngIf="formSections.length > 1"
+          type="button"
+          class="btn btn-sm btn-outline-danger"
+          (click)="removeSection(i)"
+        >
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+
+      <div class="mb-2">
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          placeholder="Subtitle *"
+          [(ngModel)]="section.subtitle"
+        />
+      </div>
+      <textarea
+        class="form-control form-control-sm"
+        rows="3"
+        placeholder="Content *"
+        [(ngModel)]="section.content"
+      ></textarea>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary mb-3"
+      (click)="addSection()"
+    >
+      <i class="bi bi-plus me-1"></i> Add Section
+    </button>
+
+    <div class="errorMsg mb-2" *ngIf="saveError">{{ saveError }}</div>
+
+    <div class="d-flex gap-2 justify-content-end">
+      <button
+        type="button"
+        class="btn btnCommon btnTransparent"
+        (click)="cancelAddForm()"
+        [disabled]="isSaving"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btnCommon"
+        (click)="savePolicy()"
+        [disabled]="isSaving"
+      >
+        <span
+          *ngIf="isSaving"
+          class="spinner-border spinner-border-sm me-1"
+          role="status"
+        ></span>
+        {{ isSaving ? "Saving..." : "Save Policy" }}
+      </button>
+    </div>
+  </div>
+</app-white-card>
+
+<app-white-card *ngIf="!showAddForm">
   <div class="infrmtnBody">
-    <!-- <div class="infrmtnLft">
-      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
-      <p>
-        {{ "LOREM_IPSUM_TEXT" | translate }}
-      </p>
-
-      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
-      <p>
-        {{ "LOREM_IPSUM_TEXT" | translate }}
-      </p>
-
-      <h4>{{ "POLICY_COVERAGE" | translate }}</h4>
-
-      <p>
-        {{ "LOREM_IPSUM_TEXT" | translate }}
-      </p>
-    </div> -->
     <div class="infrmtnLft">
-      <ng-container *ngFor="let item of privacyPolicies">
-        <h4>{{ item.title }}</h4>
+      <div *ngIf="!isLoading && !defaultPolicy" class="policyEmpty">
+        <p>No policy content available.</p>
+      </div>
 
-        <p>
-          {{ item.content }}
-        </p>
+      <ng-container *ngIf="!isLoading && defaultPolicy">
+        <div class="policyTitleRow mb-3">
+          <h3 class="policyMainTitle">{{ defaultPolicy.title }}</h3>
+          <span class="policyUpdated" *ngIf="defaultPolicy.updated_at">
+            Last updated: {{ formatDate(defaultPolicy.updated_at) }}
+          </span>
+        </div>
+
+        <ng-container
+          *ngFor="let section of defaultPolicy.other_policy_content"
+        >
+          <h4>{{ section.subtitle }}</h4>
+          <p>{{ section.content }}</p>
+        </ng-container>
       </ng-container>
     </div>
+
     <div class="infrmtnRght">
       <h4>{{ "OTHER_POLICY" | translate }}</h4>
-      <ul>
-        <li>{{ "TENANT_SERVICE_TERMS" | translate }}</li>
-        <li>{{ "PROPERTY_OWNER_AGREEMENT" | translate }}</li>
-        <li>{{ "DATA_PRIVACY&PROCESSING_ADDENDUM" | translate }}</li>
-        <li>{{ "RENT_PAYMENT&REFUND_POLICY" | translate }}</li>
-        <li>
-          <a href="javascript:void(0);">{{
-            "MAINTENANCE_REQUEST_POLICY" | translate
-          }}</a>
+      <ul class="policyList">
+        <li
+          *ngFor="let policy of policies"
+          [class.activePolicy]="policy.id === activePolicyId"
+          (click)="selectPolicy(policy)"
+          role="button"
+        >
+          {{ policy.title }}
         </li>
-        <li>{{ "COMMUNITY_GUIDELINES&CONDUCT_POLICY" | translate }}</li>
-        <li>{{ "PROPERTY_LISTING&VERIFICATION_TERMS" | translate }}</li>
-        <li>S{{ "SUBSCRIPTION_&_BILLING_AGREEMENT" | translate }}</li>
-        <li>{{ "TERMS_OF_USE" | translate }}</li>
       </ul>
     </div>
   </div>

@@ -22,6 +22,7 @@ import { OwnerService } from '../../services/owner.service';
 import { SharedService } from '../../../shared.service';
 import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-owner-detail',
@@ -72,6 +73,8 @@ export class OwnerDetailComponent implements OnInit {
   private searchSubject$ = new Subject<string>();
   private searchText = '';
   private ownerId!: number;
+  private alertService = inject(AlertService);
+
   constructor(private translate: TranslateService) {}
   ngOnInit(): void {
     this.ownerId = +(this.route.snapshot.paramMap.get('owner_id') || 0);
@@ -164,6 +167,27 @@ export class OwnerDetailComponent implements OnInit {
     this.router.navigate(['/dashboard/owners']);
   }
 
+  handleExportClick() {
+    const params = {
+      owner_id: this.ownerId,
+    };
+
+    this.ownerService
+      .export(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+
+        a.href = url;
+        a.download = `OwnerProperties.csv`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+
+        this.alertService.success('Exported successfully');
+      });
+  }
   viewProperty(prop: any) {
     const id = prop.property_id || prop.id;
     if (id) this.router.navigate(['/dashboard/properties', id]);

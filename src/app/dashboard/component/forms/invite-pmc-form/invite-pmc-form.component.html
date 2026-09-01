@@ -2,15 +2,15 @@
   <form [formGroup]="invitePmcForm">
     <div class="mb-0">
       <div class="col-md-6">
-        <label class="form-label"> {{ "PROPERTY_NAME" | translate }} * </label>
+        <label class="form-label"> {{ "PMC_NAME" | translate }} * </label>
 
         <app-custom-select
           [options]="propertyList"
-          [placeholder]="'SELECT_PROPERTY' | translate"
+          [placeholder]="'SELECT_PMC' | translate"
           key="key"
           value="value"
           [selectedOption]="selectedProperty"
-          (optionSelected)="onOptionSelectedPropertyUnit($event)"
+          (optionSelected)="onOptionSelectedPMC($event)"
         ></app-custom-select>
         <!-- (click)="onSelectClickPropertyUnit()" -->
       </div>

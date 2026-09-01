@@ -37,6 +37,11 @@ export class PmcService {
     );
   }
   addPmcToInvite(data: Record<string, any>): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/invitation`, data);
+    return this.http.post(`${this.SERVER_ADDRESS}/user/invite-pm`, data);
+  }
+  getPMCPdf(leaseId: number, action: 'download' | 'preview'): Observable<any> {
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/owner/pmc/${leaseId}/pdf?action=${action}`,
+    );
   }
 }

@@ -1,24 +1,25 @@
 @if (totalRecords > 0) {
-<div class="cmmnTblPgntn">
-  <ngb-pagination
-    [collectionSize]="totalRecords"
-    [(page)]="currentPage"
-    [pageSize]="rowsPerPage"
-    [boundaryLinks]="true"
-    (pageChange)="onPageChange($event)"
-    [disabled]="disabled"
-  >
-    <ng-template ngbPaginationPages let-page let-pages="pages">
-      @if (pages.length > 0) {
-      <li class="cmmnTblPgntnItem">
-        <label>
-          {{ "PAGE" | translate }}
-          <span id="paginationSpan">{{ page }}</span> of
-          <span>{{ pages.length }}</span>
-        </label>
-      </li>
-      }
-    </ng-template>
-  </ngb-pagination>
-</div>
+  <div class="cmmnTblPgntn">
+    <ngb-pagination
+      [collectionSize]="totalRecords"
+      [(page)]="currentPage"
+      [pageSize]="rowsPerPage"
+      [boundaryLinks]="true"
+      (pageChange)="onPageChange($event)"
+      [disabled]="disabled"
+    >
+      <ng-template ngbPaginationPages let-page let-pages="pages">
+        @if (pages.length > 0) {
+          <li class="cmmnTblPgntnItem">
+            <label>
+              {{ "PAGE" | translate }}
+              <span id="paginationSpan">{{ page }}</span>
+              {{ "OF" | translate }}
+              <span>{{ pages.length }}</span>
+            </label>
+          </li>
+        }
+      </ng-template>
+    </ngb-pagination>
+  </div>
 }

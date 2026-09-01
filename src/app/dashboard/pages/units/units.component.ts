@@ -22,6 +22,8 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
 import { debounceTime, Subject } from 'rxjs';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { FormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ShareProfileModalComponent } from '../../component/forms/share-profile-modal/share-profile-modal.component';
 
 @Component({
   selector: 'app-units',
@@ -50,6 +52,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class UnitsComponent implements OnInit {
   private propertyService = inject(PropertyService);
+  private modalService = inject(NgbModal);
 
   units: any[] = [];
   totalRecords: number = 0;
@@ -190,8 +193,17 @@ export class UnitsComponent implements OnInit {
     this.propertyService.exportUnits(this.buildParams());
   }
 
-  handleDropdownAction(action: string) {
-    console.log(`${action} action clicked`);
+  handleDropdownAction(action: string, unit?: any) {
+    if (action === 'share' && unit) {
+      const modalRef = this.modalService.open(ShareProfileModalComponent, {
+        ariaLabelledBy: 'modal-title',
+        windowClass: 'mdlCommon',
+        centered: true,
+      });
+      modalRef.componentInstance.profileId = unit.id;
+      modalRef.componentInstance.profileName = unit.unit_name || '';
+      modalRef.componentInstance.apiType = 'unit';
+    }
   }
 
   onPageSizeChange(event: PageSizeChange): void {

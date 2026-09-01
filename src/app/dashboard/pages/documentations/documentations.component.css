@@ -1,0 +1,127 @@
+.neverExpireChip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.daysChip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.daysSafe {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.daysWarn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.daysExpired {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.daysNever {
+  background: #ede9fe;
+  color: #5b21b6;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.previewModalBody {
+  background: #1e1e1e;
+  min-height: 400px;
+  overflow: auto;
+}
+
+.imagePreviewContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background: #1e1e1e;
+  min-height: 400px;
+}
+
+.previewImage {
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.prevUploadFilterBar {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.prevUploadsTable thead th {
+  background: #f3f4f6;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #374151;
+}
+
+.prevUploadsTable tbody td {
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.prevStatusBadge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.prevStatusBadge.status-green {
+  background: #d1fae5;
+  color: #065f46;
+}
+.prevStatusBadge.status-red {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.prevStatusBadge.status-orange {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.fileNameCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.previewNoUrl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: #9ca3af;
+  gap: 12px;
+}
+
+.previewNoUrl i {
+  font-size: 48px;
+}
+
+.previewNoUrl p {
+  font-size: 15px;
+  margin: 0;
+}

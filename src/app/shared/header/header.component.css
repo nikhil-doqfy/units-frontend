@@ -249,6 +249,10 @@
   font-weight: 400;
   display: block;
   margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 183px;
 }
 
 .hdrUserDrpdwnLinks {

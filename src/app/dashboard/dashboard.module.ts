@@ -279,9 +279,14 @@ export const routes: Routes = [
         data: { titleKey: 'PAGE_TITLE.PAY_MY_DUES' },
       },
       {
+        path: 'raise-complaint/detail',
+        component: RaiseComplaintComponent,
+        data: { titleKey: 'PAGE_TITLE.SUPPORT' },
+      },
+      {
         path: 'raise-complaint',
         component: RaiseComplaintComponent,
-        data: { titleKey: 'PAGE_TITLE.RAISE_COMPLAINT' },
+        data: { titleKey: 'PAGE_TITLE.SUPPORT' },
       },
       {
         path: 'privacy-policy',

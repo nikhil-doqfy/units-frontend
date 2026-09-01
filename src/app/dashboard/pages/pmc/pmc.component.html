@@ -188,6 +188,7 @@
       },
     ]"
     (back)="handleBackClick()"
+    [showCloseBtn]="false"
   ></app-table-view-card>
 
   <div class="mt-3">
@@ -210,19 +211,68 @@
         <div class="col-md">
           <app-table-title
             [title]="'PROPERTIES_ASSIGNED' | translate"
-            subtitle="(5)"
+            [subtitle]="'(' + assignedPropertiesTotal + ')'"
+            (onRefresh)="onRefresh()"
           ></app-table-title>
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search placeholder="Search here..." />
-            <app-table-filter-btn
+            <app-table-search
+              placeholder="Search here..."
+              (onValueChange)="propertySearchTextChange($event)"
+            />
+
+            <app-filter-popup-btn #ticketFilterPopup>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{
+                        "TENANCY_STATUS" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="tenancyStatus"
+                        key="key"
+                        value="value"
+                        [placeholder]="'SELECT_TENANCY_STATUS' | translate"
+                        (optionSelected)="selectedTenancyStatus = $event"
+                        (click)="onHandleTenancyStatusClick()"
+                      >
+                      </app-custom-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter(); ticketFilterPopup.closePopup()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
+            <!-- <app-table-filter-btn
               [title]="'FILTER' | translate"
               [hasIcon]="true"
-              (clicked)="handleExportClick()"
             >
               <app-filter-icon />
-            </app-table-filter-btn>
+            </app-table-filter-btn> -->
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
@@ -266,13 +316,13 @@
                   />
                 </td>
                 <td>
-                  @if (property?.tennat && property?.tennat?.name) {
+                  @if (property?.tenant_name) {
                     <app-table-img-item
                       [img]="
                         property?.tennat?.profile_image ||
                         '../../assets/userDefaultProImg.png'
                       "
-                      [title]="property?.tennat?.name"
+                      [title]="property?.tenant_name"
                     />
                   } @else {
                     N/A
@@ -284,11 +334,13 @@
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="download"
-                      (clicked)="handleDownloadDocumentClick()"
+                      [class.disabled-btn]="!property.pdf_download_url"
+                      (clicked)="downloadContract(property)"
                     />
                     <app-table-action-btn
                       type="preview"
-                      (clicked)="handlePreviewDocumentClick()"
+                      [class.disabled-btn]="!property.pdf_url"
+                      (clicked)="viewContract(property)"
                     />
                   </div>
                 </td>

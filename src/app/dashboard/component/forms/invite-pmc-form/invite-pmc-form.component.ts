@@ -32,12 +32,12 @@ export class InvitePMCFormComponent {
   propertyUnitLoaded = false;
   invitePmcForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    invitation_type: ['OWNER_TO_PMC', Validators.required],
-    property_unit_id: [null, Validators.required],
+    // invitation_type: ['OWNER_TO_PMC', Validators.required],
+    pmc_id: [null, Validators.required],
   });
 
   ngOnInit() {
-    this.getOptionTypes(['PROPERTY_UNIT']);
+    this.getOptionTypes(['PMC_BY_PM']);
   }
 
   getOptionTypes(options: string[]) {
@@ -46,22 +46,22 @@ export class InvitePMCFormComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: any) => {
-          this.propertyList = response?.content?.property_unit ?? [];
+          this.propertyList = response?.content?.pmc ?? [];
         },
       });
   }
 
-  onOptionSelectedPropertyUnit(option: any) {
+  onOptionSelectedPMC(option: any) {
     this.invitePmcForm.patchValue({
-      property_unit_id: option?.key ?? null,
+      pmc_id: option?.key ?? null,
     });
   }
 
-  onInvitationTypeSelect(option: any) {
-    this.invitePmcForm.patchValue({
-      invitation_type: option?.key,
-    });
-  }
+  // onInvitationTypeSelect(option: any) {
+  //   this.invitePmcForm.patchValue({
+  //     invitation_type: option?.key,
+  //   });
+  // }
 
   getPayload() {
     return this.invitePmcForm.value;

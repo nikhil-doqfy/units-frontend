@@ -16,6 +16,13 @@
   z-index: 1000;
 }
 
+:host-context([dir="rtl"]) .fltrPopup {
+  right: auto;
+  left: 100%;
+  margin-right: 0;
+  margin-left: 16px;
+}
+
 .show .fltrPopup {
   display: block;
 }
@@ -62,5 +69,11 @@
     right: 0;
     width: 280px;
     margin-right: 0;
+  }
+
+  :host-context([dir="rtl"]) .fltrPopup {
+    right: auto;
+    left: 0;
+    margin-left: 0;
   }
 }

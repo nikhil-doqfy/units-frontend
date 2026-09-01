@@ -1,104 +1,248 @@
 <div class="mb-4" [ngClass]="{ arabic: currentLanguage === 'ar' }">
-  <app-white-card [title]="'TERMS_AND_CONDITIONS' | translate">
-    <div class="commonTabs">
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            [class.active]="activeTab === 'login'"
-            (click)="activeTab = 'login'"
-          >
-            {{ "LOGIN_SIGNUP" | translate }}
-          </button>
-        </li>
-
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            [class.active]="activeTab === 'commercials'"
-            (click)="activeTab = 'commercials'"
-          >
-            {{ "COMMERCIALS" | translate }}
-          </button>
-        </li>
-      </ul>
+  <!-- ── Header ── -->
+  <div class="infrmtnHdr mb-3">
+    <div
+      class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+    >
+      <div>
+        <h3>{{ "TERMS_AND_CONDITIONS" | translate }}</h3>
+      </div>
+      <!-- Add Policy button — PMC only, right corner of title -->
+      <button
+        *ngIf="isPmc && !showAddForm"
+        class="btn btnCommon"
+        type="button"
+        (click)="openAddForm()"
+      >
+        <i class="bi bi-plus-lg me-1"></i> Add Policy
+      </button>
     </div>
-  </app-white-card>
-  <div class="mt-3">
-    <app-white-card>
-      <button class="edit-btn">
-        <i><app-edit-icon></app-edit-icon></i> {{ "EDIT" | translate }}
+  </div>
+
+  <!-- ── ADD POLICY FORM ── -->
+  <app-white-card *ngIf="showAddForm">
+    <div class="addPolicyForm">
+      <h5 class="addPolicyTitle mb-3">New Policy</h5>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">
+          Policy Title <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="e.g. Privacy Policy"
+          [(ngModel)]="addFormTitle"
+        />
+      </div>
+
+      <div
+        class="policySection mb-3"
+        *ngFor="let section of addFormSections; let i = index"
+      >
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <label class="fw-semibold mb-0">Section {{ i + 1 }}</label>
+          <button
+            *ngIf="addFormSections.length > 1"
+            type="button"
+            class="btn btn-sm btn-outline-danger"
+            (click)="removeSection(i)"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+        <input
+          type="text"
+          class="form-control form-control-sm mb-2"
+          placeholder="Subtitle *"
+          [(ngModel)]="section.subtitle"
+        />
+        <textarea
+          class="form-control form-control-sm"
+          rows="3"
+          placeholder="Content *"
+          [(ngModel)]="section.content"
+        ></textarea>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary mb-3"
+        (click)="addSection()"
+      >
+        <i class="bi bi-plus me-1"></i> Add Section
       </button>
 
-      <div class="content">
-        <div class="section">
-          <h4>1. Acceptance of Terms</h4>
-          <p>
-            By creating an account or logging into this website, you agree to be
-            bound by these Terms and Conditions and our
-            <a href="https://www.privacypolicygenerator.info/" target="_blank"
-              >Privacy Policy</a
-            >. If you do not agree, please do not use the service.
-          </p>
-        </div>
+      <div class="errorMsg mb-2" *ngIf="saveError">{{ saveError }}</div>
 
-        <div class="section">
-          <h4>2. User Responsibilities</h4>
-          <ul>
-            <li>
-              Account Security: You are responsible for maintaining the
-              confidentiality of your login credentials (username and password).
-            </li>
-            <li>
-              Accuracy: You must provide truthful and complete information
-              during registration.
-            </li>
-            <li>
-              No Sharing: Accounts are personal and may not be shared with third
-              parties.
-            </li>
-          </ul>
-        </div>
-
-        <div class="section">
-          <h4>3. Prohibited Conduct</h4>
-          <ul>
-            <li>Use the account for any illegal or unauthorised purpose.</li>
-            <li>
-              Attempt to hack, bypass, or disrupt the service’s security
-              measures.
-            </li>
-            <li>Use automated methods (bots) to register accounts.</li>
-          </ul>
-        </div>
-
-        <div class="section">
-          <h4>4. Account Termination</h4>
-          <p>
-            We reserve the right to suspend or terminate your account at any
-            time, without notice, for any violation of these terms or for
-            conduct that we believe is harmful to other users or our business.
-          </p>
-        </div>
-
-        <div class="section">
-          <h4>5. Limitation of Liability</h4>
-          <p>
-            The service is provided “as is.” We are not liable for any data
-            loss, service interruptions, or damages arising from your use of the
-            login portal.
-          </p>
-        </div>
-
-        <div class="section">
-          <h4>6. Updates to Terms</h4>
-          <p>
-            We may update these terms periodically. Continued use of your
-            account after changes are posted constitutes acceptance of the new
-            terms.
-          </p>
-        </div>
+      <div class="d-flex gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btnCommon btnTransparent"
+          (click)="cancelAddForm()"
+          [disabled]="isSaving"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btnCommon"
+          (click)="saveNewPolicy()"
+          [disabled]="isSaving"
+        >
+          <span
+            *ngIf="isSaving"
+            class="spinner-border spinner-border-sm me-1"
+            role="status"
+          ></span>
+          {{ isSaving ? "Saving..." : "Save Policy" }}
+        </button>
       </div>
-    </app-white-card>
-  </div>
+    </div>
+  </app-white-card>
+
+  <!-- ── POLICIES PANEL ── -->
+  <app-white-card *ngIf="!showAddForm">
+    <div class="infrmtnBody">
+      <!-- LEFT: Active policy content -->
+      <div class="infrmtnLft">
+        <div *ngIf="!isLoadingPolicies && !activePolicy" class="policyEmpty">
+          <p>No policy content available.</p>
+        </div>
+
+        <ng-container *ngIf="!isLoadingPolicies && activePolicy">
+          <!-- READ MODE -->
+          <ng-container *ngIf="!isEditing(activePolicy)">
+            <div class="policyTitleRow mb-3">
+              <h3 class="policyMainTitle">{{ activePolicy.title }}</h3>
+              <button
+                *ngIf="isPmc"
+                class="edit-btn"
+                type="button"
+                (click)="startEdit(activePolicy)"
+              >
+                <i><app-edit-icon></app-edit-icon></i> {{ "EDIT" | translate }}
+              </button>
+            </div>
+
+            <ng-container
+              *ngFor="let section of activePolicy.other_policy_content"
+            >
+              <h4>{{ section.subtitle }}</h4>
+              <p>{{ section.content }}</p>
+            </ng-container>
+
+            <div
+              *ngIf="!activePolicy.other_policy_content?.length"
+              class="text-muted"
+              style="font-size: 13px"
+            >
+              No content available.
+            </div>
+          </ng-container>
+
+          <!-- EDIT MODE -->
+          <ng-container *ngIf="isEditing(activePolicy)">
+            <div class="policyFormWrap">
+              <h5 class="policyFormHeading mb-3">Edit Policy</h5>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">
+                  Policy Title <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="editingMap[activePolicy.id].title"
+                />
+              </div>
+
+              <div
+                class="policySection mb-3"
+                *ngFor="
+                  let section of editingMap[activePolicy.id].sections;
+                  let i = index
+                "
+              >
+                <div
+                  class="d-flex align-items-center justify-content-between mb-2"
+                >
+                  <label class="fw-semibold mb-0">Section {{ i + 1 }}</label>
+                  <button
+                    *ngIf="editingMap[activePolicy.id].sections.length > 1"
+                    type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="removeEditSection(activePolicy.id, i)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  class="form-control form-control-sm mb-2"
+                  placeholder="Subtitle *"
+                  [(ngModel)]="section.subtitle"
+                />
+                <textarea
+                  class="form-control form-control-sm"
+                  rows="3"
+                  placeholder="Content *"
+                  [(ngModel)]="section.content"
+                ></textarea>
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary mb-3"
+                (click)="addEditSection(activePolicy.id)"
+              >
+                <i class="bi bi-plus me-1"></i> Add Section
+              </button>
+
+              <div class="d-flex gap-2 justify-content-end">
+                <button
+                  type="button"
+                  class="btn btnCommon btnTransparent"
+                  (click)="cancelEdit(activePolicy)"
+                  [disabled]="savingMap[activePolicy.id]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="saveEdit(activePolicy)"
+                  [disabled]="savingMap[activePolicy.id]"
+                >
+                  <span
+                    *ngIf="savingMap[activePolicy.id]"
+                    class="spinner-border spinner-border-sm me-1"
+                    role="status"
+                  ></span>
+                  {{
+                    savingMap[activePolicy.id] ? "Saving..." : "Save Changes"
+                  }}
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <!-- RIGHT: Policy list navigation -->
+      <div class="infrmtnRght">
+        <h4>Other Policies</h4>
+        <ul class="policyList">
+          <li
+            *ngFor="let policy of policies"
+            [class.activePolicy]="policy.id === activePolicyId"
+            (click)="selectPolicy(policy)"
+            role="button"
+          >
+            {{ policy.title }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </app-white-card>
 </div>

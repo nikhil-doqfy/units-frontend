@@ -148,3 +148,15 @@
   border-style: solid;
   border-color: transparent transparent #111 transparent;
 }
+:host-context([dir="rtl"]) .prprtyAcrdn .accordion-button {
+  padding-right: 16px;
+  padding-left: 15px;
+}
+
+:host-context([dir="rtl"]) .prprtyAcrdn .accordion-button::after {
+  right: auto;
+  left: 16px;
+
+  margin-left: 0;
+  margin-right: 0;
+}

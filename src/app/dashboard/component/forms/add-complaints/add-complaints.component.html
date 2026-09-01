@@ -20,6 +20,7 @@
         [options]="propertyOptions"
         [showFilterInput]="true"
         [placeholder]="'SELECT_OPTION' | translate"
+        [selectedOption]="selectedPropertyOption"
         (optionSelected)="onPropertySelect($event)"
       ></app-form-select-field>
     </div>
@@ -31,8 +32,9 @@
         [options]="unitOptions"
         [showFilterInput]="true"
         [placeholder]="'SELECT_OPTION' | translate"
-        [form]="leadForm"
+        [form]="complaintForm"
         controlName="unit_id"
+        [selectedOption]="selectedUnitOption"
         (optionSelected)="onUnitSelect($event)"
       ></app-form-select-field>
     </div>
@@ -45,8 +47,10 @@
         [form]="complaintForm"
         controlName="service_type"
         [placeholder]="'SELECT_OPTION' | translate"
+        [selectedOption]="selectedServiceType"
         (optionSelected)="
-          complaintForm.patchValue({ service_type: $event?.key })
+          complaintForm.patchValue({ service_type: $event?.key });
+          selectedServiceType = $event
         "
       ></app-form-select-field>
     </div>
@@ -59,7 +63,11 @@
         [form]="complaintForm"
         controlName="priority"
         [placeholder]="'SELECT_OPTION' | translate"
-        (optionSelected)="complaintForm.patchValue({ priority: $event?.key })"
+        [selectedOption]="selectedPriority"
+        (optionSelected)="
+          complaintForm.patchValue({ priority: $event?.key });
+          selectedPriority = $event
+        "
       ></app-form-select-field>
     </div>
 

@@ -99,26 +99,26 @@
                   <div class="row g-2">
                     <div class="col-6">
                       <label class="form-label">{{
-                        "Min value" | translate
+                        "MIN_VALUE" | translate
                       }}</label>
 
                       <input
                         type="number"
                         class="form-control"
                         [(ngModel)]="filterMinFloor"
-                        placeholder="Min Floor"
+                        [placeholder]="'MIN_FLOOR' | translate"
                       />
                     </div>
 
                     <div class="col-6">
                       <label class="form-label">{{
-                        "Max value" | translate
+                        "MAX_VALUE" | translate
                       }}</label>
                       <input
                         type="number"
                         class="form-control"
                         [(ngModel)]="filterMaxFloor"
-                        placeholder="Max Floor"
+                        [placeholder]="'MAX_FLOOR' | translate"
                       />
                     </div>
                   </div>
@@ -209,7 +209,7 @@
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-dropdown
                       [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
+                      (actionClicked)="handleDropdownAction($event, unit)"
                     ></app-table-action-dropdown>
                   </div>
                 </div>
