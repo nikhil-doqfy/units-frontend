@@ -9,6 +9,7 @@ import {
   ContentChild,
   output,
   HostListener,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -23,6 +24,8 @@ import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-do
 import { WhatsappShareIconComponent } from '../../../icon/whatsapp-share-icon/whatsapp-share-icon.component';
 import { ArrowUpIconComponent } from '../../../shared/component/icons/arrow-up-icon/arrow-up-icon.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TenantsService } from '../../services/tenants.service';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-table-view-card',
@@ -45,6 +48,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./table-view-card.component.css'],
 })
 export class TableViewCardComponent {
+  @Input() leaseId: number | null = null;
   @Input() showBack: boolean = true;
   @Input() showImage: boolean = true;
   @Input() showCloseBtn: boolean = true;
@@ -75,7 +79,11 @@ export class TableViewCardComponent {
     mail: true,
     sms: false,
   };
-  constructor(private eRef: ElementRef) {}
+  constructor(
+    private eRef: ElementRef,
+    private tenantService: TenantsService,
+    private alertService: AlertService,
+  ) {}
 
   ngAfterContentInit() {
     this.hasProjectedContent = this.projectedButtons.length > 0;
@@ -117,10 +125,31 @@ export class TableViewCardComponent {
   }
 
   shareSelected() {
-    this.share.emit(this.shareOptions);
-    this.openShare = false;
-  }
+    console.log('Received leaseId:', this.leaseId);
 
+    if (!this.leaseId) {
+      console.error('lease_id is missing');
+      return;
+    }
+
+    const payload = {
+      lease_id: this.leaseId,
+    };
+
+    console.log('Share API Payload:', payload);
+
+    this.tenantService.shareInvoice(payload).subscribe({
+      next: (response) => {
+        console.log('Invoice shared successfully:', response);
+        this.alertService.success('Invoice sent successfully');
+        this.share.emit(this.shareOptions);
+        this.openShare = false;
+      },
+      error: (error) => {
+        console.error('Invoice share failed:', error);
+      },
+    });
+  }
   closeShare() {
     this.openShare = false;
   }

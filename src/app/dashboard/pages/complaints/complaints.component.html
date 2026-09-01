@@ -26,6 +26,7 @@
           <h6>{{ "REJECTED" | translate }}</h6>
         </div>
         <button
+          *ngIf="canManageComplaints"
           class="btn btnCommon btnPrimary complaintBtn"
           (click)="openComplaintModal()"
         >
@@ -48,11 +49,6 @@
           [isFilter]="true"
         >
         </app-custom-select>
-      </ng-container>
-      <ng-container *ngIf="isTenant" card-actions>
-        <button class="btn btnCommon btnPrimary" (click)="openComplaintModal()">
-          {{ "NEW_COMPLAINT" | translate }}
-        </button>
       </ng-container>
 
       <!-- MODAL -->
@@ -265,10 +261,10 @@
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn type="up-arrow" />
                     <app-table-action-btn type="complete" />
-
                     <app-table-action-btn type="preview" />
                     <app-table-action-btn type="disable" />
                     <app-edit-icon
+                      *ngIf="canManageComplaints"
                       type="edit"
                       (click)="openEditComplaint(item)"
                     ></app-edit-icon>

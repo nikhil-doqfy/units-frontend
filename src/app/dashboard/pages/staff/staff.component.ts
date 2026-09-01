@@ -13,6 +13,7 @@ import {
   ModalDismissReasons,
   NgbActiveModal,
   NgbModal,
+  NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { TableTitleComponent } from '../../../dashboard/component/table-title/table-title.component';
@@ -78,6 +79,7 @@ import { FormsModule } from '@angular/forms';
     CustomSelectComponent,
     NoDataComponent,
     FormsModule,
+    NgbTooltipModule,
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css',
@@ -97,6 +99,7 @@ export class StaffComponent {
   breadcrumbData: BreadCrumb[] = [];
   selectedStaff: any = null;
   selectedstaffRole: any = null;
+  private onStaffDetailSearch$ = new Subject<string>();
   staffRoles: any = [];
   staffRolesData: Record<string, any> = {};
   totalRecords: number = 0;
@@ -154,6 +157,7 @@ export class StaffComponent {
 
     this.sharedService.initLanguage();
     this.initLanguageListener();
+    this.initStaffDetailSearchListener();
   }
 
   getLabel(key: string): string {
@@ -167,6 +171,20 @@ export class StaffComponent {
       });
   }
 
+  initStaffDetailSearchListener() {
+    this.onStaffDetailSearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText: string) => {
+        this.detailSearchText = searchText.trim();
+        this.detailCurrentPage = 1;
+
+        const staffId = this.route.snapshot.paramMap.get('staff_id');
+
+        if (staffId) {
+          this.loadDetailView(+staffId);
+        }
+      });
+  }
   async loadBreadcrumb() {
     this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
@@ -187,6 +205,9 @@ export class StaffComponent {
     this.selectedstaffRole = null;
   }
 
+  getRemainingPmcNames(staff: any): string {
+    return staff?.pmcs?.map((pmc: any) => pmc.value)?.join(', ') || '';
+  }
   handleDropdownAction(action: string, staff: any): void {
     const modalOptions = {
       ariaLabelledBy: 'modal-title',
@@ -239,9 +260,8 @@ export class StaffComponent {
       });
   }
 
-  onDetailSearch(text: string): void {
-    this.detailSearchText = text.trim();
-    this.detailCurrentPage = 1;
+  onDetailSearch(search: string): void {
+    this.onStaffDetailSearch$.next(search);
   }
 
   onDetailPageChange(event: PageChange): void {
@@ -439,8 +459,15 @@ export class StaffComponent {
   }
 
   loadDetailView(staff_id: number): void {
+    const params: Record<string, any> = {
+      staff_id: staff_id,
+    };
+
+    if (this.detailSearchText) {
+      params['search'] = this.detailSearchText;
+    }
     this.staffService
-      .accessStaffRoleDetails({ staff_id: staff_id })
+      .accessStaffRoleDetails(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {

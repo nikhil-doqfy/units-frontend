@@ -47,6 +47,9 @@ import {
   PageSizeChange,
 } from '../../../shared/model/shared.model';
 import { AlertService } from '../../../shared/services/alert.service';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
+import { SharedApiService } from '../../../shared/services/shared-api.service';
 
 @Component({
   selector: 'app-pmc',
@@ -72,6 +75,8 @@ import { AlertService } from '../../../shared/services/alert.service';
     TranslateModule,
     NoDataComponent,
     NgbTooltipModule,
+    FilterPopupButtonComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './pmc.component.html',
   styleUrl: './pmc.component.css',
@@ -82,15 +87,22 @@ export class PMCComponent {
   private alertService = inject(AlertService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-
+  private onPropertySearch$ = new Subject<string>();
   breadcrumbData: BreadCrumb[] = [];
   private translate = inject(TranslateService);
+  private sharedApiService = inject(SharedApiService);
+
   private modalService = inject(NgbModal);
   componentName = 'PMCComponent';
+  ticketFilterPopup!: FilterPopupButtonComponent;
   closeResult: WritableSignal<string> = signal('');
   pmcList: any[] = [];
+  propertySearchText = '';
+  assignedPropertiesTotal = 0;
   showDetailView: boolean = false;
   currentLanguage = 'en';
+  tenancyStatus: any = [];
+  selectedTenancyStatus: any = null;
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -105,6 +117,7 @@ export class PMCComponent {
   assignedProperties: any[] = [];
   constructor(private destroyRef: DestroyRef) {
     this.initPMCSearchListener();
+    this.initPropertySearchListener();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.showDetailView = true;
@@ -121,7 +134,23 @@ export class PMCComponent {
     this.sharedService.initLanguage();
     this.initLanguageListener();
   }
+  initPropertySearchListener() {
+    this.onPropertySearch$
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchText: string) => {
+        this.propertySearchText = searchText.trim();
+        this.currentPage = 1;
 
+        const companyId = this.route.snapshot.paramMap.get('id');
+
+        if (companyId) {
+          this.loadDetailView(+companyId);
+        }
+      });
+  }
+  propertySearchTextChange(search: string): void {
+    this.onPropertySearch$.next(search);
+  }
   initLanguageListener() {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -164,7 +193,42 @@ export class PMCComponent {
         }));
       });
   }
+  getOptionTypes(options: string[]) {
+    this.sharedApiService
+      .getOptions({ option_type: options.join(',') })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.tenancyStatus = response?.content?.tenancy_status;
+        },
+      });
+  }
+  onHandleTenancyStatusClick(): void {
+    this.getOptionTypes(['TENANCY_STATUS']);
+  }
+  applyFilter(): void {
+    this.currentPage = 1;
 
+    const companyId = this.route.snapshot.paramMap.get('id');
+
+    if (companyId) {
+      this.loadDetailView(+companyId);
+    }
+
+    setTimeout(() => {
+      this.ticketFilterPopup?.closePopup();
+    });
+  }
+  removeFilter(): void {
+    this.selectedTenancyStatus = null;
+    this.currentPage = 1;
+
+    const companyId = this.route.snapshot.paramMap.get('id');
+
+    if (companyId) {
+      this.loadDetailView(+companyId);
+    }
+  }
   onRefresh() {
     this.getPMC();
   }
@@ -327,28 +391,51 @@ export class PMCComponent {
   handleBackClick(): void {
     this.router.navigate(['/dashboard/pmc']);
   }
-
-  handleDownloadDocumentClick(): void {
-    console.log('Download Document button clicked');
+  downloadContract(prop: any) {
+    const url = prop.pdf_download_url;
+    if (!url) {
+      return;
+    }
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'agreement.pdf';
+    a.target = '_blank';
+    a.click();
+  }
+  viewContract(prop: any) {
+    const url = prop.pdf_url;
+    if (!url) {
+      return;
+    }
+    window.open(url, '_blank');
   }
 
-  handlePreviewDocumentClick(): void {
-    console.log('Preview Document button clicked');
-  }
   loadDetailView(company_id: number): void {
+    const params: Record<string, any> = {
+      company_id: company_id,
+      limit: this.rowsPerPage,
+      page: this.currentPage,
+    };
+
+    if (this.propertySearchText) {
+      params['search'] = this.propertySearchText;
+    }
+    if (this.selectedTenancyStatus) {
+      params['tenancy_status'] =
+        this.selectedTenancyStatus.key || this.selectedTenancyStatus.value;
+    }
     this.pmcService
-      .getPMC({
-        company_id: company_id,
-        limit: this.rowsPerPage,
-        page: this.currentPage,
-      })
+      .getPMC(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.assignedProperties = resp?.content?.properties || [];
-          this.totalRecords = resp?.pagination?.total_records || 0;
+
+          this.assignedPropertiesTotal = resp?.pagination?.total_records || 0;
         },
-        error: (err) => console.error('Detail API Error:', err),
+        error: (err) => {
+          console.error('Detail API Error:', err);
+        },
       });
   }
 }

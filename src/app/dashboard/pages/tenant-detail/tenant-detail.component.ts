@@ -10,6 +10,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   NgbDropdownModule,
@@ -17,6 +18,7 @@ import {
   NgbPopoverModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime, Subject } from 'rxjs';
 import { TenantsService } from '../../services/tenants.service';
 import { LeaseService } from '../../services/lease.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
@@ -26,6 +28,8 @@ import { WhiteCardComponent } from '../../../shared/component/white-card/white-c
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
+import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
+import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
@@ -47,12 +51,14 @@ import { ReplaceChequeComponent } from '../../component/forms/replace-cheque/rep
 import { ReceiptComponent } from '../../component/forms/receipt/receipt.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
+import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-tenant-detail',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     TranslateModule,
     NgbPopoverModule,
     TableViewCardComponent,
@@ -60,6 +66,8 @@ import { CustomDropdownComponent } from '../../../component/custom-dropdown/cust
     TableTitleComponent,
     TableSearchComponent,
     TableFilterButtonComponent,
+    FilterPopupButtonComponent,
+    CustomSelectComponent,
     TableSelectComponent,
     TablePaginationComponent,
     TableActionButtonComponent,
@@ -96,10 +104,44 @@ export class TenantDetailComponent implements OnChanges {
   private tenantsService = inject(TenantsService);
   private leaseService = inject(LeaseService);
   private destroyRef = inject(DestroyRef);
-
+  private alertService = inject(AlertService);
   tenantData: any = null;
   rentTransactions: any[] = [];
   additionalTransactions: any[] = [];
+  searchQuery: string = '';
+  private searchSubject$ = new Subject<string>();
+
+  // Filter options
+  paymentTypeOptions: { key: string; value: string }[] = [
+    { key: 'CHEQUE', value: 'Cheque' },
+    { key: 'CASH', value: 'Cash' },
+    { key: 'BANK_TRANSFER', value: 'Bank Transfer' },
+    { key: 'PDC', value: 'PDC' },
+  ];
+
+  statusOptions: { key: string; value: string }[] = [
+    { key: 'BALANCE', value: 'Balance' },
+    { key: 'CREDITED', value: 'Credited' },
+    { key: 'REALIZED', value: 'Realized' },
+    { key: 'BOUNCED', value: 'Bounce' },
+  ];
+
+  selectedPaymentType: { key: string; value: string } | null = null;
+  selectedStatus: { key: string; value: string } | null = null;
+  appliedPaymentType: { key: string; value: string } | null = null;
+  appliedStatus: { key: string; value: string } | null = null;
+
+  constructor() {
+    this.searchSubject$
+      .pipe(debounceTime(300), takeUntilDestroyed())
+      .subscribe((query: string) => {
+        this.searchQuery = query;
+        this.currentPage = 1;
+        if (this.selectedLease?.id) {
+          this.loadTransactions(this.selectedLease.id);
+        }
+      });
+  }
 
   get allTransactions(): any[] {
     return [...this.rentTransactions, ...this.additionalTransactions];
@@ -138,12 +180,26 @@ export class TenantDetailComponent implements OnChanges {
   }
 
   private loadTransactions(leaseId: number): void {
+    const params: Record<string, any> = { lease_id: leaseId };
+    if (this.searchQuery && this.searchQuery.trim()) {
+      params['search'] = this.searchQuery.trim();
+    }
+    if (this.appliedPaymentType?.key) {
+      params['payment_type'] = this.appliedPaymentType.key;
+    }
+    if (this.appliedStatus?.key) {
+      params['status'] = this.appliedStatus.key;
+    }
     this.leaseService
-      .getLeaseCheques(leaseId)
+      .getLeaseCheques(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
           this.rentTransactions = resp?.content?.all_cheques ?? [];
+          this.totalRecords =
+            resp?.pagination?.total_records ??
+            resp?.content?.total_records ??
+            this.rentTransactions.length;
           this.additionalTransactions = [];
         },
         error: () => {
@@ -239,7 +295,59 @@ export class TenantDetailComponent implements OnChanges {
   }
 
   onRefresh() {
-    this.loadTransactions(this.selectedLease.id);
+    if (this.selectedLease?.id) {
+      this.loadTransactions(this.selectedLease.id);
+    }
+  }
+
+  onSearchChange(searchValue: string) {
+    this.searchSubject$.next(searchValue);
+  }
+
+  onPaymentTypeSelect(option: any) {
+    this.selectedPaymentType = option;
+  }
+
+  onStatusSelect(option: any) {
+    this.selectedStatus = option;
+  }
+
+  applyFilter() {
+    this.appliedPaymentType = this.selectedPaymentType;
+    this.appliedStatus = this.selectedStatus;
+    this.currentPage = 1;
+    if (this.selectedLease?.id) {
+      this.loadTransactions(this.selectedLease.id);
+    }
+  }
+
+  removeFilter() {
+    this.selectedPaymentType = null;
+    this.selectedStatus = null;
+    this.appliedPaymentType = null;
+    this.appliedStatus = null;
+    this.currentPage = 1;
+    if (this.selectedLease?.id) {
+      this.loadTransactions(this.selectedLease.id);
+    }
+  }
+
+  clearPaymentTypeFilter() {
+    this.selectedPaymentType = null;
+    this.appliedPaymentType = null;
+    this.currentPage = 1;
+    if (this.selectedLease?.id) {
+      this.loadTransactions(this.selectedLease.id);
+    }
+  }
+
+  clearStatusFilter() {
+    this.selectedStatus = null;
+    this.appliedStatus = null;
+    this.currentPage = 1;
+    if (this.selectedLease?.id) {
+      this.loadTransactions(this.selectedLease.id);
+    }
   }
   toggleReceipt() {
     this.showReceiptDropdown = !this.showReceiptDropdown;
@@ -271,6 +379,27 @@ export class TenantDetailComponent implements OnChanges {
     }
   }
 
+  handleExportClick(leaseId: number) {
+    const params = {
+      lease_id: leaseId,
+    };
+
+    this.tenantsService
+      .exportCheque(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+
+        a.href = url;
+        a.download = `RentTransactionCheques.csv`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+
+        this.alertService.success('Exported successfully');
+      });
+  }
   get invoiceAmountInWords(): string {
     const grand = this.invoiceData?.totals?.grand_total ?? 0;
     const dirhams = Math.floor(grand);

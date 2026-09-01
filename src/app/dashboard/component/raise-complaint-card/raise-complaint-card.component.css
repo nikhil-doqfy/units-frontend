@@ -106,3 +106,10 @@
 .raiseCmplntTtl p {
   margin: 0;
 }
+
+.btnMyTickets {
+  font-size: 13px;
+  padding: 6px 16px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

@@ -222,4 +222,19 @@ export class PropertyService {
   bulkUploadProperty(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/bulk_upload_property`, data);
   }
+
+  // ── Share ─────────────────────────────────────────────────────────────────
+  shareProperty(data: {
+    property_id: number;
+    recipient_email: string;
+  }): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/share-property`, data);
+  }
+
+  shareUnit(data: {
+    unit_id: number;
+    recipient_email: string;
+  }): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/share-unit`, data);
+  }
 }

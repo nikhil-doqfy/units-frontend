@@ -11,18 +11,97 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+            <div class="selected-filters d-flex gap-2 flex-wrap">
+              <div class="filter-chip" *ngIf="selectedPropertyType">
+                {{ selectedPropertyType?.value }}
+                <span class="cross-icon" (click)="clearPropertyType()">
+                  ✕
+                </span>
+              </div>
 
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
+              <div class="filter-chip" *ngIf="selectedStatus">
+                {{ selectedStatus?.value }}
+                <span class="cross-icon" (click)="clearStatus()"> ✕ </span>
+              </div>
+
+              <div class="filter-chip" *ngIf="selectedPMC">
+                {{ selectedPMC?.value }}
+                <span class="cross-icon" (click)="clearPMC()"> ✕ </span>
+              </div>
+            </div>
+            <app-table-search
+              [placeholder]="'SEARCH_HERE' | translate"
+              (onValueChange)="searchTextChange($event)"
+            />
+            <app-filter-popup-btn #filterPopup>
+              <ng-container form>
+                <div class="row g-3">
+                  <div class="col-md-12">
+                    <app-form-select-field
+                      [label]="'LINK_PROPERTY' | translate"
+                      [required]="true"
+                      [options]="propertyOptions"
+                      [showFilterInput]="true"
+                      [placeholder]="'SELECT_OPTION' | translate"
+                    ></app-form-select-field>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">
+                      {{ "AGREEMENT_STATUS" | translate }}
+                    </label>
+
+                    <app-custom-select
+                      [options]="statusOptions"
+                      key="key"
+                      value="value"
+                      [(ngModel)]="selectedStatus"
+                      [placeholder]="'SELECT_STATUS' | translate"
+                      (optionSelected)="
+                        selectedStatus = $event; filterStatus = $event?.key
+                      "
+                    >
+                    </app-custom-select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">{{
+                      "PROPERTY_STATUS" | translate
+                    }}</label>
+                    <app-custom-select
+                      [options]="pmcOptions"
+                      key="key"
+                      value="value"
+                      [(ngModel)]="selectedPMC"
+                      [placeholder]="'SELECT_STATUS' | translate"
+                      (optionSelected)="
+                        selectedPMC = $event; filterPMC = $event?.key
+                      "
+                    >
+                    </app-custom-select>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter(); filterPopup.closePopup()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter(); filterPopup.closePopup()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
 
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
+              (clicked)="handleExportClick()"
             >
               <app-export-icon />
             </app-table-filter-btn>
@@ -55,232 +134,51 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>133</td>
+            <tr *ngFor="let property of tenancyLedgerData">
+              <td>{{ property.property_id || "--" }}</td>
               <td>
                 <app-table-img-item
                   [img]="'assets/property/property-img-1.png'"
-                  [title]="'Novastis AG'"
+                  [title]="property.property_name || '--'"
                   (click)="handleViewClick(property.property_unit_id)"
                 />
               </td>
-              <td>A</td>
-              <td>A102</td>
+              <td>{{ property.block_tower || "--" }}</td>
+              <td>{{ property.unit || "--" }}</td>
               <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Jenshin'"
-                />
+                <!-- /* [img]="'assets/property/property-img-1.png'" */ -->
+                <app-table-img-item [title]="property.tenant_name || '--'" />
               </td>
 
               <td>
-                <app-badge title="Ongoing" status="green"></app-badge>
+                <app-badge
+                  [title]="property.agreement_status || '--'"
+                  [status]="
+                    property.agreement_status === 'ACTIVE' ? 'green' : 'yellow'
+                  "
+                ></app-badge>
               </td>
-              <td>1BHK</td>
+              <td>{{ property.dimension || "--" }}</td>
               <td>
-                <app-badge title="Occupied" status="green"></app-badge>
+                <app-badge
+                  [title]="property.property_status || '--'"
+                  [status]="
+                    property.property_status === 'Occupied' ? 'green' : 'yellow'
+                  "
+                ></app-badge>
               </td>
-              <td>3g real estate</td>
+              <td>{{ property.pmc || "--" }}</td>
               <td>
                 <app-rental-amount
-                  [amount]="1200"
-                  [percentage]="0.2"
+                  [amount]="property.rental_amount || 0"
+                  [percentage]="0"
                   trend="up"
                 >
                 </app-rental-amount>
               </td>
 
-              <td>1,300.00</td>
-              <td align="center">--</td>
-              <td align="center">
-                <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Novastis AG'"
-                />
-              </td>
-              <td>A</td>
-              <td>A102</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Jenshin'"
-                />
-              </td>
-
-              <td>
-                <app-badge title="Ongoing" status="green"></app-badge>
-              </td>
-              <td>1BHK</td>
-              <td>
-                <app-badge title="Occupied" status="green"></app-badge>
-              </td>
-              <td>3g real estate</td>
-              <td>
-                <app-rental-amount [amount]="1200" [percentage]="12" trend="up">
-                </app-rental-amount>
-              </td>
-
-              <td>1,300.00</td>
-              <td align="center">--</td>
-              <td align="center">
-                <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Novastis AG'"
-                />
-              </td>
-              <td>A</td>
-              <td>A102</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Jenshin'"
-                />
-              </td>
-
-              <td>
-                <app-badge title="Ongoing" status="green"></app-badge>
-              </td>
-              <td>1BHK</td>
-              <td>
-                <app-badge title="Occupied" status="green"></app-badge>
-              </td>
-              <td>3g real estate</td>
-              <td>
-                <app-rental-amount [amount]="1200" [percentage]="20" trend="up">
-                </app-rental-amount>
-              </td>
-              <td>1,300.00</td>
-              <td align="center">--</td>
-              <td align="center">
-                <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Novastis AG'"
-                />
-              </td>
-              <td>A</td>
-              <td>A102</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Jenshin'"
-                />
-              </td>
-
-              <td>
-                <app-badge title="Ongoing" status="green"></app-badge>
-              </td>
-              <td>1BHK</td>
-              <td>
-                <app-badge title="Occupied" status="green"></app-badge>
-              </td>
-              <td>3g real estate</td>
-              <td>
-                <app-rental-amount [amount]="1200" [percentage]="12">
-                </app-rental-amount>
-              </td>
-              <td>1,300.00</td>
-              <td align="center">
-                <app-property-share-platfrom
-                  type="icons"
-                ></app-property-share-platfrom>
-              </td>
-              <td align="center">
-                <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
-                  <div class="cmmnTblActnBtnDiv">
-                    <app-table-action-dropdown
-                      [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
-                    >
-                    </app-table-action-dropdown>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>133</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Novastis AG'"
-                />
-              </td>
-              <td>A</td>
-              <td>A102</td>
-              <td>
-                <app-table-img-item
-                  [img]="'assets/property/property-img-1.png'"
-                  [title]="'Jenshin'"
-                />
-              </td>
-
-              <td>
-                <app-badge title="Ongoing" status="green"></app-badge>
-              </td>
-              <td>1BHK</td>
-              <td>
-                <app-badge title="Occupied" status="green"></app-badge>
-              </td>
-              <td>3g real estate</td>
-              <td>
-                <app-rental-amount [amount]="1200" [percentage]="null">
-                </app-rental-amount>
-              </td>
-              <td>1,300.00</td>
-              <td align="center">
-                <app-property-share-platfrom
-                  type="list"
-                ></app-property-share-platfrom>
-              </td>
+              <td>{{ property.rera_index || "--" }}</td>
+              <td align="center">{{ property.platform || "--" }}</td>
               <td align="center">
                 <div class="tbl-action-inline">
                   <app-edit-icon></app-edit-icon>

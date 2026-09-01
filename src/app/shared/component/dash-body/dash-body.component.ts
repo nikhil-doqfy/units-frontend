@@ -25,14 +25,15 @@ export class DashBodyComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {
     this.subscriptions.add(
       this.translate.onLangChange.subscribe((event: any) => {
         this.currentLanguage = event.lang;
-      })
+      }),
     );
-    translate.use('en');
+    // Read current language from shared service (already initialized from localStorage)
+    this.currentLanguage = this.sharedService.getCurrentLanguage();
   }
 
   ngOnInit() {
@@ -48,20 +49,20 @@ export class DashBodyComponent implements OnInit, OnDestroy {
 
           // Set the right sidebar state for the current route
           this.sharedService.setRightSidebarStateForRoute(this.router.url);
-        })
+        }),
     );
 
     // Subscribe to the shared service for sidebar states
     this.subscriptions.add(
       this.sharedService.openSidebarValue$.subscribe((value) => {
         this.openSidebarValue = value;
-      })
+      }),
     );
 
     this.subscriptions.add(
       this.sharedService.openRightSidebarValue$.subscribe((value) => {
         this.openRightSidebarValue = value;
-      })
+      }),
     );
   }
 

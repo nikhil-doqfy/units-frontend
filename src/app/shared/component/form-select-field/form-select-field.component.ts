@@ -36,6 +36,7 @@ export class FormSelectFieldComponent {
   @Input() bindToControl: boolean = false;
   @Input() form!: FormGroup;
   @Input() controlName: string = '';
+  @Input() selectedOption: any = null;
   @Output() optionSelected = new EventEmitter<any>();
 
   get errorState() {

@@ -12,14 +12,25 @@ export class DocumenattionService {
   private sharedService = inject(SharedService);
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
   constructor() {}
+
   uploadTenantDocument(payload: any): Observable<any> {
-    return this.http.post(
-      `${this.SERVER_ADDRESS}/user/tenant_documents`,
-      payload,
-    );
+    return this.http.post(`${this.SERVER_ADDRESS}/user/documents`, payload);
   }
 
+  getTenantDocumentById(documentId: number): Observable<any> {
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/user/documents?document_id=${documentId}`,
+    );
+  }
+  updateTenantDocument(payload: any): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/user/documents`, payload);
+  }
   getTenantDocuments(): Observable<any> {
-    return this.http.get(`${this.SERVER_ADDRESS}/user/tenant_documents`);
+    return this.http.get(`${this.SERVER_ADDRESS}/user/documents`);
+  }
+  exportTenantDocuments(): Observable<Blob> {
+    return this.http.get(`${this.SERVER_ADDRESS}/user/documents?export=csv`, {
+      responseType: 'blob',
+    });
   }
 }
