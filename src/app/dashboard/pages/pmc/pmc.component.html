@@ -316,13 +316,13 @@
                   />
                 </td>
                 <td>
-                  @if (property?.tennat && property?.tennat?.name) {
+                  @if (property?.tenant_name) {
                     <app-table-img-item
                       [img]="
                         property?.tennat?.profile_image ||
                         '../../assets/userDefaultProImg.png'
                       "
-                      [title]="property?.tennat?.name"
+                      [title]="property?.tenant_name"
                     />
                   } @else {
                     N/A

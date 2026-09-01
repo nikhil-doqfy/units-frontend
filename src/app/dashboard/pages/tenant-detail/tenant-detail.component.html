@@ -234,15 +234,22 @@
             >
               <div class="filter-chip" *ngIf="appliedPaymentType">
                 {{ appliedPaymentType.value }}
-                <span class="cross-icon" (click)="clearPaymentTypeFilter()"> ✕ </span>
+                <span class="cross-icon" (click)="clearPaymentTypeFilter()">
+                  ✕
+                </span>
               </div>
               <div class="filter-chip" *ngIf="appliedStatus">
                 {{ appliedStatus.value }}
-                <span class="cross-icon" (click)="clearStatusFilter()"> ✕ </span>
+                <span class="cross-icon" (click)="clearStatusFilter()">
+                  ✕
+                </span>
               </div>
             </div>
 
-            <app-table-search placeholder="Search here..." (onValueChange)="onSearchChange($event)" />
+            <app-table-search
+              placeholder="Search here..."
+              (onValueChange)="onSearchChange($event)"
+            />
             <app-custom-dropdown
               [title]="'RECEIPT' | translate"
               [hasIcon]="true"
@@ -310,7 +317,7 @@
             <app-table-filter-btn
               [title]="'EXPORT' | translate"
               [hasIcon]="true"
-              (clicked)="handleExportClick( selectedLease.id)"
+              (clicked)="handleExportClick(selectedLease.id)"
             >
               <app-export-icon />
             </app-table-filter-btn>
@@ -442,6 +449,7 @@
     [showShare]="true"
     [showCloseBtn]="true"
     [showBack]="false"
+    [leaseId]="selectedLease?.id"
     (close)="handleCloseClick()"
     (download)="downloadInvoicePdf()"
   >

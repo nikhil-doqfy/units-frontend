@@ -83,7 +83,6 @@ export class AddComplaintsComponent {
         this.pmcOptions = resp?.content?.pmc ?? [];
       });
 
-    // Patch after form is initialised (complaintData may have arrived via ngOnChanges before ngOnInit)
     if (this.complaintData) {
       this.patchForm(this.complaintData);
     }

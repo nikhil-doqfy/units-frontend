@@ -82,4 +82,7 @@ export class TenantsService {
       `${this.SERVER_ADDRESS}/tenant/details/${queryString}`,
     );
   }
+  shareInvoice(payload: any): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/invoice/share`, payload);
+  }
 }

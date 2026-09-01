@@ -1,5 +1,7 @@
 <!-- ══════ RAISE TICKET – existing page (unchanged) ══════ -->
-<ng-container *ngIf="activeTab === 'raise'">
+<ng-container
+  *ngIf="activeTab === 'raise' && !showDetailView && !isPropertyManager"
+>
   <app-raise-complaint-card (onMyTickets)="switchTab('myTickets')">
     <ng-container form-content>
       <div class="textareaCombo">
@@ -13,7 +15,7 @@
         <button
           type="button"
           class="btn btnCommon btnWhite btnExtraSmall"
-          (click)="sendComplaint()"
+          (click)="sendTicket()"
         >
           <i><app-send-icon /></i>{{ "SEND" | translate }}
         </button>
@@ -40,7 +42,10 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2">
-            <app-table-search placeholder="Search here..." />
+            <app-table-search
+              placeholder="Search here..."
+              (onValueChange)="searchTextChange($event)"
+            />
             <app-filter-popup-btn #ticketFilterPopup>
               <app-table-filter-btn
                 [title]="'FILTER' | translate"
@@ -58,14 +63,13 @@
                       }}</label>
                       <app-custom-select
                         [options]="complaintsStatus"
-                        key="key"
-                        value="value"
+                        key="id"
+                        value="name"
+                        [selectedOption]="selectedComplaintstatus"
                         [placeholder]="'SELECT_TICKET_STATUS' | translate"
                         (optionSelected)="selectedComplaintstatus = $event"
-                      >
                         (click)="onHandleComplaintsStatusClick()"
-
-                      </app-custom-select>
+                      ></app-custom-select>
                     </div>
                   </div>
                 </form>
@@ -81,7 +85,7 @@
                 <button
                   type="button"
                   class="btn btnCommon"
-                  (click)="applyFilter()"
+                  (click)="applyFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "APPLY" | translate }}
                 </button>
@@ -100,7 +104,7 @@
               <th>Sl.No</th>
               <th>Ticket ID</th>
               <th>Subject</th>
-              <th>Property</th>
+              <th>Tenant Name</th>
               <th>Raised Date</th>
               <th>Status</th>
               <th>Action</th>
@@ -110,17 +114,17 @@
             <tr *ngFor="let ticket of filteredTickets; let i = index">
               <td>{{ i + 1 }}</td>
               <td>
-                <span>{{ ticket.code }}</span>
+                <span>{{ ticket.id }}</span>
               </td>
-              <td>{{ ticket.subject }}</td>
-              <td>{{ ticket.property }}</td>
+              <td>{{ ticket.description }}</td>
+              <td>{{ ticket.tenantName }}</td>
               <td>{{ ticket.created }}</td>
               <td>
                 <span
                   class="stStatusBadge"
-                  [ngClass]="badgeClass(ticket.statusKey)"
+                  [ngClass]="badgeClass(ticket.status)"
                 >
-                  {{ ticket.statusLabel }}
+                  {{ ticket.status }}
                 </span>
               </td>
               <td align="center">
@@ -161,7 +165,10 @@
   </div>
 
   <!-- ── DETAIL VIEW ── -->
-  <div class="stDetailOuter" *ngIf="ticketView === 'detail' && selectedTicket">
+  <div
+    class="stDetailOuter"
+    *ngIf="ticketView === 'detail' && selectedTicket && showDetailView"
+  >
     <!-- Sticky header -->
     <div class="stDetailHeader">
       <div class="stDetailHeaderTop">
@@ -243,7 +250,7 @@
       <button
         class="btn btnCommon btnPrimary stSendBtn"
         (click)="sendReply()"
-        [disabled]="!replyText.trim()"
+        [disabled]="!replyText.trim() || isSendingReply"
       >
         <svg
           width="13"
@@ -256,7 +263,7 @@
           <line x1="22" y1="2" x2="11" y2="13" />
           <polygon points="22 2 15 22 11 13 2 9 22 2" />
         </svg>
-        Send
+        {{ isSendingReply ? "Sending..." : "Send" }}
       </button>
     </div>
   </div>
