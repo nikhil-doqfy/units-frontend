@@ -9,7 +9,7 @@ export class PermissionService {
 
   /**
    * Returns the permissions map from the stored user profile.
-   * Format: { "Properties": { create: true, edit: false, ... }, ... }
+   * Format: { "Properties": { create: true, edit: false, ... }, "Finance": { ... }, ... }
    * Empty object means no restrictions (company admin / owner).
    */
   private getPermissions(): Record<string, Record<PermissionAction, boolean>> {

@@ -293,6 +293,15 @@ export const routes: Routes = [
         component: PrivacyPolicyComponent,
         data: { titleKey: 'PAGE_TITLE.PRIVACY_POLICY' },
       },
+      {
+        path: 'finance',
+        loadChildren: () =>
+          import('./finance/finance-routing.module').then(
+            (m) => m.FinanceRoutingModule,
+          ),
+        canActivate: [authGuard, permissionGuard],
+        data: { titleKey: 'PAGE_TITLE.FINANCE', module: 'Finance' },
+      },
     ],
   },
 ];
