@@ -1,0 +1,28 @@
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="Trial Balance"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <app-date-range-picker [formControl]="dateRangeControl"></app-date-range-picker>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" role="alert" *ngIf="!balanced">
+    Trial Balance is not balanced for the selected period.
+  </div>
+
+  <p *ngIf="loadFailed">Failed to load Trial Balance.</p>
+
+  <p *ngIf="loading && !loadFailed">Loading…</p>
+
+  <app-report-table
+    *ngIf="!loadFailed"
+    [columns]="columns"
+    [rows]="rows"
+    [totals]="totals"
+  ></app-report-table>
+</ng-container>

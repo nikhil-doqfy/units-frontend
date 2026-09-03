@@ -11,19 +11,10 @@
   </div>
 </div>
 
-<ng-container *ngIf="financeActivation === 'not_activated'">
-  <app-white-card
-    title="Finance Overview"
-    description="Finance not yet set up for this PMC."
-  ></app-white-card>
-</ng-container>
-
-<ng-container *ngIf="financeActivation === 'activated_empty'">
-  <app-white-card
-    title="Finance Overview"
-    description="Finance is activated for this PMC, but there is no activity recorded yet."
-  ></app-white-card>
-</ng-container>
+<app-finance-empty-state
+  [financeActivation]="financeActivation"
+  title="Finance Overview"
+></app-finance-empty-state>
 
 <div class="row" *ngIf="financeActivation === 'activated'">
   <div class="col-md-4">

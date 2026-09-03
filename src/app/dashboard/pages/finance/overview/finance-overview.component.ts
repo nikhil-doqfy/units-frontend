@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WhiteCardComponent } from '../../../../shared/component/white-card/white-card.component';
 import { CustomSelectComponent } from '../../../component/custom-select/custom-select.component';
+import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
 import { FinanceReportsService } from '../../../services/finance-reports.service';
 import { unwrapFinanceEnvelope } from '../finance-envelope';
 import { FinanceActivationState } from '../finance-activation.resolver';
@@ -12,6 +13,7 @@ import {
   ReachablePmc,
 } from '../finance-reachable-pmc.service';
 import { StorageService } from '../../../../shared/services/storage.service';
+import { getCurrentMonthRange } from '../finance-date-range';
 
 interface ProfitLossContent {
   net_profit_loss: number;
@@ -45,7 +47,12 @@ interface TrialBalanceContent {
 @Component({
   selector: 'app-finance-overview',
   standalone: true,
-  imports: [CommonModule, WhiteCardComponent, CustomSelectComponent],
+  imports: [
+    CommonModule,
+    WhiteCardComponent,
+    CustomSelectComponent,
+    FinanceEmptyStateComponent,
+  ],
   templateUrl: './finance-overview.component.html',
 })
 export class FinanceOverviewComponent implements OnInit {
@@ -116,7 +123,7 @@ export class FinanceOverviewComponent implements OnInit {
   }
 
   private loadReports(): void {
-    const { startDate, endDate } = this.getCurrentMonthRange();
+    const { startDate, endDate } = getCurrentMonthRange();
 
     this.financeReportsService
       .getProfitLoss(this.pmcId, startDate, endDate)
@@ -141,21 +148,5 @@ export class FinanceOverviewComponent implements OnInit {
           this.trialBalanceFailed = true;
         },
       });
-  }
-
-  private getCurrentMonthRange(): { startDate: string; endDate: string } {
-    const now = new Date();
-    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    return {
-      startDate: this.toIsoDate(firstOfMonth),
-      endDate: this.toIsoDate(now),
-    };
-  }
-
-  private toIsoDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 }
