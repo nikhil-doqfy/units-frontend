@@ -1,16 +1,27 @@
-<ng-container
-  *ngIf="
-    financeActivation === 'not_activated' ||
-    financeActivation === 'activated_empty'
-  "
->
+<div class="row mb-3" *ngIf="showSelector">
+  <div class="col-md-4">
+    <app-custom-select
+      [options]="reachablePmcs"
+      key="id"
+      value="name"
+      [selectedOption]="selectedPmc"
+      placeholder="Select PMC"
+      (optionSelected)="onPmcSelected($event)"
+    ></app-custom-select>
+  </div>
+</div>
+
+<ng-container *ngIf="financeActivation === 'not_activated'">
   <app-white-card
     title="Finance Overview"
-    [description]="
-      financeActivation === 'not_activated'
-        ? 'Finance has not been set up for this PMC yet.'
-        : 'Finance is activated for this PMC, but there is no activity yet.'
-    "
+    description="Finance not yet set up for this PMC."
+  ></app-white-card>
+</ng-container>
+
+<ng-container *ngIf="financeActivation === 'activated_empty'">
+  <app-white-card
+    title="Finance Overview"
+    description="Finance is activated for this PMC, but there is no activity recorded yet."
   ></app-white-card>
 </ng-container>
 

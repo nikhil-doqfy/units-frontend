@@ -16,7 +16,8 @@ export const financePmcReachableGuard: CanActivateFn = (route) => {
 
   const pmcId = route.paramMap.get('pmcId');
 
-  return reachablePmcService.getReachablePmcIds().pipe(
+  return reachablePmcService.getReachablePmcs().pipe(
+    map((reachablePmcs) => reachablePmcs.map((p) => p.id)),
     map((reachableIds) => {
       if (pmcId && reachableIds.includes(pmcId)) {
         return true;

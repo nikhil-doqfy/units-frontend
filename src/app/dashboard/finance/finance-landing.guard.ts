@@ -20,7 +20,8 @@ export const financeLandingGuard: CanActivateFn = () => {
   const storageService = inject(StorageService);
   const router = inject(Router);
 
-  return reachablePmcService.getReachablePmcIds().pipe(
+  return reachablePmcService.getReachablePmcs().pipe(
+    map((reachablePmcs) => reachablePmcs.map((p) => p.id)),
     map((reachableIds) => {
       if (reachableIds.length === 0) {
         // No reachable PMC at all — let FinanceLandingComponent render
