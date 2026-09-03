@@ -1,23 +1,270 @@
-<app-raise-complaint-card>
-  <ng-container form-content>
-    <div class="textareaCombo">
-      <textarea
-        class="form-control"
+<!-- ══════ RAISE TICKET – existing page (unchanged) ══════ -->
+<ng-container
+  *ngIf="activeTab === 'raise' && !showDetailView && !isPropertyManager"
+>
+  <app-raise-complaint-card (onMyTickets)="switchTab('myTickets')">
+    <ng-container form-content>
+      <div class="textareaCombo">
+        <textarea
+          class="form-control"
+          type="text"
+          name="contactMsg"
+          [(ngModel)]="description"
+          placeholder="{{ 'HELP_PROMPT' | translate }}"
+        ></textarea>
+        <button
+          type="button"
+          class="btn btnCommon btnWhite btnExtraSmall"
+          (click)="sendTicket()"
+        >
+          <i><app-send-icon /></i>{{ "SEND" | translate }}
+        </button>
+      </div>
+    </ng-container>
+    <ng-container accordion-content>
+      <app-faq-accordian-card [accordianData]="faqList" />
+    </ng-container>
+  </app-raise-complaint-card>
+</ng-container>
+
+<!-- ══════ MY TICKETS ══════ -->
+<ng-container *ngIf="activeTab === 'myTickets'">
+  <!-- ── LIST VIEW ── -->
+  <div class="cmmnTblOuter" *ngIf="ticketView === 'list'">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'MY_TICKETS' | translate"
+            [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+        </div>
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2">
+            <app-table-search
+              placeholder="Search here..."
+              (onValueChange)="searchTextChange($event)"
+            />
+            <app-filter-popup-btn #ticketFilterPopup>
+              <app-table-filter-btn
+                [title]="'FILTER' | translate"
+                [hasIcon]="true"
+              >
+                <app-filter-icon />
+              </app-table-filter-btn>
+
+              <ng-container form>
+                <form>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">{{
+                        "TICKET_STATUS" | translate
+                      }}</label>
+                      <app-custom-select
+                        [options]="complaintsStatus"
+                        key="id"
+                        value="name"
+                        [selectedOption]="selectedComplaintstatus"
+                        [placeholder]="'SELECT_TICKET_STATUS' | translate"
+                        (optionSelected)="selectedComplaintstatus = $event"
+                        (click)="onHandleComplaintsStatusClick()"
+                      ></app-custom-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-container action>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="removeFilter(); ticketFilterPopup.closePopup()"
+                >
+                  {{ "REMOVE_ALL" | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btnCommon"
+                  (click)="applyFilter(); ticketFilterPopup.closePopup()"
+                >
+                  {{ "APPLY" | translate }}
+                </button>
+              </ng-container>
+            </app-filter-popup-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered st-ticket-table">
+          <thead>
+            <tr>
+              <th>Sl.No</th>
+              <th>Ticket ID</th>
+              <th>Subject</th>
+              <th>Tenant Name</th>
+              <th>Raised Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ticket of filteredTickets; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <span>{{ ticket.id }}</span>
+              </td>
+              <td>{{ ticket.description }}</td>
+              <td>{{ ticket.tenantName }}</td>
+              <td>{{ ticket.created }}</td>
+              <td>
+                <span
+                  class="stStatusBadge"
+                  [ngClass]="badgeClass(ticket.status)"
+                >
+                  {{ ticket.status }}
+                </span>
+              </td>
+              <td align="center">
+                <div class="cmmnTblActnBtnDiv">
+                  <button
+                    class="btn btnCommon btnSmall"
+                    (click)="openTicket(ticket)"
+                  >
+                    <app-preview-icon></app-preview-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="filteredTickets.length === 0">
+              <td colspan="7" class="text-center py-4 stEmptyCell">
+                No tickets found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+
+  <!-- ── DETAIL VIEW ── -->
+  <div
+    class="stDetailOuter"
+    *ngIf="ticketView === 'detail' && selectedTicket && showDetailView"
+  >
+    <!-- Sticky header -->
+    <div class="stDetailHeader">
+      <div class="stDetailHeaderTop">
+        <button class="stBackBtn" (click)="backToList()">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          Ticket Details
+        </button>
+        <span
+          class="stStatusBadge"
+          [ngClass]="badgeClass(selectedTicket.statusKey)"
+        >
+          {{ selectedTicket.statusLabel }}
+        </span>
+      </div>
+      <div class="stDetailInfo">
+        <div class="stDetailInfoLeft">
+          <span class="stDetailCode">{{ selectedTicket.code }}</span>
+          <span class="stDetailCreated"
+            >Created: {{ selectedTicket.created }}</span
+          >
+        </div>
+      </div>
+      <div class="stDetailSubject">{{ selectedTicket.subject }}</div>
+      <div class="stDetailProperty">
+        Property: {{ selectedTicket.property }}
+      </div>
+    </div>
+
+    <!-- Scrollable conversation body -->
+    <div class="stConvBody">
+      <div class="stConvLabel">Conversation</div>
+
+      <div class="stMessages">
+        <div
+          class="stMsgRow"
+          *ngFor="let msg of selectedTicket.messages"
+          [ngClass]="msg.role === 'TENANT' ? 'stMsgRowTenant' : 'stMsgRowPM'"
+        >
+          <img class="stMsgAvatar" [src]="msg.avatar" [alt]="msg.sender" />
+          <div class="stMsgBody">
+            <div
+              class="stMsgMeta"
+              [class.stMsgMetaRight]="msg.role === 'TENANT'"
+            >
+              <span class="stMsgSender">{{ msg.sender }}</span>
+              <span class="stMsgTime">{{ msg.time }}</span>
+            </div>
+            <div
+              class="stMsgBubble"
+              [ngClass]="
+                msg.role === 'TENANT' ? 'stBubbleTenant' : 'stBubblePM'
+              "
+            >
+              {{ msg.text }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reply bar (always at bottom) -->
+    <div class="stReplyBar">
+      <input
         type="text"
-        name="contactMsg"
-        [(ngModel)]="message"
-        placeholder="{{ 'HELP_PROMPT' | translate }}"
-      ></textarea>
+        class="form-control stReplyInput"
+        placeholder="Type your message..."
+        [(ngModel)]="replyText"
+        (keydown.enter)="sendReply()"
+      />
       <button
-        type="button"
-        class="btn btnCommon btnWhite btnExtraSmall"
-        (click)="sendComplaint()"
+        class="btn btnCommon btnPrimary stSendBtn"
+        (click)="sendReply()"
+        [disabled]="!replyText.trim() || isSendingReply"
       >
-        <i><app-send-icon /></i>{{ "SEND" | translate }}
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="22" y1="2" x2="11" y2="13" />
+          <polygon points="22 2 15 22 11 13 2 9 22 2" />
+        </svg>
+        {{ isSendingReply ? "Sending..." : "Send" }}
       </button>
     </div>
-  </ng-container>
-  <ng-container accordion-content>
-    <app-faq-accordian-card [accordianData]="faqList" />
-  </ng-container>
-</app-raise-complaint-card>
+  </div>
+</ng-container>

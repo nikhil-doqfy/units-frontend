@@ -125,7 +125,6 @@
               <th>{{ "LOCATION" | translate }}</th>
               <th>{{ "TOTAL_BLOCKS_TOWERS" | translate }}</th>
               <th>{{ "TOTAL_UNITS" | translate }}</th>
-              <th>{{ "PMC" | translate }}</th>
               <th>{{ "PLOT_NO" | translate }}</th>
               <th>{{ "PLOT_AREA" | translate }}</th>
               <th>{{ "DEWA_NO" | translate }}</th>
@@ -147,7 +146,6 @@
               <td>{{ prop.address_line_1 || "--" }}</td>
               <td>{{ prop.no_of_blocks }}</td>
               <td>{{ prop.no_of_units }}</td>
-              <td>{{ prop.pmc?.value || "--" }}</td>
               <td>{{ prop.plot_no || "--" }}</td>
               <td>
                 {{
@@ -167,14 +165,16 @@
                   {{ prop.status === "PUBLIC" ? "Public" : "Draft" }}
                 </span>
               </td>
-              <td>--</td>
+              <td>
+                {{ prop.platforms?.join(", ") || "--" }}
+              </td>
               <td align="center">
                 <div class="tbl-action-inline">
                   <app-edit-icon (click)="onEditClick(prop.id)"></app-edit-icon>
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-dropdown
                       [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
+                      (actionClicked)="handleDropdownAction($event, prop)"
                     >
                     </app-table-action-dropdown>
                   </div>

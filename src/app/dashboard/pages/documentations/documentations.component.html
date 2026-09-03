@@ -4,12 +4,13 @@
       <div class="col-md">
         <app-table-title
           title="{{ 'DOCUMENTS' | translate }}"
-          subtitle="5"
+          [subtitle]="'(' + totalRecords + ')'"
+          (onRefresh)="onRefresh()"
         ></app-table-title>
       </div>
       <div class="col-md-auto">
         <div class="d-flex align-items-center gap-2 gap-md-3">
-          <app-custom-select
+          <!-- <app-custom-select
             [options]="[
               'Falcom city',
               'Novatis AG...',
@@ -23,7 +24,7 @@
             (optionSelected)="onOptionSelected($event)"
             [isFilter]="true"
           >
-          </app-custom-select>
+          </app-custom-select> -->
           <app-table-filter-btn
             [title]="'EXPORT' | translate"
             [hasIcon]="true"
@@ -31,135 +32,264 @@
           >
             <app-export-icon />
           </app-table-filter-btn>
+
+          <button
+            class="btn btnCommon"
+            (click)="openTenantDocumentUpload(uploadTenantDocumentModal)"
+          >
+            {{ "UPLOAD" | translate }}
+          </button>
         </div>
       </div>
     </div>
   </div>
+
   <div class="cmmnTbl">
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead>
           <tr>
             <th>{{ "SI.CODE" | translate }}</th>
+
             <th>{{ "AGREEMENT_NAME" | translate }}</th>
             <th>{{ "STAUES" | translate }}</th>
-            <th width="200">{{ "DOCUMENT" | translate }}</th>
+            <th>{{ "EXPIRY_DATE" | translate }}</th>
+            <th>{{ "DAYS_STATUS" | translate }}</th>
+            <th width="220">{{ "DOCUMENT" | translate }}</th>
           </tr>
         </thead>
         <tbody>
-          <!-- @for (property of documentationList; track $index){ -->
-          <tr>
-            <td>LP9021</td>
-            <td>Lease-Purchase Agreement</td>
+          <tr *ngFor="let document of tenantDocuments; let i = index">
+            <td>{{ document.code }}</td>
+
+            <td>{{ document.title || "—" }}</td>
+
             <td>
-              <app-badge title="Active" status="green" />
+              <app-badge
+                [title]="
+                  document.document_type_name || document.status || 'Active'
+                "
+                [status]="getStatusBadge(document.status)"
+              >
+              </app-badge>
             </td>
+
+            <td>
+              <span *ngIf="document.never_expire" class="neverExpireChip">
+                Never Expires
+              </span>
+              <span *ngIf="!document.never_expire && document.expiry_date">
+                {{ formatDate(document.expiry_date) }}
+              </span>
+              <span *ngIf="!document.never_expire && !document.expiry_date"
+                >—</span
+              >
+            </td>
+
+            <td>
+              <span
+                *ngIf="!document.never_expire && document.expiry_date"
+                class="daysChip"
+                [ngClass]="getDaysClass(document)"
+              >
+                {{ getDaysLabel(document) }}
+              </span>
+              <span *ngIf="document.never_expire" class="daysChip daysNever">
+                ∞
+              </span>
+              <span *ngIf="!document.never_expire && !document.expiry_date"
+                >—</span
+              >
+            </td>
+
             <td align="center">
               <div class="cmmnTblActnBtnDiv">
                 <app-table-action-btn
                   type="download"
-                  (clicked)="handleDownloadClick()"
-                />
+                  (clicked)="downloadDocument(document)"
+                >
+                </app-table-action-btn>
+
                 <app-table-action-btn
                   type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>LP8021</td>
-            <td>Property Management Contract</td>
-            <td>
-              <app-badge title="Active" status="green" />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
+                  (clicked)="previewDocument(document, pdfPreviewModal)"
+                >
+                </app-table-action-btn>
+
                 <app-table-action-btn
-                  type="download"
-                  (clicked)="handleDownloadClick()"
-                />
+                  type="history"
+                  (clicked)="openDocHistory(document, docHistoryModal)"
+                >
+                </app-table-action-btn>
+
                 <app-table-action-btn
-                  type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>VC79021</td>
-            <td>Vendor Contract - Cleaning</td>
-            <td>
-              <app-badge title="Expired" status="red" />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <app-table-action-btn
-                  type="download"
-                  (clicked)="handleDownloadClick()"
-                />
-                <app-table-action-btn
-                  type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-                <app-table-action-btn
+                  *ngIf="isExpired(document)"
                   type="renew"
-                  (clicked)="handlePreviewClick()"
-                />
+                  (clicked)="renewDoc(document, uploadTenantDocumentModal)"
+                >
+                </app-table-action-btn>
               </div>
             </td>
           </tr>
-          <tr>
-            <td>VC69021</td>
-            <td>Vendor Contract - Landscaping</td>
-            <td>
-              <app-badge title="Active" status="green" />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <app-table-action-btn
-                  type="download"
-                  (clicked)="handleDownloadClick()"
-                />
-                <app-table-action-btn
-                  type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>VC59021</td>
-            <td>Maintenance and Repair Agreement</td>
-            <td>
-              <app-badge title="Expires in 3 days" status="orange" />
-            </td>
-            <td align="center">
-              <div class="cmmnTblActnBtnDiv">
-                <app-table-action-btn
-                  type="download"
-                  (clicked)="handleDownloadClick()"
-                />
-                <app-table-action-btn
-                  type="preview"
-                  (clicked)="handlePreviewClick()"
-                />
-              </div>
-            </td>
-          </tr>
-          <!-- }@empty {
-          <tr>
-            <td colspan="20" align="center">
+
+          <tr *ngIf="!tenantDocuments.length">
+            <td colspan="7" align="center">
               <app-no-data></app-no-data>
             </td>
           </tr>
-          } -->
         </tbody>
       </table>
     </div>
   </div>
+
   <div class="cmmnTblFtr">
-    <app-table-select />
-    <app-table-pagination />
+    <app-table-select
+      [componentName]="componentName"
+      [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (rowsPerPageChange)="onPageSizeChange($event)"
+    />
+    <app-table-pagination
+      [componentName]="componentName"
+      [currentPage]="currentPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage"
+      (pageChange)="onPageChange($event)"
+    />
   </div>
+
+  <!-- ====================== UPLOAD / RENEW TENANT DOCUMENT MODAL ====================== -->
+  <ng-template #uploadTenantDocumentModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title">
+        {{
+          isEditMode
+            ? ("RENEW_DOCUMENT" | translate)
+            : ("UPLOAD_TENANT_DOCUMENT" | translate)
+        }}
+      </h6>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click'); resetUploadMode()"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+      <app-tenant-document-upload
+        #tenantDocumentUploadComponent
+        [isEditMode]="isEditMode"
+        [document]="selectedDocument"
+        (documentUploaded)="onDocumentUploaded($event, modal)"
+      >
+      </app-tenant-document-upload>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btnCommon btnTransparent"
+        (click)="modal.dismiss('Cancel click'); resetUploadMode()"
+      >
+        {{ "CANCEL" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btnCommon"
+        (click)="tenantDocumentUploadComponent.uploadDocument()"
+      >
+        {{
+          isEditMode
+            ? ("RENEW_DOCUMENT" | translate)
+            : ("UPLOAD_DOCUMENT" | translate)
+        }}
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- ====================== PDF / IMAGE PREVIEW MODAL ====================== -->
+  <ng-template #pdfPreviewModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title">
+        <i class="bi bi-file-earmark me-2"></i>{{ previewFileName }}
+      </h6>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <div class="modal-body p-0 previewModalBody">
+      <ng-container *ngIf="isPdfPreview && previewUrl">
+        <pdf-viewer
+          [src]="previewUrl"
+          [render-text]="true"
+          [original-size]="false"
+          [fit-to-page]="true"
+          [zoom]="1"
+          [zoom-scale]="'page-width'"
+          style="width: 100%; height: 75vh; display: block"
+        ></pdf-viewer>
+      </ng-container>
+
+      <ng-container *ngIf="!isPdfPreview && previewUrl">
+        <div class="imagePreviewContainer">
+          <img
+            [src]="previewUrl"
+            [alt]="previewFileName"
+            class="img-fluid previewImage"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!previewUrl">
+        <div class="previewNoUrl">
+          <i class="bi bi-exclamation-circle"></i>
+          <p>Document URL not available.</p>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btnCommon btnTransparent"
+        (click)="modal.dismiss()"
+      >
+        {{ "CANCEL" | translate }}
+      </button>
+      <button
+        *ngIf="previewUrl"
+        type="button"
+        class="btn btnCommon"
+        (click)="downloadFromUrl(previewUrl, previewFileName)"
+      >
+        <i class="bi bi-download"></i>
+        {{ "DOWNLOAD" | translate }}
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- ====================== DOCUMENT HISTORY MODAL (per document) ====================== -->
+  <ng-template #docHistoryModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title">{{ "PREVIOUS_UPLOADS" | translate }}</h6>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <div class="modal-body p-3">
+      <app-previous-uploads
+        [documentId]="selectedDocumentId"
+      ></app-previous-uploads>
+    </div>
+  </ng-template>
 </div>

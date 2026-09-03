@@ -318,7 +318,7 @@ export class OnboardingComponent {
   loadCheques() {
     const id = this.leaseId;
     if (!id) return;
-    this.leaseService.getLeaseCheques(id).subscribe({
+    this.leaseService.getLeaseCheques({ lease_id: id }).subscribe({
       next: (resp: any) => {
         const c = resp?.content ?? {};
         this.rentCheques       = c.rent_cheques       ?? [];

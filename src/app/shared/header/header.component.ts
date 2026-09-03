@@ -133,20 +133,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('en');
 
+    // Read current language — SharedService already called translate.use() on init
     const savedLang = this.storage.getLanguage() || 'en';
-
     this.currentLang = savedLang;
-    this.translate.use(savedLang);
+    this.currentLanguage = savedLang;
     this.updateDirection();
+
     this.subscriptions.add(
       this.translate.onLangChange.subscribe((event: any) => {
+        this.currentLang = event.lang;
         this.currentLanguage = event.lang;
+        this.updateDirection();
         this.pageTitle = this.getRouteTitle(this.router.routerState.root);
       }),
     );
-
-    translate.use(storage.getLanguage());
-    this.updateDirection();
   }
 
   ngOnInit() {
@@ -219,6 +219,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.currentRole = role;
       }),
     );
+
+    // Load notifications on init so badge count is populated
+    this.getNotifications();
   }
 
   onUpload(event: UploadFileModel) {}
@@ -379,81 +382,144 @@ export class HeaderComponent implements OnInit, OnDestroy {
   unDeletedNotifications: any[] = [];
 
   allCount: number = 0;
+  notifications: any[] = [];
 
-  notifications: any = [];
+  currentNotificationType: string = 'all';
 
-  getNotifications() {
-    this.sharedService.getNotifications({}).subscribe((resp: any) => {
-      this.notifications = resp.content.notifications_data;
-      this.unDeletedNotifications = this.notifications.filter(
-        (n: any) => !n.is_deleted,
-      );
-      this.readNotifications = this.notifications.filter(
-        (n: any) => n.is_read && !n.is_deleted,
-      );
-      this.unreadNotifications = this.notifications.filter(
-        (n: any) => !n.is_read && !n.is_deleted,
-      );
-      this.deletedNotifications = this.notifications.filter(
-        (n: any) => n.is_deleted,
-      );
-      this.allCount = resp.content.notification_count;
-      this.readCount = resp.content.read_notifications;
-      this.unreadCount = resp.content.unread_notifications;
-    });
+  getNotifications(type: string = this.currentNotificationType) {
+    const params: Record<string, any> = {};
+    if (type && type !== 'all') {
+      params['type'] = type;
+    }
+    this.subscriptions.add(
+      this.sharedService.getNotifications(params).subscribe({
+        next: (resp: any) => {
+          const results = resp?.content?.results ?? resp?.content ?? [];
+          this.notifications = Array.isArray(results) ? results : [];
+
+          if (type === 'read') {
+            this.readNotifications = this.notifications.filter(
+              (n: any) => !n.is_cleared,
+            );
+          } else if (type === 'unread') {
+            this.unreadNotifications = this.notifications.filter(
+              (n: any) => !n.is_cleared,
+            );
+          } else if (type === 'cleared') {
+            this.deletedNotifications = this.notifications;
+          } else {
+            // 'all'
+            this.unDeletedNotifications = this.notifications.filter(
+              (n: any) => !n.is_cleared,
+            );
+            this.readNotifications = this.notifications.filter(
+              (n: any) => n.is_read && !n.is_cleared,
+            );
+            this.unreadNotifications = this.notifications.filter(
+              (n: any) => !n.is_read && !n.is_cleared,
+            );
+            this.deletedNotifications = this.notifications.filter(
+              (n: any) => n.is_cleared,
+            );
+          }
+
+          // counts come from content.counts object
+          const counts = resp?.content?.counts ?? {};
+          if (counts.all !== undefined) this.allCount = counts.all ?? 0;
+          if (counts.read !== undefined) this.readCount = counts.read ?? 0;
+          if (counts.unread !== undefined) this.unreadCount = counts.unread ?? 0;
+        },
+        error: () => {
+          // fail silently — badge stays at previous value
+        },
+      }),
+    );
+  }
+
+  onNotificationTabChange(type: string) {
+    this.currentNotificationType = type;
+    this.getNotifications(type);
   }
 
   openNotificaion(content: TemplateRef<any>) {
+    this.getNotifications();
     this.offcanvasService.open(content, {
       position: 'end',
       scroll: false,
       panelClass: 'notificationOffcanvas',
     });
   }
+
   clearAllClearedNotifications() {
-    this.sharedService
-      .deleteNotification({ clear_all: true })
-      .subscribe((resp: any) => {
-        if (resp.status === 200) {
-          this.alertService.success(resp.message);
-          this.getNotifications();
-        } else {
-          this.alertService.error(resp.message);
-        }
-      });
+    this.subscriptions.add(
+      this.sharedService.clearAllNotifications().subscribe({
+        next: (resp: any) => {
+          if (resp.status === 200) {
+            this.alertService.success(resp.message);
+          } else {
+            this.alertService.error(resp.message);
+          }
+          this.getNotifications(this.currentNotificationType);
+        },
+        error: (err: any) => {
+          this.alertService.error(
+            err?.error?.message ?? 'Failed to clear notifications',
+          );
+        },
+      }),
+    );
   }
+
   markNotiFicationAsRead(id: number) {
-    this.sharedService
-      .readNotification({ notification_id: id })
-      .subscribe((resp: any) => {
-        if (resp.status === 200) {
-          this.alertService.success(resp.message);
-          this.getNotifications();
-        }
-      });
+    this.subscriptions.add(
+      this.sharedService.readNotification(id).subscribe({
+        next: (resp: any) => {
+          if (resp?.status === 200 || resp?.message) {
+            this.alertService.success(resp.message ?? 'Marked as read');
+          }
+          this.getNotifications(this.currentNotificationType);
+        },
+        error: () => {
+          this.getNotifications(this.currentNotificationType);
+        },
+      }),
+    );
   }
+
   clearSingleNotifications(id: number) {
-    this.sharedService
-      .deleteNotification({ clear_notification_id: id })
-      .subscribe((resp: any) => {
-        if (resp.status === 200) {
-          this.alertService.success(resp.message);
-          this.getNotifications();
-        } else {
-          this.alertService.error(resp.message);
-        }
-      });
+    this.subscriptions.add(
+      this.sharedService.clearOneNotification(id).subscribe({
+        next: (resp: any) => {
+          if (resp.status === 200) {
+            this.alertService.success(resp.message);
+          } else {
+            this.alertService.error(resp.message);
+          }
+          this.getNotifications(this.currentNotificationType);
+        },
+        error: (err: any) => {
+          this.alertService.error(
+            err?.error?.message ?? 'Failed to clear notification',
+          );
+        },
+      }),
+    );
   }
 
   deleteNotification(id: number) {
-    this.sharedService
-      .deleteNotification({ notification_id: id })
-      .subscribe((resp: any) => {
-        if (resp.status === 200) {
-          this.alertService.success(resp.message);
-          this.getNotifications();
-        }
-      });
+    this.subscriptions.add(
+      this.sharedService.deleteOneNotification(id).subscribe({
+        next: (resp: any) => {
+          if (resp.status === 200) {
+            this.alertService.success(resp.message);
+          }
+          this.getNotifications(this.currentNotificationType);
+        },
+        error: () => {
+          this.getNotifications(this.currentNotificationType);
+        },
+      }),
+    );
   }
 
   goToCharges() {
@@ -504,7 +570,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
   /*----------------------------Toggle mode--------------------------------*/
-  isDark: boolean = false;
+  isDark: boolean = localStorage.getItem('theme') === 'dark';
   toggleTheme() {
     this.isDark = !this.isDark;
 
@@ -517,10 +583,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   applyTheme() {
-    const themeClass = this.isDark ? 'dark-theme' : 'light-theme';
-
-    document.body.classList.remove('light-theme', 'dark-theme');
-    document.body.classList.add(themeClass);
+    document.body.classList.toggle('dark-theme', this.isDark);
   }
 
   @HostListener('document:click', ['$event'])

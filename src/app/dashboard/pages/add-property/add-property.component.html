@@ -130,6 +130,17 @@
               (optionSelected)="onPmcSelected($event)"
             ></app-custom-select>
           </div>
+
+          <div class="col-md-3">
+            <app-form-select-field
+              [label]="'PLATFORM' | translate"
+              [options]="platformOptions"
+              [bindToControl]="true"
+              [form]="pmDetailsForm"
+              [multiple]="true"
+              controlName="platforms"
+            ></app-form-select-field>
+          </div>
         </form>
       </app-step-pane>
     </ng-container>

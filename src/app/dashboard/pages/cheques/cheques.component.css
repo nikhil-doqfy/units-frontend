@@ -193,7 +193,21 @@
 .amount-cell {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.amount-cell > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.amount-cell > span img {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 /* ── Scrollable table with hidden scrollbar ─────────────────── */

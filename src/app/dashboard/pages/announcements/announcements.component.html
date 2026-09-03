@@ -170,45 +170,90 @@
                     ></app-table-title>
                   </div>
                   <div class="col-md-auto">
-                    <div class="d-flex align-items-center gap-2 gap-md-3">
+                    <div
+                      class="d-flex align-items-center gap-2 gap-md-3 flex-wrap"
+                    >
+                      <!-- Active filter chips -->
+                      <div
+                        class="selected-filters d-flex gap-2 flex-wrap"
+                        *ngIf="
+                          selectedFilterProperty ||
+                          selectedFilterBlock ||
+                          selectedFilterUnit
+                        "
+                      >
+                        <div
+                          class="filter-chip"
+                          *ngIf="selectedFilterProperty?.value"
+                        >
+                          {{ selectedFilterProperty?.value }}
+                          <span
+                            class="cross-icon"
+                            (click)="clearFilterProperty()"
+                            >✕</span
+                          >
+                        </div>
+                        <div
+                          class="filter-chip"
+                          *ngIf="selectedFilterBlock?.value"
+                        >
+                          {{ selectedFilterBlock?.value }}
+                          <span class="cross-icon" (click)="clearFilterBlock()"
+                            >✕</span
+                          >
+                        </div>
+                        <div
+                          class="filter-chip"
+                          *ngIf="selectedFilterUnit?.value"
+                        >
+                          {{ selectedFilterUnit?.value }}
+                          <span class="cross-icon" (click)="clearFilterUnit()"
+                            >✕</span
+                          >
+                        </div>
+                      </div>
                       <app-table-search
                         [placeholder]="'SEARCH_HERE' | translate"
                         (onValueChange)="searchTextChange($event)"
                       />
-                      <div class="custom-select-wrapper">
-                        <span class="cmmnTblFltrBtn">
-                          <app-custom-select
-                            [placeholder]="'PROPERTY_ALL' | translate"
-                            key="key"
-                            value="value"
-                          >
-                          </app-custom-select>
-                        </span>
-                      </div>
-                      <div class="custom-select-wrapper">
-                        <span class="cmmnTblFltrBtn">
-                          <app-custom-select
-                            [placeholder]="'BLOCK_TOWER_ALL' | translate"
-                            key="key"
-                            value="value"
-                          >
-                          </app-custom-select>
-                        </span>
-                      </div>
-                      <div class="custom-select-wrapper">
-                        <span class="cmmnTblFltrBtn">
-                          <app-custom-select
-                            [placeholder]="'UNIT_ALL' | translate"
-                            key="key"
-                            value="value"
-                          >
-                          </app-custom-select>
-                        </span>
-                      </div>
+                      <!-- Property filter -->
+                      <app-custom-select
+                        [placeholder]="'PROPERTY_ALL' | translate"
+                        key="key"
+                        value="value"
+                        [options]="propertyOptions"
+                        [selectedOption]="selectedFilterProperty"
+                        [showFilterInput]="true"
+                        [isFilter]="true"
+                        (optionSelected)="onFilterPropertySelect($event)"
+                      ></app-custom-select>
+                      <!-- Block/Tower filter -->
+                      <app-custom-select
+                        [placeholder]="'BLOCK_TOWER_ALL' | translate"
+                        key="key"
+                        value="value"
+                        [options]="filterBlockOptions"
+                        [selectedOption]="selectedFilterBlock"
+                        [showFilterInput]="true"
+                        [isFilter]="true"
+                        (optionSelected)="onFilterBlockSelect($event)"
+                      ></app-custom-select>
+                      <!-- Unit filter -->
+                      <app-custom-select
+                        [placeholder]="'UNIT_ALL' | translate"
+                        key="key"
+                        value="value"
+                        [options]="filterUnitOptions"
+                        [selectedOption]="selectedFilterUnit"
+                        [showFilterInput]="true"
+                        [isFilter]="true"
+                        (optionSelected)="onFilterUnitSelect($event)"
+                      ></app-custom-select>
 
                       <app-table-filter-btn
                         [title]="'EXPORT' | translate"
                         [hasIcon]="true"
+                        (click)="handleExportClick()"
                       >
                         <app-export-icon />
                       </app-table-filter-btn>
@@ -326,31 +371,46 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>01</td>
-                        <td>LP9021</td>
-                        <td *ngIf="prop !== 'sent' && prop !== 'scheduled'">
-                          Water Supply Maintenance Notice
-                        </td>
-
-                        <td *ngIf="prop === 'sent'">Lift Maintenance Notice</td>
-                        <td *ngIf="prop === 'scheduled'">
-                          Monthly press control Notice
-                        </td>
+                      <tr *ngFor="let item of broadcastData; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ item.log_id || "-" }}</td>
+                        <td>{{ item.title || "-" }}</td>
                         <td>
-                          <app-table-img-item img="" title="Novatis AG" />
+                          <app-table-img-item
+                            img=""
+                            [title]="item.property_name || '-'"
+                          />
                         </td>
-                        <td>Evergreen(B)</td>
-                        <td>All Units</td>
+                        <td>{{ item.block_name || "-" }}</td>
+                        <td>{{ item.unit_name || "-" }}</td>
                         <td *ngIf="prop === 'scheduled' || prop === 'draft'">
-                          12 Jan 2026 02:00 PM
+                          {{
+                            (
+                              prop === "scheduled"
+                                ? item.scheduled_at
+                                : item.modified
+                            )
+                              ? ((prop === "scheduled"
+                                  ? item.scheduled_at
+                                  : item.modified
+                                ) | date: "dd MMM yyyy hh:mm a")
+                              : "-"
+                          }}
                         </td>
-                        <td *ngIf="prop === 'sent'">Ayesha Siddiqui</td>
+                        <td *ngIf="prop === 'sent'">
+                          {{ item.sent_by || "-" }}
+                        </td>
                         <td *ngIf="prop !== 'scheduled' && prop !== 'draft'">
-                          01 Feb 25
+                          {{
+                            item.sent_date
+                              ? (item.sent_date | date: "dd MMM yyyy")
+                              : "-"
+                          }}
                         </td>
                         <td *ngIf="prop !== 'draft' && prop !== 'deleted'">
-                          App/Email/SMS
+                          {{
+                            item.channel?.length ? item.channel.join("/") : "-"
+                          }}
                         </td>
                         <td
                           *ngIf="
@@ -360,7 +420,7 @@
                             prop !== 'deleted'
                           "
                         >
-                          240
+                          {{ item.recipients ?? 0 }}
                         </td>
                         <td
                           *ngIf="
@@ -370,7 +430,7 @@
                             prop !== 'deleted'
                           "
                         >
-                          240
+                          {{ item.delivered ?? 0 }}
                         </td>
                         <td
                           *ngIf="
@@ -380,16 +440,35 @@
                             prop !== 'deleted'
                           "
                         >
-                          0
+                          {{ item.failed ?? 0 }}
                         </td>
                         <td align="center">
                           <div class="tbl-action-inline">
-                            <app-report-icon></app-report-icon>
-                            <div class="cmmnTblActnBtnDiv">View Reports</div>
+                            <span
+                              class="tbl-action-btn"
+                              (click)="openReportPanel(item)"
+                              title="View Reports"
+                            >
+                              <app-report-icon></app-report-icon>
+                              <span class="cmmnTblActnBtnDiv"
+                                >View Reports</span
+                              >
+                            </span>
+                            <span
+                              *ngIf="item.failed > 0"
+                              class="tbl-action-btn tbl-action-resend"
+                              (click)="resendFailed(item)"
+                              title="Resend Failed"
+                            >
+                              <app-resend-icon></app-resend-icon>
+                              <span class="cmmnTblActnBtnDiv"
+                                >Resend Failed</span
+                              >
+                            </span>
                           </div>
                         </td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <td>02</td>
                         <td>LP8021</td>
                         <td>Parking Area Refreshing</td>
@@ -637,7 +716,7 @@
                             <div class="cmmnTblActnBtnDiv">View Reports</div>
                           </div>
                         </td>
-                      </tr>
+                      </tr> -->
                     </tbody>
                   </table>
                 </div>
@@ -663,146 +742,204 @@
       </ng-container>
 
       <ng-container *ngIf="showCreateScreen">
-        <div class="announcement-page">
-          <div class="top-actions">
-            <div></div>
+        <form [formGroup]="announcementForm">
+          <div class="announcement-page">
+            <div class="top-actions">
+              <div></div>
 
-            <div class="right-actions">
-              <app-preview-icon></app-preview-icon>
-              <app-delete-icon></app-delete-icon>|
-              <button class="btn-outline">
-                {{ "SAVE_AS_DRAFT" | translate }}
-              </button>
+              <div class="right-actions">
+                <app-preview-icon></app-preview-icon>
+                <app-delete-icon></app-delete-icon>|
+                <button class="btn-outline">
+                  {{ "SAVE_AS_DRAFT" | translate }}
+                </button>
 
-              <div class="btn btncommon">
-                <button class="btn btnCommon">
-                  {{ "SEND_NOW" | translate }} |<i
-                    ><app-arrow-down-icon></app-arrow-down-icon
-                  ></i>
+                <div class="btn btncommon">
+                  <button class="btn btnCommon" (click)="createAnnouncement()">
+                    {{ "SEND_NOW" | translate }} |<i
+                      ><app-arrow-down-icon></app-arrow-down-icon
+                    ></i>
+                  </button>
+                </div>
+
+                <button class="icon-btn close" (click)="closeCreate()">
+                  <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
                 </button>
               </div>
+            </div>
+            <div class="mt-3">
+              <app-white-card>
+                <div class="audience-header">
+                  <span class="title">{{
+                    "AUDIENCE_SELECTION" | translate
+                  }}</span>
+                  <span class="badge">01</span>
+                </div>
 
-              <button class="icon-btn close" (click)="closeCreate()">
-                <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
-              </button>
+                <div class="audience-form">
+                  <div class="col-md-12">
+                    <app-form-select-field
+                      [label]="'LINK_PROPERTY' | translate"
+                      [required]="true"
+                      [options]="propertyOptions"
+                      [showFilterInput]="true"
+                      [placeholder]="'SELECT_OPTION' | translate"
+                      [form]="announcementForm"
+                      controlName="property"
+                      (optionSelected)="onPropertySelect($event)"
+                    ></app-form-select-field>
+                  </div>
+
+                  <div class="col-md-12">
+                    <app-form-select-field
+                      [label]="'BLOCK_TOWER' | translate"
+                      [required]="true"
+                      [options]="blockOptions"
+                      [showFilterInput]="true"
+                      [placeholder]="'SELECT_OPTION' | translate"
+                      [form]="announcementForm"
+                      controlName="block_tower"
+                      (optionSelected)="onBlockSelect($event)"
+                    ></app-form-select-field>
+                  </div>
+                  <div class="col-md-12">
+                    <app-form-select-field
+                      [label]="'UNIT' | translate"
+                      [required]="true"
+                      [options]="unitOptions"
+                      [showFilterInput]="true"
+                      [placeholder]="'SELECT_OPTION' | translate"
+                      [form]="announcementForm"
+                      controlName="unit"
+                      (optionSelected)="onUnitSelect($event)"
+                    ></app-form-select-field>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-center mt-3">
+                  <label>
+                    <input
+                      type="checkbox"
+                      (change)="onChannelChange('APP_NOTIFICATION', $event)"
+                    />
+                    {{ "APP_NOTIFICATION" | translate }}
+                  </label>
+
+                  <label>
+                    <input
+                      type="checkbox"
+                      (change)="onChannelChange('SMS', $event)"
+                    />
+                    {{ "SMS" | translate }}
+                  </label>
+
+                  <label>
+                    <input
+                      type="checkbox"
+                      (change)="onChannelChange('MAIL', $event)"
+                    />
+                    {{ "MAIL" | translate }}
+                  </label>
+
+                  <label>
+                    <input
+                      type="checkbox"
+                      (change)="onChannelChange('WHATSAPP', $event)"
+                    />
+                    {{ "WHATSAPP" | translate }}
+                  </label>
+                </div>
+              </app-white-card>
+            </div>
+            <div class="mt-3">
+              <app-white-card>
+                <div class="announce-header">
+                  <span class="title">{{
+                    "ANNOUNCEMENT_DETAILS" | translate
+                  }}</span>
+                  <span class="badge">02</span>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-group title-width">
+                    <label>{{ "TITLE" | translate }}</label>
+                    <input
+                      type="text"
+                      formControlName="title"
+                      placeholder="{{ 'ENTER_HERE' | translate }}"
+                    />
+                  </div>
+
+                  <div class="form-group priority-inline">
+                    <label>{{ "PRIORITY" | translate }}</label>
+                    <div class="radio-group">
+                      <label class="radio">
+                        <input
+                          type="radio"
+                          name="priority"
+                          formControlName="priority"
+                          value="NORMAL"
+                          checked
+                        />
+                        {{ "NORMAL" | translate }}
+                      </label>
+
+                      <label class="radio">
+                        <input
+                          type="radio"
+                          name="priority"
+                          formControlName="priority"
+                          value="IMPORTANT"
+                        />
+                        {{ "IMPORTANT" | translate }}
+                      </label>
+
+                      <label class="radio">
+                        <input
+                          type="radio"
+                          name="priority"
+                          formControlName="priority"
+                          value="URGENT"
+                        />
+                        {{ "URGENT" | translate }}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="form-group full">
+                    <label>{{ "DESCRIPTION" | translate }}</label>
+                    <textarea
+                      rows="4"
+                      formControlName="description"
+                      placeholder="{{ 'ENTER_HERE' | translate }}"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group full">
+                    <label>{{ "UPLOAD_BANNER_IMAGE" | translate }}</label>
+
+                    <app-upload-document
+                      [isMultipleFiles]="false"
+                      [fileTypes]="['jpg', 'jpeg', 'png']"
+                      [maxSize]="5"
+                      (uploadProgress)="onBannerImageUpload($event)"
+                    ></app-upload-document>
+
+                    <div
+                      class="uploads-list mt-3"
+                      *ngIf="uploadedBannerImages.length"
+                    >
+                      <app-file-upload-item
+                        *ngFor="let image of uploadedBannerImages"
+                        [item]="image"
+                        (remove)="removeBannerImage(image.tempId)"
+                      ></app-file-upload-item>
+                    </div>
+                  </div>
+                </div>
+              </app-white-card>
             </div>
           </div>
-          <div class="mt-3">
-            <app-white-card>
-              <div class="audience-header">
-                <span class="title">{{
-                  "AUDIENCE_SELECTION" | translate
-                }}</span>
-                <span class="badge">01</span>
-              </div>
-
-              <div class="audience-form">
-                <div class="form-group">
-                  <label>{{ "PROPERTY" | translate }}</label>
-                  <select>
-                    <option>--Select--</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>{{ "BLOCK_TOWER" | translate }}</label>
-                  <select>
-                    <option>--Select--</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>{{ "UNIT" | translate }}</label>
-                  <select>
-                    <option>--Select--</option>
-                  </select>
-                </div>
-              </div>
-              <div class="d-flex gap-3 align-items-center mt-3">
-                <label>
-                  <input type="checkbox" /> {{ "APP_NOTIFICATION" | translate }}
-                </label>
-
-                <label>
-                  <input type="checkbox" /> {{ "SMS" | translate }}
-                </label>
-
-                <label>
-                  <input type="checkbox" /> {{ "MAIL" | translate }}
-                </label>
-
-                <label>
-                  <input type="checkbox" /> {{ "WHATSAPP" | translate }}
-                </label>
-              </div>
-            </app-white-card>
-          </div>
-          <div class="mt-3">
-            <app-white-card>
-              <div class="announce-header">
-                <span class="title">{{
-                  "ANNOUNCEMENT_DETAILS" | translate
-                }}</span>
-                <span class="badge">02</span>
-              </div>
-
-              <div class="form-grid">
-                <div class="form-group title-width">
-                  <label>{{ "TITLE" | translate }}</label>
-                  <input
-                    type="text"
-                    placeholder="{{ 'ENTER_HERE' | translate }}"
-                  />
-                </div>
-
-                <div class="form-group priority-inline">
-                  <label>{{ "PRIORITY" | translate }}</label>
-                  <div class="radio-group">
-                    <label class="radio">
-                      <input type="radio" name="priority" checked />
-                      {{ "NORMAL" | translate }}
-                    </label>
-
-                    <label class="radio">
-                      <input type="radio" name="priority" />
-                      {{ "IMPORTANT" | translate }}
-                    </label>
-
-                    <label class="radio">
-                      <input type="radio" name="priority" />
-                      {{ "URGENT" | translate }}
-                    </label>
-                  </div>
-                </div>
-
-                <div class="form-group full">
-                  <label>{{ "DESCRIPTION" | translate }}</label>
-                  <textarea
-                    rows="4"
-                    placeholder="{{ 'ENTER_HERE' | translate }}"
-                  ></textarea>
-                </div>
-
-                <div class="form-group full">
-                  <label>{{ "UPLOAD_BANNER_IMAGE" | translate }}</label>
-
-                  <div class="upload-box">
-                    <i class="upload-icon"
-                      ><app-download-icon></app-download-icon>
-                    </i>
-                    <span class="upload-text">{{
-                      "UPLOAD_HERE" | translate
-                    }}</span>
-                    <div class="upload-info">
-                      800px * 350px &nbsp;|&nbsp; Max 5MB
-                    </div>
-                    <input type="file" />
-                  </div>
-                </div>
-              </div>
-            </app-white-card>
-          </div>
-        </div>
+        </form>
       </ng-container>
     </div>
   </ng-template>

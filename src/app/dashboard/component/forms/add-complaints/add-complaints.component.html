@@ -1,19 +1,42 @@
 <form class="commonForm" [formGroup]="complaintForm">
   <div class="row g-3">
+    <!-- Link Property + Unit -->
     <div class="col-md-6">
-      <label class="form-label">Unit ID<span>*</span></label>
-      <input
-        type="number"
-        class="form-control"
-        [class.is-invalid]="isInvalid(complaintForm, 'unit_id').status"
-        placeholder="1"
-        formControlName="unit_id"
-      />
-      @if (isInvalid(complaintForm, "unit_id").status) {
-        <small class="errorMsg">{{
-          isInvalid(complaintForm, "unit_id").msg
-        }}</small>
-      }
+      <label class="form-label">{{ "SELECT_PMC" | translate }}</label>
+      <app-custom-select
+        [options]="pmcOptions"
+        key="key"
+        value="value"
+        formControlName="pmc"
+        [placeholder]="'SELECT_PMC' | translate"
+        [selectedOption]="selectedPmc"
+        (optionSelected)="onPmcSelected($event)"
+      ></app-custom-select>
+    </div>
+    <div class="col-md-6">
+      <app-form-select-field
+        [label]="'LINK_PROPERTY' | translate"
+        [required]="true"
+        [options]="propertyOptions"
+        [showFilterInput]="true"
+        [placeholder]="'SELECT_OPTION' | translate"
+        [selectedOption]="selectedPropertyOption"
+        (optionSelected)="onPropertySelect($event)"
+      ></app-form-select-field>
+    </div>
+
+    <div class="col-md-6">
+      <app-form-select-field
+        [label]="'UNIT' | translate"
+        [required]="true"
+        [options]="unitOptions"
+        [showFilterInput]="true"
+        [placeholder]="'SELECT_OPTION' | translate"
+        [form]="complaintForm"
+        controlName="unit_id"
+        [selectedOption]="selectedUnitOption"
+        (optionSelected)="onUnitSelect($event)"
+      ></app-form-select-field>
     </div>
 
     <div class="col-md-6">
@@ -24,8 +47,10 @@
         [form]="complaintForm"
         controlName="service_type"
         [placeholder]="'SELECT_OPTION' | translate"
+        [selectedOption]="selectedServiceType"
         (optionSelected)="
-          complaintForm.patchValue({ service_type: $event?.key })
+          complaintForm.patchValue({ service_type: $event?.key });
+          selectedServiceType = $event
         "
       ></app-form-select-field>
     </div>
@@ -38,7 +63,11 @@
         [form]="complaintForm"
         controlName="priority"
         [placeholder]="'SELECT_OPTION' | translate"
-        (optionSelected)="complaintForm.patchValue({ priority: $event?.key })"
+        [selectedOption]="selectedPriority"
+        (optionSelected)="
+          complaintForm.patchValue({ priority: $event?.key });
+          selectedPriority = $event
+        "
       ></app-form-select-field>
     </div>
 

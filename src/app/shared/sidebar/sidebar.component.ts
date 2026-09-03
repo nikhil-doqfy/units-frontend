@@ -138,7 +138,7 @@ export class SidebarComponent implements OnInit {
       .subscribe((event: any) => {
         this.currentLanguage = event.lang;
       });
-    translate.use('en');
+    this.currentLanguage = this.sharedService.getCurrentLanguage();
   }
 
   ngOnInit() {

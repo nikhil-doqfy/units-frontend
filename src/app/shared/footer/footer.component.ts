@@ -23,10 +23,8 @@ export class FooterComponent {
     private sharedService: SharedService,
     private router: Router,
     private themeService: ThemeService,
-    private translate: TranslateService
-  ) {
-    translate.use('en');
-  }
+    private translate: TranslateService,
+  ) {}
 
   setLanguage(lang: string) {
     this.translate.use(lang);

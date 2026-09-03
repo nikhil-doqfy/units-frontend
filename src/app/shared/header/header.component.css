@@ -37,6 +37,12 @@
 
 .dashHdrLogo img {
   height: 32px;
+  mix-blend-mode: multiply;
+}
+
+:host-context(.dark-theme) .dashHdrLogo img {
+  mix-blend-mode: normal;
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .hdrOptns {
@@ -243,6 +249,10 @@
   font-weight: 400;
   display: block;
   margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 183px;
 }
 
 .hdrUserDrpdwnLinks {

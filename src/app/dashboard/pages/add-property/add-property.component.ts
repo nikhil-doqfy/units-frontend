@@ -9,7 +9,12 @@ import { FormSelectFieldComponent } from '../../../shared/component/form-select-
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { PropertyFormService } from '../../services/property-form.service';
 import { PropertyService } from '../../services/property.service';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -55,6 +60,7 @@ interface UploadConfig {
     TranslateModule,
     WhiteCardComponent,
     MapPickerComponent,
+    FormsModule,
   ],
   templateUrl: './add-property.component.html',
   styleUrl: './add-property.component.css',
@@ -87,6 +93,8 @@ export class AddPropertyComponent {
   parkingCount: any[] = [];
   pmcList: any[] = [];
   selectedPmc: any = null;
+  selectedPlatform: any = null;
+  filterPlatform: string | null = null;
 
   commercialsForm = this.propertyFormService.propertyCommercialsForm;
   imagesForm = this.propertyFormService.propertyImagesForm;
@@ -97,6 +105,12 @@ export class AddPropertyComponent {
   engine!: StepEngine;
   steps: StepSchema[] = [];
 
+  platformOptions = [
+    { key: 'BAYUT', value: 'Bayut' },
+    { key: 'PROPERTY_FINDER', value: 'Property Finder' },
+    { key: 'DIRECT', value: 'Direct' },
+    { key: 'REFERRAL', value: 'Referral' },
+  ];
   blocksBulkColumns = [
     { key: 'block_name', label: 'Block/Tower Name' },
     { key: 'no_of_floors', label: 'No of Floors' },

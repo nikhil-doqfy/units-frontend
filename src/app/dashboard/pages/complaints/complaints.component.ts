@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -45,6 +51,7 @@ import { AddComplaintsComponent } from '../../component/forms/add-complaints/add
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
 import { DeleteIconComponent } from '../../component/icons/delete-icon/delete-icon.component';
+import { UserRole } from '../../../theme.service';
 
 @Component({
   selector: 'app-complaints',
@@ -86,8 +93,7 @@ import { DeleteIconComponent } from '../../component/icons/delete-icon/delete-ic
 })
 export class ComplaintsComponent {
   @ViewChild('searchComp') searchComp!: any;
-  @ViewChild('addComplaintContent')
-  addComplaintContent!: AddComplaintsComponent;
+  @ViewChild('addComplaintContent') addComplaintContent!: TemplateRef<any>;
   @ViewChild(AddComplaintsComponent)
   addComplaintComponent!: AddComplaintsComponent;
   private sharedService = inject(SharedService);
@@ -124,10 +130,10 @@ export class ComplaintsComponent {
   componentName = 'ComplaintsComponent';
   breadcrumbData: BreadCrumb[] = [];
   selected: string = 'Property: All';
-  role: 'OWNER' | 'PMC' | 'TENANT' | null = null;
+  role: UserRole | null = null;
   showComplaintModal = false;
   showAllPhotos = false;
-
+  currentRole: UserRole = 'property-manager';
   complaintStats = [
     {
       value: '12000',
@@ -181,7 +187,7 @@ export class ComplaintsComponent {
     this.sharedService.initLanguage();
     this.initLanguageListener();
     const storedRole = this.storageService.getUserRole();
-    this.role = storedRole ? (storedRole.toUpperCase() as any) : null;
+    this.role = storedRole ? (storedRole as UserRole) : null;
     // this.getTickets();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -345,11 +351,16 @@ export class ComplaintsComponent {
   //----------------------------------compalint modal --------------------------------------------------
 
   get isOwnerOrPmc() {
-    return this.role === 'OWNER' || this.role === 'PMC';
+    return this.role === 'owner' || this.role === 'property-manager';
   }
 
   get isTenant() {
-    return this.role === 'TENANT';
+    return this.role === 'tenant';
+  }
+
+  /** True for roles that can create/edit complaints — everyone except owner */
+  get canManageComplaints() {
+    return this.role !== 'owner';
   }
 
   closeComplaintModal() {
@@ -359,7 +370,7 @@ export class ComplaintsComponent {
     this.isEditMode = false;
     this.selectedComplaint = null;
 
-    const modalRef = this.modalService.open(this.addComplaintContent, {
+    this.modalService.open(this.addComplaintContent, {
       centered: true,
       size: 'lg',
       backdrop: true,
@@ -389,14 +400,31 @@ export class ComplaintsComponent {
 
   openEditComplaint(item: any) {
     this.isEditMode = true;
-    this.selectedComplaint = item;
-
-    const modalRef = this.modalService.open(this.addComplaintContent, {
-      centered: true,
-      size: 'lg',
-      backdrop: true,
-      windowClass: 'complaint-modal-window',
-    });
+    // Fetch full detail first so all fields (PMC, property, unit, slots) are available
+    this.complaintService
+      .getComplaintDetails(item.code)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.selectedComplaint = resp?.content ?? item;
+          this.modalService.open(this.addComplaintContent, {
+            centered: true,
+            size: 'lg',
+            backdrop: true,
+            windowClass: 'complaint-modal-window',
+          });
+        },
+        error: () => {
+          // Fallback: open with the list-row data if detail call fails
+          this.selectedComplaint = item;
+          this.modalService.open(this.addComplaintContent, {
+            centered: true,
+            size: 'lg',
+            backdrop: true,
+            windowClass: 'complaint-modal-window',
+          });
+        },
+      });
   }
   onDeleteClick(item: any): void {
     if (!item?.code) return;

@@ -215,14 +215,24 @@ export class TenantsComponent {
     this.tenantsService
       .exportTenantsByTab(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `tenants_${this.backendTab}.csv`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        this.alertService.success('Exported successfully');
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `tenants_${this.backendTab}.csv`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.alertService.success('Exported successfully');
+        },
+        error: (error) => {
+          console.error('Export failed:', error);
+
+          this.alertService.error(
+            error?.error?.message ||
+              'Failed to export tenants. Please try again.',
+          );
+        },
       });
   }
 

@@ -7,6 +7,12 @@
 .no-data-img {
   width: 160px;
   margin-bottom: 15px;
+  mix-blend-mode: multiply;
+}
+
+:host-context(.dark-theme) .no-data-img {
+  mix-blend-mode: normal;
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .title {

@@ -18,10 +18,8 @@ export class SidebarSupportComponent {
   openSidebarValue = true;
   constructor(
     private sharedService: SharedService,
-    private translate: TranslateService
-  ) {
-    translate.use('en');
-  }
+    private translate: TranslateService,
+  ) {}
 
   ngOnInit() {
     this.sharedService.openSidebarValue$

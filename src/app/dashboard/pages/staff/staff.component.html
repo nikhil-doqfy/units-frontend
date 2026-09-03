@@ -128,7 +128,22 @@
                   >
                   </app-table-img-item>
                 </td>
-                <td>{{ staff?.pmcs?.[0]?.value || "--" }}</td>
+                <td
+                  [ngbTooltip]="getRemainingPmcNames(staff)"
+                  placement="top"
+                  container="body"
+                >
+                  <span
+                    *ngFor="let pmc of staff?.pmcs?.slice(0, 2); let i = index"
+                  >
+                    {{ pmc.value }}
+                    <span *ngIf="i < 1 && staff?.pmcs?.length > 1">, </span>
+                  </span>
+
+                  <span *ngIf="staff?.pmcs?.length > 2">
+                    +{{ staff.pmcs.length - 2 }}
+                  </span>
+                </td>
                 <td>{{ staff.code || "_" }}</td>
                 <td>{{ staff.contact_number | maskPhone }}</td>
 
@@ -273,8 +288,7 @@
           : 'N/A',
       },
     ]"
-    [showEdit]="true"
-    (edit)="openEditStaffModal(addStaffContent, selectedStaff.staff_id)"
+    [showEdit]="false"
     (back)="handleBackClick()"
   ></app-table-view-card>
 
@@ -285,6 +299,7 @@
           <app-table-title
             [title]="'PROPERTIES_ASSIGNED' | translate"
             [subtitle]="'(' + totalRecords + ')'"
+            (onRefresh)="onRefresh()"
           ></app-table-title>
         </div>
         <div class="col-md-auto">

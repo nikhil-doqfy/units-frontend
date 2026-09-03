@@ -3,9 +3,11 @@
     <p>
       {{ "SUPPORT_HELP_TEXT" | translate }}
     </p>
-
-    <button class="btn btnCommon btn-primary" (click)="onCreateComplaint()">
-      {{ "CREATE_COMPLAINT" | translate }}
+    <button
+      class="btn btnCommon btnPrimary btnMyTickets"
+      (click)="openMyTickets()"
+    >
+      My Tickets
     </button>
   </div>
   <div class="raiseCmplntInfo">

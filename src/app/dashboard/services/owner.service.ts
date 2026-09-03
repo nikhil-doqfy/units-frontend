@@ -35,12 +35,19 @@ export class OwnerService {
   }
 
   deleteOwner(ownerId: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_ADDRESS}/user/owner?owner_id=${ownerId}`);
+    return this.http.delete(
+      `${this.SERVER_ADDRESS}/user/owner?owner_id=${ownerId}`,
+    );
   }
 
   exportOwners(params: Record<string, any> = {}): Observable<Blob> {
-    const queryString = this.sharedService.getQueryString({ ...params, export: 'csv' });
-    return this.http.get(`${this.SERVER_ADDRESS}/user/owner${queryString}`, { responseType: 'blob' });
+    const queryString = this.sharedService.getQueryString({
+      ...params,
+      export: 'csv',
+    });
+    return this.http.get(`${this.SERVER_ADDRESS}/user/owner${queryString}`, {
+      responseType: 'blob',
+    });
   }
 
   // ------------------------- addOwnerToInvite -------------------------
@@ -52,7 +59,7 @@ export class OwnerService {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
       `${this.SERVER_ADDRESS}/company_owners_csv${queryString}`,
-      { responseType: 'blob' }
+      { responseType: 'blob' },
     );
   }
 
@@ -60,5 +67,12 @@ export class OwnerService {
     let url = `${this.SERVER_ADDRESS}/lease_pdf?lease_id=${leaseId}`;
     if (type === 'download') url += `&purpose=download`;
     return this.http.get(url);
+  }
+  export(params: any): Observable<Blob> {
+    const query = this.sharedService.getQueryString(params);
+
+    return this.http.get(`${this.SERVER_ADDRESS}/user/owner/export${query}`, {
+      responseType: 'blob',
+    });
   }
 }

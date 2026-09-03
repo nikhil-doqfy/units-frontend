@@ -18,6 +18,11 @@
 </head>
 
 <body>
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-theme');
+    }
+  </script>
   <app-root></app-root>
 </body>
 

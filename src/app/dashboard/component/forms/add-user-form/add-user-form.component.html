@@ -28,6 +28,18 @@
     </div>
 
     <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">{{ "SELECT_PMC" | translate }}</label>
+        <app-custom-select
+          [options]="pmcOptions"
+          key="key"
+          value="value"
+          formControlName="pmc"
+          [placeholder]="'SELECT_PMC' | translate"
+          [selectedOption]="selectedPmc"
+          (optionSelected)="onPmcSelected($event)"
+        ></app-custom-select>
+      </div>
       <!-- First Name -->
       <div class="col-md-6">
         <label class="form-label"

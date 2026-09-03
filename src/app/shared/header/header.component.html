@@ -236,6 +236,7 @@
             </button>
 
             <button
+              *ngIf="currentRole === 'property-manager'"
               type="button"
               class="btn btnCommon btnWhite"
               (click)="openSearch()"
@@ -288,13 +289,13 @@
                       class="commonTabs"
                     >
                       <li [ngbNavItem]="1">
-                        <button ngbNavLink>
+                        <button ngbNavLink (click)="onNotificationTabChange('all')">
                           {{ "ALL" | translate }} <span>{{ allCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
                           <!-- Empty state first -->
                           <div
-                            *ngIf="readNotifications.length === 0"
+                            *ngIf="unDeletedNotifications.length === 0"
                             class="hdrNotiEmptyCol"
                           >
                             <div class="hdrNotiEmptyInfo">
@@ -314,7 +315,7 @@
                               (click)="markNotiFicationAsRead(notification.id)"
                             >
                               <h5>
-                                {{ notification.notification_type }}
+                                {{ notification.title }}
                                 <span></span>
                               </h5>
                               <p>
@@ -322,14 +323,15 @@
                               </p>
                               <div
                                 class="hdrNotiDrpdwnTime"
-                                *ngIf="notification.timestamp"
+                                *ngIf="notification.created"
                               >
                                 <span>{{
-                                  notification.timestamp | date: "d MMM yyyy"
+                                  notification.created * 1000
+                                    | date: "d MMM yyyy"
                                 }}</span>
                                 <span>|</span>
                                 <span>{{
-                                  notification.timestamp | date: "hh.mma"
+                                  notification.created * 1000 | date: "hh.mma"
                                 }}</span>
                               </div>
                             </div>
@@ -345,7 +347,7 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="2">
-                        <button ngbNavLink>
+                        <button ngbNavLink (click)="onNotificationTabChange('read')">
                           {{ "READ" | translate }}<span>{{ readCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
@@ -366,7 +368,7 @@
                           >
                             <div class="hdrNotiDrpdwnTtl">
                               <h5>
-                                {{ notification.notification_type }}
+                                {{ notification.title }}
                                 <span></span>
                               </h5>
                               <p>
@@ -374,14 +376,15 @@
                               </p>
                               <div
                                 class="hdrNotiDrpdwnTime"
-                                *ngIf="notification.timestamp"
+                                *ngIf="notification.created"
                               >
                                 <span>{{
-                                  notification.timestamp | date: "d MMM yyyy"
+                                  notification.created * 1000
+                                    | date: "d MMM yyyy"
                                 }}</span>
                                 <span>|</span>
                                 <span>{{
-                                  notification.timestamp | date: "hh.mma"
+                                  notification.created * 1000 | date: "hh.mma"
                                 }}</span>
                               </div>
                             </div>
@@ -397,7 +400,7 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="3">
-                        <button ngbNavLink>
+                        <button ngbNavLink (click)="onNotificationTabChange('unread')">
                           {{ "UNREAD" | translate
                           }}<span>{{ unreadCount }}</span>
                         </button>
@@ -419,9 +422,12 @@
                             class="hdrNotiDrpdwnCol unread"
                             *ngFor="let notification of unreadNotifications"
                           >
-                            <div class="hdrNotiDrpdwnTtl">
+                            <div
+                              class="hdrNotiDrpdwnTtl"
+                              (click)="markNotiFicationAsRead(notification.id)"
+                            >
                               <h5>
-                                {{ notification.notification_type }}
+                                {{ notification.title }}
                                 <span></span>
                               </h5>
                               <p>
@@ -429,14 +435,15 @@
                               </p>
                               <div
                                 class="hdrNotiDrpdwnTime"
-                                *ngIf="notification.timestamp"
+                                *ngIf="notification.created"
                               >
                                 <span>{{
-                                  notification.timestamp | date: "d MMM yyyy"
+                                  notification.created * 1000
+                                    | date: "d MMM yyyy"
                                 }}</span>
                                 <span>|</span>
                                 <span>{{
-                                  notification.timestamp | date: "hh.mma"
+                                  notification.created * 1000 | date: "hh.mma"
                                 }}</span>
                               </div>
                             </div>
@@ -452,7 +459,7 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="4">
-                        <button ngbNavLink>{{ "CLEARED" | translate }}</button>
+                        <button ngbNavLink (click)="onNotificationTabChange('cleared')">{{ "CLEARED" | translate }}</button>
                         <ng-template ngbNavContent>
                           <div
                             class="hdrNotiEmptyCol"
@@ -486,20 +493,21 @@
                           >
                             <div class="hdrNotiDrpdwnTtl">
                               <h5>
-                                {{ notification.notification_type }}
+                                {{ notification.title }}
                                 <span></span>
                               </h5>
                               <p>{{ notification.message }}</p>
                               <div
                                 class="hdrNotiDrpdwnTime"
-                                *ngIf="notification.timestamp"
+                                *ngIf="notification.created"
                               >
                                 <span>{{
-                                  notification.timestamp | date: "d MMM yyyy"
+                                  notification.created * 1000
+                                    | date: "d MMM yyyy"
                                 }}</span>
                                 <span>|</span>
                                 <span>{{
-                                  notification.timestamp | date: "hh.mma"
+                                  notification.created * 1000 | date: "hh.mma"
                                 }}</span>
                               </div>
                             </div>
@@ -691,9 +699,14 @@
   </div>
   <div class="offcanvas-body">
     <div class="hdrNotiDrpdwnBody">
-      <ul ngbNav #navOffcanvas="ngbNav" [(activeId)]="active" class="commonTabs">
+      <ul
+        ngbNav
+        #navOffcanvas="ngbNav"
+        [(activeId)]="active"
+        class="commonTabs"
+      >
         <li [ngbNavItem]="1">
-          <button ngbNavLink>
+          <button ngbNavLink (click)="onNotificationTabChange('all')">
             {{ "ALL" | translate }} <span>{{ allCount }}</span>
           </button>
           <ng-template ngbNavContent>
@@ -717,12 +730,16 @@
                 class="hdrNotiDrpdwnTtl"
                 (click)="markNotiFicationAsRead(notification.id)"
               >
-                <h5>{{ notification.notification_type }}<span></span></h5>
+                <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
-                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
-                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
+                  <span>{{
+                    notification.created * 1000 | date: "d MMM yyyy"
+                  }}</span>
                   <span>|</span>
-                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                  <span>{{
+                    notification.created * 1000 | date: "hh.mma"
+                  }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
@@ -735,14 +752,11 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="2">
-          <button ngbNavLink>
+          <button ngbNavLink (click)="onNotificationTabChange('read')">
             {{ "READ" | translate }}<span>{{ readCount }}</span>
           </button>
           <ng-template ngbNavContent>
-            <div
-              *ngIf="readNotifications.length === 0"
-              class="hdrNotiEmptyCol"
-            >
+            <div *ngIf="readNotifications.length === 0" class="hdrNotiEmptyCol">
               <div class="hdrNotiEmptyInfo">
                 <div class="hdrNotiEmptyIcon">
                   <img src="assets/Bell.svg" />
@@ -755,12 +769,16 @@
               *ngFor="let notification of readNotifications"
             >
               <div class="hdrNotiDrpdwnTtl">
-                <h5>{{ notification.notification_type }}<span></span></h5>
+                <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
-                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
-                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
+                  <span>{{
+                    notification.created * 1000 | date: "d MMM yyyy"
+                  }}</span>
                   <span>|</span>
-                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                  <span>{{
+                    notification.created * 1000 | date: "hh.mma"
+                  }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
@@ -773,7 +791,7 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="3">
-          <button ngbNavLink>
+          <button ngbNavLink (click)="onNotificationTabChange('unread')">
             {{ "UNREAD" | translate }}<span>{{ unreadCount }}</span>
           </button>
           <ng-template ngbNavContent>
@@ -792,13 +810,20 @@
               class="hdrNotiDrpdwnCol unread"
               *ngFor="let notification of unreadNotifications"
             >
-              <div class="hdrNotiDrpdwnTtl">
-                <h5>{{ notification.notification_type }}<span></span></h5>
+              <div
+                class="hdrNotiDrpdwnTtl"
+                (click)="markNotiFicationAsRead(notification.id)"
+              >
+                <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
-                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
-                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
+                  <span>{{
+                    notification.created * 1000 | date: "d MMM yyyy"
+                  }}</span>
                   <span>|</span>
-                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                  <span>{{
+                    notification.created * 1000 | date: "hh.mma"
+                  }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
@@ -811,7 +836,7 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="4">
-          <button ngbNavLink>{{ "CLEARED" | translate }}</button>
+          <button ngbNavLink (click)="onNotificationTabChange('cleared')">{{ "CLEARED" | translate }}</button>
           <ng-template ngbNavContent>
             <div
               class="hdrNotiEmptyCol"
@@ -830,12 +855,16 @@
               *ngFor="let notification of deletedNotifications"
             >
               <div class="hdrNotiDrpdwnTtl">
-                <h5>{{ notification.notification_type }}<span></span></h5>
+                <h5>{{ notification.title }}<span></span></h5>
                 <p>{{ notification.message }}</p>
-                <div class="hdrNotiDrpdwnTime" *ngIf="notification.timestamp">
-                  <span>{{ notification.timestamp | date: "d MMM yyyy" }}</span>
+                <div class="hdrNotiDrpdwnTime" *ngIf="notification.created">
+                  <span>{{
+                    notification.created * 1000 | date: "d MMM yyyy"
+                  }}</span>
                   <span>|</span>
-                  <span>{{ notification.timestamp | date: "hh.mma" }}</span>
+                  <span>{{
+                    notification.created * 1000 | date: "hh.mma"
+                  }}</span>
                 </div>
               </div>
               <div class="hdrNotiDrpdwnDlt">
