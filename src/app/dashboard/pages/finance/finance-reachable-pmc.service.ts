@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { PmcService } from '../services/pmc.service';
+import { PmcService } from '../../services/pmc.service';
 
 export interface ReachablePmc {
   id: string;

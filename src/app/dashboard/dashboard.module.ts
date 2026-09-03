@@ -296,7 +296,7 @@ export const routes: Routes = [
       {
         path: 'finance',
         loadChildren: () =>
-          import('./finance/finance-routing.module').then(
+          import('./pages/finance/finance-routing.module').then(
             (m) => m.FinanceRoutingModule,
           ),
         canActivate: [authGuard, permissionGuard],

@@ -2,16 +2,16 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
-import { CustomSelectComponent } from '../component/custom-select/custom-select.component';
-import { FinanceReportsService } from './finance-reports.service';
-import { unwrapFinanceEnvelope } from './finance-envelope';
-import { FinanceActivationState } from './finance-activation.resolver';
+import { WhiteCardComponent } from '../../../../shared/component/white-card/white-card.component';
+import { CustomSelectComponent } from '../../../component/custom-select/custom-select.component';
+import { FinanceReportsService } from '../../../services/finance-reports.service';
+import { unwrapFinanceEnvelope } from '../finance-envelope';
+import { FinanceActivationState } from '../finance-activation.resolver';
 import {
   FinanceReachablePmcService,
   ReachablePmc,
-} from './finance-reachable-pmc.service';
-import { StorageService } from '../../shared/services/storage.service';
+} from '../finance-reachable-pmc.service';
+import { StorageService } from '../../../../shared/services/storage.service';
 
 interface ProfitLossContent {
   net_profit_loss: number;

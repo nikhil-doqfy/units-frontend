@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FinanceOverviewComponent } from './finance-overview.component';
-import { FinanceLandingComponent } from './finance-landing.component';
+import { FinanceOverviewComponent } from './overview/finance-overview.component';
+import { FinanceLandingComponent } from './landing/finance-landing.component';
 import { financeLandingGuard } from './finance-landing.guard';
 import { financePmcReachableGuard } from './finance-pmc-reachable.guard';
 import { financeActivationResolver } from './finance-activation.resolver';
