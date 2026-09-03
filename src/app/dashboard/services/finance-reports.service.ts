@@ -60,4 +60,15 @@ export class FinanceReportsService {
       `${this.FINANCE_SERVER_ADDRESS}/reports/balance-sheet/${queryString}`,
     );
   }
+
+  getAgeing(pmcId: string, page: number, pageSize: number): Observable<any> {
+    const queryString = this.sharedService.getQueryString({
+      pmc_id: pmcId,
+      page: page,
+      page_size: pageSize,
+    });
+    return this.http.get(
+      `${this.FINANCE_SERVER_ADDRESS}/reports/ageing/${queryString}`,
+    );
+  }
 }

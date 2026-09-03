@@ -6,6 +6,7 @@ import { FinanceLandingComponent } from './landing/finance-landing.component';
 import { TrialBalanceComponent } from './trial-balance/trial-balance.component';
 import { ProfitLossComponent } from './profit-loss/profit-loss.component';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
+import { AgeingComponent } from './ageing/ageing.component';
 import { financeLandingGuard } from './finance-landing.guard';
 import { financePmcReachableGuard } from './finance-pmc-reachable.guard';
 import { financeActivationResolver } from './finance-activation.resolver';
@@ -41,6 +42,12 @@ const routes: Routes = [
   {
     path: ':pmcId/balance-sheet',
     component: BalanceSheetComponent,
+    canActivate: [financePmcReachableGuard],
+    resolve: { financeActivation: financeActivationResolver },
+  },
+  {
+    path: ':pmcId/ageing',
+    component: AgeingComponent,
     canActivate: [financePmcReachableGuard],
     resolve: { financeActivation: financeActivationResolver },
   },
