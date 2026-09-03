@@ -1,0 +1,46 @@
+<div class="table-responsive reportTable">
+  <table class="table">
+    <thead>
+      <tr>
+        @for (column of columns; track column.key) {
+          <th [class]="column.align ? 'text-' + column.align : ''">
+            {{ column.label }}
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows; track $index) {
+        <tr>
+          @for (column of columns; track column.key) {
+            <td [class]="column.align ? 'text-' + column.align : ''">
+              {{ row[column.key] }}
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+    @if (totals) {
+      <tfoot>
+        <tr>
+          @for (column of columns; track column.key) {
+            <td [class]="column.align ? 'text-' + column.align : ''">
+              {{ totals[column.key] }}
+            </td>
+          }
+        </tr>
+      </tfoot>
+    }
+  </table>
+</div>
+
+@if (paginated) {
+  <app-table-pagination
+    [componentName]="componentName"
+    [currentPage]="currentPage"
+    [totalRecords]="totalRecords"
+    [rowsPerPage]="rowsPerPage"
+    [disabled]="disabled"
+    (pageChange)="onPageChange($event)"
+  />
+}

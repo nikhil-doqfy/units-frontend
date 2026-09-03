@@ -1,0 +1,34 @@
+<div class="row g-2 dateRangePicker">
+  <div class="col-6">
+    <div class="datePicker">
+      <input
+        class="form-control"
+        placeholder="YYYY-MM-DD"
+        ngbDatepicker
+        #fromDate="ngbDatepicker"
+        [ngModel]="from"
+        (ngModelChange)="onFromChange($event)"
+        [disabled]="isDisabled"
+      />
+      <button type="button" (click)="fromDate.toggle()" [disabled]="isDisabled">
+        <app-date-icon />
+      </button>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="datePicker">
+      <input
+        class="form-control"
+        placeholder="YYYY-MM-DD"
+        ngbDatepicker
+        #toDate="ngbDatepicker"
+        [ngModel]="to"
+        (ngModelChange)="onToChange($event)"
+        [disabled]="isDisabled"
+      />
+      <button type="button" (click)="toDate.toggle()" [disabled]="isDisabled">
+        <app-date-icon />
+      </button>
+    </div>
+  </div>
+</div>
