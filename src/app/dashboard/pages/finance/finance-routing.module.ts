@@ -5,6 +5,7 @@ import { FinanceOverviewComponent } from './overview/finance-overview.component'
 import { FinanceLandingComponent } from './landing/finance-landing.component';
 import { TrialBalanceComponent } from './trial-balance/trial-balance.component';
 import { ProfitLossComponent } from './profit-loss/profit-loss.component';
+import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
 import { financeLandingGuard } from './finance-landing.guard';
 import { financePmcReachableGuard } from './finance-pmc-reachable.guard';
 import { financeActivationResolver } from './finance-activation.resolver';
@@ -34,6 +35,12 @@ const routes: Routes = [
   {
     path: ':pmcId/profit-loss',
     component: ProfitLossComponent,
+    canActivate: [financePmcReachableGuard],
+    resolve: { financeActivation: financeActivationResolver },
+  },
+  {
+    path: ':pmcId/balance-sheet',
+    component: BalanceSheetComponent,
     canActivate: [financePmcReachableGuard],
     resolve: { financeActivation: financeActivationResolver },
   },
