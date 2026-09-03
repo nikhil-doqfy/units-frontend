@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FinanceStubComponent } from './finance-stub.component';
+import { FinanceOverviewComponent } from './finance-overview.component';
 import { FinanceLandingComponent } from './finance-landing.component';
 import { financeLandingGuard } from './finance-landing.guard';
 import { financePmcReachableGuard } from './finance-pmc-reachable.guard';
@@ -19,7 +19,7 @@ const routes: Routes = [
   },
   {
     path: ':pmcId/overview',
-    component: FinanceStubComponent,
+    component: FinanceOverviewComponent,
     canActivate: [financePmcReachableGuard],
     resolve: { financeActivation: financeActivationResolver },
   },

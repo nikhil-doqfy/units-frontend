@@ -1,0 +1,43 @@
+<ng-container
+  *ngIf="
+    financeActivation === 'not_activated' ||
+    financeActivation === 'activated_empty'
+  "
+>
+  <app-white-card
+    title="Finance Overview"
+    [description]="
+      financeActivation === 'not_activated'
+        ? 'Finance has not been set up for this PMC yet.'
+        : 'Finance is activated for this PMC, but there is no activity yet.'
+    "
+  ></app-white-card>
+</ng-container>
+
+<div class="row" *ngIf="financeActivation === 'activated'">
+  <div class="col-md-4">
+    <app-white-card title="Profit &amp; Loss" subtitle="Current month">
+      <p *ngIf="profitLossFailed">Failed to load Profit &amp; Loss.</p>
+      <p *ngIf="!profitLossFailed && !profitLoss">Loading…</p>
+      <p *ngIf="!profitLossFailed && profitLoss">
+        {{ profitLoss.net_profit_loss }}
+      </p>
+    </app-white-card>
+  </div>
+
+  <div class="col-md-4">
+    <app-white-card title="Trial Balance" subtitle="Current month">
+      <p *ngIf="trialBalanceFailed">Failed to load Trial Balance.</p>
+      <p *ngIf="!trialBalanceFailed && !trialBalance">Loading…</p>
+      <p *ngIf="!trialBalanceFailed && trialBalance">
+        {{ trialBalance.balanced ? 'Balanced' : 'Unbalanced' }}
+      </p>
+    </app-white-card>
+  </div>
+
+  <div class="col-md-4">
+    <app-white-card title="Accounts Receivable" subtitle="Outstanding">
+      <p>Not yet available</p>
+    </app-white-card>
+  </div>
+</div>
