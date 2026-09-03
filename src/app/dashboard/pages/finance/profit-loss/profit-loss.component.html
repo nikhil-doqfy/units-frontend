@@ -1,0 +1,35 @@
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="Profit &amp; Loss"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <app-date-range-picker [formControl]="dateRangeControl"></app-date-range-picker>
+    </div>
+  </div>
+
+  <p *ngIf="loadFailed">Failed to load Profit &amp; Loss.</p>
+
+  <p *ngIf="loading && !loadFailed">Loading…</p>
+
+  <ng-container *ngIf="!loadFailed">
+    <h5>Income</h5>
+    <app-report-table
+      [columns]="columns"
+      [rows]="incomeRows"
+    ></app-report-table>
+
+    <h5 class="mt-4">Expense</h5>
+    <app-report-table
+      [columns]="columns"
+      [rows]="expenseRows"
+    ></app-report-table>
+
+    <div class="alert alert-info mt-3" role="alert">
+      Net Profit &amp; Loss: {{ netProfitLoss }}
+    </div>
+  </ng-container>
+</ng-container>
