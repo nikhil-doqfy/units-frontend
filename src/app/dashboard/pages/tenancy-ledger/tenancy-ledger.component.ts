@@ -235,8 +235,10 @@ export class TenancyLedgerComponent {
     this.applyFilter();
   }
 
-  handleDropdownAction(action: string) {
-    console.log(`${action} action clicked`);
+  handleDropdownAction(action: string, row: any): void {
+    if (action === 'share') {
+      this.shareTenancyLedger(row.lease_id);
+    }
   }
 
   onPageChange(event: PageChange): void {
@@ -389,5 +391,18 @@ export class TenancyLedgerComponent {
     this.selectedReceiptType = type;
     this.showMonthDropdown = true;
     this.detailViewChanges.emit(false);
+  }
+  shareTenancyLedger(leaseId: number): void {
+    this.tenancyLedgerService
+      .shareTenancyLedger(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: any) => {
+          this.alertService.success('Tenancy ledger shared successfully');
+        },
+        error: (error: any) => {
+          this.alertService.error('Failed to share tenancy ledger');
+        },
+      });
   }
 }

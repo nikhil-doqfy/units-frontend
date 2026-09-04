@@ -29,4 +29,9 @@ export class TenancyLedgerService {
       },
     );
   }
+  shareTenancyLedger(leaseId: number): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/share/tenancy-ledger`, {
+      lease_id: leaseId,
+    });
+  }
 }

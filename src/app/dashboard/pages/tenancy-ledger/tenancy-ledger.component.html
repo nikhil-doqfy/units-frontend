@@ -181,12 +181,10 @@
               <td align="center">{{ property.platform || "--" }}</td>
               <td align="center">
                 <div class="tbl-action-inline">
-                  <app-edit-icon></app-edit-icon>
-
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-dropdown
                       [dropdownItems]="documentActions"
-                      (actionClicked)="handleDropdownAction($event)"
+                      (actionClicked)="handleDropdownAction($event, property)"
                     >
                     </app-table-action-dropdown>
                   </div>
