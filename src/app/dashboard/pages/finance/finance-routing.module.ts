@@ -7,8 +7,10 @@ import { TrialBalanceComponent } from './trial-balance/trial-balance.component';
 import { ProfitLossComponent } from './profit-loss/profit-loss.component';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
 import { AgeingComponent } from './ageing/ageing.component';
+import { ReconciliationComponent } from './reconciliation/reconciliation.component';
 import { financeLandingGuard } from './finance-landing.guard';
 import { financePmcReachableGuard } from './finance-pmc-reachable.guard';
+import { financeReconciliationGuard } from './finance-reconciliation.guard';
 import { financeActivationResolver } from './finance-activation.resolver';
 
 // Every Finance route is shaped `dashboard/finance/:pmcId/<page>` — no
@@ -49,6 +51,12 @@ const routes: Routes = [
     path: ':pmcId/ageing',
     component: AgeingComponent,
     canActivate: [financePmcReachableGuard],
+    resolve: { financeActivation: financeActivationResolver },
+  },
+  {
+    path: ':pmcId/reconciliation',
+    component: ReconciliationComponent,
+    canActivate: [financePmcReachableGuard, financeReconciliationGuard],
     resolve: { financeActivation: financeActivationResolver },
   },
 ];

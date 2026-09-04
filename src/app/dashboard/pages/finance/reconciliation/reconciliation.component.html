@@ -1,0 +1,9 @@
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="Reconciliation"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <app-bank-statement-upload [pmcId]="pmcId"></app-bank-statement-upload>
+</ng-container>
