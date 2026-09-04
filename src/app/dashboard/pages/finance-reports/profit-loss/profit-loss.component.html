@@ -1,0 +1,192 @@
+<div class="mt-2">
+  <div class="cmmnTblOuter">
+    <!-- ── Table Header ───────────────────────────────────────── -->
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'Profit & Loss Statement'"
+            [subtitle]="selectedPeriod"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+        </div>
+
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Data Table ─────────────────────────────────────────── -->
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered fr-table">
+          <thead>
+            <tr>
+              <th>Account Code</th>
+              <th>Account Name</th>
+              <th class="text-end">Amount (AED)</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- Loading -->
+            @if (loading) {
+              <tr>
+                <td colspan="3" *align*="center">
+                  <div class="fr-spinner"></div>
+                </td>
+              </tr>
+            } @else {
+              <!-- ── Income Section ─────────────────────────────── -->
+              <tr class="fr-section-header-row">
+                <td colspan="3">
+                  <span class="fr-section-label fr-section-income">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24">
+                      <polyline
+                        points="23 6 13.5 15.5 8.5 10.5 1 18"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    INCOME
+                  </span>
+                </td>
+              </tr>
+
+              @for (row of incomeLines; track row.account_code) {
+                <tr>
+                  <td>
+                    <code class="fr-code">
+                      {{ row.account_code }}
+                    </code>
+                  </td>
+
+                  <td>
+                    {{ row.account_name }}
+                  </td>
+
+                  <td class="text-end fr-credit-cell">
+                    {{ row.amount | number: "1.2-2" }}
+                  </td>
+                </tr>
+              }
+
+              <tr class="fr-subtotal-row">
+                <td colspan="2">
+                  <strong>Total Income</strong>
+                </td>
+
+                <td class="text-end fr-credit-cell">
+                  <strong>
+                    {{ totalIncome | number: "1.2-2" }}
+                  </strong>
+                </td>
+              </tr>
+
+              <!-- ── Expense Section ───────────────────────────── -->
+              <tr class="fr-section-header-row">
+                <td colspan="3">
+                  <span class="fr-section-label fr-section-expense">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24">
+                      <polyline
+                        points="23 18 13.5 8.5 8.5 13.5 1 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    EXPENSES
+                  </span>
+                </td>
+              </tr>
+
+              @for (row of expenseLines; track row.account_code) {
+                <tr>
+                  <td>
+                    <code class="fr-code">
+                      {{ row.account_code }}
+                    </code>
+                  </td>
+
+                  <td>
+                    {{ row.account_name }}
+                  </td>
+
+                  <td class="text-end fr-debit-cell">
+                    {{ row.amount | number: "1.2-2" }}
+                  </td>
+                </tr>
+              }
+
+              <tr class="fr-subtotal-row">
+                <td colspan="2">
+                  <strong>Total Expenses</strong>
+                </td>
+
+                <td class="text-end fr-debit-cell">
+                  <strong>
+                    {{ totalExpense | number: "1.2-2" }}
+                  </strong>
+                </td>
+              </tr>
+            }
+          </tbody>
+
+          <!-- ── Net Profit / Loss ─────────────────────────────── -->
+          @if (!loading) {
+            <tfoot>
+              <tr
+                class="fr-net-pl-row"
+                [class.fr-net-profit]="isProfit"
+                [class.fr-net-loss]="!isProfit"
+              >
+                <td colspan="2">
+                  <strong>
+                    {{ isProfit ? "NET PROFIT" : "NET LOSS" }}
+                  </strong>
+                </td>
+
+                <td class="text-end">
+                  <strong>
+                    {{ netPL | number: "1.2-2" }}
+                  </strong>
+                </td>
+              </tr>
+            </tfoot>
+          }
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Footer: Rows Per Page + Pagination ─────────────────── -->
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+</div>

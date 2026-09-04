@@ -1,0 +1,292 @@
+<!-- ── Stat Cards ──────────────────────────────────────────────────── -->
+<div class="fo-cards-grid">
+  @for (card of statCards; track card.label) {
+    <div class="fo-stat-card">
+      <div class="fo-card-inner">
+        <div class="fo-card-icon fo-icon-{{ card.icon }}">
+          @switch (card.icon) {
+            @case ("cash") {
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                <rect
+                  x="2"
+                  y="5"
+                  width="20"
+                  height="14"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <path
+                  d="M6 12h.01M18 12h.01"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            }
+            @case ("ar") {
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                <path
+                  d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+                <rect
+                  x="9"
+                  y="3"
+                  width="6"
+                  height="4"
+                  rx="1"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <path
+                  d="M9 12h6M9 16h4"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
+            }
+            @case ("pl") {
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                <polyline
+                  points="22 7 13.5 15.5 8.5 10.5 2 17"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <polyline
+                  points="16 7 22 7 22 13"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+            @case ("cheque") {
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                <rect
+                  x="2"
+                  y="7"
+                  width="20"
+                  height="13"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <path
+                  d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <line
+                  x1="8"
+                  y1="13"
+                  x2="16"
+                  y2="13"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
+            }
+          }
+        </div>
+        <div class="fo-card-body">
+          <div class="fo-card-value">{{ card.value }}</div>
+          <div class="fo-card-label">{{ card.label }}</div>
+          <div class="fo-card-sub">{{ card.sub }}</div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- ── Recent Journal Entries ─────────────────────────────────────── -->
+<!-- <div class="mt-3">
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="fo-section-header">
+          <span class="fo-section-title">Recent Journal Entries</span>
+          <span class="fo-section-sub">Last 8 posted entries</span>
+        </div>
+
+        <div class="cmmnTbl">
+          <div class="table-responsive">
+            <table class="table table-bordered fo-je-table">
+              <thead>
+                <tr>
+                  <th>Ref</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th class="text-end">Debit (AED)</th>
+                  <th class="text-end">Credit (AED)</th>
+                  <th>Posted By</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (loading) {
+                  <tr>
+                    <td colspan="6" class="text-center fo-loading-cell">
+                      <div class="fo-spinner"></div>
+                    </td>
+                  </tr>
+                } @else if (stats?.recent_journal_entries?.length) {
+                  @for (je of stats!.recent_journal_entries; track je.id) {
+                    <tr>
+                      <td>
+                        <span class="fo-ref-badge">{{ je.ref }}</span>
+                      </td>
+                      <td class="fo-date-cell">{{ je.date }}</td>
+                      <td>{{ je.description }}</td>
+                      <td class="text-end fo-debit-cell">
+                        @if (je.debit > 0) {
+                          {{ je.debit | number: "1.2-2" }}
+                        } @else {
+                          <span class="fo-dash">—</span>
+                        }
+                      </td>
+                      <td class="text-end fo-credit-cell">
+                        @if (je.credit > 0) {
+                          {{ je.credit | number: "1.2-2" }}
+                        } @else {
+                          <span class="fo-dash">—</span>
+                        }
+                      </td>
+                      <td class="fo-posted-by">{{ je.posted_by }}</td>
+                    </tr>
+                  }
+                } @else {
+                  <tr>
+                    <td colspan="6" class="text-center fo-empty-cell">
+                      No journal entries found.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="mt-3">
+  <div class="cmmnTblOuter">
+    <!-- ── Table Header ───────────────────────────────────────── -->
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <div class="fo-section-header">
+            <span class="fo-section-title">Recent Journal Entries</span>
+            <span class="fo-section-sub">Last 8 posted entries</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Data Table ─────────────────────────────────────────── -->
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered fo-je-table">
+          <thead>
+            <tr>
+              <th>Ref</th>
+              <th>Date</th>
+              <th>Description</th>
+              <th class="text-end">Debit (AED)</th>
+              <th class="text-end">Credit (AED)</th>
+              <th>Posted By</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- Loading -->
+            @if (loading) {
+              <tr>
+                <td colspan="6" *align*="center">
+                  <div class="fo-spinner"></div>
+                </td>
+              </tr>
+
+              <!-- Data -->
+            } @else if (stats?.recent_journal_entries?.length) {
+              @for (je of stats!.recent_journal_entries; track je.id) {
+                <tr>
+                  <td>
+                    <span class="fo-ref-badge">
+                      {{ je.ref }}
+                    </span>
+                  </td>
+
+                  <td class="fo-date-cell">
+                    {{ je.date }}
+                  </td>
+
+                  <td>
+                    {{ je.description }}
+                  </td>
+
+                  <td class="text-end fo-debit-cell">
+                    @if (je.debit > 0) {
+                      {{ je.debit | number: "1.2-2" }}
+                    } @else {
+                      <span class="fo-dash">—</span>
+                    }
+                  </td>
+
+                  <td class="text-end fo-credit-cell">
+                    @if (je.credit > 0) {
+                      {{ je.credit | number: "1.2-2" }}
+                    } @else {
+                      <span class="fo-dash">—</span>
+                    }
+                  </td>
+
+                  <td class="fo-posted-by">
+                    {{ je.posted_by }}
+                  </td>
+                </tr>
+              }
+
+              <!-- Empty State -->
+            } @else {
+              <tr>
+                <td colspan="6" *align*="center">
+                  <app-no-data></app-no-data>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+</div>

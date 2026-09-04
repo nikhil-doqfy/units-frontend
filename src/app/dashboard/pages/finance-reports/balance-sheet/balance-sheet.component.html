@@ -1,0 +1,407 @@
+<!-- ── Balance Sheet Table ────────────────────────────────────────── -->
+<!-- <div class="mt-2">
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="fr-tbl-title">Balance Sheet</div>
+      <div class="fr-tbl-subtitle">As at {{ selectedPeriod }}</div>
+    </div>
+    <div class="fr-toolbar-right">
+      @if (!loading) {
+        <div
+          class="fr-check-banner"
+          [class.fr-balanced]="isBalanced"
+          [class.fr-unbalanced]="!isBalanced"
+        >
+          @if (isBalanced) {
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+              <path
+                d="M20 6L9 17l-5-5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Assets = Liabilities + Equity
+          } @else {
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <line
+                x1="12"
+                y1="8"
+                x2="12"
+                y2="12"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+            Balance check failed
+          }
+        </div>
+      }
+    </div>
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered fr-table">
+          <thead>
+            <tr>
+              <th>Account Code</th>
+              <th>Account Name</th>
+              <th class="text-end">Amount (AED)</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (loading) {
+              <tr>
+                <td colspan="3" class="fr-loading-cell">
+                  <div class="fr-spinner"></div>
+                </td>
+              </tr>
+            } @else {
+              <!-- Assets -->
+<!-- <tr class="fr-section-header-row">
+                <td colspan="3">
+                  <span class="fr-section-label fr-section-asset">ASSETS</span>
+                </td>
+              </tr>
+              @for (row of assetLines; track row.account_code) {
+                <tr>
+                  <td>
+                    <code class="fr-code">{{ row.account_code }}</code>
+                  </td>
+                  <td>{{ row.account_name }}</td>
+                  <td class="text-end">{{ row.amount | number: "1.2-2" }}</td>
+                </tr>
+              }
+              <tr class="fr-subtotal-row">
+                <td colspan="2"><strong>Total Assets</strong></td>
+                <td class="text-end fr-asset-total">
+                  <strong>{{ totalAssets | number: "1.2-2" }}</strong>
+                </td>
+              </tr> -->
+
+<!-- Liabilities -->
+<!-- <tr class="fr-section-header-row">
+                <td colspan="3">
+                  <span class="fr-section-label fr-section-liability"
+                    >LIABILITIES</span
+                  >
+                </td>
+              </tr>
+              @for (row of liabilityLines; track row.account_code) {
+                <tr>
+                  <td>
+                    <code class="fr-code">{{ row.account_code }}</code>
+                  </td>
+                  <td>{{ row.account_name }}</td>
+                  <td class="text-end">{{ row.amount | number: "1.2-2" }}</td>
+                </tr>
+              }
+              <tr class="fr-subtotal-row">
+                <td colspan="2"><strong>Total Liabilities</strong></td>
+                <td class="text-end fr-liab-total">
+                  <strong>{{ totalLiabilities | number: "1.2-2" }}</strong>
+                </td>
+              </tr>
+
+              <!-- Equity -->
+<!-- <tr class="fr-section-header-row">
+                <td colspan="3">
+                  <span class="fr-section-label fr-section-equity">EQUITY</span>
+                </td>
+              </tr>
+              @for (row of equityLines; track row.account_code) {
+                <tr>
+                  <td>
+                    <code class="fr-code">{{ row.account_code }}</code>
+                  </td>
+                  <td>{{ row.account_name }}</td>
+                  <td class="text-end">{{ row.amount | number: "1.2-2" }}</td>
+                </tr>
+              }
+              <tr class="fr-subtotal-row">
+                <td colspan="2"><strong>Total Equity</strong></td>
+                <td class="text-end fr-equity-total">
+                  <strong>{{ totalEquity | number: "1.2-2" }}</strong>
+                </td>
+              </tr>
+            }
+          </tbody>
+          @if (!loading) {
+            <tfoot>
+              <tr class="fr-total-row">
+                <td colspan="2"><strong>TOTAL LIABILITIES + EQUITY</strong></td>
+                <td class="text-end">
+                  <strong>{{ totalLiabEquity | number: "1.2-2" }}</strong>
+                </td>
+              </tr>
+            </tfoot>
+          }
+        </table>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="mt-2">
+  <div class="cmmnTblOuter">
+    <!-- ── Table Header ───────────────────────────────────────── -->
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <!-- Title -->
+        <div class="col-md">
+          <app-table-title
+            [title]="'Balance Sheet'"
+            [subtitle]="'As at ' + selectedPeriod"
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <!-- Balance Check -->
+            @if (!loading) {
+              <div
+                class="fr-check-banner"
+                [class.fr-balanced]="isBalanced"
+                [class.fr-unbalanced]="!isBalanced"
+              >
+                @if (isBalanced) {
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+                    <path
+                      d="M20 6L9 17l-5-5"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+
+                  Assets = Liabilities + Equity
+                } @else {
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+
+                    <line
+                      x1="12"
+                      y1="8"
+                      x2="12"
+                      y2="12"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+
+                  Balance check failed
+                }
+              </div>
+            }
+
+            <!-- Search -->
+            <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+
+            <!-- Export -->
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Data Table ─────────────────────────────────────────── -->
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered fr-table">
+          <thead>
+            <tr>
+              <th>Account Code</th>
+              <th>Account Name</th>
+              <th class="text-end">Amount (AED)</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- Loading -->
+            @if (loading) {
+              <tr>
+                <td colspan="3" *align*="center">
+                  <div class="fr-spinner"></div>
+                </td>
+              </tr>
+            } @else {
+              <!-- ── Assets ───────────────────────────────────── -->
+              <tr class="fr-section-header-row">
+                <td colspan="3">
+                  <span class="fr-section-label fr-section-asset">
+                    ASSETS
+                  </span>
+                </td>
+              </tr>
+
+              @for (row of assetLines; track row.account_code) {
+                <tr>
+                  <td>
+                    <code class="fr-code">
+                      {{ row.account_code }}
+                    </code>
+                  </td>
+
+                  <td>
+                    {{ row.account_name }}
+                  </td>
+
+                  <td class="text-end">
+                    {{ row.amount | number: "1.2-2" }}
+                  </td>
+                </tr>
+              }
+
+              <tr class="fr-subtotal-row">
+                <td colspan="2">
+                  <strong>Total Assets</strong>
+                </td>
+
+                <td class="text-end fr-asset-total">
+                  <strong>
+                    {{ totalAssets | number: "1.2-2" }}
+                  </strong>
+                </td>
+              </tr>
+
+              <!-- ── Liabilities ──────────────────────────────── -->
+              <tr class="fr-section-header-row">
+                <td colspan="3">
+                  <span class="fr-section-label fr-section-liability">
+                    LIABILITIES
+                  </span>
+                </td>
+              </tr>
+
+              @for (row of liabilityLines; track row.account_code) {
+                <tr>
+                  <td>
+                    <code class="fr-code">
+                      {{ row.account_code }}
+                    </code>
+                  </td>
+
+                  <td>
+                    {{ row.account_name }}
+                  </td>
+
+                  <td class="text-end">
+                    {{ row.amount | number: "1.2-2" }}
+                  </td>
+                </tr>
+              }
+
+              <tr class="fr-subtotal-row">
+                <td colspan="2">
+                  <strong>Total Liabilities</strong>
+                </td>
+
+                <td class="text-end fr-liab-total">
+                  <strong>
+                    {{ totalLiabilities | number: "1.2-2" }}
+                  </strong>
+                </td>
+              </tr>
+
+              <!-- ── Equity ───────────────────────────────────── -->
+              <tr class="fr-section-header-row">
+                <td colspan="3">
+                  <span class="fr-section-label fr-section-equity">
+                    EQUITY
+                  </span>
+                </td>
+              </tr>
+
+              @for (row of equityLines; track row.account_code) {
+                <tr>
+                  <td>
+                    <code class="fr-code">
+                      {{ row.account_code }}
+                    </code>
+                  </td>
+
+                  <td>
+                    {{ row.account_name }}
+                  </td>
+
+                  <td class="text-end">
+                    {{ row.amount | number: "1.2-2" }}
+                  </td>
+                </tr>
+              }
+
+              <tr class="fr-subtotal-row">
+                <td colspan="2">
+                  <strong>Total Equity</strong>
+                </td>
+
+                <td class="text-end fr-equity-total">
+                  <strong>
+                    {{ totalEquity | number: "1.2-2" }}
+                  </strong>
+                </td>
+              </tr>
+            }
+          </tbody>
+
+          <!-- ── Total Liabilities + Equity ───────────────────── -->
+          @if (!loading) {
+            <tfoot>
+              <tr class="fr-total-row">
+                <td colspan="2">
+                  <strong> TOTAL LIABILITIES + EQUITY </strong>
+                </td>
+
+                <td class="text-end">
+                  <strong>
+                    {{ totalLiabEquity | number: "1.2-2" }}
+                  </strong>
+                </td>
+              </tr>
+            </tfoot>
+          }
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Footer: Rows Per Page + Pagination ─────────────────── -->
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+</div>

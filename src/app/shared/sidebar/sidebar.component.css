@@ -360,3 +360,200 @@
     padding: 16px;
   }
 }
+
+
+
+/* ══════════════════════════════════════════════════════════════════════
+   Finance Master — Card-style accordion (matches screenshot design)
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Outer white card */
+.fmCard {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ── Card header row (Finance Master + chevron) ── */
+/* Exact match with .dashSdbrItem a */
+.fmCardHeader {
+  background: var(--whiteBg);
+  font-size: 14px;
+  color: var(--greyText);
+  font-weight: 600;
+  line-height: 36.4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--muteBorder1);
+  border-radius: 8px;
+  padding: 0 10px;
+  position: relative;
+  transition: all 0s ease 0s;
+  z-index: 1;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+.fmCardHeader:hover {
+  background-color: var(--muteBg);
+}
+
+/* Active — exact match with .dashSdbrItem a.active + theme-manager */
+.fmCardHeader.fmCardHeaderActive {
+  background: var(--managerGradientBg);
+  color: white;
+  border-color: transparent;
+}
+.fmCardHeader.fmCardHeaderActive .fmCardChevron {
+  color: white;
+}
+.fmCardHeader.fmCardHeaderActive .fmCardHeaderIcon {
+  color: white;
+}
+
+/* When Finance Master page is active — header text turns blue */
+
+.fmCardHeaderIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.fmCardHeaderLabel {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fmCardChevron {
+  flex-shrink: 0;
+  color: var(--greyText, #94a3b8);
+  transition: transform 0.2s;
+}
+.fmCardChevronOpen {
+  transform: rotate(180deg);
+}
+
+/* ── Card body — list of nav items ── */
+.fmCardBody {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 2px;
+}
+
+/* ── Individual nav row (leaf or group) ── */
+.fmNavRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--greyText, #64748b);
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+.fmNavRow:hover {
+  background: var(--muteBg, #f1f5f9);
+  color: var(--greyDarkText, #334155);
+}
+
+/* Active leaf row — light blue bg + blue text */
+.fmNavRowActive {
+  background: #ebf1ff !important;
+  color: #2563eb !important;
+  font-weight: 600;
+}
+
+.fmNavRowIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 16px;
+  color: inherit;
+}
+
+.fmNavRowLabel {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fmNavRowGroupBtn {
+  /* no extra overrides needed — same as fmNavRow */
+}
+
+.fmNavRowChevron {
+  flex-shrink: 0;
+  color: var(--greyText, #94a3b8);
+  transition: transform 0.2s;
+  margin-left: auto;
+}
+.fmNavRowActive .fmNavRowChevron {
+  color: #2563eb;
+}
+
+/* ── Sub-list (grand-children) ── */
+.fmNavGroup2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.fmNavSubList {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: 16px;
+  padding-bottom: 4px;
+}
+
+.fmNavSubRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--greyText, #64748b);
+  text-decoration: none;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+.fmNavSubRow:hover {
+  color: var(--greyDarkText, #334155);
+}
+.fmNavSubRowActive {
+  color: #2563eb !important;
+  font-weight: 600;
+}
+
+.fmNavSubDot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+.fmNavSubRowActive .fmNavSubDot {
+  opacity: 1;
+}

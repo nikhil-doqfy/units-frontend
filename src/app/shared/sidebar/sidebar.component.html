@@ -228,7 +228,86 @@
         </app-sidebar-item>
       </div>
     </div>
-    
+
+    <!-- Finance Section (Property Manager) -->
+    <div class="dashSdbrWdgt" *ngIf="currentRole === 'property-manager'">
+      <app-sidebar-heading title="FINANCE" />
+
+      <!-- ── Finance accordion card ─────────────────────────────────── -->
+      <div class="fmCard">
+        <button
+          class="fmCardHeader"
+          [class.fmCardHeaderActive]="isFmPageActive()"
+          (click)="toggleFmCard()"
+          type="button"
+        >
+          <span class="fmCardHeaderIcon">
+            <app-finance-icons icon="master"></app-finance-icons>
+          </span>
+          <span class="fmCardHeaderLabel">Finance Master</span>
+
+          <app-finance-chevron [isOpen]="fmOpen"></app-finance-chevron>
+        </button>
+
+        <!-- Expanded children list -->
+        @if (fmOpen) {
+          <div class="fmCardBody">
+            @for (item of fmNavItems; track item.label) {
+              <!-- Leaf item (Overview) -->
+              @if (!item.children) {
+                <a
+                  class="fmNavRow"
+                  [class.fmNavRowActive]="isFmActive(item.route)"
+                  [routerLink]="item.route"
+                >
+                  <span class="fmNavRowIcon">
+                    <app-finance-icons [icon]="item.icon"></app-finance-icons>
+                  </span>
+                  <span class="fmNavRowLabel">{{ item.label }}</span>
+                </a>
+              }
+
+              <!-- Group item (Reports / AR / Bank Recon) -->
+              @if (item.children) {
+                <div class="fmNavGroup2">
+                  <button
+                    class="fmNavRow fmNavRowGroupBtn"
+                    [class.fmNavRowActive]="isFmGroupActive(item)"
+                    (click)="toggleFmGroup(item.label)"
+                    type="button"
+                  >
+                    <span class="fmNavRowIcon">
+                      <app-finance-icons [icon]="item.icon"></app-finance-icons>
+                    </span>
+                    <span class="fmNavRowLabel">{{ item.label }}</span>
+                    <app-finance-chevron
+                      [isOpen]="fmExpanded === item.label"
+                    ></app-finance-chevron>
+                  </button>
+
+                  @if (fmExpanded === item.label) {
+                    <div class="fmNavSubList">
+                      @for (child of item.children; track child.route) {
+                        <a
+                          class="fmNavSubRow"
+                          [class.fmNavSubRowActive]="isFmActive(child.route)"
+                          [routerLink]="child.route"
+                        >
+                          <span class="fmNavSubDot"></span>
+                          {{ child.label }}
+                        </a>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+      <!-- ── Finance card end ── -->
+    </div>
+
     <!-- Property Manager Menus End -->
 
     <!-- Tenant Menus Start -->

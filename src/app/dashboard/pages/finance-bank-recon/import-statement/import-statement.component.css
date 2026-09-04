@@ -1,0 +1,86 @@
+.br-upload-section { display: flex; flex-direction: column; gap: 18px; }
+
+.br-dropzone {
+  border: 2px dashed var(--muteBorder1);
+  border-radius: 12px;
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: #fafafa;
+}
+.br-dropzone:hover, .br-dragover { border-color: #2563eb; background: #eff6ff; }
+.br-upload-done { border-color: #059669; background: #f0fdf4; }
+
+.br-upload-state {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  color: var(--textMuted);
+}
+.br-upload-success { color: #059669; }
+.br-drop-title { font-size: 14px; font-weight: 600; color: var(--textPrimary); }
+.br-drop-sub   { font-size: 12px; color: var(--textMuted); }
+
+.br-browse-btn {
+  display: inline-flex; align-items: center;
+  height: 34px; padding: 0 16px;
+  background: #2563eb; color: #fff;
+  border-radius: 8px; font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none; margin-top: 4px;
+  transition: background 0.15s;
+}
+.br-browse-btn:hover { background: #1d4ed8; }
+
+.br-clear-btn {
+  height: 30px; padding: 0 14px;
+  background: transparent; border: 1px solid #059669; color: #059669;
+  border-radius: 8px; font-size: 12px; cursor: pointer;
+  transition: background 0.15s;
+}
+.br-clear-btn:hover { background: #ecfdf5; }
+
+/* Stat row */
+.br-stat-row {
+  display: flex; flex-wrap: wrap; gap: 14px;
+}
+.br-stat-item {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 14px 24px;
+  background: var(--whiteBg);
+  border: 1px solid var(--muteBorder1);
+  border-radius: 10px;
+  flex: 1; min-width: 120px;
+}
+.br-stat-val { font-size: 18px; font-weight: 700; color: var(--textPrimary); }
+.br-stat-lbl { font-size: 11px; color: var(--textMuted); margin-top: 2px; }
+.br-stat-green .br-stat-val  { color: #059669; }
+.br-stat-orange .br-stat-val { color: #ea580c; }
+
+/* Match badges */
+.br-match-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+.br-matched   { background: #ecfdf5; color: #059669; }
+.br-unmatched { background: #fef2f2; color: #dc2626; }
+
+/* shared */
+.fr-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.fr-toolbar-left, .fr-toolbar-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.fr-label { font-size: 12px; font-weight: 600; color: var(--textMuted); margin-right: 6px; }
+.fr-select { height: 36px; padding: 0 10px; border: 1px solid var(--muteBorder1); border-radius: 8px; font-size: 13px; background: var(--whiteBg); color: var(--textPrimary); outline: none; cursor: pointer; }
+.fr-period-wrap { display: flex; align-items: center; }
+.fr-search-box { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 36px; border: 1px solid var(--muteBorder1); border-radius: 8px; background: var(--whiteBg); min-width: 260px; color: var(--textMuted); }
+.fr-search-box input { border: none; outline: none; font-size: 13px; background: transparent; color: var(--textPrimary); width: 100%; }
+.fr-tbl-title    { font-size: 15px; font-weight: 600; color: var(--textPrimary); }
+.fr-tbl-subtitle { font-size: 12px; color: var(--textMuted); margin-top: 2px; }
+.fr-table thead th { background-color: var(--activeBg1); font-size: 12px; font-weight: 600; padding: 10px 14px; white-space: nowrap; color: var(--textPrimary); }
+.fr-table tbody td { font-size: 13px; padding: 10px 14px; vertical-align: middle; color: var(--greyDarkText); }
+.fr-code { font-size: 11px; font-family: 'Courier New', monospace; background: #f3f4f6; color: #374151; padding: 2px 6px; border-radius: 4px; }
+.fr-date-cell   { white-space: nowrap; color: var(--textMuted); font-size: 12px; }
+.fr-credit-cell { color: #059669; font-weight: 500; }
+.fr-debit-cell  { color: #dc2626; font-weight: 500; }
+.fr-loading-cell, .fr-empty-cell { text-align: center; padding: 32px; color: var(--textMuted); font-size: 13px; }
+.fr-spinner { width: 28px; height: 28px; border: 3px solid var(--muteBorder1); border-top-color: var(--primary, #2563eb); border-radius: 50%; animation: fr-spin 0.8s linear infinite; margin: 0 auto; }
+@keyframes fr-spin { to { transform: rotate(360deg); } }

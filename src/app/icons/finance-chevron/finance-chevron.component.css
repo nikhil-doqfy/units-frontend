@@ -1,0 +1,12 @@
+:host {
+  display: contents;
+}
+
+.fmCardChevron {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.fmCardChevronOpen {
+  transform: rotate(180deg);
+}

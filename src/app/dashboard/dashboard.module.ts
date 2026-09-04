@@ -38,6 +38,18 @@ import { NewUnitsComponent } from './pages/new-units/new-units.component';
 import { UnitDetailComponent } from './pages/unit-detail/unit-detail.component';
 import { BasicpersonalComponent } from '../newtenant/component/basicpersonal/basicpersonal.component';
 import { SearchContactComponent } from '../shared/search-contact/search-contact.component';
+// ── Finance module components ─────────────────────────────────────────
+import { FinanceShellComponent } from './pages/finance-shell/finance-shell.component';
+import { FinanceOverviewComponent } from './pages/finance-overview/finance-overview.component';
+import { TrialBalanceComponent } from './pages/finance-reports/trial-balance/trial-balance.component';
+import { ProfitLossComponent } from './pages/finance-reports/profit-loss/profit-loss.component';
+import { BalanceSheetComponent } from './pages/finance-reports/balance-sheet/balance-sheet.component';
+import { AgeingComponent } from './pages/finance-reports/ageing/ageing.component';
+import { ArByTenantComponent } from './pages/finance-ar/ar-by-tenant/ar-by-tenant.component';
+import { ArByUnitComponent } from './pages/finance-ar/ar-by-unit/ar-by-unit.component';
+import { ImportStatementComponent } from './pages/finance-bank-recon/import-statement/import-statement.component';
+import { MatchReconcileComponent } from './pages/finance-bank-recon/match-reconcile/match-reconcile.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -292,6 +304,68 @@ export const routes: Routes = [
         path: 'privacy-policy',
         component: PrivacyPolicyComponent,
         data: { titleKey: 'PAGE_TITLE.PRIVACY_POLICY' },
+      },
+      // ── Finance sub-module ────────────────────────────────────────
+      {
+        path: 'finance',
+        component: FinanceShellComponent,
+        canActivate: [authGuard],
+        data: { titleKey: 'Finance' },
+        children: [
+          {
+            path: '',
+            redirectTo: 'overview',
+            pathMatch: 'full',
+          },
+          {
+            path: 'overview',
+            component: FinanceOverviewComponent,
+            data: { titleKey: 'Finance — Overview' },
+          },
+          // Reports
+          {
+            path: 'reports/trial-balance',
+            component: TrialBalanceComponent,
+            data: { titleKey: 'Trial Balance' },
+          },
+          {
+            path: 'reports/profit-loss',
+            component: ProfitLossComponent,
+            data: { titleKey: 'Profit & Loss' },
+          },
+          {
+            path: 'reports/balance-sheet',
+            component: BalanceSheetComponent,
+            data: { titleKey: 'Balance Sheet' },
+          },
+          {
+            path: 'reports/ageing',
+            component: AgeingComponent,
+            data: { titleKey: 'Ageing / Collections' },
+          },
+          // Accounts Receivable
+          {
+            path: 'ar/by-tenant',
+            component: ArByTenantComponent,
+            data: { titleKey: 'AR — Outstanding by Tenant' },
+          },
+          {
+            path: 'ar/by-unit',
+            component: ArByUnitComponent,
+            data: { titleKey: 'AR — Outstanding by Unit' },
+          },
+          // Bank Reconciliation
+          {
+            path: 'bank-recon/import',
+            component: ImportStatementComponent,
+            data: { titleKey: 'Bank Reconciliation — Import Statement' },
+          },
+          {
+            path: 'bank-recon/match',
+            component: MatchReconcileComponent,
+            data: { titleKey: 'Bank Reconciliation — Match & Reconcile' },
+          },
+        ],
       },
     ],
   },

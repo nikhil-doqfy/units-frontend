@@ -1,0 +1,245 @@
+<!-- ── Summary cards by bucket ────────────────────────────────────── -->
+<div class="ag-cards-grid">
+  @for (card of summaryCards; track card.bucket) {
+    <div
+      class="ag-summary-card ag-card-{{ card.color }}"
+      [class.ag-card-active]="activeBucket === card.bucket"
+      (click)="selectBucket(card.bucket)"
+    >
+      <div class="ag-card-top">
+        <span class="ag-card-amount"
+          >AED {{ card.amount | number: "1.0-0" }}</span
+        >
+        <span class="ag-card-count">{{ card.count }} items</span>
+      </div>
+      <div class="ag-card-label">{{ card.label }}</div>
+    </div>
+  }
+</div>
+
+<!-- ── Table ──────────────────────────────────────────────────────── -->
+<!-- <div class="mt-2">
+  <div class="cmmnTblOuter">
+    <div class="cmmnTblHdr">
+      <div class="col-md-auto">
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+          <div class="fr-tbl-title">Ageing / Collections</div>
+          <div class="fr-tbl-subtitle">
+            {{ filtered.length }} items &nbsp;·&nbsp; Outstanding: AED
+            {{ totalOutstanding | number: "1.2-2" }}
+          </div>
+          <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+          <app-table-filter-btn [title]="'EXPORT' | translate" [hasIcon]="true">
+            <app-export-icon />
+          </app-table-filter-btn>
+        </div>
+        <div class="cmmnTbl">
+          <div class="table-responsive">
+            <table class="table table-bordered fr-table">
+              <thead>
+                <tr>
+                  <th>Tenant</th>
+                  <th>Unit</th>
+                  <th>Cheque / Invoice Ref</th>
+                  <th>Due Date</th>
+                  <th class="text-end">Amount (AED)</th>
+                  <th class="text-center">Days Overdue</th>
+                  <th class="text-center">Bucket</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (loading) {
+                  <tr>
+                    <td colspan="7" class="fr-loading-cell">
+                      <div class="fr-spinner"></div>
+                    </td>
+                  </tr>
+                } @else if (filtered.length === 0) {
+                  <tr>
+                    <td colspan="7" class="fr-empty-cell">
+                      No outstanding items found.
+                    </td>
+                  </tr>
+                } @else {
+                  @for (row of filtered; track row.id) {
+                    <tr>
+                      <td class="ag-tenant-cell">{{ row.tenant }}</td>
+                      <td>
+                        <span class="ag-unit-badge">{{ row.unit }}</span>
+                      </td>
+                      <td>
+                        <code class="fr-code">{{ row.ref }}</code>
+                      </td>
+                      <td class="fr-date-cell">{{ row.due_date }}</td>
+                      <td class="text-end fr-debit-cell">
+                        {{ row.amount | number: "1.2-2" }}
+                      </td>
+                      <td class="text-center">
+                        @if (row.days_overdue === 0) {
+                          <span class="ag-days ag-days-ok">—</span>
+                        } @else {
+                          <span
+                            class="ag-days"
+                            [class.ag-days-warn]="row.days_overdue <= 30"
+                            [class.ag-days-danger]="row.days_overdue > 30"
+                          >
+                            {{ row.days_overdue }}d
+                          </span>
+                        }
+                      </td>
+                      <td class="text-center">
+                        <span
+                          class="ag-bucket-badge"
+                          [ngClass]="bucketClass(row.bucket)"
+                          >{{ row.bucket }}</span
+                        >
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="mt-2">
+  <div class="cmmnTblOuter">
+    <!-- ── Table Header ───────────────────────────────────────────── -->
+    <div class="cmmnTblHdr">
+      <div class="row g-3 align-items-center">
+        <div class="col-md">
+          <app-table-title
+            [title]="'Ageing / Collections'"
+            [subtitle]="
+              filtered.length +
+              ' items &nbsp;·&nbsp; Outstanding: AED ' +
+              (totalOutstanding | number: '1.2-2')
+            "
+            (onRefresh)="onRefresh()"
+          ></app-table-title>
+        </div>
+
+        <div class="col-md-auto">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
+            <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
+
+            <app-table-filter-btn
+              [title]="'EXPORT' | translate"
+              [hasIcon]="true"
+            >
+              <app-export-icon />
+            </app-table-filter-btn>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Data Table ─────────────────────────────────────────────── -->
+    <div class="cmmnTbl">
+      <div class="table-responsive">
+        <table class="table table-bordered fr-table">
+          <thead>
+            <tr>
+              <th>Tenant</th>
+              <th>Unit</th>
+              <th>Cheque / Invoice Ref</th>
+              <th>Due Date</th>
+              <th class="text-end">Amount (AED)</th>
+              <th class="text-center">Days Overdue</th>
+              <th class="text-center">Bucket</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @if (loading) {
+              <tr>
+                <td colspan="7" class="fr-loading-cell">
+                  <div class="fr-spinner"></div>
+                </td>
+              </tr>
+            } @else if (filtered.length === 0) {
+              <tr>
+                <td colspan="7" class="fr-empty-cell">
+                  No outstanding items found.
+                </td>
+              </tr>
+            } @else {
+              @for (row of filtered; track row.id) {
+                <tr>
+                  <td class="ag-tenant-cell">
+                    {{ row.tenant }}
+                  </td>
+
+                  <td>
+                    <span class="ag-unit-badge">
+                      {{ row.unit }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <code class="fr-code">
+                      {{ row.ref }}
+                    </code>
+                  </td>
+
+                  <td class="fr-date-cell">
+                    {{ row.due_date }}
+                  </td>
+
+                  <td class="text-end fr-debit-cell">
+                    {{ row.amount | number: "1.2-2" }}
+                  </td>
+
+                  <td class="text-center">
+                    @if (row.days_overdue === 0) {
+                      <span class="ag-days ag-days-ok"> — </span>
+                    } @else {
+                      <span
+                        class="ag-days"
+                        [class.ag-days-warn]="row.days_overdue <= 30"
+                        [class.ag-days-danger]="row.days_overdue > 30"
+                      >
+                        {{ row.days_overdue }}d
+                      </span>
+                    }
+                  </td>
+
+                  <td class="text-center">
+                    <span
+                      class="ag-bucket-badge"
+                      [ngClass]="bucketClass(row.bucket)"
+                    >
+                      {{ row.bucket }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Footer: Rows Per Page + Pagination ────────────────────── -->
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+</div>
