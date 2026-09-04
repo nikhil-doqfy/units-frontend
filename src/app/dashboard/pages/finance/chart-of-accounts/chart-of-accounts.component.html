@@ -13,5 +13,7 @@
     *ngIf="!loadFailed"
     [columns]="columns"
     [rows]="rows"
+    [clickableRows]="true"
+    (rowClick)="onRowClick($event)"
   ></app-report-table>
 </ng-container>

@@ -9,6 +9,7 @@ import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
 import { AgeingComponent } from './ageing/ageing.component';
 import { ReconciliationComponent } from './reconciliation/reconciliation.component';
 import { ChartOfAccountsComponent } from './chart-of-accounts/chart-of-accounts.component';
+import { LedgerDetailComponent } from './ledger-detail/ledger-detail.component';
 import { financeLandingGuard } from './finance-landing.guard';
 import { financePmcReachableGuard } from './finance-pmc-reachable.guard';
 import { financeReconciliationGuard } from './finance-reconciliation.guard';
@@ -63,6 +64,12 @@ const routes: Routes = [
   {
     path: ':pmcId/chart-of-accounts',
     component: ChartOfAccountsComponent,
+    canActivate: [financePmcReachableGuard],
+    resolve: { financeActivation: financeActivationResolver },
+  },
+  {
+    path: ':pmcId/ledger-detail/:accountId',
+    component: LedgerDetailComponent,
     canActivate: [financePmcReachableGuard],
     resolve: { financeActivation: financeActivationResolver },
   },

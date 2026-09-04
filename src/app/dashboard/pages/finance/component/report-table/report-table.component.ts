@@ -25,6 +25,7 @@ export interface ReportColumn {
   standalone: true,
   imports: [CommonModule, TablePaginationComponent],
   templateUrl: './report-table.component.html',
+  styleUrl: './report-table.component.css',
 })
 export class ReportTableComponent {
   @Input() columns: ReportColumn[] = [];
@@ -38,9 +39,20 @@ export class ReportTableComponent {
   @Input() rowsPerPage = 0;
   @Input() disabled = false;
 
+  // Story 4.2: opt-in row-click affordance. Defaults to `false` so every
+  // existing consumer (P&L, Balance Sheet, Ageing) that passes neither this
+  // input nor `rowClick` renders and behaves byte-identically to before.
+  @Input() clickableRows = false;
+
   @Output() pageChange = new EventEmitter<PageChange>();
+  @Output() rowClick = new EventEmitter<Record<string, string | number>>();
 
   onPageChange(event: PageChange): void {
     this.pageChange.emit(event);
+  }
+
+  onRowClick(row: Record<string, string | number>): void {
+    if (!this.clickableRows) return;
+    this.rowClick.emit(row);
   }
 }

@@ -11,7 +11,10 @@
     </thead>
     <tbody>
       @for (row of rows; track $index) {
-        <tr>
+        <tr
+          [class.clickable]="clickableRows"
+          (click)="onRowClick(row)"
+        >
           @for (column of columns; track column.key) {
             <td [class]="column.align ? 'text-' + column.align : ''">
               {{ row[column.key] }}

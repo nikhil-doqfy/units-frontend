@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, catchError, of, switchMap, tap } from 'rxjs';
 
@@ -68,6 +68,7 @@ interface TrialBalanceContent {
 })
 export class TrialBalanceComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private financeReportsService = inject(FinanceReportsService);
   private destroyRef = inject(DestroyRef);
 
@@ -181,6 +182,7 @@ export class TrialBalanceComponent implements OnInit {
   private applyContent(content: TrialBalanceContent): void {
     const accounts = content?.accounts ?? [];
     this.rows = accounts.map((account) => ({
+      id: account.id,
       name: account.name,
       account_type: account.account_type,
       total_debit: account.total_debit,
@@ -206,5 +208,17 @@ export class TrialBalanceComponent implements OnInit {
     // `balanced` is read directly from the API -- never recomputed from the
     // page-local sum above (spec Boundaries & Constraints).
     this.balanced = content?.balanced ?? true;
+  }
+
+  // Navigation is a route event, resolved entirely by the destination
+  // page's own route -- never a direct `FinanceLedgerService` injection
+  // across pages (AD-8 cross-service drill-through rule, spec Always).
+  onRowClick(row: Record<string, string | number>): void {
+    this.router.navigate([
+      '/dashboard/finance',
+      this.pmcId,
+      'ledger-detail',
+      row['id'],
+    ]);
   }
 }

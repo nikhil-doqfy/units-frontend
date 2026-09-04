@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
 
 import {
@@ -51,6 +51,7 @@ interface ChartOfAccountsContent {
 })
 export class ChartOfAccountsComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private financeLedgerService = inject(FinanceLedgerService);
   private destroyRef = inject(DestroyRef);
 
@@ -116,9 +117,22 @@ export class ChartOfAccountsComponent implements OnInit {
   private applyContent(content: ChartOfAccountsContent): void {
     const accounts = content?.accounts ?? [];
     this.rows = accounts.map((account) => ({
+      id: account.id,
       name: account.name,
       account_type: account.account_type,
       balance: account.balance,
     }));
+  }
+
+  // Navigation is a route event, resolved entirely by the destination
+  // page's own route -- never a direct `FinanceLedgerService` injection
+  // across pages (AD-8 cross-service drill-through rule, spec Always).
+  onRowClick(row: Record<string, string | number>): void {
+    this.router.navigate([
+      '/dashboard/finance',
+      this.pmcId,
+      'ledger-detail',
+      row['id'],
+    ]);
   }
 }

@@ -28,4 +28,24 @@ export class FinanceLedgerService {
       `${this.FINANCE_SERVER_ADDRESS}/accounts/${queryString}`,
     );
   }
+
+  getAccountLedgerLines(
+    pmcId: string,
+    accountId: number,
+    startDate: string,
+    endDate: string,
+    page: number,
+    pageSize: number,
+  ): Observable<any> {
+    const queryString = this.sharedService.getQueryString({
+      pmc_id: pmcId,
+      start_date: startDate,
+      end_date: endDate,
+      page,
+      page_size: pageSize,
+    });
+    return this.http.get(
+      `${this.FINANCE_SERVER_ADDRESS}/accounts/${accountId}/ledger-lines${queryString}`,
+    );
+  }
 }
