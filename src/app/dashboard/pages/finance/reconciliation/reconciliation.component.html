@@ -9,6 +9,12 @@
     [pmcId]="pmcId"
     (uploaded)="suggestedMatchesQueue.refreshQueue()"
   ></app-bank-statement-upload>
+  <p class="pending-suggestions-summary">
+    <ng-container *ngIf="suggestedMatchesQueue.suggestions.length > 0; else noPendingSuggestions">
+      {{ suggestedMatchesQueue.suggestions.length }} pending suggestion(s)
+    </ng-container>
+    <ng-template #noPendingSuggestions>No pending suggestions</ng-template>
+  </p>
   <app-suggested-matches-queue
     #suggestedMatchesQueue
     [pmcId]="pmcId"
