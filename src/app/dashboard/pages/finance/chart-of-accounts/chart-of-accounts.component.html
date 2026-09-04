@@ -1,0 +1,17 @@
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="Chart of Accounts"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <p *ngIf="loadFailed">Failed to load Chart of Accounts.</p>
+
+  <p *ngIf="loading && !loadFailed">Loading…</p>
+
+  <app-report-table
+    *ngIf="!loadFailed"
+    [columns]="columns"
+    [rows]="rows"
+  ></app-report-table>
+</ng-container>

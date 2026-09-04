@@ -1,0 +1,124 @@
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { catchError, of, tap } from 'rxjs';
+
+import {
+  ReportColumn,
+  ReportTableComponent,
+} from '../component/report-table/report-table.component';
+import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
+import { FinanceLedgerService } from '../../../services/finance-ledger.service';
+import { unwrapFinanceEnvelope } from '../finance-envelope';
+import { FinanceActivationState } from '../finance-activation.resolver';
+
+interface ChartOfAccountsRow {
+  id: number;
+  name: string;
+  account_type: string;
+  // Decimal-serialized as a string by the backend, matching Trial
+  // Balance's total_debit/total_credit and Balance Sheet's balance fields
+  // from the same service -- never a native number on the wire.
+  balance: string;
+}
+
+interface ChartOfAccountsContent {
+  pmc_id: string;
+  accounts: ChartOfAccountsRow[];
+}
+
+/**
+ * Story 4.1: Chart of Accounts page -- a read-only reference view of a
+ * PMC's seeded accounting structure, independent of any single report.
+ * Mirrors Trial Balance's reactive `paramMap` subscription pattern (Story
+ * 2.2) and Finance's shared `report-table`/`finance-empty-state` components.
+ *
+ * The fetch only fires when `financeActivation === 'activated'` (spec
+ * Boundaries & Constraints): for the other two states,
+ * `FinanceEmptyStateComponent` renders instead and no fetch happens.
+ *
+ * This story codes against `GET accounts/`, a backend contract AD-6
+ * commits to but has not shipped yet -- the call is expected to 404 today,
+ * and `loadFailed` is expected to render honestly in that case (spec
+ * Boundaries & Constraints: no fabricated/mocked rows).
+ */
+@Component({
+  selector: 'app-chart-of-accounts',
+  standalone: true,
+  imports: [CommonModule, ReportTableComponent, FinanceEmptyStateComponent],
+  templateUrl: './chart-of-accounts.component.html',
+})
+export class ChartOfAccountsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private financeLedgerService = inject(FinanceLedgerService);
+  private destroyRef = inject(DestroyRef);
+
+  pmcId = '';
+  financeActivation: FinanceActivationState = 'not_activated';
+
+  columns: ReportColumn[] = [
+    { key: 'name', label: 'Name' },
+    { key: 'account_type', label: 'Type' },
+    { key: 'balance', label: 'Balance', align: 'end' },
+  ];
+
+  rows: Record<string, string | number>[] = [];
+
+  loading = false;
+  loadFailed = false;
+
+  ngOnInit(): void {
+    // Read params/data reactively, not from a one-time snapshot: Angular's
+    // default RouteReuseStrategy reuses this component instance when only
+    // `:pmcId` changes, so a snapshot-only read would keep showing the
+    // previous PMC's data (mirrors Trial Balance, Story 2.2).
+    this.route.paramMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.pmcId = params.get('pmcId') ?? '';
+        this.financeActivation = this.route.snapshot.data[
+          'financeActivation'
+        ] as FinanceActivationState;
+
+        this.rows = [];
+        this.loadFailed = false;
+
+        if (this.financeActivation === 'activated' && this.pmcId) {
+          this.fetchChartOfAccounts();
+        }
+      });
+  }
+
+  private fetchChartOfAccounts(): void {
+    this.loading = true;
+    this.loadFailed = false;
+
+    this.financeLedgerService
+      .getChartOfAccounts(this.pmcId)
+      .pipe(
+        tap((resp) => {
+          this.loading = false;
+          const content = unwrapFinanceEnvelope<ChartOfAccountsContent>(resp);
+          this.applyContent(content);
+        }),
+        catchError(() => {
+          this.loading = false;
+          this.loadFailed = true;
+          this.rows = [];
+          return of(null);
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+  }
+
+  private applyContent(content: ChartOfAccountsContent): void {
+    const accounts = content?.accounts ?? [];
+    this.rows = accounts.map((account) => ({
+      name: account.name,
+      account_type: account.account_type,
+      balance: account.balance,
+    }));
+  }
+}

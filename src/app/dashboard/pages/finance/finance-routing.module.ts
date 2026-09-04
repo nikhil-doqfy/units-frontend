@@ -8,6 +8,7 @@ import { ProfitLossComponent } from './profit-loss/profit-loss.component';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
 import { AgeingComponent } from './ageing/ageing.component';
 import { ReconciliationComponent } from './reconciliation/reconciliation.component';
+import { ChartOfAccountsComponent } from './chart-of-accounts/chart-of-accounts.component';
 import { financeLandingGuard } from './finance-landing.guard';
 import { financePmcReachableGuard } from './finance-pmc-reachable.guard';
 import { financeReconciliationGuard } from './finance-reconciliation.guard';
@@ -57,6 +58,12 @@ const routes: Routes = [
     path: ':pmcId/reconciliation',
     component: ReconciliationComponent,
     canActivate: [financePmcReachableGuard, financeReconciliationGuard],
+    resolve: { financeActivation: financeActivationResolver },
+  },
+  {
+    path: ':pmcId/chart-of-accounts',
+    component: ChartOfAccountsComponent,
+    canActivate: [financePmcReachableGuard],
     resolve: { financeActivation: financeActivationResolver },
   },
 ];
