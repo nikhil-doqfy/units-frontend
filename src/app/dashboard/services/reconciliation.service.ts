@@ -59,7 +59,7 @@ export class ReconciliationService {
     pmcId: string,
     bankStatementLineId: number,
     journalEntryId: number,
-    action: 'confirm' | 'reject',
+    action: 'confirm' | 'reject' | 'unreconcile',
   ): Observable<any> {
     return this.http.post(
       `${this.FINANCE_SERVER_ADDRESS}/reconciliation/match`,

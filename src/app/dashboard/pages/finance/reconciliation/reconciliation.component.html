@@ -23,4 +23,8 @@
     [pmcId]="pmcId"
     (paired)="suggestedMatchesQueue.refreshQueue()"
   ></app-manual-match-form>
+  <app-un-reconcile-form
+    [pmcId]="pmcId"
+    (unreconciled)="suggestedMatchesQueue.refreshQueue()"
+  ></app-un-reconcile-form>
 </ng-container>
