@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
 import { BankStatementUploadComponent } from '../component/bank-statement-upload/bank-statement-upload.component';
 import { SuggestedMatchesQueueComponent } from '../component/suggested-matches-queue/suggested-matches-queue.component';
+import { ManualMatchFormComponent } from '../component/manual-match-form/manual-match-form.component';
 import { FinanceActivationState } from '../finance-activation.resolver';
 
 /**
@@ -14,9 +15,9 @@ import { FinanceActivationState } from '../finance-activation.resolver';
  * reuses this component instance when only `:pmcId` changes, so a
  * snapshot-only read would keep showing the previous PMC's state) and
  * `FinanceEmptyStateComponent` gating. Renders the bank statement upload
- * control (Story 3.1) and, beneath it, the suggested-matches queue with
- * Confirm/Reject (Story 3.2) when activated -- manual pairing and
- * un-reconcile are out of scope for this story (Stories 3.3-3.4).
+ * control (Story 3.1), the suggested-matches queue with Confirm/Reject
+ * (Story 3.2), and the manual-pairing form (Story 3.3) when activated --
+ * un-reconcile is out of scope for this story (Story 3.4).
  */
 @Component({
   selector: 'app-reconciliation',
@@ -26,6 +27,7 @@ import { FinanceActivationState } from '../finance-activation.resolver';
     FinanceEmptyStateComponent,
     BankStatementUploadComponent,
     SuggestedMatchesQueueComponent,
+    ManualMatchFormComponent,
   ],
   templateUrl: './reconciliation.component.html',
 })

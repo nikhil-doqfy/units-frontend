@@ -13,4 +13,8 @@
     #suggestedMatchesQueue
     [pmcId]="pmcId"
   ></app-suggested-matches-queue>
+  <app-manual-match-form
+    [pmcId]="pmcId"
+    (paired)="suggestedMatchesQueue.refreshQueue()"
+  ></app-manual-match-form>
 </ng-container>
