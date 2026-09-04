@@ -34,4 +34,41 @@ export class ReconciliationService {
       formData,
     );
   }
+
+  /**
+   * Story 3.2: `GET reconciliation/suggested-matches` (`views.py:687`).
+   * `pmc_id` travels as a query param here -- the GET convention every
+   * other Finance endpoint follows -- unlike `applyMatchDecision`'s POST
+   * body below (spec Boundaries & Constraints / Design Notes).
+   */
+  getSuggestedMatches(pmcId: string): Observable<any> {
+    return this.http.get(
+      `${this.FINANCE_SERVER_ADDRESS}/reconciliation/suggested-matches`,
+      { params: { pmc_id: pmcId } },
+    );
+  }
+
+  /**
+   * Story 3.2: `POST reconciliation/match` (`views.py:767`). All four
+   * fields -- including `pmc_id` -- are read from the JSON body by the
+   * real backend (`request.data`), not query params: confirmed distinct
+   * from `getSuggestedMatches`'s GET convention (spec Boundaries &
+   * Constraints).
+   */
+  applyMatchDecision(
+    pmcId: string,
+    bankStatementLineId: number,
+    journalEntryId: number,
+    action: 'confirm' | 'reject',
+  ): Observable<any> {
+    return this.http.post(
+      `${this.FINANCE_SERVER_ADDRESS}/reconciliation/match`,
+      {
+        pmc_id: pmcId,
+        bank_statement_line_id: bankStatementLineId,
+        journal_entry_id: journalEntryId,
+        action,
+      },
+    );
+  }
 }

@@ -1,0 +1,47 @@
+<div class="suggested-matches-queue">
+  <p *ngIf="loadFailed">Unable to load suggested matches.</p>
+
+  <ng-container *ngIf="!loadFailed">
+    <p *ngIf="!loading && suggestions.length === 0">
+      No suggested matches for this PMC.
+    </p>
+
+    <div class="table-responsive" *ngIf="suggestions.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Statement Date</th>
+            <th>Amount</th>
+            <th>Posted At</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let suggestion of suggestions; trackBy: trackByRowKey">
+            <td>{{ suggestion.statement_date }}</td>
+            <td>{{ suggestion.amount }}</td>
+            <td>{{ suggestion.posted_at }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-primary"
+                [disabled]="!!decidingKey"
+                (click)="confirm(suggestion)"
+              >
+                Confirm
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                [disabled]="!!decidingKey"
+                (click)="reject(suggestion)"
+              >
+                Reject
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</div>

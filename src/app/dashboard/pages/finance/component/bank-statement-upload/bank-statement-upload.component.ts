@@ -1,4 +1,11 @@
-import { Component, DestroyRef, Input, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 
@@ -37,6 +44,12 @@ export class BankStatementUploadComponent {
 
   @Input() pmcId = '';
 
+  // Lets the host page (Reconciliation Workspace) refresh the
+  // suggested-matches queue after a successful import -- newly created
+  // statement lines can have new suggestions the queue has no other way
+  // to learn about (gap found during Story 3.2's review).
+  @Output() uploaded = new EventEmitter<void>();
+
   selectedFile: File | null = null;
   uploading = false;
   resultMessage: string | null = null;
@@ -71,6 +84,7 @@ export class BankStatementUploadComponent {
           );
           this.resultMessage = resp?.message ?? null;
           this.createdCount = content?.created ?? null;
+          this.uploaded.emit();
         },
         error: () => {
           // No inline error message here: the global http.interceptor.ts
