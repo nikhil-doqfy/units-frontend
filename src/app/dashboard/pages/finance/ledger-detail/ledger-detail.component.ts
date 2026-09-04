@@ -37,10 +37,30 @@ interface LedgerLineRow {
   debit: string;
   credit: string;
   running_balance: string;
-  // Story 4.3's scope -- carried on the response but never rendered in this
-  // story (spec Never list).
   reversed_journal_entry_id: number | null;
   reversing_entry_ids: number[];
+}
+
+/**
+ * Story 4.3: a plain-text, non-interactive reversal reference -- never a
+ * click-through/jump-to-row, since the linked entry isn't guaranteed to be
+ * on the current page, within the current date range, or (in principle) the
+ * same Account (spec Design Notes). Both fields come directly off the
+ * backend response as-is, never recomputed client-side.
+ */
+function buildReversalNote(line: LedgerLineRow): string {
+  const notes: string[] = [];
+
+  if (line.reversed_journal_entry_id != null) {
+    notes.push(`Reverses entry #${line.reversed_journal_entry_id}`);
+  }
+
+  if (line.reversing_entry_ids?.length) {
+    const ids = line.reversing_entry_ids.map((id) => `#${id}`).join(', ');
+    notes.push(`Reversed by entry ${ids}`);
+  }
+
+  return notes.join('; ');
 }
 
 interface AccountLedgerLinesContent {
@@ -64,6 +84,11 @@ interface AccountLedgerLinesContent {
  * `account_balance` and each row's `running_balance` are rendered exactly
  * as the backend returns them -- this page never recomputes or overrides
  * them (spec Boundaries & Constraints, FR14/NFR1).
+ *
+ * Story 4.3: each row also carries a plain-text, non-interactive reversal
+ * reference (`buildReversalNote`) -- deliberately not a click-through/
+ * jump-to-row, since the linked entry isn't guaranteed to be on the same
+ * page/date-range/Account.
  */
 @Component({
   selector: 'app-ledger-detail',
@@ -101,6 +126,7 @@ export class LedgerDetailComponent implements OnInit {
     { key: 'debit', label: 'Debit', align: 'end' },
     { key: 'credit', label: 'Credit', align: 'end' },
     { key: 'running_balance', label: 'Running Balance', align: 'end' },
+    { key: 'reversal_note', label: 'Reversal' },
   ];
 
   rows: Record<string, string | number>[] = [];
@@ -250,6 +276,7 @@ export class LedgerDetailComponent implements OnInit {
       debit: line.debit,
       credit: line.credit,
       running_balance: line.running_balance,
+      reversal_note: buildReversalNote(line),
     }));
 
     this.totalRecords = pagination?.total_records ?? this.rows.length;
