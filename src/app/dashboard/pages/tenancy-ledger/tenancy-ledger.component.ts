@@ -181,10 +181,16 @@ export class TenancyLedgerComponent {
       },
       {
         param: 'TENANCY_LEDGER_AGREEMENT_STATUS',
-        key: 'agreementStatus',
+        key: 'tenancy_ledger_agreement_status',
         setter: (v) => {
-          console.log('Agreement Status:', v);
           this.statusOptions = v;
+        },
+      },
+      {
+        param: 'TENANCY_STATUS',
+        key: 'tenancy_status',
+        setter: (v) => {
+          this.pmcOptions = v;
         },
       },
     ]);
@@ -321,10 +327,10 @@ export class TenancyLedgerComponent {
       page_size: this.rowsPerPage,
     };
     if (this.searchText) params['search'] = this.searchText;
-    // if (this.filterTenancyType)
-    //   params['property_type'] = this.filterTenancyType;
-    // if (this.filterStatus) params['status'] = this.filterStatus;
-    // if (this.filterPMC) params['pmc_id'] = this.filterPMC;
+    if (this.filterPropertyType)
+      params['property_id'] = this.filterPropertyType;
+    if (this.filterStatus) params['agreement_status'] = this.filterStatus;
+    if (this.filterPMC) params['property_status'] = this.filterPMC;
     return params;
   }
   loadTenancyLedger(): void {
@@ -373,12 +379,12 @@ export class TenancyLedgerComponent {
     this.detailViewChanges.emit(true);
   }
   removeFilter(): void {
-    // this.filterPropertyType = null;
-    // this.filterStatus = null;
-    // this.filterPMC = null;
-    // this.selectedPropertyType = null;
-    // this.selectedStatus = null;
-    // this.selectedPMC = null;
+    this.filterPropertyType = null;
+    this.filterStatus = null;
+    this.filterPMC = null;
+    this.selectedPropertyType = null;
+    this.selectedStatus = null;
+    this.selectedPMC = null;
     this.currentPage = 1;
     this.loadTenancyLedger();
   }

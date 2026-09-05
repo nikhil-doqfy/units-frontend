@@ -43,6 +43,10 @@
                       [options]="propertyOptions"
                       [showFilterInput]="true"
                       [placeholder]="'SELECT_OPTION' | translate"
+                      (optionSelected)="
+                        selectedPropertyType = $event;
+                        filterPropertyType = $event?.key
+                      "
                     ></app-form-select-field>
                   </div>
                   <div class="col-12">
