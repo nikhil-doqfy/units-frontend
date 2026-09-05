@@ -1,3 +1,5 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
 <div class="row mb-3" *ngIf="showSelector">
   <div class="col-md-4">
     <app-custom-select
@@ -5,7 +7,7 @@
       key="id"
       value="name"
       [selectedOption]="selectedPmc"
-      placeholder="Select PMC"
+      placeholder="SELECT_PMC"
       (optionSelected)="onPmcSelected($event)"
     ></app-custom-select>
   </div>
@@ -13,14 +15,14 @@
 
 <app-finance-empty-state
   [financeActivation]="financeActivation"
-  title="Finance Overview"
+  title="FINANCE_OVERVIEW"
 ></app-finance-empty-state>
 
 <div class="row" *ngIf="financeActivation === 'activated'">
   <div class="col-md-4">
-    <app-white-card title="Profit &amp; Loss" subtitle="Current month">
-      <p *ngIf="profitLossFailed">Failed to load Profit &amp; Loss.</p>
-      <p *ngIf="!profitLossFailed && !profitLoss">Loading…</p>
+    <app-white-card title="FINANCE_PROFIT_LOSS" subtitle="FINANCE_CURRENT_MONTH">
+      <p *ngIf="profitLossFailed">{{ "FINANCE_FAILED_TO_LOAD_PROFIT_LOSS" | translate }}</p>
+      <p *ngIf="!profitLossFailed && !profitLoss">{{ "FINANCE_LOADING" | translate }}</p>
       <p *ngIf="!profitLossFailed && profitLoss">
         {{ profitLoss.net_profit_loss }}
       </p>
@@ -28,18 +30,18 @@
   </div>
 
   <div class="col-md-4">
-    <app-white-card title="Trial Balance" subtitle="Current month">
-      <p *ngIf="trialBalanceFailed">Failed to load Trial Balance.</p>
-      <p *ngIf="!trialBalanceFailed && !trialBalance">Loading…</p>
+    <app-white-card title="FINANCE_TRIAL_BALANCE" subtitle="FINANCE_CURRENT_MONTH">
+      <p *ngIf="trialBalanceFailed">{{ "FINANCE_FAILED_TO_LOAD_TRIAL_BALANCE" | translate }}</p>
+      <p *ngIf="!trialBalanceFailed && !trialBalance">{{ "FINANCE_LOADING" | translate }}</p>
       <p *ngIf="!trialBalanceFailed && trialBalance">
-        {{ trialBalance.balanced ? 'Balanced' : 'Unbalanced' }}
+        {{ (trialBalance.balanced ? "FINANCE_BALANCED" : "FINANCE_UNBALANCED") | translate }}
       </p>
     </app-white-card>
   </div>
 
   <div class="col-md-4">
-    <app-white-card title="Accounts Receivable" subtitle="Outstanding">
-      <p>Not yet available</p>
+    <app-white-card title="FINANCE_ACCOUNTS_RECEIVABLE" subtitle="FINANCE_OUTSTANDING">
+      <p>{{ "FINANCE_NOT_YET_AVAILABLE" | translate }}</p>
     </app-white-card>
   </div>
 </div>

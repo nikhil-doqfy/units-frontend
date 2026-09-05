@@ -1,0 +1,15 @@
+<app-white-card>
+  <div class="commonTabs">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation" *ngFor="let link of links">
+        <a
+          class="nav-link"
+          [routerLink]="['/dashboard/finance', pmcId, link.segment]"
+          routerLinkActive="active"
+        >
+          {{ link.labelKey | translate }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</app-white-card>

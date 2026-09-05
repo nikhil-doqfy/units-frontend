@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, catchError, of, switchMap, tap } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 import {
   ReportColumn,
@@ -14,6 +15,7 @@ import {
   DateRangePickerComponent,
 } from '../component/date-range-picker/date-range-picker.component';
 import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
+import { FinanceNavComponent } from '../component/finance-nav/finance-nav.component';
 import { FinanceReportsService } from '../../../services/finance-reports.service';
 import { unwrapFinanceEnvelope } from '../finance-envelope';
 import { FinanceActivationState } from '../finance-activation.resolver';
@@ -22,6 +24,9 @@ import {
   getCurrentMonthRange,
   toIsoDate,
 } from '../finance-date-range';
+import { SharedService } from '../../../../shared.service';
+import { BreadCrumb } from '../../../../shared/model/shared.model';
+import { WhiteCardComponent } from '../../../../shared/component/white-card/white-card.component';
 
 interface TrialBalanceAccount {
   id: number;
@@ -63,6 +68,9 @@ interface TrialBalanceContent {
     ReportTableComponent,
     DateRangePickerComponent,
     FinanceEmptyStateComponent,
+    FinanceNavComponent,
+    WhiteCardComponent,
+    TranslateModule,
   ],
   templateUrl: './trial-balance.component.html',
 })
@@ -70,16 +78,18 @@ export class TrialBalanceComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private financeReportsService = inject(FinanceReportsService);
+  private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
 
   pmcId = '';
   financeActivation: FinanceActivationState = 'not_activated';
+  breadcrumbData: BreadCrumb[] = [];
 
   columns: ReportColumn[] = [
-    { key: 'name', label: 'Account' },
-    { key: 'account_type', label: 'Type' },
-    { key: 'total_debit', label: 'Debit', align: 'end' },
-    { key: 'total_credit', label: 'Credit', align: 'end' },
+    { key: 'name', label: 'FINANCE_COL_ACCOUNT', type: 'label' },
+    { key: 'account_type', label: 'FINANCE_COL_TYPE' },
+    { key: 'total_debit', label: 'FINANCE_COL_DEBIT', align: 'end' },
+    { key: 'total_credit', label: 'FINANCE_COL_CREDIT', align: 'end' },
   ];
 
   rows: Record<string, string | number>[] = [];
@@ -106,6 +116,7 @@ export class TrialBalanceComponent implements OnInit {
         this.financeActivation = this.route.snapshot.data[
           'financeActivation'
         ] as FinanceActivationState;
+        this.loadBreadcrumb();
 
         this.rows = [];
         this.totals = undefined;
@@ -148,6 +159,16 @@ export class TrialBalanceComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+  }
+
+  private loadBreadcrumb(): void {
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.FINANCE', link: `/dashboard/finance/${this.pmcId}/overview` },
+        { label: 'FINANCE_TRIAL_BALANCE', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private fetchTrialBalance(startDate: string, endDate: string): void {
@@ -199,7 +220,7 @@ export class TrialBalanceComponent implements OnInit {
     );
 
     this.totals = {
-      name: 'Total',
+      name: 'FINANCE_TOTAL',
       account_type: '',
       total_debit: totalDebit,
       total_credit: totalCredit,
@@ -214,11 +235,9 @@ export class TrialBalanceComponent implements OnInit {
   // page's own route -- never a direct `FinanceLedgerService` injection
   // across pages (AD-8 cross-service drill-through rule, spec Always).
   onRowClick(row: Record<string, string | number>): void {
-    this.router.navigate([
-      '/dashboard/finance',
-      this.pmcId,
-      'ledger-detail',
-      row['id'],
-    ]);
+    this.router.navigate(
+      ['/dashboard/finance', this.pmcId, 'ledger-detail', row['id']],
+      { queryParams: { from: 'trial-balance' } },
+    );
   }
 }

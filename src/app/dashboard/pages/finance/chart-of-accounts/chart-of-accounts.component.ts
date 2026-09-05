@@ -3,15 +3,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 import {
   ReportColumn,
   ReportTableComponent,
 } from '../component/report-table/report-table.component';
 import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
+import { FinanceNavComponent } from '../component/finance-nav/finance-nav.component';
 import { FinanceLedgerService } from '../../../services/finance-ledger.service';
 import { unwrapFinanceEnvelope } from '../finance-envelope';
 import { FinanceActivationState } from '../finance-activation.resolver';
+import { SharedService } from '../../../../shared.service';
+import { BreadCrumb } from '../../../../shared/model/shared.model';
 
 interface ChartOfAccountsRow {
   id: number;
@@ -46,22 +50,30 @@ interface ChartOfAccountsContent {
 @Component({
   selector: 'app-chart-of-accounts',
   standalone: true,
-  imports: [CommonModule, ReportTableComponent, FinanceEmptyStateComponent],
+  imports: [
+    CommonModule,
+    ReportTableComponent,
+    FinanceEmptyStateComponent,
+    FinanceNavComponent,
+    TranslateModule,
+  ],
   templateUrl: './chart-of-accounts.component.html',
 })
 export class ChartOfAccountsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private financeLedgerService = inject(FinanceLedgerService);
+  private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
 
   pmcId = '';
   financeActivation: FinanceActivationState = 'not_activated';
+  breadcrumbData: BreadCrumb[] = [];
 
   columns: ReportColumn[] = [
-    { key: 'name', label: 'Name' },
-    { key: 'account_type', label: 'Type' },
-    { key: 'balance', label: 'Balance', align: 'end' },
+    { key: 'name', label: 'FINANCE_COL_NAME' },
+    { key: 'account_type', label: 'FINANCE_COL_TYPE' },
+    { key: 'balance', label: 'FINANCE_COL_BALANCE', align: 'end' },
   ];
 
   rows: Record<string, string | number>[] = [];
@@ -81,6 +93,7 @@ export class ChartOfAccountsComponent implements OnInit {
         this.financeActivation = this.route.snapshot.data[
           'financeActivation'
         ] as FinanceActivationState;
+        this.loadBreadcrumb();
 
         this.rows = [];
         this.loadFailed = false;
@@ -89,6 +102,16 @@ export class ChartOfAccountsComponent implements OnInit {
           this.fetchChartOfAccounts();
         }
       });
+  }
+
+  private loadBreadcrumb(): void {
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.FINANCE', link: `/dashboard/finance/${this.pmcId}/overview` },
+        { label: 'FINANCE_CHART_OF_ACCOUNTS', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private fetchChartOfAccounts(): void {
@@ -128,11 +151,9 @@ export class ChartOfAccountsComponent implements OnInit {
   // page's own route -- never a direct `FinanceLedgerService` injection
   // across pages (AD-8 cross-service drill-through rule, spec Always).
   onRowClick(row: Record<string, string | number>): void {
-    this.router.navigate([
-      '/dashboard/finance',
-      this.pmcId,
-      'ledger-detail',
-      row['id'],
-    ]);
+    this.router.navigate(
+      ['/dashboard/finance', this.pmcId, 'ledger-detail', row['id']],
+      { queryParams: { from: 'chart-of-accounts' } },
+    );
   }
 }

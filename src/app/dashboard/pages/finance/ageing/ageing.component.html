@@ -1,13 +1,15 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
 <app-finance-empty-state
   *ngIf="financeActivation !== 'activated'"
   [financeActivation]="financeActivation"
-  title="Ageing"
+  title="FINANCE_AGEING"
 ></app-finance-empty-state>
 
 <ng-container *ngIf="financeActivation === 'activated'">
-  <p *ngIf="loadFailed">Failed to load Ageing.</p>
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_AGEING" | translate }}</p>
 
-  <p *ngIf="loading && !loadFailed">Loading…</p>
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
 
   <app-report-table
     *ngIf="!loadFailed"
@@ -19,5 +21,6 @@
     [totalRecords]="totalRecords"
     [rowsPerPage]="rowsPerPage"
     (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
   ></app-report-table>
 </ng-container>

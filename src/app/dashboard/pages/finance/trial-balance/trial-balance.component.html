@@ -1,23 +1,27 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
 <app-finance-empty-state
   *ngIf="financeActivation !== 'activated'"
   [financeActivation]="financeActivation"
-  title="Trial Balance"
+  title="FINANCE_TRIAL_BALANCE"
 ></app-finance-empty-state>
 
 <ng-container *ngIf="financeActivation === 'activated'">
-  <div class="row mb-3">
-    <div class="col-md-6">
-      <app-date-range-picker [formControl]="dateRangeControl"></app-date-range-picker>
+  <app-white-card customClass="mb-3">
+    <div class="row">
+      <div class="col-md-6">
+        <app-date-range-picker [formControl]="dateRangeControl"></app-date-range-picker>
+      </div>
     </div>
-  </div>
+  </app-white-card>
 
   <div class="alert alert-warning" role="alert" *ngIf="!balanced">
-    Trial Balance is not balanced for the selected period.
+    {{ "FINANCE_TRIAL_BALANCE_UNBALANCED" | translate }}
   </div>
 
-  <p *ngIf="loadFailed">Failed to load Trial Balance.</p>
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_TRIAL_BALANCE" | translate }}</p>
 
-  <p *ngIf="loading && !loadFailed">Loading…</p>
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
 
   <app-report-table
     *ngIf="!loadFailed"

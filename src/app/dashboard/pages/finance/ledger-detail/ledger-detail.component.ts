@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, Subject, catchError, of, switchMap, tap } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import {
   ReportColumn,
@@ -22,7 +23,13 @@ import {
   getCurrentMonthRange,
   toIsoDate,
 } from '../finance-date-range';
-import { PageChange } from '../../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../../shared/model/shared.model';
+import { SharedService } from '../../../../shared.service';
+import { WhiteCardComponent } from '../../../../shared/component/white-card/white-card.component';
 
 // Decimal-serialized as strings by the backend, matching Trial Balance's
 // total_debit/total_credit and Chart of Accounts' balance fields from the
@@ -48,16 +55,46 @@ interface LedgerLineRow {
  * same Account (spec Design Notes). Both fields come directly off the
  * backend response as-is, never recomputed client-side.
  */
-function buildReversalNote(line: LedgerLineRow): string {
+/**
+ * `source_status_transition` is a free-form, dynamically-built string on
+ * the backend (e.g. `CREATE-BALANCE`, `BALANCE-BOUNCED`,
+ * `BOUNCE_FEE-FOR-6`, `COMMISSION-SPLIT`) -- there's no fixed enum to map
+ * against a lookup table, so this only reformats the existing value
+ * (underscores/hyphens -> spaces, sentence case) rather than guessing at a
+ * translated meaning for every possible transition the backend can emit.
+ * Paired with the source transaction id so the reference isn't just a bare,
+ * meaningless number (spec: readability for the portal user).
+ */
+function formatSourceReference(
+  line: LedgerLineRow,
+  translate: TranslateService,
+): string {
+  const transition = (line.source_status_transition ?? '')
+    .replace(/[-_]+/g, ' ')
+    .trim()
+    .toLowerCase();
+  const label = transition
+    ? transition.charAt(0).toUpperCase() + transition.slice(1)
+    : translate.instant('FINANCE_TRANSACTION');
+
+  return `${label} (Txn #${line.source_lease_transaction_id})`;
+}
+
+function buildReversalNote(
+  line: LedgerLineRow,
+  translate: TranslateService,
+): string {
   const notes: string[] = [];
 
   if (line.reversed_journal_entry_id != null) {
-    notes.push(`Reverses entry #${line.reversed_journal_entry_id}`);
+    notes.push(
+      `${translate.instant('FINANCE_REVERSES_ENTRY')} #${line.reversed_journal_entry_id}`,
+    );
   }
 
   if (line.reversing_entry_ids?.length) {
     const ids = line.reversing_entry_ids.map((id) => `#${id}`).join(', ');
-    notes.push(`Reversed by entry ${ids}`);
+    notes.push(`${translate.instant('FINANCE_REVERSED_BY_ENTRY')} ${ids}`);
   }
 
   return notes.join('; ');
@@ -99,17 +136,29 @@ interface AccountLedgerLinesContent {
     ReportTableComponent,
     DateRangePickerComponent,
     FinanceEmptyStateComponent,
+    WhiteCardComponent,
+    TranslateModule,
   ],
   templateUrl: './ledger-detail.component.html',
 })
 export class LedgerDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private financeLedgerService = inject(FinanceLedgerService);
+  private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
   pmcId = '';
   accountId = '';
   financeActivation: FinanceActivationState = 'not_activated';
+  breadcrumbData: BreadCrumb[] = [];
+
+  // Set by the `?from=` query param the originating page's row-click
+  // navigation passes (Trial Balance or Chart of Accounts) -- picks the
+  // correct parent breadcrumb crumb without a cross-page service injection
+  // (AD-8). Defaults to Chart of Accounts when absent (direct navigation,
+  // deep link, or refresh).
+  private origin: 'trial-balance' | 'chart-of-accounts' = 'chart-of-accounts';
 
   // componentName-matching guard convention (see all-leads.component.ts,
   // mirrored by ageing.component.ts) -- report-table forwards this to
@@ -121,12 +170,16 @@ export class LedgerDetailComponent implements OnInit {
   accountBalance: string | number = '';
 
   columns: ReportColumn[] = [
-    { key: 'posted_at', label: 'Date' },
-    { key: 'source_lease_transaction_id', label: 'Source Reference' },
-    { key: 'debit', label: 'Debit', align: 'end' },
-    { key: 'credit', label: 'Credit', align: 'end' },
-    { key: 'running_balance', label: 'Running Balance', align: 'end' },
-    { key: 'reversal_note', label: 'Reversal' },
+    { key: 'posted_at', label: 'FINANCE_COL_DATE', type: 'date' },
+    { key: 'source_reference', label: 'FINANCE_COL_SOURCE_REFERENCE' },
+    { key: 'debit', label: 'FINANCE_COL_DEBIT', align: 'end' },
+    { key: 'credit', label: 'FINANCE_COL_CREDIT', align: 'end' },
+    {
+      key: 'running_balance',
+      label: 'FINANCE_COL_RUNNING_BALANCE',
+      align: 'end',
+    },
+    { key: 'reversal_note', label: 'FINANCE_COL_REVERSAL' },
   ];
 
   rows: Record<string, string | number>[] = [];
@@ -150,48 +203,15 @@ export class LedgerDetailComponent implements OnInit {
   private fetchTrigger = new Subject<void>();
 
   ngOnInit(): void {
-    // Read params/data reactively, not from a one-time snapshot: Angular's
-    // default RouteReuseStrategy reuses this component instance when only
-    // `:pmcId`/`:accountId` changes, so a snapshot-only read would keep
-    // showing the previous Account's data (mirrors Trial Balance, Story
-    // 2.2).
-    this.route.paramMap
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params) => {
-        this.pmcId = params.get('pmcId') ?? '';
-        this.accountId = params.get('accountId') ?? '';
-        this.financeActivation = this.route.snapshot.data[
-          'financeActivation'
-        ] as FinanceActivationState;
-
-        this.rows = [];
-        this.currentPage = 1;
-        this.totalRecords = 0;
-        this.accountName = '';
-        this.accountType = '';
-        this.accountBalance = '';
-        this.loadFailed = false;
-
-        if (
-          this.financeActivation === 'activated' &&
-          this.pmcId &&
-          this.accountId
-        ) {
-          const range = getCurrentMonthRange();
-          this.dateRangeControl.setValue(
-            {
-              from: fromIsoDate(range.startDate),
-              to: fromIsoDate(range.endDate),
-            },
-            { emitEvent: false },
-          );
-          this.fetchTrigger.next();
-        }
-      });
-
-    // switchMap so a fast-changing date range (or page change) never lets a
-    // slower, stale request overwrite a newer one's result -- only the
-    // latest request's response is ever applied (mirrors Trial Balance).
+    // Subscribed before `paramMap` below: `fetchTrigger` is a plain Subject
+    // (not a BehaviorSubject), so a `.next()` call with no subscriber yet
+    // listening is silently dropped. `paramMap` emits synchronously on
+    // subscribe (the current route params are already known), and its
+    // handler below calls `fetchTrigger.next()` on that very first
+    // synchronous emission -- if this pipeline were wired up afterward
+    // (as it originally was), that first fetch would be lost and the page
+    // would render empty until the user changed the date range or page,
+    // which is what finally set up a listener in time.
     this.fetchTrigger
       .pipe(
         switchMap(() => {
@@ -220,12 +240,89 @@ export class LedgerDetailComponent implements OnInit {
         this.currentPage = 1;
         this.fetchTrigger.next();
       });
+
+    // Read params/data reactively, not from a one-time snapshot: Angular's
+    // default RouteReuseStrategy reuses this component instance when only
+    // `:pmcId`/`:accountId` changes, so a snapshot-only read would keep
+    // showing the previous Account's data (mirrors Trial Balance, Story
+    // 2.2).
+    this.route.paramMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.pmcId = params.get('pmcId') ?? '';
+        this.accountId = params.get('accountId') ?? '';
+        this.financeActivation = this.route.snapshot.data[
+          'financeActivation'
+        ] as FinanceActivationState;
+        this.origin =
+          this.route.snapshot.queryParamMap.get('from') === 'trial-balance'
+            ? 'trial-balance'
+            : 'chart-of-accounts';
+
+        this.rows = [];
+        this.currentPage = 1;
+        this.totalRecords = 0;
+        this.accountName = '';
+        this.accountType = '';
+        this.accountBalance = '';
+        this.loadFailed = false;
+        this.loadBreadcrumb();
+
+        if (
+          this.financeActivation === 'activated' &&
+          this.pmcId &&
+          this.accountId
+        ) {
+          const range = getCurrentMonthRange();
+          this.dateRangeControl.setValue(
+            {
+              from: fromIsoDate(range.startDate),
+              to: fromIsoDate(range.endDate),
+            },
+            { emitEvent: false },
+          );
+          this.fetchTrigger.next();
+        }
+      });
   }
 
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
     this.fetchTrigger.next();
+  }
+
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.fetchTrigger.next();
+  }
+
+  private loadBreadcrumb(): void {
+    const parentCrumb =
+      this.origin === 'trial-balance'
+        ? {
+            label: 'FINANCE_TRIAL_BALANCE',
+            link: `/dashboard/finance/${this.pmcId}/trial-balance`,
+          }
+        : {
+            label: 'FINANCE_CHART_OF_ACCOUNTS',
+            link: `/dashboard/finance/${this.pmcId}/chart-of-accounts`,
+          };
+
+    // `accountName` is real API data, never a translation key -- only the
+    // fallback (no account name loaded yet) is. `getBreadcrumbs` pipes
+    // every label through `translate.get()`, which safely no-ops back to
+    // the identity string for a real account name that isn't a key.
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.FINANCE', link: `/dashboard/finance/${this.pmcId}/overview` },
+        parentCrumb,
+        { label: this.accountName || 'FINANCE_LEDGER_DETAIL', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private doFetchLedgerLines(startDate: string, endDate: string) {
@@ -268,15 +365,16 @@ export class LedgerDetailComponent implements OnInit {
     this.accountName = content?.account_name ?? '';
     this.accountType = content?.account_type ?? '';
     this.accountBalance = content?.account_balance ?? '';
+    this.loadBreadcrumb();
 
     const lines = content?.lines ?? [];
     this.rows = lines.map((line) => ({
       posted_at: line.posted_at,
-      source_lease_transaction_id: line.source_lease_transaction_id,
+      source_reference: formatSourceReference(line, this.translate),
       debit: line.debit,
       credit: line.credit,
       running_balance: line.running_balance,
-      reversal_note: buildReversalNote(line),
+      reversal_note: buildReversalNote(line, this.translate),
     }));
 
     this.totalRecords = pagination?.total_records ?? this.rows.length;

@@ -3,16 +3,23 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Subject, catchError, of, switchMap, tap } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 import {
   ReportColumn,
   ReportTableComponent,
 } from '../component/report-table/report-table.component';
 import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
+import { FinanceNavComponent } from '../component/finance-nav/finance-nav.component';
 import { FinanceReportsService } from '../../../services/finance-reports.service';
 import { unwrapFinanceEnvelope } from '../finance-envelope';
 import { FinanceActivationState } from '../finance-activation.resolver';
-import { PageChange } from '../../../../shared/model/shared.model';
+import {
+  BreadCrumb,
+  PageChange,
+  PageSizeChange,
+} from '../../../../shared/model/shared.model';
+import { SharedService } from '../../../../shared.service';
 
 interface AgeingRow {
   lease_transaction_id: number;
@@ -39,25 +46,37 @@ interface AgeingRow {
 @Component({
   selector: 'app-ageing',
   standalone: true,
-  imports: [CommonModule, ReportTableComponent, FinanceEmptyStateComponent],
+  imports: [
+    CommonModule,
+    ReportTableComponent,
+    FinanceEmptyStateComponent,
+    FinanceNavComponent,
+    TranslateModule,
+  ],
   templateUrl: './ageing.component.html',
 })
 export class AgeingComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private financeReportsService = inject(FinanceReportsService);
+  private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
 
   componentName = 'ageingComponent';
 
   pmcId = '';
   financeActivation: FinanceActivationState = 'not_activated';
+  breadcrumbData: BreadCrumb[] = [];
 
   columns: ReportColumn[] = [
-    { key: 'lease_transaction_id', label: 'Lease Transaction' },
-    { key: 'cheque_date', label: 'Cheque Date' },
-    { key: 'days_overdue', label: 'Days Overdue', align: 'end' },
-    { key: 'bucket', label: 'Bucket' },
-    { key: 'outstanding_amount', label: 'Outstanding Amount', align: 'end' },
+    { key: 'lease_transaction_id', label: 'FINANCE_COL_LEASE_TRANSACTION' },
+    { key: 'cheque_date', label: 'FINANCE_COL_CHEQUE_DATE', type: 'date' },
+    { key: 'days_overdue', label: 'FINANCE_COL_DAYS_OVERDUE', align: 'end' },
+    { key: 'bucket', label: 'FINANCE_COL_BUCKET' },
+    {
+      key: 'outstanding_amount',
+      label: 'FINANCE_COL_OUTSTANDING_AMOUNT',
+      align: 'end',
+    },
   ];
 
   rows: Record<string, string | number>[] = [];
@@ -77,28 +96,15 @@ export class AgeingComponent implements OnInit {
   private fetchTrigger = new Subject<void>();
 
   ngOnInit(): void {
-    // Read params/data reactively, not from a one-time snapshot: Angular's
-    // default RouteReuseStrategy reuses this component instance when only
-    // `:pmcId` changes, so a snapshot-only read would keep showing the
-    // previous PMC's data (mirrors the other three report pages).
-    this.route.paramMap
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params) => {
-        this.pmcId = params.get('pmcId') ?? '';
-        this.financeActivation = this.route.snapshot.data[
-          'financeActivation'
-        ] as FinanceActivationState;
-
-        this.rows = [];
-        this.currentPage = 1;
-        this.totalRecords = 0;
-        this.loadFailed = false;
-
-        if (this.financeActivation === 'activated' && this.pmcId) {
-          this.fetchTrigger.next();
-        }
-      });
-
+    // Subscribed before `paramMap` below: `fetchTrigger` is a plain Subject
+    // (not a BehaviorSubject), so a `.next()` call with no subscriber yet
+    // listening is silently dropped. `paramMap` emits synchronously on
+    // subscribe (the current route params are already known), and its
+    // handler below calls `fetchTrigger.next()` on that very first
+    // synchronous emission -- if this pipeline were wired up afterward
+    // (as it originally was), that first fetch would be lost and the page
+    // would render empty until the user changed the page, which is what
+    // finally set up a listener in time.
     this.fetchTrigger
       .pipe(
         switchMap(() => {
@@ -110,6 +116,29 @@ export class AgeingComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+
+    // Read params/data reactively, not from a one-time snapshot: Angular's
+    // default RouteReuseStrategy reuses this component instance when only
+    // `:pmcId` changes, so a snapshot-only read would keep showing the
+    // previous PMC's data (mirrors the other three report pages).
+    this.route.paramMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.pmcId = params.get('pmcId') ?? '';
+        this.financeActivation = this.route.snapshot.data[
+          'financeActivation'
+        ] as FinanceActivationState;
+        this.loadBreadcrumb();
+
+        this.rows = [];
+        this.currentPage = 1;
+        this.totalRecords = 0;
+        this.loadFailed = false;
+
+        if (this.financeActivation === 'activated' && this.pmcId) {
+          this.fetchTrigger.next();
+        }
+      });
   }
 
   // Follows the exact `componentName`-matching guard convention
@@ -118,6 +147,23 @@ export class AgeingComponent implements OnInit {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
     this.fetchTrigger.next();
+  }
+
+  onPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.componentName) return;
+    this.rowsPerPage = event.pageSize;
+    this.currentPage = 1;
+    this.fetchTrigger.next();
+  }
+
+  private loadBreadcrumb(): void {
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.FINANCE', link: `/dashboard/finance/${this.pmcId}/overview` },
+        { label: 'FINANCE_AGEING', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private doFetchAgeing() {

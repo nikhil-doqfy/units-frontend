@@ -84,6 +84,7 @@
           *ngIf="canAccess('Finance')"
           title="{{ 'FINANCE' | translate }}"
           href="/dashboard/finance"
+          [exact]="false"
         >
           <app-pmc-icon></app-pmc-icon>
         </app-sidebar-item>
@@ -160,6 +161,7 @@
           *ngIf="canAccess('Finance')"
           title="{{ 'FINANCE' | translate }}"
           href="/dashboard/finance"
+          [exact]="false"
         >
           <app-pmc-icon></app-pmc-icon>
         </app-sidebar-item>

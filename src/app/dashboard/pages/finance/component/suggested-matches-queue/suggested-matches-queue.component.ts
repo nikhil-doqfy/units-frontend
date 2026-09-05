@@ -1,6 +1,7 @@
 import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ReconciliationService } from '../../../../services/reconciliation.service';
 import { unwrapFinanceEnvelope } from '../../finance-envelope';
@@ -34,7 +35,7 @@ interface SuggestedMatchesContent {
 @Component({
   selector: 'app-suggested-matches-queue',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DatePipe, TranslateModule],
   templateUrl: './suggested-matches-queue.component.html',
 })
 export class SuggestedMatchesQueueComponent implements OnInit {

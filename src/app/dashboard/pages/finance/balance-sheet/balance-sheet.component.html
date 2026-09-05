@@ -1,32 +1,36 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
 <app-finance-empty-state
   *ngIf="financeActivation !== 'activated'"
   [financeActivation]="financeActivation"
-  title="Balance Sheet"
+  title="FINANCE_BALANCE_SHEET"
 ></app-finance-empty-state>
 
 <ng-container *ngIf="financeActivation === 'activated'">
-  <div class="row mb-3">
-    <div class="col-md-3">
-      <app-as-of-date-picker [formControl]="asOfDateControl"></app-as-of-date-picker>
+  <app-white-card customClass="mb-3">
+    <div class="row">
+      <div class="col-md-3">
+        <app-as-of-date-picker [formControl]="asOfDateControl"></app-as-of-date-picker>
+      </div>
     </div>
-  </div>
+  </app-white-card>
 
   <div class="alert alert-warning" role="alert" *ngIf="!balanced">
-    Balance Sheet is not balanced for the selected date.
+    {{ "FINANCE_BALANCE_SHEET_UNBALANCED" | translate }}
   </div>
 
-  <p *ngIf="loadFailed">Failed to load Balance Sheet.</p>
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_BALANCE_SHEET" | translate }}</p>
 
-  <p *ngIf="loading && !loadFailed">Loading…</p>
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
 
   <ng-container *ngIf="!loadFailed">
-    <h5>Assets</h5>
+    <h5>{{ "FINANCE_ASSETS" | translate }}</h5>
     <app-report-table
       [columns]="columns"
       [rows]="assetRows"
     ></app-report-table>
 
-    <h5 class="mt-4">Liabilities</h5>
+    <h5 class="mt-4">{{ "FINANCE_LIABILITIES" | translate }}</h5>
     <app-report-table
       [columns]="columns"
       [rows]="liabilityRows"

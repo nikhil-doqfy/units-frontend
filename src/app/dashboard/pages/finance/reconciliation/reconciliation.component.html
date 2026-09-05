@@ -1,30 +1,47 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
 <app-finance-empty-state
   *ngIf="financeActivation !== 'activated'"
   [financeActivation]="financeActivation"
-  title="Reconciliation"
+  title="FINANCE_RECONCILIATION"
 ></app-finance-empty-state>
 
 <ng-container *ngIf="financeActivation === 'activated'">
-  <app-bank-statement-upload
-    [pmcId]="pmcId"
-    (uploaded)="suggestedMatchesQueue.refreshQueue()"
-  ></app-bank-statement-upload>
-  <p class="pending-suggestions-summary">
-    <ng-container *ngIf="suggestedMatchesQueue.suggestions.length > 0; else noPendingSuggestions">
-      {{ suggestedMatchesQueue.suggestions.length }} pending suggestion(s)
-    </ng-container>
-    <ng-template #noPendingSuggestions>No pending suggestions</ng-template>
-  </p>
-  <app-suggested-matches-queue
-    #suggestedMatchesQueue
-    [pmcId]="pmcId"
-  ></app-suggested-matches-queue>
-  <app-manual-match-form
-    [pmcId]="pmcId"
-    (paired)="suggestedMatchesQueue.refreshQueue()"
-  ></app-manual-match-form>
-  <app-un-reconcile-form
-    [pmcId]="pmcId"
-    (unreconciled)="suggestedMatchesQueue.refreshQueue()"
-  ></app-un-reconcile-form>
+  <app-white-card
+    title="FINANCE_BANK_STATEMENT_UPLOAD"
+    description="FINANCE_BANK_STATEMENT_UPLOAD_DESC"
+    customClass="mb-3"
+  >
+    <app-bank-statement-upload
+      [pmcId]="pmcId"
+      (uploaded)="suggestedMatchesQueue.refreshQueue()"
+    ></app-bank-statement-upload>
+  </app-white-card>
+
+  <app-white-card title="FINANCE_SUGGESTED_MATCHES" customClass="mb-3">
+    <p class="pending-suggestions-summary">
+      <ng-container *ngIf="suggestedMatchesQueue.suggestions.length > 0; else noPendingSuggestions">
+        {{ suggestedMatchesQueue.suggestions.length }} {{ "FINANCE_PENDING_SUGGESTIONS_SUFFIX" | translate }}
+      </ng-container>
+      <ng-template #noPendingSuggestions>{{ "FINANCE_NO_PENDING_SUGGESTIONS" | translate }}</ng-template>
+    </p>
+    <app-suggested-matches-queue
+      #suggestedMatchesQueue
+      [pmcId]="pmcId"
+    ></app-suggested-matches-queue>
+  </app-white-card>
+
+  <app-white-card title="FINANCE_MANUAL_PAIRING" customClass="mb-3">
+    <app-manual-match-form
+      [pmcId]="pmcId"
+      (paired)="suggestedMatchesQueue.refreshQueue()"
+    ></app-manual-match-form>
+  </app-white-card>
+
+  <app-white-card title="FINANCE_UN_RECONCILE">
+    <app-un-reconcile-form
+      [pmcId]="pmcId"
+      (unreconciled)="suggestedMatchesQueue.refreshQueue()"
+    ></app-un-reconcile-form>
+  </app-white-card>
 </ng-container>

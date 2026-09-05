@@ -1,38 +1,40 @@
 <div class="un-reconcile-form">
-  <h3>Un-reconcile</h3>
+  <div class="row g-3 align-items-end">
+    <div class="col-md-4">
+      <label for="un-reconcile-statement-line-id">{{ "FINANCE_STATEMENT_LINE_ID" | translate }}</label>
+      <input
+        id="un-reconcile-statement-line-id"
+        type="number"
+        min="1"
+        step="1"
+        class="form-control"
+        [formControl]="statementLineIdControl"
+        [disabled]="submitting"
+      />
+    </div>
 
-  <div class="form-group">
-    <label for="un-reconcile-statement-line-id">Statement Line ID</label>
-    <input
-      id="un-reconcile-statement-line-id"
-      type="number"
-      min="1"
-      step="1"
-      class="form-control"
-      [formControl]="statementLineIdControl"
-      [disabled]="submitting"
-    />
+    <div class="col-md-4">
+      <label for="un-reconcile-journal-entry-id">{{ "FINANCE_JOURNAL_ENTRY_ID" | translate }}</label>
+      <input
+        id="un-reconcile-journal-entry-id"
+        type="number"
+        min="1"
+        step="1"
+        class="form-control"
+        [formControl]="journalEntryIdControl"
+        [disabled]="submitting"
+      />
+    </div>
+
+    <div class="col-md-auto">
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!canSubmit"
+        (click)="submit()"
+      >
+        {{ (submitting ? "FINANCE_UN_RECONCILING" : "FINANCE_UN_RECONCILE") | translate }}
+      </button>
+    </div>
   </div>
-
-  <div class="form-group">
-    <label for="un-reconcile-journal-entry-id">Journal Entry ID</label>
-    <input
-      id="un-reconcile-journal-entry-id"
-      type="number"
-      min="1"
-      step="1"
-      class="form-control"
-      [formControl]="journalEntryIdControl"
-      [disabled]="submitting"
-    />
-  </div>
-
-  <button
-    type="button"
-    class="btn btn-primary"
-    [disabled]="!canSubmit"
-    (click)="submit()"
-  >
-    {{ submitting ? 'Un-reconciling…' : 'Un-reconcile' }}
-  </button>
 </div>

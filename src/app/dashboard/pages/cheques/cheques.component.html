@@ -362,11 +362,11 @@
         <input
           type="text"
           class="form-control cheque-form-input"
-          [class.is-invalid]="!editDraft.cheque_number?.trim()"
+          [class.is-invalid]="!editDraft.cheque_number.trim()"
           placeholder="Enter cheque number"
           [(ngModel)]="editDraft.cheque_number"
         />
-        <div class="invalid-feedback" *ngIf="!editDraft.cheque_number?.trim()">
+        <div class="invalid-feedback" *ngIf="!editDraft.cheque_number.trim()">
           {{ "CHEQUE_NUMBER" | translate }} is required
         </div>
       </div>

@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ReconciliationService } from '../../../../services/reconciliation.service';
 import { unwrapFinanceEnvelope } from '../../finance-envelope';
@@ -35,7 +36,7 @@ interface BankStatementImportContent {
 @Component({
   selector: 'app-bank-statement-upload',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './bank-statement-upload.component.html',
 })
 export class BankStatementUploadComponent {

@@ -12,13 +12,13 @@
     [disabled]="!selectedFile || uploading"
     (click)="upload()"
   >
-    {{ uploading ? 'Uploading…' : 'Upload' }}
+    {{ (uploading ? "FINANCE_UPLOADING" : "FINANCE_UPLOAD") | translate }}
   </button>
 
   <p *ngIf="resultMessage">
     {{ resultMessage }}
     <ng-container *ngIf="createdCount !== null">
-      ({{ createdCount }} created)
+      ({{ createdCount }} {{ "FINANCE_CREATED_SUFFIX" | translate }})
     </ng-container>
   </p>
 </div>

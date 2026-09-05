@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, catchError, of, switchMap, tap } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import {
   ReportColumn,
@@ -11,10 +12,14 @@ import {
 } from '../component/report-table/report-table.component';
 import { AsOfDatePickerComponent } from '../component/as-of-date-picker/as-of-date-picker.component';
 import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
+import { FinanceNavComponent } from '../component/finance-nav/finance-nav.component';
 import { FinanceReportsService } from '../../../services/finance-reports.service';
 import { unwrapFinanceEnvelope } from '../finance-envelope';
 import { FinanceActivationState } from '../finance-activation.resolver';
 import { toIsoDate } from '../finance-date-range';
+import { SharedService } from '../../../../shared.service';
+import { BreadCrumb } from '../../../../shared/model/shared.model';
+import { WhiteCardComponent } from '../../../../shared/component/white-card/white-card.component';
 
 interface BalanceSheetAccount {
   id: number;
@@ -65,23 +70,29 @@ interface BalanceSheetContent {
     ReportTableComponent,
     AsOfDatePickerComponent,
     FinanceEmptyStateComponent,
+    FinanceNavComponent,
+    WhiteCardComponent,
+    TranslateModule,
   ],
   templateUrl: './balance-sheet.component.html',
 })
 export class BalanceSheetComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private financeReportsService = inject(FinanceReportsService);
+  private sharedService = inject(SharedService);
+  private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
   pmcId = '';
   financeActivation: FinanceActivationState = 'not_activated';
+  breadcrumbData: BreadCrumb[] = [];
 
   columns: ReportColumn[] = [
-    { key: 'name', label: 'Account' },
-    { key: 'account_type', label: 'Type' },
-    { key: 'total_debit', label: 'Debit', align: 'end' },
-    { key: 'total_credit', label: 'Credit', align: 'end' },
-    { key: 'balance', label: 'Balance', align: 'end' },
+    { key: 'name', label: 'FINANCE_COL_ACCOUNT' },
+    { key: 'account_type', label: 'FINANCE_COL_TYPE' },
+    { key: 'total_debit', label: 'FINANCE_COL_DEBIT', align: 'end' },
+    { key: 'total_credit', label: 'FINANCE_COL_CREDIT', align: 'end' },
+    { key: 'balance', label: 'FINANCE_COL_BALANCE', align: 'end' },
   ];
 
   assetRows: Record<string, string | number>[] = [];
@@ -109,6 +120,7 @@ export class BalanceSheetComponent implements OnInit {
         this.financeActivation = this.route.snapshot.data[
           'financeActivation'
         ] as FinanceActivationState;
+        this.loadBreadcrumb();
 
         this.assetRows = [];
         this.liabilityRows = [];
@@ -139,6 +151,16 @@ export class BalanceSheetComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+  }
+
+  private loadBreadcrumb(): void {
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.FINANCE', link: `/dashboard/finance/${this.pmcId}/overview` },
+        { label: 'FINANCE_BALANCE_SHEET', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private fetchBalanceSheet(asOfDate: string): void {
@@ -192,7 +214,9 @@ export class BalanceSheetComponent implements OnInit {
       balance: account.balance,
     }));
 
-    this.equityName = content?.equity?.name ?? 'Retained Earnings';
+    this.equityName =
+      content?.equity?.name ??
+      this.translate.instant('FINANCE_RETAINED_EARNINGS');
     this.equityBalance = content?.equity?.balance ?? 0;
 
     // `balanced` is read directly from the API -- never recomputed by

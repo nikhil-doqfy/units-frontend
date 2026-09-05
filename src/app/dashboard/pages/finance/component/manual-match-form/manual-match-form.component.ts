@@ -9,6 +9,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ReconciliationService } from '../../../../services/reconciliation.service';
 
@@ -37,7 +38,7 @@ import { ReconciliationService } from '../../../../services/reconciliation.servi
 @Component({
   selector: 'app-manual-match-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './manual-match-form.component.html',
 })
 export class ManualMatchFormComponent {

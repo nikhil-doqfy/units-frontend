@@ -1,26 +1,26 @@
 <div class="suggested-matches-queue">
-  <p *ngIf="loadFailed">Unable to load suggested matches.</p>
+  <p *ngIf="loadFailed">{{ "FINANCE_UNABLE_TO_LOAD_SUGGESTED_MATCHES" | translate }}</p>
 
   <ng-container *ngIf="!loadFailed">
     <p *ngIf="!loading && suggestions.length === 0">
-      No suggested matches for this PMC.
+      {{ "FINANCE_NO_SUGGESTED_MATCHES" | translate }}
     </p>
 
     <div class="table-responsive" *ngIf="suggestions.length > 0">
       <table class="table">
         <thead>
           <tr>
-            <th>Statement Date</th>
-            <th>Amount</th>
-            <th>Posted At</th>
+            <th>{{ "FINANCE_COL_STATEMENT_DATE" | translate }}</th>
+            <th>{{ "FINANCE_COL_AMOUNT" | translate }}</th>
+            <th>{{ "FINANCE_COL_POSTED_AT" | translate }}</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let suggestion of suggestions; trackBy: trackByRowKey">
-            <td>{{ suggestion.statement_date }}</td>
+            <td>{{ suggestion.statement_date | date: 'medium' }}</td>
             <td>{{ suggestion.amount }}</td>
-            <td>{{ suggestion.posted_at }}</td>
+            <td>{{ suggestion.posted_at | date: 'medium' }}</td>
             <td>
               <button
                 type="button"
@@ -28,7 +28,7 @@
                 [disabled]="!!decidingKey"
                 (click)="confirm(suggestion)"
               >
-                Confirm
+                {{ "FINANCE_CONFIRM" | translate }}
               </button>
               <button
                 type="button"
@@ -36,7 +36,7 @@
                 [disabled]="!!decidingKey"
                 (click)="reject(suggestion)"
               >
-                Reject
+                {{ "FINANCE_REJECT" | translate }}
               </button>
             </td>
           </tr>

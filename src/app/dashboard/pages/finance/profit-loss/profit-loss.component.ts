@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, catchError, of, switchMap, tap } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 import {
   ReportColumn,
@@ -14,6 +15,7 @@ import {
   DateRangePickerComponent,
 } from '../component/date-range-picker/date-range-picker.component';
 import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
+import { FinanceNavComponent } from '../component/finance-nav/finance-nav.component';
 import { FinanceReportsService } from '../../../services/finance-reports.service';
 import { unwrapFinanceEnvelope } from '../finance-envelope';
 import { FinanceActivationState } from '../finance-activation.resolver';
@@ -22,6 +24,9 @@ import {
   getCurrentMonthRange,
   toIsoDate,
 } from '../finance-date-range';
+import { SharedService } from '../../../../shared.service';
+import { BreadCrumb } from '../../../../shared/model/shared.model';
+import { WhiteCardComponent } from '../../../../shared/component/white-card/white-card.component';
 
 interface ProfitLossAccount {
   id: number;
@@ -82,23 +87,28 @@ interface ProfitLossContent {
     ReportTableComponent,
     DateRangePickerComponent,
     FinanceEmptyStateComponent,
+    FinanceNavComponent,
+    WhiteCardComponent,
+    TranslateModule,
   ],
   templateUrl: './profit-loss.component.html',
 })
 export class ProfitLossComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private financeReportsService = inject(FinanceReportsService);
+  private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
 
   pmcId = '';
   financeActivation: FinanceActivationState = 'not_activated';
+  breadcrumbData: BreadCrumb[] = [];
 
   columns: ReportColumn[] = [
-    { key: 'name', label: 'Account' },
-    { key: 'account_type', label: 'Type' },
-    { key: 'total_debit', label: 'Debit', align: 'end' },
-    { key: 'total_credit', label: 'Credit', align: 'end' },
-    { key: 'contribution', label: 'Contribution', align: 'end' },
+    { key: 'name', label: 'FINANCE_COL_ACCOUNT' },
+    { key: 'account_type', label: 'FINANCE_COL_TYPE' },
+    { key: 'total_debit', label: 'FINANCE_COL_DEBIT', align: 'end' },
+    { key: 'total_credit', label: 'FINANCE_COL_CREDIT', align: 'end' },
+    { key: 'contribution', label: 'FINANCE_COL_CONTRIBUTION', align: 'end' },
   ];
 
   incomeRows: Record<string, string | number>[] = [];
@@ -125,6 +135,7 @@ export class ProfitLossComponent implements OnInit {
         this.financeActivation = this.route.snapshot.data[
           'financeActivation'
         ] as FinanceActivationState;
+        this.loadBreadcrumb();
 
         this.incomeRows = [];
         this.expenseRows = [];
@@ -167,6 +178,16 @@ export class ProfitLossComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+  }
+
+  private loadBreadcrumb(): void {
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.FINANCE', link: `/dashboard/finance/${this.pmcId}/overview` },
+        { label: 'FINANCE_PROFIT_LOSS', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 
   private fetchProfitLoss(startDate: string, endDate: string): void {

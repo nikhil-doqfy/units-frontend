@@ -2,13 +2,18 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
 import { BankStatementUploadComponent } from '../component/bank-statement-upload/bank-statement-upload.component';
 import { SuggestedMatchesQueueComponent } from '../component/suggested-matches-queue/suggested-matches-queue.component';
 import { ManualMatchFormComponent } from '../component/manual-match-form/manual-match-form.component';
 import { UnReconcileFormComponent } from '../component/un-reconcile-form/un-reconcile-form.component';
+import { FinanceNavComponent } from '../component/finance-nav/finance-nav.component';
 import { FinanceActivationState } from '../finance-activation.resolver';
+import { SharedService } from '../../../../shared.service';
+import { BreadCrumb } from '../../../../shared/model/shared.model';
+import { WhiteCardComponent } from '../../../../shared/component/white-card/white-card.component';
 
 /**
  * Story 3.1's Reconciliation Workspace page. Mirrors the report pages'
@@ -30,15 +35,20 @@ import { FinanceActivationState } from '../finance-activation.resolver';
     SuggestedMatchesQueueComponent,
     ManualMatchFormComponent,
     UnReconcileFormComponent,
+    FinanceNavComponent,
+    WhiteCardComponent,
+    TranslateModule,
   ],
   templateUrl: './reconciliation.component.html',
 })
 export class ReconciliationComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
 
   pmcId = '';
   financeActivation: FinanceActivationState = 'not_activated';
+  breadcrumbData: BreadCrumb[] = [];
 
   ngOnInit(): void {
     this.route.paramMap
@@ -48,6 +58,17 @@ export class ReconciliationComponent implements OnInit {
         this.financeActivation = this.route.snapshot.data[
           'financeActivation'
         ] as FinanceActivationState;
+        this.loadBreadcrumb();
       });
+  }
+
+  private loadBreadcrumb(): void {
+    this.sharedService
+      .getBreadcrumbs([
+        { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },
+        { label: 'PAGE_TITLE.FINANCE', link: `/dashboard/finance/${this.pmcId}/overview` },
+        { label: 'FINANCE_RECONCILIATION', link: '' },
+      ])
+      .subscribe((data) => (this.breadcrumbData = data));
   }
 }

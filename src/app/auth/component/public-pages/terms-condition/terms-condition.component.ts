@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './terms-condition.component.css',
 })
 export class TermsConditionComponent implements OnInit {
-  page!: PublicPage;
+  page?: PublicPage;
 
   constructor(private publicPagesService: PublicPagesService) {}
 

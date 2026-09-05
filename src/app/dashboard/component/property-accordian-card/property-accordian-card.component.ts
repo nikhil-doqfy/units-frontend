@@ -31,7 +31,7 @@ export class PropertyAccordianCardComponent {
           isAction?: boolean;
         }[];
         tableColumns?: { key: string; label: string }[];
-        tableRows?: Record<string, string>[];
+        tableRows?: Record<string, string | undefined>[];
       }[]
     | undefined;
   @Output() accordionIndexChange = new EventEmitter<number>();
