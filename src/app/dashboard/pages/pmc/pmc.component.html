@@ -157,34 +157,34 @@
 
 <ng-container *ngIf="showDetailView">
   <app-table-view-card
-    [title]="pmcList[0]?.company_name || 'N/A'"
-    [imgSrc]="''"
+    [title]="pmcDetail?.company_name || 'N/A'"
+    [imgSrc]="pmcDetail?.profile_image || ''"
     [headerItems]="[
       {
         label: getLabel('COMPANY_CODE'),
-        value: pmcList[0]?.company_code || 'N/A',
+        value: pmcDetail?.company_code || 'N/A',
       },
-      { label: getLabel('EMAIL'), value: pmcList[0]?.email },
+      { label: getLabel('EMAIL'), value: pmcDetail?.email || 'N/A' },
     ]"
     [items]="[
       {
         label: getLabel('PHONE_NUMBER'),
-        value: pmcList[0]?.phone_number || 'N/A',
+        value: pmcDetail?.phone_number || 'N/A',
       },
-      { label: getLabel('COMPANY'), value: pmcList[0]?.company_name || 'N/A' },
-      { label: getLabel('CITY'), value: pmcList[0]?.city || 'N/A' },
-      { label: getLabel('LOCALITY'), value: pmcList[0]?.locality || 'N/A' },
+      { label: getLabel('COMPANY'), value: pmcDetail?.company_name || 'N/A' },
+      { label: getLabel('CITY'), value: pmcDetail?.city || 'N/A' },
+      { label: getLabel('LOCALITY'), value: pmcDetail?.locality || 'N/A' },
       {
         label: getLabel('POSTAL_CODE'),
-        value: pmcList[0]?.postal_code || 'N/A',
+        value: pmcDetail?.postal_code || 'N/A',
       },
       {
         label: getLabel('ADDRESS_LINE_1'),
-        value: pmcList[0]?.address_line_1 || 'N/A',
+        value: pmcDetail?.address_line_1 || 'N/A',
       },
       {
         label: getLabel('ADDRESS_LINE_2'),
-        value: pmcList[0]?.address_line_2 || 'N/A',
+        value: pmcDetail?.address_line_2 || 'N/A',
       },
     ]"
     (back)="handleBackClick()"
@@ -194,7 +194,7 @@
   <div class="mt-3">
     <app-white-card [title]="'PMC_DOCUMENTS' | translate">
       <div class="row g-2">
-        @for (document of pmcList[0]?.documents; track $index) {
+        @for (document of pmcDetail?.documents; track $index) {
           <div class="col-auto">
             <app-document-type-item
               [title]="document?.file_name"
