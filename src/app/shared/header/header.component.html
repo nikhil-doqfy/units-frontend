@@ -8,7 +8,7 @@
       <div class="col">
         <div class="dashHdrLogo d-md-none">
           <a href="javascript:void(0);" (click)="goToDashboard()">
-            <img src="../../../../assets/mainLogoIcon.svg" alt="Units Logo" />
+            <img src="../../../../assets/unitsLogo.png" alt="Units Logo" />
           </a>
         </div>
         <div class="d-none d-md-block">
@@ -289,7 +289,10 @@
                       class="commonTabs"
                     >
                       <li [ngbNavItem]="1">
-                        <button ngbNavLink (click)="onNotificationTabChange('all')">
+                        <button
+                          ngbNavLink
+                          (click)="onNotificationTabChange('all')"
+                        >
                           {{ "ALL" | translate }} <span>{{ allCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
@@ -347,7 +350,10 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="2">
-                        <button ngbNavLink (click)="onNotificationTabChange('read')">
+                        <button
+                          ngbNavLink
+                          (click)="onNotificationTabChange('read')"
+                        >
                           {{ "READ" | translate }}<span>{{ readCount }}</span>
                         </button>
                         <ng-template ngbNavContent>
@@ -400,7 +406,10 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="3">
-                        <button ngbNavLink (click)="onNotificationTabChange('unread')">
+                        <button
+                          ngbNavLink
+                          (click)="onNotificationTabChange('unread')"
+                        >
                           {{ "UNREAD" | translate
                           }}<span>{{ unreadCount }}</span>
                         </button>
@@ -459,7 +468,12 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="4">
-                        <button ngbNavLink (click)="onNotificationTabChange('cleared')">{{ "CLEARED" | translate }}</button>
+                        <button
+                          ngbNavLink
+                          (click)="onNotificationTabChange('cleared')"
+                        >
+                          {{ "CLEARED" | translate }}
+                        </button>
                         <ng-template ngbNavContent>
                           <div
                             class="hdrNotiEmptyCol"
@@ -836,7 +850,9 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="4">
-          <button ngbNavLink (click)="onNotificationTabChange('cleared')">{{ "CLEARED" | translate }}</button>
+          <button ngbNavLink (click)="onNotificationTabChange('cleared')">
+            {{ "CLEARED" | translate }}
+          </button>
           <ng-template ngbNavContent>
             <div
               class="hdrNotiEmptyCol"
