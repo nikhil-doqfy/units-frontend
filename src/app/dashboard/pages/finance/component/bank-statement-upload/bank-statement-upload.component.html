@@ -1,0 +1,24 @@
+<div class="bank-statement-upload">
+  <input
+    type="file"
+    accept=".csv"
+    (change)="onFileSelect($event)"
+    [disabled]="uploading"
+  />
+
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="!selectedFile || uploading"
+    (click)="upload()"
+  >
+    {{ (uploading ? "FINANCE_UPLOADING" : "FINANCE_UPLOAD") | translate }}
+  </button>
+
+  <p *ngIf="resultMessage">
+    {{ resultMessage }}
+    <ng-container *ngIf="createdCount !== null">
+      ({{ createdCount }} {{ "FINANCE_CREATED_SUFFIX" | translate }})
+    </ng-container>
+  </p>
+</div>

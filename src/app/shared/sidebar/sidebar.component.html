@@ -81,6 +81,14 @@
           <app-pmc-icon></app-pmc-icon>
         </app-sidebar-item>
         <app-sidebar-item
+          *ngIf="canAccess('Finance')"
+          title="{{ 'FINANCE' | translate }}"
+          href="/dashboard/finance"
+          [exact]="false"
+        >
+          <app-pmc-icon></app-pmc-icon>
+        </app-sidebar-item>
+        <app-sidebar-item
           title="{{ 'TENANTS' | translate }}"
           href="/dashboard/tenants"
         >
@@ -148,6 +156,14 @@
           href="/dashboard/owners"
         >
           <app-owner-icon></app-owner-icon>
+        </app-sidebar-item>
+        <app-sidebar-item
+          *ngIf="canAccess('Finance')"
+          title="{{ 'FINANCE' | translate }}"
+          href="/dashboard/finance"
+          [exact]="false"
+        >
+          <app-pmc-icon></app-pmc-icon>
         </app-sidebar-item>
         <app-sidebar-item
           title="{{ 'CHEQUES' | translate }}"

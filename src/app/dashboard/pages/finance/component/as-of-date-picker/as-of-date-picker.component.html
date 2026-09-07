@@ -1,0 +1,14 @@
+<div class="datePicker">
+  <input
+    class="form-control"
+    placeholder="YYYY-MM-DD"
+    ngbDatepicker
+    #asOfDate="ngbDatepicker"
+    [ngModel]="date"
+    (ngModelChange)="onDateChange($event)"
+    [disabled]="isDisabled"
+  />
+  <button type="button" (click)="asOfDate.toggle()" [disabled]="isDisabled">
+    <app-date-icon />
+  </button>
+</div>
