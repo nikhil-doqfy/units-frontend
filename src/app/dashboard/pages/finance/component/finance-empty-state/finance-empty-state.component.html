@@ -1,0 +1,13 @@
+<ng-container *ngIf="financeActivation === 'not_activated'">
+  <app-white-card
+    [title]="title"
+    description="FINANCE_NOT_ACTIVATED_DESC"
+  ></app-white-card>
+</ng-container>
+
+<ng-container *ngIf="financeActivation === 'activated_empty'">
+  <app-white-card
+    [title]="title"
+    description="FINANCE_ACTIVATED_EMPTY_DESC"
+  ></app-white-card>
+</ng-container>

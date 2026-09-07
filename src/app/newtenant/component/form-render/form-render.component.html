@@ -213,7 +213,7 @@
     <div
       [class.blur]="
         currentSubStep?.component === CommercialdetailsComponent &&
-        leaseStage$()?.toUpperCase() === 'MANAGER_APPROVAL_REQUIRED'
+        leaseStage$().toUpperCase() === 'MANAGER_APPROVAL_REQUIRED'
       "
     >
       <ng-container

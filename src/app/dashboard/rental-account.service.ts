@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { SharedService } from '../shared.service';
-import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class RentalAccountService {
   getOwnerRentAmounts(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/payment/owner_rent_amounts${queryString}`
+      `${this.SERVER_ADDRESS}/payment/owner_rent_amounts${queryString}`,
     );
   }
   getLeaseDetailsById(leaseId: number): Observable<any> {
@@ -24,14 +24,14 @@ export class RentalAccountService {
       `${this.SERVER_ADDRESS}/payment/access_rental_account/`,
       {
         params: { lease_id: leaseId },
-      }
+      },
     );
   }
 
   getRentalPayments(params: Record<string, any>): Observable<any> {
     const queryString = this.sharedService.getQueryString(params);
     return this.http.get(
-      `${this.SERVER_ADDRESS}/payment/rental_payments/${queryString}`
+      `${this.SERVER_ADDRESS}/payment/rental_payments/${queryString}`,
     );
   }
 }

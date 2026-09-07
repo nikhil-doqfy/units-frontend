@@ -19,6 +19,11 @@ export class SidebarItemComponent {
   @Input() href: string | undefined;
   @Input() currentRoute: string = '';
   @Input() count?: number;
+  // Finance's sidebar link points at a redirecting parent route
+  // (`/dashboard/finance` -> `financeLandingGuard` -> `/dashboard/finance/:pmcId/overview`),
+  // so `exact: true` (every other item's own leaf route) never matches and
+  // the item never highlights. Pass `exact="false"` for any link like this.
+  @Input() exact = true;
 
   openSidebarValue = true;
   tooltipPlacement: 'start' | 'end' = 'end';

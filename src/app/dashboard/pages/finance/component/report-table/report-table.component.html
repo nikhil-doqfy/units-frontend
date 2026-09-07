@@ -1,0 +1,71 @@
+<div class="cmmnTblOuter">
+  <div class="cmmnTbl">
+    <div class="table-responsive reportTable">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            @for (column of columns; track column.key) {
+              <th [class]="column.align ? 'text-' + column.align : ''">
+                {{ column.label | translate }}
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows; track $index) {
+            <tr
+              [class.clickable]="clickableRows"
+              (click)="onRowClick(row)"
+            >
+              @for (column of columns; track column.key) {
+                <td [class]="column.align ? 'text-' + column.align : ''">
+                  @if (column.type === 'date') {
+                    {{ row[column.key] | date: 'medium' }}
+                  } @else {
+                    {{ row[column.key] }}
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+        @if (totals) {
+          <tfoot>
+            <tr>
+              @for (column of columns; track column.key) {
+                <td [class]="column.align ? 'text-' + column.align : ''">
+                  @if (column.type === 'date') {
+                    {{ totals[column.key] | date: 'medium' }}
+                  } @else if (column.type === 'label') {
+                    {{ asLabel(totals[column.key]) | translate }}
+                  } @else {
+                    {{ totals[column.key] }}
+                  }
+                </td>
+              }
+            </tr>
+          </tfoot>
+        }
+      </table>
+    </div>
+  </div>
+
+  @if (paginated) {
+    <div class="cmmnTblFtr">
+      <app-table-select
+        [componentName]="componentName"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (rowsPerPageChange)="onPageSizeChange($event)"
+      />
+      <app-table-pagination
+        [componentName]="componentName"
+        [currentPage]="currentPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        [disabled]="disabled"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  }
+</div>

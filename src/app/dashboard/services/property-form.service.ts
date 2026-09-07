@@ -351,7 +351,21 @@ export class PropertyFormService {
 
   patchPMDetails(response: any) {
     const content: any = response.content;
+    const selectedPlatforms = (content?.platforms || [])
+      .map((platform: string) => {
+        const map: any = {
+          'property finder': {
+            key: 'PROPERTY_FINDER',
+            value: 'Property Finder',
+          },
+          direct: { key: 'DIRECT', value: 'Direct' },
+          bayut: { key: 'BAYUT', value: 'Bayut' },
+          referral: { key: 'REFERRAL', value: 'Referral' },
+        };
 
+        return map[platform.toLowerCase()];
+      })
+      .filter(Boolean);
     return {
       propertyName: content?.property_name,
       noOfBlocks: {
@@ -370,14 +384,7 @@ export class PropertyFormService {
         : content?.property_type
           ? [{ key: content.property_type, value: content.property_type }]
           : [],
-      platforms: Array.isArray(content?.platforms)
-        ? content.platforms.map((p: any) => ({
-            key: p.key ?? p.id ?? p,
-            value: p.value ?? p.name ?? p,
-          }))
-        : content?.platforms
-          ? [{ key: content.platforms, value: content.platforms }]
-          : [],
+      platforms: selectedPlatforms,
       landArea: content?.land_area,
       landAreaUnit: {
         key: content?.land_area_unit,

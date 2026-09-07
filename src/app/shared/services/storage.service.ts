@@ -77,4 +77,24 @@ export class StorageService {
   getTheme(): string {
     return localStorage.getItem(this.THEME_KEY) ?? 'light';
   }
+
+  /*----------------------finance last-selected PMC --------------------*/
+  private LAST_FINANCE_PMC_KEY = 'lastFinancePmcId';
+
+  setLastFinancePmcId(id: string): void {
+    if (!id) return;
+    try {
+      localStorage.setItem(this.LAST_FINANCE_PMC_KEY, id);
+    } catch {
+      // private browsing / quota exceeded — nothing to persist, fail safe
+    }
+  }
+
+  getLastFinancePmcId(): string | null {
+    try {
+      return localStorage.getItem(this.LAST_FINANCE_PMC_KEY);
+    } catch {
+      return null;
+    }
+  }
 }

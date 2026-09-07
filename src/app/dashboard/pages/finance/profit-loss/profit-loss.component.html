@@ -1,0 +1,39 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="FINANCE_PROFIT_LOSS"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <app-white-card customClass="mb-3">
+    <div class="row">
+      <div class="col-md-6">
+        <app-date-range-picker [formControl]="dateRangeControl"></app-date-range-picker>
+      </div>
+    </div>
+  </app-white-card>
+
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_PROFIT_LOSS" | translate }}</p>
+
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
+
+  <ng-container *ngIf="!loadFailed">
+    <h5>{{ "FINANCE_INCOME" | translate }}</h5>
+    <app-report-table
+      [columns]="columns"
+      [rows]="incomeRows"
+    ></app-report-table>
+
+    <h5 class="mt-4">{{ "FINANCE_EXPENSE" | translate }}</h5>
+    <app-report-table
+      [columns]="columns"
+      [rows]="expenseRows"
+    ></app-report-table>
+
+    <div class="alert alert-info mt-3" role="alert">
+      {{ "FINANCE_NET_PROFIT_LOSS" | translate }}: {{ netProfitLoss }}
+    </div>
+  </ng-container>
+</ng-container>

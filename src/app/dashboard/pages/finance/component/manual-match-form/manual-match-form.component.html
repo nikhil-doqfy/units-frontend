@@ -1,0 +1,40 @@
+<div class="manual-match-form">
+  <div class="row g-3 align-items-end">
+    <div class="col-md-4">
+      <label for="manual-match-statement-line-id">{{ "FINANCE_STATEMENT_LINE_ID" | translate }}</label>
+      <input
+        id="manual-match-statement-line-id"
+        type="number"
+        min="1"
+        step="1"
+        class="form-control"
+        [formControl]="statementLineIdControl"
+        [disabled]="submitting"
+      />
+    </div>
+
+    <div class="col-md-4">
+      <label for="manual-match-journal-entry-id">{{ "FINANCE_JOURNAL_ENTRY_ID" | translate }}</label>
+      <input
+        id="manual-match-journal-entry-id"
+        type="number"
+        min="1"
+        step="1"
+        class="form-control"
+        [formControl]="journalEntryIdControl"
+        [disabled]="submitting"
+      />
+    </div>
+
+    <div class="col-md-auto">
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!canSubmit"
+        (click)="submit()"
+      >
+        {{ (submitting ? "FINANCE_CONFIRMING" : "FINANCE_CONFIRM") | translate }}
+      </button>
+    </div>
+  </div>
+</div>

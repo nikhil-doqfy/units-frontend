@@ -97,6 +97,7 @@ export class PMCComponent {
   ticketFilterPopup!: FilterPopupButtonComponent;
   closeResult: WritableSignal<string> = signal('');
   pmcList: any[] = [];
+  pmcDetail: any = null;
   propertySearchText = '';
   assignedPropertiesTotal = 0;
   showDetailView: boolean = false;
@@ -429,8 +430,9 @@ export class PMCComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
+          this.pmcDetail = resp?.content?.company_profile || null;
+          this.pmcList = this.pmcDetail ? [this.pmcDetail] : [];
           this.assignedProperties = resp?.content?.properties || [];
-
           this.assignedPropertiesTotal = resp?.pagination?.total_records || 0;
         },
         error: (err) => {
