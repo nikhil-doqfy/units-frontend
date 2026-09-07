@@ -476,3 +476,84 @@
     padding: 8px 12px; /* 👈 थोडी space वाढव */
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   ADD CHEQUE MODAL FORM
+   ══════════════════════════════════════════════════════════════════ */
+.cheque-form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.cheque-form-input {
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  background: var(--input-bg, #fff);
+  color: var(--text-primary);
+}
+
+.cheque-form-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-focus, rgba(99, 102, 241, 0.2));
+  border-color: var(--primary-color, #6366f1);
+}
+
+.cheque-form-input[readonly] {
+  background: var(--input-disabled-bg, #f8f9fa);
+  cursor: default;
+}
+
+.cheque-section-divider {
+  border-color: var(--border-light);
+  margin: 4px 0;
+}
+
+/* Additional Cheque button — slightly different shade */
+.btn-additional-cheque {
+  background: var(--secondary-btn-bg, #e0e7ff);
+  color: var(--secondary-btn-text, #4338ca);
+  border: 1px solid var(--secondary-btn-border, #c7d2fe);
+}
+
+.btn-additional-cheque:hover {
+  background: var(--secondary-btn-hover, #c7d2fe);
+}
+
+/* ── Cheque Type Toggle (inside modal) ────────────────────────── */
+.cheque-type-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.cheque-type-btn {
+  padding: 8px 22px;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.cheque-type-btn:not(:last-child) {
+  border-right: 1px solid var(--border-light);
+}
+
+.cheque-type-btn.active {
+  background: var(--primary-color, #6366f1);
+  color: #fff;
+}
+
+.cheque-type-btn:hover:not(.active) {
+  background: var(--hover-bg, #f1f5f9);
+}
