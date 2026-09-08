@@ -471,9 +471,9 @@
 }
 @media (max-width: 767px) {
   .invoice-section {
-    height: auto; /* 👈 fixed height काढ */
-    min-height: 30px; /* 👈 base height ठेव */
-    padding: 8px 12px; /* 👈 थोडी space वाढव */
+    height: auto;
+    min-height: 30px;
+    padding: 8px 12px;
   }
 }
 
