@@ -1,0 +1,43 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="FINANCE_BALANCE_SHEET"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <app-white-card customClass="mb-3">
+    <div class="row">
+      <div class="col-md-3">
+        <app-as-of-date-picker [formControl]="asOfDateControl"></app-as-of-date-picker>
+      </div>
+    </div>
+  </app-white-card>
+
+  <div class="alert alert-warning" role="alert" *ngIf="!balanced">
+    {{ "FINANCE_BALANCE_SHEET_UNBALANCED" | translate }}
+  </div>
+
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_BALANCE_SHEET" | translate }}</p>
+
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
+
+  <ng-container *ngIf="!loadFailed">
+    <h5>{{ "FINANCE_ASSETS" | translate }}</h5>
+    <app-report-table
+      [columns]="columns"
+      [rows]="assetRows"
+    ></app-report-table>
+
+    <h5 class="mt-4">{{ "FINANCE_LIABILITIES" | translate }}</h5>
+    <app-report-table
+      [columns]="columns"
+      [rows]="liabilityRows"
+    ></app-report-table>
+
+    <div class="alert alert-info mt-3" role="alert">
+      {{ equityName }}: {{ equityBalance }}
+    </div>
+  </ng-container>
+</ng-container>

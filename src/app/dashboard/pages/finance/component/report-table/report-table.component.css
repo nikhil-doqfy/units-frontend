@@ -1,0 +1,6 @@
+/* Story 4.2: cursor affordance for opt-in clickable rows. Only applied when
+   `clickableRows` is true via the `[class.clickable]` binding -- has no
+   effect on any consumer that doesn't opt in. */
+tr.clickable {
+  cursor: pointer;
+}

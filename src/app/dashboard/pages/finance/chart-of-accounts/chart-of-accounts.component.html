@@ -1,0 +1,21 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="FINANCE_CHART_OF_ACCOUNTS"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_CHART_OF_ACCOUNTS" | translate }}</p>
+
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
+
+  <app-report-table
+    *ngIf="!loadFailed"
+    [columns]="columns"
+    [rows]="rows"
+    [clickableRows]="true"
+    (rowClick)="onRowClick($event)"
+  ></app-report-table>
+</ng-container>

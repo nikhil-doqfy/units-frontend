@@ -1,0 +1,11 @@
+{
+  "/api/finance": {
+    "target": "http://localhost:8001",
+    "secure": false,
+    "pathRewrite": {
+      "^/api/finance": ""
+    },
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

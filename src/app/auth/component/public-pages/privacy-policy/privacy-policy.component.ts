@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './privacy-policy.component.css',
 })
 export class PrivacyPolicyComponent {
-  page!: PublicPage;
+  page?: PublicPage;
 
   constructor(private publicPagesService: PublicPagesService) {}
 
