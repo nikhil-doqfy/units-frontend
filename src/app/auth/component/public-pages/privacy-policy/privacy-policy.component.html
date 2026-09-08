@@ -23,7 +23,7 @@
     <span class="sidebar-title"> ON THIS PAGE </span>
 
     <div class="toc-links">
-      <a *ngFor="let item of page.sections" (click)="scrollToSection(item.id)">
+      <a *ngFor="let item of page?.sections" (click)="scrollToSection(item.id)">
         {{ item.title }}
       </a>
     </div>
@@ -33,10 +33,10 @@
     <p class="doc-category">LEGAL</p>
 
     <h1 class="doc-title">
-      {{ page.title }}
+      {{ page?.title }}
     </h1>
 
-    <p class="doc-date">Effective Date: {{ page.effectiveDate }}</p>
+    <p class="doc-date">Effective Date: {{ page?.effectiveDate }}</p>
 
     <div class="doc-info">
       <i class="bi bi-info-circle"></i>
