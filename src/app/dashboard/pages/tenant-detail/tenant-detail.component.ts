@@ -13,10 +13,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
+  NgbDatepickerModule,
+  NgbDateStruct,
   NgbDropdownModule,
   NgbModal,
   NgbPopoverModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { DateIconComponent } from '../../component/icons/date-icon/date-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Subject } from 'rxjs';
 import { TenantsService } from '../../services/tenants.service';
@@ -89,6 +92,8 @@ import { CustomDropdownComponent } from '../../../component/custom-dropdown/cust
     NoDataComponent,
     CustomDropdownComponent,
     NgbDropdownModule,
+    NgbDatepickerModule,
+    DateIconComponent,
   ],
   templateUrl: './tenant-detail.component.html',
   styleUrl: './tenant-detail.component.css',
@@ -525,6 +530,12 @@ export class TenantDetailComponent implements OnChanges {
   addingChequeType: 'RENT_CHEQUE' | 'ADDITIONAL_CHEQUE' = 'RENT_CHEQUE';
   savingCheque = false;
   chequeFile: File | null = null;
+
+  // NgbDateStruct models for the three date pickers in the modal
+  chequeDateStruct: NgbDateStruct | null = null;
+  startDateStruct: NgbDateStruct | null = null;
+  endDateStruct: NgbDateStruct | null = null;
+
   chequeForm: {
     payment_type: string;
     cheque_number: string;
@@ -581,6 +592,9 @@ export class TenantDetailComponent implements OnChanges {
     type: 'RENT_CHEQUE' | 'ADDITIONAL_CHEQUE' = 'RENT_CHEQUE',
   ) {
     this.addingChequeType = type;
+    this.chequeDateStruct = null;
+    this.startDateStruct = null;
+    this.endDateStruct = null;
     this.chequeForm = {
       payment_type: 'CHEQUE',
       cheque_number: '',
@@ -635,9 +649,9 @@ export class TenantDetailComponent implements OnChanges {
       cheque_type: this.addingChequeType,
       payment_type: this.chequeForm.payment_type,
       cheque_number: this.chequeForm.cheque_number,
-      cheque_date: this.chequeForm.cheque_date,
-      start_date: this.chequeForm.start_date,
-      end_date: this.chequeForm.end_date,
+      cheque_date: this.ngbDateToString(this.chequeDateStruct),
+      start_date: this.ngbDateToString(this.startDateStruct),
+      end_date: this.ngbDateToString(this.endDateStruct),
       origin_bank_id: this.chequeForm.origin_bank_id,
       origin_account_number: this.chequeForm.origin_account_number,
       settlement_bank_id: this.chequeForm.settlement_bank_id,
@@ -704,5 +718,13 @@ export class TenantDetailComponent implements OnChanges {
       centered: true,
       size: 'xl',
     });
+  }
+
+  // ── Date helpers (NgbDateStruct ↔ 'YYYY-MM-DD' string) ──────────
+  ngbDateToString(d: NgbDateStruct | null): string {
+    if (!d) return '';
+    const mm = String(d.month).padStart(2, '0');
+    const dd = String(d.day).padStart(2, '0');
+    return `${d.year}-${mm}-${dd}`;
   }
 }

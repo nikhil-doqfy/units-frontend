@@ -492,7 +492,6 @@
   border-radius: 6px;
   border: 1px solid var(--border-light);
   background: var(--input-bg, #fff);
-  color: var(--text-primary);
 }
 
 .cheque-form-input:focus {
@@ -556,4 +555,42 @@
 
 .cheque-type-btn:hover:not(.active) {
   background: var(--hover-bg, #f1f5f9);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CHEQUE MODAL — ngbDatepicker wrapper  (matches add-lease pattern)
+   ══════════════════════════════════════════════════════════════════ */
+.datePicker {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--inputBorder, #ced4da);
+  border-radius: 6px;
+  overflow: visible;
+  background: var(--whiteBg, #fff);
+}
+
+.datePicker input.form-control {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  flex: 1;
+  min-width: 0;
+}
+
+.datePicker input.form-control:focus {
+  box-shadow: none;
+}
+
+.datePicker button {
+  background: transparent;
+  border: none;
+  padding: 0 10px;
+  cursor: pointer;
+  color: var(--textSecondary, #6c757d);
+  display: flex;
+  align-items: center;
+}
+
+.datePicker button:hover {
+  color: var(--primaryBlue, #2563eb);
 }

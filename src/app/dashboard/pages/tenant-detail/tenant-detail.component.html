@@ -228,14 +228,6 @@
         </div>
         <div class="col-md-auto">
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <button
-              type="button"
-              class="btn btnCommon btn-sm"
-              (click)="openAddChequeModal(addChequeModal)"
-            >
-              + Add Cheque
-            </button>
-
             <div
               class="selected-filters d-flex gap-2 flex-wrap"
               *ngIf="appliedPaymentType || appliedStatus"
@@ -256,6 +248,13 @@
               placeholder="Search here..."
               (onValueChange)="onSearchChange($event)"
             />
+            <button
+              type="button"
+              class="btn btnCommonsx"
+              (click)="openAddChequeModal(addChequeModal)"
+            >
+              + Add Cheque
+            </button>
             <app-custom-dropdown
               [title]="'RECEIPT' | translate"
               [hasIcon]="true"
@@ -692,31 +691,55 @@
       <!-- Cheque Date -->
       <div class="col-md-4">
         <label class="form-label cheque-form-label">Cheque Date</label>
-        <input
-          type="date"
-          class="form-control cheque-form-input"
-          [(ngModel)]="chequeForm.cheque_date"
-        />
+        <div class="datePicker">
+          <input
+            class="form-control cheque-form-input"
+            placeholder="YYYY-MM-DD"
+            ngbDatepicker
+            #chequeDatePicker="ngbDatepicker"
+            [(ngModel)]="chequeDateStruct"
+            name="chequeDate"
+          />
+          <button type="button" (click)="chequeDatePicker.toggle()">
+            <app-date-icon />
+          </button>
+        </div>
       </div>
 
       <!-- Start Date -->
       <div class="col-md-4">
         <label class="form-label cheque-form-label">Start Date</label>
-        <input
-          type="date"
-          class="form-control cheque-form-input"
-          [(ngModel)]="chequeForm.start_date"
-        />
+        <div class="datePicker">
+          <input
+            class="form-control cheque-form-input"
+            placeholder="YYYY-MM-DD"
+            ngbDatepicker
+            #startDatePicker="ngbDatepicker"
+            [(ngModel)]="startDateStruct"
+            name="startDate"
+          />
+          <button type="button" (click)="startDatePicker.toggle()">
+            <app-date-icon />
+          </button>
+        </div>
       </div>
 
       <!-- End Date -->
       <div class="col-md-4">
         <label class="form-label cheque-form-label">End Date</label>
-        <input
-          type="date"
-          class="form-control cheque-form-input"
-          [(ngModel)]="chequeForm.end_date"
-        />
+        <div class="datePicker">
+          <input
+            class="form-control cheque-form-input"
+            placeholder="YYYY-MM-DD"
+            ngbDatepicker
+            #endDatePicker="ngbDatepicker"
+            [(ngModel)]="endDateStruct"
+            name="endDate"
+          />
+          <button type="button" (click)="endDatePicker.toggle()">
+            <app-date-icon />
+          </button>
+        </div>
       </div>
 
       <!-- Divider -->
