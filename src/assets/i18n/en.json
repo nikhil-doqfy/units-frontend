@@ -942,5 +942,12 @@
   "MY_TICKETS": "My Tickets",
   "TICKET_STATUS": "Ticket Status",
   "SELECT_TICKET_STATUS": "Select Ticket Status",
-  "COMMISSION_PERCENT": "Commission Percent"
+  "COMMISSION_PERCENT": "Commission Percent",
+
+  "REQUIRED": "This field is required.",
+  "MIN_LENGTH_2": "Minimum 2 characters are required.",
+  "MAX_LENGTH_100": "Maximum 100 characters are allowed.",
+  "AMOUNT_MIN": "Amount must be greater than 0.",
+  "AMOUNT_PATTERN": "Please enter a valid amount.",
+  "MAX_LENGTH_20": "Maximum 20 characters are allowed."
 }
