@@ -55,6 +55,7 @@ import { ReplaceChequeComponent } from '../../component/forms/replace-cheque/rep
 import { ReceiptComponent } from '../../component/forms/receipt/receipt.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 @Component({
   selector: 'app-tenant-detail',
   standalone: true,
@@ -94,6 +95,7 @@ import { CustomDropdownComponent } from '../../../component/custom-dropdown/cust
     NgbDropdownModule,
     NgbDatepickerModule,
     DateIconComponent,
+    PdfViewerModule,
   ],
   templateUrl: './tenant-detail.component.html',
   styleUrl: './tenant-detail.component.css',
@@ -129,6 +131,10 @@ export class TenantDetailComponent implements OnChanges {
     { key: 'REALIZED', value: 'Realized' },
     { key: 'BOUNCED', value: 'Bounce' },
   ];
+
+  previewUrl: string = '';
+  previewFileName: string = '';
+  isPdfPreview: boolean = false;
 
   selectedPaymentType: { key: string; value: string } | null = null;
   selectedStatus: { key: string; value: string } | null = null;
@@ -386,6 +392,55 @@ export class TenantDetailComponent implements OnChanges {
     }
   }
 
+  downloadFromUrl(url: string, _fileName: string): void {
+    window.open(url, '_blank');
+  }
+  previewDocument(document: any, previewModal: any): void {
+    const url =
+      document.pdf_url ??
+      document.file_url ??
+      document.document_url ??
+      document.path ??
+      null;
+
+    if (!url) {
+      console.warn('No URL found for document preview:', document);
+      return;
+    }
+
+    const fileName = document.file_name ?? document.title ?? 'Document';
+    const ext = fileName.split('.').pop()?.toLowerCase() ?? '';
+    this.isPdfPreview = ext === 'pdf';
+    this.previewFileName = fileName;
+    this.previewUrl = '';
+
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error('Fetch failed');
+        return res.blob();
+      })
+      .then((blob) => {
+        if (this.previewUrl?.startsWith('blob:')) {
+          URL.revokeObjectURL(this.previewUrl);
+        }
+        this.previewUrl = URL.createObjectURL(blob);
+
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      })
+      .catch(() => {
+        this.previewUrl = url;
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      });
+  }
+  
   handleExportClick(leaseId: number) {
     const params = {
       lease_id: leaseId,

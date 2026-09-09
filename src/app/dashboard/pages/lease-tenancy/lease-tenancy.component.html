@@ -91,7 +91,7 @@
           <tr>
             <th>{{ "PROPERTY_CODE" | translate }}</th>
             <th>
-                {{ "AGREEMENT_WITH" | translate }} <i><app-sorting-icon /></i>
+              {{ "AGREEMENT_WITH" | translate }} <i><app-sorting-icon /></i>
             </th>
             <th>{{ "CONTACT_NUMBER" | translate }}</th>
             <th>{{ "AGREEMENT START & END DATE" | translate }}</th>
@@ -136,7 +136,7 @@
                   <!-- (clicked)="handleDownloadClick()" -->
                   <app-table-action-btn
                     type="preview"
-                    (click)="handleViewPdf(lease.lease_id)"
+                    (clicked)="previewDocument(lease, pdfPreviewModal)"
                   />
 
                   <!-- (clicked)="handlePreviewClick()" -->
@@ -168,3 +168,68 @@
     />
   </div>
 </div>
+
+<!-- ====================== PDF / IMAGE PREVIEW MODAL ====================== -->
+<ng-template #pdfPreviewModal let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title">
+      <i class="bi bi-file-earmark me-2"></i>{{ previewFileName }}
+    </h6>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    ></button>
+  </div>
+
+  <div class="modal-body p-0 previewModalBody">
+    <ng-container *ngIf="isPdfPreview && previewUrl">
+      <pdf-viewer
+        [src]="previewUrl"
+        [render-text]="true"
+        [original-size]="false"
+        [fit-to-page]="true"
+        [zoom]="1"
+        [zoom-scale]="'page-width'"
+        style="width: 100%; height: 75vh; display: block"
+      ></pdf-viewer>
+    </ng-container>
+
+    <ng-container *ngIf="!isPdfPreview && previewUrl">
+      <div class="imagePreviewContainer">
+        <img
+          [src]="previewUrl"
+          [alt]="previewFileName"
+          class="img-fluid previewImage"
+        />
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!previewUrl">
+      <div class="previewNoUrl">
+        <i class="bi bi-exclamation-circle"></i>
+        <p>Document URL not available.</p>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss()"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      *ngIf="previewUrl"
+      type="button"
+      class="btn btnCommon"
+      (click)="downloadFromUrl(previewUrl, previewFileName)"
+    >
+      <i class="bi bi-download"></i>
+      {{ "DOWNLOAD" | translate }}
+    </button>
+  </div>
+</ng-template>

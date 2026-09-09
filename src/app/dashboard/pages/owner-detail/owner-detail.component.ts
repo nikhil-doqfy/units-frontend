@@ -23,6 +23,8 @@ import { SharedService } from '../../../shared.service';
 import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AlertService } from '../../../shared/services/alert.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PdfViewerModule } from "ng2-pdf-viewer";
 
 @Component({
   selector: 'app-owner-detail',
@@ -43,7 +45,8 @@ import { AlertService } from '../../../shared/services/alert.service';
     TableActionButtonComponent,
     TenantDetailComponent,
     TranslateModule,
-  ],
+    PdfViewerModule
+],
   templateUrl: './owner-detail.component.html',
   styleUrl: './owner-detail.component.css',
 })
@@ -53,11 +56,16 @@ export class OwnerDetailComponent implements OnInit {
   private ownerService = inject(OwnerService);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
+  private modalService = inject(NgbModal);
 
   loading = signal(true);
   propsLoading = signal(false);
   owner: any = null;
   properties: any[] = [];
+
+  previewUrl: string = '';
+  previewFileName: string = '';
+  isPdfPreview: boolean = false;
 
   totalRecords = 0;
   rowsPerPage = 10;
@@ -144,6 +152,55 @@ export class OwnerDetailComponent implements OnInit {
 
   onRefresh() {
     this.loadProperties();
+  }
+
+  downloadFromUrl(url: string, _fileName: string): void {
+    window.open(url, '_blank');
+  }
+  previewDocument(document: any, previewModal: any): void {
+    const url =
+      document.pdf_url ??
+      document.file_url ??
+      document.document_url ??
+      document.path ??
+      null;
+
+    if (!url) {
+      console.warn('No URL found for document preview:', document);
+      return;
+    }
+
+    const fileName = document.file_name ?? document.title ?? 'Document';
+    const ext = fileName.split('.').pop()?.toLowerCase() ?? '';
+    this.isPdfPreview = ext === 'pdf';
+    this.previewFileName = fileName;
+    this.previewUrl = '';
+
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error('Fetch failed');
+        return res.blob();
+      })
+      .then((blob) => {
+        if (this.previewUrl?.startsWith('blob:')) {
+          URL.revokeObjectURL(this.previewUrl);
+        }
+        this.previewUrl = URL.createObjectURL(blob);
+
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      })
+      .catch(() => {
+        this.previewUrl = url;
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      });
   }
 
   searchTextChange(text: string) {
