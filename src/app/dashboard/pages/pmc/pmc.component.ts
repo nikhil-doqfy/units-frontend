@@ -50,6 +50,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'app-pmc',
@@ -77,6 +78,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
     NgbTooltipModule,
     FilterPopupButtonComponent,
     CustomSelectComponent,
+    PdfViewerModule,
   ],
   templateUrl: './pmc.component.html',
   styleUrl: './pmc.component.css',
@@ -104,6 +106,11 @@ export class PMCComponent {
   currentLanguage = 'en';
   tenancyStatus: any = [];
   selectedTenancyStatus: any = null;
+
+  previewUrl: string = '';
+  previewFileName: string = '';
+  isPdfPreview: boolean = false;
+
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
@@ -373,6 +380,54 @@ export class PMCComponent {
       });
   }
 
+  downloadFromUrl(url: string, _fileName: string): void {
+    window.open(url, '_blank');
+  }
+  previewDocument(document: any, previewModal: any): void {
+    const url =
+      document.pdf_url ??
+      document.file_url ??
+      document.document_url ??
+      document.path ??
+      null;
+
+    if (!url) {
+      console.warn('No URL found for document preview:', document);
+      return;
+    }
+
+    const fileName = document.file_name ?? document.title ?? 'Document';
+    const ext = fileName.split('.').pop()?.toLowerCase() ?? '';
+    this.isPdfPreview = ext === 'pdf';
+    this.previewFileName = fileName;
+    this.previewUrl = '';
+
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error('Fetch failed');
+        return res.blob();
+      })
+      .then((blob) => {
+        if (this.previewUrl?.startsWith('blob:')) {
+          URL.revokeObjectURL(this.previewUrl);
+        }
+        this.previewUrl = URL.createObjectURL(blob);
+
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      })
+      .catch(() => {
+        this.previewUrl = url;
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      });
+  }
   handleEditClick(): void {
     console.log('Edit button clicked');
   }

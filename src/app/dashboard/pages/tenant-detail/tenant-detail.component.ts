@@ -13,14 +13,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
+  NgbDatepickerModule,
+  NgbDateStruct,
   NgbDropdownModule,
   NgbModal,
   NgbPopoverModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { DateIconComponent } from '../../component/icons/date-icon/date-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Subject } from 'rxjs';
 import { TenantsService } from '../../services/tenants.service';
 import { LeaseService } from '../../services/lease.service';
+import { AlertService } from '../../../shared/services/alert.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 
 import { TableViewCardComponent } from '../../component/table-view-card/table-view-card.component';
@@ -51,8 +55,7 @@ import { ReplaceChequeComponent } from '../../component/forms/replace-cheque/rep
 import { ReceiptComponent } from '../../component/forms/receipt/receipt.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
-import { AlertService } from '../../../shared/services/alert.service';
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 @Component({
   selector: 'app-tenant-detail',
   standalone: true,
@@ -90,6 +93,9 @@ import { AlertService } from '../../../shared/services/alert.service';
     NoDataComponent,
     CustomDropdownComponent,
     NgbDropdownModule,
+    NgbDatepickerModule,
+    DateIconComponent,
+    PdfViewerModule,
   ],
   templateUrl: './tenant-detail.component.html',
   styleUrl: './tenant-detail.component.css',
@@ -126,6 +132,10 @@ export class TenantDetailComponent implements OnChanges {
     { key: 'BOUNCED', value: 'Bounce' },
   ];
 
+  previewUrl: string = '';
+  previewFileName: string = '';
+  isPdfPreview: boolean = false;
+
   selectedPaymentType: { key: string; value: string } | null = null;
   selectedStatus: { key: string; value: string } | null = null;
   appliedPaymentType: { key: string; value: string } | null = null;
@@ -161,6 +171,8 @@ export class TenantDetailComponent implements OnChanges {
       if (this.selectedLease?.id) {
         this.loadTransactions(this.selectedLease.id);
         this.loadRentAnalytics(this.selectedLease.id);
+        this.loadCheques();
+        this.loadBanks();
       }
     }
   }
@@ -297,6 +309,7 @@ export class TenantDetailComponent implements OnChanges {
   onRefresh() {
     if (this.selectedLease?.id) {
       this.loadTransactions(this.selectedLease.id);
+      this.loadCheques();
     }
   }
 
@@ -379,6 +392,55 @@ export class TenantDetailComponent implements OnChanges {
     }
   }
 
+  downloadFromUrl(url: string, _fileName: string): void {
+    window.open(url, '_blank');
+  }
+  previewDocument(document: any, previewModal: any): void {
+    const url =
+      document.pdf_url ??
+      document.file_url ??
+      document.document_url ??
+      document.path ??
+      null;
+
+    if (!url) {
+      console.warn('No URL found for document preview:', document);
+      return;
+    }
+
+    const fileName = document.file_name ?? document.title ?? 'Document';
+    const ext = fileName.split('.').pop()?.toLowerCase() ?? '';
+    this.isPdfPreview = ext === 'pdf';
+    this.previewFileName = fileName;
+    this.previewUrl = '';
+
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error('Fetch failed');
+        return res.blob();
+      })
+      .then((blob) => {
+        if (this.previewUrl?.startsWith('blob:')) {
+          URL.revokeObjectURL(this.previewUrl);
+        }
+        this.previewUrl = URL.createObjectURL(blob);
+
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      })
+      .catch(() => {
+        this.previewUrl = url;
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      });
+  }
+  
   handleExportClick(leaseId: number) {
     const params = {
       lease_id: leaseId,
@@ -516,6 +578,177 @@ export class TenantDetailComponent implements OnChanges {
     this.currentPage = 1;
   }
 
+  // ── Add Cheque ──────────────────────────────────────────────────
+  rentCheques: any[] = [];
+  additionalCheques: any[] = [];
+  banks: { key: number; value: string; ifsc_code: string }[] = [];
+  addingChequeType: 'RENT_CHEQUE' | 'ADDITIONAL_CHEQUE' = 'RENT_CHEQUE';
+  savingCheque = false;
+  chequeFile: File | null = null;
+
+  // NgbDateStruct models for the three date pickers in the modal
+  chequeDateStruct: NgbDateStruct | null = null;
+  startDateStruct: NgbDateStruct | null = null;
+  endDateStruct: NgbDateStruct | null = null;
+
+  chequeForm: {
+    payment_type: string;
+    cheque_number: string;
+    cheque_date: string;
+    start_date: string;
+    end_date: string;
+    origin_bank_id: number | null;
+    origin_account_number: string;
+    origin_ifsc_code: string;
+    settlement_bank_id: number | null;
+    settlement_account_number: string;
+    settlement_ifsc_code: string;
+    amount: number | null;
+  } = {
+    payment_type: 'CHEQUE',
+    cheque_number: '',
+    cheque_date: '',
+    start_date: '',
+    end_date: '',
+    origin_bank_id: null,
+    origin_account_number: '',
+    origin_ifsc_code: '',
+    settlement_bank_id: null,
+    settlement_account_number: '',
+    settlement_ifsc_code: '',
+    amount: null,
+  };
+
+  loadCheques(): void {
+    const leaseId = this.selectedLease?.id;
+    if (!leaseId) return;
+    this.leaseService
+      .getLeaseCheques({ lease_id: leaseId })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const c = resp?.content ?? {};
+          this.rentCheques = c.rent_cheques ?? [];
+          this.additionalCheques = c.additional_cheques ?? [];
+        },
+      });
+  }
+
+  loadBanks(): void {
+    this.leaseService.getBanks().subscribe({
+      next: (resp: any) => {
+        this.banks = resp?.content?.bank ?? [];
+      },
+    });
+  }
+
+  openAddChequeModal(
+    content: TemplateRef<any>,
+    type: 'RENT_CHEQUE' | 'ADDITIONAL_CHEQUE' = 'RENT_CHEQUE',
+  ) {
+    this.addingChequeType = type;
+    this.chequeDateStruct = null;
+    this.startDateStruct = null;
+    this.endDateStruct = null;
+    this.chequeForm = {
+      payment_type: 'CHEQUE',
+      cheque_number: '',
+      cheque_date: '',
+      start_date: '',
+      end_date: '',
+      origin_bank_id: null,
+      origin_account_number: '',
+      origin_ifsc_code: '',
+      settlement_bank_id: null,
+      settlement_account_number: '',
+      settlement_ifsc_code: '',
+      amount: null,
+    };
+    this.chequeFile = null;
+    if (!this.banks.length) {
+      this.loadBanks();
+    }
+    this.modalService.open(content, {
+      ariaLabelledBy: 'add-cheque-title',
+      windowClass: 'mdlCommon',
+      centered: true,
+      size: 'lg',
+    });
+  }
+
+  onOriginBankChange(): void {
+    const bank = this.banks.find(
+      (b) => b.key === this.chequeForm.origin_bank_id,
+    );
+    this.chequeForm.origin_ifsc_code = bank?.ifsc_code ?? '';
+  }
+
+  onSettlementBankChange(): void {
+    const bank = this.banks.find(
+      (b) => b.key === this.chequeForm.settlement_bank_id,
+    );
+    this.chequeForm.settlement_ifsc_code = bank?.ifsc_code ?? '';
+  }
+
+  onChequeFileSelected(event: Event): void {
+    this.chequeFile = (event.target as HTMLInputElement).files?.[0] ?? null;
+  }
+
+  saveNewCheque(modal: any): void {
+    const leaseId = this.selectedLease?.id;
+    if (!leaseId) return;
+    this.savingCheque = true;
+
+    const payload: Record<string, any> = {
+      lease_id: leaseId,
+      cheque_type: this.addingChequeType,
+      payment_type: this.chequeForm.payment_type,
+      cheque_number: this.chequeForm.cheque_number,
+      cheque_date: this.ngbDateToString(this.chequeDateStruct),
+      start_date: this.ngbDateToString(this.startDateStruct),
+      end_date: this.ngbDateToString(this.endDateStruct),
+      origin_bank_id: this.chequeForm.origin_bank_id,
+      origin_account_number: this.chequeForm.origin_account_number,
+      settlement_bank_id: this.chequeForm.settlement_bank_id,
+      settlement_account_number: this.chequeForm.settlement_account_number,
+      amount: this.chequeForm.amount,
+    };
+
+    const doSave = (fileData?: { data: string; file_name: string }) => {
+      if (fileData) {
+        payload['file_data'] = fileData.data;
+        payload['file_name'] = fileData.file_name;
+      }
+      this.leaseService
+        .createLeaseCheque(payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.alertService.customSuccess('Cheque added successfully');
+            this.savingCheque = false;
+            modal.close();
+            this.loadCheques();
+            this.loadTransactions(leaseId);
+          },
+          error: () => {
+            this.alertService.error('Failed to add cheque');
+            this.savingCheque = false;
+          },
+        });
+    };
+
+    if (this.chequeFile) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        doSave({ data: base64, file_name: this.chequeFile!.name });
+      };
+      reader.readAsDataURL(this.chequeFile);
+    } else {
+      doSave();
+    }
+  }
+
   openChangePayementModeModal(content: TemplateRef<any>) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-title',
@@ -540,5 +773,13 @@ export class TenantDetailComponent implements OnChanges {
       centered: true,
       size: 'xl',
     });
+  }
+
+  // ── Date helpers (NgbDateStruct ↔ 'YYYY-MM-DD' string) ──────────
+  ngbDateToString(d: NgbDateStruct | null): string {
+    if (!d) return '';
+    const mm = String(d.month).padStart(2, '0');
+    const dd = String(d.day).padStart(2, '0');
+    return `${d.year}-${mm}-${dd}`;
   }
 }

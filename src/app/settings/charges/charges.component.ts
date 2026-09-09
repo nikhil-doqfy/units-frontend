@@ -8,6 +8,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { PlusIconComponent } from '../../shared/component/icons/plus-icon/plus-icon.component';
 import { EditIconComponent } from '../../dashboard/component/icons/edit-icon/edit-icon.component';
@@ -95,12 +96,34 @@ export class ChargesComponent {
   createChargeForm(c?: any): FormGroup {
     return this.fb.group({
       charge_id: [c?.charge_id || c?.id || null],
-      description: [c?.description || ''],
-      amount: [c?.amount || 0],
-      tax_code: [c?.tax_code || ''],
-      vat: [c?.vat_amount || 0],
+
+      description: [
+        c?.description || '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100),
+        ],
+      ],
+
+      amount: [
+        c?.amount ?? null,
+        [
+          Validators.required,
+          Validators.min(0.01),
+          Validators.pattern(/^\d+(\.\d{1,2})?$/),
+        ],
+      ],
+
+      tax_code: [
+        c?.tax_code || '',
+        [Validators.required, Validators.maxLength(20)],
+      ],
+
+      vat: [c?.vat_amount ?? 0],
+
       is_editable: [c?.editable || false],
-      total: [c?.total || 0],
+      total: [c?.total ?? 0],
       isNew: [c?.isNew || false],
       isEdit: [false],
     });
@@ -129,10 +152,11 @@ export class ChargesComponent {
   addNewRow() {
     const hasNew = this.chargesArray.value.some((c: any) => c.isNew);
 
-    if (hasNew) return;
+    if (hasNew) {
+      return;
+    }
 
     this.showSave = true;
-
     this.chargesArray.insert(0, this.createChargeForm({ isNew: true }));
   }
 
@@ -146,34 +170,65 @@ export class ChargesComponent {
 
     this.showSave = false;
   }
-
   saveRow(index?: number) {
+    // =========================
+    // SAVE NEW CHARGE
+    // =========================
     const formValue = this.chargesArray.value;
+
     const newIndex = formValue.findIndex((c: any) => c.isNew);
+
     if (newIndex !== -1) {
+      const rowForm = this.chargesArray.at(newIndex) as FormGroup;
+
+      rowForm.markAllAsTouched();
+
+      if (rowForm.invalid) {
+        return;
+      }
+
       const payload = {
-        description: formValue[newIndex]?.description,
-        amount: formValue[newIndex]?.amount,
-        tax_code: formValue[newIndex]?.tax_code,
+        description: rowForm.value.description.trim(),
+        amount: rowForm.value.amount,
+        tax_code: String(rowForm.value.tax_code ?? '').trim(),
       };
-      this.showSave = false;
-      this.chargesService.addCharge(payload).subscribe(() => {
-        this.getCharges();
+
+      this.chargesService.addCharge(payload).subscribe({
+        next: () => {
+          this.showSave = false;
+          this.getCharges();
+        },
+        error: () => {},
       });
+
+      return;
     }
 
+    // =========================
+    // EDIT EXISTING CHARGE
+    // =========================
     if (index !== undefined) {
-      const rowForm = this.chargesArray.at(index);
+      const rowForm = this.chargesArray.at(index) as FormGroup;
+
+      rowForm.markAllAsTouched();
+
+      if (rowForm.invalid) {
+        return;
+      }
+
       const payload = {
         charge_id: rowForm.value.charge_id,
-        description: rowForm.value.description,
+        description: rowForm.value.description.trim(),
         amount: rowForm.value.amount,
-        tax_code: rowForm.value.tax_code,
+        tax_code: String(rowForm.value.tax_code ?? '').trim(),
       };
 
-      this.chargesService.editCharge(payload).subscribe(() => {
-        rowForm.patchValue({ isEdit: false });
-        this.getCharges();
+      this.chargesService.editCharge(payload).subscribe({
+        next: () => {
+          rowForm.patchValue({ isEdit: false });
+          this.getCharges();
+        },
+        error: () => {},
       });
     }
   }

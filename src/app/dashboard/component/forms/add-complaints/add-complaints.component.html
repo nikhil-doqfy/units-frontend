@@ -10,6 +10,7 @@
         formControlName="pmc"
         [placeholder]="'SELECT_PMC' | translate"
         [selectedOption]="selectedPmc"
+        [disabled]="isEditMode"
         (optionSelected)="onPmcSelected($event)"
       ></app-custom-select>
     </div>
@@ -21,6 +22,7 @@
         [showFilterInput]="true"
         [placeholder]="'SELECT_OPTION' | translate"
         [selectedOption]="selectedPropertyOption"
+        [disabled]="isEditMode"
         (optionSelected)="onPropertySelect($event)"
       ></app-form-select-field>
     </div>
@@ -35,6 +37,7 @@
         [form]="complaintForm"
         controlName="unit_id"
         [selectedOption]="selectedUnitOption"
+        [disabled]="isEditMode"
         (optionSelected)="onUnitSelect($event)"
       ></app-form-select-field>
     </div>

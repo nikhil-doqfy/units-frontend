@@ -146,3 +146,14 @@
     display: flex;
   }
 }
+
+.inline-input.input-error {
+  border-bottom: 2px solid var(--dangerRed, #dc3545);
+}
+
+.field-error {
+  font-size: 11px;
+  color: var(--dangerRed, #dc3545);
+  margin-top: 2px;
+  line-height: 1.3;
+}
