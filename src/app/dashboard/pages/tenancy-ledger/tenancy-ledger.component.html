@@ -144,18 +144,14 @@
                 <app-table-img-item
                   [img]="'assets/property/property-img-1.png'"
                   [title]="property.property_name || '--'"
-                  (click)="handleViewClick(property.property_unit_id)"
+                  (click)="handleViewClick(property)"
                 />
               </td>
               <td>{{ property.block_tower || "--" }}</td>
               <td>{{ property.unit || "--" }}</td>
-              <td style="cursor: pointer" (click)="viewTenant(property)">
+              <td>
                 <!-- /* [img]="'assets/property/property-img-1.png'" */ -->
-                <app-table-img-item
-                  [title]="property.tenant_name || '--'"
-                  size="md"
-                  [showInitialsFallback]="true"
-                />
+                <app-table-img-item [title]="property.tenant_name || '--'" />
               </td>
 
               <td>
@@ -222,488 +218,216 @@
 </ng-container>
 
 <ng-container *ngIf="showDetailView">
-  <app-white-card>
-    <app-property-view-card
-      [propertyImages]="property.propertyImages"
-      [name]="property.name"
-      [location]="property.location"
-      [status]="property.status"
-      [price]="property.rent"
-      [bhk]="property.bhk"
-      [sqft]="property.sqft"
-      [sections]="property.sections"
-      [showBack]="true"
-      (back)="handleBackClick()"
-      [priceLabel]="'Fixed Rent'"
-      [priceValue]="'AED 31,000'"
-    >
-      >
-    </app-property-view-card>
-  </app-white-card>
-  <div class="mt-3">
-    <app-white-card [title]="'ALL_DOCUMENTS' | translate">
-      <div class="commonTabs">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              id="emiratesID-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#emiratesID-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="emiratesID-tab-pane"
-              aria-selected="true"
-            >
-              Rental Document
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="passportSelf-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#passportSelf-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="passportSelf-tab-pane"
-              aria-selected="false"
-            >
-              Tenant Doc
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="passportFamily-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#passportFamily-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="passportFamily-tab-pane"
-              aria-selected="false"
-            >
-              Ejari Certificates
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="employmentProof-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#employmentProof-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="employmentProof-tab-pane"
-              aria-selected="false"
-            >
-              Owner Docs
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="visaSelf-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#visaSelf-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="visaSelf-tab-pane"
-              aria-selected="false"
-            >
-              Cheque
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div class="commonTabsContent">
-        <div class="tab-content" id="myTabContent">
-          <div
-            class="tab-pane fade show active"
-            id="emiratesID-tab-pane"
-            role="tabpanel"
-            aria-labelledby="emiratesID-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div
-                class="col-auto"
-                *ngFor="let item of documentsByType.EMIRATES_ID"
-              >
-                <app-document-type-item
-                  [title]="item.file_name"
-                  size="1.2 MB"
-                  [fileUrl]="item.data"
-                />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="dsfds.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="passportSelf-tab-pane"
-            role="tabpanel"
-            aria-labelledby="passportSelf-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="passportFamily-tab-pane"
-            role="tabpanel"
-            aria-labelledby="passportFamily-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="employmentProof-tab-pane"
-            role="tabpanel"
-            aria-labelledby="employmentProof-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="visaSelf-tab-pane"
-            role="tabpanel"
-            aria-labelledby="visaSelf-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="visaFamily-tab-pane"
-            role="tabpanel"
-            aria-labelledby="visaFamily-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="bankStatement-tab-pane"
-            role="tabpanel"
-            aria-labelledby="bankStatement-tab"
-            tabindex="0"
-          >
-            <div class="row g-2">
-              <div class="col-auto">
-                <app-document-type-item title="Contract.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Finances.png" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="Marketing.pdf" size="1.2 MB" />
-              </div>
-              <div class="col-auto">
-                <app-document-type-item title="LaunchPlan.pdf" size="1.2 MB" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- ── Loading spinner ─────────────────────────────────────────────────── -->
+  <div *ngIf="isDetailLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <ng-container *ngIf="!isDetailLoading">
+    <!-- ── Property card (same as property-detail page) ──────────────────── -->
+    <app-white-card>
+      <app-property-view-card
+        [propertyImages]="detailPropertyImages"
+        [name]="detailPropertyName"
+        [location]="detailPropertyLocation"
+        [status]="detailPropertyStatus"
+        [price]="detailPropertyRent"
+        [priceLabel]="'PROPERTY_CODE' | translate"
+        [priceValue]="detailPropertyCode"
+        [sections]="detailPropertySections"
+        [showBack]="true"
+        [showPlatformIcons]="false"
+        (back)="handleBackClick()"
+      />
     </app-white-card>
-  </div>
-  <div class="cmmnTblOuter mt-3">
-    <div class="cmmnTblHdr">
-      <div class="row align-items-center">
-        <div class="col-md">
-          <app-table-title
-            [title]="'RENT_TRANSACTIONS' | translate"
-            subtitle="(5)"
-          ></app-table-title>
-        </div>
-        <div class="col-md-auto">
-          <div class="d-flex align-items-center gap-2 gap-md-3">
-            <app-table-search [placeholder]="'SEARCH_HERE' | translate" />
 
-            <app-custom-dropdown
-              [title]="'RECEIPT' | translate"
-              [hasIcon]="true"
-            >
-              <app-receipt-icon></app-receipt-icon>
-            </app-custom-dropdown>
-            <app-table-filter-btn
-              [title]="'FILTER' | translate"
-              [hasIcon]="true"
-            >
-              <app-filter-icon />
-            </app-table-filter-btn>
-            <app-table-filter-btn
-              [title]="'EXPORT' | translate"
-              [hasIcon]="true"
-            >
-              <app-export-icon />
-            </app-table-filter-btn>
+    <!-- ── Rent Transactions (same pattern as tenant-detail) ─────────────── -->
+    <div class="cmmnTblOuter mt-3">
+      <div class="cmmnTblHdr">
+        <div class="row align-items-center">
+          <div class="col-md">
+            <app-table-title
+              [title]="'RENT_TRANSACTIONS' | translate"
+              [subtitle]="'(' + rentTransactions.length + ')'"
+              (onRefresh)="onRentRefresh()"
+            />
+          </div>
+          <div class="col-md-auto">
+            <div class="d-flex align-items-center gap-2 gap-md-3">
+              <!-- active filter chips -->
+              <div
+                class="selected-filters d-flex gap-2 flex-wrap"
+                *ngIf="appliedRentPaymentType || appliedRentStatus"
+              >
+                <div class="filter-chip" *ngIf="appliedRentPaymentType">
+                  {{ appliedRentPaymentType.value }}
+                  <span
+                    class="cross-icon"
+                    (click)="clearRentPaymentTypeFilter()"
+                    >✕</span
+                  >
+                </div>
+                <div class="filter-chip" *ngIf="appliedRentStatus">
+                  {{ appliedRentStatus.value }}
+                  <span class="cross-icon" (click)="clearRentStatusFilter()"
+                    >✕</span
+                  >
+                </div>
+              </div>
+
+              <app-table-search
+                [placeholder]="'SEARCH_HERE' | translate"
+                (onValueChange)="onRentSearchChange($event)"
+              />
+
+              <app-custom-dropdown
+                [title]="'RECEIPT' | translate"
+                [hasIcon]="true"
+              >
+                <app-receipt-icon />
+              </app-custom-dropdown>
+
+              <app-filter-popup-btn #rentFilterPopup>
+                <ng-container form>
+                  <form>
+                    <div class="row g-3">
+                      <div class="col-12">
+                        <label class="form-label">{{
+                          "PAYMENT_TYPE" | translate
+                        }}</label>
+                        <app-custom-select
+                          [options]="rentPaymentTypeOptions"
+                          key="key"
+                          value="value"
+                          [placeholder]="'SELECT_PAYMENT_TYPE' | translate"
+                          [(ngModel)]="selectedRentPaymentType"
+                          name="rentPaymentType"
+                          (optionSelected)="onRentPaymentTypeSelect($event)"
+                        />
+                      </div>
+                      <div class="col-12">
+                        <label class="form-label">{{
+                          "STATUS" | translate
+                        }}</label>
+                        <app-custom-select
+                          [options]="rentStatusOptions"
+                          key="key"
+                          value="value"
+                          [placeholder]="'SELECT_STATUS' | translate"
+                          [(ngModel)]="selectedRentStatus"
+                          name="rentStatus"
+                          (optionSelected)="onRentStatusSelect($event)"
+                        />
+                      </div>
+                    </div>
+                  </form>
+                </ng-container>
+                <ng-container action>
+                  <button
+                    type="button"
+                    class="btn btnCommon"
+                    (click)="removeRentFilter(); rentFilterPopup.closePopup()"
+                  >
+                    {{ "REMOVE_ALL" | translate }}
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btnCommon"
+                    (click)="applyRentFilter(); rentFilterPopup.closePopup()"
+                  >
+                    {{ "APPLY" | translate }}
+                  </button>
+                </ng-container>
+              </app-filter-popup-btn>
+
+              <app-table-filter-btn
+                [title]="'EXPORT' | translate"
+                [hasIcon]="true"
+              >
+                <app-export-icon />
+              </app-table-filter-btn>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="cmmnTbl">
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>{{ "TRANSACTION_ID" | translate }}</th>
-              <th>
-                {{ "BANK_NAME" | translate }}
-              </th>
-              <th>
-                {{ "BANK_ACCOUNT" | translate }}
-              </th>
-              <th>{{ "CHEQUE_NUMBER" | translate }}</th>
-              <th>{{ "CHEQUE_DATE" | translate }}</th>
-              <th>{{ "PAYMENT_TYPE" | translate }}</th>
-              <th>{{ "PURPOSE" | translate }}</th>
-              <th>{{ "STATUS" | translate }}</th>
-              <th>{{ "AMOUNT" | translate }}</th>
-              <th>{{ "ADDITIONAL_CHARGES" | translate }}</th>
-              <th>{{ "TOTAL_AMOUNT" | translate }}</th>
-            </tr>
-          </thead>
 
-          <tbody>
-            <tr>
-              <td>CHQ-AX104</td>
-              <td>EIB</td>
-              <td>20394857</td>
-              <td>928374</td>
-              <td>10/10/2024</td>
-              <td>Cheque</td>
-              <td>Jan 2025 Rent</td>
-
-              <td>
-                <app-status-action-dropdown
-                  status="Amount Credited"
-                ></app-status-action-dropdown>
-              </td>
-
-              <td>9,000</td>
-              <td>---</td>
-              <td>9,000.000</td>
-            </tr>
-
-            <tr>
-              <td>CHQ-AX105</td>
-              <td>EIB</td>
-              <td>89475639</td>
-              <td>857493</td>
-              <td>11/01/2024</td>
-              <td>Cheque</td>
-              <td>Feb 2025 Rent</td>
-
-              <td>
-                <app-status-action-dropdown
-                  status="Check Bounce"
-                ></app-status-action-dropdown>
-              </td>
-
-              <td>9,000</td>
-              <td>
-                300.00
-                <i
-                  [ngbPopover]="chargesPopover"
-                  triggers="click"
-                  placement="top"
-                  container="body"
-                  popoverClass="custom-popover"
-                  class="charges-info"
-                >
-                  <app-termscondition-icon></app-termscondition-icon>
-                </i>
-
-                <ng-template #chargesPopover>
-                  <div class="chargesTooltip">
-                    <div class="chargesRow">
-                      <span>Cheque Bounce</span>
-                      <span class="value">240</span>
+      <div class="cmmnTbl">
+        <div class="table-responsive">
+          <table class="table table-bordered tenants-table">
+            <thead>
+              <tr>
+                <th>{{ "TRANSACTION_ID" | translate }}</th>
+                <th>{{ "BANK_NAME" | translate }}</th>
+                <th>{{ "BANK_ACCOUNT" | translate }}</th>
+                <th>{{ "CHEQUE_NUMBER" | translate }}</th>
+                <th>{{ "CHEQUE_DATE" | translate }}</th>
+                <th>{{ "PAYMENT_TYPE" | translate }}</th>
+                <th>{{ "PURPOSE" | translate }}</th>
+                <th>{{ "STATUS" | translate }}</th>
+                <th>{{ "AMOUNT" | translate }}</th>
+                <th>{{ "ADDITIONAL_CHARGES" | translate }}</th>
+                <th>{{ "TOTAL_AMOUNT" | translate }}</th>
+                <th>{{ "ACTIONS" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of rentTransactions; track t.id) {
+                <tr>
+                  <td>{{ t.code || "—" }}</td>
+                  <td>{{ t.origin_bank?.name || "—" }}</td>
+                  <td>{{ t.origin_account_number || "—" }}</td>
+                  <td>{{ t.cheque_number || "—" }}</td>
+                  <td>{{ t.cheque_date | date: "dd/MM/yyyy" }}</td>
+                  <td>{{ t.payment_type || "—" }}</td>
+                  <td>
+                    @if (t.start_date && t.end_date) {
+                      {{ t.start_date | date: "MMM yyyy" }} –
+                      {{ t.end_date | date: "MMM yyyy" }}
+                    } @else {
+                      —
+                    }
+                  </td>
+                  <td>
+                    <app-status-action-dropdown [status]="t.status || '—'" />
+                  </td>
+                  <td>{{ t.amount | number: "1.2-2" }}</td>
+                  <td>—</td>
+                  <td>{{ t.amount | number: "1.2-2" }}</td>
+                  <td align="center">
+                    <div class="cmmnTblActnBtnDiv">
+                      <app-table-action-btn type="preview" />
+                      <app-table-action-btn type="download" />
                     </div>
+                  </td>
+                </tr>
+              }
+              @if (!rentTransactions.length) {
+                <tr>
+                  <td colspan="12" align="center">
+                    <app-no-data />
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-                    <div class="chargesRow">
-                      <span>Tax</span>
-                      <span class="value">60</span>
-                    </div>
-
-                    <div class="chargesRow">
-                      <span>Total</span>
-                      <span class="value">300</span>
-                    </div>
-                  </div>
-                </ng-template>
-                <div class="badge-wrapper">
-                  <div class="additional cheque">
-                    <span>Cheque bounce</span>
-                  </div>
-
-                  <div class="additional tax">
-                    <span>Tax</span>
-                  </div>
-                </div>
-              </td>
-              <td>9,000.00</td>
-            </tr>
-
-            <tr>
-              <td>--</td>
-              <td>EIB</td>
-              <td>39576849</td>
-              <td>746382</td>
-              <td>11/15/2024</td>
-              <td>Cheque</td>
-              <td>Mar 2025 Rent</td>
-              <td>
-                <app-status-action-dropdown
-                  status="Invoice Generated"
-                ></app-status-action-dropdown>
-              </td>
-              <td>9,000</td>
-              <td>---</td>
-              <td>9,000.00</td>
-            </tr>
-
-            <tr>
-              <td>--</td>
-              <td>EIB</td>
-              <td>94837659</td>
-              <td>635271</td>
-              <td>12/01/2024</td>
-              <td>Cheque</td>
-              <td>Other Charges</td>
-
-              <td>
-                <app-status-action-dropdown
-                  status="Invoice Generated"
-                ></app-status-action-dropdown>
-              </td>
-
-              <td>9,000</td>
-              <td>---</td>
-              <td>9,300.00</td>
-            </tr>
-
-            <tr>
-              <td>CHQ-AX109</td>
-              <td>EIB</td>
-              <td>69304857</td>
-              <td>524160</td>
-              <td>12/15/2024</td>
-              <td>Cheque</td>
-              <td>Apr 2025 Rent</td>
-              <td>
-                <app-status-action-dropdown
-                  status="Invoice Generated"
-                ></app-status-action-dropdown>
-              </td>
-
-              <td>9,000</td>
-              <td>---</td>
-              <td>9,000.00</td>
-            </tr>
-            <tr class="totalRow">
-              <td colspan="8"></td>
-
-              <td class="totalCell">45,000.00</td>
-              <td class="totalCell">300.00</td>
-              <td class="totalCell">45,300.00</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="cmmnTblFtr">
+        <app-table-select
+          [componentName]="rentComponentName"
+          [rowsPerPage]="rentRowsPerPage"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          (rowsPerPageChange)="onRentPageSizeChange($event)"
+        />
+        <app-table-pagination
+          [componentName]="rentComponentName"
+          [currentPage]="rentCurrentPage"
+          [totalRecords]="rentTotalRecords"
+          [rowsPerPage]="rentRowsPerPage"
+          (pageChange)="onRentPageChange($event)"
+        />
       </div>
     </div>
-    <div class="cmmnTblFtr">
-      <app-table-select
-        [componentName]="componentName"
-        [rowsPerPage]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-      >
-      </app-table-select>
-
-      <app-table-pagination
-        [componentName]="componentName"
-        [currentPage]="currentPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPage]="rowsPerPage"
-      >
-      </app-table-pagination>
-    </div>
-  </div>
+  </ng-container>
 </ng-container>

@@ -15,57 +15,37 @@ import { TableImgItemComponent } from '../../component/table-img-item/table-img-
 import { TableActionDropdownComponent } from '../../component/table-action-dropdown/table-action-dropdown.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ResetIconComponent } from '../../component/icons/reset-icon/reset-icon.component';
 import { ShareIconComponent } from '../../component/icons/share-icon/share-icon.component';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CommonModule } from '@angular/common';
 import { BadgeComponent } from '../../component/badge/badge.component';
 import { RentalAmountComponent } from '../../component/rental-amount/rental-amount.component';
-import { PlatfromCellComponent } from '../../component/platfrom-cell/platfrom-cell.component';
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { PropertyViewCardComponent } from '../../component/property-view-card/property-view-card.component';
 import { Router } from '@angular/router';
-import { StatusDropdownComponent } from '../../component/status-dropdown/status-dropdown.component';
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { TermsconditionIconComponent } from '../../../icons/termscondition-icon/termscondition-icon.component';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.component';
-import { PropertySharePlatfromComponent } from '../../property-share-platfrom/property-share-platfrom.component';
 import { StatusActionDropdownComponent } from '../../../status-action-dropdown/status-action-dropdown.component';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
-import { EditIconComponent } from '../../component/icons/edit-icon/edit-icon.component';
 import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TenancyLedgerService } from '../../../tenancy-ledger.service';
 import { AlertService } from '../../../shared/services/alert.service';
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, forkJoin, Subject } from 'rxjs';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { FormsModule } from '@angular/forms';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
 import { FormSelectFieldComponent } from '../../../shared/component/form-select-field/form-select-field.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
-type PropertyImages = Record<'imgSrc', string>;
-interface SectionItems {
-  label: string;
-  value: string;
-}
-interface Section {
-  title: string;
-  items: SectionItems[];
-}
-interface PropertyDetails {
-  property_unit_id: number;
-  name: string;
-  location: string;
-  status: string;
-  rent: string;
-  bhk: string;
-  sqft: string;
-  propertyImages: PropertyImages[];
-  sections: Section[];
-}
+import { PropertyService } from '../../services/property.service';
+import { LeaseService } from '../../services/lease.service';
+import { NoDataComponent } from '../../../no-data/no-data.component';
+
 @Component({
   selector: 'app-tenancy-ledger',
   standalone: true,
@@ -90,86 +70,108 @@ interface PropertyDetails {
     TermsconditionIconComponent,
     ArrowDownIconComponent,
     ReceiptIconComponent,
-    PropertySharePlatfromComponent,
     StatusActionDropdownComponent,
     NgbPopoverModule,
-    EditIconComponent,
     CustomDropdownComponent,
     CustomSelectComponent,
     FilterPopupButtonComponent,
     FormsModule,
     FormSelectFieldComponent,
+    TableActionButtonComponent,
+    NoDataComponent,
   ],
   templateUrl: './tenancy-ledger.component.html',
   styleUrl: './tenancy-ledger.component.css',
 })
 export class TenancyLedgerComponent {
   @Output() detailViewChanges = new EventEmitter<boolean>();
+
   private destroyRef = inject(DestroyRef);
   private alertService = inject(AlertService);
-  propertyDetails: Record<string, any> = {};
+  private sharedApiService = inject(SharedApiService);
+  private propertyService = inject(PropertyService);
+  private leaseService = inject(LeaseService);
+  private translate = inject(TranslateService);
+
+  // ── list state ────────────────────────────────────────────────────────────
+  tenancyLedgerData: any[] = [];
+  isLoading = false;
+  totalRecords = 0;
+  componentName = 'all-properties-component';
+  rowsPerPageOptions = [10, 25, 50, 100];
+  rowsPerPage = 10;
+  currentPage = 1;
+  searchText = '';
+  private search$ = new Subject<string>();
+
+  // filter state
   propertyOptions: { key: number; value: string }[] = [];
+  statusOptions: { key: string; value: string }[] = [];
+  pmcOptions: any[] = [];
   selectedPropertyType: any = null;
   selectedStatus: any = null;
   selectedPMC: any = null;
-  showReceiptDropdown = false;
-  showMonthDropdown = false;
-  selectedReceiptType = '';
   filterPropertyType: string | null = null;
   filterStatus: string | null = null;
   filterPMC: string | null = null;
-  showDetailView: boolean = false;
-  totalRecords: number = 0;
-  componentName: string = 'all-properties-component';
-  rowsPerPageOptions: number[] = [10, 25, 50, 100];
-  private search$ = new Subject<string>();
-  private sharedApiService = inject(SharedApiService);
-  rowsPerPage: number = 10;
-  currentPage: number = 1;
-  searchText: string = '';
 
-  // ── Tenant detail view ───────────────────────────────────────────
-  showTenantDetail = false;
-  selectedTenantLease: any = null;
-
-  propertyTypeOptions = [
-    { key: 'APARTMENT', value: 'Apartment' },
-    { key: 'VILLA', value: 'Villa' },
-    { key: 'TOWNHOUSE', value: 'Townhouse' },
-    { key: 'PENTHOUSE', value: 'Penthouse' },
-    { key: 'STUDIO', value: 'Studio' },
-    { key: 'OFFICE', value: 'Office' },
-    { key: 'SHOP', value: 'Shop' },
-    { key: 'WAREHOUSE', value: 'Warehouse' },
-  ];
-
-  statusOptions: { key: string; value: string }[] = [];
-  pmcOptions: any[] = [];
-  documentsByType: any = {
-    EMIRATES_ID: [],
-    PASSPORT_SELF: [],
-    PASSPORT_FAMILY: [],
-    EMPLOYMENT_PROOF: [],
-    VISA_SELF: [],
-    VISA_FAMILY: [],
-    BANK_STATEMENT: [],
-  };
-  tenancyLedgerData: any[] = [];
-  isLoading = false;
-  selectedq: any = {
-    label: 'Amount Credited',
-    status: 'green',
-  };
   documentActions = [
     { label: 'Share', icon: ShareIconComponent, action: 'share' },
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
+
+  // ── detail view state ─────────────────────────────────────────────────────
+  showDetailView = false;
+  isDetailLoading = false;
+
+  // property card
+  detailPropertyImages: { imgSrc: string }[] = [];
+  detailPropertyName = '';
+  detailPropertyLocation = '';
+  detailPropertyStatus = '';
+  detailPropertyRent = '';
+  detailPropertyCode = '';
+  detailPropertySections: {
+    title: string;
+    items: { label: string; value: string }[];
+  }[] = [];
+
+  // rent transactions (reuses tenant-detail pattern)
+  rentTransactions: any[] = [];
+  rentTotalRecords = 0;
+  rentRowsPerPage = 10;
+  rentCurrentPage = 1;
+  rentComponentName = 'tenancy-ledger-rent';
+
+  private rentSearch$ = new Subject<string>();
+  rentSearchQuery = '';
+
+  rentPaymentTypeOptions: { key: string; value: string }[] = [
+    { key: 'CHEQUE', value: 'Cheque' },
+    { key: 'CASH', value: 'Cash' },
+    { key: 'BANK_TRANSFER', value: 'Bank Transfer' },
+    { key: 'PDC', value: 'PDC' },
+  ];
+  rentStatusOptions: { key: string; value: string }[] = [
+    { key: 'BALANCE', value: 'Balance' },
+    { key: 'CREDITED', value: 'Credited' },
+    { key: 'REALIZED', value: 'Realized' },
+    { key: 'BOUNCED', value: 'Bounce' },
+  ];
+  selectedRentPaymentType: { key: string; value: string } | null = null;
+  selectedRentStatus: { key: string; value: string } | null = null;
+  appliedRentPaymentType: { key: string; value: string } | null = null;
+  appliedRentStatus: { key: string; value: string } | null = null;
+
+  private currentLeaseId: number | null = null;
+  private currentPropertyId: number | null = null;
+
   constructor(
     private router: Router,
     private tenancyLedgerService: TenancyLedgerService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.search$
       .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
       .subscribe((text: string) => {
@@ -177,7 +179,17 @@ export class TenancyLedgerComponent {
         this.currentPage = 1;
         this.loadTenancyLedger();
       });
+
+    this.rentSearch$
+      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
+      .subscribe((q: string) => {
+        this.rentSearchQuery = q.trim();
+        this.rentCurrentPage = 1;
+        if (this.currentLeaseId) this.loadRentTransactions(this.currentLeaseId);
+      });
+
     this.loadTenancyLedger();
+
     this.sharedApiService.getOptionsType([
       {
         param: 'PARENT_PROPERTY',
@@ -187,33 +199,61 @@ export class TenancyLedgerComponent {
       {
         param: 'TENANCY_LEDGER_AGREEMENT_STATUS',
         key: 'tenancy_ledger_agreement_status',
-        setter: (v) => {
-          this.statusOptions = v;
-        },
+        setter: (v) => (this.statusOptions = v),
       },
       {
         param: 'TENANCY_STATUS',
         key: 'tenancy_status',
-        setter: (v) => {
-          this.pmcOptions = v;
-        },
+        setter: (v) => (this.pmcOptions = v),
       },
     ]);
   }
-  onRefresh() {
+
+  // ── list helpers ──────────────────────────────────────────────────────────
+  onRefresh(): void {
     this.loadTenancyLedger();
   }
+
   searchTextChange(text: string): void {
     this.search$.next(text);
   }
 
-  viewTenant(row: any) {
-    const tenantId = row?.tenant?.id;
-    if (!tenantId) return;
-    this.selectedTenantLease = { tenant: { id: tenantId } };
-    this.showTenantDetail = true;
+  buildParams(): Record<string, any> {
+    const params: Record<string, any> = {
+      page: this.currentPage,
+      page_size: this.rowsPerPage,
+    };
+    if (this.searchText) params['search'] = this.searchText;
+    if (this.filterPropertyType)
+      params['property_id'] = this.filterPropertyType;
+    if (this.filterStatus) params['agreement_status'] = this.filterStatus;
+    if (this.filterPMC) params['property_status'] = this.filterPMC;
+    return params;
   }
-  handleExportClick() {
+
+  loadTenancyLedger(): void {
+    this.isLoading = true;
+    this.tenancyLedgerService
+      .getTenancyLedger(this.buildParams())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.tenancyLedgerData = resp?.content ?? [];
+          this.totalRecords =
+            resp?.pagination?.total_records ??
+            resp?.content?.pagination?.total_records ??
+            this.tenancyLedgerData.length;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.tenancyLedgerData = [];
+          this.totalRecords = 0;
+          this.isLoading = false;
+        },
+      });
+  }
+
+  handleExportClick(): void {
     const params: Record<string, any> = {};
     if (this.searchText) params['search'] = this.searchText;
     this.tenancyLedgerService
@@ -229,166 +269,38 @@ export class TenancyLedgerComponent {
         this.alertService.success('Exported successfully');
       });
   }
+
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
-  }
-  clearPropertyType() {
-    this.selectedPropertyType = null;
-    this.filterPropertyType = null;
-    this.applyFilter();
-  }
-
-  clearStatus() {
-    this.selectedStatus = null;
-    this.filterStatus = null;
-    this.applyFilter();
-  }
-
-  clearPMC() {
-    this.selectedPMC = null;
-    this.filterPMC = null;
-    this.applyFilter();
-  }
-
-  handleDropdownAction(action: string, row: any): void {
-    if (action === 'share') {
-      this.shareTenancyLedger(row.lease_id);
-    }
+    this.loadTenancyLedger();
   }
 
   onPageChange(event: PageChange): void {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+    this.loadTenancyLedger();
   }
 
-  property: PropertyDetails = {
-    property_unit_id: 1,
-    name: '--',
-    location: '--',
-    status: '--',
-    rent: '--',
-    bhk: '--',
-    sqft: '--',
-    propertyImages: [
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-      {
-        imgSrc: 'assets/property/property-img-default.svg',
-      },
-    ],
-    sections: [
-      {
-        title: 'Property details',
-        items: [
-          { label: 'Phone Number', value: '--' },
-          { label: 'Property Code', value: '--' },
-          { label: 'City', value: '--' },
-          { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '--' },
-          { label: 'Address Line 1', value: '--' },
-          { label: 'Address Line 2 ', value: '--' },
-        ],
-      },
-      {
-        title: 'Property Costing',
-        items: [{ label: 'Rent Cost', value: '--' }],
-      },
-      {
-        title: 'Tenant details',
-        items: [
-          { label: 'Name', value: '--' },
-          { label: 'Email', value: '--' },
-          { label: 'Phone Number', value: '--' },
-          { label: 'Emirates ID', value: '--' },
-          { label: 'City', value: '--' },
-          { label: 'Locality', value: '--' },
-          { label: 'Postal Code', value: '--' },
-          { label: 'Address Line 1', value: '--' },
-          { label: 'Address Line 2', value: '--' },
-        ],
-      },
-      {
-        title: 'Owner details',
-        items: [
-          { label: 'Name', value: '--' },
-          { label: 'Emirates ID', value: '--' },
-          { label: 'Residence Visa', value: '--' },
-          { label: 'Trade License', value: '--' },
-          { label: 'Owner Code', value: '--' },
-        ],
-      },
-    ],
-  };
-
-  buildParams(): Record<string, any> {
-    const params: Record<string, any> = {
-      page: this.currentPage,
-      page_size: this.rowsPerPage,
-    };
-    if (this.searchText) params['search'] = this.searchText;
-    if (this.filterPropertyType)
-      params['property_id'] = this.filterPropertyType;
-    if (this.filterStatus) params['agreement_status'] = this.filterStatus;
-    if (this.filterPMC) params['property_status'] = this.filterPMC;
-    return params;
-  }
-  loadTenancyLedger(): void {
-    this.isLoading = true;
-
-    this.tenancyLedgerService
-      .getTenancyLedger(this.buildParams())
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (resp: any) => {
-          console.log('Tenancy Ledger Response:', resp);
-
-          this.tenancyLedgerData = resp?.content ?? [];
-
-          this.totalRecords =
-            resp?.content?.pagination?.total_records ??
-            this.tenancyLedgerData.length;
-
-          this.isLoading = false;
-        },
-
-        error: (error) => {
-          console.error('Tenancy Ledger API Error:', error);
-
-          this.tenancyLedgerData = [];
-          this.totalRecords = 0;
-          this.isLoading = false;
-        },
-      });
-  }
-  handleViewClick(property_unit_id: number) {
-    this.property.property_unit_id = property_unit_id;
-    console.log('clicked id:', property_unit_id);
-    this.showDetailView = true;
-    this.detailViewChanges.emit(true);
-  }
-  handleBackClick(): void {
-    this.showDetailView = false;
-    this.router.navigate(['/dashboard/properties']);
-    this.detailViewChanges.emit(false);
+  clearPropertyType(): void {
+    this.selectedPropertyType = null;
+    this.filterPropertyType = null;
+    this.applyFilter();
   }
 
-  toggleReceipt() {
-    this.showReceiptDropdown = !this.showReceiptDropdown;
-    this.showMonthDropdown = false;
-    this.detailViewChanges.emit(true);
+  clearStatus(): void {
+    this.selectedStatus = null;
+    this.filterStatus = null;
+    this.applyFilter();
   }
+
+  clearPMC(): void {
+    this.selectedPMC = null;
+    this.filterPMC = null;
+    this.applyFilter();
+  }
+
   removeFilter(): void {
     this.filterPropertyType = null;
     this.filterStatus = null;
@@ -399,27 +311,335 @@ export class TenancyLedgerComponent {
     this.currentPage = 1;
     this.loadTenancyLedger();
   }
+
   applyFilter(): void {
     this.currentPage = 1;
     this.loadTenancyLedger();
   }
 
-  selectReceiptType(type: string) {
-    this.selectedReceiptType = type;
-    this.showMonthDropdown = true;
-    this.detailViewChanges.emit(false);
+  handleDropdownAction(action: string, row: any): void {
+    if (action === 'share') {
+      this.shareTenancyLedger(row.lease_id);
+    }
   }
+
   shareTenancyLedger(leaseId: number): void {
     this.tenancyLedgerService
       .shareTenancyLedger(leaseId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response: any) => {
-          this.alertService.success('Tenancy ledger shared successfully');
+        next: () =>
+          this.alertService.success('Tenancy ledger shared successfully'),
+        error: () => this.alertService.error('Failed to share tenancy ledger'),
+      });
+  }
+
+  // ── detail view ───────────────────────────────────────────────────────────
+  handleViewClick(row: any): void {
+    this.showDetailView = true;
+    this.detailViewChanges.emit(true);
+
+    // reset previous data
+    this.detailPropertyImages = [];
+    this.detailPropertySections = [];
+    this.rentTransactions = [];
+    this.currentLeaseId = row.lease_id ?? null;
+    this.currentPropertyId = row.property_id ?? null;
+
+    this.isDetailLoading = true;
+    this.loadPropertyDetail(row.property_id);
+
+    if (this.currentLeaseId) {
+      this.loadRentTransactions(this.currentLeaseId);
+    }
+  }
+
+  private getLabel(key: string): string {
+    return this.translate.instant(key);
+  }
+
+  private loadPropertyDetail(propertyId: number): void {
+    if (!propertyId) {
+      this.isDetailLoading = false;
+      return;
+    }
+
+    forkJoin({
+      property: this.propertyService.getProperties({ property_id: propertyId }),
+      blocks: this.propertyService.getPropertyBlocks({
+        property_id: propertyId,
+      }),
+      images: this.propertyService.getPropertyImages({
+        property_id: propertyId,
+      }),
+      units: this.propertyService.getUnits({ property_id: propertyId }),
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ property, blocks, images, units }) => {
+          const prop = property?.content ?? null;
+
+          if (prop) {
+            this.detailPropertyName = prop.property_name || '';
+            this.detailPropertyCode = prop.code || '';
+            this.detailPropertyLocation =
+              [prop.address_line_1, prop.address_line_2, prop.landmark]
+                .filter(Boolean)
+                .join(', ') || '';
+            this.detailPropertyStatus =
+              prop.status === 'PUBLIC' ? 'Public' : 'Draft';
+            this.detailPropertyRent = prop.approx_rent
+              ? `AED ${Number(prop.approx_rent).toLocaleString('en-US', {
+                  maximumFractionDigits: 0,
+                })}`
+              : '';
+          }
+
+          this.detailPropertyImages = (images?.content || []).map(
+            (img: any) => ({
+              imgSrc: img.url,
+            }),
+          );
+
+          const blockList: any[] = blocks?.content || [];
+          const unitList: any[] = units?.content || [];
+
+          this.detailPropertySections = [
+            {
+              title: 'PEROPERTY_DETAILS',
+              items: [
+                {
+                  label: this.getLabel('PROPERTY_CODE'),
+                  value: prop?.code || '--',
+                },
+                {
+                  label: this.getLabel('PROPERTY_TYPE'),
+                  value:
+                    prop?.property_type
+                      ?.map((t: any) => t.name ?? t.value ?? t)
+                      .join(', ') || '--',
+                },
+                {
+                  label: this.getLabel('NO_OF_BLOCKS'),
+                  value: String(prop?.no_of_blocks ?? '--'),
+                },
+                {
+                  label: this.getLabel('NO_OF_UNITS'),
+                  value: String(prop?.no_of_units ?? '--'),
+                },
+                {
+                  label: this.getLabel('LAND_AREA'),
+                  value: prop?.land_area
+                    ? `${prop.land_area} ${prop.land_area_unit}`
+                    : '--',
+                },
+                {
+                  label: this.getLabel('LAND_DM_NO'),
+                  value: prop?.land_dm_no || '--',
+                },
+                {
+                  label: this.getLabel('PLOT_NO'),
+                  value: prop?.plot_no || '--',
+                },
+                {
+                  label: this.getLabel('DEWA_NO'),
+                  value: prop?.dewa_no || '--',
+                },
+                {
+                  label: this.getLabel('PINCODE'),
+                  value: prop?.pincode || '--',
+                },
+                {
+                  label: this.getLabel('ADDRESS_1'),
+                  value: prop?.address_line_1 || '--',
+                },
+                {
+                  label: this.getLabel('ADDRESS_2'),
+                  value: prop?.address_line_2 || '--',
+                },
+              ],
+            },
+            {
+              title: 'BLOCK_DETAILS',
+              items: blockList.length
+                ? blockList.flatMap((b: any, i: number) => [
+                    {
+                      label: `${this.getLabel('BLOCK')} ${i + 1}`,
+                      value: b.block_name || '--',
+                    },
+                    {
+                      label: this.getLabel('NO_OF_FLOORS'),
+                      value: String(b.no_of_floors ?? '--'),
+                    },
+                    {
+                      label: this.getLabel('NO_OF_PARKING'),
+                      value: String(b.no_of_parking ?? '--'),
+                    },
+                    {
+                      label: this.getLabel('MAKANI_NO'),
+                      value: b.makani_no || '--',
+                    },
+                    {
+                      label: this.getLabel('NO_OF_UNITS'),
+                      value: String(b.no_of_units ?? '--'),
+                    },
+                  ])
+                : [
+                    {
+                      label: this.getLabel('BLOCKS'),
+                      value: 'No blocks added',
+                    },
+                  ],
+            },
+            {
+              title: 'UNIT_DETAILS',
+              items: unitList.length
+                ? unitList.flatMap((u: any, i: number) => [
+                    {
+                      label: `${this.getLabel('UNIT')} ${i + 1}`,
+                      value: u.unit_name || '--',
+                    },
+                    {
+                      label: this.getLabel('UNIT_CODE'),
+                      value: u.code || '--',
+                    },
+                    {
+                      label: this.getLabel('BLOCK_NAME'),
+                      value: u.block_name || '--',
+                    },
+                    {
+                      label: this.getLabel('UNIT_TYPE'),
+                      value: u.unit_type || '--',
+                    },
+                  ])
+                : [{ label: this.getLabel('UNITS'), value: 'No units added' }],
+            },
+          ];
+
+          this.isDetailLoading = false;
         },
-        error: (error: any) => {
-          this.alertService.error('Failed to share tenancy ledger');
+        error: () => {
+          this.isDetailLoading = false;
         },
       });
+  }
+
+  private loadRentTransactions(leaseId: number): void {
+    const params: Record<string, any> = {
+      lease_id: leaseId,
+      page: this.rentCurrentPage,
+      page_size: this.rentRowsPerPage,
+    };
+    if (this.rentSearchQuery) params['search'] = this.rentSearchQuery;
+    if (this.appliedRentPaymentType?.key)
+      params['payment_type'] = this.appliedRentPaymentType.key;
+    if (this.appliedRentStatus?.key)
+      params['status'] = this.appliedRentStatus.key;
+
+    this.leaseService
+      .getLeaseCheques(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.rentTransactions = resp?.content?.all_cheques ?? [];
+          this.rentTotalRecords =
+            resp?.pagination?.total_records ??
+            resp?.content?.total_records ??
+            this.rentTransactions.length;
+        },
+        error: () => {
+          this.rentTransactions = [];
+          this.rentTotalRecords = 0;
+        },
+      });
+  }
+
+  handleBackClick(): void {
+    this.showDetailView = false;
+    this.detailViewChanges.emit(false);
+  }
+
+  // ── rent filter / search helpers ──────────────────────────────────────────
+  onRentSearchChange(text: string): void {
+    this.rentSearch$.next(text);
+  }
+
+  onRentRefresh(): void {
+    if (this.currentLeaseId) this.loadRentTransactions(this.currentLeaseId);
+  }
+
+  onRentPaymentTypeSelect(option: any): void {
+    this.selectedRentPaymentType = option;
+  }
+
+  onRentStatusSelect(option: any): void {
+    this.selectedRentStatus = option;
+  }
+
+  applyRentFilter(): void {
+    this.appliedRentPaymentType = this.selectedRentPaymentType;
+    this.appliedRentStatus = this.selectedRentStatus;
+    this.rentCurrentPage = 1;
+    if (this.currentLeaseId) this.loadRentTransactions(this.currentLeaseId);
+  }
+
+  removeRentFilter(): void {
+    this.selectedRentPaymentType = null;
+    this.selectedRentStatus = null;
+    this.appliedRentPaymentType = null;
+    this.appliedRentStatus = null;
+    this.rentCurrentPage = 1;
+    if (this.currentLeaseId) this.loadRentTransactions(this.currentLeaseId);
+  }
+
+  clearRentPaymentTypeFilter(): void {
+    this.selectedRentPaymentType = null;
+    this.appliedRentPaymentType = null;
+    this.rentCurrentPage = 1;
+    if (this.currentLeaseId) this.loadRentTransactions(this.currentLeaseId);
+  }
+
+  clearRentStatusFilter(): void {
+    this.selectedRentStatus = null;
+    this.appliedRentStatus = null;
+    this.rentCurrentPage = 1;
+    if (this.currentLeaseId) this.loadRentTransactions(this.currentLeaseId);
+  }
+
+  onRentPageSizeChange(event: PageSizeChange): void {
+    if (event.componentName !== this.rentComponentName) return;
+    this.rentRowsPerPage = event.pageSize;
+    this.rentCurrentPage = 1;
+    if (this.currentLeaseId) this.loadRentTransactions(this.currentLeaseId);
+  }
+
+  onRentPageChange(event: PageChange): void {
+    if (event.componentName !== this.rentComponentName) return;
+    this.rentCurrentPage = event.currentPage;
+    if (this.currentLeaseId) this.loadRentTransactions(this.currentLeaseId);
+  }
+
+  transactionStatusClass(status: string): string {
+    const s = (status || '').toLowerCase();
+    if (s.includes('credit') || s.includes('paid') || s.includes('realiz'))
+      return 'badge-active';
+    if (s.includes('bounce') || s.includes('reject')) return 'badge-rejected';
+    if (s.includes('invoice') || s.includes('generat')) return 'badge-draft';
+    return 'badge-inactive';
+  }
+
+  // misc (kept for backward compat with any parent binding)
+  showReceiptDropdown = false;
+  showMonthDropdown = false;
+  selectedReceiptType = '';
+
+  toggleReceipt(): void {
+    this.showReceiptDropdown = !this.showReceiptDropdown;
+    this.showMonthDropdown = false;
+  }
+
+  selectReceiptType(type: string): void {
+    this.selectedReceiptType = type;
+    this.showMonthDropdown = true;
   }
 }
