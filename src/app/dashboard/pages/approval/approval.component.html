@@ -110,7 +110,17 @@
                       />
                     </td>
                     <td>{{ approval.tower }}</td>
-                    <td>{{ approval.unit }}</td>
+                    <td style="cursor: pointer" (click)="viewUnit(approval)">
+                      <app-table-img-item
+                        [img]="
+                          approval?.property_images?.[0]?.data ||
+                          '../../assets/property/property-img-default.svg'
+                        "
+                        size="md"
+                        [title]="approval?.unit"
+                        [showInitialsFallback]="true"
+                      />
+                    </td>
                     <td style="cursor: pointer" (click)="viewTenant(approval)">
                       <app-table-img-item
                         [img]="approval.profile_image"
@@ -208,7 +218,17 @@
                       />
                     </td>
                     <td>{{ approval.tower }}</td>
-                    <td>{{ approval.unit }}</td>
+                    <td style="cursor: pointer" (click)="viewUnit(approval)">
+                      <app-table-img-item
+                        [img]="
+                          approval?.property_images?.[0]?.data ||
+                          '../../assets/property/property-img-default.svg'
+                        "
+                        size="md"
+                        [title]="approval?.unit"
+                        [showInitialsFallback]="true"
+                      />
+                    </td>
                     <td style="cursor: pointer" (click)="viewTenant(approval)">
                       <app-table-img-item
                         [img]="approval.profile_image"
@@ -294,7 +314,17 @@
                       />
                     </td>
                     <td>{{ approval.tower }}</td>
-                    <td>{{ approval.unit }}</td>
+                    <td style="cursor: pointer" (click)="viewUnit(approval)">
+                      <app-table-img-item
+                        [img]="
+                          approval?.property_images?.[0]?.data ||
+                          '../../assets/property/property-img-default.svg'
+                        "
+                        size="md"
+                        [title]="approval?.unit"
+                        [showInitialsFallback]="true"
+                      />
+                    </td>
                     <td style="cursor: pointer" (click)="viewTenant(approval)">
                       <app-table-img-item
                         [img]="approval.profile_image"

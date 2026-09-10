@@ -146,7 +146,7 @@
       </button>
       <button
         type="button"
-        class="btn btnCommon"
+        class="btnCommon"
         (click)="assignProperty(modal, assignPropertyForm)"
       >
         {{ "ASSIGN_PROPERTY" | translate }}
@@ -253,16 +253,12 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
-                <button
-                  type="button"
-                  class="btn btnCommon"
-                  (click)="applyFilter()"
-                >
+                <button type="button" class="btnCommon" (click)="applyFilter()">
                   {{ "APPLY" | translate }}
                 </button>
               </ng-container>

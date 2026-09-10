@@ -10,7 +10,7 @@
       <!-- Add Policy button — PMC only, right corner of title -->
       <button
         *ngIf="isPmc && !showAddForm"
-        class="btn btnCommon"
+        class="btnCommon"
         type="button"
         (click)="openAddForm()"
       >
@@ -86,7 +86,7 @@
         </button>
         <button
           type="button"
-          class="btn btnCommon"
+          class="btnCommon"
           (click)="saveNewPolicy()"
           [disabled]="isSaving"
         >
@@ -210,7 +210,7 @@
                 </button>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="saveEdit(activePolicy)"
                   [disabled]="savingMap[activePolicy.id]"
                 >

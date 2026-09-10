@@ -80,7 +80,7 @@
       <div class="col-md-auto">
         <button
           type="button"
-          class="btn btnCommon"
+          class="btnCommon"
           (click)="openAddLeadModal(addLeadContent)"
         >
           <i><app-plus-icon /></i>{{ "NEW_LEAD" | translate }}
@@ -129,7 +129,7 @@
     <button
       *ngIf="AddLeadFormComponent.activeTab === 'manual'"
       type="button"
-      class="btn btnCommon"
+      class="btnCommon"
       (click)="AddLeadFormComponent.submitForm()"
     >
       {{ "CREATE_LEAD" | translate }}
@@ -138,7 +138,7 @@
     <button
       *ngIf="AddLeadFormComponent.activeTab === 'bulk'"
       type="button"
-      class="btn btnCommon"
+      class="btnCommon"
       (click)="AddLeadFormComponent.uploadBulkFile()"
     >
       {{ "UPLOAD_FILE" | translate }}

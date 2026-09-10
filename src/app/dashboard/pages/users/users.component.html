@@ -88,16 +88,12 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); filterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
-                <button
-                  type="button"
-                  class="btn btnCommon"
-                  (click)="applyFilter()"
-                >
+                <button type="button" class="btnCommon" (click)="applyFilter()">
                   {{ "APPLY" | translate }}
                 </button>
               </ng-container>
@@ -252,7 +248,7 @@
     </button>
     <button
       type="button"
-      class="btn btnCommon"
+      class="btnCommon"
       (click)="AddUserFormComponent.submitUserForm()"
     >
       {{ "SUBMIT_DETAILS" | translate }}

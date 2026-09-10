@@ -27,7 +27,7 @@
         </div>
         <button
           *ngIf="canManageComplaints"
-          class="btn btnCommon btnPrimary complaintBtn"
+          class="btnCommon btnPrimary complaintBtn"
           (click)="openComplaintModal()"
         >
           {{ "NEW_COMPLAINT" | translate }}
@@ -161,16 +161,12 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
-                <button
-                  type="button"
-                  class="btn btnCommon"
-                  (click)="applyFilter()"
-                >
+                <button type="button" class="btnCommon" (click)="applyFilter()">
                   {{ "APPLY" | translate }}
                 </button>
               </ng-container>
@@ -481,16 +477,12 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
-                <button
-                  type="button"
-                  class="btn btnCommon"
-                  (click)="applyFilter()"
-                >
+                <button type="button" class="btnCommon" (click)="applyFilter()">
                   {{ "APPLY" | translate }}
                 </button>
               </ng-container>
@@ -620,7 +612,7 @@
 
     <button
       type="button"
-      class="btn btnCommon"
+      class="btnCommon"
       (click)="addComplaintComponent.submitForm()"
     >
       {{

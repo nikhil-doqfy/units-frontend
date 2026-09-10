@@ -82,14 +82,14 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); filterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="applyFilter(); filterPopup.closePopup()"
                 >
                   {{ "APPLY" | translate }}
@@ -251,7 +251,7 @@
     </button>
     <button
       type="button"
-      class="btn btnCommon"
+      class="btnCommon"
       (click)="EditLeadFormComponent.submitForm()"
     >
       {{ "UPDATE_LEAD" | translate }}
@@ -325,11 +325,7 @@
     >
       {{ "CANCEL" | translate }}
     </button>
-    <button
-      type="button"
-      class="btn btnCommon"
-      (click)="convertToTenancy(modal)"
-    >
+    <button type="button" class="btnCommon" (click)="convertToTenancy(modal)">
       {{ "CONVERT_TO_TENANCY" | translate }}
     </button>
   </div>
