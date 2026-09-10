@@ -6,9 +6,10 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './table-multi-img-item.component.html',
-  styleUrls: ['./table-multi-img-item.component.css']
+  styleUrls: ['./table-multi-img-item.component.css'],
 })
 export class TableMultiImgItemComponent {
+  @Input() showInitialsFallback: boolean = false;
   @Input() images: string[] = [];
   @Input() size: 'sm' | 'md' | 'lg' = 'sm';
   @Input() totalCount: number | null = null;

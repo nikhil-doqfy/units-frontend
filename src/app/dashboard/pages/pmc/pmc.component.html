@@ -305,7 +305,7 @@
             @for (property of assignedProperties; track $index) {
               <tr>
                 <td>{{ property?.property_code || "N/A" }}</td>
-                <td>
+                <td style="cursor: pointer" (click)="viewProperty(property)">
                   <app-table-img-item
                     [img]="
                       property?.property_images?.[0]?.data ||
@@ -313,6 +313,7 @@
                     "
                     size="md"
                     [title]="property?.property_name"
+                    [showInitialsFallback]="true"
                   />
                 </td>
                 <td>

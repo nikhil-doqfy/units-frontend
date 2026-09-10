@@ -147,7 +147,7 @@
                 <td>{{ staff.code || "_" }}</td>
                 <td>{{ staff.contact_number | maskPhone }}</td>
 
-                <td>
+                <td style="cursor: pointer" (click)="viewProperty(staff)">
                   <app-table-multi-img-item
                     [images]="
                       staff.property_images?.length
@@ -156,6 +156,7 @@
                     "
                     [totalCount]="staff.property_count"
                     size="md"
+                    [showInitialsFallback]="true"
                   />
                 </td>
 
@@ -342,7 +343,7 @@
               <tr>
                 <td>{{ property.property_code || "_" }}</td>
 
-                <td>
+                <td style="cursor: pointer" (click)="viewProperty(property)">
                   <app-table-img-item
                     [img]="
                       property.property_image ||
@@ -350,6 +351,7 @@
                     "
                     size="md"
                     [title]="property.property_name"
+                    [showInitialsFallback]="true"
                   />
                 </td>
 

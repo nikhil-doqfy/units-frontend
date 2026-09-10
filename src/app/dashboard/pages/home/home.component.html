@@ -601,7 +601,18 @@
                 @for (c of chequeList; track $index) {
                   <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ c.property_name || "—" }}</td>
+                    <td style="cursor: pointer" (click)="viewProperty(c)">
+                      <app-table-img-item
+                        [img]="
+                          c.property_image ||
+                          c.thumbnail ||
+                          '../../../../assets/property/property-img-default.svg'
+                        "
+                        [title]="c.property_name || c.name || '—'"
+                        size="md"
+                        [showInitialsFallback]="true"
+                      />
+                    </td>
                     <td>{{ c.property_unit_name || "—" }}</td>
                     <td>{{ c.tenant_name || "—" }}</td>
                     <td>{{ c.cheque_number || "—" }}</td>

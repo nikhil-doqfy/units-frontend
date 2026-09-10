@@ -375,10 +375,15 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ item.log_id || "-" }}</td>
                         <td>{{ item.title || "-" }}</td>
-                        <td>
+                        <td
+                          style="cursor: pointer"
+                          (click)="viewProperty(prop)"
+                        >
                           <app-table-img-item
                             img=""
                             [title]="item.property_name || '-'"
+                            size="md"
+                            [showInitialsFallback]="true"
                           />
                         </td>
                         <td>{{ item.block_name || "-" }}</td>

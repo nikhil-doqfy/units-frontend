@@ -203,17 +203,16 @@
               <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ item.id || "N/A" }}</td>
-                <td>
+                <td style="cursor: pointer" (click)="viewProperty(item)">
                   <app-table-img-item
                     [img]="
                       item?.raised_by_image ??
                       '../../../../assets/userDefaultProImg.png'
                     "
                     [title]="item.unit?.property_name || 'N/A'"
-                    [clickable]="true"
-                    (clicked)="handleViewClick(item)"
+                    size="md"
+                    [showInitialsFallback]="true"
                   />
-                  <!-- (clicked)="handleViewClick(item)" -->
                 </td>
                 <td>
                   <app-table-img-item
@@ -222,6 +221,8 @@
                       '../../../../assets/userDefaultProImg.png'
                     "
                     [title]="item.raised_by?.name || 'N/A'"
+                    [clickable]="true"
+                    (clicked)="handleViewClick(item)"
                   />
                 </td>
                 <td>

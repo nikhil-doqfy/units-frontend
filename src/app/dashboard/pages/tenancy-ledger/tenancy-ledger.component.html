@@ -149,9 +149,13 @@
               </td>
               <td>{{ property.block_tower || "--" }}</td>
               <td>{{ property.unit || "--" }}</td>
-              <td>
+              <td style="cursor: pointer" (click)="viewTenant(property)">
                 <!-- /* [img]="'assets/property/property-img-1.png'" */ -->
-                <app-table-img-item [title]="property.tenant_name || '--'" />
+                <app-table-img-item
+                  [title]="property.tenant_name || '--'"
+                  size="md"
+                  [showInitialsFallback]="true"
+                />
               </td>
 
               <td>

@@ -127,6 +127,11 @@ export class TenancyLedgerComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   searchText: string = '';
+
+  // ── Tenant detail view ───────────────────────────────────────────
+  showTenantDetail = false;
+  selectedTenantLease: any = null;
+
   propertyTypeOptions = [
     { key: 'APARTMENT', value: 'Apartment' },
     { key: 'VILLA', value: 'Villa' },
@@ -202,6 +207,12 @@ export class TenancyLedgerComponent {
     this.search$.next(text);
   }
 
+  viewTenant(row: any) {
+    const tenantId = row?.tenant?.id;
+    if (!tenantId) return;
+    this.selectedTenantLease = { tenant: { id: tenantId } };
+    this.showTenantDetail = true;
+  }
   handleExportClick() {
     const params: Record<string, any> = {};
     if (this.searchText) params['search'] = this.searchText;

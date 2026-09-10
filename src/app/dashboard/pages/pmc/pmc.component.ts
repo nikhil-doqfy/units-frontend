@@ -247,6 +247,15 @@ export class PMCComponent {
         this.getPMC();
       });
   }
+  viewProperty(prop: any) {
+    const id = prop.property_unit_id || prop.unit_id || prop.id;
+
+    if (id) {
+      this.router.navigate(['/dashboard/units', id]);
+    } else {
+      console.warn('❌ Unit ID not found:', prop);
+    }
+  }
 
   searchTextChange(search: string): void {
     this.onPMCSearch$.next(search);

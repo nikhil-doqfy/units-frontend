@@ -143,13 +143,15 @@
             <tr *ngFor="let lead of leads">
               <td>{{ lead.code }}</td>
               <td>{{ lead.created_at || "--" }}</td>
-              <td>
+              <td style="cursor: pointer" (click)="viewProperty(lead)">
                 <app-table-img-item
                   [img]="
                     lead.property_thumbnail ||
                     'assets/property/property-img-default.svg'
                   "
                   [title]="lead.property_name"
+                  size="md"
+                  [showInitialsFallback]="true"
                 />
               </td>
               <td>{{ lead.unit_name }}</td>

@@ -98,7 +98,10 @@
                   <tr>
                     <td>{{ approval.date_request }}</td>
                     <td>{{ approval.requested_by }}</td>
-                    <td>
+                    <td
+                      style="cursor: pointer"
+                      (click)="viewProperty(approval)"
+                    >
                       <app-table-img-item
                         [img]="approval.property_image"
                         [title]="approval.property_name"
@@ -108,7 +111,7 @@
                     </td>
                     <td>{{ approval.tower }}</td>
                     <td>{{ approval.unit }}</td>
-                    <td>
+                    <td style="cursor: pointer" (click)="viewTenant(approval)">
                       <app-table-img-item
                         [img]="approval.profile_image"
                         [title]="approval.tenant_name"
@@ -193,7 +196,10 @@
                   <tr>
                     <td>{{ approval.date_request }}</td>
                     <td>{{ approval.requested_by }}</td>
-                    <td>
+                    <td
+                      style="cursor: pointer"
+                      (click)="viewProperty(approval)"
+                    >
                       <app-table-img-item
                         [img]="approval.property_image"
                         [title]="approval.property_name"
@@ -203,7 +209,7 @@
                     </td>
                     <td>{{ approval.tower }}</td>
                     <td>{{ approval.unit }}</td>
-                    <td>
+                    <td style="cursor: pointer" (click)="viewTenant(approval)">
                       <app-table-img-item
                         [img]="approval.profile_image"
                         [title]="approval.tenant_name"
@@ -276,7 +282,10 @@
                   <tr>
                     <td>{{ approval.date_request }}</td>
                     <td>{{ approval.requested_by }}</td>
-                    <td>
+                    <td
+                      style="cursor: pointer"
+                      (click)="viewProperty(approval)"
+                    >
                       <app-table-img-item
                         [img]="approval.property_image"
                         [title]="approval.property_name"
@@ -286,7 +295,7 @@
                     </td>
                     <td>{{ approval.tower }}</td>
                     <td>{{ approval.unit }}</td>
-                    <td>
+                    <td style="cursor: pointer" (click)="viewTenant(approval)">
                       <app-table-img-item
                         [img]="approval.profile_image"
                         [title]="approval.tenant_name"

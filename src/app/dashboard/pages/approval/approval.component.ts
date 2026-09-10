@@ -97,6 +97,10 @@ export class ApprovalComponent {
   rowsPerPage: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
+  // ── Tenant detail view ───────────────────────────────────────────
+  showTenantDetail = false;
+  selectedTenantLease: any = null;
+
   breadcrumbData = [
     { label: 'Dashboard', link: '/dashboard/home' },
     { label: 'Approval', link: '' },
@@ -302,6 +306,22 @@ export class ApprovalComponent {
       });
   }
 
+  viewTenant(row: any) {
+    const tenantId = row?.tenant?.id;
+    if (!tenantId) return;
+    this.selectedTenantLease = { tenant: { id: tenantId } };
+    this.showTenantDetail = true;
+  }
+  viewProperty(prop: any) {
+    console.log('Selected property:', prop);
+    console.log('Property ID:', prop.property_id);
+
+    const id = prop.property_id || prop.id;
+
+    if (id) {
+      this.router.navigate(['/dashboard/properties', id]);
+    }
+  }
   loadBreadcrumb() {
     this.setBreadCrumb([
       { label: 'PAGE_TITLE.DASHBOARD', link: '/dashboard/home' },

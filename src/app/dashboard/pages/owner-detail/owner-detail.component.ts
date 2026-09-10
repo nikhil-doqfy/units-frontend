@@ -190,7 +190,10 @@ export class OwnerDetailComponent implements OnInit {
   }
   viewProperty(prop: any) {
     const id = prop.property_id || prop.id;
-    if (id) this.router.navigate(['/dashboard/properties', id]);
+
+    if (id) {
+      this.router.navigate(['/dashboard/properties', id]);
+    }
   }
 
   viewTenant(prop: any) {
