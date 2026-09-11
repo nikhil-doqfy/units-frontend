@@ -55,6 +55,11 @@ export class FinanceNavComponent {
       labelKey: 'FINANCE_LEDGER_ENTRIES',
       segment: 'ledger/general/cash/manual-entries',
     },
+    // Story 5.2 (FR-17): PMC Charge Types settings page -- a new flat tab,
+    // same as every other entry here (Design Notes: not a general PMC
+    // profile editor, so it lives beside the report tabs, not nested under
+    // Ledger Entries).
+    { labelKey: 'FINANCE_PMC_CHARGE_TYPES', segment: 'pmc-charge-types' },
   ];
 
   // A `link.segment` may itself contain multiple path segments (e.g.

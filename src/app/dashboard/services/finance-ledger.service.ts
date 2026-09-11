@@ -83,4 +83,41 @@ export class FinanceLedgerService {
       },
     );
   }
+
+  /**
+   * Story 5.2: `GET ledger/pmc-charge-types/` -- lists existing
+   * `(FinancePMCProfile, charge_id)` -> Account mappings for the active
+   * PMC, backing the new PMC Charge Types settings page.
+   */
+  getPmcChargeTypes(pmcId: string): Observable<any> {
+    const queryString = this.sharedService.getQueryString({
+      pmc_id: pmcId,
+    });
+    return this.http.get(
+      `${this.FINANCE_SERVER_ADDRESS}/ledger/pmc-charge-types/${queryString}`,
+    );
+  }
+
+  /**
+   * Story 5.2: `POST ledger/pmc-charge-types/` -- creates or updates a
+   * `(FinancePMCProfile, charge_id)` -> Account mapping. A second call for
+   * the same `charge_id` updates the existing row (account/active) rather
+   * than creating a duplicate (backend upserts on the pair).
+   */
+  savePmcChargeType(
+    pmcId: string,
+    chargeId: number,
+    accountId: number,
+    active: boolean,
+  ): Observable<any> {
+    return this.http.post(
+      `${this.FINANCE_SERVER_ADDRESS}/ledger/pmc-charge-types/`,
+      {
+        pmc_id: pmcId,
+        charge_id: chargeId,
+        account_id: accountId,
+        active,
+      },
+    );
+  }
 }
