@@ -87,6 +87,10 @@ export class BasicpersonalComponent implements OnInit {
           const u = resp?.content;
           if (!u) return;
           this.form.patchValue({
+            unit: {
+              key: this.leadData.unit_id,
+              value: this.leadData.unit_name ?? u.unit_name ?? '',
+            },
             unitName: u.unit_name ?? '',
             unitSize: u.unit_size ?? '',
             landNo: u.land_no ?? '',
@@ -165,12 +169,16 @@ export class BasicpersonalComponent implements OnInit {
 
   onUnitSelect(unit: any) {
     if (!unit?.key) return;
+    this.form.patchValue({
+      unit: unit,
+    });
     this.propertyService
       .getUnits({ unit_id: unit.key })
       .subscribe((resp: any) => {
         const u = resp?.content;
         if (!u) return;
         this.form.patchValue({
+          unit: unit,
           unitName: u.unit_name ?? '',
           unitSize: u.unit_size ?? '',
           landNo: u.land_no ?? '',
@@ -183,6 +191,8 @@ export class BasicpersonalComponent implements OnInit {
         });
         this.patchOwners(u.unit_owners ?? []);
         this.formService.setUnitCommercialData(u);
+
+        this.form.get('unit')?.updateValueAndValidity();
       });
   }
 

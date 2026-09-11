@@ -48,12 +48,37 @@
               >
                 <td>
                   {{ i + 1 }}
-                  <input
-                    *ngIf="c.value.isEdit || c.value.isNew"
-                    class="inline-input"
-                    placeholder="Enter here"
-                    formControlName="description"
-                  />
+                  <ng-container *ngIf="c.value.isEdit || c.value.isNew">
+                    <input
+                      class="inline-input"
+                      [class.input-error]="
+                        c.get('description')?.invalid &&
+                        c.get('description')?.touched
+                      "
+                      placeholder="Enter here"
+                      formControlName="description"
+                    />
+                    <div
+                      class="field-error"
+                      *ngIf="
+                        c.get('description')?.invalid &&
+                        c.get('description')?.touched
+                      "
+                    >
+                      <span
+                        *ngIf="c.get('description')?.errors?.['required']"
+                        >{{ "REQUIRED" | translate }}</span
+                      >
+                      <span
+                        *ngIf="c.get('description')?.errors?.['minlength']"
+                        >{{ "MIN_LENGTH_2" | translate }}</span
+                      >
+                      <span
+                        *ngIf="c.get('description')?.errors?.['maxlength']"
+                        >{{ "MAX_LENGTH_100" | translate }}</span
+                      >
+                    </div>
+                  </ng-container>
                   <span
                     *ngIf="!c.value.isEdit && !c.value.isNew"
                     (click)="editRow(i)"
@@ -63,44 +88,69 @@
                   </span>
                 </td>
                 <td>
-                  <input
-                    *ngIf="c.value.isEdit || c.value.isNew"
-                    class="inline-input"
-                    type="number"
-                    placeholder="Enter here"
-                    formControlName="amount"
-                  />
-
+                  <ng-container *ngIf="c.value.isEdit || c.value.isNew">
+                    <input
+                      class="inline-input"
+                      [class.input-error]="
+                        c.get('amount')?.invalid && c.get('amount')?.touched
+                      "
+                      type="number"
+                      placeholder="Enter here"
+                      formControlName="amount"
+                    />
+                    <div
+                      class="field-error"
+                      *ngIf="
+                        c.get('amount')?.invalid && c.get('amount')?.touched
+                      "
+                    >
+                      <span *ngIf="c.get('amount')?.errors?.['required']">{{
+                        "REQUIRED" | translate
+                      }}</span>
+                      <span *ngIf="c.get('amount')?.errors?.['min']">{{
+                        "AMOUNT_MIN" | translate
+                      }}</span>
+                      <span *ngIf="c.get('amount')?.errors?.['pattern']">{{
+                        "AMOUNT_PATTERN" | translate
+                      }}</span>
+                    </div>
+                  </ng-container>
                   <span *ngIf="!c.value.isEdit && !c.value.isNew">
                     {{ c.value.amount | number: "1.2-2" }}
                   </span>
                 </td>
 
                 <td>
-                  <input
-                    *ngIf="c.value.isEdit || c.value.isNew"
-                    class="inline-input"
-                    placeholder="Enter here"
-                    formControlName="tax_code"
-                  />
-
+                  <ng-container *ngIf="c.value.isEdit || c.value.isNew">
+                    <input
+                      class="inline-input"
+                      [class.input-error]="
+                        c.get('tax_code')?.invalid && c.get('tax_code')?.touched
+                      "
+                      placeholder="Enter here"
+                      formControlName="tax_code"
+                    />
+                    <div
+                      class="field-error"
+                      *ngIf="
+                        c.get('tax_code')?.invalid && c.get('tax_code')?.touched
+                      "
+                    >
+                      <span *ngIf="c.get('tax_code')?.errors?.['required']">{{
+                        "REQUIRED" | translate
+                      }}</span>
+                      <span *ngIf="c.get('tax_code')?.errors?.['maxlength']">{{
+                        "MAX_LENGTH_20" | translate
+                      }}</span>
+                    </div>
+                  </ng-container>
                   <span *ngIf="!c.value.isEdit && !c.value.isNew">
                     {{ c.value.tax_code }}
                   </span>
                 </td>
 
                 <td>
-                  <input
-                    *ngIf="c.value.isEdit || c.value.isNew"
-                    class="inline-input"
-                    type="number"
-                    placeholder="Enter here"
-                    formControlName="vat"
-                  />
-
-                  <span *ngIf="!c.value.isEdit && !c.value.isNew">
-                    {{ c.value.vat | number: "1.2-2" }}
-                  </span>
+                  <span>{{ c.value.vat | number: "1.2-2" }}</span>
                 </td>
 
                 <td class="text-center">

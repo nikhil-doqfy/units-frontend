@@ -42,6 +42,8 @@ import { BreadCrumb } from '../../../shared/model/shared.model';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
+import { UserRole } from '../../../theme.service';
+import { StorageService } from '../../../shared/services/storage.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -88,6 +90,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   selectedMonthly: string = 'Oct 2025';
   selectedFilter: string = '';
   occupiedPercent = 0;
+  currentRole: UserRole = 'tenant';
   vacantPercent = 0;
   occupancyVacancy = 0;
   occupancyOccupied = 0;
@@ -155,7 +158,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   breadcrumbData = [
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
-  constructor(private cd: ChangeDetectorRef) {
+  constructor(
+    private cd: ChangeDetectorRef,
+    private storageService: StorageService,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
@@ -175,6 +181,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.loadTopRevenueProperties();
     this.loadPropertyOwned();
     this.loadOccupancyData();
+    const role = this.storageService.getUserRole();
+
+    console.log('User Role:', role);
+
+    if (role) {
+      this.currentRole = role as UserRole;
+    }
+
+    console.log('Current Role:', this.currentRole);
   }
   changeLanguage(lang: string) {
     this.sharedService.setLanguage(lang);

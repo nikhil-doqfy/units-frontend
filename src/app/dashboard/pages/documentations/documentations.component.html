@@ -52,6 +52,9 @@
             <th>{{ "SI.CODE" | translate }}</th>
 
             <th>{{ "AGREEMENT_NAME" | translate }}</th>
+            <th *ngIf="currentRole === 'property-manager'">
+              {{ "PMC" | translate }}
+            </th>
             <th>{{ "STAUES" | translate }}</th>
             <th>{{ "EXPIRY_DATE" | translate }}</th>
             <th>{{ "DAYS_STATUS" | translate }}</th>
@@ -63,7 +66,9 @@
             <td>{{ document.code }}</td>
 
             <td>{{ document.title || "—" }}</td>
-
+            <td *ngIf="currentRole === 'property-manager'">
+              {{ document.pmc_name || "-" }}
+            </td>
             <td>
               <app-badge
                 [title]="

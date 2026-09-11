@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { SharedService } from '../../shared.service';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class PropertyService {
   private http = inject(HttpClient);
   private sharedService = inject(SharedService);
   private SERVER_ADDRESS = environment.SERVER_ADDRESS;
+  private alertService = inject(AlertService);
 
   constructor() {}
 
@@ -25,12 +27,19 @@ export class PropertyService {
       ...params,
       export: 'csv',
     });
+
     this.http
       .get(`${this.SERVER_ADDRESS}/property${queryString}`, {
         responseType: 'blob',
       })
-      .subscribe((blob) => {
-        this.sharedService.downloadBlob(blob, 'properties.csv');
+      .subscribe({
+        next: (blob) => {
+          this.sharedService.downloadBlob(blob, 'properties.csv');
+          this.alertService.success('Exported successfully');
+        },
+        error: () => {
+          this.alertService.error('Export failed');
+        },
       });
   }
 
@@ -154,19 +163,26 @@ export class PropertyService {
     return this.http.get(`${this.SERVER_ADDRESS}/property/unit${queryString}`);
   }
 
-  exportUnits(params: Record<string, any> = {}): void {
-    const queryString = this.sharedService.getQueryString({
-      ...params,
-      export: 'csv',
-    });
-    this.http
-      .get(`${this.SERVER_ADDRESS}/property/unit${queryString}`, {
-        responseType: 'blob',
-      })
-      .subscribe((blob) => {
+exportUnits(params: Record<string, any> = {}): void {
+  const queryString = this.sharedService.getQueryString({
+    ...params,
+    export: 'csv',
+  });
+
+  this.http
+    .get(`${this.SERVER_ADDRESS}/property/unit${queryString}`, {
+      responseType: 'blob',
+    })
+    .subscribe({
+      next: (blob) => {
         this.sharedService.downloadBlob(blob, 'units.csv');
-      });
-  }
+        this.alertService.success('Exported successfully');
+      },
+      error: () => {
+        this.alertService.error('Export failed');
+      },
+    });
+}
 
   addUnit(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/property/unit`, data);

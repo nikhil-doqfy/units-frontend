@@ -214,14 +214,14 @@
     </app-white-card>
   </div>
 
-  <!-- Rent-Transactions -->
+  <!-- ── Rent Cheques Table ─────────────────────────────────────── -->
   <div class="cmmnTblOuter mt-3">
     <div class="cmmnTblHdr">
       <div class="row align-items-center">
         <div class="col-md">
           <app-table-title
-            [title]="'RENT_TRANSACTIONS' | translate"
-            [subtitle]="'(' + allTransactions.length + ')'"
+            [title]="'Rent Cheques'"
+            [subtitle]="'(' + rentCheques.length + ')'"
             (onRefresh)="onRefresh()"
           >
           </app-table-title>
@@ -234,15 +234,13 @@
             >
               <div class="filter-chip" *ngIf="appliedPaymentType">
                 {{ appliedPaymentType.value }}
-                <span class="cross-icon" (click)="clearPaymentTypeFilter()">
-                  ✕
-                </span>
+                <span class="cross-icon" (click)="clearPaymentTypeFilter()"
+                  >✕</span
+                >
               </div>
               <div class="filter-chip" *ngIf="appliedStatus">
                 {{ appliedStatus.value }}
-                <span class="cross-icon" (click)="clearStatusFilter()">
-                  ✕
-                </span>
+                <span class="cross-icon" (click)="clearStatusFilter()">✕</span>
               </div>
             </div>
 
@@ -250,6 +248,13 @@
               placeholder="Search here..."
               (onValueChange)="onSearchChange($event)"
             />
+            <button
+              type="button"
+              class="btn btnCommonsx"
+              (click)="openAddChequeModal(addChequeModal)"
+            >
+              + Add Cheque
+            </button>
             <app-custom-dropdown
               [title]="'RECEIPT' | translate"
               [hasIcon]="true"
@@ -274,8 +279,7 @@
                         [(ngModel)]="selectedPaymentType"
                         name="paymentType"
                         (optionSelected)="onPaymentTypeSelect($event)"
-                      >
-                      </app-custom-select>
+                      ></app-custom-select>
                     </div>
                     <div class="col-12">
                       <label class="form-label">{{
@@ -290,8 +294,7 @@
                         [(ngModel)]="selectedStatus"
                         name="status"
                         (optionSelected)="onStatusSelect($event)"
-                      >
-                      </app-custom-select>
+                      ></app-custom-select>
                     </div>
                   </div>
                 </form>
@@ -337,18 +340,16 @@
               <th>{{ "CHEQUE_NUMBER" | translate }}</th>
               <th>{{ "CHEQUE_DATE" | translate }}</th>
               <th>{{ "PAYMENT_TYPE" | translate }}</th>
-              <th>{{ "PURPOSE" | translate }}</th>
+              <th>Rent Start &amp; End Date</th>
               <th>{{ "STATUS" | translate }}</th>
               <th>{{ "AMOUNT" | translate }}</th>
-              <th>Additional Charges</th>
-              <th>Total Amount</th>
               <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
           <tbody>
-            @for (t of allTransactions; track t.id) {
+            @for (t of rentCheques; track t.id) {
               <tr>
-                <td>{{ t.code || "—" }}</td>
+                <td>{{ t.code || t.id || "—" }}</td>
                 <td>{{ t.origin_bank?.name || "—" }}</td>
                 <td>{{ t.origin_account_number || "—" }}</td>
                 <td>{{ t.cheque_number || "—" }}</td>
@@ -367,23 +368,21 @@
                     [status]="t.status || '—'"
                   ></app-status-action-dropdown>
                 </td>
-                <td>{{ t.amount | number }}</td>
-                <td>—</td>
-                <td>{{ t.amount | number }}</td>
+                <td>{{ t.amount | number: "1.2-2" }}</td>
                 <td align="center">
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="preview"
-                      (clicked)="openReceiptModal(receiptContent)"
+                      (clicked)="previewDocument(t, pdfPreviewModal)"
                     />
                     <app-table-action-btn type="download" />
                   </div>
                 </td>
               </tr>
             }
-            @if (!allTransactions.length) {
+            @if (!rentCheques.length) {
               <tr>
-                <td colspan="12" align="center">
+                <td colspan="10" align="center">
                   <app-no-data />
                 </td>
               </tr>
@@ -403,7 +402,7 @@
       <app-table-pagination
         [componentName]="componentName"
         [currentPage]="currentPage"
-        [totalRecords]="totalRecords"
+        [totalRecords]="rentCheques.length"
         [rowsPerPage]="rowsPerPage"
         (pageChange)="onPageChange($event)"
       />
@@ -618,6 +617,248 @@
   </app-table-view-card>
 </ng-container>
 
+<!-- ── Add Cheque Modal ────────────────────────────────────────────── -->
+<ng-template #addChequeModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="add-cheque-title">Add Cheque</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-3">
+      <!-- Cheque Type -->
+      <div class="col-12">
+        <label class="form-label cheque-form-label">Cheque Type</label>
+        <div class="cheque-type-toggle">
+          <button
+            type="button"
+            class="cheque-type-btn"
+            [class.active]="addingChequeType === 'RENT_CHEQUE'"
+            (click)="addingChequeType = 'RENT_CHEQUE'"
+          >
+            Rent Cheque
+          </button>
+          <button
+            type="button"
+            class="cheque-type-btn"
+            [class.active]="addingChequeType === 'ADDITIONAL_CHEQUE'"
+            (click)="addingChequeType = 'ADDITIONAL_CHEQUE'"
+          >
+            Additional Cheque
+          </button>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="col-12"><hr class="cheque-section-divider" /></div>
+
+      <!-- Payment Type -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">Payment Type</label>
+        <select
+          class="form-select cheque-form-input"
+          [(ngModel)]="chequeForm.payment_type"
+        >
+          <option value="CHEQUE">Cheque</option>
+          <option value="CASH">Cash</option>
+          <option value="BANK_TRANSFER">Bank Transfer</option>
+          <option value="PDC">PDC</option>
+        </select>
+      </div>
+
+      <!-- Cheque Number -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">Cheque Number</label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          placeholder="Enter cheque number"
+          [(ngModel)]="chequeForm.cheque_number"
+        />
+      </div>
+
+      <!-- Amount -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">Amount</label>
+        <input
+          type="number"
+          class="form-control cheque-form-input"
+          placeholder="0.00"
+          [(ngModel)]="chequeForm.amount"
+        />
+      </div>
+
+      <!-- Cheque Date -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">Cheque Date</label>
+        <div class="datePicker">
+          <input
+            class="form-control cheque-form-input"
+            placeholder="YYYY-MM-DD"
+            ngbDatepicker
+            #chequeDatePicker="ngbDatepicker"
+            [(ngModel)]="chequeDateStruct"
+            name="chequeDate"
+          />
+          <button type="button" (click)="chequeDatePicker.toggle()">
+            <app-date-icon />
+          </button>
+        </div>
+      </div>
+
+      <!-- Start Date -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">Start Date</label>
+        <div class="datePicker">
+          <input
+            class="form-control cheque-form-input"
+            placeholder="YYYY-MM-DD"
+            ngbDatepicker
+            #startDatePicker="ngbDatepicker"
+            [(ngModel)]="startDateStruct"
+            name="startDate"
+          />
+          <button type="button" (click)="startDatePicker.toggle()">
+            <app-date-icon />
+          </button>
+        </div>
+      </div>
+
+      <!-- End Date -->
+      <div class="col-md-4">
+        <label class="form-label cheque-form-label">End Date</label>
+        <div class="datePicker">
+          <input
+            class="form-control cheque-form-input"
+            placeholder="YYYY-MM-DD"
+            ngbDatepicker
+            #endDatePicker="ngbDatepicker"
+            [(ngModel)]="endDateStruct"
+            name="endDate"
+          />
+          <button type="button" (click)="endDatePicker.toggle()">
+            <app-date-icon />
+          </button>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="col-12"><hr class="cheque-section-divider" /></div>
+
+      <!-- Origin Bank -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">Origin Bank</label>
+        <select
+          class="form-select cheque-form-input"
+          [(ngModel)]="chequeForm.origin_bank_id"
+          (ngModelChange)="onOriginBankChange()"
+        >
+          <option [ngValue]="null" disabled>Select bank</option>
+          <option *ngFor="let b of banks" [ngValue]="b.key">
+            {{ b.value }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Origin Account No. -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">Origin Account No.</label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          placeholder="Account number"
+          [(ngModel)]="chequeForm.origin_account_number"
+        />
+      </div>
+
+      <!-- Origin IFSC Code (read-only, auto-filled from bank) -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">Origin IFSC Code</label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          [value]="chequeForm.origin_ifsc_code || '—'"
+          readonly
+        />
+      </div>
+
+      <!-- Divider -->
+      <div class="col-12"><hr class="cheque-section-divider" /></div>
+
+      <!-- Settlement Bank -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">Settlement Bank</label>
+        <select
+          class="form-select cheque-form-input"
+          [(ngModel)]="chequeForm.settlement_bank_id"
+          (ngModelChange)="onSettlementBankChange()"
+        >
+          <option [ngValue]="null" disabled>Select bank</option>
+          <option *ngFor="let b of banks" [ngValue]="b.key">
+            {{ b.value }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Settlement Account No. -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label"
+          >Settlement Account No.</label
+        >
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          placeholder="Account number"
+          [(ngModel)]="chequeForm.settlement_account_number"
+        />
+      </div>
+
+      <!-- Settlement IFSC Code (read-only, auto-filled from bank) -->
+      <div class="col-md-6">
+        <label class="form-label cheque-form-label">Settlement IFSC Code</label>
+        <input
+          type="text"
+          class="form-control cheque-form-input"
+          [value]="chequeForm.settlement_ifsc_code || '—'"
+          readonly
+        />
+      </div>
+
+      <!-- Divider -->
+      <div class="col-12"><hr class="cheque-section-divider" /></div>
+
+      <!-- Photo / File -->
+      <div class="col-12">
+        <label class="form-label cheque-form-label">Photo / File</label>
+        <input
+          type="file"
+          class="form-control cheque-form-input"
+          accept=".pdf,.jpg,.jpeg,.png"
+          (change)="onChequeFileSelected($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss()"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btnCommon"
+      [disabled]="savingCheque"
+      (click)="saveNewCheque(modal)"
+    >
+      {{ savingCheque ? "Saving…" : "Save Cheque" }}
+    </button>
+  </div>
+</ng-template>
+
 <!-- ── Modals ─────────────────────────────────────────────────────── -->
 <ng-template #changePaymentModeContent let-modal>
   <div class="modal-header">
@@ -690,4 +931,69 @@
     ></button>
   </div>
   <div class="modal-body"><app-receipt /></div>
+</ng-template>
+
+<!-- ====================== PDF / IMAGE PREVIEW MODAL ====================== -->
+<ng-template #pdfPreviewModal let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title">
+      <i class="bi bi-file-earmark me-2"></i>{{ previewFileName }}
+    </h6>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    ></button>
+  </div>
+
+  <div class="modal-body p-0 previewModalBody">
+    <ng-container *ngIf="isPdfPreview && previewUrl">
+      <pdf-viewer
+        [src]="previewUrl"
+        [render-text]="true"
+        [original-size]="false"
+        [fit-to-page]="true"
+        [zoom]="1"
+        [zoom-scale]="'page-width'"
+        style="width: 100%; height: 75vh; display: block"
+      ></pdf-viewer>
+    </ng-container>
+
+    <ng-container *ngIf="!isPdfPreview && previewUrl">
+      <div class="imagePreviewContainer">
+        <img
+          [src]="previewUrl"
+          [alt]="previewFileName"
+          class="img-fluid previewImage"
+        />
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!previewUrl">
+      <div class="previewNoUrl">
+        <i class="bi bi-exclamation-circle"></i>
+        <p>Document URL not available.</p>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss()"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      *ngIf="previewUrl"
+      type="button"
+      class="btn btnCommon"
+      (click)="downloadFromUrl(previewUrl, previewFileName)"
+    >
+      <i class="bi bi-download"></i>
+      {{ "DOWNLOAD" | translate }}
+    </button>
+  </div>
 </ng-template>

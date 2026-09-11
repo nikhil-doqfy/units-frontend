@@ -31,6 +31,8 @@ import { CustomSelectComponent } from '../../component/custom-select/custom-sele
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { AlertService } from '../../../shared/services/alert.service';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-lease-tenancy',
@@ -54,6 +56,7 @@ import { AlertService } from '../../../shared/services/alert.service';
     NoDataComponent,
     CustomSelectComponent,
     FilterPopupButtonComponent,
+    PdfViewerModule,
   ],
   templateUrl: './lease-tenancy.component.html',
   styleUrl: './lease-tenancy.component.css',
@@ -64,6 +67,8 @@ export class LeaseTenancyComponent {
   private alertService = inject(AlertService);
   private translate = inject(TranslateService);
   private leaseService = inject(LeaseService);
+
+  private modalService = inject(NgbModal);
   private sharedApiService = inject(SharedApiService);
 
   breadcrumbData: BreadCrumb[] = [];
@@ -79,6 +84,9 @@ export class LeaseTenancyComponent {
   rowsPerPageOptions: number[] = [10, 25, 50, 100];
   rowsPerPage: number = 10;
   currentPage: number = 1;
+  previewUrl: string = '';
+  previewFileName: string = '';
+  isPdfPreview: boolean = false;
 
   private onLeaseSearch$ = new Subject<string>();
 
@@ -153,6 +161,54 @@ export class LeaseTenancyComponent {
       });
   }
 
+  downloadFromUrl(url: string, _fileName: string): void {
+    window.open(url, '_blank');
+  }
+  previewDocument(document: any, previewModal: any): void {
+    const url =
+      document.pdf_url ??
+      document.file_url ??
+      document.document_url ??
+      document.path ??
+      null;
+
+    if (!url) {
+      console.warn('No URL found for document preview:', document);
+      return;
+    }
+
+    const fileName = document.file_name ?? document.title ?? 'Document';
+    const ext = fileName.split('.').pop()?.toLowerCase() ?? '';
+    this.isPdfPreview = ext === 'pdf';
+    this.previewFileName = fileName;
+    this.previewUrl = '';
+
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error('Fetch failed');
+        return res.blob();
+      })
+      .then((blob) => {
+        if (this.previewUrl?.startsWith('blob:')) {
+          URL.revokeObjectURL(this.previewUrl);
+        }
+        this.previewUrl = URL.createObjectURL(blob);
+
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      })
+      .catch(() => {
+        this.previewUrl = url;
+        this.modalService.open(previewModal, {
+          centered: true,
+          size: 'xl',
+          backdrop: 'static',
+        });
+      });
+  }
   applyFilter() {
     this.leaseFilter['lease_status'] = this.selectedleasestatus.key;
     this.currentPage = 1;

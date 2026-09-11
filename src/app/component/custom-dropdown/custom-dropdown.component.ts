@@ -25,7 +25,6 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './custom-dropdown.component.css',
 })
 export class CustomDropdownComponent {
-  @HostListener('document:click', ['$event'])
   @Output()
   detailViewChanges = new EventEmitter<boolean>();
 
@@ -72,6 +71,7 @@ export class CustomDropdownComponent {
     this.showMonthDropdown = false;
   }
 
+  @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.closeDropdown();

@@ -335,6 +335,14 @@
         label: getLabel('STATUS'),
         value: selectedComplaint?.status?.value || '--',
       },
+      {
+        label: getLabel('ADDRESS_LINE_1'),
+        value: selectedComplaint?.unit?.address_line_1 || 'N/A',
+      },
+      {
+        label: getLabel('ADDRESS_LINE_2'),
+        value: selectedComplaint?.unit?.address_line_2 || 'N/A',
+      },
     ]"
     (back)="handleBackClick()"
   >
