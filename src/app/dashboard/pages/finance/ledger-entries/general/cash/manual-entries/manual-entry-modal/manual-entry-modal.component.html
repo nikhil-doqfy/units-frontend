@@ -1,0 +1,95 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ "FINANCE_ADD_MANUAL_ENTRY" | translate }}</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <div class="form-group">
+    <label>{{ "FINANCE_MEMO" | translate }}</label>
+    <input type="text" class="form-control" [(ngModel)]="memo" name="memo" />
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{{ "FINANCE_COL_ACCOUNT" | translate }}</th>
+        <th>{{ "FINANCE_COL_DEBIT" | translate }}</th>
+        <th>{{ "FINANCE_COL_CREDIT" | translate }}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let line of formLines; let i = index">
+        <td>
+          <select
+            class="form-control"
+            [(ngModel)]="line.account_id"
+            [name]="'account_' + i"
+          >
+            <option [ngValue]="null">{{ "FINANCE_SELECT_ACCOUNT" | translate }}</option>
+            <option *ngFor="let account of accounts" [ngValue]="account.id">
+              {{ account.name }}
+            </option>
+          </select>
+        </td>
+        <td>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            [(ngModel)]="line.debit"
+            [name]="'debit_' + i"
+          />
+        </td>
+        <td>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            [(ngModel)]="line.credit"
+            [name]="'credit_' + i"
+          />
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-link"
+            [attr.aria-label]="'FINANCE_REMOVE_LINE' | translate"
+            [title]="'FINANCE_REMOVE_LINE' | translate"
+            (click)="removeLine(i)"
+            [disabled]="formLines.length <= 2"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button type="button" class="btn btn-outline-secondary" (click)="addLine()">
+    {{ "FINANCE_ADD_LINE" | translate }}
+  </button>
+
+  <p *ngIf="balanceError" class="text-danger">
+    {{ balanceError | translate }}
+  </p>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="dismiss()">
+    {{ "CANCEL" | translate }}
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="submitting"
+    (click)="submit()"
+  >
+    {{ (submitting ? "FINANCE_SUBMITTING" : "FINANCE_SUBMIT") | translate }}
+  </button>
+</div>
