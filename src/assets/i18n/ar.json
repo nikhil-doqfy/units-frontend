@@ -58,6 +58,7 @@
   "FINANCE_COL_ACCOUNT": "الحساب",
   "FINANCE_COL_NAME": "الاسم",
   "FINANCE_COL_TYPE": "النوع",
+  "FINANCE_COL_CATEGORY": "الفئة",
   "FINANCE_COL_MEMO": "ملاحظة",
   "FINANCE_COL_DEBIT": "مدين",
   "FINANCE_COL_CREDIT": "دائن",

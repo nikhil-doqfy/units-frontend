@@ -60,6 +60,7 @@
   "FINANCE_COL_ACCOUNT": "Account",
   "FINANCE_COL_NAME": "Name",
   "FINANCE_COL_TYPE": "Type",
+  "FINANCE_COL_CATEGORY": "Category",
   "FINANCE_COL_MEMO": "Memo",
   "FINANCE_COL_DEBIT": "Debit",
   "FINANCE_COL_CREDIT": "Credit",
