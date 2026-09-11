@@ -4,7 +4,7 @@
       <li class="nav-item" role="presentation" *ngFor="let link of links">
         <a
           class="nav-link"
-          [routerLink]="['/dashboard/finance', pmcId, link.segment]"
+          [routerLink]="routeCommands(pmcId, link.segment)"
           routerLinkActive="active"
         >
           {{ link.labelKey | translate }}

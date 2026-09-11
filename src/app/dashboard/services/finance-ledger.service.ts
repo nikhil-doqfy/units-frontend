@@ -48,4 +48,39 @@ export class FinanceLedgerService {
       `${this.FINANCE_SERVER_ADDRESS}/accounts/${accountId}/ledger-lines${queryString}`,
     );
   }
+
+  /**
+   * Story 5.1: `GET ledger/manual-entries/` -- lists existing manual
+   * entries for the active PMC, backing the Manual Entries list view
+   * (Ledger Entries -> General -> Cash -> Manual Entries).
+   */
+  getManualJournalEntries(pmcId: string): Observable<any> {
+    const queryString = this.sharedService.getQueryString({
+      pmc_id: pmcId,
+    });
+    return this.http.get(
+      `${this.FINANCE_SERVER_ADDRESS}/ledger/manual-entries/${queryString}`,
+    );
+  }
+
+  /**
+   * Story 5.1: `POST ledger/manual-entries/` -- creates a balanced manual
+   * `JournalEntry` (`source_type=MANUAL`). `lines` is a list of
+   * `{account_id, debit, credit}` objects, matching the spec's example
+   * payload shape exactly.
+   */
+  createManualJournalEntry(
+    pmcId: string,
+    lines: { account_id: number; debit: string; credit: string }[],
+    memo = '',
+  ): Observable<any> {
+    return this.http.post(
+      `${this.FINANCE_SERVER_ADDRESS}/ledger/manual-entries/`,
+      {
+        pmc_id: pmcId,
+        memo,
+        lines,
+      },
+    );
+  }
 }

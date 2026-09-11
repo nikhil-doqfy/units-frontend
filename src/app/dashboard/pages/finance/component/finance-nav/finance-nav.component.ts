@@ -17,6 +17,15 @@ interface FinanceNavLink {
  * link. Ledger Detail is deliberately excluded: it takes an `:accountId`
  * this strip has no value for, and is reached by clicking an account row
  * on Chart of Accounts instead.
+ *
+ * Story 5.1 (FR-16) adds "Ledger Entries", landing on
+ * Ledger Entries -> General -> Cash -> Manual Entries -- this strip still
+ * has no dropdown/tree support (Design Notes), so the new entry is one
+ * more flat tab whose `segment` happens to be a multi-segment path,
+ * exactly like every other entry here structurally, just deeper. Do not
+ * build a generic multi-level nav framework speculatively for this story
+ * (spec Never) -- Story 5.7 will need its own slot under
+ * "Ledger Entries -> General" too, but that is out of scope here.
  */
 @Component({
   selector: 'app-finance-nav',
@@ -42,5 +51,19 @@ export class FinanceNavComponent {
     { labelKey: 'FINANCE_AGEING', segment: 'ageing' },
     { labelKey: 'FINANCE_CHART_OF_ACCOUNTS', segment: 'chart-of-accounts' },
     { labelKey: 'FINANCE_RECONCILIATION', segment: 'reconciliation' },
+    {
+      labelKey: 'FINANCE_LEDGER_ENTRIES',
+      segment: 'ledger/general/cash/manual-entries',
+    },
   ];
+
+  // A `link.segment` may itself contain multiple path segments (e.g.
+  // Story 5.1's 'ledger/general/cash/manual-entries') -- the template
+  // needs one array entry per real segment, not a single entry containing
+  // literal slashes (which `[routerLink]` would otherwise URL-encode as
+  // `%2F`, breaking navigation). Every existing single-segment link
+  // (e.g. 'overview') round-trips through `split('/')` unchanged.
+  routeCommands(pmcId: string, segment: string): (string | null)[] {
+    return ['/dashboard/finance', pmcId, ...segment.split('/')];
+  }
 }

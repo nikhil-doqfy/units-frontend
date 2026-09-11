@@ -1,0 +1,100 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="FINANCE_MANUAL_ENTRIES"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <app-white-card>
+    <h3>{{ "FINANCE_ADD_MANUAL_ENTRY" | translate }}</h3>
+
+    <div class="form-group">
+      <label>{{ "FINANCE_MEMO" | translate }}</label>
+      <input type="text" class="form-control" [(ngModel)]="memo" name="memo" />
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ "FINANCE_COL_ACCOUNT" | translate }}</th>
+          <th>{{ "FINANCE_COL_DEBIT" | translate }}</th>
+          <th>{{ "FINANCE_COL_CREDIT" | translate }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of formLines; let i = index">
+          <td>
+            <select
+              class="form-control"
+              [(ngModel)]="line.account_id"
+              [name]="'account_' + i"
+            >
+              <option [ngValue]="null">{{ "FINANCE_SELECT_ACCOUNT" | translate }}</option>
+              <option *ngFor="let account of accounts" [ngValue]="account.id">
+                {{ account.name }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <input
+              type="number"
+              step="0.01"
+              class="form-control"
+              [(ngModel)]="line.debit"
+              [name]="'debit_' + i"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              step="0.01"
+              class="form-control"
+              [(ngModel)]="line.credit"
+              [name]="'credit_' + i"
+            />
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-link"
+              (click)="removeLine(i)"
+              [disabled]="formLines.length <= 2"
+            >
+              {{ "FINANCE_REMOVE_LINE" | translate }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button type="button" class="btn btn-outline-secondary" (click)="addLine()">
+      {{ "FINANCE_ADD_LINE" | translate }}
+    </button>
+
+    <p *ngIf="balanceError" class="text-danger">
+      {{ balanceError | translate }}
+    </p>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="submitting"
+      (click)="submit()"
+    >
+      {{ (submitting ? "FINANCE_SUBMITTING" : "FINANCE_SUBMIT") | translate }}
+    </button>
+  </app-white-card>
+
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_MANUAL_ENTRIES" | translate }}</p>
+
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
+
+  <app-report-table
+    *ngIf="!loadFailed"
+    [columns]="columns"
+    [rows]="rows"
+  ></app-report-table>
+</ng-container>

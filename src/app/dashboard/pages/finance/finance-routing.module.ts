@@ -10,6 +10,7 @@ import { AgeingComponent } from './ageing/ageing.component';
 import { ReconciliationComponent } from './reconciliation/reconciliation.component';
 import { ChartOfAccountsComponent } from './chart-of-accounts/chart-of-accounts.component';
 import { LedgerDetailComponent } from './ledger-detail/ledger-detail.component';
+import { ManualEntriesComponent } from './ledger-entries/general/cash/manual-entries/manual-entries.component';
 import { financeLandingGuard } from './finance-landing.guard';
 import { financePmcReachableGuard } from './finance-pmc-reachable.guard';
 import { financeReconciliationGuard } from './finance-reconciliation.guard';
@@ -70,6 +71,19 @@ const routes: Routes = [
   {
     path: ':pmcId/ledger-detail/:accountId',
     component: LedgerDetailComponent,
+    canActivate: [financePmcReachableGuard],
+    resolve: { financeActivation: financeActivationResolver },
+  },
+  // Story 5.1 (FR-16): Ledger Entries -> General -> Cash -> Manual Entries.
+  // The feedback's drill path is not four distinct pages yet (Design
+  // Notes) -- "General" and "Cash" have no page of their own in this
+  // story, so the nested URL segments are kept (matching the spec's
+  // literal Code Map path) but resolve straight to the one page that
+  // exists so far, Manual Entries. A sibling link next to it (e.g. under
+  // General) can be added later without restructuring this route.
+  {
+    path: ':pmcId/ledger/general/cash/manual-entries',
+    component: ManualEntriesComponent,
     canActivate: [financePmcReachableGuard],
     resolve: { financeActivation: financeActivationResolver },
   },
