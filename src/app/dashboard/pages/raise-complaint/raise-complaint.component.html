@@ -14,7 +14,7 @@
         ></textarea>
         <button
           type="button"
-          class="btn btnCommon btnWhite btnExtraSmall"
+          class="btnCommon btnWhite btnExtraSmall"
           (click)="sendTicket()"
         >
           <i><app-send-icon /></i>{{ "SEND" | translate }}
@@ -77,14 +77,14 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="applyFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "APPLY" | translate }}
@@ -248,7 +248,7 @@
         (keydown.enter)="sendReply()"
       />
       <button
-        class="btn btnCommon btnPrimary stSendBtn"
+        class="btnCommon btnPrimary stSendBtn"
         (click)="sendReply()"
         [disabled]="!replyText.trim() || isSendingReply"
       >

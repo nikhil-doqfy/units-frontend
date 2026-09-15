@@ -25,6 +25,7 @@ import { FormService } from '../../services/form.service';
 export class FormSelectFieldComponent {
   private formService = inject(FormService);
   @Input() multiple = false;
+  @Input() disabled = false;
   @Input() label: string = '';
   @Input() required: boolean = false;
   @Input() options: any[] = [];

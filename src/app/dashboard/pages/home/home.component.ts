@@ -10,7 +10,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -41,6 +41,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { TableImgItemComponent } from '../../component/table-img-item/table-img-item.component';
+import { UserRole } from '../../../theme.service';
+import { StorageService } from '../../../shared/services/storage.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -67,6 +70,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
     TranslateModule,
     NoDataComponent,
     FormsModule,
+    TableImgItemComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -82,9 +86,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
   private sharedApiService = inject(SharedApiService);
+  private router = inject(Router);
   selectedMonthly: string = 'Oct 2025';
   selectedFilter: string = '';
   occupiedPercent = 0;
+  currentRole: UserRole = 'tenant';
   vacantPercent = 0;
   occupancyVacancy = 0;
   occupancyOccupied = 0;
@@ -152,7 +158,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   breadcrumbData = [
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
-  constructor(private cd: ChangeDetectorRef) {
+  constructor(
+    private cd: ChangeDetectorRef,
+    private storageService: StorageService,
+  ) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
   }
@@ -172,6 +181,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.loadTopRevenueProperties();
     this.loadPropertyOwned();
     this.loadOccupancyData();
+    const role = this.storageService.getUserRole();
+
+    console.log('User Role:', role);
+
+    if (role) {
+      this.currentRole = role as UserRole;
+    }
+
+    console.log('Current Role:', this.currentRole);
   }
   changeLanguage(lang: string) {
     this.sharedService.setLanguage(lang);
@@ -283,6 +301,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (property?.key) this.getUnitsByProperty(property);
   }
 
+  viewProperty(prop: any) {
+    const id = prop.property_id || prop.id;
+
+    if (id) {
+      this.router.navigate(['/dashboard/properties', id]);
+    } else {
+      console.warn('Property ID not found:', prop);
+    }
+  }
   getUnitsByProperty(option: any) {
     this.sharedApiService
       .getOptions({

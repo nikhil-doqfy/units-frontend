@@ -8,7 +8,7 @@
         <div class="col-auto">
           <button
             type="button"
-            class="btn btnCommon"
+            class="btnCommon"
             (click)="openAddRoleModal(addRoleContent)"
           >
             <i><app-plus-icon /></i>{{ "NEW_ROLE" | translate }}
@@ -213,7 +213,7 @@
     </button>
     <button
       type="button"
-      class="btn btnCommon"
+      class="btnCommon"
       (click)="saveRole()"
       [disabled]="roleForm.invalid || isLoading"
     >

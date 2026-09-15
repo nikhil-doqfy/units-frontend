@@ -53,6 +53,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   @Input() highlight = false;
   private destroyRef = inject(DestroyRef);
   private alertService = inject(AlertService);
+  @Input() disabled = false;
   @Input() width: string = '100%';
   @Input() unitText?: string;
   @Input() isFilter: boolean = false;
@@ -108,6 +109,10 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
     return this.selectedOptions.map((item) => item[this.value]).join(', ');
   }
   toggleSelection(option: any) {
+    if (this.disabled || this.isDisabled) {
+      this.isDropdownOpen = false;
+      return;
+    }
     const index = this.selectedOptions.findIndex(
       (x) => x[this.key] === option[this.key],
     );
@@ -248,6 +253,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
     }
   }
   selectOption(option: any) {
+    if (this.disabled || this.isDisabled) return;
     this.selectedOption = option;
     this.onChange(option);
     this.optionSelected.emit(option);

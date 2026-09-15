@@ -33,6 +33,9 @@ import { CustomSelectComponent } from '../../custom-select/custom-select.compone
 export class AddComplaintsComponent {
   @Output() formSubmitted = new EventEmitter<boolean>();
   @Input() complaintData: any = null;
+  get isEditMode(): boolean {
+    return !!this.complaintData?.code;
+  }
   private fb = inject(FormBuilder);
   private formService = inject(FormService);
   private complaintsService = inject(ComplaintsService);
@@ -95,6 +98,7 @@ export class AddComplaintsComponent {
   }
 
   onPmcSelected(option: any): void {
+    if (this.isEditMode) return;
     this.selectedPmc = option;
 
     this.complaintForm.patchValue({
@@ -125,6 +129,7 @@ export class AddComplaintsComponent {
     ]);
   }
   onPropertySelect(option: any): void {
+    if (this.isEditMode) return;
     this.unitOptions = [];
     this.selectedPropertyOption = option;
     this.selectedUnitOption = null;
@@ -145,6 +150,7 @@ export class AddComplaintsComponent {
   }
 
   onUnitSelect(option: any): void {
+    if (this.isEditMode) return;
     this.selectedUnitOption = option;
     this.complaintForm.patchValue({
       unit_id: option?.key ?? null,
@@ -161,6 +167,13 @@ export class AddComplaintsComponent {
     } else {
       this.uploadedImages.push(event);
     }
+  }
+  private disableEditFields(): void {
+    if (!this.isEditMode) return;
+
+    this.complaintForm.get('pmc')?.disable({ emitEvent: false });
+    this.complaintForm.get('property')?.disable({ emitEvent: false });
+    this.complaintForm.get('unit_id')?.disable({ emitEvent: false });
   }
   patchForm(data: any): void {
     if (!this.complaintForm) return;
@@ -209,22 +222,49 @@ export class AddComplaintsComponent {
       this.priorityOptions.find((o) => o.key === priorityKey) ?? null;
 
     // ── 2. PMC → Property → Unit cascade ──────────────────────────────────
-    const pmcKey = data.pmc?.id ?? data.pmc?.key ?? data.unit?.pmc_id ?? null;
-    const pmcValue = data.pmc?.name ?? data.pmc?.value ?? null;
+
+    const pmcKey =
+      data.pmc_id ?? data.pmc?.id ?? data.pmc?.key ?? data.unit?.pmc_id ?? null;
+
+    const pmcValue =
+      data.pmc_name ??
+      data.pmc?.name ??
+      data.pmc?.value ??
+      data.unit?.pmc_name ??
+      null;
+
     const propertyKey =
-      data.unit?.property_id ?? data.property?.id ?? data.property?.key ?? null;
+      data.property_id ??
+      data.property?.id ??
+      data.property?.key ??
+      data.unit?.property_id ??
+      null;
+
     const propertyValue =
-      data.unit?.property_name ??
+      data.property_name ??
       data.property?.name ??
       data.property?.value ??
+      data.unit?.property_name ??
       null;
-    const unitKey = data.unit?.id ?? null;
-    const unitValue = data.unit?.unit_name ?? data.unit?.value ?? null;
+
+    const unitKey = data.unit_id ?? data.unit?.id ?? null;
+
+    const unitValue =
+      data.unit?.unit_name ?? data.unit?.name ?? data.unit?.value ?? null;
 
     if (pmcKey) {
-      const pmcOption = { key: pmcKey, value: pmcValue ?? String(pmcKey) };
+      const pmcOption = this.pmcOptions.find(
+        (p: any) => Number(p.key) === Number(pmcKey),
+      ) ?? {
+        key: pmcKey,
+        value: pmcValue ?? String(pmcKey),
+      };
+
       this.selectedPmc = pmcOption;
-      this.complaintForm.patchValue({ pmc: pmcOption });
+
+      this.complaintForm.patchValue({
+        pmc: pmcOption,
+      });
 
       this.sharedApiService.getOptionsType([
         {
@@ -234,7 +274,9 @@ export class AddComplaintsComponent {
             this.propertyOptions = properties;
 
             const propOption =
-              properties.find((p: any) => p.key === propertyKey) ??
+              properties.find(
+                (p: any) => Number(p.key) === Number(propertyKey),
+              ) ??
               (propertyKey
                 ? {
                     key: propertyKey,
@@ -242,37 +284,52 @@ export class AddComplaintsComponent {
                   }
                 : null);
 
-            if (propOption) {
-              this.selectedPropertyOption = propOption;
-              this.complaintForm.patchValue({ property: propOption });
+            if (!propOption) return;
 
-              this.sharedApiService.getOptionsType([
-                {
-                  param: 'PROPERTY_UNIT_BY_PROPERTY',
-                  key: 'property_unit',
-                  setter: (units) => {
-                    this.unitOptions = units;
-                    if (unitKey) {
-                      const unitOption = units.find(
-                        (u: any) => u.key === unitKey,
-                      ) ?? {
-                        key: unitKey,
-                        value: unitValue ?? String(unitKey),
-                      };
-                      this.selectedUnitOption = unitOption;
-                      this.complaintForm.patchValue({ unit_id: unitKey });
-                    }
-                  },
-                  params: { property_id: propOption.key },
+            this.selectedPropertyOption = propOption;
+
+            this.complaintForm.patchValue({
+              property: propOption,
+            });
+
+            this.sharedApiService.getOptionsType([
+              {
+                param: 'PROPERTY_UNIT_BY_PROPERTY',
+                key: 'property_unit',
+                setter: (units) => {
+                  this.unitOptions = units;
+
+                  const unitOption =
+                    units.find((u: any) => Number(u.key) === Number(unitKey)) ??
+                    (unitKey
+                      ? {
+                          key: unitKey,
+                          value: unitValue ?? String(unitKey),
+                        }
+                      : null);
+
+                  if (!unitOption) return;
+
+                  this.selectedUnitOption = unitOption;
+
+                  this.complaintForm.patchValue({
+                    unit_id: unitOption.key,
+                  });
                 },
-              ]);
-            }
+                params: {
+                  property_id: propOption.key,
+                },
+              },
+            ]);
           },
-          params: { pmc_id: pmcKey },
+          params: {
+            pmc_id: pmcKey,
+          },
         },
       ]);
     } else if (unitKey) {
       this.complaintForm.patchValue({ unit_id: unitKey });
+      this.disableEditFields();
     }
   }
   removeImage(tempId: number | undefined): void {

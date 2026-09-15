@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="row g-3" *ngIf="isVisible('OVERVIEW')">
-    <div class="col-lg-3">
+    <div class="col-lg-3 col-md-12" *ngIf="currentRole !== 'owner'">
       <app-stats-card
         [stats]="[
           {
@@ -48,7 +48,10 @@
         </ng-container>
       </app-stats-card>
     </div>
-    <div class="col-lg-9">
+    <div
+      class="col-md-12"
+      [ngClass]="currentRole !== 'owner' ? 'col-lg-9' : 'col-lg-12'"
+    >
       <div class="row g-3">
         <div class="col-md-6">
           <app-stats-card
@@ -222,7 +225,7 @@
             <ng-container action>
               <button
                 type="button"
-                class="btn btnCommon"
+                class="btnCommon"
                 (click)="
                   removeFilter('revenue'); revenueFilterPopup.closePopup()
                 "
@@ -231,7 +234,7 @@
               </button>
               <button
                 type="button"
-                class="btn btnCommon"
+                class="btnCommon"
                 (click)="handleFilterClick('revenue')"
               >
                 {{ "APPLY" | translate }}
@@ -334,14 +337,14 @@
             <ng-container action>
               <button
                 type="button"
-                class="btn btnCommon"
+                class="btnCommon"
                 (click)="removeFilter('dues'); duesFilterPopup.closePopup()"
               >
                 {{ "REMOVE_ALL" | translate }}
               </button>
               <button
                 type="button"
-                class="btn btnCommon"
+                class="btnCommon"
                 (click)="handleFilterClick('dues')"
               >
                 {{ "APPLY" | translate }}
@@ -555,7 +558,7 @@
                   <ng-container action>
                     <button
                       type="button"
-                      class="btn btnCommon"
+                      class="btnCommon"
                       (click)="
                         handleRemoveFilter(); chequeVisFilterPopup.closePopup()
                       "
@@ -564,7 +567,7 @@
                     </button>
                     <button
                       type="button"
-                      class="btn btnCommon"
+                      class="btnCommon"
                       (click)="handleApplyFilter()"
                     >
                       {{ "APPLY" | translate }}
@@ -601,7 +604,18 @@
                 @for (c of chequeList; track $index) {
                   <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ c.property_name || "—" }}</td>
+                    <td style="cursor: pointer" (click)="viewProperty(c)">
+                      <app-table-img-item
+                        [img]="
+                          c.property_image ||
+                          c.thumbnail ||
+                          '../../../../assets/property/property-img-default.svg'
+                        "
+                        [title]="c.property_name || c.name || '—'"
+                        size="md"
+                        [showInitialsFallback]="true"
+                      />
+                    </td>
                     <td>{{ c.property_unit_name || "—" }}</td>
                     <td>{{ c.tenant_name || "—" }}</td>
                     <td>{{ c.cheque_number || "—" }}</td>
@@ -774,7 +788,7 @@
             <ng-container action>
               <button
                 type="button"
-                class="btn btnCommon"
+                class="btnCommon"
                 (click)="
                   removeFilter('payment'); paymentFilterPopup.closePopup()
                 "
@@ -783,7 +797,7 @@
               </button>
               <button
                 type="button"
-                class="btn btnCommon"
+                class="btnCommon"
                 (click)="handleFilterClick('payment')"
               >
                 {{ "APPLY" | translate }}

@@ -1,20 +1,26 @@
-<div class="tenantDocumentWrapper">
+<div class="tenantDocumentWrapper" [formGroup]="documentForm">
   <!-- Info Box -->
   <div class="infoBox mb-3">
     <ul class="mb-0">
-      <li>{{ "UPLOAD_TENANT_DOCUMENT_IN_PDF" | translate }}</li>
-      <li>{{ "UPLOAD_TENANT_DOCUMENT_INSTRUCTIONS" | translate }}</li>
-      <li>{{ "MAXIMUM_FILE_SIZE" | translate }}</li>
+      <li>
+        {{ "UPLOAD_TENANT_DOCUMENT_IN_PDF" | translate }}
+      </li>
+      <li>
+        {{ "UPLOAD_TENANT_DOCUMENT_INSTRUCTIONS" | translate }}
+      </li>
+      <li>
+        {{ "MAXIMUM_FILE_SIZE" | translate }}
+      </li>
     </ul>
   </div>
 
   <!-- Document Title -->
   <div class="mb-3">
     <label class="form-label fw-semibold">
-      {{ "DOC_TITLE" | translate }} <span class="text-danger">*</span>
+      {{ "DOC_TITLE" | translate }}
+      <span class="text-danger">*</span>
     </label>
 
-    <!-- Dropdown from API -->
     <app-custom-select
       [options]="documentTypeOptions"
       key="key"
@@ -24,7 +30,46 @@
       (optionSelected)="onDocumentTypeSelected($event)"
     ></app-custom-select>
 
-    <div class="errorMsg mt-1" *ngIf="titleError">{{ titleError }}</div>
+    <div
+      class="errorMsg mt-1"
+      *ngIf="
+        documentForm.get('document_type_id')?.touched &&
+        documentForm.get('document_type_id')?.invalid
+      "
+    >
+      Document type is required.
+    </div>
+
+    <div class="errorMsg mt-1" *ngIf="titleError">
+      {{ titleError }}
+    </div>
+  </div>
+
+  <!-- PMC -->
+  <div class="col-md-12 mb-3">
+    <label class="form-label">
+      {{ "PMC_NAME" | translate }}
+      <span class="text-danger">*</span>
+    </label>
+
+    <app-custom-select
+      [options]="pmcList"
+      [placeholder]="'SELECT_PMC' | translate"
+      key="key"
+      value="value"
+      [selectedOption]="selectedPmc"
+      (optionSelected)="onOptionSelectedPMC($event)"
+    ></app-custom-select>
+
+    <div
+      class="errorMsg mt-1"
+      *ngIf="
+        documentForm.get('pmc_id')?.touched &&
+        documentForm.get('pmc_id')?.invalid
+      "
+    >
+      PMC is required.
+    </div>
   </div>
 
   <!-- Never Expire Toggle -->
@@ -34,56 +79,66 @@
         class="form-check-input"
         type="checkbox"
         id="neverExpireToggle"
-        [(ngModel)]="neverExpire"
-        (ngModelChange)="onNeverExpireChange()"
+        formControlName="never_expire"
+        (change)="onNeverExpireChange()"
       />
+
       <label class="form-check-label fw-semibold" for="neverExpireToggle">
         {{ "NEVER_EXPIRE" | translate }}
       </label>
     </div>
   </div>
 
-  <!-- Expiry Date + Days — hidden when neverExpire is true -->
-  <div class="mb-3" *ngIf="!neverExpire">
+  <!-- Expiry Date + Days -->
+  <div class="mb-3" *ngIf="!documentForm.get('never_expire')?.value">
     <label class="form-label fw-semibold">
-      {{ "EXPIRY_DATE" | translate }} <span class="text-danger">*</span>
+      {{ "EXPIRY_DATE" | translate }}
+      <span class="text-danger">*</span>
     </label>
 
-    <!-- Date + Days inputs side by side -->
     <div class="expiryRow">
-      <!-- Date picker -->
+      <!-- Date Picker -->
       <input
         type="date"
         class="form-control expiryDateInput"
-        [(ngModel)]="expiryDate"
-        (ngModelChange)="onDatePickedChange()"
+        formControlName="expiry_date"
+        [min]="todayStr"
+        (change)="onExpiryDateChange()"
       />
 
       <!-- Separator -->
-      <span class="expirySep">{{ "OR" | translate }}</span>
+      <span class="expirySep">
+        {{ "OR" | translate }}
+      </span>
 
-      <!-- Days input -->
+      <!-- Days Input -->
       <div class="daysInputWrap">
         <input
           type="number"
           class="form-control daysInput"
-          [placeholder]="'e.g. 34'|translate"
-          [(ngModel)]="expiryDays"
+          formControlName="expiry_days"
+          [placeholder]="'e.g. 34' | translate"
           min="0"
-          (ngModelChange)="onDaysInputChange()"
+          (input)="onDaysInputChange()"
         />
-        <span class="daysInputSuffix">{{ "DAYS" | translate }}</span>
+
+        <span class="daysInputSuffix">
+          {{ "DAYS" | translate }}
+        </span>
       </div>
     </div>
 
-    <!-- Days countdown pill -->
+    <!-- Days Countdown -->
     <div class="daysCountBadge mt-2" *ngIf="daysLabel">
       <span class="daysPillUpload" [ngClass]="daysPillClass">
         {{ daysLabel }}
       </span>
     </div>
 
-    <div class="errorMsg mt-1" *ngIf="expiryError">{{ expiryError }}</div>
+    <!-- Expiry Error -->
+    <div class="errorMsg mt-1" *ngIf="expiryError">
+      {{ expiryError }}
+    </div>
   </div>
 
   <!-- Upload -->
@@ -96,6 +151,7 @@
   >
   </app-upload-document>
 
+  <!-- Uploaded Files -->
   <div class="uploads-list mt-3" *ngIf="uploadedFiles.length">
     <app-file-upload-item
       *ngFor="let file of uploadedFiles"
@@ -105,7 +161,7 @@
     </app-file-upload-item>
   </div>
 
-  <!-- Error -->
+  <!-- Upload Error -->
   <div class="errorMsg mt-2" *ngIf="uploadError">
     {{ uploadError }}
   </div>
