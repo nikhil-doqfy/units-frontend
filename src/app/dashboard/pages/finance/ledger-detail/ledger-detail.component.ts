@@ -39,7 +39,9 @@ interface LedgerLineRow {
   ledger_line_id: number;
   journal_entry_id: number;
   posted_at: string;
-  source_lease_transaction_id: number;
+  // Nullable since Story 5.1: manual journal entries have no originating
+  // lease transaction (source_status_transition is always "" for those).
+  source_lease_transaction_id: number | null;
   source_status_transition: string;
   debit: string;
   credit: string;
@@ -69,6 +71,15 @@ function formatSourceReference(
   line: LedgerLineRow,
   translate: TranslateService,
 ): string {
+  // Story 5.1 made source_lease_transaction_id nullable for manual entries
+  // (source_status_transition is always blank in that case, never
+  // fabricated) -- this branch is display-only and must come before the
+  // lease-transaction formatting below, otherwise a manual entry renders
+  // the literal string "Txn #null" (bug fix, post-5.1b).
+  if (line.source_lease_transaction_id == null) {
+    return translate.instant('FINANCE_MANUAL_ENTRY');
+  }
+
   const transition = (line.source_status_transition ?? '')
     .replace(/[-_]+/g, ' ')
     .trim()

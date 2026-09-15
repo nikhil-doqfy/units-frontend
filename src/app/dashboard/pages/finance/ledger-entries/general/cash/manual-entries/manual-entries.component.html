@@ -1,0 +1,43 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="FINANCE_MANUAL_ENTRIES"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <div class="mb-3 d-flex justify-content-end">
+    <button type="button" class="btn btn-primary" (click)="openAddEntryModal()">
+      {{ "FINANCE_ADD_MANUAL_ENTRY" | translate }}
+    </button>
+  </div>
+
+  <app-white-card customClass="mb-3">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-6">
+        <label class="form-label">{{ "FINANCE_FILTER_DATE_RANGE" | translate }}</label>
+        <app-date-range-picker [formControl]="dateRangeControl"></app-date-range-picker>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">{{ "FINANCE_FILTER_ACCOUNT" | translate }}</label>
+        <select class="form-control" [formControl]="accountFilter">
+          <option [ngValue]="null">{{ "FINANCE_ALL_ACCOUNTS" | translate }}</option>
+          <option *ngFor="let account of accounts" [ngValue]="account.id">
+            {{ account.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </app-white-card>
+
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_MANUAL_ENTRIES" | translate }}</p>
+
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
+
+  <app-report-table
+    *ngIf="!loadFailed"
+    [columns]="columns"
+    [rows]="rows"
+  ></app-report-table>
+</ng-container>

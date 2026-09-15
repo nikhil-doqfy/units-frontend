@@ -1,0 +1,78 @@
+<app-finance-nav [pmcId]="pmcId"></app-finance-nav>
+
+<app-finance-empty-state
+  *ngIf="financeActivation !== 'activated'"
+  [financeActivation]="financeActivation"
+  title="FINANCE_PMC_CHARGE_TYPES"
+></app-finance-empty-state>
+
+<ng-container *ngIf="financeActivation === 'activated'">
+  <div class="mb-3 d-flex justify-content-end">
+    <button type="button" class="btn btn-primary" (click)="openAddForm()">
+      {{ "FINANCE_ADD_PMC_CHARGE_TYPE" | translate }}
+    </button>
+  </div>
+
+  <app-white-card *ngIf="showForm" customClass="mb-3">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label">{{ "FINANCE_COL_CHARGE" | translate }}</label>
+        <select class="form-control" [(ngModel)]="formChargeId" name="chargeId">
+          <option [ngValue]="null">{{ "FINANCE_SELECT_CHARGE" | translate }}</option>
+          <option *ngFor="let charge of charges" [ngValue]="charge.id">
+            {{ charge.description }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">{{ "FINANCE_COL_ACCOUNT" | translate }}</label>
+        <select class="form-control" [(ngModel)]="formAccountId" name="accountId">
+          <option [ngValue]="null">{{ "FINANCE_SELECT_ACCOUNT" | translate }}</option>
+          <option *ngFor="let account of accounts" [ngValue]="account.id">
+            {{ account.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-2 form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="chargeTypeActive"
+          [(ngModel)]="formActive"
+          name="active"
+        />
+        <label class="form-check-label" for="chargeTypeActive">
+          {{ "FINANCE_COL_ACTIVE" | translate }}
+        </label>
+      </div>
+      <div class="col-md-2 d-flex gap-2">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="saving"
+          (click)="submit()"
+        >
+          {{ (saving ? "FINANCE_SUBMITTING" : "FINANCE_SUBMIT") | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="closeForm()">
+          {{ "CANCEL" | translate }}
+        </button>
+      </div>
+    </div>
+    <p *ngIf="saveError" class="text-danger mt-2 mb-0">
+      {{ saveError | translate }}
+    </p>
+  </app-white-card>
+
+  <p *ngIf="loadFailed">{{ "FINANCE_FAILED_TO_LOAD_PMC_CHARGE_TYPES" | translate }}</p>
+
+  <p *ngIf="loading && !loadFailed">{{ "FINANCE_LOADING" | translate }}</p>
+
+  <app-report-table
+    *ngIf="!loadFailed"
+    [columns]="columns"
+    [rows]="rows"
+    [clickableRows]="true"
+    (rowClick)="onRowClick($event)"
+  ></app-report-table>
+</ng-container>
