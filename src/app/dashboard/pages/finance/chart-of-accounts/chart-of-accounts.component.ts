@@ -21,6 +21,11 @@ interface ChartOfAccountsRow {
   id: number;
   name: string;
   account_type: string;
+  // Story 5.3 (FR-18): sub-category under account_type (e.g. Current
+  // Asset, Liability). Null for accounts with no subtype (Income/Expense
+  // accounts, or a pre-existing row left uncategorized by the Story 5.3
+  // migration) -- rendered as a dash, never fabricated.
+  account_subtype: string | null;
   // Decimal-serialized as a string by the backend, matching Trial
   // Balance's total_debit/total_credit and Balance Sheet's balance fields
   // from the same service -- never a native number on the wire.
@@ -73,8 +78,24 @@ export class ChartOfAccountsComponent implements OnInit {
   columns: ReportColumn[] = [
     { key: 'name', label: 'FINANCE_COL_NAME' },
     { key: 'account_type', label: 'FINANCE_COL_TYPE' },
+    { key: 'account_subtype', label: 'FINANCE_COL_CATEGORY' },
     { key: 'balance', label: 'FINANCE_COL_BALANCE', align: 'end' },
   ];
+
+  // Story 5.3 (FR-18): human-readable labels for the Category column,
+  // matching Account.ACCOUNT_SUBTYPE_CHOICES' backend display names
+  // exactly (ledger/models.py) -- a plain lookup, not a translation-pipe
+  // key, since `report-table` renders row values with no per-cell
+  // translation step (spec Code Map: "translated label" means a real
+  // display string, not a raw enum code).
+  private static readonly ACCOUNT_SUBTYPE_LABELS: Record<string, string> = {
+    FIXED_ASSET: 'Fixed Asset',
+    CURRENT_ASSET: 'Current Asset',
+    OTHER_CURRENT_ASSET: 'Other Current Asset',
+    LIABILITY: 'Liability',
+    CAPITAL_CONTRIBUTION: 'Capital Contribution',
+    SHARE_CAPITAL: 'Share Capital',
+  };
 
   rows: Record<string, string | number>[] = [];
 
@@ -143,8 +164,21 @@ export class ChartOfAccountsComponent implements OnInit {
       id: account.id,
       name: account.name,
       account_type: account.account_type,
+      account_subtype: this.formatAccountSubtype(account.account_subtype),
       balance: account.balance,
     }));
+  }
+
+  // Blank/dash for null (Income/Expense accounts, or a pre-existing row
+  // left uncategorized by the Story 5.3 migration) -- never a fabricated
+  // guess (spec Always).
+  private formatAccountSubtype(accountSubtype: string | null): string {
+    if (!accountSubtype) {
+      return '—';
+    }
+    return (
+      ChartOfAccountsComponent.ACCOUNT_SUBTYPE_LABELS[accountSubtype] ?? accountSubtype
+    );
   }
 
   // Navigation is a route event, resolved entirely by the destination
