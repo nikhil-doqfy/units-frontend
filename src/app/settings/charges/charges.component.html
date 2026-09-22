@@ -4,19 +4,20 @@
     <div class="mt-3">
       <div class="cmmnTblHdr">
         <div class="row g-3 align-items-center">
-          <div class="col-md">{{ "ADD_DELETE" | translate }}</div>
+          <div class="col-md">
+            <div class="d-flex align-items-center gap-3">
+              <span class="hdr-title">{{ "ADD_DELETE" | translate }}</span>
+              
+            </div>
+          </div>
           <div class="col-md-auto">
             <button
-              *ngIf="!showSave"
               class="btn btnCommonsx"
-              (click)="addNewRow()"
+              type="button"
+              (click)="openAddChargeModal(addChargeModal)"
             >
               <app-plus-icon></app-plus-icon>
               {{ "ADD_MORE" | translate }}
-            </button>
-
-            <button *ngIf="showSave" class="btn btnCommon" (click)="saveRow()">
-              <i><app-save-icon></app-save-icon> </i>{{ "SAVE" | translate }}
             </button>
           </div>
         </div>
@@ -48,14 +49,39 @@
               >
                 <td>
                   {{ i + 1 }}
-                  <input
-                    *ngIf="c.value.isEdit || c.value.isNew"
-                    class="inline-input"
-                    placeholder="Enter here"
-                    formControlName="description"
-                  />
+                  <ng-container *ngIf="c.value.isEdit">
+                    <input
+                      class="inline-input"
+                      [class.input-error]="
+                        c.get('description')?.invalid &&
+                        c.get('description')?.touched
+                      "
+                      placeholder="Enter here"
+                      formControlName="description"
+                    />
+                    <div
+                      class="field-error"
+                      *ngIf="
+                        c.get('description')?.invalid &&
+                        c.get('description')?.touched
+                      "
+                    >
+                      <span
+                        *ngIf="c.get('description')?.errors?.['required']"
+                        >{{ "REQUIRED" | translate }}</span
+                      >
+                      <span
+                        *ngIf="c.get('description')?.errors?.['minlength']"
+                        >{{ "MIN_LENGTH_2" | translate }}</span
+                      >
+                      <span
+                        *ngIf="c.get('description')?.errors?.['maxlength']"
+                        >{{ "MAX_LENGTH_100" | translate }}</span
+                      >
+                    </div>
+                  </ng-container>
                   <span
-                    *ngIf="!c.value.isEdit && !c.value.isNew"
+                    *ngIf="!c.value.isEdit"
                     (click)="editRow(i)"
                     class="desc-text"
                   >
@@ -63,44 +89,69 @@
                   </span>
                 </td>
                 <td>
-                  <input
-                    *ngIf="c.value.isEdit || c.value.isNew"
-                    class="inline-input"
-                    type="number"
-                    placeholder="Enter here"
-                    formControlName="amount"
-                  />
-
-                  <span *ngIf="!c.value.isEdit && !c.value.isNew">
+                  <ng-container *ngIf="c.value.isEdit">
+                    <input
+                      class="inline-input"
+                      [class.input-error]="
+                        c.get('amount')?.invalid && c.get('amount')?.touched
+                      "
+                      type="number"
+                      placeholder="Enter here"
+                      formControlName="amount"
+                    />
+                    <div
+                      class="field-error"
+                      *ngIf="
+                        c.get('amount')?.invalid && c.get('amount')?.touched
+                      "
+                    >
+                      <span *ngIf="c.get('amount')?.errors?.['required']">{{
+                        "REQUIRED" | translate
+                      }}</span>
+                      <span *ngIf="c.get('amount')?.errors?.['min']">{{
+                        "AMOUNT_MIN" | translate
+                      }}</span>
+                      <span *ngIf="c.get('amount')?.errors?.['pattern']">{{
+                        "AMOUNT_PATTERN" | translate
+                      }}</span>
+                    </div>
+                  </ng-container>
+                  <span *ngIf="!c.value.isEdit">
                     {{ c.value.amount | number: "1.2-2" }}
                   </span>
                 </td>
 
                 <td>
-                  <input
-                    *ngIf="c.value.isEdit || c.value.isNew"
-                    class="inline-input"
-                    placeholder="Enter here"
-                    formControlName="tax_code"
-                  />
-
-                  <span *ngIf="!c.value.isEdit && !c.value.isNew">
+                  <ng-container *ngIf="c.value.isEdit">
+                    <input
+                      class="inline-input"
+                      [class.input-error]="
+                        c.get('tax_code')?.invalid && c.get('tax_code')?.touched
+                      "
+                      placeholder="5"
+                      formControlName="tax_code"
+                    />
+                    <div
+                      class="field-error"
+                      *ngIf="
+                        c.get('tax_code')?.invalid && c.get('tax_code')?.touched
+                      "
+                    >
+                      <span *ngIf="c.get('tax_code')?.errors?.['required']">{{
+                        "REQUIRED" | translate
+                      }}</span>
+                      <span *ngIf="c.get('tax_code')?.errors?.['maxlength']">{{
+                        "MAX_LENGTH_20" | translate
+                      }}</span>
+                    </div>
+                  </ng-container>
+                  <span *ngIf="!c.value.isEdit">
                     {{ c.value.tax_code }}
                   </span>
                 </td>
 
                 <td>
-                  <input
-                    *ngIf="c.value.isEdit || c.value.isNew"
-                    class="inline-input"
-                    type="number"
-                    placeholder="Enter here"
-                    formControlName="vat"
-                  />
-
-                  <span *ngIf="!c.value.isEdit && !c.value.isNew">
-                    {{ c.value.vat | number: "1.2-2" }}
-                  </span>
+                  <span>{{ c.value.vat | number: "1.2-2" }}</span>
                 </td>
 
                 <td class="text-center">
@@ -109,6 +160,7 @@
                       class="form-check-input"
                       type="checkbox"
                       formControlName="is_editable"
+                      [attr.disabled]="!c.value.isEdit ? true : null"
                     />
                   </div>
                 </td>
@@ -149,3 +201,183 @@
     </div>
   </form>
 </div>
+
+<!-- Add Charge Modal -->
+<ng-template #addChargeModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">
+      {{ "ADD_CHARGES" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="mdlCommonForm commonForm">
+      <form [formGroup]="addChargeForm">
+        <div class="row g-3">
+          <!-- PMC Dropdown -->
+          <div class="col-12">
+            <label class="form-label">
+              {{ "PMC" | translate }} <span class="text-danger">*</span>
+            </label>
+            <app-custom-select
+              [options]="pmcList"
+              [placeholder]="'SELECT_PMC' | translate"
+              key="key"
+              value="value"
+              [selectedOption]="selectedPmc"
+              (optionSelected)="onPmcSelected($event)"
+            ></app-custom-select>
+            <div
+              class="field-error"
+              *ngIf="
+                addChargeForm.get('pmc_id')?.invalid &&
+                addChargeForm.get('pmc_id')?.touched
+              "
+            >
+              <span>{{ "REQUIRED" | translate }}</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="col-12">
+            <label class="form-label">
+              {{ "DESCRIPTION" | translate }} <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="
+                addChargeForm.get('description')?.invalid &&
+                addChargeForm.get('description')?.touched
+              "
+              placeholder="{{ 'ENTER_HERE' | translate }}"
+              formControlName="description"
+            />
+            <div
+              class="field-error"
+              *ngIf="
+                addChargeForm.get('description')?.invalid &&
+                addChargeForm.get('description')?.touched
+              "
+            >
+              <span *ngIf="addChargeForm.get('description')?.errors?.['required']">
+                {{ "REQUIRED" | translate }}
+              </span>
+              <span *ngIf="addChargeForm.get('description')?.errors?.['minlength']">
+                {{ "MIN_LENGTH_2" | translate }}
+              </span>
+              <span *ngIf="addChargeForm.get('description')?.errors?.['maxlength']">
+                {{ "MAX_LENGTH_100" | translate }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Amount -->
+          <div class="col-md-6">
+            <label class="form-label">
+              {{ "AMOUNT" | translate }} <span class="text-danger">*</span>
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              [class.is-invalid]="
+                addChargeForm.get('amount')?.invalid &&
+                addChargeForm.get('amount')?.touched
+              "
+              placeholder="{{ 'ENTER_HERE' | translate }}"
+              formControlName="amount"
+            />
+            <div
+              class="field-error"
+              *ngIf="
+                addChargeForm.get('amount')?.invalid &&
+                addChargeForm.get('amount')?.touched
+              "
+            >
+              <span *ngIf="addChargeForm.get('amount')?.errors?.['required']">
+                {{ "REQUIRED" | translate }}
+              </span>
+              <span *ngIf="addChargeForm.get('amount')?.errors?.['min']">
+                {{ "AMOUNT_MIN" | translate }}
+              </span>
+              <span *ngIf="addChargeForm.get('amount')?.errors?.['pattern']">
+                {{ "AMOUNT_PATTERN" | translate }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Tax Code -->
+          <div class="col-md-6">
+            <label class="form-label">
+              {{ "TAX_CODE" | translate }} <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="
+                addChargeForm.get('tax_code')?.invalid &&
+                addChargeForm.get('tax_code')?.touched
+              "
+              placeholder="5"
+              formControlName="tax_code"
+            />
+            <div
+              class="field-error"
+              *ngIf="
+                addChargeForm.get('tax_code')?.invalid &&
+                addChargeForm.get('tax_code')?.touched
+              "
+            >
+              <span *ngIf="addChargeForm.get('tax_code')?.errors?.['required']">
+                {{ "REQUIRED" | translate }}
+              </span>
+              <span *ngIf="addChargeForm.get('tax_code')?.errors?.['maxlength']">
+                {{ "MAX_LENGTH_20" | translate }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Editable switch -->
+          <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between p-2 rounded border bg-light-subtle">
+              <label class="form-label mb-0 fw-medium">{{ "EDITABLE" | translate }}</label>
+              <div class="form-check form-switch mb-0">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  formControlName="is_editable"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btnCommon btnTransparent"
+      (click)="modal.dismiss('Cancel click')"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btnCommon"
+      (click)="saveNewCharge(modal)"
+      [disabled]="isSubmitting"
+    >
+      <i><app-save-icon></app-save-icon></i>
+      {{ "SAVE" | translate }}
+    </button>
+  </div>
+</ng-template>
+

@@ -43,6 +43,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { AlertService } from '../../../shared/services/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-announcements',
@@ -82,6 +83,7 @@ export class AnnouncementsComponent {
   private sharedApiService = inject(SharedApiService);
   private alertService = inject(AlertService);
   private modalService = inject(NgbModal);
+  private router = inject(Router);
   @ViewChild('reportModal') reportModal!: TemplateRef<any>;
   propertyOptions: { key: number; value: string }[] = [];
   unitOptions: { key: number; value: string; rent?: string }[] = [];
@@ -356,6 +358,13 @@ export class AnnouncementsComponent {
     this.getBroadcastData();
   }
 
+  viewProperty(prop: any) {
+    const id = prop.property_id || prop.id;
+
+    if (id) {
+      this.router.navigate(['/dashboard/properties', id]);
+    }
+  }
   // ─── View Report panel ─────────────────────────────────────────────────────
   openReportPanel(item: any): void {
     this.selectedReport = item;

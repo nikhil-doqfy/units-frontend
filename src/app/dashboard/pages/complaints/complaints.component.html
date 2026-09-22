@@ -27,7 +27,7 @@
         </div>
         <button
           *ngIf="canManageComplaints"
-          class="btn btnCommon btnPrimary complaintBtn"
+          class="btnCommon btnPrimary complaintBtn"
           (click)="openComplaintModal()"
         >
           {{ "NEW_COMPLAINT" | translate }}
@@ -161,16 +161,12 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
-                <button
-                  type="button"
-                  class="btn btnCommon"
-                  (click)="applyFilter()"
-                >
+                <button type="button" class="btnCommon" (click)="applyFilter()">
                   {{ "APPLY" | translate }}
                 </button>
               </ng-container>
@@ -203,17 +199,16 @@
               <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ item.id || "N/A" }}</td>
-                <td>
+                <td style="cursor: pointer" (click)="viewProperty(item)">
                   <app-table-img-item
                     [img]="
                       item?.raised_by_image ??
                       '../../../../assets/userDefaultProImg.png'
                     "
                     [title]="item.unit?.property_name || 'N/A'"
-                    [clickable]="true"
-                    (clicked)="handleViewClick(item)"
+                    size="md"
+                    [showInitialsFallback]="true"
                   />
-                  <!-- (clicked)="handleViewClick(item)" -->
                 </td>
                 <td>
                   <app-table-img-item
@@ -222,6 +217,8 @@
                       '../../../../assets/userDefaultProImg.png'
                     "
                     [title]="item.raised_by?.name || 'N/A'"
+                    [clickable]="true"
+                    (clicked)="handleViewClick(item)"
                   />
                 </td>
                 <td>
@@ -337,6 +334,14 @@
       {
         label: getLabel('STATUS'),
         value: selectedComplaint?.status?.value || '--',
+      },
+      {
+        label: getLabel('ADDRESS_LINE_1'),
+        value: selectedComplaint?.unit?.address_line_1 || 'N/A',
+      },
+      {
+        label: getLabel('ADDRESS_LINE_2'),
+        value: selectedComplaint?.unit?.address_line_2 || 'N/A',
       },
     ]"
     (back)="handleBackClick()"
@@ -480,16 +485,12 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); ticketFilterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
-                <button
-                  type="button"
-                  class="btn btnCommon"
-                  (click)="applyFilter()"
-                >
+                <button type="button" class="btnCommon" (click)="applyFilter()">
                   {{ "APPLY" | translate }}
                 </button>
               </ng-container>
@@ -619,7 +620,7 @@
 
     <button
       type="button"
-      class="btn btnCommon"
+      class="btnCommon"
       (click)="addComplaintComponent.submitForm()"
     >
       {{

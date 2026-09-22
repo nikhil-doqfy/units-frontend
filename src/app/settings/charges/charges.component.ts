@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, TemplateRef } from '@angular/core';
 import { WhiteCardComponent } from '../../shared/component/white-card/white-card.component';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -8,6 +8,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { PlusIconComponent } from '../../shared/component/icons/plus-icon/plus-icon.component';
 import { EditIconComponent } from '../../dashboard/component/icons/edit-icon/edit-icon.component';
@@ -17,6 +18,14 @@ import { BreadCrumb } from '../../shared/model/shared.model';
 import { SharedService } from '../../shared.service';
 import { ChargesService } from '../../charges.service';
 import { NoDataComponent } from '../../no-data/no-data.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CustomSelectComponent } from '../../dashboard/component/custom-select/custom-select.component';
+import { SharedApiService } from '../../shared/services/shared-api.service';
+import { AlertService } from '../../shared/services/alert.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { StorageService } from '../../shared/services/storage.service';
+
 export interface Charge {
   id?: number;
   label: string;
@@ -29,6 +38,7 @@ export interface Charge {
   isNew?: boolean;
   isEdit?: boolean;
 }
+
 @Component({
   selector: 'app-charges',
   standalone: true,
@@ -43,27 +53,97 @@ export interface Charge {
     SaveIconComponent,
     ReactiveFormsModule,
     NoDataComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './charges.component.html',
   styleUrl: './charges.component.css',
 })
 export class ChargesComponent {
   private sharedService = inject(SharedService);
+  private sharedApiService = inject(SharedApiService);
+  private alertService = inject(AlertService);
+  private modalService = inject(NgbModal);
+  private destroyRef = inject(DestroyRef);
   private fb = inject(FormBuilder);
   private chargesService = inject(ChargesService);
+  private storageService = inject(StorageService);
+
   currentLanguage = 'en';
-  showSave = false;
   showDetailView: boolean = false;
   breadcrumbData: BreadCrumb[] = [];
   activeRow: number | null = null;
   chargesForm!: FormGroup;
+  addChargeForm!: FormGroup;
+
+  pmcList: any[] = [];
+  selectedPmc: any = null;
+  filterPmc: any = null;
+  isSubmitting = false;
+
   ngOnInit() {
+    this.initAddChargeForm();
     this.chargesForm = this.fb.group({
       charges: this.fb.array([]),
     });
     this.loadBreadcrumb();
-    this.getCharges();
+    this.loadPmcOptions();
     this.sharedService.initLanguage();
+  }
+
+  initAddChargeForm() {
+    this.addChargeForm = this.fb.group({
+      pmc_id: [this.selectedPmc?.key ?? null, [Validators.required]],
+      description: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100),
+        ],
+      ],
+      amount: [
+        null,
+        [
+          Validators.required,
+          Validators.min(0.01),
+          Validators.pattern(/^\d+(\.\d{1,2})?$/),
+        ],
+      ],
+      tax_code: [
+        '5',
+        [Validators.required, Validators.maxLength(20)],
+      ],
+      is_editable: [false],
+    });
+  }
+
+  loadPmcOptions(): void {
+    this.sharedApiService
+      .getOptions({ option_type: 'PMC_BY_PM' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.pmcList = resp?.content?.pmc ?? [];
+          const defaultPmc = this.storageService.getDefaultPmc(this.pmcList);
+          if (defaultPmc) {
+            this.selectedPmc = defaultPmc;
+            this.filterPmc = defaultPmc;
+            if (this.addChargeForm) {
+              this.addChargeForm.patchValue({ pmc_id: defaultPmc.key });
+            }
+          }
+          this.getCharges();
+        },
+        error: (err) => {
+          console.error('Error loading PMC options:', err);
+          this.getCharges();
+        },
+      });
+  }
+
+  onFilterPmcChange(option: any): void {
+    this.filterPmc = option?.key ? option : null;
+    this.getCharges();
   }
 
   loadBreadcrumb() {
@@ -83,11 +163,13 @@ export class ChargesComponent {
       ]);
     }
   }
+
   setBreadCrumb(breadCrumb: BreadCrumb[]) {
     this.sharedService
       .getBreadcrumbs(breadCrumb)
       .subscribe((data) => (this.breadcrumbData = data));
   }
+
   get chargesArray(): FormArray {
     return this.chargesForm.get('charges') as FormArray;
   }
@@ -95,45 +177,135 @@ export class ChargesComponent {
   createChargeForm(c?: any): FormGroup {
     return this.fb.group({
       charge_id: [c?.charge_id || c?.id || null],
-      description: [c?.description || ''],
-      amount: [c?.amount || 0],
-      tax_code: [c?.tax_code || ''],
-      vat: [c?.vat_amount || 0],
+
+      description: [
+        c?.description || '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100),
+        ],
+      ],
+
+      amount: [
+        c?.amount ?? null,
+        [
+          Validators.required,
+          Validators.min(0.01),
+          Validators.pattern(/^\d+(\.\d{1,2})?$/),
+        ],
+      ],
+
+      tax_code: [
+        c?.tax_code || '5',
+        [Validators.required, Validators.maxLength(20)],
+      ],
+
+      vat: [c?.vat_amount ?? 0],
+
       is_editable: [c?.editable || false],
-      total: [c?.total || 0],
+      total: [c?.total ?? 0],
       isNew: [c?.isNew || false],
       isEdit: [false],
     });
   }
+
   getCharges() {
-    this.chargesService.charges({}).subscribe((resp: any) => {
-      const data = resp?.content ?? [];
+    const params: Record<string, any> = {};
+    if (this.filterPmc?.key) {
+      params['pmc_id'] = this.filterPmc.key;
+    }
 
-      this.chargesArray.clear();
+    this.chargesService
+      .charges(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          const data = resp?.content ?? [];
+          this.chargesArray.clear();
 
-      data.forEach((c: any) => {
-        const mapped = {
-          id: c.id,
-          description: c.description,
-          amount: c.amount,
-          tax_code: c.tax_code,
-          vat_amount: c.vat_amount,
-          total: c.total_amount,
-          editable: c.is_editable,
-        };
+          data.forEach((c: any) => {
+            const mapped = {
+              id: c.id,
+              description: c.description,
+              amount: c.amount,
+              tax_code: c.tax_code,
+              vat_amount: c.vat_amount,
+              total: c.total_amount,
+              editable: c.is_editable,
+            };
 
-        this.chargesArray.push(this.createChargeForm(mapped));
+            this.chargesArray.push(this.createChargeForm(mapped));
+          });
+        },
+        error: () => {
+          this.chargesArray.clear();
+        },
       });
+  }
+
+  openAddChargeModal(content: TemplateRef<any>) {
+    this.initAddChargeForm();
+    if (!this.selectedPmc && this.pmcList.length) {
+      this.selectedPmc = this.storageService.getDefaultPmc(this.pmcList);
+    }
+    const currentPmc = this.selectedPmc || this.filterPmc;
+    if (currentPmc?.key) {
+      this.selectedPmc = currentPmc;
+      this.addChargeForm.patchValue({ pmc_id: currentPmc.key });
+    }
+
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-title',
+      windowClass: 'mdlCommon mdlSmall',
+      centered: true,
     });
   }
-  addNewRow() {
-    const hasNew = this.chargesArray.value.some((c: any) => c.isNew);
 
-    if (hasNew) return;
+  onPmcSelected(option: any): void {
+    this.selectedPmc = option;
+    this.addChargeForm.patchValue({
+      pmc_id: option?.key ?? null,
+    });
+    this.addChargeForm.get('pmc_id')?.markAsTouched();
+  }
 
-    this.showSave = true;
+  saveNewCharge(modal: any) {
+    this.addChargeForm.markAllAsTouched();
 
-    this.chargesArray.insert(0, this.createChargeForm({ isNew: true }));
+    if (this.addChargeForm.invalid) {
+      return;
+    }
+
+    const formValue = this.addChargeForm.value;
+    const payload = {
+      pmc_id: formValue.pmc_id,
+      description: formValue.description?.trim(),
+      amount: formValue.amount,
+      tax_code: String(formValue.tax_code ?? '').trim(),
+      is_editable: formValue.is_editable ?? false,
+    };
+
+    this.isSubmitting = true;
+    this.chargesService
+      .addCharge(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.isSubmitting = false;
+          this.alertService.success(
+            resp?.message || 'Charge added successfully'
+          );
+          modal.close('Save click');
+          this.getCharges();
+        },
+        error: (err: any) => {
+          this.isSubmitting = false;
+          this.alertService.error(
+            err?.error?.message || 'Failed to add charge'
+          );
+        },
+      });
   }
 
   editRow(index: number) {
@@ -143,53 +315,66 @@ export class ChargesComponent {
       isEdit: true,
       isNew: false,
     });
-
-    this.showSave = false;
   }
 
   saveRow(index?: number) {
-    const formValue = this.chargesArray.value;
-    const newIndex = formValue.findIndex((c: any) => c.isNew);
-    if (newIndex !== -1) {
-      const payload = {
-        description: formValue[newIndex]?.description,
-        amount: formValue[newIndex]?.amount,
-        tax_code: formValue[newIndex]?.tax_code,
-      };
-      this.showSave = false;
-      this.chargesService.addCharge(payload).subscribe(() => {
-        this.getCharges();
-      });
-    }
-
     if (index !== undefined) {
-      const rowForm = this.chargesArray.at(index);
+      const rowForm = this.chargesArray.at(index) as FormGroup;
+
+      rowForm.markAllAsTouched();
+
+      if (rowForm.invalid) {
+        return;
+      }
+
       const payload = {
         charge_id: rowForm.value.charge_id,
-        description: rowForm.value.description,
+        description: rowForm.value.description?.trim(),
         amount: rowForm.value.amount,
-        tax_code: rowForm.value.tax_code,
+        tax_code: String(rowForm.value.tax_code ?? '').trim(),
+        is_editable: rowForm.value.is_editable ?? false,
       };
 
-      this.chargesService.editCharge(payload).subscribe(() => {
-        rowForm.patchValue({ isEdit: false });
-        this.getCharges();
+      this.chargesService.editCharge(payload).subscribe({
+        next: (resp: any) => {
+          rowForm.patchValue({ isEdit: false });
+          this.alertService.success(
+            resp?.message || 'Charge updated successfully'
+          );
+          this.getCharges();
+        },
+        error: (err: any) => {
+          this.alertService.error(
+            err?.error?.message || 'Failed to update charge'
+          );
+        },
       });
     }
   }
+
   deleteRow(index: number) {
     const row = this.chargesArray.at(index)?.value;
 
     if (row?.charge_id) {
-      const payload = {
-        charge_id: row.charge_id,
-      };
+      this.alertService.confirm(
+        () => {
+          const payload = {
+            charge_id: row.charge_id,
+          };
 
-      this.chargesService.deleteCharge(payload).subscribe(() => {
-        this.getCharges();
-      });
+          this.chargesService.deleteCharge(payload).subscribe(() => {
+            this.getCharges();
+          });
+        },
+        null,
+        this,
+        index,
+        'Are you sure?',
+        'Do you want to delete this charge?'
+      );
     } else {
       this.chargesArray.removeAt(index);
     }
   }
 }
+

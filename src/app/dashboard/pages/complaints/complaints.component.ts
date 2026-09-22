@@ -318,6 +318,10 @@ export class ComplaintsComponent {
     });
   }
 
+  viewProperty(prop: any) {
+    const id = prop.property_id || prop.id;
+    if (id) this.router.navigate(['/dashboard/properties', id]);
+  }
   removeFilter() {
     this.selectedComplaintstatus = null;
     this.currentPage = 1;

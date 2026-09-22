@@ -11,6 +11,7 @@ import {
 } from '@angular/forms';
 import { FormService } from '../../../../shared/services/form.service';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
+import { StorageService } from '../../../../shared/services/storage.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface OptionsParams {
@@ -35,6 +36,7 @@ export class AssignPropertyFormComponent {
   private formBuilder = inject(FormBuilder);
   private formService = inject(FormService);
   private sharedAPIService = inject(SharedApiService);
+  private storageService = inject(StorageService);
   private destroyRef = inject(DestroyRef);
 
   isInvalid = this.formService.isInvalid;
@@ -71,6 +73,12 @@ export class AssignPropertyFormComponent {
           const content = res?.content || {};
 
           options.forEach((o) => o.setter(content[o.key] || []));
+          if (!this.assignedPrpertyForm.get('pmc')?.value) {
+            const defaultPmc = this.storageService.getDefaultPmc(this.pmcList);
+            if (defaultPmc) {
+              this.assignedPrpertyForm.patchValue({ pmc: defaultPmc.key });
+            }
+          }
         },
       });
   }

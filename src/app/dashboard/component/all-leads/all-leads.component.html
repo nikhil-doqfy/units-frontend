@@ -82,14 +82,14 @@
               <ng-container action>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="removeFilter(); filterPopup.closePopup()"
                 >
                   {{ "REMOVE_ALL" | translate }}
                 </button>
                 <button
                   type="button"
-                  class="btn btnCommon"
+                  class="btnCommon"
                   (click)="applyFilter(); filterPopup.closePopup()"
                 >
                   {{ "APPLY" | translate }}
@@ -143,13 +143,15 @@
             <tr *ngFor="let lead of leads">
               <td>{{ lead.code }}</td>
               <td>{{ lead.created_at || "--" }}</td>
-              <td>
+              <td style="cursor: pointer" (click)="viewProperty(lead)">
                 <app-table-img-item
                   [img]="
                     lead.property_thumbnail ||
                     'assets/property/property-img-default.svg'
                   "
                   [title]="lead.property_name"
+                  size="md"
+                  [showInitialsFallback]="true"
                 />
               </td>
               <td>{{ lead.unit_name }}</td>
@@ -249,7 +251,7 @@
     </button>
     <button
       type="button"
-      class="btn btnCommon"
+      class="btnCommon"
       (click)="EditLeadFormComponent.submitForm()"
     >
       {{ "UPDATE_LEAD" | translate }}
@@ -323,11 +325,7 @@
     >
       {{ "CANCEL" | translate }}
     </button>
-    <button
-      type="button"
-      class="btn btnCommon"
-      (click)="convertToTenancy(modal)"
-    >
+    <button type="button" class="btnCommon" (click)="convertToTenancy(modal)">
       {{ "CONVERT_TO_TENANCY" | translate }}
     </button>
   </div>

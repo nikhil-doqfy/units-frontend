@@ -97,4 +97,84 @@ export class StorageService {
       return null;
     }
   }
+
+  /*----------------------logged in company / default PMC --------------------*/
+  getLoggedInCompanyId(): number | string | null {
+    const user = this.getUserProfile();
+    if (!user) return null;
+    return (
+      user.company_id ??
+      user.company?.company_id ??
+      user.company?.id ??
+      user.company?.key ??
+      user.pmc_id ??
+      user.pmc?.id ??
+      user.pmc?.key ??
+      user.company_profile?.company_id ??
+      user.company_profile?.id ??
+      null
+    );
+  }
+
+  getLoggedInCompanyName(): string | null {
+    const user = this.getUserProfile();
+    if (!user) return null;
+    return (
+      user.company_name ??
+      user.company?.company_name ??
+      user.company?.name ??
+      user.company?.value ??
+      user.pmc_name ??
+      user.pmc?.name ??
+      user.company_profile?.company_name ??
+      null
+    );
+  }
+
+  getDefaultPmc(pmcList: any[]): any {
+    if (!pmcList || !pmcList.length) return null;
+    const companyId = this.getLoggedInCompanyId();
+    const companyName = this.getLoggedInCompanyName()?.toLowerCase().trim();
+
+    if (companyId != null) {
+      const match = pmcList.find(
+        (p: any) =>
+          String(p.key) === String(companyId) ||
+          String(p.id) === String(companyId) ||
+          String(p.company_id) === String(companyId),
+      );
+      if (match) return match;
+    }
+
+    if (companyName) {
+      const match = pmcList.find((p: any) => {
+        const val = (p.value || p.name || p.company_name || '')
+          .toLowerCase()
+          .trim();
+        return (
+          val &&
+          (val === companyName ||
+            val.includes(companyName) ||
+            companyName.includes(val))
+        );
+      });
+      if (match) return match;
+    }
+
+    const lastFinancePmcId = this.getLastFinancePmcId();
+    if (lastFinancePmcId) {
+      const match = pmcList.find(
+        (p: any) =>
+          String(p.key) === String(lastFinancePmcId) ||
+          String(p.id) === String(lastFinancePmcId),
+      );
+      if (match) return match;
+    }
+
+    if (pmcList.length === 1) {
+      return pmcList[0];
+    }
+
+    return pmcList[0] || null;
+  }
 }

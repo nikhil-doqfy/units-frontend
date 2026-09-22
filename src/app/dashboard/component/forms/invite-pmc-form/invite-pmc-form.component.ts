@@ -8,6 +8,7 @@ import { CustomSelectComponent } from '../../../component/custom-select/custom-s
 // import { CustomSelectComponent } from '../../../../dashboard/component/custom-select/custom-select.component';
 // import { CustomSelectComponent } from '../../../../auth/component/custom-select/custom-select.component';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
+import { StorageService } from '../../../../shared/services/storage.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -26,9 +27,10 @@ export class InvitePMCFormComponent {
   private fb = inject(FormBuilder);
 
   private sharedApiService = inject(SharedApiService);
+  private storageService = inject(StorageService);
   private destroyRef = inject(DestroyRef);
   propertyList: any[] = [];
-  selectedProperty: string | null = null;
+  selectedProperty: any = null;
   propertyUnitLoaded = false;
   invitePmcForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -47,6 +49,11 @@ export class InvitePMCFormComponent {
       .subscribe({
         next: (response: any) => {
           this.propertyList = response?.content?.pmc ?? [];
+          const defaultPmc = this.storageService.getDefaultPmc(this.propertyList);
+          if (defaultPmc && !this.selectedProperty) {
+            this.selectedProperty = defaultPmc;
+            this.invitePmcForm.patchValue({ pmc_id: defaultPmc.key });
+          }
         },
       });
   }

@@ -248,6 +248,10 @@ export class AllLeadsComponent implements OnInit {
     this.leadsService.exportLeads(this.buildParams());
   }
 
+  viewProperty(prop: any) {
+    const id = prop.property_id || prop.id;
+    if (id) this.router.navigate(['/dashboard/properties', id]);
+  }
   getPlatformType(
     platform: string,
   ): 'propertyFinder' | 'bayut' | 'direct' | 'referral' {

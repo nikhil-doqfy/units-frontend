@@ -146,3 +146,25 @@
     display: flex;
   }
 }
+
+.pmc-filter-wrapper {
+  min-width: 180px;
+  max-width: 260px;
+}
+
+.hdr-title {
+  font-weight: 500;
+  color: var(--textBlack);
+}
+
+.inline-input.input-error {
+  border-bottom: 2px solid var(--dangerRed, #dc3545);
+}
+
+.field-error {
+  font-size: 11px;
+  color: var(--dangerRed, #dc3545);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
