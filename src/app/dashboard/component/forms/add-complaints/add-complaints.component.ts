@@ -15,6 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
 import { CustomSelectComponent } from '../../custom-select/custom-select.component';
+import { StorageService } from '../../../../shared/services/storage.service';
 @Component({
   selector: 'app-add-complaints',
   standalone: true,
@@ -40,6 +41,7 @@ export class AddComplaintsComponent {
   private formService = inject(FormService);
   private complaintsService = inject(ComplaintsService);
   private sharedApiService = inject(SharedApiService);
+  private storageService = inject(StorageService);
   isInvalid = this.formService.isInvalid.bind(this.formService);
   propertyOptions: { key: number; value: string }[] = [];
   unitOptions: { key: number; value: string; rent?: string }[] = [];
@@ -84,6 +86,12 @@ export class AddComplaintsComponent {
       .getOptions({ option_type: 'PMC_BY_PM' })
       .subscribe((resp: any) => {
         this.pmcOptions = resp?.content?.pmc ?? [];
+        if (!this.complaintData && !this.selectedPmc) {
+          const defaultPmc = this.storageService.getDefaultPmc(this.pmcOptions);
+          if (defaultPmc) {
+            this.onPmcSelected(defaultPmc);
+          }
+        }
       });
 
     if (this.complaintData) {

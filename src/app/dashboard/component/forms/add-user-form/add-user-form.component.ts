@@ -30,6 +30,7 @@ import { FileService } from '../../../../shared/services/file.service';
 import { UserService } from '../../../../user/services/user.service';
 import { AlertService } from '../../../../shared/services/alert.service';
 import { SharedApiService } from '../../../../shared/services/shared-api.service';
+import { StorageService } from '../../../../shared/services/storage.service';
 
 @Component({
   selector: 'app-add-user-form',
@@ -60,6 +61,7 @@ export class AddUserFormComponent implements OnInit {
   private userService = inject(UserService);
   private alertService = inject(AlertService);
   private sharedApiService = inject(SharedApiService);
+  private storageService = inject(StorageService);
 
   isInvalid = this.formService.isInvalid;
   pmcOptions: { key: number; value: string }[] = [];
@@ -103,6 +105,12 @@ export class AddUserFormComponent implements OnInit {
           this.selectedPmc =
             this.pmcOptions.find((p: any) => p.key === existing.key) ??
             existing;
+        } else if (!this.editData) {
+          const defaultPmc = this.storageService.getDefaultPmc(this.pmcOptions);
+          if (defaultPmc) {
+            this.selectedPmc = defaultPmc;
+            this.userForm.patchValue({ pmc: defaultPmc });
+          }
         }
       });
     if (this.editData) {

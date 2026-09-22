@@ -19,6 +19,7 @@ import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { FormService } from '../../../shared/services/form.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
+import { StorageService } from '../../../shared/services/storage.service';
 import {
   OptionsParams,
   UploadFileModel,
@@ -72,6 +73,7 @@ export class AddPropertyComponent {
   private formService = inject(FormService);
   private route = inject(ActivatedRoute);
   private sharedService = inject(SharedService);
+  private storageService = inject(StorageService);
   breadcrumbData = [
     {
       label: this.translate.instant('PAGE_TITLE.DASHBOARD'),
@@ -222,6 +224,12 @@ export class AddPropertyComponent {
         if (existing?.key) {
           this.selectedPmc =
             this.pmcList.find((p: any) => p.key === existing.key) ?? existing;
+        } else {
+          const defaultPmc = this.storageService.getDefaultPmc(this.pmcList);
+          if (defaultPmc) {
+            this.selectedPmc = defaultPmc;
+            this.pmDetailsForm.patchValue({ pmc: defaultPmc });
+          }
         }
       });
 

@@ -27,6 +27,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LeaseService } from '../dashboard/services/lease.service';
 import { CustomSelectComponent } from '../dashboard/component/custom-select/custom-select.component';
 import { SharedApiService } from '../shared/services/shared-api.service';
+import { StorageService } from '../shared/services/storage.service';
 
 @Component({
   selector: 'app-tenant-document-upload',
@@ -48,6 +49,7 @@ export class TenantDocumentUploadComponent implements OnChanges, OnInit {
   private fb = inject(FormBuilder);
 
   private sharedApiService = inject(SharedApiService);
+  private storageService = inject(StorageService);
   @ViewChild('uploadTenantDocumentModal')
   uploadTenantDocumentModal!: TemplateRef<any>;
 
@@ -191,6 +193,13 @@ export class TenantDocumentUploadComponent implements OnChanges, OnInit {
         params: {},
         setter: (data: any[]) => {
           this.pmcList = data ?? [];
+          if (!this.selectedPmc && !this.documentForm.get('pmc_id')?.value) {
+            const defaultPmc = this.storageService.getDefaultPmc(this.pmcList);
+            if (defaultPmc) {
+              this.selectedPmc = defaultPmc;
+              this.documentForm.patchValue({ pmc_id: defaultPmc.key });
+            }
+          }
         },
       },
     ]);
