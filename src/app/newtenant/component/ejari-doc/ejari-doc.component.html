@@ -1,3 +1,7 @@
+<div class="top-alert" *ngIf="showMsg$()">
+  <span class="icon"><app-warning-icon></app-warning-icon></span>
+  <span class="text">{{ msgText$() }}</span>
+</div>
 <form [formGroup]="form">
   <app-white-card>
     <div class="success-wrapper">

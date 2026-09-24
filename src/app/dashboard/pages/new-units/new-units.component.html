@@ -288,6 +288,20 @@
               controlName="unitUsage"
             ></app-form-select-field>
           </div>
+          <div class="col-md-3" *ngIf="basicDetailsForm.get('unitUsage')?.value?.key === 'BACHELORS_FLAT'">
+            <label class="form-label">{{ "MAXIMUM_OCCUPANTS_ALLOWED" | translate }}</label>
+            <input
+              type="number"
+              class="form-control"
+              [placeholder]="'ENTER_HERE' | translate"
+              formControlName="occupantsAllowed"
+            />
+            @if (isInvalid(basicDetailsForm, "occupantsAllowed").status) {
+              <small class="errorMsg">{{
+                isInvalid(basicDetailsForm, "occupantsAllowed").msg
+              }}</small>
+            }
+          </div>
           <div class="col-md-3">
             <app-form-select-field
               [label]="'UNIT_TYPE' | translate"

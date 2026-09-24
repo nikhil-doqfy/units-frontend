@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LeaseApprovalComponent } from './auth/pages/lease-approval/lease-approval.component';
 import { LeaseSignatureComponent } from './auth/pages/lease-signature/lease-signature.component';
+import { EjariSignatureComponent } from './auth/pages/ejari-signature/ejari-signature.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -14,6 +15,11 @@ export const routes: Routes = [
     path: 'lease-sign',
     title: 'Sign Lease Agreement | Units',
     component: LeaseSignatureComponent,
+  },
+  {
+    path: 'ejari-sign',
+    title: 'Ejari Signature | Units',
+    component: EjariSignatureComponent,
   },
   {
     path: 'auth',

@@ -8,6 +8,7 @@ import { PropertiesComponent } from './pages/properties/properties.component';
 import { AddPropertyComponent } from './pages/add-property/add-property.component';
 import { PMCComponent } from './pages/pmc/pmc.component';
 import { TenantsComponent } from './pages/tenants/tenants.component';
+import { TenantDetailComponent } from './pages/tenant-detail/tenant-detail.component';
 import { LeaseTenancyComponent } from './pages/lease-tenancy/lease-tenancy.component';
 import { AddLeaseComponent } from './pages/add-lease/add-lease.component';
 import { OwnersComponent } from './pages/owners/owners.component';
@@ -147,6 +148,12 @@ export const routes: Routes = [
       {
         path: 'tenants/detail/:id',
         component: TenantsComponent,
+        data: { titleKey: 'PAGE_TITLE.TENANTS', module: 'Tenant' },
+        canActivate: [permissionGuard],
+      },
+      {
+        path: 'tenant-detail/:id',
+        component: TenantDetailComponent,
         data: { titleKey: 'PAGE_TITLE.TENANTS', module: 'Tenant' },
         canActivate: [permissionGuard],
       },

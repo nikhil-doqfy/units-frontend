@@ -2,9 +2,12 @@ import {
   Component,
   DestroyRef,
   EventEmitter,
+  effect,
   inject,
   Output,
 } from '@angular/core';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
+import { NoDataComponent } from '../../../no-data/no-data.component';
 import { TableTitleComponent } from '../../component/table-title/table-title.component';
 import { TableSearchComponent } from '../../component/table-search/table-search.component';
 import { TableFilterButtonComponent } from '../../component/table-filter-btn/table-filter-btn.component';
@@ -70,6 +73,7 @@ interface PropertyDetails {
   selector: 'app-tenancy-ledger',
   standalone: true,
   imports: [
+    NoDataComponent,
     TableTitleComponent,
     TableSearchComponent,
     TableFilterButtonComponent,
@@ -107,6 +111,11 @@ export class TenancyLedgerComponent {
   @Output() detailViewChanges = new EventEmitter<boolean>();
   private destroyRef = inject(DestroyRef);
   private alertService = inject(AlertService);
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+  // Navbar-driven PMC filter -- distinct from `filterPMC` above, which
+  // (despite the name) is actually the property-occupancy-status filter.
+  filterPmcId: string | null = null;
   propertyDetails: Record<string, any> = {};
   propertyOptions: { key: number; value: string }[] = [];
   selectedPropertyType: any = null;
@@ -162,9 +171,26 @@ export class TenancyLedgerComponent {
   constructor(
     private router: Router,
     private tenancyLedgerService: TenancyLedgerService,
-  ) {}
+  ) {
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- ngOnInit's own initial
+    // load below already covers that, using whatever the navbar's
+    // selection has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.loadTenancyLedger();
+    });
+  }
 
   ngOnInit() {
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.search$
       .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
       .subscribe((text: string) => {
@@ -331,6 +357,7 @@ export class TenancyLedgerComponent {
       params['property_id'] = this.filterPropertyType;
     if (this.filterStatus) params['agreement_status'] = this.filterStatus;
     if (this.filterPMC) params['property_status'] = this.filterPMC;
+    if (this.filterPmcId) params['pmc_id'] = this.filterPmcId;
     return params;
   }
   loadTenancyLedger(): void {
@@ -341,13 +368,10 @@ export class TenancyLedgerComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          console.log('Tenancy Ledger Response:', resp);
-
           this.tenancyLedgerData = resp?.content ?? [];
 
           this.totalRecords =
-            resp?.content?.pagination?.total_records ??
-            this.tenancyLedgerData.length;
+            resp?.pagination?.total_records ?? this.tenancyLedgerData.length;
 
           this.isLoading = false;
         },

@@ -133,12 +133,13 @@
               </th>
               <th>{{ "PLATFROM" | translate }}</th>
               <th>{{ "TYPE_OF_LEAD" | translate }}</th>
+              <th>{{ "PROPOSAL" | translate }}</th>
               <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="leads.length === 0">
-              <td colspan="12" align="center"><app-no-data /></td>
+              <td colspan="13" align="center"><app-no-data /></td>
             </tr>
             <tr *ngFor="let lead of leads">
               <td>{{ lead.code }}</td>
@@ -174,8 +175,21 @@
               </td>
               <td>{{ lead.lead_type }}</td>
               <td>
+                <app-badge
+                  [title]="getProposalStatusBadge(lead.latest_proposal_status).title"
+                  [status]="getProposalStatusBadge(lead.latest_proposal_status).color"
+                  [showIcon]="true"
+                  [enableBg]="true"
+                >
+                </app-badge>
+              </td>
+              <td>
                 <div class="cmmnTblActnBtnDiv">
                   <app-check-icon
+                    ngbTooltip="Convert to Tenant"
+                    tooltipClass="tltpCommon"
+                    container="body"
+                    [triggers]="'hover'"
                     (click)="
                       openLeadToTenantModel(convertLeadToTenentContent, lead)
                     "
@@ -187,10 +201,15 @@
                   >
                   </app-table-action-btn>
                   <app-table-action-btn
-                    type="file"
+                    type="history"
                     (clicked)="
                       openActivityHistroyModal(activityHistroyContent, lead)
                     "
+                  >
+                  </app-table-action-btn>
+                  <app-table-action-btn
+                    type="proposal"
+                    (clicked)="openProposalModal(lead)"
                   >
                   </app-table-action-btn>
                 </div>

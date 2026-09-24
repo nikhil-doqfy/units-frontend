@@ -1,11 +1,5 @@
 <!-- ── Tenant Detail View ─────────────────────────────────────────── -->
 <ng-container *ngIf="!showInvoiceDetails">
-  <div *ngIf="showRenewalBlockedMsg" class="renewal-alert">
-    <i class="me-2"><app-block-icon></app-block-icon></i>
-    <strong>Renewal Blocked:</strong>
-    Renewal cannot proceed due to outstanding dues.
-  </div>
-
   <app-table-view-card
     (click)="showMsg()"
     (dblclick)="hideMsg()"
@@ -30,11 +24,11 @@
       },
       {
         label: getLabel('UNIT_TYPE'),
-        value: selectedLease?.unit?.name || 'Residential',
+        value: selectedLease?.unit?.unit_type || 'Residential',
       },
       {
         label: getLabel('YEAR_RENT'),
-        value: selectedLease?.financials?.rent || '67,000',
+        value: selectedLease?.financials?.annual_amount | number: '1.2-2',
       },
       {
         label: getLabel('OTHER_CHARGESE'),
@@ -42,13 +36,15 @@
       },
       { label: getLabel('VAT'), value: leaseChargesVatTotal | number: '1.2-2' },
       {
-        label: getLabel('TOTAL_RENT'),
-        value: selectedLease?.financials?.annual_amount || '1,00,000',
+        label: getLabel('TOTAL_AMOUNT'),
+        value: totalRentAmount | number: '1.2-2',
       },
     ]"
     (back)="handleBackClick()"
     [showCloseBtn]="false"
   >
+    <span before-back class="paid lease-status-badge">{{ selectedLease?.lease_status || "—" }}</span>
+
     <!-- <div class="threeDotWrap" rental-btn>
       <button class="threeDotBtn" (click)="toggleMenu()">⋮</button>
       <div class="threeDotDropdown" *ngIf="showMenu">
@@ -100,43 +96,6 @@
           </ng-template>
         </div>
 
-        <div class="payment-info">
-          <div>
-            <label>{{ "STATUS" | translate }}</label>
-            <span class="paid">{{ selectedLease?.lease_status || "--" }}</span>
-          </div>
-          <div>
-            <label>{{ "PAYMENT_TYPE" | translate }}</label>
-            <strong>{{ selectedLease?.payment_type || "--" }}</strong>
-          </div>
-          <div>
-            <label>{{ "CHEQUE_NUMBER" | translate }}</label>
-            <strong>{{ selectedLease?.cheque_number || "--" }}</strong>
-          </div>
-          <div>
-            <label>{{ "TOTAL_AMOUNT" | translate }}</label>
-            <strong>{{ leaseChargesTotalAmount | number: "1.2-2" }}</strong>
-          </div>
-          <div *ngIf="showRenewalBlockedMsg">
-            <div class="dues-card">
-              <div class="dues-title">Outstanding Dues</div>
-              <div class="dues-amount">AED540.00</div>
-            </div>
-            <a class="payment-link">Send Payment Link</a>
-          </div>
-        </div>
-
-        <div class="invoice-section mt-3">
-          <div class="mt-1">
-            <span
-              ><i><app-invoice-icon></app-invoice-icon></i>
-              {{ "INVOICE_GENERATED_SUCCESSFULLY" | translate }}</span
-            >
-            <a href="#" (click)="onViewInvoiceClick(selectedLease, $event)">{{
-              "VIEW_INVOICE" | translate
-            }}</a>
-          </div>
-        </div>
       </div>
     </div>
   </app-table-view-card>
@@ -253,6 +212,7 @@
             <app-custom-dropdown
               [title]="'RECEIPT' | translate"
               [hasIcon]="true"
+              [leaseId]="selectedLease?.id"
             >
               <app-receipt-icon></app-receipt-icon>
             </app-custom-dropdown>
@@ -331,59 +291,67 @@
         <table class="table table-bordered tenants-table">
           <thead>
             <tr>
-              <th>{{ "TRANSACTION_ID" | translate }}</th>
-              <th>{{ "BANK_NAME" | translate }}</th>
-              <th>{{ "BANK_ACCOUNT" | translate }}</th>
+              <th>#</th>
+              <th>{{ "DESCRIPTION" | translate }}</th>
+              <th>Due Date</th>
+              <th>Int Amount</th>
+              <th>Tax Code</th>
+              <th>{{ "VAT" | translate }}</th>
+              <th>{{ "TOTAL_AMOUNT" | translate }}</th>
+              <th>{{ "AMOUNT" | translate }}</th>
+              <th>{{ "PAYMENT_TYPE" | translate }}</th>
               <th>{{ "CHEQUE_NUMBER" | translate }}</th>
               <th>{{ "CHEQUE_DATE" | translate }}</th>
-              <th>{{ "PAYMENT_TYPE" | translate }}</th>
-              <th>{{ "PURPOSE" | translate }}</th>
+              <th>{{ "BANK_NAME" | translate }}</th>
+              <th>Account Number</th>
               <th>{{ "STATUS" | translate }}</th>
-              <th>{{ "AMOUNT" | translate }}</th>
-              <th>Additional Charges</th>
-              <th>Total Amount</th>
               <th>{{ "ACTIONS" | translate }}</th>
             </tr>
           </thead>
           <tbody>
-            @for (t of allTransactions; track t.id) {
+            @for (t of allTransactions; track t.id; let i = $index) {
               <tr>
-                <td>{{ t.code || "—" }}</td>
-                <td>{{ t.origin_bank?.name || "—" }}</td>
-                <td>{{ t.origin_account_number || "—" }}</td>
+                <td>{{ i + 1 }}</td>
+                <td>{{ t.description || "—" }}</td>
+                <td>{{ t.cheque_date | date: "dd/MM/yyyy" }}</td>
+                <td>{{ t.amount | number: "1.2-2" }}</td>
+                <td>{{ "VAT @" + (t.tax_code || 0) + "%" }}</td>
+                <td>{{ t.vat | number: "1.2-2" }}</td>
+                <td>{{ t.total | number: "1.2-2" }}</td>
+                <td>{{ t.total | number: "1.2-2" }}</td>
+                <td>{{ t.payment_type || "—" }}</td>
                 <td>{{ t.cheque_number || "—" }}</td>
                 <td>{{ t.cheque_date | date: "dd/MM/yyyy" }}</td>
-                <td>{{ t.payment_type || "—" }}</td>
+                <td>{{ t.selltlement_bank?.name || "—" }}</td>
+                <td>{{ t.settlement_account_number || "—" }}</td>
                 <td>
-                  @if (t.start_date && t.end_date) {
-                    {{ t.start_date | date: "MMM yyyy" }} –
-                    {{ t.end_date | date: "MMM yyyy" }}
-                  } @else {
-                    —
-                  }
+                  <app-custom-select
+                    [options]="statusOptions"
+                    key="key"
+                    value="value"
+                    [selectedOption]="getStatusOption(t.status)"
+                    (optionSelected)="onChequeStatusChange(t, $event)"
+                    [isFilter]="true"
+                  ></app-custom-select>
                 </td>
-                <td>
-                  <app-status-action-dropdown
-                    [status]="t.status || '—'"
-                  ></app-status-action-dropdown>
-                </td>
-                <td>{{ t.amount | number }}</td>
-                <td>—</td>
-                <td>{{ t.amount | number }}</td>
                 <td align="center">
                   <div class="cmmnTblActnBtnDiv">
                     <app-table-action-btn
                       type="preview"
-                      (clicked)="openReceiptModal(receiptContent)"
+                      (clicked)="openReceiptModal(t, receiptContent)"
                     />
-                    <app-table-action-btn type="download" />
+                    <app-table-action-btn
+                      *ngIf="t.invoice_pdf_url"
+                      type="download"
+                      (clicked)="downloadTransactionInvoice(t)"
+                    />
                   </div>
                 </td>
               </tr>
             }
             @if (!allTransactions.length) {
               <tr>
-                <td colspan="12" align="center">
+                <td colspan="15" align="center">
                   <app-no-data />
                 </td>
               </tr>
@@ -414,27 +382,26 @@
   <div class="mt-3">
     <app-white-card [title]="'ACTIVITY_HISTORY' | translate">
       <div class="activityWrapper">
-        <div class="year">2025</div>
-        <div class="weekLabel">This week <span class="line"></span></div>
-        <div class="activityItem">
-          <div class="icon orange">H</div>
-          <div class="content">
-            <div class="title"><strong>Ali</strong> added notes</div>
-            <div class="title"><strong>Cheques</strong> changes</div>
-            <span>Old Cheque 83683638363838 to new cheque 726826282627</span>
+        <ng-container *ngIf="activityHistory.length; else noActivity">
+          <div
+            class="activityItem"
+            [class.mt-3]="!first"
+            *ngFor="let a of activityHistory; let first = first; let odd = odd"
+          >
+            <div class="icon" [class.orange]="odd" [class.blue]="!odd">
+              {{ (a.user_name || "?").charAt(0) | uppercase }}
+            </div>
+            <div class="content simple">
+              <span>{{ a.message }}</span>
+              <div class="text-muted small">
+                {{ a.user_name || "—" }} &middot; {{ a.created | date: "dd MMM yyyy, h:mm a" }}
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="activityItem mt-3">
-          <div class="icon orange">H</div>
-          <div class="content simple"><strong>Hajji</strong> added Account</div>
-        </div>
-        <div class="activityItem">
-          <div class="icon blue">P</div>
-          <div class="content simple">
-            <strong>Prnjitha</strong> account was created by
-            <strong>Hajji</strong>
-          </div>
-        </div>
+        </ng-container>
+        <ng-template #noActivity>
+          <app-no-data></app-no-data>
+        </ng-template>
       </div>
     </app-white-card>
   </div>
@@ -679,15 +646,97 @@
 <ng-template #receiptContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">
-      {{ "Receipt:" | translate }}
-      <span class="ref-badge">#72628 72827 27282</span>
+      {{ "Receipt" | translate }}
+      <span class="ref-badge" *ngIf="previewTransaction?.code">#{{ previewTransaction.code }}</span>
     </h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
+    <div class="modal-header-actions">
+      <button
+        type="button"
+        class="icon-btn"
+        aria-label="Download"
+        title="Download"
+        *ngIf="(previewTab === 'receipt' && previewReceiptUrl) || (previewTab === 'invoice' && previewInvoiceUrl)"
+        (click)="downloadPreview()"
+      >
+        <app-download-icon></app-download-icon>
+      </button>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
   </div>
-  <div class="modal-body"><app-receipt /></div>
+  <div class="modal-body p-0">
+    <div class="commonTabs" *ngIf="previewTransaction?.file_path && previewTransaction?.invoice_pdf_url">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <button
+            type="button"
+            class="nav-link"
+            [class.active]="previewTab === 'receipt'"
+            (click)="previewTab = 'receipt'"
+          >
+            Receipt
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            type="button"
+            class="nav-link"
+            [class.active]="previewTab === 'invoice'"
+            (click)="previewTab = 'invoice'"
+          >
+            Invoice
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <ng-container *ngIf="previewTab === 'receipt' && previewTransaction?.file_path">
+      <div *ngIf="!previewReceiptUrl" class="text-center p-4 text-muted">Loading…</div>
+      <ng-container *ngIf="previewReceiptUrl">
+        <ng-container *ngIf="isPdfFile(previewTransaction.file_name); else receiptImage">
+          <div class="a4-page-preview">
+            <pdf-viewer
+              [src]="previewReceiptUrl"
+              [render-text]="true"
+              [original-size]="false"
+              [fit-to-page]="true"
+              [zoom-scale]="'page-width'"
+              [show-all]="true"
+              style="width: 100%; height: 100%; display: block"
+            ></pdf-viewer>
+          </div>
+        </ng-container>
+        <ng-template #receiptImage>
+          <div class="text-center p-3">
+            <img [src]="previewReceiptUrl" [alt]="previewTransaction.file_name" class="img-fluid" />
+          </div>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="previewTab === 'invoice' && previewTransaction?.invoice_pdf_url">
+      <div *ngIf="!previewInvoiceUrl" class="text-center p-4 text-muted">Loading…</div>
+      <div class="a4-page-preview" *ngIf="previewInvoiceUrl">
+        <pdf-viewer
+          [src]="previewInvoiceUrl"
+          [render-text]="true"
+          [original-size]="false"
+          [fit-to-page]="true"
+          [zoom-scale]="'page-width'"
+          [show-all]="true"
+          style="width: 100%; height: 100%; display: block"
+        ></pdf-viewer>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!previewTransaction?.file_path && !previewTransaction?.invoice_pdf_url">
+      <div class="p-4">
+        <app-no-data></app-no-data>
+      </div>
+    </ng-container>
+  </div>
 </ng-template>

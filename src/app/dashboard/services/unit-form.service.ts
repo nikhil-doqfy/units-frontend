@@ -44,6 +44,7 @@ export class UnitFormService {
       noOfBalcony: [''],
       landNo: [''],
       unitUsage: [''],
+      occupantsAllowed: [''],
       unitType: [''],
       subType: [''],
       makaniNo: [''],

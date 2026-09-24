@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, effect, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { WhiteCardComponent } from '../../../../../shared/component/white-card/white-card.component';
+import { SelectedPmcService } from '../../../../services/selected-pmc.service';
 
 interface FinanceNavLink {
   labelKey: string;
@@ -42,6 +43,37 @@ interface FinanceNavLink {
 })
 export class FinanceNavComponent {
   @Input({ required: true }) pmcId!: string;
+
+  private router = inject(Router);
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+
+  constructor() {
+    // The navbar's PMC selector now drives Finance's PMC switching (the
+    // in-page dropdown that used to live on the Overview page is gone).
+    // Every Finance page includes this component, so this is the one
+    // place that needs to react: on change, re-navigate to the same
+    // report/page the user is currently on, just under the new :pmcId.
+    // Skips the first (synchronous, effect-creation-time) run -- that
+    // fires before `pmcId` has even been set from the route yet.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      if (!pmc || pmc.key === this.pmcId) return;
+
+      const currentSegment = this.router.url
+        .replace(/^\/dashboard\/finance\/[^/]+\//, '')
+        .split('?')[0];
+      this.router.navigate([
+        '/dashboard/finance',
+        pmc.key,
+        ...currentSegment.split('/'),
+      ]);
+    });
+  }
 
   readonly links: FinanceNavLink[] = [
     { labelKey: 'FINANCE_OVERVIEW', segment: 'overview' },

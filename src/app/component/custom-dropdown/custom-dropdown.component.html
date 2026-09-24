@@ -1,4 +1,4 @@
-<div class="custom-dropdown position-relative">
+<div class="custom-dropdown position-relative" (click)="$event.stopPropagation()">
   <button
     class="cmmnTblFltrBtn"
     [class.cmmnTblFltrIconBtn]="hasIcon"
@@ -29,26 +29,30 @@
   </div>
 
   <div class="custom-menu filter-box month-dropdown" *ngIf="showMonthDropdown">
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="jan" />
-      <label for="jan">Jan 2025</label>
-    </div>
+    <div *ngIf="loadingMonths" class="text-muted small py-2">Loading…</div>
 
-    <div class="form-check mb-2">
-      <input type="checkbox" class="form-check-input" id="feb" checked />
-      <label for="feb">Feb 2025</label>
-    </div>
+    <ng-container *ngIf="!loadingMonths">
+      <div *ngIf="!availableMonths.length" class="text-muted small py-2">
+        No rent cheques found.
+      </div>
+      <div class="form-check mb-2" *ngFor="let m of availableMonths">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          [id]="'month-' + m.key"
+          [checked]="isMonthSelected(m.key)"
+          (change)="toggleMonth(m.key)"
+        />
+        <label [for]="'month-' + m.key">{{ m.label }}</label>
+      </div>
 
-    <div class="form-check mb-2">
-      <input type="checkbox" class="form-check-input" id="mar" checked />
-      <label for="mar">Mar 2025</label>
-    </div>
-
-    <div class="form-check mb-3">
-      <input type="checkbox" class="form-check-input" id="apr" />
-      <label for="apr">Apr 2025</label>
-    </div>
-
-    <button class="btn generate-btn w-100">Generate</button>
+      <button
+        class="btn generate-btn w-100"
+        [disabled]="generating || !availableMonths.length"
+        (click)="generateReceipt('RENTAL')"
+      >
+        {{ generating ? "Generating…" : "Generate" }}
+      </button>
+    </ng-container>
   </div>
 </div>

@@ -1,20 +1,14 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { WhiteCardComponent } from '../../../../shared/component/white-card/white-card.component';
-import { CustomSelectComponent } from '../../../component/custom-select/custom-select.component';
 import { FinanceEmptyStateComponent } from '../component/finance-empty-state/finance-empty-state.component';
 import { FinanceNavComponent } from '../component/finance-nav/finance-nav.component';
 import { FinanceReportsService } from '../../../services/finance-reports.service';
 import { unwrapFinanceEnvelope } from '../finance-envelope';
 import { FinanceActivationState } from '../finance-activation.resolver';
-import {
-  FinanceReachablePmcService,
-  ReachablePmc,
-} from '../finance-reachable-pmc.service';
-import { StorageService } from '../../../../shared/services/storage.service';
 import { getCurrentMonthRange } from '../finance-date-range';
 import { SharedService } from '../../../../shared.service';
 import { BreadCrumb } from '../../../../shared/model/shared.model';
@@ -40,13 +34,13 @@ interface TrialBalanceContent {
  * `'activated_empty'`, no report calls fire at all and an empty-state
  * placeholder renders instead of the 3 cards.
  *
- * Story 1.5 adds the PMC selector: fetched alongside the existing
- * `paramMap` subscription (one `getReachablePmcs()` call per navigation),
- * shown only when reachable to 2+ PMCs, and selection navigates via
- * `Router` to the new `:pmcId` rather than mutating any local/shared state
- * -- this re-triggers Story 1.3's guards/resolver and this component's own
- * reactive `paramMap` fetch, which is what guarantees no stale data
- * survives the transition (NFR5).
+ * Story 1.5 originally added an in-page PMC selector here; superseded by
+ * the navbar's global PMC selector (`SelectedPmcService`), which now
+ * drives Finance PMC switching for every Finance page via
+ * `FinanceNavComponent` (shared across all of them) navigating to the
+ * new `:pmcId` -- this still re-triggers Story 1.3's guards/resolver and
+ * this component's own reactive `paramMap` fetch, so NFR5 (no stale data
+ * survives the transition) still holds.
  */
 @Component({
   selector: 'app-finance-overview',
@@ -54,7 +48,6 @@ interface TrialBalanceContent {
   imports: [
     CommonModule,
     WhiteCardComponent,
-    CustomSelectComponent,
     FinanceEmptyStateComponent,
     FinanceNavComponent,
     TranslateModule,
@@ -63,24 +56,13 @@ interface TrialBalanceContent {
 })
 export class FinanceOverviewComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private financeReportsService = inject(FinanceReportsService);
-  private financeReachablePmcService = inject(FinanceReachablePmcService);
-  private storageService = inject(StorageService);
   private sharedService = inject(SharedService);
   private destroyRef = inject(DestroyRef);
 
   pmcId = '';
   financeActivation: FinanceActivationState = 'not_activated';
   breadcrumbData: BreadCrumb[] = [];
-
-  reachablePmcs: ReachablePmc[] = [];
-  get showSelector(): boolean {
-    return this.reachablePmcs.length > 1;
-  }
-  get selectedPmc(): ReachablePmc | null {
-    return this.reachablePmcs.find((p) => p.id === this.pmcId) ?? null;
-  }
 
   profitLoss: ProfitLossContent | null = null;
   profitLossFailed = false;
@@ -109,8 +91,6 @@ export class FinanceOverviewComponent implements OnInit {
         if (this.financeActivation === 'activated' && this.pmcId) {
           this.loadReports();
         }
-
-        this.loadReachablePmcs();
       });
   }
 
@@ -121,23 +101,6 @@ export class FinanceOverviewComponent implements OnInit {
         { label: 'PAGE_TITLE.FINANCE', link: '' },
       ])
       .subscribe((data) => (this.breadcrumbData = data));
-  }
-
-  private loadReachablePmcs(): void {
-    this.financeReachablePmcService
-      .getReachablePmcs()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((reachablePmcs) => {
-        this.reachablePmcs = reachablePmcs;
-      });
-  }
-
-  onPmcSelected(pmc: ReachablePmc): void {
-    if (!pmc || !pmc.id || pmc.id === this.pmcId) {
-      return;
-    }
-    this.storageService.setLastFinancePmcId(pmc.id);
-    this.router.navigate(['/dashboard/finance', pmc.id, 'overview']);
   }
 
   private loadReports(): void {

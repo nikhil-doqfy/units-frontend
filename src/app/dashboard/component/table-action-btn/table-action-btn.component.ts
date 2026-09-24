@@ -15,6 +15,7 @@ import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.co
 import { FileIconComponent } from '../../../icons/file-icon/file-icon.component';
 import { SendAppLinkIconComponent } from '../../../icons/send-app-link-icon/send-app-link-icon.component';
 import { HistoryIconComponent } from '../../../icons/history-icon/history-icon.component';
+import { ProposalIconComponent } from '../../../icons/proposal-icon/proposal-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -35,6 +36,7 @@ import { TranslateModule } from '@ngx-translate/core';
     FileIconComponent,
     SendAppLinkIconComponent,
     HistoryIconComponent,
+    ProposalIconComponent,
     TranslateModule,
   ],
   templateUrl: './table-action-btn.component.html',
@@ -57,7 +59,8 @@ export class TableActionButtonComponent {
     | 'rejectOrange'
     | 'approve'
     | 'restart'
-    | 'history';
+    | 'history'
+    | 'proposal';
   @Output() clicked = new EventEmitter<void>();
 
   getTooltip(type: string): string {
@@ -94,6 +97,8 @@ export class TableActionButtonComponent {
         return 'Restart';
       case 'history':
         return 'History';
+      case 'proposal':
+        return 'Proposal';
       default:
         return '';
     }

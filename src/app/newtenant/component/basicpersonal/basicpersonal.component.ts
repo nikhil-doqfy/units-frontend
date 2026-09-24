@@ -1,6 +1,11 @@
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
 import { CustomSelectComponent } from '../../../dashboard/component/custom-select/custom-select.component';
@@ -48,6 +53,7 @@ export class BasicpersonalComponent implements OnInit {
   unitUsageList = [
     { key: 'RESIDENTIAL', value: 'Residential' },
     { key: 'COMMERCIAL', value: 'Commercial' },
+    { key: 'BACHELORS_FLAT', value: 'Bachelors Flat' },
   ];
   unitTypeList = [
     { key: 'FLAT', value: 'Flat' },
@@ -64,6 +70,15 @@ export class BasicpersonalComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Maximum Occupants Allowed is only collected -- and only required --
+    // when Property Unit Usage is Bachelors Flat. Applied immediately (for
+    // pre-filled/edit cases) and again on every subsequent change.
+    this.applyOccupantsAllowedValidator(this.form.get('unitUsage')?.value);
+    this.form
+      .get('unitUsage')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((v) => this.applyOccupantsAllowedValidator(v));
+
     this.sharedAPIService.getOptionsType([
       {
         param: 'PARENT_PROPERTY',
@@ -230,6 +245,17 @@ export class BasicpersonalComponent implements OnInit {
     this.form.patchValue({ unitUsage: opt?.key ?? '' });
   }
 
+  private applyOccupantsAllowedValidator(unitUsage: any) {
+    const occupantsControl = this.form.get('occupantsAllowed');
+    if (unitUsage === 'BACHELORS_FLAT') {
+      occupantsControl?.setValidators([Validators.required]);
+    } else {
+      occupantsControl?.clearValidators();
+      occupantsControl?.setValue('');
+    }
+    occupantsControl?.updateValueAndValidity();
+  }
+
   onUnitTypeSelect(opt: any) {
     this.form.patchValue({ unitType: opt?.key ?? '' });
   }
@@ -241,6 +267,7 @@ export class BasicpersonalComponent implements OnInit {
       landNo: '',
       dmNo: '',
       unitUsage: '',
+      occupantsAllowed: '',
       unitType: '',
       subType: '',
       makaniNo: '',

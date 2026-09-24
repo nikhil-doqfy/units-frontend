@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  effect,
+  EventEmitter,
+  inject,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { TablePaginationComponent } from '../../component/table-pagination/table-pagination.component';
 import { TableSelectComponent } from '../../component/table-select/table-select.component';
 import { EditIconComponent } from '../../../user/component/icons/edit-icon/edit-icon.component';
@@ -24,6 +31,7 @@ import { NoDataComponent } from '../../../no-data/no-data.component';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ShareProfileModalComponent } from '../../component/forms/share-profile-modal/share-profile-modal.component';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 
 @Component({
   selector: 'app-units',
@@ -53,6 +61,8 @@ import { ShareProfileModalComponent } from '../../component/forms/share-profile-
 export class UnitsComponent implements OnInit {
   private propertyService = inject(PropertyService);
   private modalService = inject(NgbModal);
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
 
   units: any[] = [];
   totalRecords: number = 0;
@@ -64,6 +74,7 @@ export class UnitsComponent implements OnInit {
   private search$ = new Subject<string>();
 
   // Filter values
+  filterPMC: string | null = null;
   filterPropertyId: string = '';
   filterBedrooms: string = '';
   filterFloor: string = '';
@@ -99,7 +110,23 @@ export class UnitsComponent implements OnInit {
 
   @Output() detailViewChanges = new EventEmitter<boolean>();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- ngOnInit's own initial
+    // load below already covers that, using whatever the navbar's
+    // selection has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPMC = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.loadUnits();
+    });
+  }
 
   ngOnInit(): void {
     this.search$.pipe(debounceTime(400)).subscribe((text) => {
@@ -107,6 +134,7 @@ export class UnitsComponent implements OnInit {
       this.currentPage = 1;
       this.loadUnits();
     });
+    this.filterPMC = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.loadPropertyOptions();
     this.loadUnits();
   }
@@ -128,6 +156,7 @@ export class UnitsComponent implements OnInit {
       page_size: this.rowsPerPage,
     };
     if (this.searchText) params['search'] = this.searchText;
+    if (this.filterPMC) params['pmc_id'] = this.filterPMC;
     if (this.filterPropertyId) params['property_id'] = this.filterPropertyId;
     if (this.filterBedrooms) params['no_of_bedrooms'] = this.filterBedrooms;
     if (this.filterFloor) params['floor_no'] = this.filterFloor;

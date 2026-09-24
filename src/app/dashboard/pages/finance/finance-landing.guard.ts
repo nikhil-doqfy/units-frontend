@@ -29,7 +29,10 @@ export const financeLandingGuard: CanActivateFn = () => {
         return true;
       }
 
-      const lastSelected = storageService.getLastFinancePmcId();
+      // Prefers the navbar's remembered PMC selection (SelectedPmcService)
+      // so landing in Finance lines up with whatever the user already had
+      // selected globally, rather than tracking its own separate memory.
+      const lastSelected = storageService.getSelectedPmcId();
       const targetPmcId =
         lastSelected && reachableIds.includes(lastSelected)
           ? lastSelected

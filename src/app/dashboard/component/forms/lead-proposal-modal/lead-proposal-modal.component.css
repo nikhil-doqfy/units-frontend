@@ -1,0 +1,169 @@
+/* ── Header ─────────────────────────────── */
+.lpmHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.lpmIconWrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--primaryLight, #eff6ff);
+  color: var(--primaryColor, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px;
+  color: var(--blackText, #111827);
+}
+
+.lpmSubtitle {
+  font-size: 12px;
+  color: var(--greyLightText, #6b7280);
+  margin: 0;
+}
+
+/* ── Loading / empty ─────────────────────── */
+.lpmLoading,
+.lpmEmpty {
+  font-size: 13px;
+  color: var(--greyLightText, #6b7280);
+  padding: 8px 0;
+}
+
+/* ── History ──────────────────────────────── */
+.lpmSectionTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blackText, #111827);
+  margin-bottom: 10px;
+}
+
+.lpmHistory {
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 4px;
+}
+
+.lpmHistoryItem {
+  border: 1px solid var(--greyLightBorder, #e5e7eb);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.lpmHistoryTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.lpmHistoryDate {
+  font-size: 11px;
+  color: var(--greyLightText, #6b7280);
+}
+
+.lpmHistoryRow {
+  font-size: 12px;
+  color: var(--greyDarkText1, #374151);
+  margin-bottom: 2px;
+}
+
+.lpmDivider {
+  margin: 16px 0;
+  border-color: var(--greyLightBorder, #e5e7eb);
+}
+
+/* ── Form elements ──────────────────────── */
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--greyDarkText1, #374151);
+  margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+  font-size: 13px;
+  border-radius: 8px;
+  border-color: var(--greyLightBorder, #d1d5db);
+  color: var(--blackText, #111827);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primaryColor, #2563eb);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+.lpmChargesTotal {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blackText, #111827);
+}
+
+.lpmChargesTable {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+
+.lpmChargesTable th {
+  font-weight: 500;
+  color: var(--greyLightText, #6b7280);
+  border-bottom-width: 1px;
+}
+
+.lpmChargesTable td {
+  vertical-align: middle;
+}
+
+/* ── Action footers ──────────────────────── */
+.lpmActionFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.lpmHoldFooter {
+  justify-content: space-between;
+}
+
+/* ── Converted state ─────────────────────── */
+.lpmConverted {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  color: #065f46;
+}
+
+/* ── Loading spinner ────────────────────── */
+.lpmSpinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

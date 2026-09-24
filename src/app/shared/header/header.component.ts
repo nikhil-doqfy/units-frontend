@@ -59,6 +59,8 @@ import { NewUnitsIconComponent } from '../../icons/new-units-icon/new-units-icon
 import { SearchContactIconComponent } from '../../icon/search-contact-icon/search-contact-icon.component';
 import { SearchContactComponent } from '../search-contact/search-contact.component';
 import { MoonIconComponent } from '../../icons/moon-icon/moon-icon.component';
+import { SelectedPmcService } from '../../dashboard/services/selected-pmc.service';
+import { CustomSelectComponent } from '../../dashboard/component/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-header',
@@ -92,12 +94,14 @@ import { MoonIconComponent } from '../../icons/moon-icon/moon-icon.component';
     SearchContactIconComponent,
     SearchContactComponent,
     MoonIconComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  selectedPmcService = inject(SelectedPmcService);
   currentRole: UserRole = 'owner';
   currentLang = 'en';
   pageTitle: string = '';
@@ -222,6 +226,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // Load notifications on init so badge count is populated
     this.getNotifications();
+
+    this.selectedPmcService.loadPmcs();
+  }
+
+  onPmcSelected(option: any) {
+    this.selectedPmcService.selectPmc(option ?? null);
   }
 
   onUpload(event: UploadFileModel) {}

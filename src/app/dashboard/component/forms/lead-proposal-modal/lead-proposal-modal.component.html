@@ -1,0 +1,310 @@
+<div class="modal-header">
+  <div class="lpmHeader">
+    <span class="lpmIconWrap">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="8" y1="13" x2="16" y2="13"></line>
+        <line x1="8" y1="17" x2="16" y2="17"></line>
+      </svg>
+    </span>
+    <div>
+      <h4 class="modal-title" id="modal-title">Proposal &amp; Hold</h4>
+      <p class="lpmSubtitle" *ngIf="lead?.name">
+        for <strong>{{ lead.name }}</strong>
+      </p>
+    </div>
+  </div>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <div class="lpmLoading" *ngIf="isLoading">Loading proposal history...</div>
+
+  <ng-container *ngIf="!isLoading">
+    <!-- History -->
+    <div class="lpmHistory">
+      <h6 class="lpmSectionTitle">Proposal History</h6>
+      <div class="lpmEmpty" *ngIf="proposals.length === 0">
+        No proposals sent yet.
+      </div>
+      <div class="lpmHistoryItem" *ngFor="let p of proposals">
+        <div class="lpmHistoryTop">
+          <app-badge
+            [title]="getStatusBadge(p.status).title"
+            [status]="getStatusBadge(p.status).color"
+            [showIcon]="true"
+            [enableBg]="true"
+          ></app-badge>
+          <span class="lpmHistoryDate">{{ p.created_at }}</span>
+        </div>
+        <div class="lpmHistoryRow" *ngIf="p.offered_rent">
+          Offered Rent: AED {{ p.offered_rent }}
+          <span *ngIf="p.offered_maintenance_charges">
+            + AED {{ p.offered_maintenance_charges }} maintenance</span
+          >
+        </div>
+        <div class="lpmHistoryRow" *ngIf="p.holding_amount">
+          Holding Amount: AED {{ p.holding_amount }} ({{ p.hold_period_days }}
+          days)
+        </div>
+        <div class="lpmHistoryRow" *ngIf="p.hold_expiry_date">
+          Hold Expiry: {{ p.hold_expiry_date | date: 'dd MMM yyyy, HH:mm' }}
+        </div>
+        <div class="lpmHistoryRow" *ngIf="p.refund_policy_note">
+          {{ p.refund_policy_note }}
+        </div>
+      </div>
+    </div>
+
+    <hr class="lpmDivider" />
+
+    <!-- Action: Send Proposal -->
+    <form [formGroup]="sendForm" *ngIf="showSendForm">
+      <h6 class="lpmSectionTitle">Send Proposal</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-sm-6">
+          <label class="form-label"
+            >Offered Rent (AED) <span class="text-danger">*</span></label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="offered_rent"
+            [class.is-invalid]="
+              sendForm.get('offered_rent')?.touched &&
+              sendForm.get('offered_rent')?.invalid
+            "
+          />
+        </div>
+        <div class="col-sm-6">
+          <label class="form-label">Offered Maintenance Charges (AED)</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="offered_maintenance_charges"
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Channel</label>
+        <div class="d-flex gap-4 mt-1">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              value="EMAIL"
+              formControlName="channel"
+            />
+            <label class="form-check-label">Email</label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              value="WHATSAPP"
+              formControlName="channel"
+            />
+            <label class="form-check-label">WhatsApp</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="form-label mb-0">Other Charges</label>
+          <span class="lpmChargesTotal"
+            >Total: AED {{ selectedChargesTotal | number: '1.2-2' }}</span
+          >
+        </div>
+        <div class="table-responsive" *ngIf="charges.length; else noCharges">
+          <table class="table lpmChargesTable">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Tax</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of charges">
+                <td>
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="c.checked"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                </td>
+                <td>{{ c.label }}</td>
+                <td>AED {{ c.amount | number: '1.2-2' }}</td>
+                <td>{{ c.tax }}</td>
+                <td>AED {{ c.total | number: '1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noCharges>
+          <div class="lpmEmpty">No charges configured in Charges section.</div>
+        </ng-template>
+      </div>
+
+      <div class="lpmActionFooter">
+        <button
+          type="button"
+          class="btn btnCommon"
+          (click)="submitSend()"
+          [disabled]="isSubmitting"
+        >
+          <span class="lpmSpinner" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? "Sending..." : "Send Proposal" }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Action: Record Customer Response -->
+    <form [formGroup]="respondForm" *ngIf="showRespondForm">
+      <h6 class="lpmSectionTitle">Record Customer Response</h6>
+      <div class="d-flex gap-4 mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            value="HOLD"
+            formControlName="response"
+          />
+          <label class="form-check-label">Hold</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            value="NOT_INTERESTED"
+            formControlName="response"
+          />
+          <label class="form-check-label">Not Interested</label>
+        </div>
+      </div>
+
+      <div
+        class="row g-3 mb-3"
+        *ngIf="respondForm.get('response')?.value === 'HOLD'"
+      >
+        <div class="col-sm-6">
+          <label class="form-label"
+            >Holding Amount (AED) <span class="text-danger">*</span></label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="holding_amount"
+          />
+        </div>
+        <div class="col-sm-6">
+          <label class="form-label"
+            >Hold Period (days) <span class="text-danger">*</span></label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="hold_period_days"
+          />
+        </div>
+      </div>
+
+      <div class="lpmActionFooter">
+        <button
+          type="button"
+          class="btn btnCommon"
+          (click)="submitRespond()"
+          [disabled]="isSubmitting"
+        >
+          <span class="lpmSpinner" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? "Saving..." : "Save Response" }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Action: On Hold -->
+    <div *ngIf="showHoldActions">
+      <h6 class="lpmSectionTitle">Confirm &amp; Proceed to Lease</h6>
+      <form [formGroup]="confirmForm">
+        <div class="row g-3 mb-3">
+          <div class="col-sm-4">
+            <label class="form-label"
+              >Start Date <span class="text-danger">*</span></label
+            >
+            <input
+              type="date"
+              class="form-control"
+              formControlName="start_date"
+              [min]="today"
+            />
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label"
+              >End Date <span class="text-danger">*</span></label
+            >
+            <input
+              type="date"
+              class="form-control"
+              formControlName="end_date"
+              [min]="today"
+            />
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label">Payment Frequency</label>
+            <select class="form-select" formControlName="payment_frequency">
+              <option value="MONTHLY">Monthly</option>
+              <option value="QUARTERLY">Quarterly</option>
+              <option value="SEMI_ANNUAL">Semi-Annual</option>
+              <option value="ANNUAL">Annual</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="lpmActionFooter lpmHoldFooter">
+          <button
+            type="button"
+            class="btn btnCommon btnTransparent"
+            (click)="releaseHold()"
+            [disabled]="isSubmitting"
+          >
+            Release Hold
+          </button>
+          <button
+            type="button"
+            class="btn btnCommon"
+            (click)="submitConfirm()"
+            [disabled]="isSubmitting"
+          >
+            <span class="lpmSpinner" *ngIf="isSubmitting"></span>
+            {{ isSubmitting ? "Processing..." : "Confirm & Proceed" }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Converted (terminal state) -->
+    <div class="lpmConverted" *ngIf="isConverted">
+      This proposal has been converted to a lease. Continuing this lease
+      (cheques, Ejari, signature, activation) isn't available here yet.
+    </div>
+  </ng-container>
+</div>

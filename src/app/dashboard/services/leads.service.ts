@@ -18,7 +18,7 @@ export class LeadsService {
   }
 
   getLeadById(leadId: number | string): Observable<any> {
-    return this.http.get(`${this.SERVER_ADDRESS}/lead?lead_id=${leadId}`);
+    return this.http.get(`${this.SERVER_ADDRESS}/lead/${leadId}`);
   }
 
   createLead(data: Record<string, any>): Observable<any> {
@@ -26,11 +26,29 @@ export class LeadsService {
   }
 
   updateLead(leadId: string, data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/lead`, { ...data, lead_id: leadId });
+    return this.http.put(`${this.SERVER_ADDRESS}/lead/${leadId}`, data);
   }
 
   deleteLead(leadId: string): Observable<any> {
-    return this.http.delete(`${this.SERVER_ADDRESS}/lead?lead_id=${leadId}`);
+    return this.http.delete(`${this.SERVER_ADDRESS}/lead/${leadId}`);
+  }
+
+  // ── Proposal & Hold (Dubai Leasing Management Flow, Phase 1) ──────────────
+
+  sendProposal(leadId: number | string, data: Record<string, any> = {}): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/lead/send-proposal`, { lead_id: leadId, ...data });
+  }
+
+  respondToProposal(proposalId: number | string, data: Record<string, any>): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/lead/respond-to-proposal`, { proposal_id: proposalId, ...data });
+  }
+
+  confirmHoldAndProceed(proposalId: number | string, data: Record<string, any> = {}): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/lead/confirm-hold-and-proceed`, { proposal_id: proposalId, ...data });
+  }
+
+  releaseExpiredHold(proposalId: number | string): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/lead/release-expired-hold`, { proposal_id: proposalId });
   }
 
   exportLeads(params: Record<string, any> = {}): void {

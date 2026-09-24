@@ -1,6 +1,7 @@
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   TemplateRef,
   ViewChild,
@@ -39,6 +40,7 @@ import { ComplaintsService } from '../../complaints.service';
 import { FilterPopupButtonComponent } from '../../component/filter-popup-btn/filter-popup-btn.component';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { StorageService } from '../../../shared/services/storage.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 import { FormGroup } from '@angular/forms';
@@ -170,12 +172,33 @@ export class ComplaintsComponent {
     'assets/complaint/complaint-8.svg',
   ];
   assignEnginnerForm!: FormGroup;
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+  filterPmcId: string | null = null;
+
   constructor(
     private destroyRef: DestroyRef,
     private storageService: StorageService,
-  ) {}
+  ) {
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- ngOnInit's own initial
+    // load already covers that, using whatever the navbar's selection
+    // has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.getTickets();
+    });
+  }
 
   ngOnInit() {
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.onComplaintsSearch$
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe(() => {
@@ -254,6 +277,10 @@ export class ComplaintsComponent {
 
     if (this.selectedComplaintstatus?.key) {
       params.status = this.selectedComplaintstatus.key;
+    }
+
+    if (this.filterPmcId) {
+      params.pmc_id = this.filterPmcId;
     }
 
     this.complaintService.getTickets(params).subscribe({
@@ -481,6 +508,10 @@ export class ComplaintsComponent {
 
     if (this.selectedComplaintstatus?.key) {
       params['status'] = this.selectedComplaintstatus.key;
+    }
+
+    if (this.filterPmcId) {
+      params['pmc_id'] = this.filterPmcId;
     }
 
     return params;

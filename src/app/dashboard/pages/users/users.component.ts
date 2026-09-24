@@ -1,6 +1,7 @@
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   signal,
   TemplateRef,
@@ -40,6 +41,7 @@ import { AddUserFormComponent } from '../../component/forms/add-user-form/add-us
 import { ResetPasswordModalComponent } from '../../component/forms/reset-password-modal/reset-password-modal.component';
 import { ShareProfileModalComponent } from '../../component/forms/share-profile-modal/share-profile-modal.component';
 import { UserService } from '../../../user/services/user.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../../shared.service';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -110,6 +112,9 @@ export class UsersComponent {
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
 
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+
   constructor() {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -125,6 +130,26 @@ export class UsersComponent {
         this.currentPage = 1;
         this.getUser();
       });
+
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- ngOnInit's own initial
+    // load already covers that, using whatever the navbar's selection
+    // has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      if (pmc) {
+        this.userData['pmc_id'] = pmc.key;
+      } else {
+        delete this.userData['pmc_id'];
+      }
+      this.currentPage = 1;
+      this.getUser();
+    });
   }
 
   ngOnInit(): void {
@@ -134,6 +159,8 @@ export class UsersComponent {
     this.translate.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadBreadcrumb());
+    const initialPmc = this.selectedPmcService.selectedPmc();
+    if (initialPmc) this.userData['pmc_id'] = initialPmc.key;
     this.getUser();
   }
 

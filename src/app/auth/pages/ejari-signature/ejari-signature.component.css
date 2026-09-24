@@ -1,0 +1,87 @@
+.sig-page {
+  min-height: 100vh;
+  background: #f5f6fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.otp-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px 36px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.card-logo img {
+  height: 36px;
+  margin-bottom: 16px;
+}
+
+.otp-card h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+  color: #1a1a2e;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.reason {
+  color: #999;
+  font-size: 12px;
+}
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
+  border-radius: 50%;
+  background: #e6f9ee;
+  color: #1db954;
+  font-size: 32px;
+  margin: 0 auto 16px;
+}
+
+.fail-icon {
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
+  border-radius: 50%;
+  background: #fdeaea;
+  color: #e02424;
+  font-size: 32px;
+  margin: 0 auto 16px;
+}
+
+.sub-note {
+  color: #999;
+  font-size: 12px;
+  margin-top: 8px;
+}

@@ -10,4 +10,8 @@ import { CallIconsNewComponent } from '../../icons/call-icons-new/call-icons-new
   templateUrl: './invoice-template.component.html',
   styleUrl: './invoice-template.component.css',
 })
-export class InvoiceTemplateComponent {}
+export class InvoiceTemplateComponent {
+  downloadPdf() {
+    window.print();
+  }
+}

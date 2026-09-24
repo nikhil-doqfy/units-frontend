@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject, TemplateRef } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  TemplateRef,
+} from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +33,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { LeaseService } from '../../services/lease.service';
 import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component';
 import { PropertyService } from '../../services/property.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { AlertService } from '../../../shared/services/alert.service';
 
@@ -63,6 +70,26 @@ export class ChequesComponent {
   private router = inject(Router);
   private propertyService = inject(PropertyService);
   private alertService = inject(AlertService);
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+  filterPmcId = '';
+
+  constructor() {
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- ngOnInit's own initial
+    // load already covers that, using whatever the navbar's selection
+    // has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? '';
+      this.reloadAll();
+    });
+  }
 
   // ── Status options (inline row dropdown) ─────────────────────────
   statusOptions: { key: string; value: string }[] = [
@@ -303,7 +330,6 @@ export class ChequesComponent {
 
   // ── Tenant detail view ───────────────────────────────────────────
   showTenantDetail = false;
-  selectedTenantLease: any = null;
 
   // ── Summary cards ────────────────────────────────────────────────
   summaryCards: {
@@ -357,6 +383,7 @@ export class ChequesComponent {
   ];
 
   ngOnInit() {
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? '';
     this.loadBreadcrumb();
     this.loadSummary();
     this.loadFilterOptions();
@@ -496,6 +523,7 @@ export class ChequesComponent {
     if (this.filterPropertyId) p['property_id'] = this.filterPropertyId;
     if (this.filterBlockId) p['block_id'] = this.filterBlockId;
     if (this.filterUnitId) p['unit_id'] = this.filterUnitId;
+    if (this.filterPmcId) p['pmc_id'] = this.filterPmcId;
     return p;
   }
 
@@ -579,15 +607,9 @@ export class ChequesComponent {
   }
 
   viewTenant(row: any) {
-    const tenantId = row?.tenant?.id;
-    if (!tenantId) return;
-    this.selectedTenantLease = { tenant: { id: tenantId } };
-    this.showTenantDetail = true;
-  }
-
-  onTenantDetailBack() {
-    this.showTenantDetail = false;
-    this.selectedTenantLease = null;
+    const leaseId = row?.cheque?.lease_id;
+    if (!leaseId) return;
+    this.router.navigate(['/dashboard/tenant-detail', leaseId]);
   }
 
   openChequeBounceHistoryModel(activityHistoryContent: TemplateRef<any>) {

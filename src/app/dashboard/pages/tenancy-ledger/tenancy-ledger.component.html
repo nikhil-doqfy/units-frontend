@@ -195,6 +195,9 @@
                 </div>
               </td>
             </tr>
+            <tr *ngIf="!isLoading && tenancyLedgerData.length === 0">
+              <td colspan="13" align="center"><app-no-data /></td>
+            </tr>
           </tbody>
         </table>
       </div>

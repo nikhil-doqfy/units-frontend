@@ -1,6 +1,7 @@
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   signal,
   WritableSignal,
@@ -24,6 +25,7 @@ import { SharedService } from '../../../shared.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApprovalService } from '../../approval.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { debounceTime, Subject } from 'rxjs';
 import {
@@ -104,6 +106,10 @@ export class ApprovalComponent {
   currentLanguage = 'en';
   showDetailView: boolean = false;
 
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+  filterPmcId: string | null = null;
+
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
@@ -117,6 +123,22 @@ export class ApprovalComponent {
     } else {
       this.showDetailView = false;
     }
+
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- ngOnInit's own initial
+    // load already covers that, using whatever the navbar's selection
+    // has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.loadManagerApprovals();
+    });
   }
 
   charges = [
@@ -212,6 +234,7 @@ export class ApprovalComponent {
   ];
 
   ngOnInit() {
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
     this.initLanguageListener();
@@ -226,6 +249,7 @@ export class ApprovalComponent {
       page: this.currentPage,
       page_size: this.rowsPerPage,
     };
+    if (this.filterPmcId) params['pmc_id'] = this.filterPmcId;
     this.approvalService
       .getManagerApprovals(params)
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { TableTitleComponent } from '../table-title/table-title.component';
@@ -27,6 +27,7 @@ import { SharedService } from '../../../shared.service';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ShareProfileModalComponent } from '../forms/share-profile-modal/share-profile-modal.component';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 
 @Component({
   selector: 'app-all-properties',
@@ -57,6 +58,8 @@ import { ShareProfileModalComponent } from '../forms/share-profile-modal/share-p
 export class AllPropertiesComponent implements OnInit {
   private propertyService = inject(PropertyService);
   private sharedApiService = inject(SharedApiService);
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
   selectedPropertyType: any = null;
   selectedStatus: any = null;
   selectedPMC: any = null;
@@ -103,7 +106,23 @@ export class AllPropertiesComponent implements OnInit {
     private router: Router,
     private sharedService: SharedService,
     private modalService: NgbModal,
-  ) {}
+  ) {
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- ngOnInit's own initial
+    // load below already covers that, using whatever the navbar's
+    // selection has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPMC = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.loadProperties();
+    });
+  }
 
   ngOnInit(): void {
     this.search$.pipe(debounceTime(400)).subscribe((text) => {
@@ -111,6 +130,7 @@ export class AllPropertiesComponent implements OnInit {
       this.currentPage = 1;
       this.loadProperties();
     });
+    this.filterPMC = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.loadProperties();
     this.loadPmcOptions();
   }

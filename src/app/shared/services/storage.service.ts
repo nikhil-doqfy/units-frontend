@@ -19,8 +19,14 @@ export class StorageService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
+  // Merges into the cached profile rather than replacing it -- callers here
+  // (e.g. My Profile's save-partial-fields flow) only ever pass a subset of
+  // fields, and a wholesale overwrite used to wipe out `permissions` and
+  // `user_role`, silently hiding sidebar items/routes until the next full
+  // profile refetch (header.component.ts) overwrote it back.
   saveUserProfile(profile: any): void {
-    localStorage.setItem(this.USER_KEY, JSON.stringify(profile));
+    const existing = this.getUserProfile() ?? {};
+    localStorage.setItem(this.USER_KEY, JSON.stringify({ ...existing, ...profile }));
   }
 
   updateUserName(firstName: string, lastName: string): void {
@@ -78,21 +84,20 @@ export class StorageService {
     return localStorage.getItem(this.THEME_KEY) ?? 'light';
   }
 
-  /*----------------------finance last-selected PMC --------------------*/
-  private LAST_FINANCE_PMC_KEY = 'lastFinancePmcId';
+  /*----------------------navbar selected PMC --------------------*/
+  private SELECTED_PMC_KEY = 'selectedPmcId';
 
-  setLastFinancePmcId(id: string): void {
-    if (!id) return;
+  setSelectedPmcId(id: string): void {
     try {
-      localStorage.setItem(this.LAST_FINANCE_PMC_KEY, id);
+      localStorage.setItem(this.SELECTED_PMC_KEY, id);
     } catch {
       // private browsing / quota exceeded — nothing to persist, fail safe
     }
   }
 
-  getLastFinancePmcId(): string | null {
+  getSelectedPmcId(): string | null {
     try {
-      return localStorage.getItem(this.LAST_FINANCE_PMC_KEY);
+      return localStorage.getItem(this.SELECTED_PMC_KEY);
     } catch {
       return null;
     }

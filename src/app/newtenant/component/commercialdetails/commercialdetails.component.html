@@ -292,7 +292,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngIf="!charges.length">
+          <tr *ngIf="!charges.length && !fieldDerivedCharges.length">
             <td colspan="5" align="center"><app-no-data /></td>
           </tr>
           <tr
@@ -341,6 +341,18 @@
                   </button>
                 </ng-template>
               </span>
+            </td>
+          </tr>
+
+          <!-- Amount/Rent Details fields mirrored here as charge lines --
+               no checkbox/edit: they follow the fields above directly. -->
+          <tr *ngFor="let c of fieldDerivedCharges" class="tableRow">
+            <td>{{ c.label }}</td>
+            <td>{{ c.amount | number: "1.2-2" }}</td>
+            <td>{{ c.tax }}</td>
+            <td>{{ c.vat | number: "1.2-2" }}</td>
+            <td class="totalCell">
+              <span class="totalValue">{{ c.total | number: "1.2-2" }}</span>
             </td>
           </tr>
         </tbody>

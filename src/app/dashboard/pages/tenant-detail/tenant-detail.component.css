@@ -476,3 +476,45 @@
     padding: 8px 12px; /* 👈 थोडी space वाढव */
   }
 }
+
+.lease-status-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* Receipt/Invoice preview modal */
+.modal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--cardLightBg, rgba(0, 0, 0, 0.05));
+}
+
+.a4-page-preview {
+  width: min(620px, 90%);
+  aspect-ratio: 210 / 297;
+  max-height: 85vh;
+  margin: 16px auto;
+  overflow-y: auto;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}

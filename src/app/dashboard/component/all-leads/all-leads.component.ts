@@ -1,6 +1,7 @@
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   OnInit,
   signal,
@@ -23,6 +24,7 @@ import {
 } from '../../../shared/model/shared.model';
 import { CommonModule } from '@angular/common';
 import { LeadsService } from '../../services/leads.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { CustomSelectComponent } from '../custom-select/custom-select.component';
 import { FilterPopupButtonComponent } from '../filter-popup-btn/filter-popup-btn.component';
@@ -37,6 +39,7 @@ import {
   NgbDatepicker,
   NgbDatepickerModule,
   NgbModal,
+  NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { EditLeadsFormComponent } from '../forms/edit-leads-form/edit-leads-form.component';
 import { ActivityHistoryFormComponent } from '../forms/activity-history-form/activity-history-form.component';
@@ -48,6 +51,7 @@ import { SortingIconComponent } from '../icons/sorting-icon/sorting-icon.compone
 import { CheckIconComponent } from '../../../icons/check-icon/check-icon.component';
 import { ConvertLeadToTenentFromComponent } from '../forms/convert-lead-to-tenent-from/convert-lead-to-tenent-from.component';
 import { ScheduleMeetingModalComponent } from '../forms/schedule-meeting-modal/schedule-meeting-modal.component';
+import { LeadProposalModalComponent } from '../forms/lead-proposal-modal/lead-proposal-modal.component';
 import { SharedService } from '../../../shared.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NoDataComponent } from '../../../no-data/no-data.component';
@@ -75,6 +79,7 @@ import { FormsModule } from '@angular/forms';
     ActivityHistoryFormComponent,
     ActivityHistroyIconsComponent,
     NgbDatepickerModule,
+    NgbTooltipModule,
     CalenderIconComponent,
     CircularCrossBtnIconComponent,
     SortingIconComponent,
@@ -97,6 +102,8 @@ export class AllLeadsComponent implements OnInit {
   private translate = inject(TranslateService);
   closeResult: WritableSignal<string> = signal('');
   private destroyRef = inject(DestroyRef);
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
   leads: any[] = [];
   totalRecords: number = 0;
   rowsPerPage: number = 10;
@@ -113,6 +120,25 @@ export class AllLeadsComponent implements OnInit {
   filterStatus: string = '';
   filterPlatform: string = '';
   filterLeadType: string = '';
+  filterPmcId: string | null = null;
+
+  constructor() {
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- ngOnInit's own initial
+    // load already covers that, using whatever the navbar's selection
+    // has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.loadLeads();
+    });
+  }
 
   selectedStatus: any = null;
   selectedPlatform: any = null;
@@ -138,6 +164,7 @@ export class AllLeadsComponent implements OnInit {
   isEditMode: boolean = false;
 
   ngOnInit(): void {
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.search$.pipe(debounceTime(400)).subscribe((text) => {
       this.searchText = text;
       this.currentPage = 1;
@@ -158,13 +185,14 @@ export class AllLeadsComponent implements OnInit {
     if (this.filterStatus) params['status'] = this.filterStatus;
     if (this.filterPlatform) params['platform'] = this.filterPlatform;
     if (this.filterLeadType) params['lead_type'] = this.filterLeadType;
+    if (this.filterPmcId) params['pmc_id'] = this.filterPmcId;
     return params;
   }
 
   loadLeads(): void {
     this.leadsService.getLeads(this.buildParams()).subscribe({
       next: (resp: any) => {
-        this.leads = resp?.content || [];
+        this.leads = resp?.results || [];
         this.sharedService.setLeadsCount(this.leads.length);
         this.totalRecords =
           resp?.pagination?.total_records ?? this.leads.length;
@@ -269,6 +297,18 @@ export class AllLeadsComponent implements OnInit {
     return map[status] || { title: status, color: 'grey' };
   }
 
+  getProposalStatusBadge(status: string | null): { title: string; color: string } {
+    if (!status) return { title: '--', color: 'grey' };
+    const map: Record<string, any> = {
+      PROPOSAL_SENT: { title: 'Proposal Sent', color: 'blue' },
+      ON_HOLD: { title: 'On Hold', color: 'orange' },
+      CONVERTED: { title: 'Converted', color: 'green' },
+      CLOSED: { title: 'Closed', color: 'red' },
+      HOLD_EXPIRED: { title: 'Hold Expired', color: 'red' },
+    };
+    return map[status] || { title: status, color: 'grey' };
+  }
+
   onPageSizeChange(event: PageSizeChange): void {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
@@ -338,6 +378,24 @@ export class AllLeadsComponent implements OnInit {
         if (result === true) {
           // refresh the activity history if modal is already open
           this.selectedLead = { ...this.selectedLead };
+        }
+      },
+      () => {},
+    );
+  }
+
+  openProposalModal(lead: any): void {
+    const modalRef = this.modalService.open(LeadProposalModalComponent, {
+      ariaLabelledBy: 'modal-title',
+      windowClass: 'mdlCommon',
+      centered: true,
+      size: 'lg',
+    });
+    modalRef.componentInstance.lead = lead;
+    modalRef.result.then(
+      (result) => {
+        if (result) {
+          this.loadLeads();
         }
       },
       () => {},

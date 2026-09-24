@@ -49,9 +49,11 @@
       <span class="restart-icon">⟳</span>
       <span class="restart-text">Restart</span>
     </i>
-    <i *ngSwitchCase="'history'" class="restartAction">
-      <span class="restart-icon"><app-history-icon></app-history-icon></span>
-      <span class="restart-text">History</span>
+    <i *ngSwitchCase="'history'">
+      <app-history-icon></app-history-icon>
+    </i>
+    <i *ngSwitchCase="'proposal'">
+      <app-proposal-icon></app-proposal-icon>
     </i>
   </ng-container>
 </button>

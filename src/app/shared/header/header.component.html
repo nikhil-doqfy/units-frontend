@@ -19,6 +19,19 @@
       <div class="col-auto">
         @if (!isContactSearchOpen) {
           <div class="hdrOptns">
+            <div
+              class="pmc-select-wrapper"
+              *ngIf="selectedPmcService.pmcOptions().length > 0"
+            >
+              <app-custom-select
+                [options]="selectedPmcService.pmcOptions()"
+                key="key"
+                value="value"
+                [selectedOption]="selectedPmcService.selectedPmc()"
+                [isFilter]="true"
+                (optionSelected)="onPmcSelected($event)"
+              ></app-custom-select>
+            </div>
             <ng-container *ngIf="currentRole === 'property-manager'">
               <div class="dropdown-wrapper" (clickOutside)="closeDropdown()">
                 <button class="add-btn" (click)="toggleDropdown()">

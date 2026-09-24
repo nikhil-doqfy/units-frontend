@@ -42,7 +42,7 @@ export class AgreementComponent {
     this.pdfLoading = true;
     this.leaseService.getLeaseById(leaseId).subscribe({
       next: (resp: any) => {
-        const pdfUrl = resp?.content?.pdf_url;
+        const pdfUrl = resp?.pdf_url;
         if (pdfUrl) {
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
         }

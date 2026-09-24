@@ -5,11 +5,13 @@ import {
   inject,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
   TemplateRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
@@ -35,7 +37,6 @@ import { TablePaginationComponent } from '../../component/table-pagination/table
 import { TableActionButtonComponent } from '../../component/table-action-btn/table-action-btn.component';
 import { DocumentTypeItemComponent } from '../../component/document-type-item/document-type-item.component';
 import { AreaGraphComponent } from '../../component/charts/area-graph/area-graph.component';
-import { StatusActionDropdownComponent } from '../../../status-action-dropdown/status-action-dropdown.component';
 import { BadgeComponent } from '../../component/badge/badge.component';
 import { ExportIconComponent } from '../../component/icons/export-icon/export-icon.component';
 import { FilterIconComponent } from '../../component/icons/filter-icon/filter-icon.component';
@@ -45,10 +46,11 @@ import { InvoiceIconComponent } from '../../../icons/invoice-icon/invoice-icon.c
 import { BlockIconComponent } from '../../../icons/block-icon/block-icon.component';
 import { TermsconditionIconComponent } from '../../../icons/termscondition-icon/termscondition-icon.component';
 import { ReceiptIconComponent } from '../../../icons/receipt-icon/receipt-icon.component';
+import { DownloadIconComponent } from '../../../icons/download-icon/download-icon.component';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { ChnagePaymentModeFormComponent } from '../../component/forms/chnage-payment-mode-form/chnage-payment-mode-form.component';
 import { ReplaceChequeComponent } from '../../component/forms/replace-cheque/replace-cheque.component';
-import { ReceiptComponent } from '../../component/forms/receipt/receipt.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PageChange, PageSizeChange } from '../../../shared/model/shared.model';
 import { CustomDropdownComponent } from '../../../component/custom-dropdown/custom-dropdown.component';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -73,7 +75,6 @@ import { AlertService } from '../../../shared/services/alert.service';
     TableActionButtonComponent,
     DocumentTypeItemComponent,
     AreaGraphComponent,
-    StatusActionDropdownComponent,
     BadgeComponent,
     ExportIconComponent,
     FilterIconComponent,
@@ -83,10 +84,11 @@ import { AlertService } from '../../../shared/services/alert.service';
     BlockIconComponent,
     TermsconditionIconComponent,
     ReceiptIconComponent,
+    DownloadIconComponent,
     ArrowDownIconComponent,
     ChnagePaymentModeFormComponent,
     ReplaceChequeComponent,
-    ReceiptComponent,
+    PdfViewerModule,
     NoDataComponent,
     CustomDropdownComponent,
     NgbDropdownModule,
@@ -94,7 +96,7 @@ import { AlertService } from '../../../shared/services/alert.service';
   templateUrl: './tenant-detail.component.html',
   styleUrl: './tenant-detail.component.css',
 })
-export class TenantDetailComponent implements OnChanges {
+export class TenantDetailComponent implements OnInit, OnChanges {
   @Input() selectedLease: any = null;
   @Output() back = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
@@ -105,11 +107,37 @@ export class TenantDetailComponent implements OnChanges {
   private leaseService = inject(LeaseService);
   private destroyRef = inject(DestroyRef);
   private alertService = inject(AlertService);
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
+
+  // true when this component is the routed page (/dashboard/tenant-detail/:id)
+  // rather than embedded inline via [selectedLease] by a parent page.
+  private isRoutedMode = false;
   tenantData: any = null;
   rentTransactions: any[] = [];
   additionalTransactions: any[] = [];
   searchQuery: string = '';
   private searchSubject$ = new Subject<string>();
+
+  getStatusOption(status: string): { key: string; value: string } | null {
+    return this.statusOptions.find((o) => o.key === status) ?? null;
+  }
+
+  onChequeStatusChange(t: any, option: any) {
+    if (!option?.key || !t?.id) return;
+    this.alertService.confirmStatusChange(option.value, () => {
+      t.status = option.key;
+      this.leaseService
+        .updateLeaseCheque({ cheque_id: t.id, status: option.key })
+        .subscribe({
+          next: () => {
+            if (this.selectedLease?.id) {
+              this.loadTransactions(this.selectedLease.id);
+            }
+          },
+        });
+    });
+  }
 
   // Filter options
   paymentTypeOptions: { key: string; value: string }[] = [
@@ -153,16 +181,56 @@ export class TenantDetailComponent implements OnChanges {
     total_amount: number;
   }[] = [];
 
+  ngOnInit(): void {
+    const routeId = this.route.snapshot.paramMap.get('id');
+    if (routeId) {
+      this.isRoutedMode = true;
+      this.leaseService
+        .getLeaseById(+routeId)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (resp: any) => {
+            this.selectedLease = resp;
+            this.loadLeaseDetail();
+          },
+          error: () => {
+            this.alertService.error('Failed to load tenant details.');
+          },
+        });
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedLease'] && this.selectedLease) {
-      if (this.selectedLease?.tenant?.id) {
-        this.loadTenantData(this.selectedLease.tenant.id);
-      }
-      if (this.selectedLease?.id) {
-        this.loadTransactions(this.selectedLease.id);
-        this.loadRentAnalytics(this.selectedLease.id);
-      }
+      this.loadLeaseDetail();
     }
+  }
+
+  private loadLeaseDetail(): void {
+    if (this.selectedLease?.tenant?.id) {
+      this.loadTenantData(this.selectedLease.tenant.id);
+    }
+    if (this.selectedLease?.id) {
+      this.loadTransactions(this.selectedLease.id);
+      this.loadRentAnalytics(this.selectedLease.id);
+      this.loadActivityHistory(this.selectedLease.id);
+    }
+  }
+
+  activityHistory: any[] = [];
+
+  private loadActivityHistory(leaseId: number): void {
+    this.leaseService
+      .getLeaseActivityHistory(leaseId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (resp: any) => {
+          this.activityHistory = resp?.content ?? [];
+        },
+        error: () => {
+          this.activityHistory = [];
+        },
+      });
   }
 
   private loadTenantData(tenantId: number): void {
@@ -180,7 +248,11 @@ export class TenantDetailComponent implements OnChanges {
   }
 
   private loadTransactions(leaseId: number): void {
-    const params: Record<string, any> = { lease_id: leaseId };
+    const params: Record<string, any> = {
+      lease_id: leaseId,
+      page: this.currentPage,
+      page_size: this.rowsPerPage,
+    };
     if (this.searchQuery && this.searchQuery.trim()) {
       params['search'] = this.searchQuery.trim();
     }
@@ -220,25 +292,38 @@ export class TenantDetailComponent implements OnChanges {
   selectedReceiptType = '';
 
   // ── summary ─────────────────────────────────────────────────────
-  totalAmount = '—';
-  receivedAmount = '—';
-  pendingAmount = '—';
+  // Computed from the same lease-wide totalRentAmount/allTransactions the
+  // header tile uses, rather than a separate year-filtered API call --
+  // otherwise this card's "Total Rental Amount" and the header's "Total
+  // Amount" show two different numbers for the same lease.
+  private formatAed(n: number): string {
+    return `AED ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  get totalAmount(): string {
+    return this.formatAed(this.totalRentAmount);
+  }
+
+  private get receivedAmountValue(): number {
+    return this.allTransactions
+      .filter((t) => t.status === 'CREDITED' || t.status === 'REALIZED')
+      .reduce((sum: number, t: any) => sum + (t.total ?? 0), 0);
+  }
+
+  get receivedAmount(): string {
+    return this.formatAed(this.receivedAmountValue);
+  }
+
+  get pendingAmount(): string {
+    return this.formatAed(this.totalRentAmount - this.receivedAmountValue);
+  }
 
   private loadRentAnalytics(leaseId: number): void {
-    const fmt = (n: number) =>
-      `AED ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
     this.leaseService
       .getRentAnalytics({ lease_id: leaseId, year: new Date().getFullYear() })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          const s = resp?.content?.summary;
-          if (s) {
-            this.totalAmount = fmt(s.total_amount ?? 0);
-            this.receivedAmount = fmt(s.amount_received ?? 0);
-            this.pendingAmount = fmt(s.pending_amount ?? 0);
-          }
           this.areaChartData = resp?.content?.monthly ?? [];
         },
       });
@@ -271,6 +356,14 @@ export class TenantDetailComponent implements OnChanges {
       (sum: number, lc: any) => sum + (lc.vat ?? 0),
       0,
     );
+  }
+
+  // leaseChargesTotalAmount is already VAT-inclusive (lc.total = amount +
+  // vat per charge) -- don't add leaseChargesVatTotal on top of it here,
+  // that would double-count the VAT.
+  get totalRentAmount(): number {
+    const annualRent = this.selectedLease?.financials?.annual_amount ?? 0;
+    return annualRent + this.leaseChargesTotalAmount;
   }
 
   transactionStatusClass(status: string): string {
@@ -497,23 +590,37 @@ export class TenantDetailComponent implements OnChanges {
   handleBackClick() {
     this.showInvoiceDetails = false;
     this.showRenewalBlockedMsg = false;
-    this.back.emit();
+    if (this.isRoutedMode) {
+      this.location.back();
+    } else {
+      this.back.emit();
+    }
   }
 
   handleCloseClick() {
     this.showInvoiceDetails = false;
-    this.close.emit();
+    if (this.isRoutedMode) {
+      this.location.back();
+    } else {
+      this.close.emit();
+    }
   }
 
   onPageChange(event: PageChange) {
     if (event.componentName !== this.componentName) return;
     this.currentPage = event.currentPage;
+    if (this.selectedLease?.id) {
+      this.loadTransactions(this.selectedLease.id);
+    }
   }
 
   onPageSizeChange(event: PageSizeChange) {
     if (event.componentName !== this.componentName) return;
     this.rowsPerPage = event.pageSize;
     this.currentPage = 1;
+    if (this.selectedLease?.id) {
+      this.loadTransactions(this.selectedLease.id);
+    }
   }
 
   openChangePayementModeModal(content: TemplateRef<any>) {
@@ -533,12 +640,67 @@ export class TenantDetailComponent implements OnChanges {
     });
   }
 
-  openReceiptModal(content: TemplateRef<any>) {
+  previewTransaction: any = null;
+  previewTab: 'receipt' | 'invoice' = 'receipt';
+  previewReceiptUrl = '';
+  previewInvoiceUrl = '';
+
+  openReceiptModal(t: any, content: TemplateRef<any>) {
+    this.previewTransaction = t;
+    this.previewTab = t?.file_path ? 'receipt' : 'invoice';
+    this.previewReceiptUrl = '';
+    this.previewInvoiceUrl = '';
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-title',
-      windowClass: 'mdlCommon',
+      windowClass: 'mdlCommon receiptPreviewModal',
       centered: true,
       size: 'xl',
     });
+    if (t?.file_path) this.loadPreviewBlob(t.id, 'receipt');
+    if (t?.invoice_pdf_url) this.loadPreviewBlob(t.id, 'invoice');
+  }
+
+  // The S3 bucket has no CORS policy, so neither ng2-pdf-viewer's own
+  // internal fetch nor a direct browser fetch() of the S3 URL can read
+  // the bytes -- route through our own backend instead (same-origin-ish,
+  // and we control the response headers), then hand pdf-viewer a local
+  // blob URL.
+  private loadPreviewBlob(chequeId: number, which: 'receipt' | 'invoice') {
+    this.leaseService.getChequeFileBlob(chequeId, which).subscribe({
+      next: (blob: Blob) => {
+        const objectUrl = URL.createObjectURL(blob);
+        if (which === 'receipt') this.previewReceiptUrl = objectUrl;
+        else this.previewInvoiceUrl = objectUrl;
+      },
+      error: () => {
+        this.alertService.error(`Failed to load ${which}.`);
+      },
+    });
+  }
+
+  isPdfFile(fileName: string): boolean {
+    return (fileName || '').split('.').pop()?.toLowerCase() === 'pdf';
+  }
+
+  downloadTransactionInvoice(t: any) {
+    if (!t.invoice_pdf_url) return;
+    const link = document.createElement('a');
+    link.href = t.invoice_pdf_url;
+    link.download = `invoice_${t.code || t.id}.pdf`;
+    link.target = '_blank';
+    link.click();
+  }
+
+  downloadPreview() {
+    const url = this.previewTab === 'receipt' ? this.previewReceiptUrl : this.previewInvoiceUrl;
+    if (!url) return;
+    const code = this.previewTransaction?.code || this.previewTransaction?.id;
+    const ext = this.previewTab === 'receipt'
+      ? (this.previewTransaction?.file_name?.split('.').pop() || 'pdf')
+      : 'pdf';
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${this.previewTab}_${code}.${ext}`;
+    link.click();
   }
 }

@@ -56,7 +56,7 @@ export class NewTenantComponent {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (resp: any) => {
-            const lease = resp?.content ?? null;
+            const lease = resp ?? null;
             if (lease) {
               this.newTenantService.getLeaseId().set(lease.id);
 
@@ -108,7 +108,7 @@ export class NewTenantComponent {
                 });
               }
 
-              const commercialFormGroup = this.steps()?.[0]?.subSteps?.[1]?.formGroup;
+              const commercialFormGroup = this.steps()?.[1]?.subSteps?.[0]?.formGroup;
               if (commercialFormGroup) {
                 commercialFormGroup.patchValue({
                   startDate:             d.start_date             ?? '',
@@ -131,37 +131,14 @@ export class NewTenantComponent {
               }
 
               const stage = lease.lease_stage ?? stateLeaseStage;
-              const s = stage?.toUpperCase();
 
-              const isAgreementOrLater =
-                s === LEASE_STAGE.AGREEMENT        || s === LEASE_STAGE.AGREEMENT_SIGNING ||
-                s === LEASE_STAGE.AGREEMENT_SIGNED || s === LEASE_STAGE.EJARI             ||
-                s === LEASE_STAGE.EJARI_SIGNING    || s === LEASE_STAGE.ACTIVATED;
-
-              if (s === LEASE_STAGE.WAITING_FOR_SIGNUP) {
-                // Always show the "Waiting for Tenant" page (sub-step 0)
-                // regardless of is_onboarding flag
-                this.newTenantService.getActiveIndex().set(1);
-                this.newTenantService.getActiveSubIndex().set(0);
-              } else if (s === LEASE_STAGE.COMMERCIAL_DETAILS || s === LEASE_STAGE.MANAGER_APPROVAL_REQUIRED || s === LEASE_STAGE.MANAGER_APPROVED) {
-                // Resume on Commercial Details sub-step
-                this.newTenantService.getActiveIndex().set(0);
-                this.newTenantService.getActiveSubIndex().set(1);
-              } else if (!isAgreementOrLater && (
-                  t.is_onboarding                        ||
-                  s === LEASE_STAGE.ONBOARDING           ||
-                  s === LEASE_STAGE.NEGOTIATION_SENT     || s === LEASE_STAGE.PENDING_APPROVAL ||
-                  s === LEASE_STAGE.OWNER_APPROVED       || s === LEASE_STAGE.TENANT_APPROVED  ||
-                  s === LEASE_STAGE.WAITING_CHEQUE       || s === LEASE_STAGE.CHEQUE_REQUESTED ||
-                  s === LEASE_STAGE.CHEQUE_COLLECTED)) {
-                this.newTenantService.getActiveIndex().set(1);
-                this.newTenantService.getActiveSubIndex().set(1);
-              } else {
-                this.newTenantService.getActiveIndex().set(
-                  this.leaseStageToStepIndex(stage),
-                );
-                this.newTenantService.getActiveSubIndex().set(0);
-              }
+              // Property Details, Commercial Details, Ejari, Signature and
+              // Activated are all standalone top-level steps, each with
+              // exactly one sub-step.
+              this.newTenantService.getActiveIndex().set(
+                this.leaseStageToStepIndex(stage),
+              );
+              this.newTenantService.getActiveSubIndex().set(0);
               this.newTenantService.restoreStepFromStage(stage);
             }
             this.loading.set(false);
@@ -184,14 +161,27 @@ export class NewTenantComponent {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (resp: any) => {
-            const leadData = resp?.content ?? null;
+            const leadData = resp ?? null;
             this.steps = this.newTenantService.PropertySteps(leadData);
 
             const leaseId = leadData?.lease_id ?? null;
             const stage   = (leadData?.lease_stage ?? '') as string;
-            const s       = stage.toUpperCase();
 
             if (!leaseId) {
+              // No lease created yet — prefill Amount/Rent Details from the
+              // lead's latest sent proposal (falling back to the unit's own
+              // rent) so the PM doesn't have to re-enter numbers already
+              // agreed with the customer. Lessor Period is left blank: a
+              // proposal only tracks its hold window, not an actual lease
+              // term.
+              const latestProposal = leadData?.proposals?.[0] ?? null;
+              if (latestProposal || leadData?.rent) {
+                this.newTenantService.setUnitCommercialData({
+                  rent: latestProposal?.offered_rent ?? leadData?.rent,
+                  maintenance_charges: latestProposal?.offered_maintenance_charges,
+                  booking_amount: latestProposal?.holding_amount,
+                });
+              }
               this.loading.set(false);
               return;
             }
@@ -199,23 +189,11 @@ export class NewTenantComponent {
             this.newTenantService.getLeaseId().set(leaseId);
             this.newTenantService.restoreStepFromStage(stage);
 
-            if (s === LEASE_STAGE.COMMERCIAL_DETAILS || s === LEASE_STAGE.MANAGER_APPROVAL_REQUIRED || s === LEASE_STAGE.MANAGER_APPROVED) {
-              this.newTenantService.getActiveIndex().set(0);
-              this.newTenantService.getActiveSubIndex().set(1);
-            } else if (s === LEASE_STAGE.WAITING_FOR_SIGNUP) {
-              this.newTenantService.getActiveIndex().set(1);
-              this.newTenantService.getActiveSubIndex().set(0);
-            } else if (s === LEASE_STAGE.ONBOARDING           ||
-                       s === LEASE_STAGE.NEGOTIATION_SENT     || s === LEASE_STAGE.PENDING_APPROVAL ||
-                       s === LEASE_STAGE.OWNER_APPROVED       || s === LEASE_STAGE.TENANT_APPROVED  ||
-                       s === LEASE_STAGE.WAITING_CHEQUE       || s === LEASE_STAGE.CHEQUE_REQUESTED ||
-                       s === LEASE_STAGE.CHEQUE_COLLECTED) {
-              this.newTenantService.getActiveIndex().set(1);
-              this.newTenantService.getActiveSubIndex().set(1);
-            } else if (stage && stage !== LEASE_STAGE.BASIC_DETAILS) {
-              this.newTenantService.getActiveIndex().set(this.leaseStageToStepIndex(stage));
-              this.newTenantService.getActiveSubIndex().set(0);
-            }
+            // Property Details, Commercial Details, Ejari, Signature and
+            // Activated are all standalone top-level steps, each with
+            // exactly one sub-step.
+            this.newTenantService.getActiveIndex().set(this.leaseStageToStepIndex(stage));
+            this.newTenantService.getActiveSubIndex().set(0);
 
             // Fetch full lease details to pre-fill forms
             this.leaseService
@@ -223,7 +201,7 @@ export class NewTenantComponent {
               .pipe(takeUntilDestroyed(this.destroyRef))
               .subscribe({
                 next: (detailResp: any) => {
-                  const fullLease = detailResp?.content ?? null;
+                  const fullLease = detailResp ?? null;
                   if (fullLease) {
                     const u = fullLease.unit      ?? {};
                     const t = fullLease.tenant    ?? {};
@@ -246,7 +224,7 @@ export class NewTenantComponent {
                       });
                     }
 
-                    const commercialFormGroup = this.steps()?.[0]?.subSteps?.[1]?.formGroup;
+                    const commercialFormGroup = this.steps()?.[1]?.subSteps?.[0]?.formGroup;
                     if (commercialFormGroup) {
                       commercialFormGroup.patchValue({
                         startDate:             d.start_date             ?? '',
@@ -280,6 +258,13 @@ export class NewTenantComponent {
 
   private leaseStageToStepIndex(stage: string): number {
     switch (stage?.toUpperCase()) {
+      case LEASE_STAGE.COMMERCIAL_DETAILS:
+      case LEASE_STAGE.MANAGER_APPROVAL_REQUIRED:
+      case LEASE_STAGE.MANAGER_APPROVED:
+        return 1;
+      // Onboarding + Agreement steps were removed -- any lease sitting at
+      // one of these legacy stages, plus the real cheque-collection
+      // stages, now opens on the Collect Cheque step.
       case LEASE_STAGE.WAITING_FOR_SIGNUP:
       case LEASE_STAGE.ONBOARDING:
       case LEASE_STAGE.NEGOTIATION_SENT:
@@ -290,16 +275,22 @@ export class NewTenantComponent {
       case LEASE_STAGE.CHEQUE_REQUESTED:
       case LEASE_STAGE.CHEQUE_COLLECTED:
       case LEASE_STAGE.CHEQUE_VERIFIED:
-        return 1;
       case LEASE_STAGE.AGREEMENT:
       case LEASE_STAGE.AGREEMENT_SIGNING:
       case LEASE_STAGE.AGREEMENT_SIGNED:
         return 2;
       case LEASE_STAGE.EJARI:
       case LEASE_STAGE.EJARI_DOCUMENT_UPLOAD:
-      case LEASE_STAGE.EJARI_SIGNING:
-      case LEASE_STAGE.ACTIVATED:
+      case LEASE_STAGE.EJARI_APPROVED:
         return 3;
+      // Signature is its own top-level step, separate from the Ejari
+      // document step -- signing here is a UAE PASS authentication, not
+      // an Ejari certificate signature.
+      case LEASE_STAGE.EJARI_SIGNING:
+      case LEASE_STAGE.EJARI_SIGNED:
+        return 4;
+      case LEASE_STAGE.ACTIVATED:
+        return 5;
       default:
         return 0;
     }

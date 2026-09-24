@@ -15,6 +15,12 @@ body {
   border-radius: 6px;
 }
 
+.download-bar {
+  width: 820px;
+  margin: 30px auto 0;
+  text-align: right;
+}
+
 .invoice-header {
   display: flex;
   justify-content: space-between;
@@ -331,4 +337,74 @@ body {
   font-size: 13px;
   color: var(--textMuted); /* lighter TRN */
   font-weight: 500;
+}
+
+/* PRINT: compress spacing so the whole invoice fits on one page.
+   Signature block (.signature / .sign-img / .signature .name / .signature .role)
+   is intentionally left untouched here. */
+@media print {
+  @page {
+    size: A4;
+    margin: 8mm;
+  }
+
+  /* Chrome/Firefox strip background colors on print by default -- force
+     them to render so the table header, info card and grand-total badge
+     look the same as on screen. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: none;
+  }
+
+  .invoice-page {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .invoice-info {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+
+  .invoice-table th,
+  .invoice-table td {
+    padding: 6px 8px;
+  }
+
+  .totals {
+    margin-top: 12px;
+  }
+
+  .payment {
+    margin-top: 12px;
+    padding: 8px;
+  }
+
+  .invoice-footer {
+    margin-top: 14px;
+  }
+
+  .terms p {
+    line-height: 1.35;
+    margin-bottom: 4px;
+  }
+
+  .footer-note {
+    margin: 8px 0;
+  }
+
+  .footer-bottom {
+    padding-top: 6px;
+  }
 }

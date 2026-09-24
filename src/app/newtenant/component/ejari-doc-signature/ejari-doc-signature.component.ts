@@ -24,8 +24,4 @@ export class EjariDocSignatureComponent {
   constructor(private formService: NewTenantFromService) {}
   msgText$ = this.formService.getMsgText();
   showMsg$ = this.formService.getShowMsg();
-
-  ngOnInit() {
-    this.formService.ejariDoc();
-  }
 }

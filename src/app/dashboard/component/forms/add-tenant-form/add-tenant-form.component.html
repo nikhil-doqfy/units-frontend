@@ -73,6 +73,25 @@
           }
         </div>
       </div>
+      <div class="col-md-12">
+        <div class="mb-0">
+          <label for="emiratesID" class="form-label"
+            >{{ "EMIRATES_ID" | translate }}<span>*</span></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="emiratesID"
+            [placeholder]="'ENTER_ID_HERE' | translate"
+            formControlName="emiratesID"
+          />
+          @if (isInvalid(tenantForm, 'emiratesID').status) {
+          <small class="errorMsg">
+            {{ isInvalid(tenantForm, "emiratesID").msg }}
+          </small>
+          }
+        </div>
+      </div>
       <div class="col-md-6">
         <div class="mb-0">
           <label for="email" class="form-label"
@@ -107,25 +126,6 @@
           @if (isInvalid(tenantForm, 'contactNumber').status) {
           <small class="errorMsg">
             {{ isInvalid(tenantForm, "contactNumber").msg }}
-          </small>
-          }
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div class="mb-0">
-          <label for="emiratesID" class="form-label"
-            >{{ "EMIRATES_ID" | translate }}<span>*</span></label
-          >
-          <input
-            class="form-control"
-            type="text"
-            name="emiratesID"
-            [placeholder]="'ENTER_ID_HERE' | translate"
-            formControlName="emiratesID"
-          />
-          @if (isInvalid(tenantForm, 'emiratesID').status) {
-          <small class="errorMsg">
-            {{ isInvalid(tenantForm, "emiratesID").msg }}
           </small>
           }
         </div>

@@ -205,7 +205,11 @@
 
               <div>
                 <label>{{ "YEAR_RENT" | translate }}</label>
-                <span>{{ l.financials?.annual_amount || "—" }}</span>
+                <span>{{
+                  l.financials?.annual_amount != null
+                    ? (l.financials.annual_amount | number: "1.2-2")
+                    : "—"
+                }}</span>
               </div>
 
               <div>
@@ -219,8 +223,8 @@
               </div>
 
               <div>
-                <label>{{ "TOTAL_RENT" | translate }}</label>
-                <strong>{{ l.financials?.rent || "—" }}</strong>
+                <label>{{ "TOTAL_AMOUNT" | translate }}</label>
+                <strong>{{ getTotalAmount(l) | number: "1.2-2" }}</strong>
               </div>
             </div>
           </div>
@@ -252,11 +256,4 @@
       (detailViewChange)="onPropertyDetailToggle($event)"
     ></app-property-analytics>
   </ng-container>
-</ng-container>
-
-<ng-container *ngIf="showDetailView">
-  <app-tenant-detail
-    [selectedLease]="selectedLease"
-    (back)="handleBackClick()"
-  ></app-tenant-detail>
 </ng-container>

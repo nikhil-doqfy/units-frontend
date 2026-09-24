@@ -8,6 +8,7 @@ import {
   ElementRef,
   AfterViewInit,
   HostListener,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -41,6 +42,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
 import { NoDataComponent } from '../../../no-data/no-data.component';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -152,17 +154,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
   breadcrumbData = [
     { label: this.translate.instant('PAGE_TITLE.DASHBOARD'), link: '' },
   ];
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstPmcChange = true;
+
   constructor(private cd: ChangeDetectorRef) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
+    // Re-fetch every PMC-scoped widget whenever the navbar's PMC selection
+    // changes. Skips the first run -- ngOnInit's own calls below already
+    // cover the initial load (avoids firing every widget's request twice
+    // on page load, before the user has actually switched PMC).
+    effect(() => {
+      this.selectedPmcService.selectedPmc();
+      if (this.isFirstPmcChange) {
+        this.isFirstPmcChange = false;
+        return;
+      }
+      this.loadDashboardData();
+    });
   }
 
-  ngOnInit(): void {
-    this.loadBreadcrumb();
-    this.sharedService.initLanguage();
-    this.initLanguageListener();
-    this.getDashboardVisualization();
-
+  private loadDashboardData(): void {
     this.getStats();
     this.getMonthlyRevenue();
     this.loadProperties();
@@ -172,6 +185,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.loadTopRevenueProperties();
     this.loadPropertyOwned();
     this.loadOccupancyData();
+  }
+
+  ngOnInit(): void {
+    this.loadBreadcrumb();
+    this.sharedService.initLanguage();
+    this.initLanguageListener();
+    this.getDashboardVisualization();
+
+    this.loadDashboardData();
   }
   changeLanguage(lang: string) {
     this.sharedService.setLanguage(lang);

@@ -29,6 +29,7 @@
         <app-edit-icon />
       </button>
       <div class="column">
+        <ng-content select="[before-back]"></ng-content>
         <!-- *ngIf="hasProjectedContent; else noActionButtons" -->
         <button
           *ngIf="showBack"

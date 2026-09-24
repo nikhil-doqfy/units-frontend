@@ -55,6 +55,7 @@ export class CommercialdetailsComponent implements OnInit {
         if (this.form) {
           this.prefillFromUnit();
           this.recalculateAnnualFromDates();
+          this.syncChargesToService();
         }
       });
   }
@@ -65,23 +66,45 @@ export class CommercialdetailsComponent implements OnInit {
     this.sharedService.initLanguage();
     this.loadCharges();
     this.recalculateAnnualFromDates();
+    this.syncChargesToService();
   }
+
+  // These labels are always shown as their own field-derived rows (see
+  // fieldDerivedCharges below), sourced directly from this form's own
+  // Security/Booking Amount, Maintenance Charges, Security Deposit and
+  // Commission fields. If a Charge in the Charges master list happens to
+  // share one of these exact names (e.g. seeded/entered by mistake), it
+  // must be excluded from the checklist here -- otherwise the same line
+  // item appears twice, once from each source, with two different (and
+  // unrelated) amounts.
+  private static readonly RESERVED_FIELD_CHARGE_LABELS = new Set([
+    'security/booking amount',
+    'maintenance charges',
+    'security deposit',
+    'commission',
+  ]);
 
   private loadCharges() {
     this.chargesService.charges()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
-          this.charges = (resp?.content ?? []).map((c: any) => ({
-            charge_id: c.id,
-            label: c.description,
-            amount: c.amount,
-            tax: c.tax_code ? `VAT @${c.tax_code}%` : 'VAT @Nil',
-            vat: c.vat_amount,
-            total: c.total_amount,
-            checked: true,
-            isEdit: false,
-          }));
+          this.charges = (resp?.content ?? [])
+            .filter((c: any) =>
+              !CommercialdetailsComponent.RESERVED_FIELD_CHARGE_LABELS.has(
+                (c.description || '').trim().toLowerCase(),
+              ),
+            )
+            .map((c: any) => ({
+              charge_id: c.id,
+              label: c.description,
+              amount: c.amount,
+              tax: c.tax_code ? `VAT @${c.tax_code}%` : 'VAT @Nil',
+              vat: c.vat_amount,
+              total: c.total_amount,
+              checked: true,
+              isEdit: false,
+            }));
           this.syncChargesToService();
         },
         error: () => { this.charges = []; },
@@ -89,11 +112,64 @@ export class CommercialdetailsComponent implements OnInit {
   }
 
   private syncChargesToService() {
-    this.newTenantService.setSelectedCharges(
-      this.charges
-        .filter(c => c.checked)
-        .map(c => ({ charge_id: c.charge_id, amount: c.amount }))
-    );
+    const moduleCharges = this.charges
+      .filter(c => c.checked)
+      .map(c => ({ charge_id: c.charge_id, amount: c.amount }));
+    // Commercial-details fields (Security/Booking Amount, Maintenance
+    // Charges, Security Deposit, Commission) surfaced as charge lines --
+    // identified by description since they aren't Charges-section rows.
+    // Discount is excluded: it's a deduction, not a taxable charge, and
+    // stays purely on Lease.discount.
+    const fieldCharges = this.fieldDerivedCharges
+      .filter(c => c.description)
+      .map(c => ({ description: c.label, amount: c.amount }));
+    this.newTenantService.setSelectedCharges([...moduleCharges, ...fieldCharges]);
+  }
+
+  /** Commercial-details field values mirrored as read-only Other Charges
+   * rows, each with a flat 5% VAT for display. Discount is shown as a
+   * negative, VAT-free row for visibility only -- see syncChargesToService. */
+  get fieldDerivedCharges(): any[] {
+    if (!this.form) return [];
+    const v = this.form.value;
+    const vatRate = 0.05;
+    const rows: any[] = [];
+
+    const pushChargeRow = (label: string, amount: number) => {
+      if (!amount) return;
+      const vat = Math.round(amount * vatRate * 100) / 100;
+      rows.push({
+        label,
+        amount,
+        tax: 'VAT @5%',
+        vat,
+        total: Math.round((amount + vat) * 100) / 100,
+        description: label,
+      });
+    };
+
+    pushChargeRow('Security/Booking Amount', parseFloat(v.securityBookingAmount) || 0);
+    pushChargeRow('Maintenance Charges', parseFloat(v.maintenanceCharges) || 0);
+    pushChargeRow('Security Deposit', parseFloat(v.securityDeposit) || 0);
+
+    const rent = parseFloat(v.rent) || 0;
+    const commissionPercent = parseFloat(v.commissionPercent) || 0;
+    const commissionAmount = Math.round(((rent * commissionPercent) / 100) * 100) / 100;
+    pushChargeRow('Commission', commissionAmount);
+
+    const discount = parseFloat(v.discount) || 0;
+    if (discount) {
+      rows.push({
+        label: 'Discount',
+        amount: -discount,
+        tax: 'VAT @Nil',
+        vat: 0,
+        total: -discount,
+        description: null,
+      });
+    }
+
+    return rows;
   }
 
   private prefillFromUnit() {
@@ -129,6 +205,15 @@ export class CommercialdetailsComponent implements OnInit {
         .get(ctrl)!
         .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => this.recalculateAnnualFromDates());
+    });
+
+    // Other Charges: keep the field-derived rows (and the payload sent on
+    // save) in sync whenever any of the fields they mirror change.
+    ['securityBookingAmount', 'maintenanceCharges', 'securityDeposit', 'commissionPercent', 'rent', 'discount'].forEach((ctrl) => {
+      this.form
+        .get(ctrl)!
+        .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => this.syncChargesToService());
     });
 
     // contractAmount: recalculate whenever any of its components change
@@ -176,9 +261,11 @@ export class CommercialdetailsComponent implements OnInit {
 
   charges: any[] = [];
   get totalAmount(): number {
-    return this.charges
+    const moduleTotal = this.charges
       .filter((c) => c.checked)
       .reduce((sum, c) => sum + c.total, 0);
+    const fieldTotal = this.fieldDerivedCharges.reduce((sum, c) => sum + c.total, 0);
+    return Math.round((moduleTotal + fieldTotal) * 100) / 100;
   }
   sendInvite() {
     this.alertService.customSuccess('Invite Sent Successfully');

@@ -1,18 +1,5 @@
 <app-finance-nav [pmcId]="pmcId"></app-finance-nav>
 
-<div class="row mb-3" *ngIf="showSelector">
-  <div class="col-md-4">
-    <app-custom-select
-      [options]="reachablePmcs"
-      key="id"
-      value="name"
-      [selectedOption]="selectedPmc"
-      placeholder="SELECT_PMC"
-      (optionSelected)="onPmcSelected($event)"
-    ></app-custom-select>
-  </div>
-</div>
-
 <app-finance-empty-state
   [financeActivation]="financeActivation"
   title="FINANCE_OVERVIEW"

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, Subject } from 'rxjs';
@@ -26,6 +26,7 @@ import {
   PageSizeChange,
 } from '../../../shared/model/shared.model';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 
 type MainTab = 'onboarding' | 'active';
 type SubTab = 'current' | 'past' | 'rejected';
@@ -84,16 +85,9 @@ export class TenantsComponent {
 
   // ── Detail view ──────────────────────────────────
   showDetailView = false;
-  selectedTenant: any = null;
 
   onTenantClick(tenant: any) {
-    this.selectedTenant = tenant;
-    this.showDetailView = true;
-  }
-
-  onDetailBack() {
-    this.showDetailView = false;
-    this.selectedTenant = null;
+    if (tenant?.id) this.router.navigate(['/dashboard/tenant-detail', tenant.id]);
   }
 
   // ── Table state ──────────────────────────────────
@@ -108,12 +102,32 @@ export class TenantsComponent {
   private searchSubject$ = new Subject<string>();
   private searchText = '';
   private translate = inject(TranslateService);
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+  filterPmcId: string | null = null;
 
   constructor() {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.initSearchListener();
     this.loadTenants();
+
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- the load above already
+    // covers that, using whatever the navbar's selection has resolved to
+    // by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.loadTenants();
+    });
   }
 
   ngOnInit() {
@@ -174,6 +188,7 @@ export class TenantsComponent {
       page_size: this.rowsPerPage,
     };
     if (this.searchText) params['search'] = this.searchText;
+    if (this.filterPmcId) params['pmc_id'] = this.filterPmcId;
 
     this.tenantsService
       .getTenantsByTab(params)

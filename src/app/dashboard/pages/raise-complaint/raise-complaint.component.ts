@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,6 +28,7 @@ import { ThemeService } from '../../../theme.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { SharedApiService } from '../../../shared/services/shared-api.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 
 type TabView = 'raise' | 'myTickets';
 type TicketView = 'list' | 'detail';
@@ -69,9 +70,24 @@ export class RaiseComplaintComponent {
   showDetailView: boolean = false;
   complaintsStatus: any = [];
   selectedComplaintstatus: any = null;
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+  filterPmcId: string | null = null;
+
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.getSupportTickets();
+    });
   }
 
   loadBreadcrumb() {
@@ -251,6 +267,7 @@ export class RaiseComplaintComponent {
 
   /* ── Existing ── */
   ngOnInit() {
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.isPropertyManager = this.themeService.getRole() === 'property-manager';
     if (this.isPropertyManager) {
       this.activeTab = 'myTickets';
@@ -321,6 +338,8 @@ export class RaiseComplaintComponent {
           ? this.selectedComplaintstatus
           : this.selectedComplaintstatus.id;
     }
+
+    if (this.filterPmcId) params['pmc_id'] = this.filterPmcId;
 
     console.log('Support Ticket Params:', params);
 

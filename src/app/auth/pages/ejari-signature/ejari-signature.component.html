@@ -1,0 +1,48 @@
+<div class="sig-page">
+
+  @if (step === 'sign' || step === 'redirecting') {
+    <div class="otp-card">
+      <div class="card-logo">
+        <img src="assets/mainLogoWhite.svg" alt="Units" />
+      </div>
+      <h2>Ejari Signature</h2>
+      <p class="subtitle">
+        Sign in with UAE PASS to sign as the
+        <strong>{{ role === 'owner' ? 'Owner' : 'Tenant' }}</strong>
+        (<strong>{{ email }}</strong>).
+      </p>
+      <button
+        class="btn-primary"
+        [disabled]="step === 'redirecting'"
+        (click)="signWithUaePass()"
+      >
+        {{ step === 'redirecting' ? 'Redirecting to UAE PASS…' : 'Sign with UAE PASS' }}
+      </button>
+    </div>
+  }
+
+  @if (step === 'success') {
+    <div class="otp-card success-card">
+      <div class="success-icon">✓</div>
+      <h2>Signed Successfully!</h2>
+      <p>Your Ejari signature has been recorded via UAE PASS.</p>
+      <p class="sub-note">
+        The lease will be activated once the other party has also signed.
+        You can close this page now.
+      </p>
+    </div>
+  }
+
+  @if (step === 'failed') {
+    <div class="otp-card">
+      <div class="fail-icon">✕</div>
+      <h2>Signature Failed</h2>
+      <p class="subtitle">
+        Something went wrong while signing with UAE PASS.
+        @if (failReason) { <span class="reason">({{ failReason }})</span> }
+      </p>
+      <button class="btn-primary" (click)="retry()">Try Again</button>
+    </div>
+  }
+
+</div>

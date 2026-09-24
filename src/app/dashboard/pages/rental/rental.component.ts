@@ -1,6 +1,12 @@
-import { Component, DestroyRef, Input, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  effect,
+  Input,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, ɵEmptyOutletComponent } from '@angular/router';
+import { ActivatedRoute, Router, ɵEmptyOutletComponent } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedService } from '../../../shared.service';
@@ -25,6 +31,7 @@ import {
 } from '../../../shared/model/shared.model';
 import { LeaseService } from '../../services/lease.service';
 import { TenantsService } from '../../services/tenants.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 import { PropertyService } from '../../services/property.service';
 import { Subject, debounceTime } from 'rxjs';
 import { DisableIconComponent } from '../../../icon/disable-icon/disable-icon.component';
@@ -83,6 +90,7 @@ import { TenantDetailComponent } from '../tenant-detail/tenant-detail.component'
 export class RentalComponent {
   private sharedService = inject(SharedService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private translate = inject(TranslateService);
   private leaseService = inject(LeaseService);
   private tenantsService = inject(TenantsService);
@@ -177,6 +185,10 @@ export class RentalComponent {
       total_rent: '520000',
     },
   ];
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+  filterPmcId: string | null = null;
+
   constructor(
     private destroyRef: DestroyRef,
     private themeService: ThemeService,
@@ -187,8 +199,28 @@ export class RentalComponent {
     this.sharedService.showDetail$.subscribe((value) => {
       this.showDetailView = value;
     });
+
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload every widget on this
+    // page. Skips the first (synchronous, effect-creation-time) run --
+    // ngOnInit's own initial load already covers that, using whatever
+    // the navbar's selection has resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.getLeases();
+      this.loadChequeSummary();
+      this.loadChequeMonthly();
+      this.loadRentAnalytics();
+    });
   }
   ngOnInit() {
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.loadBreadcrumb();
     this.initLanguageListener();
     this.initCurrentRoleListener();
@@ -267,6 +299,7 @@ export class RentalComponent {
       params['property_id'] = this.rentalFilterPropertyId;
     if (this.rentalFilterBlockId) params['block_id'] = this.rentalFilterBlockId;
     if (this.rentalFilterUnitId) params['unit_id'] = this.rentalFilterUnitId;
+    if (this.filterPmcId) params['pmc_id'] = this.filterPmcId;
 
     this.tenantsService
       .getTenantsByTab(params)
@@ -402,9 +435,15 @@ export class RentalComponent {
     this.getLeases();
   }
 
+  private yearPmcParams(): Record<string, any> {
+    const params: Record<string, any> = { year: this.selectedYear };
+    if (this.filterPmcId) params['pmc_id'] = this.filterPmcId;
+    return params;
+  }
+
   loadChequeSummary() {
     this.leaseService
-      .getChequeSummary({ year: this.selectedYear })
+      .getChequeSummary(this.yearPmcParams())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
@@ -412,7 +451,11 @@ export class RentalComponent {
           if (!s) return;
           const fmt = (n: number) =>
             `AED ${n.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
-          this.summaryAmountReceived = fmt(s['total']?.amount ?? 0);
+          // "Amount Received" must be money actually collected (credited +
+          // realized), not s['total'] -- that's every cheque regardless of
+          // status, including ones still pending or bounced.
+          const received = (s['credited']?.amount ?? 0) + (s['realized']?.amount ?? 0);
+          this.summaryAmountReceived = fmt(received);
           this.summaryChequesApproved = fmt(s['credited']?.amount ?? 0);
           this.summaryChequesDeposited = fmt(s['realized']?.amount ?? 0);
           this.summaryCountApproved = String(s['credited']?.count ?? 0);
@@ -423,7 +466,7 @@ export class RentalComponent {
 
   loadChequeMonthly() {
     this.leaseService
-      .getChequeMonthly({ year: this.selectedYear })
+      .getChequeMonthly(this.yearPmcParams())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
@@ -441,7 +484,7 @@ export class RentalComponent {
       `AED ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
     this.leaseService
-      .getRentAnalytics({ year: this.selectedYear })
+      .getRentAnalytics(this.yearPmcParams())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (resp: any) => {
@@ -472,9 +515,16 @@ export class RentalComponent {
     return (lease.lease_charges ?? []).reduce((sum: number, lc: any) => sum + (lc.vat ?? 0), 0);
   }
 
+  // getOtherChargesTotal is already VAT-inclusive (lc.total = amount + vat
+  // per charge) -- don't add getOtherChargesVat on top of it here, that
+  // would double-count the VAT.
+  getTotalAmount(lease: any): number {
+    const annualRent = lease.financials?.annual_amount ?? 0;
+    return annualRent + this.getOtherChargesTotal(lease);
+  }
+
   onLeaseClick(lease: any) {
-    this.selectedLease = lease;
-    this.showDetailView = true;
+    if (lease?.id) this.router.navigate(['/dashboard/tenant-detail', lease.id]);
   }
 
   searchTextChange(text: string) {

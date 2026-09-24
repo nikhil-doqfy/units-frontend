@@ -224,56 +224,6 @@ circle {
   color: var(--darkGreen);
 }
 
-.confirm-box {
-  border: 1.5px solid var(--primaryBlue);
-  background-color: var(--lightBlueBg);
-  padding: 10px 14px;
-  border-radius: 8px;
-  width: 100%;
-}
-
-.confirm-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  margin: 0;
-}
-
-.confirm-label input {
-  display: none;
-}
-
-.custom-checkbox {
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--borderLight);
-  border-radius: 4px;
-  position: relative;
-  background-color: var(--white);
-}
-
-.confirm-label input:checked + .custom-checkbox {
-  background-color: var(--checkboxBlue);
-}
-
-.confirm-label input:checked + .custom-checkbox::after {
-  content: "";
-  position: absolute;
-  left: 4px;
-  top: 0px;
-  width: 5px;
-  height: 10px;
-  border: solid var(--white);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-.confirm-text {
-  font-size: 14px;
-  color: var(--textDark);
-}
-
 .custom-table-wrapper {
   background: var(--tableBg);
   padding: 15px;
@@ -638,6 +588,18 @@ circle {
   margin: 4px 0;
 }
 
+.row-edit-input {
+  min-width: 110px;
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.row-edit-actions {
+  display: flex;
+  gap: 6px;
+  white-space: nowrap;
+}
+
 .cheque-table-title {
   font-size: 14px;
   font-weight: 600;
@@ -658,35 +620,9 @@ circle {
   border-radius: 12px;
 }
 
-.cheque-table-scroll {
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
-}
-
-.cheque-table-scroll::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
-}
-
-.cheque-table {
-  width: max-content;
-  min-width: 100%;
-  font-size: 12px;
-  border-collapse: collapse;
-}
-
-.cheque-table th,
-.cheque-table td {
-  padding: 8px 14px;
-  white-space: nowrap;
-  vertical-align: middle;
-}
-
-.cheque-table th {
-  font-size: 12px;
-  font-weight: 600;
-  background-color: var(--primaryBlue);
-  color: var(--white);
+.cheque-total-row {
+  font-weight: 700;
+  background: var(--primaryBlueLight);
 }
 
 .minus-btn {

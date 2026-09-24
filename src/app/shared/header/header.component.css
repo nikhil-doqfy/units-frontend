@@ -51,6 +51,10 @@
   gap: 10px;
 }
 
+.pmc-select-wrapper {
+  width: 200px;
+}
+
 .hdrDrpdwn .hdrDrpdwnBtn {
   background-color: transparent;
   position: relative;

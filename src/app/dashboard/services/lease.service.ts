@@ -20,16 +20,16 @@ export class LeaseService {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease`, data);
   }
 
-  updateLease(data: Record<string, any>): Observable<any> {
-    return this.http.put(`${this.SERVER_ADDRESS}/api/lease`, data);
+  updateLease(leaseId: number, data: Record<string, any>): Observable<any> {
+    return this.http.put(`${this.SERVER_ADDRESS}/api/lease/${leaseId}`, data);
   }
 
   deleteLease(leaseId: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_ADDRESS}/api/lease?lease_id=${leaseId}`);
+    return this.http.delete(`${this.SERVER_ADDRESS}/api/lease/${leaseId}`);
   }
 
   getLeaseById(leaseId: number): Observable<any> {
-    return this.http.get(`${this.SERVER_ADDRESS}/api/lease?lease_id=${leaseId}`);
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/${leaseId}`);
   }
 
   getLeases(params: Record<string, any> = {}): Observable<any> {
@@ -139,12 +139,17 @@ export class LeaseService {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/send-negotiation`, { lease_id: leaseId });
   }
 
-  sendLeaseInvite(leaseId: number): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/send-invite`, { lease_id: leaseId });
-  }
-
   getChequeStatus(leaseId: number): Observable<any> {
     return this.http.get(`${this.SERVER_ADDRESS}/api/lease/cheque-status?lease_id=${leaseId}`);
+  }
+
+  generateChequeSchedule(data: {
+    lease_id: number;
+    payment_frequency: string;
+    start_date: string;
+    regenerate?: boolean;
+  }): Observable<any> {
+    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/generate-cheque-schedule`, data);
   }
 
   // ── LeaseCheque CRUD ──────────────────────────────────────────────────────
@@ -207,6 +212,32 @@ export class LeaseService {
     return this.http.get(`${this.SERVER_ADDRESS}/api/lease/invoice-pdf?lease_id=${leaseId}`);
   }
 
+  getChequeReceiptPdf(
+    leaseId: number,
+    receiptType?: 'RENTAL' | 'OTHER_CHARGES' | 'COMBINED',
+    months?: string[],
+  ): Observable<any> {
+    let url = `${this.SERVER_ADDRESS}/api/lease/cheque-receipt-pdf?lease_id=${leaseId}`;
+    if (receiptType) url += `&receipt_type=${receiptType}`;
+    if (months?.length) url += `&months=${months.join(',')}`;
+    return this.http.get(url);
+  }
+
+  getRentReceiptMonths(leaseId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/rent-receipt-months?lease_id=${leaseId}`);
+  }
+
+  getLeaseActivityHistory(leaseId: number): Observable<any> {
+    return this.http.get(`${this.SERVER_ADDRESS}/api/lease/activity-history?lease_id=${leaseId}`);
+  }
+
+  getChequeFileBlob(chequeId: number, type: 'receipt' | 'invoice'): Observable<Blob> {
+    return this.http.get(
+      `${this.SERVER_ADDRESS}/api/lease/cheque-file-proxy?cheque_id=${chequeId}&type=${type}`,
+      { responseType: 'blob' },
+    );
+  }
+
   editTemplateData(data: Record<string, any>): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/generate-contract`, data);
   }
@@ -247,10 +278,6 @@ export class LeaseService {
 
   approveLease(leaseId: number, role: string, email: string): Observable<any> {
     return this.http.post(`${this.SERVER_ADDRESS}/api/lease/approve`, { lease_id: leaseId, role, email });
-  }
-
-  sendForSignature(leaseId: number): Observable<any> {
-    return this.http.post(`${this.SERVER_ADDRESS}/api/lease/send-for-signature`, { lease_id: leaseId });
   }
 
   submitLeaseSignature(payload: any): Observable<any> {

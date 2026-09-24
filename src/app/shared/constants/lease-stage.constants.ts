@@ -19,7 +19,9 @@ export const LEASE_STAGE = {
   AGREEMENT_SIGNED:           'AGREEMENT_SIGNED',
   EJARI:                      'EJARI',
   EJARI_DOCUMENT_UPLOAD:      'EJARI_DOCUMENT_UPLOAD',
+  EJARI_APPROVED:             'EJARI_APPROVED',
   EJARI_SIGNING:              'EJARI_SIGNING',
+  EJARI_SIGNED:               'EJARI_SIGNED',
   ACTIVATED:                  'ACTIVATED',
 } as const;
 

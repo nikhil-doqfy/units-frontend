@@ -1,6 +1,7 @@
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   signal,
   TemplateRef,
@@ -37,6 +38,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { debounceTime, Subject } from 'rxjs';
 import { AlertService } from '../../../shared/services/alert.service';
 import { StaffService } from '../../services/staff.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 import {
   BreadCrumb,
   PageChange,
@@ -138,11 +140,18 @@ export class StaffComponent {
     { label: 'Reset', icon: ResetIconComponent, action: 'reset' },
   ];
   assignedProperties: any[] = [];
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+
   constructor(private router: Router) {
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
     this.initStaffSearchListener();
     const id = this.route.snapshot.paramMap.get('staff_id');
+
+    const initialPmc = this.selectedPmcService.selectedPmc();
+    if (initialPmc) this.staffRolesData['pmc_id'] = initialPmc.key;
+
     if (id) {
       this.showDetailView = true;
       this.loadDetailView(+id);
@@ -150,6 +159,26 @@ export class StaffComponent {
       this.showDetailView = false;
       this.getStaffRoleDetails();
     }
+
+    // Follow the navbar's PMC selector: whenever it changes, reflect it
+    // into this page's own PMC filter and reload. Skips the first
+    // (synchronous, effect-creation-time) run -- the initial load above
+    // already covers that, using whatever the navbar's selection has
+    // resolved to by then.
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      if (pmc) {
+        this.staffRolesData['pmc_id'] = pmc.key;
+      } else {
+        delete this.staffRolesData['pmc_id'];
+      }
+      this.currentPage = 1;
+      this.getStaffRoleDetails();
+    });
   }
 
   ngOnInit(): void {
@@ -311,6 +340,8 @@ export class StaffComponent {
       params['search'] = this.staffRolesData['search'];
     if (this.staffRolesData['role'])
       params['role_id'] = this.staffRolesData['role'];
+    if (this.staffRolesData['pmc_id'])
+      params['pmc_id'] = this.staffRolesData['pmc_id'];
 
     this.staffService
       .getExcelFileOfStaff(params)

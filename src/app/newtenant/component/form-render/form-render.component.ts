@@ -12,21 +12,17 @@ import {
 import { CommonModule } from '@angular/common';
 import { NewTenantFromService } from '../service/new-tenant-from.service';
 import { WhiteCardComponent } from '../../../shared/component/white-card/white-card.component';
-import { CircularCrossBtnIconComponent } from '../../../icons/circular-cross-btn-icon/circular-cross-btn-icon.component';
 import { LeftArrowIconComponent } from '../../../icons/left-arrow-icon/left-arrow-icon.component';
 import { CommercialdetailsComponent } from '../commercialdetails/commercialdetails.component';
+import { OnboardingComponent } from '../onboarding/onboarding.component';
 import { SendInviteIconComponent } from '../../../icon/send-invite-icon/send-invite-icon.component';
 import { AlertService } from '../../../shared/services/alert.service';
 import { RefreshIconComponent } from '../../../dashboard/component/icons/refresh-icon/refresh-icon.component';
-import { ProfileComponent } from '../profile/profile.component';
-import { OnboardingComponent } from '../onboarding/onboarding.component';
 import { ArrowDownIconComponent } from '../../../shared/component/icons/arrow-down-icon/arrow-down-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AgreementComponent } from '../agreement/agreement.component';
 import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
 import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
-import { EjarimodelService } from '../../../ejarimodel.service';
 import { WarningIconComponent } from '../../../icons/warning-icon/warning-icon.component';
 import { SignedSuccessfullyIconComponent } from '../../../icons/signed-successfully-icon/signed-successfully-icon.component';
 import { PermissionService } from '../../../services/permission.service';
@@ -40,7 +36,6 @@ import { TransactionComponent } from '../../../shared/transaction/transaction.co
     CommonModule,
     WhiteCardComponent,
     TransactionComponent,
-    CircularCrossBtnIconComponent,
     LeftArrowIconComponent,
     SendInviteIconComponent,
     RefreshIconComponent,
@@ -81,9 +76,7 @@ export class FormRenderComponent {
     return this.permissionService.isPropertyManager() &&
       this.permissionService.canAccessModule('Approval');
   }
-  ProfileComponent = ProfileComponent;
   OnboardingComponent = OnboardingComponent;
-  AgreementComponent = AgreementComponent;
   EjariComponent = EjariDocComponent;
   EjariDocSignatureComponent = EjariDocSignatureComponent;
   CommercialdetailsComponent = CommercialdetailsComponent;
@@ -91,9 +84,6 @@ export class FormRenderComponent {
   get showDummyLink(): boolean {
     const c = this.currentSubStep?.component;
     return (
-      c !== this.ProfileComponent &&
-      c !== this.OnboardingComponent &&
-      c !== this.AgreementComponent &&
       c !== this.EjariComponent &&
       c !== this.EjariDocSignatureComponent
     );
@@ -105,12 +95,10 @@ export class FormRenderComponent {
   showMsg$ = this.formService.getShowMsg();
   msgText$ = this.formService.getMsgText();
   showRefresh$ = this.formService.showRefresh$;
-  chequeConfirmed$ = this.formService.getChequeConfirmed();
   leaseStage$ = this.formService.currentLeaseStage;
   isSendingInvite$ = this.formService.isSendingInvite;
   isSendingNegotiation$ = this.formService.isSendingNegotiation;
   constructor(
-    private ejariModelService: EjarimodelService,
     private formService: NewTenantFromService,
     private alertService: AlertService,
   ) {}
@@ -146,19 +134,11 @@ export class FormRenderComponent {
   get isSaveDisabled(): boolean {
     const c = this.currentSubStep?.component;
     const stage = this.leaseStage$()?.toUpperCase();
-    if (
-      c === this.EjariComponent &&
-      stage === 'EJARI'
-    )
-      return true;
     if (c === this.CommercialdetailsComponent && stage === 'MANAGER_APPROVAL_REQUIRED')
       return true;
     if (c === this.CommercialdetailsComponent && this.isSendingInvite$())
       return true;
     if (
-      c === this.ProfileComponent ||
-      c === this.OnboardingComponent ||
-      c === this.AgreementComponent ||
       c === this.EjariComponent ||
       c === this.EjariDocSignatureComponent
     )
@@ -174,62 +154,18 @@ export class FormRenderComponent {
     if (this.currentSubStep?.component === EjariDocSignatureComponent) {
       return this.btnTitle$().trim();
     }
-    if (this.currentSubStep?.component === AgreementComponent) {
-      return this.btnTitle$();
-    }
 
     if (this.currentSubStep?.component === EjariDocComponent) {
       return 'Send for Signature';
-    }
-
-    if (this.currentSubStep?.component === EjariDocSignatureComponent) {
-      return this.btnTitle$();
-    }
-
-    if (this.currentSubStep?.component === CommercialdetailsComponent) {
-      return 'Send Invite';
-    }
-
-    if (this.currentSubStep?.component === ProfileComponent) {
-      return 'Continue';
     }
 
     return 'Save & Next';
   }
 
   next() {
-    if (
-      this.currentSubStep?.component === EjariDocSignatureComponent &&
-      this.getNextBtnLabel() === 'Approval & Generate Invoice'
-    ) {
-      // Call your alert service modal
-      this.ejariModelService.customTenantSuccessModal(
-        'The tenant has been activated and the invoice has been generated successfully.',
-        (action) => {
-          // Handle actions when user clicks buttons
-          if (action === 'invoice') {
-            // navigate to invoice page or just close
-            console.log('Go to Invoice clicked');
-          } else if (action === 'profile') {
-            // navigate to tenant profile page
-            console.log('View Profile clicked');
-          }
-          // Move to next step if needed
-          this.goToNextStep();
-        },
-      );
-
-      return; // stop further next() execution
-    }
-    if (this.currentSubStep?.component === AgreementComponent) {
-      this.formService.handleMainButtonClick(
-        () => this.goToNextStep(),
-        'AGREEMENT',
-      );
-      return;
-    }
-
-    if (this.currentSubStep?.component === EjariDocSignatureComponent) {
+    // Ejari document step — sends the document for signature; the stepper
+    // advances to the Signature sub-step only once that request succeeds.
+    if (this.currentSubStep?.component === this.EjariComponent) {
       this.formService.handleMainButtonClick(
         () => this.goToNextStep(),
         'EJARI',
@@ -269,8 +205,9 @@ export class FormRenderComponent {
       return;
     }
 
-    if (this.currentSubStep?.component === ProfileComponent) {
-      this.formService.updateLeaseStage('ONBOARDING');
+    // Collect Cheque step — cheques save individually via their own modal,
+    // nothing to validate/submit here, just advance.
+    if (this.currentSubStep?.component === OnboardingComponent) {
       this.goToNextStep();
       return;
     }
@@ -429,9 +366,10 @@ export class FormRenderComponent {
   }
 
   private readonly STAGE_MAP: Record<number, string> = {
-    2: 'AGREEMENT',
+    1: 'COMMERCIAL_DETAILS',
+    2: 'WAITING_CHEQUE',
     3: 'EJARI',
-    4: 'ACTIVATED',
+    5: 'ACTIVATED',
   };
 
   goToNextStep() {
@@ -546,13 +484,5 @@ export class FormRenderComponent {
     } else {
       this.formService.handleMainButtonClick();
     }
-  }
-
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
-  onArrowClick(event: MouseEvent) {
-    event.stopPropagation();
-    this.isDropdownOpen = !this.isDropdownOpen;
   }
 }

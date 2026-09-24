@@ -1,11 +1,3 @@
-@if (showDetailView) {
-  <app-tenant-detail
-    [selectedLease]="selectedTenant"
-    (back)="onDetailBack()"
-    (close)="onDetailBack()"
-  />
-}
-
 @if (!showDetailView) {
   <!-- ── Top-level tab bar: Onboarding | Active Tenants ────────── -->
   <app-white-card>

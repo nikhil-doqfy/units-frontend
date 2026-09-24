@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject, TemplateRef } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  TemplateRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
@@ -21,6 +27,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadCrumb } from '../../../shared/model/shared.model';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleAndPermissionsService } from '../../../services/role-and-permissions.service';
+import { SelectedPmcService } from '../../services/selected-pmc.service';
 
 @Component({
   selector: 'app-roles-and-permissions',
@@ -67,6 +74,7 @@ export class RolesAndPermissionsComponent {
     'Users',
     'Team',
     'Roles and Permission',
+    'Finance',
   ];
 
   roles: any[] = [];
@@ -78,6 +86,9 @@ export class RolesAndPermissionsComponent {
   roleForm!: FormGroup;
   isLoading = false;
   selectedRole: any = null;
+  private selectedPmcService = inject(SelectedPmcService);
+  private isFirstNavbarPmcChange = true;
+  filterPmcId: string | null = null;
 
   constructor(
     private roleService: RoleAndPermissionsService,
@@ -86,9 +97,21 @@ export class RolesAndPermissionsComponent {
     this.roleForm = this.buildForm([]);
     const key = this.route.snapshot.data['titleKey'];
     this.sharedService.setTitle(key);
+
+    effect(() => {
+      const pmc = this.selectedPmcService.selectedPmc();
+      if (this.isFirstNavbarPmcChange) {
+        this.isFirstNavbarPmcChange = false;
+        return;
+      }
+      this.filterPmcId = pmc?.key ?? null;
+      this.currentPage = 1;
+      this.fetchRoles();
+    });
   }
 
   ngOnInit(): void {
+    this.filterPmcId = this.selectedPmcService.selectedPmc()?.key ?? null;
     this.loadBreadcrumb();
     this.sharedService.initLanguage();
     this.initLanguageListener();
@@ -178,8 +201,13 @@ export class RolesAndPermissionsComponent {
 
   fetchRoles(): void {
     this.tableLoading = true;
+    const params: Record<string, any> = {
+      page: this.currentPage,
+      limit: this.pageSize,
+    };
+    if (this.filterPmcId) params['pmc_id'] = this.filterPmcId;
     this.roleService
-      .getRoles({ page: this.currentPage, limit: this.pageSize })
+      .getRoles(params)
       .subscribe({
         next: (res) => {
           this.roles = res?.content || [];

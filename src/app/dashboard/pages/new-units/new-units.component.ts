@@ -9,7 +9,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StepEngine } from '../../model/step-engine/step-engine';
 import { StepSchema } from '../../model/step-engine/step-schema';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { UploadDocumentComponent } from '../../component/upload-document/upload-document.component';
 import { FileUploadItemComponent } from '../../component/file-upload-item/file-upload-item.component';
 import { CustomSelectComponent } from '../../component/custom-select/custom-select.component';
@@ -67,6 +72,7 @@ export class NewUnitsComponent implements OnInit {
   unitUsageList = [
     { key: 'RESIDENTIAL', value: 'Residential' },
     { key: 'COMMERCIAL', value: 'Commercial' },
+    { key: 'BACHELORS_FLAT', value: 'Bachelors Flat' },
   ];
   unitTypeList = [
     { key: 'FLAT', value: 'Flat' },
@@ -140,6 +146,16 @@ export class NewUnitsComponent implements OnInit {
     this.sharedService.initLanguage();
     this.loadProperties();
     this.loadDocumentTypes();
+
+    // Maximum Occupants Allowed is only collected -- and only required --
+    // when Unit Usage is Bachelors Flat. Applied immediately (for
+    // pre-filled/edit cases) and again on every subsequent change.
+    this.applyOccupantsAllowedValidator(
+      this.basicDetailsForm.get('unitUsage')?.value,
+    );
+    this.basicDetailsForm
+      .get('unitUsage')
+      ?.valueChanges.subscribe((v) => this.applyOccupantsAllowedValidator(v));
     this.sharedApiService.getOptionsType([
       {
         param: 'PMC_OWNERS',
@@ -169,6 +185,17 @@ export class NewUnitsComponent implements OnInit {
             });
         });
     }
+  }
+
+  private applyOccupantsAllowedValidator(unitUsage: any) {
+    const occupantsControl = this.basicDetailsForm.get('occupantsAllowed');
+    if (unitUsage?.key === 'BACHELORS_FLAT') {
+      occupantsControl?.setValidators([Validators.required]);
+    } else {
+      occupantsControl?.clearValidators();
+      occupantsControl?.setValue('');
+    }
+    occupantsControl?.updateValueAndValidity();
   }
 
   loadDocumentTypes() {

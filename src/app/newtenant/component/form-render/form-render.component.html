@@ -47,8 +47,6 @@
       <button
         class="btn-refresh"
         *ngIf="
-          (currentSubStep?.component === ProfileComponent &&
-            subIndex() === 0) ||
           currentSubStep?.component === EjariComponent ||
           currentSubStep?.component === EjariDocSignatureComponent ||
           showRefresh$()
@@ -73,34 +71,13 @@
       </button> -->
 
       <button
-        class="reject-btn"
-        *ngIf="
-          getNextBtnLabel() === 'Approval & Generate Invoice' &&
-          currentSubStep?.component === EjariDocSignatureComponent
-        "
-      >
-        Reject
-      </button>
-      <button
-        *ngIf="
-          currentSubStep?.component !== OnboardingComponent &&
-          !(
-            currentSubStep?.component === EjariComponent &&
-            getNextBtnLabel() === 'Approval & Generate Invoice'
-          )
-        "
+        *ngIf="getNextBtnLabel() !== 'Approval & Generate Invoice'"
         [disabled]="isSaveDisabled"
         [ngClass]="{
-          'profile-save-btn':
-            currentSubStep?.component === ProfileComponent && subIndex() === 0,
-          'save-btn':
-            currentSubStep?.component !== ProfileComponent &&
-            getNextBtnLabel() === 'Save & Next',
+          'save-btn': getNextBtnLabel() === 'Save & Next',
           'invite-btn': getNextBtnLabel() === 'Send Invite',
           'sign-btn': getNextBtnLabel() === 'Send for Signature',
           'submit-for-ejari': getNextBtnLabel() === 'Submit for Ejari',
-          'Approval-Generate-invoice ':
-            getNextBtnLabel() === 'Approval & Generate Invoice',
           'btn-disabled': isSaveDisabled,
         }"
         (click)="next()"
@@ -111,59 +88,6 @@
             : getNextBtnLabel()
         }}
       </button>
-
-      <div
-        *ngIf="currentSubStep?.component === OnboardingComponent && !showMsg$()"
-        class="send-negotiation-wrap"
-      >
-        <button
-          class="send-negotiation-btn"
-          [disabled]="
-            (btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()) ||
-            (btnTitle$() === 'Send Negotiation' && isSendingNegotiation$())
-          "
-          [class.btn-disabled]="
-            (btnTitle$() === 'Proceed to Agreement' && !chequeConfirmed$()) ||
-            (btnTitle$() === 'Send Negotiation' && isSendingNegotiation$())
-          "
-          (click)="onMainClick()"
-        >
-          {{
-            btnTitle$() === "Send Negotiation" && isSendingNegotiation$()
-              ? "Sending…"
-              : btnTitle$()
-          }}
-
-          <span
-            *ngIf="btnTitle$() === 'Send Negotiation'"
-            class="arrow-divider"
-            (click)="onArrowClick($event)"
-          >
-            <app-arrow-down-icon></app-arrow-down-icon>
-          </span>
-        </button>
-        <div class="approvalDropdown" *ngIf="isDropdownOpen">
-          <div class="dropdownHeader">
-            <h4>Send for Approval</h4>
-            <button class="closeBtn" (click)="isDropdownOpen = false">✕</button>
-          </div>
-
-          <div class="dropdownBody">
-            <label>Select Recipient</label>
-
-            <div class="inputBox">
-              Type "&#64;" to search and add managers or users.
-            </div>
-          </div>
-
-          <div class="dropdownFooter">
-            <button class="sendBtn">Send</button>
-          </div>
-        </div>
-      </div>
-      <i *ngIf="getNextBtnLabel() !== 'Approval & Generate Invoice'">
-        <app-circular-cross-btn-icon></app-circular-cross-btn-icon>
-      </i>
     </div>
   </div>
 </app-white-card>

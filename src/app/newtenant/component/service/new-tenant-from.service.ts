@@ -5,9 +5,7 @@ import { Router } from '@angular/router';
 import { NewTenant } from '../modules/new-tenant';
 import { CommercialdetailsComponent } from '../commercialdetails/commercialdetails.component';
 import { BasicpersonalComponent } from '../basicpersonal/basicpersonal.component';
-import { ProfileComponent } from '../profile/profile.component';
 import { OnboardingComponent } from '../onboarding/onboarding.component';
-import { AgreementComponent } from '../agreement/agreement.component';
 import { EjariDocComponent } from '../ejari-doc/ejari-doc.component';
 import { EjariDocSignatureComponent } from '../ejari-doc-signature/ejari-doc-signature.component';
 import { LeaseService } from '../../../dashboard/services/lease.service';
@@ -36,10 +34,12 @@ export class NewTenantFromService {
     this.prefillCommercialFromUnit(data);
   }
 
-  // Other charges selected on the commercial-details step
-  private selectedCharges = signal<{ charge_id: number; amount: number }[]>([]);
+  // Other charges selected on the commercial-details step -- either an
+  // existing Charges-section row (charge_id) or a commercial-details field
+  // surfaced as a charge line, resolved by description on the backend.
+  private selectedCharges = signal<({ charge_id: number; amount: number } | { description: string; amount: number })[]>([]);
   getSelectedCharges() { return this.selectedCharges; }
-  setSelectedCharges(charges: { charge_id: number; amount: number }[]) {
+  setSelectedCharges(charges: ({ charge_id: number; amount: number } | { description: string; amount: number })[]) {
     this.selectedCharges.set(charges);
   }
 
@@ -54,7 +54,7 @@ export class NewTenantFromService {
     return signal<NewTenant[]>([
       {
         id: '1',
-        title: 'INVITE',
+        title: 'PROPERTY_DETAILS',
         subSteps: [
           {
             id: '1-1',
@@ -69,8 +69,14 @@ export class NewTenantFromService {
               onClick: () => this.handleMainButtonClick(),
             },
           },
+        ],
+      },
+      {
+        id: '2',
+        title: 'COMMERCIAL_DETAILS',
+        subSteps: [
           {
-            id: '1-2',
+            id: '2-1',
             title: 'COMMERCIAL_DETAILS',
             description: 'CREATE_LEASE_FIELDS',
             component: CommercialdetailsComponent,
@@ -79,39 +85,14 @@ export class NewTenantFromService {
         ],
       },
       {
-        id: '2',
-        title: 'ONBOARDING',
-        subSteps: [
-          {
-            id: '2-1',
-            title: 'WAITING_FOR_TENANT',
-            description: 'INVITE_SENT',
-            component: ProfileComponent,
-            formGroup: this.createProfileForm(),
-          },
-          {
-            id: '2-2',
-            title: 'ONBOARDING',
-            description: 'REVIEW_CHEQUES_AND_SEND_NEGOTIATION',
-            component: OnboardingComponent,
-            formGroup: this.createOnboardingForm(),
-          },
-        ],
-      },
-      {
         id: '3',
-        title: 'AGREEMENT',
+        title: 'COLLECT_CHEQUE',
         subSteps: [
           {
             id: '3-1',
-            title: 'PROFILE',
-            component: AgreementComponent,
-            formGroup: this.createBasicForm(),
-            saveButtonDetails: {
-              title: 'SEND_FOR_SIGNATURE',
-              buttonType: 'SIMPLE',
-              onClick: () => this.handleMainButtonClick(),
-            },
+            title: 'COLLECT_CHEQUE',
+            component: OnboardingComponent,
+            formGroup: this.createOnboardingForm(),
           },
         ],
       },
@@ -121,7 +102,7 @@ export class NewTenantFromService {
         subSteps: [
           {
             id: '4-1',
-            title: 'PROFILE',
+            title: 'EJARI',
             component: EjariDocComponent,
             formGroup: this.createCommercialForm(),
             saveButtonDetails: {
@@ -130,9 +111,15 @@ export class NewTenantFromService {
               onClick: () => this.startEjariFlow(),
             },
           },
+        ],
+      },
+      {
+        id: '5',
+        title: 'SIGNATURE',
+        subSteps: [
           {
-            id: '4-2',
-            title: 'Profile',
+            id: '5-1',
+            title: 'SIGNATURE',
             component: EjariDocSignatureComponent,
             formGroup: this.createCommercialForm(),
             saveButtonDetails: {
@@ -144,7 +131,7 @@ export class NewTenantFromService {
         ],
       },
       {
-        id: '5',
+        id: '6',
         title: 'ACTIVATED',
       },
     ]);
@@ -184,6 +171,7 @@ export class NewTenantFromService {
       landNo: [leadData?.land_no ?? '', Validators.required],
       dmNo: [leadData?.dm_no ?? '', Validators.required],
       unitUsage: [leadData?.unit_usage ?? '', Validators.required],
+      occupantsAllowed: [leadData?.occupants_allowed ?? ''],
       unitType: [leadData?.unit_type ?? '', Validators.required],
       subType: [leadData?.sub_type ?? '', Validators.required],
       makaniNo: [leadData?.makani_no ?? '', Validators.required],
@@ -258,6 +246,10 @@ export class NewTenantFromService {
     return form;
   }
 
+  private createOnboardingForm(): FormGroup {
+    return this.fb.group({});
+  }
+
   /** Patch the commercial form with unit defaults (blank fields only). */
   prefillCommercialFromUnit(u: any) {
     const form = this._commercialForm;
@@ -285,21 +277,6 @@ export class NewTenantFromService {
     }
   }
 
-  private createProfileForm(): FormGroup {
-    return this.fb.group({
-      companyName: [''],
-      tradeLicense: [''],
-      vatNumber: [''],
-    });
-  }
-  private createOnboardingForm(): FormGroup {
-    return this.fb.group({
-      companyName: [''],
-      tradeLicense: [''],
-      vatNumber: [''],
-    });
-  }
-
   /* ================= FORMS ================= */
 
   private showCheckSection = signal(false);
@@ -309,7 +286,6 @@ export class NewTenantFromService {
   private approvalStage = signal<
     'NEGOTIATION_SENT' | 'OWNER_APPROVED' | 'TENANT_APPROVED' | null
   >(null);
-  private chequeConfirmed = signal(false);
 
   getShowCheckSection() {
     return this.showCheckSection;
@@ -319,9 +295,6 @@ export class NewTenantFromService {
   }
   getApprovalStage() {
     return this.approvalStage;
-  }
-  getChequeConfirmed() {
-    return this.chequeConfirmed;
   }
   private showMsg = signal(false);
   private msgText = signal('');
@@ -375,12 +348,7 @@ export class NewTenantFromService {
   //   }
   // }
 
-  handleMainButtonClick(goNext?: () => void, type?: 'AGREEMENT' | 'EJARI') {
-    if (type === 'AGREEMENT') {
-      this.triggerAgreementSignature(goNext!);
-      return;
-    }
-
+  handleMainButtonClick(goNext?: () => void, type?: 'EJARI') {
     if (type === 'EJARI') {
       this.triggerEjariSignature(goNext);
       return;
@@ -390,17 +358,7 @@ export class NewTenantFromService {
       this.triggerNegotiation();
     } else if (this.stepPhase() === 'CHEQUE') {
       this.triggerChequeRequest();
-    } else if (this.stepPhase() === 'COLLECTED') {
-      this.triggerProceedToAgreement();
     }
-  }
-
-  private triggerProceedToAgreement() {
-    this.updateLeaseStage('AGREEMENT');
-    this.showCheckSection.set(false);
-    this.activeIndex.set(2);
-    this.activeSubIndex.set(0);
-    this.startAgreementFlow();
   }
 
   private triggerNegotiation() {
@@ -453,54 +411,33 @@ export class NewTenantFromService {
     this.msgText.set('');
   }
 
-  triggerAgreementSignature(goNext: () => void) {
-    if (this.agreementPhase() === 'INIT') {
-      const id = this.leaseId();
-      if (!id) {
-        this.alertService.error(
-          'Lease not found. Please complete the previous steps first.',
-        );
-        return;
-      }
-      this.msgText.set('Sending signature requests…');
-      this.showMsg.set(true);
-
-      this.leaseService.sendForSignature(id).subscribe({
-        next: () => {
-          this.updateLeaseStage('AGREEMENT_SIGNING');
-          this.msgText.set('Signature requests sent. Waiting for signatures…');
-          this.btnTitle.set('Submit for Ejari');
-          this.agreementPhase.set('SIGNING');
-        },
-        error: () => {
-          this.msgText.set(
-            'Failed to send signature requests. Please try again.',
-          );
-          setTimeout(() => this.showMsg.set(false), 3000);
-        },
-      });
-    } else if (this.agreementPhase() === 'SIGNED') {
-      goNext();
-    }
-  }
-
   triggerEjariSignature(goNext?: () => void) {
     if (this.ejariPhase() === 'INIT') {
       const id = this.leaseId();
       if (!id) return;
 
-      this.msgText.set('Sending Ejari for signature…');
+      this.msgText.set('Sending for signature…');
       this.showMsg.set(true);
 
       this.leaseService.sendEjariForSignature(id).subscribe({
         next: () => {
           this.updateLeaseStage(LEASE_STAGE.EJARI_SIGNING);
-          this.msgText.set('Ejari sent for signature. Waiting for tenant to sign…');
+          this.msgText.set('Sent for signature. Waiting for tenant to sign…');
           this.btnTitle.set('Approval & Generate Invoice');
           this.ejariPhase.set('SIGNING');
+          goNext?.();
         },
-        error: () => {
-          this.msgText.set('Failed to send Ejari for signature. Please try again.');
+        error: (err: any) => {
+          const msg = err?.error?.message || 'Failed to send for signature. Please try again.';
+          this.msgText.set(msg);
+          if (err?.error?.message?.includes('already been sent for signature')) {
+            // Lease is already awaiting the tenant's signature -- reflect
+            // that instead of leaving the button stuck on a dead-end retry.
+            this.btnTitle.set('Approval & Generate Invoice');
+            this.ejariPhase.set('SIGNING');
+            goNext?.();
+            return;
+          }
           setTimeout(() => this.showMsg.set(false), 3000);
         },
       });
@@ -554,9 +491,8 @@ export class NewTenantFromService {
 
     if (existingId) {
       this.leaseService
-        .updateLease({
+        .updateLease(existingId, {
           ...payload,
-          lease_id: existingId,
           lease_stage: LEASE_STAGE.COMMERCIAL_DETAILS,
         })
         .subscribe({
@@ -577,7 +513,7 @@ export class NewTenantFromService {
     // to avoid creating duplicates when the user navigates away and returns.
     this.leaseService.getLeases({ unit_id: unitId, page_size: 1 }).subscribe({
       next: (resp: any) => {
-        const existingLease = resp?.content?.[0] ?? null;
+        const existingLease = resp?.results?.[0] ?? null;
         const stage = existingLease?.lease_stage?.toUpperCase();
         const isDraft =
           stage === LEASE_STAGE.BASIC_DETAILS || stage === LEASE_STAGE.COMMERCIAL_DETAILS;
@@ -585,9 +521,8 @@ export class NewTenantFromService {
         if (isDraft) {
           this.leaseId.set(existingLease.id);
           this.leaseService
-            .updateLease({
+            .updateLease(existingLease.id, {
               ...payload,
-              lease_id: existingLease.id,
               lease_stage: LEASE_STAGE.COMMERCIAL_DETAILS,
             })
             .subscribe({
@@ -608,8 +543,8 @@ export class NewTenantFromService {
             .createLease({ ...payload, lease_stage: LEASE_STAGE.COMMERCIAL_DETAILS })
             .subscribe({
               next: (createResp: any) => {
-                if (createResp?.content?.id)
-                  this.leaseId.set(createResp.content.id);
+                if (createResp?.id)
+                  this.leaseId.set(createResp.id);
                 this.isSavingBasic = false;
                 this.alertService.success('Lease saved successfully');
                 onSuccess?.();
@@ -629,8 +564,8 @@ export class NewTenantFromService {
           .createLease({ ...payload, lease_stage: LEASE_STAGE.COMMERCIAL_DETAILS })
           .subscribe({
             next: (createResp: any) => {
-              if (createResp?.content?.id)
-                this.leaseId.set(createResp.content.id);
+              if (createResp?.id)
+                this.leaseId.set(createResp.id);
               this.isSavingBasic = false;
               this.alertService.success('Lease saved successfully');
               onSuccess?.();
@@ -653,7 +588,6 @@ export class NewTenantFromService {
     if (!existingId) { onSuccess?.(); return; }
 
     const payload: Record<string, any> = {
-      lease_id: existingId,
       lease_stage: LEASE_STAGE.COMMERCIAL_DETAILS,
       start_date: v.startDate || null,
       end_date: v.endDate || null,
@@ -674,7 +608,7 @@ export class NewTenantFromService {
       other_charges: this.selectedCharges(),
     };
 
-    this.leaseService.updateLease(payload).subscribe({
+    this.leaseService.updateLease(existingId, payload).subscribe({
       next: () => onSuccess?.(),
       error: () => onSuccess?.(),
     });
@@ -739,32 +673,38 @@ export class NewTenantFromService {
     }
 
     this.leaseService
-      .updateLease({
+      .updateLease(existingId, {
         ...payload,
-        lease_id: existingId,
-        lease_stage: LEASE_STAGE.WAITING_FOR_SIGNUP,
+        lease_stage: LEASE_STAGE.WAITING_CHEQUE,
       })
       .subscribe({
         next: () => {
-          this.currentLeaseStage.set(LEASE_STAGE.WAITING_FOR_SIGNUP);
+          this.currentLeaseStage.set(LEASE_STAGE.WAITING_CHEQUE);
           this.showMsg.set(false);
           this.msgText.set('');
-          this.leaseService.sendLeaseInvite(existingId).subscribe({
-            next: () => {
-              this.isSendingInvite.set(false);
-              this.alertService.success('Invite sent successfully to tenant');
-            },
-            error: () => {
-              this.isSendingInvite.set(false);
-              this.alertService.error('Lease saved but failed to send invite email');
-            },
-          });
+          this.isSendingInvite.set(false);
+          this.alertService.success('Lease saved successfully');
+          if (v.startDate) {
+            this.leaseService
+              .generateChequeSchedule({
+                lease_id: existingId,
+                payment_frequency: 'MONTHLY',
+                start_date: v.startDate,
+              })
+              .subscribe({
+                error: (err: any) => {
+                  const msg = err?.error?.message || '';
+                  if (msg.toLowerCase().includes('already exist')) {
+                    this.alertService.info('Rent cheques already exist for this lease.');
+                  }
+                },
+              });
+          }
           onSuccess?.();
         },
         error: () => {
           this.isSendingInvite.set(false);
-          this.alertService.success('Invite Sent Successfully');
-          onSuccess?.();
+          this.alertService.error('Failed to save lease. Please try again.');
         },
       });
   }
@@ -774,7 +714,7 @@ export class NewTenantFromService {
     const id = this.leaseId();
     if (!id) return;
     this.leaseService
-      .updateLease({ lease_id: id, lease_stage: stage })
+      .updateLease(id, { lease_stage: stage })
       .subscribe();
   }
 
@@ -784,7 +724,6 @@ export class NewTenantFromService {
     this.showMsg.set(false);
     this.msgText.set('');
     this.showCheckSection.set(false);
-    this.chequeConfirmed.set(false);
   }
 
   /** Restores button state when loading an existing lease with a known stage. */
@@ -806,7 +745,7 @@ export class NewTenantFromService {
       return;
     }
 
-    // Invite sent — waiting for tenant to sign up (ProfileComponent shown as sub-step 0)
+    // Commercial details saved — straight to the Onboarding step (cheques/negotiation review)
     if (s === LEASE_STAGE.WAITING_FOR_SIGNUP || s === LEASE_STAGE.ONBOARDING) {
       // No special button state needed; default is fine.
       // Navigation to step 1, sub-step 0 is handled by leaseStageToStepIndex in new-tenant.component.
@@ -881,11 +820,11 @@ export class NewTenantFromService {
       this.btnTitle.set('Submit for Ejari');
       this.agreementPhase.set('SIGNED');
 
-      // Ejari sent for signature — waiting for tenant to sign
+      // Sent for signature — waiting for tenant to sign
     } else if (s === LEASE_STAGE.EJARI_SIGNING) {
       this.btnTitle.set('Approval & Generate Invoice');
       this.ejariPhase.set('SIGNING');
-      this.msgText.set('Ejari sent for signature. Waiting for tenant to sign…');
+      this.msgText.set('Sent for signature. Waiting for tenant to sign…');
       this.showMsg.set(true);
 
       // Ejari document uploaded — ready to send for signature
@@ -900,12 +839,10 @@ export class NewTenantFromService {
   }
   stepRoutes: { [key: string]: string } = {
     '1-1': '/new-tenant/invite/property',
-    '1-2': '/new-tenant/invite/commercial',
-    '2-1': '/new-tenant/onboarding/profile',
-    '2-2': '/new-tenant/onboarding/onboarding',
-    '3-1': '/new-tenant/agreement',
+    '2-1': '/new-tenant/invite/commercial',
+    '3-1': '/new-tenant/onboarding/onboarding',
     '4-1': '/new-tenant/ejari/doc',
-    '4-2': '/new-tenant/ejari/signature',
+    '5-1': '/new-tenant/ejari/signature',
   };
   goToStep(stepId: string, subStepId?: string) {
     const steps = this.PropertySteps()();
